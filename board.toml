@@ -33,3 +33,38 @@ owned_memory_size = "0x20000000"
 # TODO: enuma ADT tool, product node, CPU topology and platform seed.
 # Physical bases and total DRAM remain unset; allocation needs the actual UEFI map.
 # TODO: userdata layout, firmware configuration, boot-image parameters.
+
+# UEFI source is the fixed firmware/ gitlink. The wrapper materializes only
+# writable staging under out/; private inputs are checked by this preflight.
+[firmware]
+config = "enuma"
+dsc = "Platforms/Xiaomi/enumaPkg/enuma.dsc"
+fd = "Build/enumaPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
+preflight = ["scripts/enuma_firmware_preflight.py"]
+# Dependency checkouts are validated/materialized before invoking the backend.
+submodules = []
+packages = [
+  "{uefi}", "{uefi}/Platforms/Xiaomi", "{tree}/package",
+  "{tree}/drivers/DarwinBoot", "{edk2}",
+  "{uefi}/Common/Mu", "{uefi}/Common/Mu_OEM_Sample",
+  "{uefi}/Silicon/Qualcomm", "{uefi}/Silicon/Silicium",
+]
+patches = [
+  "patches/dxe-stage-checkpoints.patch", "patches/dxe-dispatch-return.patch",
+  "patches/dxe-driver-checkpoints.patch", "Resources/MuPatches/Gic-Spurious.patch",
+]
+
+[firmware.defines]
+ENABLE_SECUREBOOT = "0"
+DEVICE_MODEL = "enuma"
+MEMORY_PROTECTION = "TRUE"
+SHIP_MODE = "FALSE"
+BUILDID_STRING = "enuma-research"
+ENUMA_DIAG_STAGE = "0"
+ENUMA_DIAG_DELAY_US = "2000000"
+ENUMA_DIAG_DISPATCH_ORDINAL = "1"
+ENUMA_PLATFORM_CONFIG = "enumaPkg/Include/PlatformConfig.inc"
+ENUMA_VENDOR_DSC = "EnumaInputs/Vendor.dsc.inc"
+ENUMA_VENDOR_DXE = "EnumaInputs/Vendor.fdf.inc"
+ENUMA_VENDOR_APRIORI = "EnumaInputs/Vendor.apriori.inc"
+ENUMA_VENDOR_RAW = "EnumaInputs/Vendor.raw.fdf.inc"

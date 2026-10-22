@@ -1,0 +1,100 @@
+{
+  "scope": "public source contracts only; no private inputs or firmware binary build",
+  "runs": [
+    {
+      "conclusion": "success",
+      "headSha": "a1215b7b4451c9ce134979d1886dfe6d1e3b8e17",
+      "jobs": [
+        {
+          "completedAt": "2026-10-22T14:29:33Z",
+          "conclusion": "success",
+          "databaseId": 119883562576,
+          "name": "source",
+          "startedAt": "2026-10-22T14:29:24Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-22T14:29:26Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-22T14:29:25Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-22T14:29:30Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-22T14:29:26Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-22T14:29:30Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "startedAt": "2026-10-22T14:29:30Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-22T14:29:30Z",
+              "conclusion": "success",
+              "name": "Run python3 -B Resources/Scripts/check_enuma_source.py",
+              "number": 4,
+              "startedAt": "2026-10-22T14:29:30Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-22T14:29:30Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "startedAt": "2026-10-22T14:29:30Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-22T14:29:30Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "startedAt": "2026-10-22T14:29:30Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-22T14:29:30Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "startedAt": "2026-10-22T14:29:30Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/wh1stl3/uefi-enuma/actions/runs/39796073610/job/119883562576"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/wh1stl3/uefi-enuma/actions/runs/39796073610",
+      "run_id": "39796073610"
+    },
+    {
+      "conclusion": "",
+      "headSha": "3376c4411e08442f45f4120ed6d96f2e302c51e8",
+      "jobs": [
+        {
+          "completedAt": "0001-01-01T00:00:00Z",
+          "conclusion": "",
+          "databaseId": 119886420904,
+          "name": "source",
+          "startedAt": "2026-10-22T14:35:07Z",
+          "status": "queued",
+          "steps": [],
+          "url": "https://github.com/wh1stl3/uefi-enuma/actions/runs/39796926508/job/119886420904"
+        }
+      ],
+      "status": "queued",
+      "url": "https://github.com/wh1stl3/uefi-enuma/actions/runs/39796926508",
+      "run_id": "39796926508"
+    }
+  ]
+}

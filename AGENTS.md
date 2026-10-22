@@ -4,7 +4,7 @@
 
 ## 目录与只读边界
 
-- `D:\Code\UniXNU-enuma` 为本任务唯一工作仓库。
+- `D:\Code\UniXNU-enuma` 为设备工作仓；用户于 2026-10-22 明确授权新建 `D:\Code\uefi-enuma` 固件仓。两仓可写，设备仓 `firmware/` 为固件仓的固定提交子模块，不再重复维护两份板级源码。
 - `D:\Code\UniXNU-nuwa` 只读参考，且有其他会话工作；不得改文件、提交或影响其 CI。
 - `D:\Code\PortingiOS`、`D:\Code\PortingiOSWithUniXNU` 及其中上游源码全部只读。
 - 上游源码按固定提交和本地路径引用，不整棵复制进设备仓。WSL 路径大小写须保持真实名称。

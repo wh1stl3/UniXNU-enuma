@@ -6,7 +6,7 @@
 
 设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表 iPadOS 已可启动。Kona 固件已完成若干可恢复的临时实测：定时复位门已走到 DXE 驱动调度前，GOP/完整 iPadOS 尚未验证。
 
-目录：`config/` 路线和来源锁；`configs/` 内核候选配置；`drivers/EnumaPlatform/` 板级支持代码；`firmware/` Kona 源码增量；`scripts/` 审计和主机检查；`reports/` 可复现证据；`docs/` 五件套与操作记录。
+目录：`config/` 路线和来源锁；`configs/` 内核候选配置；`drivers/EnumaPlatform/` 板级支持代码；`firmware/` 固定提交的独立 UEFI 仓子模块；`scripts/` 审计和主机检查；`reports/` 可复现证据；`docs/` 五件套与操作记录。
 
 复现命令与驱动差异见 [首轮报告](docs/operations/2026-10-22-offline-bringup.md)。audit_inputs.py 全量核对缓存 donor，plan_adt.py 只生成 JSON 计划，check_workspace.py 验证固定输入及上游配置接口，均不生成启动镜像。
 
@@ -21,3 +21,5 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 已完成[官网144页路线核对](docs/operations/2026-10-22-official-docs-route-review.md)及[完整页面清单](docs/operations/2026-10-22-official-site-inventory.md)。macOS预检通过；首次通用bootstrap在最终链接缺少legacy display probe符号，尚未构建成功。官网新工具与本仓固定源码有版本差异，后续按独立审查接入真实静态库/预链接流程。
 
 已[接入 UniXNU 主分支固定版本及21个模块](docs/operations/2026-10-22-upstream-integration.md)，保留 enuma 补丁与 boot v3，新增关闭 legacy 功能时的编译期引用修复。本地完整固件与主机回归通过；[macOS新版通用最终链接已通过](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39790786938)，实机仍在[DXE队列定位](docs/operations/2026-10-22-dispatch-checkpoints.md)，GOP尚未验证。
+
+固件已独立至 [wh1stl3/uefi-enuma](https://github.com/wh1stl3/uefi-enuma)，设备仓通过 `firmware/` 固定其提交；克隆后初始化子模块。`board.toml [firmware]` 与预检已接通，固件包装器实际调用官方 backend，完整构建/OEM/v3回归通过。复现、私有输入要求和 example 保护范围见[双仓接入说明](docs/operations/2026-10-22-uefi-repository.md)。

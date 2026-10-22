@@ -1,0 +1,55 @@
+{
+  "official_cli_guard": {
+    "argv": [
+      "C:/Program Files/WorkBuddy/resources/vendor/python/python.exe",
+      "-B",
+      "D:\\Code\\UniXNU-enuma\\out\\sources\\UniXNU\\unixnu",
+      "build",
+      "firmware",
+      "-D",
+      "D:\\Code\\UniXNU-enuma",
+      "--out",
+      "D:\\Code\\UniXNU-enuma\\out\\official-cli-guard",
+      "--uefi",
+      "D:\\Code\\UniXNU-enuma\\firmware"
+    ],
+    "exit_code": 1,
+    "stderr": "unixnu: developed and tested on macOS only; the kernel step needs Xcode and --skip-setup needs hdiutil\nunixnu: D:\\Code\\UniXNU-enuma is an EXAMPLE device repository (example = true in board.toml); copy it and fill in a real board\n",
+    "build_executed": false
+  },
+  "firmware_backend": {
+    "complete": true,
+    "source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8",
+    "backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
+    "fd_sha256": "bc3e16ffd0ab46ceff6bee689c2ba18c496e31e43be553163755fd0922c1f917",
+    "core_patch_reversion_checked": true
+  },
+  "boot_v3": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 0,
+    "os_version_field": 0,
+    "kernel_sha256": "4d42dbf7182a0fa095f7ba7ba4746ff1708f9161be5098fae11ce53fd45532a6",
+    "ramdisk_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "image_sha256": "25d6947b0eeb2112baeab69d301d97984747b17082d279808e72bcd3d09525d7",
+    "image_bytes": 3153920,
+    "fixture_only": false,
+    "hardware_ready": false,
+    "aosp_commit": "028bdc06ce87ab1ee23204feb5cd5ee406484618",
+    "vendor_boot_policy": "retain captured stock v3 vendor_boot; no DTB append or vendor_boot rewrite",
+    "unresolved": [
+      "ABL acceptance of raw BootShim ARM64 entry",
+      "UEFI FD relocation/handoff",
+      "GOP and vendor protocol runtime closure"
+    ]
+  },
+  "device_booted": false,
+  "restored_core_files_lf_sha256": {
+    "MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c": "baa2b6c6c201afaa06d044ea1f15f26c48f2133821d347a0d42f54e4aed231ba",
+    "MdeModulePkg/Core/Dxe/DxeMain.inf": "bf4428e658be43bc5b54000897b28d87ea1314f57721d3b02a5152d681a832da",
+    "MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c": "24f50beeab071c52acbcbdabf8b282a2edcd7963a8744bb586950f607cc0b9bf",
+    "ArmPkg/Drivers/ArmGicDxe/GicV3/ArmGicV3Dxe.c": "469a9388952e828c09968f4bb9f4c85f61f53b86b2999214e04b4e48251f1724"
+  },
+  "migrated_file_count": 25
+}

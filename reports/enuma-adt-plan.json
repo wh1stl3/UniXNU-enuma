@@ -1,7 +1,7 @@
 {
   "scope": "offline ADT input plan, historical Android tree only; no UEFI or XNU execution",
   "fdt_input": {
-    "path": "D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout",
+    "path": "out/device/live-fdt.bin",
     "bytes": 941691,
     "sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
     "sha384": "d9d6f8d8fcc54ee32b931de17076fcb8114466a54b9bc7e2ccac3c5ecfacd7b2190376023e1572e593faa00195990fa1"
@@ -90,9 +90,9 @@
     "value_hex": "0000002000000000",
     "board_input": {
       "path": "D:/Code/UniXNU-enuma/board.toml",
-      "bytes": 1408,
-      "sha256": "d66dce82d1cd856b989800a75f7c66b9230ba0e07d991d4b6cacd7200b76ae40",
-      "sha384": "ad62de026d18e9f893e802a69fd0e4b3021fcb603ce209651c28754995e2983a9e449d290fb0337ce8e135850c3a9b24"
+      "bytes": 2742,
+      "sha256": "7cf5f9f5edc84088a21a7109589054f8e7ef567916317a281827067a8203a488",
+      "sha384": "ba5b45d18194c235c45513eaa6bf9d7d5eed35af0c189d26f7b717455dff8576cb4e2a3be12b7ddd0ea6708443b935c9"
     },
     "allocation": "runtime UEFI EfiConventionalMemory allocation required; not observed",
     "physical_base": null

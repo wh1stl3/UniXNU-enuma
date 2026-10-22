@@ -1,0 +1,15 @@
+{
+  "scope": "fixed inputs and writable staging, no firmware execution",
+  "vendor_files_checked": 102,
+  "reference_gitlinks": {
+    "Mu_Basecore": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+    "Common/Mu": "b8d46c71610318e36a661819e1e3c0b8bdda413a",
+    "Common/Mu_OEM_Sample": "b70b4b7bb02c43bf9db2172dfb3ed0457e2361d6"
+  },
+  "probe_upstream_sha256": {
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e"
+  },
+  "core_ready_for_official_patch_series": true
+}

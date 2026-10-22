@@ -1,60 +1,85 @@
 {
-  "scope": "isolated firmware build; no device boot",
-  "checks": [
-    {
-      "argv": [
-        "/usr/bin/python3",
-        "/mnt/d/Code/UniXNU-enuma/out/firmware-build/Mu_Basecore/BaseTools/Source/Python/build/build.py",
-        "-p",
-        "Platforms/Xiaomi/enumaPkg/enuma.dsc",
-        "-a",
-        "AARCH64",
-        "-b",
-        "DEBUG",
-        "-t",
-        "CLANGPDB",
-        "-n",
-        "4",
-        "-D",
-        "FD_BASE=0x9fc00000",
-        "-D",
-        "FD_SIZE=0x300000",
-        "-D",
-        "FD_BLOCKS=768",
-        "-D",
-        "ENABLE_SECUREBOOT=0",
-        "-D",
-        "DEVICE_MODEL=enuma",
-        "-D",
-        "MEMORY_PROTECTION=TRUE",
-        "-D",
-        "SHIP_MODE=FALSE",
-        "-D",
-        "BUILDID_STRING=enuma-research",
-        "-D",
-        "ENUMA_DIAG_STAGE=12",
-        "-D",
-        "ENUMA_DIAG_DELAY_US=2000000",
-        "-D",
-        "ENUMA_DIAG_DISPATCH_ORDINAL=1",
-        "-D",
-        "ENUMA_PLATFORM_CONFIG=enumaPkg/Include/PlatformConfig.inc",
-        "-D",
-        "ENUMA_VENDOR_DSC=EnumaInputs/Vendor.dsc.inc",
-        "-D",
-        "ENUMA_VENDOR_DXE=EnumaInputs/Vendor.fdf.inc",
-        "-D",
-        "ENUMA_VENDOR_APRIORI=EnumaInputs/Vendor.apriori.inc",
-        "-D",
-        "ENUMA_VENDOR_RAW=EnumaInputs/Vendor.raw.fdf.inc"
-      ],
-      "exit_code": 0,
-      "log": "out/firmware-build/logs/firmware.log"
-    }
-  ],
-  "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "fd_exists": true,
+  "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
+  "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
+  "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8",
+  "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
+  "unixnu_qualification": {
+    "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+    "modules": {
+      "drivers/ArmCpu": "1951cc8444b340d7d8879e9418220cf29eb711d7",
+      "drivers/ArmDTPlatform": "0d544705c2e89725caabc0542bb96bc8febd8c70",
+      "drivers/ArmVirtPlatform": "532de8c017e394e69a0b48dc0ffc4ac0d0701177",
+      "drivers/DarwinBoot": "d099354d0eab34df5088ca1ba89c9c88bc3260bb",
+      "drivers/NativeAES": "a34964b8c2fec2e83c8e4f68fb7d6fb7e4b2227b",
+      "drivers/NativeAdreno": "cedcaa2949c795e71a47e78ae413c8a41b17d7d0",
+      "drivers/NativeGeniSpi": "b5399b5646c4d7415deec6d887fd51715a97a024",
+      "drivers/NativeHidInput": "28f9b463b48e862f2def91d29c11b9143785715e",
+      "drivers/NativeKeyStoreEvents": "e59bac4ad1ac8825919ae94da8440a64d8ab90b3",
+      "drivers/NativeMetal": "bcbbc707cf112026ace2a11fa0ed62260b4e16b0",
+      "drivers/NativeMobileDisplay": "c031d882b9721d943383d11f66dc4748252ce929",
+      "drivers/NativeRamBlock": "d4d22d9819b0162eda49f6402235dddc2279410d",
+      "drivers/NativeUfs": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "drivers/NativeVirtioBlock": "98909eb9198a4360d7a43be831887cb8b74d814d",
+      "drivers/NativeVirtioConsole": "066f9bded311233ed56824e13a5628077619efda",
+      "kits/AdrenoFirmware": "40fdb8ea87606612ac6f1e80bbb49955d0ce4051",
+      "kits/AdrenoPM4": "445f8fe6d115738352b9d78dc70af6d61aa7f62f",
+      "kits/AirNir": "032a867b5dc3121164bbd706e4e81e3b9fcd2b8f",
+      "kits/ArmSmmu4K": "4d0d6598b1a36aeec3de01091893fa6660e49388",
+      "kits/NativePrelink": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+      "kits/VerifiedRoot": "2854c61f6c4dfda870ac3d93e1f03d9181edb041"
+    },
+    "patches": [
+      {
+        "path": "patches/upstream/0001-guard-optional-legacy-display.patch",
+        "sha256": "86fa152c567558bdf3cdcf551e19c6caa5ea0a81173cb14e80c472a156a85104"
+      }
+    ]
+  },
+  "firmware_configuration": {
+    "config": "enuma",
+    "dsc": "Platforms/Xiaomi/enumaPkg/enuma.dsc",
+    "fd": "Build/enumaPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd",
+    "preflight": [
+      "scripts/enuma_firmware_preflight.py"
+    ],
+    "submodules": [],
+    "packages": [
+      "{uefi}",
+      "{uefi}/Platforms/Xiaomi",
+      "{tree}/package",
+      "{tree}/drivers/DarwinBoot",
+      "{edk2}",
+      "{uefi}/Common/Mu",
+      "{uefi}/Common/Mu_OEM_Sample",
+      "{uefi}/Silicon/Qualcomm",
+      "{uefi}/Silicon/Silicium"
+    ],
+    "patches": [
+      "patches/dxe-stage-checkpoints.patch",
+      "patches/dxe-dispatch-return.patch",
+      "patches/dxe-driver-checkpoints.patch",
+      "Resources/MuPatches/Gic-Spurious.patch"
+    ],
+    "defines": {
+      "ENABLE_SECUREBOOT": "0",
+      "DEVICE_MODEL": "enuma",
+      "MEMORY_PROTECTION": "TRUE",
+      "SHIP_MODE": "FALSE",
+      "BUILDID_STRING": "enuma-research",
+      "ENUMA_DIAG_STAGE": "12",
+      "ENUMA_DIAG_DELAY_US": "2000000",
+      "ENUMA_DIAG_DISPATCH_ORDINAL": "1",
+      "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
+      "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
+      "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
+      "ENUMA_VENDOR_APRIORI": "EnumaInputs/Vendor.apriori.inc",
+      "ENUMA_VENDOR_RAW": "EnumaInputs/Vendor.raw.fdf.inc"
+    }
+  },
+  "diagnostic_stop_stage": 12,
+  "diagnostic_delay_seconds": 2,
+  "diagnostic_dispatch_ordinal": 1,
   "archive_sha256": {
     "uefi-source.tar.gz": "7118851d4e46f6f3336c82bcad4ee5820cb7a2079103e075c9961e3f1c3a3a27",
     "mu-basecore.tar.gz": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826"
@@ -64,17 +89,27 @@
     "Common/Mu": "b8d46c71610318e36a661819e1e3c0b8bdda413a",
     "Common/Mu_OEM_Sample": "b70b4b7bb02c43bf9db2172dfb3ed0457e2361d6"
   },
-  "diagnostic_stop_stage": 12,
-  "diagnostic_delay_seconds": 2,
-  "diagnostic_dispatch_ordinal": 1,
-  "probe_upstream_sha256": {
-    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
-    "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
-    "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e"
-  },
+  "checks": [
+    {
+      "backend": "unixnu.firmware.build",
+      "exit_code": 0,
+      "log": "out/firmware-build/logs/firmware.log"
+    }
+  ],
+  "fd_exists": true,
+  "fd_sha256": "bc3e16ffd0ab46ceff6bee689c2ba18c496e31e43be553163755fd0922c1f917",
   "source_inputs_sha256": {
-    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
-    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
+    "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
+    "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
+    "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
+    "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
+    "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
+    "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+    "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+    "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7",
+    "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+    "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
+    "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
@@ -84,17 +119,13 @@
     "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
-    "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
-    "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
-    "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
-    "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
-    "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
-    "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
-    "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
-    "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
-    "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
-    "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
-    "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7"
+    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f"
   },
-  "fd_sha256": "33d8dcc5d62ab61064dbb760672d989155f3968467c42b538250eedbeb641af9"
+  "probe_upstream_sha256": {
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e"
+  },
+  "core_patch_reversion_checked": true
 }
