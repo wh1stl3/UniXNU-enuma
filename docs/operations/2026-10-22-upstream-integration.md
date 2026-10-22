@@ -31,3 +31,11 @@ WSL 使用 `/mnt/d/Code/UniXNU-enuma/out/sources/UniXNU` 作为 `--unixnu` / `--
 30 项 Python、主机 ASan/UBSan、四个 AArch64 板级对象、真实可选显示 probe 对象符号 0/1 对照、DarwinBoot 解析/分配契约、完整固件构建、81 文件/33 OEM 字节与 boot v3 roundtrip 均通过。新 stage10 FD `10d813fce9a1d503a8b2152aa3c21acaf56885201233b48546db2d1023703e27` 未实机启动，不能继承旧 stage10 的硬件结论。
 
 新候选 `out/boot-candidate/enuma-upstream-stage10-boot-v3.img`；构建日志/报告/FD 快照 `out/upstream-integration/stage10/`。可发布证据见 reports/enuma-upstream-integration.json、enuma-optional-display-check.json 及各回归报告。macOS 新运行结果另记；旧 run39784240390 的最终链接失败记录保留。
+
+## CI 头文件获取修复
+
+迁移提交83f4608已推送。run39789234153的固定源/21模块/补丁/SDK检查通过，但prepare-xnu-source.py请求匿名GitHub API元数据时403，尚未进入XNU编译。证据reports/enuma-macos-upstream-run.json。
+
+新scripts/ci/header_inputs.py从固定Git树列出DriverKit/crypto/TrustCache文件blob，提供同格式缓存元数据，download_url指向固定commit的raw内容。其余下载、blob校验及恢复仍为原始上游实现。补充锁config/ci-header-sources.lock.json固定Apple头文件提交2c2f96dc和aca3beaa，校验其tag与当前feeds匹配；只需浅取树，避免匿名API和整树blob下载。未传入或记录访问令牌。
+
+Windows第一次raw HTTPS读取出现SSL EOF；在WSL使用不变上游恢复器完成26个文件恢复，逐个Git blob SHA-1与SHA256核对通过，reports/enuma-ci-header-check.json。该主机证据不等于macOS最终链接；修复后另跑CI。

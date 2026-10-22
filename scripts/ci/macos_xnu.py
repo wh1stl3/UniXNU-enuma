@@ -17,6 +17,7 @@ import tomllib
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from upstream_source import qualify
+from header_inputs import prepare as prepare_header_inputs
 
 ROOT = Path(__file__).resolve().parents[2]
 WORK = ROOT / 'out/ci/macos'
@@ -116,6 +117,8 @@ def main():
                 subprocess.run(['git', '-C', str(target), 'checkout', '--detach', 'FETCH_HEAD'], check=True)
                 if capture(['git', 'rev-parse', 'HEAD'], target) != item['commit']:
                     raise ValueError('Reference revision mismatch: ' + name)
+            report['header_inputs'] = prepare_header_inputs(source, xnu)
+            save()
             log = EVIDENCE / 'bootstrap.log'
             with log.open('w') as stream:
                 result = subprocess.run(['bash', 'scripts/build-xnu-4k-baseline.sh'],

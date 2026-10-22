@@ -13,11 +13,11 @@
 - 30 项 Windows Python 通过；GENI/NT36523/UFS 主机 sanitizer、四个 AArch64 对象通过。
 - 新 DarwinBoot 的 AddonOffset 契约已迁移，内存窗口/ADT/GPU addon 槽主机检查通过。真实可选显示 probe 在开关0/1时的对象未定义符号对照通过。
 - 新底座完整 stage10 UEFI 构建、81文件/33 OEM PE-DEPEX字节审计与boot v3回读通过。FD SHA256 **10d813fce9a1d503a8b2152aa3c21acaf56885201233b48546db2d1023703e27**；候选 out/boot-candidate/enuma-upstream-stage10-boot-v3.img **未启动**。快照 out/upstream-integration/stage10/。
-- CI 已迁移到新 pin、固定21模块并应用校验的patch系列；下一步触发 macOS 通用最终链接检查，尚无新版运行结果。旧preflight run39784132935通过，旧bootstrap run39784240390在legacy符号最终链接失败，历史不覆盖。
+- CI 已迁移到新 pin、固定21模块并应用校验的patch系列；run39789234153在恢复Apple头文件前遇匿名GitHub API HTTP403，尚未编译内核。新增固定Git树元数据适配，26头文件已由不变的上游恢复器在WSL恢复并逐blob核对；下一轮最终链接待运行。旧preflight run39784132935通过，旧bootstrap run39784240390在legacy符号最终链接失败，历史不覆盖。
 
 ## 实机边界
 
-本轮尚未操作设备。最后实测仍为旧版六个定时复位门，最远 CoreDispatcher 前（内部 stage10），32.018秒确认 Android boot_completed=1/root/分区摘要不变。最后实测镜像 SHA fe97cac064925e430e4b2d4c8f058aa1cf8a0a05fb051e1c7c1b484b1eadc43b，FD da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d654aeaabe。
+上游更新后已临时复测新版stage10，31.357秒确认Android完成、root/分区摘要不变。主线新增调度后门的2秒候选也已返回Android（44.497秒），正在构建7秒对照以区分其他复位源；该后续源码/证据将在固件里程碑单独提交。历史旧版六个门最远CoreDispatcher前。最后实测镜像 SHA fe97cac064925e430e4b2d4c8f058aa1cf8a0a05fb051e1c7c1b484b1eadc43b，FD da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d654aeaabe。
 
 按官网仍是阶段1 UEFI；没有 GOP、菜单、负载卷或 XNU/触控实机运行证据。1600×2560 Android显示不是GOP base/stride/format证明，缓存FDT的35MiB cont_splash也不是黑屏根因。
 

@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "repository": "https://github.com/apple-oss-distributions/xnu.git",
+  "sources": [
+    {
+      "tag": "xnu-10063.121.3",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "feed_key": "driverkit_tag",
+      "directories": {
+        "iokit/DriverKit": "xnu-driverkit-10063.121.3.json",
+        "iokit/DriverKit/crypto": "xnu-driverkit-crypto-10063.121.3.json"
+      }
+    },
+    {
+      "tag": "xnu-8796.101.5",
+      "commit": "aca3beaa3dfbd42498b42c5e5ce20a938e6554e5",
+      "feed_key": "trustcache_tag",
+      "directories": {
+        "EXTERNAL_HEADERS/TrustCache": "xnu-trustcache-8796.101.5.json"
+      }
+    }
+  ]
+}
