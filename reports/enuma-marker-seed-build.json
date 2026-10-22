@@ -1,0 +1,48 @@
+{
+  "scope": "marker writer actual function host ASan/UBSan and temporary Android build only, no persistence result",
+  "seed_image": {
+    "scope": "R-002 reservation plus fixed marker seed; no device actions by builder",
+    "image_sha256": "3b1a685ef8b45a72587b28e58dda3801b685e79d0c91981a9adcfc3116c7f764",
+    "image_bytes": 116359168,
+    "stock_boot_sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+    "stock_kernel_sha256": "2b6f267ab0c3e3b262871cb44d2b0a621c10efcddf4454e427b53cbc8292d07d",
+    "stock_ramdisk_sha256": "8fe06db987b23124311c011f57860c725e6d33890a47586111b18c79a4f9832c",
+    "stock_image_size": 66211840,
+    "patched_image_size": 66230944,
+    "stock_entry_offset": "0x2b80000",
+    "hook_offset": "0x3f25000",
+    "hook_sha256": "ad88163d1fa8a03d12ae260b65e9605fa6304b9276e3be9c62839f7686b8fb4f",
+    "header_version": 3,
+    "preserved": "stock kernel placement, code except entry branch/size, ramdisk, header except kernel_size, vendor_boot untouched",
+    "reservation": [
+      "0x9fff7000",
+      "0x8000"
+    ],
+    "on_unsupported_fdt": "no writes; continue original Android entry",
+    "source_sha256": {
+      "fdt_reserve.c": "36210221743cc04edf0ab6578673e18f119609096f85b3d6f0bddf5058b94419",
+      "android_fdt_entry.S": "e2b95841485a996066e653652e92e225b71b21cd84f7a81b3250f3488268dab6",
+      "enuma_marker_seed.h": "d69de0dc4661d15998a3bbc8f7c06af9cc3efade2c58835c30049a3416a7bef4"
+    },
+    "seed_marker": true,
+    "marker_write_bytes": 16,
+    "marker_ascii": "ENUMA-R002-SEED1",
+    "marker_physical_base": "0x9fff7000",
+    "hardware_executed": false,
+    "log_memory_accessed": false,
+    "verified_flags_changed": false
+  },
+  "host_seed_cases": [
+    "reservation_false_no_writes",
+    "null_target_rejected",
+    "exact_16_bytes_with_adjacent_canaries",
+    "repeat_same_marker"
+  ],
+  "host_checks_passed": true,
+  "source_sha256": {
+    "diagnostics/enuma_marker_seed.h": "d69de0dc4661d15998a3bbc8f7c06af9cc3efade2c58835c30049a3416a7bef4",
+    "tests/log_marker_seed.c": "6f26850b205b23563847da4a8f227460f4185f73158f4b7a928669515e943af6"
+  },
+  "writes_only_after_fdt_reservation": true,
+  "normal_nonseed_mode_writes_marker": false
+}

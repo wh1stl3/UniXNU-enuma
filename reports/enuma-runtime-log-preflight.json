@@ -1,0 +1,37 @@
+{
+  "scope": "read-only display observation and removal of only two exact temporary module uploads; no reboot or partition writes",
+  "display_captures": [
+    {
+      "source": "/sys/kernel/debug/dri/0/state",
+      "returncode": 0,
+      "bytes": 62,
+      "sha256": "b6e8db85e51fefa01223bd1015a07c00d977e6e8d63217d94ad59675d0a983d2",
+      "content_contains_cat_error": true,
+      "usable_geometry": false,
+      "exit_code_not_sufficient": true
+    },
+    {
+      "source": "/d/dri/0/state",
+      "returncode": 0,
+      "bytes": 47,
+      "sha256": "9e6b0f0b7abd011128182513d3cd69a4ddc9d94973a1857478358d376f87f712",
+      "content_contains_cat_error": true,
+      "usable_geometry": false,
+      "exit_code_not_sufficient": true
+    },
+    {
+      "source": "/sys/class/drm/card0-DSI-1/enabled",
+      "returncode": 0,
+      "bytes": 8,
+      "sha256": "e056a35db086947e2f5969d747f0a7517bff00c7ffff1f9e7b47b72bfac9d948",
+      "content_contains_cat_error": false,
+      "usable_geometry": false,
+      "exit_code_not_sufficient": false
+    }
+  ],
+  "temporary_uploads_removed": true,
+  "android_boot_complete": true,
+  "root": true,
+  "modules_absent": true,
+  "partition_digests_unchanged": true
+}

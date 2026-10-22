@@ -1,0 +1,40 @@
+{
+  "scope": "normal ABI probe and guarded read-only marker; no reboot or physical writes",
+  "boot_image_sha256": "3b1a685ef8b45a72587b28e58dda3801b685e79d0c91981a9adcfc3116c7f764",
+  "fdt_sha256": "6e88ca4a3bfaf8823da9bcf44defdd5ad7a3f8eec671223675076fd5457a0d09",
+  "all_eight_pages_reserved": true,
+  "physical_write_bytes": 0,
+  "physical_read_bytes": 16,
+  "module_runs": [
+    {
+      "mode": "abi",
+      "module_sha256": "43b6bbd06fa16af578501db60ed917c5c205243aa6f8429763ca79671e4e2313",
+      "stream_started_before_load": true,
+      "insmod_returncode": 0,
+      "loaded": true,
+      "new_log_records": 1,
+      "rmmod_returncode": 0,
+      "unloaded": true,
+      "log_sha256": "28d16eedf6f564b04098cb232f328426b94eb10361b5ac3660ba8c23917e352b",
+      "temporary_upload_removed": true
+    },
+    {
+      "mode": "marker",
+      "module_sha256": "6644cf40bd4ee85ce6ec8a0a57eeef08aa0a6a2e79b61b75e1230f6b469bd6f2",
+      "stream_started_before_load": true,
+      "insmod_returncode": 0,
+      "loaded": true,
+      "new_log_records": 1,
+      "rmmod_returncode": 0,
+      "unloaded": true,
+      "log_sha256": "52ce242588fe10be88fa58bde5de0e2dd4ef0542d8d51d73163b4ab08310919c",
+      "temporary_upload_removed": true
+    }
+  ],
+  "started_at": "2026-10-23 01:57:44",
+  "matches_seed_marker": true,
+  "android_boot_complete": true,
+  "root_after": true,
+  "partition_digests_unchanged": true,
+  "persistence_proven": false
+}

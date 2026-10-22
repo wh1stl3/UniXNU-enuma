@@ -1,0 +1,18 @@
+{
+  "scope": "R-002 guarded baseline read of 16 bytes only, no marker write/reset/firmware log",
+  "module_sha256": "6644cf40bd4ee85ce6ec8a0a57eeef08aa0a6a2e79b61b75e1230f6b469bd6f2",
+  "physical_log_read_bytes": 16,
+  "physical_writes": false,
+  "persistence_proven": false,
+  "log_stream_started_before_load": true,
+  "insmod_returncode": 0,
+  "module_loaded": true,
+  "complete_16_byte_records": 1,
+  "rmmod_returncode": 0,
+  "module_unloaded": true,
+  "log_stream_sha256": "a99c377f2071160a63e138bd871d97ca7896cc2ffa250659ab2abff7ecb1d700",
+  "log_stream_bytes": 2315570,
+  "android_boot_complete": true,
+  "root_after": true,
+  "partition_digests_unchanged": true
+}

@@ -30,6 +30,7 @@ def main():
     parser.add_argument('--approved-r002',action='store_true',required=True)
     parser.add_argument('--stock-boot',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--seed-marker',action='store_true',help='R-002 only: write fixed 16-byte marker after FDT reservation, before Linux')
     args=parser.parse_args();output=args.output.resolve()
     if not output.is_relative_to((ROOT/'out').resolve()) or output.exists():raise ValueError('new output under own out/ required')
     board=tomllib.loads((ROOT/'board.toml').read_text())
@@ -48,10 +49,11 @@ def main():
     if imm&(1<<25):imm-=1<<26
     entry=imm*4
     if not 64<=entry<len(kernel) or original_size>=1<<27:raise ValueError('branch outside stock kernel')
-    out=ROOT/'out/log-readback/android-hook-build';out.mkdir(parents=True,exist_ok=True)
+    out=ROOT/'out/log-readback'/('android-hook-seed-build' if args.seed_marker else 'android-hook-build');out.mkdir(parents=True,exist_ok=True)
     compiler=['clang','--target=aarch64-none-elf','-O2','-ffreestanding','-fno-builtin',
         '-fno-stack-protector','-fno-unwind-tables','-fno-asynchronous-unwind-tables',
         '-mgeneral-regs-only','-Wall','-Wextra','-Werror','-DENUMA_ARM64_ENTRY']
+    if args.seed_marker:compiler+=['-DENUMA_SEED_MARKER']
     for source in ('fdt_reserve.c','android_fdt_entry.S'):
         subprocess.run([*compiler,'-c',str(ROOT/'diagnostics'/source),'-o',str(out/(source+'.o'))],check=True)
     script=f'''ENTRY(_start)
@@ -94,14 +96,17 @@ SECTIONS {{
     subprocess.run([sys.executable,'-B',str(aosp/'unpack_bootimg.py'),'--boot_img',str(output),'--out',str(unpack)],
         check=True,stdout=subprocess.DEVNULL)
     if (unpack/'kernel').read_bytes()!=patched or (unpack/'ramdisk').read_bytes()!=ramdisk:raise ValueError('AOSP roundtrip differs')
-    report={'scope':'R-002 reservation only; no physical log read/write and no device actions',
+    report={'scope':'R-002 reservation plus fixed marker seed; no device actions by builder' if args.seed_marker else 'R-002 reservation only; no physical log read/write and no device actions',
         'image_sha256':sha(image),'image_bytes':len(image),'stock_boot_sha256':STOCK_SHA,
         'stock_kernel_sha256':sha(kernel),'stock_ramdisk_sha256':sha(ramdisk),
         'stock_image_size':original_size,'patched_image_size':end,'stock_entry_offset':hex(entry),
         'hook_offset':hex(start),'hook_sha256':sha(hook),'header_version':3,
         'preserved':'stock kernel placement, code except entry branch/size, ramdisk, header except kernel_size, vendor_boot untouched',
         'reservation':['0x9fff7000','0x8000'],'on_unsupported_fdt':'no writes; continue original Android entry',
-        'source_sha256':{p:sha((ROOT/'diagnostics'/p).read_bytes()) for p in ('fdt_reserve.c','android_fdt_entry.S')},
+        'source_sha256':{p:sha((ROOT/'diagnostics'/p).read_bytes()) for p in ('fdt_reserve.c','android_fdt_entry.S','enuma_marker_seed.h')},
+        'seed_marker':args.seed_marker,'marker_write_bytes':16 if args.seed_marker else 0,
+        'marker_ascii':'ENUMA-R002-SEED1' if args.seed_marker else None,
+        'marker_physical_base':'0x9fff7000' if args.seed_marker else None,
         'hardware_executed':False,'log_memory_accessed':False,'verified_flags_changed':False}
     output.with_suffix('.json').write_text(json.dumps(report,indent=2)+'\n')
     (out/'disassembly.txt').write_text(subprocess.check_output(['llvm-objdump','-d',str(out/'hook.elf')],text=True))

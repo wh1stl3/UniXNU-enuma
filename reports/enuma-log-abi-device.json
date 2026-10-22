@@ -1,0 +1,18 @@
+{
+  "scope": "R-002 ABI probe normal load/unload only; no marker/physical memory access/boot/partition writes",
+  "device": "enuma",
+  "module_loaded": true,
+  "module_unloaded": true,
+  "physical_log_accessed": false,
+  "log_stream_started_before_load": true,
+  "insmod_returncode": 0,
+  "abi_ok_in_stream": true,
+  "rmmod_returncode": 0,
+  "normal_loader_accepted": true,
+  "log_stream_sha256": "66573763a092bcbbe3f54d7ad54796c00484a0b268c3919296a362d27eac4301",
+  "log_stream_bytes": 2311613,
+  "module_sha256": "43b6bbd06fa16af578501db60ed917c5c205243aa6f8429763ca79671e4e2313",
+  "android_boot_complete": true,
+  "root_after": true,
+  "partition_digests_unchanged": true
+}

@@ -144,6 +144,9 @@ int enuma_reserve_log(unsigned char *b, size_t capacity) {
 }
 
 #ifdef ENUMA_ARM64_ENTRY
+#ifdef ENUMA_SEED_MARKER
+#include "enuma_marker_seed.h"
+#endif
 void enuma_fdt_entry(unsigned char *b) {
     if(!b || ((uintptr_t)b&7)) return;
     /* Fail closed to the untouched stock Android path. Runtime host guard
@@ -154,6 +157,13 @@ void enuma_fdt_entry(unsigned char *b) {
         uintptr_t line=4ul<<((ctr>>16)&15);
         for(uintptr_t p=(uintptr_t)b&~(line-1);p<end;p+=line)
             __asm__ volatile("dc cvac, %0"::"r"(p):"memory");
+#ifdef ENUMA_SEED_MARKER
+        /* The FDT reservation is committed before any approved marker write.
+         * Default/no-seed builds contain neither this call nor target writes. */
+        enuma_seed_marker((volatile unsigned char *)0x9fff7000UL,1);
+        for(uintptr_t p=0x9fff7000UL&~(line-1);p<0x9fff7010UL;p+=line)
+            __asm__ volatile("dc cvac, %0"::"r"(p):"memory");
+#endif
         __asm__ volatile("dsb sy":::"memory");
     }
 }
