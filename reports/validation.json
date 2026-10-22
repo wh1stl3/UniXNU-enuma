@@ -1,0 +1,53 @@
+{
+  "time": "2026-10-22T17:57:27.036247+08:00",
+  "checks": [
+    {
+      "argv": [
+        "C:\\Program Files\\WorkBuddy\\resources\\vendor\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_ambiguous_identity (test_audit_inputs.DonorTests.test_ambiguous_identity) ... ok\ntest_component_corruption (test_audit_inputs.DonorTests.test_component_corruption) ... ok\ntest_matching_identity (test_audit_inputs.DonorTests.test_matching_identity) ... ok\ntest_reference_pin_mismatch (test_audit_inputs.DonorTests.test_reference_pin_mismatch) ... ok\ntest_wrong_board (test_audit_inputs.DonorTests.test_wrong_board) ... ok\ntest_wrong_os_and_product (test_audit_inputs.DonorTests.test_wrong_os_and_product) ... ok\ntest_corrupt_offsets_sizes_and_tokens (test_audit_inputs.FdtTests.test_corrupt_offsets_sizes_and_tokens) ... ok\ntest_every_truncation_rejected (test_audit_inputs.FdtTests.test_every_truncation_rejected) ... ok\ntest_valid_root (test_audit_inputs.FdtTests.test_valid_root) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.063s\n\nOK\n"
+    },
+    {
+      "argv": [
+        "C:\\Program Files\\WorkBuddy\\resources\\vendor\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "scripts/check_workspace.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: source pins, donor identity, upstream defconfig and example guard; no build performed\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Program Files\\WorkBuddy\\resources\\vendor\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "scripts/plan_adt.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: enuma GIC/PSCI/timer/topology plan; 7 unresolved contracts; no binary emitted\n",
+      "stderr": ""
+    }
+  ],
+  "dtc": {
+    "exit_code": 0,
+    "warning_lines": 320,
+    "warning_log_sha256": "c6e16e1be90fae05d42e2324a1308546e50468533df7e30f61a73dd6323b95f9",
+    "note": "Historical Android DT decompiled with original warnings; raw DTS excluded from Git"
+  },
+  "device_scope": "No enuma hardware execution"
+}

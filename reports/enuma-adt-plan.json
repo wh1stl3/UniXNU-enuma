@@ -1,0 +1,84 @@
+{
+  "scope": "offline ADT input plan, historical Android tree only; no UEFI or XNU execution",
+  "fdt_input": {
+    "path": "D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout",
+    "bytes": 941691,
+    "sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+    "sha384": "d9d6f8d8fcc54ee32b931de17076fcb8114466a54b9bc7e2ccac3c5ecfacd7b2190376023e1572e593faa00195990fa1"
+  },
+  "source_model": [
+    "Qualcomm Technologies, Inc. xiaomi enuma"
+  ],
+  "cpu_affinities": [
+    "0x0",
+    "0x100",
+    "0x200",
+    "0x300",
+    "0x400",
+    "0x500",
+    "0x600",
+    "0x700"
+  ],
+  "psci": {
+    "path": "/psci",
+    "method": "smc"
+  },
+  "timer": {
+    "path": "/soc/timer",
+    "frequency_hz": 19200000,
+    "interrupt_cells": [
+      1,
+      13,
+      65288,
+      1,
+      14,
+      65288,
+      1,
+      11,
+      65288,
+      1,
+      12,
+      65288
+    ]
+  },
+  "gic": {
+    "path": "/soc/interrupt-controller@17a00000",
+    "distributor_pa": "0x17a00000",
+    "distributor_size": "0x10000",
+    "redistributor_pa": "0x17a60000",
+    "redistributor_size": "0x100000",
+    "redistributor_stride": "0x20000",
+    "translation_evidence": "/soc ranges maps bus [0,0xffffffff) to identical root physical addresses"
+  },
+  "touch": {
+    "path": "/soc/spi@990000/novatek@0",
+    "irq_gpio_cells": [
+      101,
+      39,
+      8193
+    ],
+    "firmware_candidates": {
+      "/soc/spi@990000/novatek@0/novatek,cfg_0": "novatek_nt36523_k81_fw01.bin"
+    },
+    "driver_binding": "not_observed_in_this_run"
+  },
+  "donor_identity": {
+    "product": "iPad7,1",
+    "device_class": "j120ap",
+    "build": "21H461"
+  },
+  "unresolved": [
+    "UEFI allocation map and reviewed DRAM/owned contiguous window",
+    "reviewed arm-io parent range and matching relative GIC regs",
+    "CPU compatible policy for Kryo 585; do not inherit cortex-a715",
+    "GOP framebuffer base/stride/pixel format and persistent scan-out",
+    "enuma product/button/display geometry policy",
+    "platform identity seed outside Git and selected Data/root UUID",
+    "SM8250 UFS clock/PHY/SMMU handoff and storage layout"
+  ],
+  "disabled_hardware": [
+    "SM8550 NativeUfs path",
+    "Sheng PMGR",
+    "A740 NativeAdreno path"
+  ]
+}

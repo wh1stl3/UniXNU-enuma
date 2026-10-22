@@ -1,0 +1,502 @@
+{
+  "scope": "source reuse candidates only; no firmware built or device tested",
+  "files": [
+    {
+      "repository": "Project-Silicium/Mu-Silicium",
+      "commit": "42fe563791e51bf5500c2e470ed294ca0c94b97c",
+      "path": "LICENSE",
+      "url": "https://github.com/Project-Silicium/Mu-Silicium/blob/42fe563791e51bf5500c2e470ed294ca0c94b97c/LICENSE",
+      "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187",
+      "bytes": 1884,
+      "selected_lines": [],
+      "total_matching_lines": 0
+    },
+    {
+      "repository": "Project-Silicium/Mu-Silicium",
+      "commit": "42fe563791e51bf5500c2e470ed294ca0c94b97c",
+      "path": "Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "url": "https://github.com/Project-Silicium/Mu-Silicium/blob/42fe563791e51bf5500c2e470ed294ca0c94b97c/Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "sha256": "62ea05001fa3cef8a95a4dadabb9bc08a31871f3d29865d6121015f22ae02e01",
+      "bytes": 2822,
+      "selected_lines": [
+        {
+          "line": 8,
+          "text": "#  SPDX-License-Identifier: BSD-2-Clause-Patent"
+        },
+        {
+          "line": 29,
+          "text": "  # 0 = SM8250"
+        },
+        {
+          "line": 30,
+          "text": "  # 1 = SM8250-AB"
+        },
+        {
+          "line": 31,
+          "text": "  # 2 = SM8250-AC"
+        },
+        {
+          "line": 35,
+          "text": "!include KonaPkg/KonaPkg.dsc.inc"
+        }
+      ],
+      "total_matching_lines": 5
+    },
+    {
+      "repository": "Project-Silicium/Mu-Silicium",
+      "commit": "42fe563791e51bf5500c2e470ed294ca0c94b97c",
+      "path": "Platforms/Xiaomi/aliothPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c",
+      "url": "https://github.com/Project-Silicium/Mu-Silicium/blob/42fe563791e51bf5500c2e470ed294ca0c94b97c/Platforms/Xiaomi/aliothPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c",
+      "sha256": "f415a88775dae18d8621d81a6fd97e0ffc0654a648644907897ad703aff049b1",
+      "bytes": 1424,
+      "selected_lines": [
+        {
+          "line": 26,
+          "text": "  {\"EnableUfsIOC\", 1},"
+        },
+        {
+          "line": 27,
+          "text": "  {\"UfsSmmuConfigForOtherBootDev\", 1},"
+        },
+        {
+          "line": 36,
+          "text": "  {\"EnableDisplayThread\", 0x1},"
+        },
+        {
+          "line": 37,
+          "text": "  {\"EnableDisplayImageFv\", 0x0}"
+        }
+      ],
+      "total_matching_lines": 4
+    },
+    {
+      "repository": "Project-Silicium/Mu-Silicium",
+      "commit": "42fe563791e51bf5500c2e470ed294ca0c94b97c",
+      "path": "Silicon/Qualcomm/KonaPkg/KonaPkg.dsc.inc",
+      "url": "https://github.com/Project-Silicium/Mu-Silicium/blob/42fe563791e51bf5500c2e470ed294ca0c94b97c/Silicon/Qualcomm/KonaPkg/KonaPkg.dsc.inc",
+      "sha256": "99e80dd57212cb7262e55e2b595e28dc1c54d0d52526ba26539e4411d9896564",
+      "bytes": 2013,
+      "selected_lines": [
+        {
+          "line": 8,
+          "text": "#  SPDX-License-Identifier: BSD-2-Clause-Patent"
+        },
+        {
+          "line": 22,
+          "text": "  HAS_GIC_V3_WITHOUT_IRM_FLAG_SUPPORT_ERRATA = 0"
+        },
+        {
+          "line": 44,
+          "text": "  # GIC"
+        },
+        {
+          "line": 46,
+          "text": "  gArmTokenSpaceGuid.PcdGicDistributorBase|0x17A00000"
+        },
+        {
+          "line": 47,
+          "text": "  gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x17A60000"
+        },
+        {
+          "line": 54,
+          "text": "  gSiliciumPkgTokenSpaceGuid.PcdSmbiosProcessorPartNumber|\"SM8250\""
+        },
+        {
+          "line": 57,
+          "text": "  gSiliciumPkgTokenSpaceGuid.PcdSmbiosProcessorPartNumber|\"SM8250-AB\""
+        },
+        {
+          "line": 60,
+          "text": "  gSiliciumPkgTokenSpaceGuid.PcdSmbiosProcessorPartNumber|\"SM8250-AC\""
+        },
+        {
+          "line": 72,
+          "text": "  PlatformSecLib|KonaPkg/Library/PlatformSecLib/PlatformSecLib.inf"
+        },
+        {
+          "line": 77,
+          "text": "  AcpiTableUpdateLib|KonaPkg/Library/AcpiTableUpdateLib/AcpiTableUpdateLib.inf"
+        }
+      ],
+      "total_matching_lines": 10
+    },
+    {
+      "repository": "Project-Silicium/Mu-Silicium",
+      "commit": "42fe563791e51bf5500c2e470ed294ca0c94b97c",
+      "path": "Resources/Configs/alioth.toml",
+      "url": "https://github.com/Project-Silicium/Mu-Silicium/blob/42fe563791e51bf5500c2e470ed294ca0c94b97c/Resources/Configs/alioth.toml",
+      "sha256": "d0efe5eef7678428e1accb18c7376907503dd38a268d39476678635570165281",
+      "bytes": 360,
+      "selected_lines": [],
+      "total_matching_lines": 0
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "COPYING",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/COPYING",
+      "sha256": "ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff",
+      "bytes": 423,
+      "selected_lines": [
+        {
+          "line": 3,
+          "text": "\tSPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note"
+        },
+        {
+          "line": 5,
+          "text": "Being under the terms of the GNU General Public License version 2 only,"
+        },
+        {
+          "line": 14,
+          "text": "In addition, other licenses may also apply. Please see:"
+        },
+        {
+          "line": 16,
+          "text": "\tDocumentation/process/license-rules.rst"
+        }
+      ],
+      "total_matching_lines": 4
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/input/touchscreen/nt36523/nt36xxx.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/drivers/input/touchscreen/nt36523/nt36xxx.c",
+      "sha256": "e34cad1b799348d1a952e660a1576e0776abd9ce2c95cf31199a5c429d17a299",
+      "bytes": 102711,
+      "selected_lines": [
+        {
+          "line": 9,
+          "text": " * it under the terms of the GNU General Public License as published by"
+        },
+        {
+          "line": 10,
+          "text": " * the Free Software Foundation; either version 2 of the License, or"
+        },
+        {
+          "line": 15,
+          "text": " * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for"
+        },
+        {
+          "line": 243,
+          "text": "\treturn spi_sync(client, &m);"
+        },
+        {
+          "line": 677,
+          "text": "\tNovatek touchscreen get novatek project id information"
+        },
+        {
+          "line": 1093,
+          "text": "\t\tinput_report_key(ts->input_dev, keycode, 1);"
+        },
+        {
+          "line": 1095,
+          "text": "\t\tinput_report_key(ts->input_dev, keycode, 0);"
+        },
+        {
+          "line": 1104,
+          "text": "\t\tinput_report_abs(ts->pen_input_dev, ABS_X, 0);"
+        },
+        {
+          "line": 1105,
+          "text": "\t\tinput_report_abs(ts->pen_input_dev, ABS_Y, 0);"
+        },
+        {
+          "line": 1106,
+          "text": "\t\tinput_report_abs(ts->pen_input_dev, ABS_PRESSURE, 0);"
+        },
+        {
+          "line": 1107,
+          "text": "\t\tinput_report_abs(ts->pen_input_dev, ABS_TILT_X, 0);"
+        },
+        {
+          "line": 1108,
+          "text": "\t\tinput_report_abs(ts->pen_input_dev, ABS_TILT_Y, 0);"
+        },
+        {
+          "line": 1109,
+          "text": "\t\tinput_report_abs(ts->pen_input_dev, ABS_DISTANCE, 0);"
+        },
+        {
+          "line": 1110,
+          "text": "\t\tinput_report_key(ts->pen_input_dev, BTN_TOUCH, 0);"
+        },
+        {
+          "line": 1111,
+          "text": "\t\tinput_report_key(ts->pen_input_dev, BTN_TOOL_PEN, 0);"
+        },
+        {
+          "line": 1112,
+          "text": "\t\tinput_report_key(ts->pen_input_dev, BTN_STYLUS, 0);"
+        },
+        {
+          "line": 1113,
+          "text": "\t\tinput_report_key(ts->pen_input_dev, BTN_STYLUS2, 0);"
+        },
+        {
+          "line": 1134,
+          "text": "\tts->reset_gpio = of_get_named_gpio_flags(np, \"novatek,reset-gpio\", 0, &ts->reset_flags);"
+        },
+        {
+          "line": 1135,
+          "text": "\tNVT_LOG(\"novatek,reset-gpio=%d\\n\", ts->reset_gpio);"
+        },
+        {
+          "line": 1137,
+          "text": "\tts->irq_gpio = of_get_named_gpio_flags(np, \"novatek,irq-gpio\", 0, &ts->irq_flags);"
+        },
+        {
+          "line": 1138,
+          "text": "\tNVT_LOG(\"novatek,irq-gpio=%d\\n\", ts->irq_gpio);"
+        },
+        {
+          "line": 1140,
+          "text": "\tts->pen_support = of_property_read_bool(np, \"novatek,pen-support\");"
+        },
+        {
+          "line": 1141,
+          "text": "\tNVT_LOG(\"novatek,pen-support=%d\\n\", ts->pen_support);"
+        },
+        {
+          "line": 1143,
+          "text": "\tts->wgp_stylus = of_property_read_bool(np, \"novatek,wgp-stylus\");"
+        },
+        {
+          "line": 1144,
+          "text": "\tNVT_LOG(\"novatek,wgp-stylus=%d\\n\", ts->wgp_stylus);"
+        },
+        {
+          "line": 1146,
+          "text": "\tret = of_property_read_u32(np, \"novatek,swrst-n8-addr\", &SWRST_N8_ADDR);"
+        },
+        {
+          "line": 1148,
+          "text": "\t\tNVT_ERR(\"error reading novatek,swrst-n8-addr. ret=%d\\n\", ret);"
+        },
+        {
+          "line": 1154,
+          "text": "\tret = of_property_read_u32(np, \"novatek,spi-rd-fast-addr\", &SPI_RD_FAST_ADDR);"
+        },
+        {
+          "line": 1156,
+          "text": "\t\tNVT_LOG(\"not support novatek,spi-rd-fast-addr\\n\");"
+        },
+        {
+          "line": 1163,
+          "text": "\tret = of_property_read_u32(np, \"novatek,config-array-size\", &ts->config_array_size);"
+        },
+        {
+          "line": 1180,
+          "text": "\tret = of_property_read_u32_array(np, \"novatek,touch-game-param-config1\", ts->gamemode_config[0], 5);"
+        },
+        {
+          "line": 1192,
+          "text": "\tret = of_property_read_u32_array(np, \"novatek,touch-game-param-config2\", ts->gamemode_config[1], 5);"
+        },
+        {
+          "line": 1204,
+          "text": "\tret = of_property_read_u32_array(np, \"novatek,touch-game-param-config3\", ts->gamemode_config[2], 5);"
+        },
+        {
+          "line": 1230,
+          "text": "\t\tret = of_property_read_u32(temp, \"novatek,display-maker\", &temp_val);"
+        },
+        {
+          "line": 1238,
+          "text": "\t\tret = of_property_read_string(temp, \"novatek,fw-name\","
+        },
+        {
+          "line": 1246,
+          "text": "\t\tret = of_property_read_string(temp, \"novatek,mp-name\","
+        },
+        {
+          "line": 1364,
+          "text": "\t\tret = gpio_request_one(ts->irq_gpio, GPIOF_IN, \"NVT-int\");"
+        },
+        {
+          "line": 1367,
+          "text": "\t\t\tgoto err_request_irq_gpio;"
+        },
+        {
+          "line": 1373,
+          "text": "err_request_irq_gpio:"
+        },
+        {
+          "line": 1750,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_TRACKING_ID, input_id - 1);"
+        },
+        {
+          "line": 1751,
+          "text": "\t\t\tinput_report_key(ts->input_dev, BTN_TOUCH, 1);"
+        },
+        {
+          "line": 1754,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_POSITION_X, input_x);"
+        },
+        {
+          "line": 1755,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_POSITION_Y, input_y);"
+        },
+        {
+          "line": 1756,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_TOUCH_MAJOR, input_w);"
+        },
+        {
+          "line": 1757,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_PRESSURE, input_p);"
+        },
+        {
+          "line": 1772,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_TOUCH_MAJOR, 0);"
+        },
+        {
+          "line": 1773,
+          "text": "\t\t\tinput_report_abs(ts->input_dev, ABS_MT_PRESSURE, 0);"
+        },
+        {
+          "line": 1778,
+          "text": "\tinput_report_key(ts->input_dev, BTN_TOUCH, (finger_cnt > 0));"
+        },
+        {
+          "line": 1781,
+          "text": "\t\tinput_report_key(ts->input_dev, BTN_TOUCH, 0);"
+        },
+        {
+          "line": 1793,
+          "text": "\t\t\tinput_report_key(ts->input_dev, touch_key_array[i], ((point_data[62] >> i) & 0x01));"
+        },
+        {
+          "line": 1797,
+          "text": "\t\t\tinput_report_key(ts->input_dev, touch_key_array[i], 0);"
+        },
+        {
+          "line": 1842,
+          "text": "\t\t\t\tinput_report_abs(ts->pen_input_dev, ABS_X, pen_x);"
+        },
+        {
+          "line": 1843,
+          "text": "\t\t\t\tinput_report_abs(ts->pen_input_dev, ABS_Y, pen_y);"
+        },
+        {
+          "line": 1844,
+          "text": "\t\t\t\tinput_report_abs(ts->pen_input_dev, ABS_PRESSURE, pen_pressure);"
+        },
+        {
+          "line": 1845,
+          "text": "\t\t\t\tinput_report_key(ts->pen_input_dev, BTN_TOUCH, !!pen_pressure);"
+        },
+        {
+          "line": 1846,
+          "text": "\t\t\t\tinput_report_abs(ts->pen_input_dev, ABS_TILT_X, pen_tilt_x);"
+        },
+        {
+          "line": 1847,
+          "text": "\t\t\t\tinput_report_abs(ts->pen_input_dev, ABS_TILT_Y, pen_tilt_y);"
+        },
+        {
+          "line": 1848,
+          "text": "\t\t\t\tinput_report_abs(ts->pen_input_dev, ABS_DISTANCE, pen_distance);"
+        },
+        {
+          "line": 1849,
+          "text": "\t\t\t\tinput_report_key(ts->pen_input_dev, BTN_TOOL_PEN, !!pen_distance || !!pen_pressure);"
+        },
+        {
+          "line": 1850,
+          "text": "\t\t\t\tinput_report_key(ts->pen_input_dev, BTN_STYLUS, pen_btn1);"
+        }
+      ],
+      "total_matching_lines": 73
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/input/touchscreen/nt36523/nt36xxx.h",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/drivers/input/touchscreen/nt36523/nt36xxx.h",
+      "sha256": "d411b6aebf5b23cd2e6f819c870abd002dceb733d73f8271fc2ceb82e063b23c",
+      "bytes": 7926,
+      "selected_lines": [
+        {
+          "line": 9,
+          "text": " * it under the terms of the GNU General Public License as published by"
+        },
+        {
+          "line": 10,
+          "text": " * the Free Software Foundation; either version 2 of the License, or"
+        },
+        {
+          "line": 15,
+          "text": " * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for"
+        },
+        {
+          "line": 107,
+          "text": "#define DEFAULT_BOOT_UPDATE_FIRMWARE_NAME \"novatek_ts_fw.bin\""
+        },
+        {
+          "line": 108,
+          "text": "#define DEFAULT_MP_UPDATE_FIRMWARE_NAME   \"novatek_ts_mp.bin\""
+        },
+        {
+          "line": 109,
+          "text": "#define DEFAULT_DEBUG_FW_NAME \"novatek_debug_fw.bin\""
+        },
+        {
+          "line": 110,
+          "text": "#define DEFAULT_DEBUG_MP_NAME \"novatek_debug_mp.bin\""
+        }
+      ],
+      "total_matching_lines": 7
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/input/touchscreen/nt36523/nt36xxx_mem_map.h",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/drivers/input/touchscreen/nt36523/nt36xxx_mem_map.h",
+      "sha256": "123bed1a5f11548d055efdf60e4d98e4dba51df858f1923121920e0074b99111",
+      "bytes": 15428,
+      "selected_lines": [
+        {
+          "line": 9,
+          "text": " * it under the terms of the GNU General Public License as published by"
+        },
+        {
+          "line": 10,
+          "text": " * the Free Software Foundation; either version 2 of the License, or"
+        },
+        {
+          "line": 15,
+          "text": " * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for"
+        },
+        {
+          "line": 81,
+          "text": "static const struct nvt_ts_mem_map NT36523_memory_map = {"
+        },
+        {
+          "line": 292,
+          "text": "static struct nvt_ts_hw_info NT36523_hw_info = {"
+        },
+        {
+          "line": 337,
+          "text": "\t\t.mmap = &NT36523_memory_map,  .hwinfo = &NT36523_hw_info},"
+        },
+        {
+          "line": 339,
+          "text": "\t\t.mmap = &NT36523_memory_map,  .hwinfo = &NT36523_hw_info},"
+        },
+        {
+          "line": 341,
+          "text": "\t\t.mmap = &NT36523_memory_map,  .hwinfo = &NT36523_hw_info},"
+        },
+        {
+          "line": 343,
+          "text": "\t\t.mmap = &NT36523_memory_map,  .hwinfo = &NT36523_hw_info},"
+        },
+        {
+          "line": 345,
+          "text": "\t\t.mmap = &NT36523_memory_map,  .hwinfo = &NT36523_hw_info},"
+        }
+      ],
+      "total_matching_lines": 10
+    }
+  ]
+}

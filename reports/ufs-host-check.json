@@ -1,0 +1,99 @@
+{
+  "scope": "host ASan/UBSan execution of pure upstream helper tests; no QEMU, MMIO, real UFS or enuma boot",
+  "source_commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+  "compiler": "Ubuntu clang version 14.0.0-1ubuntu1.1\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/bin\n",
+  "tests": [
+    {
+      "name": "TransferPoll",
+      "source_sha256": "4758a0afacd46d9138f627c50fc8efdc59c4068475750c31a43d0b5db2adda70",
+      "header_sha256": "742df51cdce6d06df6bf93294176f01305c9d1359c8ffdfb99daff7b76a1ece3",
+      "compile_argv": [
+        "clang++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-fno-omit-frame-pointer",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeUfs/tests/TransferPoll.cpp",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/ufs-host/TransferPoll"
+      ],
+      "compile_stderr": "",
+      "exit_code": 0,
+      "stdout": "PASS: unaccepted, delayed, immediate, failed, stuck and fatal UFS completions\n",
+      "stderr": ""
+    },
+    {
+      "name": "RootDiagnostics",
+      "source_sha256": "063e18e2a3776f5adae660ae8db6857d6298144722d055ad58826b13a323afad",
+      "header_sha256": "0ad96da909e87d161b17694e32768a9d84500da96f975dcc6913535c413fde29",
+      "compile_argv": [
+        "clang++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-fno-omit-frame-pointer",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeUfs/tests/RootDiagnostics.cpp",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/ufs-host/RootDiagnostics"
+      ],
+      "compile_stderr": "",
+      "exit_code": 0,
+      "stdout": "UFS ROOT FAILURE: transport timeout fixture\nstage=NOP OUT result=e00002d6\nHC cap=00000000 ver=00000000 hcs=00000000 hce=00000000 db=00000000 is=00000000\nDMA=8ca774000 UTRL=8ca774000 SMMU smr=80000060 s2cr=0000007f cbar=00010000 sctlr=00000000\nCMD n=1 type=00 op=00 lun=00 ocs=0f rsp=00000000 scsi=ffff power=00\nPROTOCOL reject=6 residual=4096 sense=062900 SMMU slot=4294967295 id1=0\nQUEUE rsr=0 ahit=0 polls=100001 dbSeen=0 isSeen=0 isBefore=0 contiguous=22000\nFAULT global=0->0 syn=0 cb=0->0 syn=0 far=8cb5e9000 id2=0 cba2r=0\nUIC pa=00000000 dl=00000000 net=00000000 tr=00000000 dme=80000001\nGPT/read lba=0 userdata=0..0 magic=00000000 00000000 manifest=4294967295\nWINDOWS found=0 prepared=0 published=0 bytes=0 policies=0 verify=ffffffff\nIO reads=0 failures=0 pubPhase=5 window=1\n",
+      "stderr": ""
+    },
+    {
+      "name": "RootPublication",
+      "source_sha256": "18090bc6fad3f1de39ecd83bbb23e904a263520c22c89274b76e7e64276a5b2d",
+      "header_sha256": "3c289b44f4d7c082b3f214eda2d4225f53860dd007f4a89402bdc910f268aeda",
+      "compile_argv": [
+        "clang++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-fno-omit-frame-pointer",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeUfs/tests/RootPublication.cpp",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/ufs-host/RootPublication"
+      ],
+      "compile_stderr": "",
+      "exit_code": 0,
+      "stdout": "PASS: complete preparation or rollback, dispatch failure, SystemOS first/OS last, every start/media failure, no future publication, retained started devices, bounded valid ancestry\n",
+      "stderr": ""
+    },
+    {
+      "name": "SmmuTakeover",
+      "source_sha256": "5b918b4b64da29bb072fb15acd13f0a25d950dbd9072960d1e0e7a8f2d1a5951",
+      "header_sha256": "d865428494ce94e7ba57aa9b36202eb6af447ca1ea9fdf961e0d8d5c13e3ee86",
+      "compile_argv": [
+        "clang++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-fno-omit-frame-pointer",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeUfs/tests/SmmuTakeover.cpp",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/ufs-host/SmmuTakeover"
+      ],
+      "compile_stderr": "",
+      "exit_code": 0,
+      "stdout": "PASS: SMMU geometry/conflicts, VA64 high-DMA regression, full-range width limits, ordered configuration, reuse/repair and blocked-write refusal\n",
+      "stderr": ""
+    }
+  ]
+}

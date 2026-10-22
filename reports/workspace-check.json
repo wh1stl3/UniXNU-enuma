@@ -1,0 +1,26 @@
+{
+  "evidence_level": "static_only",
+  "source_pins_checked": 6,
+  "example_guard": "D:\\Code\\UniXNU-enuma is an EXAMPLE device repository (example = true in board.toml); copy it and fill in a real board",
+  "defconfig": [
+    {
+      "argv": [
+        "C:\\Program Files\\WorkBuddy\\resources\\vendor\\python\\python.exe",
+        "-B",
+        "D:\\Code\\PortingiOS\\common\\sources\\UniXNU\\unixnu",
+        "defconfig",
+        "-D",
+        "D:\\Code\\UniXNU-enuma",
+        "--out",
+        "D:\\Code\\UniXNU-enuma\\out\\upstream-check",
+        "enuma_defconfig"
+      ],
+      "exit_code": 0,
+      "stdout": "== configuration enuma_defconfig -> D:\\Code\\UniXNU-enuma\\out\\upstream-check\\enuma\\.config\n",
+      "stderr": "unixnu: developed and tested on macOS only; the kernel step needs Xcode and --skip-setup needs hdiutil\n"
+    }
+  ],
+  "build_performed": false,
+  "hardware_executed": false,
+  "donor_note": "uses saved audit; rerun audit_inputs.py for complete content hashing"
+}

@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "sources": {
+    "UniXNU": {
+      "path": "D:/Code/PortingiOS/common/sources/UniXNU",
+      "commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+      "repository": "https://github.com/UniXNU/UniXNU.git",
+      "file_sha256": {
+        "LICENSE": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+        "feeds.toml": "dec145fe25ed9cf1c50292a1e16ccbaa690b450a1de9e1ed687395e5fef88294",
+        "scripts/unixnu/config.py": "990e7fd512270e471ff66b399963aedb216c453cf32dcbba06213338338118fb",
+        "drivers/NativeUfs/NativeUfs.cpp": "3fbd24df8e9517b30d369fe64f4133aa6fb05bd90577d220dab8c58c0f5232f4",
+        "drivers/NativeAdreno/NativeAdrenoService.cpp": "3bfecd81fd86d38d314b1d8df9fcd213fe9957c2fe7f947e21752c7b25ed805a"
+      }
+    },
+    "UniXNU-sheng": {
+      "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng",
+      "commit": "a599a1a8a92093b5077543e071b72130769eb325",
+      "repository": "https://github.com/UniXNU/UniXNU-sheng.git",
+      "file_sha256": {
+        "LICENSE": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+        "board.toml": "245a5cfe9dbe8d077f839af6f99dd17fcdc7981c8fdd70e8b428a92d0d7479dd",
+        "scripts/make-sheng-adt.py": "a7c1b90609f84c68a23917f55930f2ade2013b7807bb998a0a0bd2dddbd8b593",
+        "configs/sheng_defconfig": "19b8ae12445232be1fb4887deb48936a3e5920f03e5a5318c0df07b0db7de12a"
+      }
+    },
+    "xnu-ios17-full": {
+      "path": "D:/Code/PortingiOS/common/sources/xnu-ios17-full",
+      "commit": "d8b80295118ef25ac3a784134bcf95cd8e88109f",
+      "repository": "https://github.com/apple-oss-distributions/xnu.git",
+      "file_sha256": {
+        "EXTERNAL_HEADERS/Availability.h": "4df136aecb401e4024ebb5a563a889e6adaaad2d48227e19fc1c43d17ed8177c"
+      }
+    },
+    "micode-enuma-devicetree": {
+      "path": "D:/Code/PortingiOS/common/sources/micode-enuma-devicetree",
+      "commit": "43b11af42a275b9415634f4d196579938820896d",
+      "repository": "https://github.com/MiCode/kernel_devicetree.git",
+      "file_sha256": {
+        "qcom/enuma-sm8250.dtsi": "6b41964a9a6c9119d35568d4184eae9eb0510cd7f169cd8859fe9656d10bef51"
+      }
+    },
+    "micode-enuma-kernel": {
+      "path": "D:/Code/PortingiOS/common/sources/micode-enuma-kernel",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git",
+      "file_sha256": {
+        "COPYING": "3ed18f1891d8d091174db229f2ee5510bccb00680c8398d1635eb9d4176a76cb",
+        "Makefile": "8139919cd67bb7cc07f63af17f581d82746a45ee0a763a3266bf888c985e5cb6"
+      }
+    },
+    "uefi-sheng": {
+      "path": "D:/Code/PortingiOS/common/sources/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "repository": "https://github.com/UniXNU/uefi-sheng.git",
+      "file_sha256": {
+        "Resources/Configs/sheng.toml": "1a5a82f7065825d1f45c8185635853e296bc8ad5fb780b09898047879d7bb46b"
+      }
+    }
+  }
+}

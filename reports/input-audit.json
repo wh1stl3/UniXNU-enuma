@@ -1,0 +1,7042 @@
+{
+  "evidence_level": "static_only",
+  "device_accessed": false,
+  "sources": {
+    "UniXNU": {
+      "path": "D:/Code/PortingiOS/common/sources/UniXNU",
+      "commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+      "repository": "https://github.com/UniXNU/UniXNU.git",
+      "tracked_changes": [],
+      "files": {
+        "LICENSE": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU/LICENSE",
+          "bytes": 2673,
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "sha384": "493f60bd726fef686e0954c20b8d6d75f20d7887df0fddd11f36ac8c30a8ac80b38ea439bb9817940560bd0c70318f18"
+        },
+        "feeds.toml": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU/feeds.toml",
+          "bytes": 1915,
+          "sha256": "dec145fe25ed9cf1c50292a1e16ccbaa690b450a1de9e1ed687395e5fef88294",
+          "sha384": "eed3c957e6f7415bd1b286a8741ea67b72a8c6cf14986e658cf80374c6a27e93e2185d9e834ffe43f3b9d83d7a829db7"
+        },
+        "scripts/unixnu/config.py": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU/scripts/unixnu/config.py",
+          "bytes": 4887,
+          "sha256": "990e7fd512270e471ff66b399963aedb216c453cf32dcbba06213338338118fb",
+          "sha384": "0d176783ba74e64d0bf6fb18b6819eb651ad80533c3b69228813cb648e09649e57946b45349632211f75d39d81f2730f"
+        },
+        "drivers/NativeUfs/NativeUfs.cpp": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU/drivers/NativeUfs/NativeUfs.cpp",
+          "bytes": 80138,
+          "sha256": "3fbd24df8e9517b30d369fe64f4133aa6fb05bd90577d220dab8c58c0f5232f4",
+          "sha384": "e3462627d3b0da412996d38db6cfde1ed0f0c2b3627d423d2753f7b1f30eac26fb8209313bad63d986ab1dcbc1c81065"
+        },
+        "drivers/NativeAdreno/NativeAdrenoService.cpp": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU/drivers/NativeAdreno/NativeAdrenoService.cpp",
+          "bytes": 34482,
+          "sha256": "3bfecd81fd86d38d314b1d8df9fcd213fe9957c2fe7f947e21752c7b25ed805a",
+          "sha384": "9615fcfaa6e6b4a33178ae1f237e20492adf076d3d0f0cf1e2a06cb6d7be0eba46843e0c7fe2116a1d9ccc6199ff2600"
+        }
+      }
+    },
+    "UniXNU-sheng": {
+      "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng",
+      "commit": "a599a1a8a92093b5077543e071b72130769eb325",
+      "repository": "https://github.com/UniXNU/UniXNU-sheng.git",
+      "tracked_changes": [],
+      "files": {
+        "LICENSE": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng/LICENSE",
+          "bytes": 2673,
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "sha384": "493f60bd726fef686e0954c20b8d6d75f20d7887df0fddd11f36ac8c30a8ac80b38ea439bb9817940560bd0c70318f18"
+        },
+        "board.toml": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng/board.toml",
+          "bytes": 6727,
+          "sha256": "245a5cfe9dbe8d077f839af6f99dd17fcdc7981c8fdd70e8b428a92d0d7479dd",
+          "sha384": "5f81e52d20f96c06bba47948d3d37e0a4e631c5a417bc59bd9432d90f137e07bb81a9b11f818ff6111fb3195bbf7d65d"
+        },
+        "scripts/make-sheng-adt.py": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng/scripts/make-sheng-adt.py",
+          "bytes": 13295,
+          "sha256": "a7c1b90609f84c68a23917f55930f2ade2013b7807bb998a0a0bd2dddbd8b593",
+          "sha384": "ce6c7c8854a2f159326cc720be29221f4aef07765cba453e2e18694ed9358bd4324a463033cf7b45032e0a4641703067"
+        },
+        "configs/sheng_defconfig": {
+          "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng/configs/sheng_defconfig",
+          "bytes": 1330,
+          "sha256": "19b8ae12445232be1fb4887deb48936a3e5920f03e5a5318c0df07b0db7de12a",
+          "sha384": "88cbf0db15cb707f76ccd7a876f1b4c34666e44903a7eb7e448e0dc5c4ebcc58253a94b20f5cac43f4eec0ab953e8502"
+        }
+      }
+    },
+    "xnu-ios17-full": {
+      "path": "D:/Code/PortingiOS/common/sources/xnu-ios17-full",
+      "commit": "d8b80295118ef25ac3a784134bcf95cd8e88109f",
+      "repository": "https://github.com/apple-oss-distributions/xnu.git",
+      "tracked_changes": [],
+      "files": {
+        "EXTERNAL_HEADERS/Availability.h": {
+          "path": "D:/Code/PortingiOS/common/sources/xnu-ios17-full/EXTERNAL_HEADERS/Availability.h",
+          "bytes": 16613,
+          "sha256": "4df136aecb401e4024ebb5a563a889e6adaaad2d48227e19fc1c43d17ed8177c",
+          "sha384": "41447d52244fb56a2140410d0acc0115b4dacbb74e88610c0b930f1e77e38b5dafc60fbad1cd1ee402fd393864a4a6de"
+        }
+      }
+    },
+    "micode-enuma-devicetree": {
+      "path": "D:/Code/PortingiOS/common/sources/micode-enuma-devicetree",
+      "commit": "43b11af42a275b9415634f4d196579938820896d",
+      "repository": "https://github.com/MiCode/kernel_devicetree.git",
+      "tracked_changes": [],
+      "files": {
+        "qcom/enuma-sm8250.dtsi": {
+          "path": "D:/Code/PortingiOS/common/sources/micode-enuma-devicetree/qcom/enuma-sm8250.dtsi",
+          "bytes": 32406,
+          "sha256": "6b41964a9a6c9119d35568d4184eae9eb0510cd7f169cd8859fe9656d10bef51",
+          "sha384": "276f256c5ee603dfb38e8f953a5bf624f6b5e008c27edef9a3a5033e2b9a74033ca5fc7b04c6438279f513884b47f67e"
+        }
+      }
+    },
+    "micode-enuma-kernel": {
+      "path": "D:/Code/PortingiOS/common/sources/micode-enuma-kernel",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git",
+      "tracked_changes": [],
+      "files": {
+        "COPYING": {
+          "path": "D:/Code/PortingiOS/common/sources/micode-enuma-kernel/COPYING",
+          "bytes": 441,
+          "sha256": "3ed18f1891d8d091174db229f2ee5510bccb00680c8398d1635eb9d4176a76cb",
+          "sha384": "223611e6e19996435389013f7cffad7c5fa60822f1633d1d602f1fc9fb153d66b8f7eca0a456ca56ebadccba0152403a"
+        },
+        "Makefile": {
+          "path": "D:/Code/PortingiOS/common/sources/micode-enuma-kernel/Makefile",
+          "bytes": 67721,
+          "sha256": "8139919cd67bb7cc07f63af17f581d82746a45ee0a763a3266bf888c985e5cb6",
+          "sha384": "b049825f5095fc7ca7c3a87e3c25482caf835edb131a2c239bfb0e454e1a2a6f3a42cd9cf416c4b6e6220f030328d641"
+        }
+      }
+    },
+    "uefi-sheng": {
+      "path": "D:/Code/PortingiOS/common/sources/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "repository": "https://github.com/UniXNU/uefi-sheng.git",
+      "tracked_changes": [],
+      "files": {
+        "Resources/Configs/sheng.toml": {
+          "path": "D:/Code/PortingiOS/common/sources/uefi-sheng/Resources/Configs/sheng.toml",
+          "bytes": 429,
+          "sha256": "1a5a82f7065825d1f45c8185635853e296bc8ad5fb780b09898047879d7bb46b",
+          "sha384": "dcdf934f79e8de40173405ca69318d247bcbbcb34d8256a9f92a10e72900d21c84943ed4a1988348f10dbb712bfe7122"
+        }
+      }
+    }
+  },
+  "donor": {
+    "manifest": {
+      "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/BuildManifest.plist",
+      "bytes": 749588,
+      "sha256": "199fb5de41c26d86c080b4e8e402c40309c5f42e7bda18c210451b09bcb49bf7",
+      "sha384": "5f2f40ef5d68ec04008afa8cc059cde4c6f707c036073e6d0136b001a54bc40784648471dfe72ab23956db0ec56ab4f2"
+    },
+    "product": "iPad7,1",
+    "version": "17.7.11",
+    "build": "21H461",
+    "device_class": "j120ap",
+    "identity_index": 0,
+    "variant": "Customer Erase Install (IPSW)",
+    "components": {
+      "KernelCache": {
+        "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/components/kernelcache.release.ipad7",
+        "bytes": 16238580,
+        "sha256": "13b97fa2c5ce97f04408dcc28c41fb6b0d60b9440065197879acf44b2572bf7b",
+        "sha384": "5eb98f5a4b5387c6ea09f2fb11bd2d83efc4669ae7387d5c22d761d84a583ba0bc7d713b748346294c3ef6e9169ce434",
+        "member": "kernelcache.release.ipad7",
+        "manifest_digest": "5eb98f5a4b5387c6ea09f2fb11bd2d83efc4669ae7387d5c22d761d84a583ba0bc7d713b748346294c3ef6e9169ce434",
+        "digest_match": true,
+        "reference_sha256_match": null
+      },
+      "DeviceTree": {
+        "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/components/DeviceTree.j120ap.im4p",
+        "bytes": 35260,
+        "sha256": "3f612f64819fbf6a8aacc03fabeda08ba897c4bf5385df995c59815c0c80c8f0",
+        "sha384": "91ae90f0aff04f1d848387d79c22b0fd7fe593c938c8c44adb92ba62581ce07f37d18ce578cb3a2d019001112f81d57e",
+        "member": "Firmware/all_flash/DeviceTree.j120ap.im4p",
+        "manifest_digest": "91ae90f0aff04f1d848387d79c22b0fd7fe593c938c8c44adb92ba62581ce07f37d18ce578cb3a2d019001112f81d57e",
+        "digest_match": true,
+        "reference_sha256_match": null
+      },
+      "StaticTrustCache": {
+        "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/components/044-76040-038.dmg.trustcache",
+        "bytes": 59519,
+        "sha256": "4563bdbf6ed8f72237d45dbba3ccde432634338f95c10d79d5d4631678a97c7c",
+        "sha384": "6d78f5cde531c14c67e71706853b081d1ec786b7e4885a9758f43324b65643144fe8efe42989a7b1dd3002a3b1ed6d5d",
+        "member": "Firmware/044-76040-038.dmg.trustcache",
+        "manifest_digest": "6d78f5cde531c14c67e71706853b081d1ec786b7e4885a9758f43324b65643144fe8efe42989a7b1dd3002a3b1ed6d5d",
+        "digest_match": true,
+        "reference_sha256_match": null
+      },
+      "Cryptex1,SystemTrustCache": {
+        "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/components/044-76034-038.dmg.trustcache",
+        "bytes": 1871,
+        "sha256": "9742f3d566369e6c48f63b3dc0740b06c243d13c6650e25bbf44616e13d6d097",
+        "sha384": "fa4b299c79db8ffe38eb97628806b341c422844ac8e4188b3a91504f56bd375fe1da0d8bf31a45eb03da0adf321dea99",
+        "member": "Firmware/044-76034-038.dmg.trustcache",
+        "manifest_digest": "fa4b299c79db8ffe38eb97628806b341c422844ac8e4188b3a91504f56bd375fe1da0d8bf31a45eb03da0adf321dea99",
+        "digest_match": true,
+        "reference_sha256_match": null
+      },
+      "OS": {
+        "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/components/044-76040-038.dmg",
+        "bytes": 5157406069,
+        "sha256": "3f99b859c9728379110b66657c7b15285bcb1925ad8b5726542e2cdcf8b1028d",
+        "sha384": "d41b9ea8cbe5220f77ff0cfa24d3267aba9ee74a4487551d8c7f1dcc753fcc750e085aedac6fb0f71d875a97f87eb73f",
+        "member": "044-76040-038.dmg",
+        "manifest_digest": "d41b9ea8cbe5220f77ff0cfa24d3267aba9ee74a4487551d8c7f1dcc753fcc750e085aedac6fb0f71d875a97f87eb73f",
+        "digest_match": true,
+        "reference_sha256_match": true
+      },
+      "Cryptex1,SystemOS": {
+        "path": "D:/Code/PortingiOS/common/cache/donor-ipados17/components/044-76034-038.dmg",
+        "bytes": 3303014400,
+        "sha256": "b4908cde41d23e6bc05e6af51a2c9eeb00cf0f863a6a18b1600c96a3fd70414f",
+        "sha384": "2c3abe4f7980440fb940f7831bba90467089a6970298f891f7b41124606eb49017b74b3b6fcbfdea94c43ae563e40917",
+        "member": "044-76034-038.dmg",
+        "manifest_digest": "2c3abe4f7980440fb940f7831bba90467089a6970298f891f7b41124606eb49017b74b3b6fcbfdea94c43ae563e40917",
+        "digest_match": true,
+        "reference_sha256_match": true
+      }
+    },
+    "apple_signature_status": "not_checked",
+    "kernelcache_format": "IPSW container; not decompressed Mach-O",
+    "scope": "static content digest checks, no restore/installation operation"
+  },
+  "fdt": {
+    "input": {
+      "path": "D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout",
+      "bytes": 941691,
+      "sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+      "sha384": "d9d6f8d8fcc54ee32b931de17076fcb8114466a54b9bc7e2ccac3c5ecfacd7b2190376023e1572e593faa00195990fa1"
+    },
+    "node_count": 4613,
+    "selected_nodes": [
+      {
+        "path": "/",
+        "properties": {
+          "model": [
+            "Qualcomm Technologies, Inc. xiaomi enuma"
+          ],
+          "compatible": [
+            "qcom,kona-mtp",
+            "qcom,kona",
+            "qcom,mtp"
+          ],
+          "interrupt-parent": [
+            "0x1"
+          ],
+          "#address-cells": [
+            "0x2"
+          ],
+          "#size-cells": [
+            "0x2"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/memory",
+        "properties": {
+          "device_type": [
+            "memory"
+          ],
+          "reg": [
+            "0x0",
+            "0x80000000",
+            "0x0",
+            "0x3bb00000",
+            "0x1",
+            "0x80000000",
+            "0x1",
+            "0x0",
+            "0x0",
+            "0xc0000000",
+            "0x0",
+            "0xc0000000"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/cpus/cpu@0",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x0"
+          ],
+          "phandle": [
+            "0xd"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@0/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x3"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@0/l2-cache/l3-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x5"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@0/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x345"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@0/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x346"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@100",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x100"
+          ],
+          "phandle": [
+            "0xe"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@100/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x6"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@100/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x347"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@100/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x348"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@200",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x200"
+          ],
+          "phandle": [
+            "0xf"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@200/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x7"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@200/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x349"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@200/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x34a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@300",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x300"
+          ],
+          "phandle": [
+            "0x10"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@300/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x8"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@300/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x34b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@300/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x34c"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@400",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x400"
+          ],
+          "phandle": [
+            "0x11"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@400/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x9"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@400/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x34d"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@400/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x34e"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@500",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x500"
+          ],
+          "phandle": [
+            "0x12"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@500/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0xa"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@500/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x34f"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@500/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x350"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@600",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x600"
+          ],
+          "phandle": [
+            "0x13"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@600/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0xb"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@600/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x351"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@600/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x352"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@700",
+        "properties": {
+          "device_type": [
+            "cpu"
+          ],
+          "compatible": [
+            "qcom,kryo"
+          ],
+          "reg": [
+            "0x0",
+            "0x700"
+          ],
+          "phandle": [
+            "0x14"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu@700/l2-cache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0xc"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@700/l1-icache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x353"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu@700/l1-dcache",
+        "properties": {
+          "compatible": [
+            "arm,arch-cache"
+          ],
+          "phandle": [
+            "0x354"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster0",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster0/core0",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster0/core1",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster0/core2",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster0/core3",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster1",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster1/core0",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster1/core1",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster1/core2",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster2",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/cpus/cpu-map/cluster2/core0",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x1"
+          ],
+          "ranges": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0xffffffff"
+          ],
+          "compatible": [
+            "simple-bus"
+          ],
+          "phandle": [
+            "0x356"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/soc/interrupt-controller@17a00000",
+        "properties": {
+          "compatible": [
+            "arm,gic-v3"
+          ],
+          "reg": [
+            "0x17a00000",
+            "0x10000",
+            "0x17a60000",
+            "0x100000"
+          ],
+          "interrupts": [
+            "0x1",
+            "0x9",
+            "0x4"
+          ],
+          "phandle": [
+            "0x1"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/timer",
+        "properties": {
+          "compatible": [
+            "arm,armv8-timer"
+          ],
+          "interrupts": [
+            "0x1",
+            "0xd",
+            "0xff08",
+            "0x1",
+            "0xe",
+            "0xff08",
+            "0x1",
+            "0xb",
+            "0xff08",
+            "0x1",
+            "0xc",
+            "0xff08"
+          ],
+          "clock-frequency": [
+            "0x124f800"
+          ],
+          "phandle": [
+            "0x35c"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/ufsphy_mem@1d87000",
+        "properties": {
+          "reg": [
+            "0x1d87000",
+            "0xe00",
+            "0x1d90000",
+            "0x8000"
+          ],
+          "reg-names": [
+            "phy_mem",
+            "ufs_ice"
+          ],
+          "clock-names": [
+            "ref_clk_src",
+            "ref_aux_clk"
+          ],
+          "clocks": [
+            "0x15",
+            "0x0",
+            "0x16",
+            "0xad"
+          ],
+          "status": [
+            "ok"
+          ],
+          "phandle": [
+            "0x76"
+          ],
+          "compatible": [
+            "qcom,ufs-phy-qmp-v4"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/ufshc@1d84000",
+        "properties": {
+          "compatible": [
+            "qcom,ufshc"
+          ],
+          "reg": [
+            "0x1d84000",
+            "0x3000",
+            "0x1d90000",
+            "0x8000"
+          ],
+          "reg-names": [
+            "ufs_mem",
+            "ufs_ice"
+          ],
+          "interrupts": [
+            "0x0",
+            "0x109",
+            "0x4"
+          ],
+          "clock-names": [
+            "core_clk",
+            "bus_aggr_clk",
+            "iface_clk",
+            "core_clk_unipro",
+            "core_clk_ice",
+            "ref_clk",
+            "tx_lane0_sync_clk",
+            "rx_lane0_sync_clk",
+            "rx_lane1_sync_clk"
+          ],
+          "clocks": [
+            "0x16",
+            "0xa7",
+            "0x16",
+            "0x6",
+            "0x16",
+            "0xa6",
+            "0x16",
+            "0xb3",
+            "0x16",
+            "0xaa",
+            "0x15",
+            "0x0",
+            "0x16",
+            "0xb2",
+            "0x16",
+            "0xb0",
+            "0x16",
+            "0xb1"
+          ],
+          "status": [
+            "ok"
+          ],
+          "phandle": [
+            "0x384"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/ufshc_card@1da4000",
+        "properties": {
+          "compatible": [
+            "qcom,ufshc"
+          ],
+          "reg": [
+            "0x1da4000",
+            "0x3000"
+          ],
+          "interrupts": [
+            "0x0",
+            "0x7d",
+            "0x4"
+          ],
+          "clock-names": [
+            "core_clk",
+            "bus_aggr_clk",
+            "iface_clk",
+            "core_clk_unipro",
+            "core_clk_ice",
+            "ref_clk",
+            "tx_lane0_sync_clk",
+            "rx_lane0_sync_clk"
+          ],
+          "clocks": [
+            "0x16",
+            "0x99",
+            "0x16",
+            "0x5",
+            "0x16",
+            "0x96",
+            "0x16",
+            "0xa5",
+            "0x16",
+            "0x9a",
+            "0x15",
+            "0x0",
+            "0x16",
+            "0xa2",
+            "0x16",
+            "0xa0"
+          ],
+          "status": [
+            "disabled"
+          ],
+          "phandle": [
+            "0x386"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,ipa@1e00000/ipa_smmu_ap",
+        "properties": {
+          "compatible": [
+            "qcom,ipa-smmu-ap-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x5c0",
+            "0x0"
+          ],
+          "phandle": [
+            "0x3aa"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,ipa@1e00000/ipa_smmu_wlan",
+        "properties": {
+          "compatible": [
+            "qcom,ipa-smmu-wlan-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x5c1",
+            "0x0"
+          ],
+          "phandle": [
+            "0x3ab"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,ipa@1e00000/ipa_smmu_uc",
+        "properties": {
+          "compatible": [
+            "qcom,ipa-smmu-uc-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x5c2",
+            "0x0"
+          ],
+          "phandle": [
+            "0x3ac"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,ipa@1e00000/ipa_smmu_11ad",
+        "properties": {
+          "compatible": [
+            "qcom,ipa-smmu-11ad-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x5c3",
+            "0x0"
+          ],
+          "phandle": [
+            "0x3ad"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/kgsl-smmu@3da0000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmu-v500"
+          ],
+          "reg": [
+            "0x3da0000",
+            "0x10000",
+            "0x3dc2000",
+            "0x20"
+          ],
+          "reg-names": [
+            "base",
+            "tcu-base"
+          ],
+          "#size-cells": [
+            "0x1"
+          ],
+          "#address-cells": [
+            "0x1"
+          ],
+          "ranges": [],
+          "clocks": [
+            "0x16",
+            "0x26",
+            "0x16",
+            "0x27",
+            "0x6d",
+            "0x0"
+          ],
+          "clock-names": [
+            "gcc_gpu_memnoc_gfx",
+            "gcc_gpu_snoc_dvm_gfx",
+            "gpu_cc_ahb"
+          ],
+          "interrupts": [
+            "0x0",
+            "0x2a0",
+            "0x4",
+            "0x0",
+            "0x2a1",
+            "0x4",
+            "0x0",
+            "0x2a6",
+            "0x4",
+            "0x0",
+            "0x2a7",
+            "0x4",
+            "0x0",
+            "0x2a8",
+            "0x4",
+            "0x0",
+            "0x2a9",
+            "0x4",
+            "0x0",
+            "0x2aa",
+            "0x4",
+            "0x0",
+            "0x2ab",
+            "0x4",
+            "0x0",
+            "0x2ac",
+            "0x4",
+            "0x0",
+            "0x2ad",
+            "0x4"
+          ],
+          "phandle": [
+            "0x182"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/kgsl-smmu@3da0000/gfx_0_tbu@3dc5000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x3dc5000",
+            "0x1000",
+            "0x3dc2200",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3f7"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/kgsl-smmu@3da0000/gfx_1_tbu@3dc9000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x3dc9000",
+            "0x1000",
+            "0x3dc2208",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3f8"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmu-v500"
+          ],
+          "reg": [
+            "0x15000000",
+            "0x100000",
+            "0x15182000",
+            "0x20"
+          ],
+          "reg-names": [
+            "base",
+            "tcu-base"
+          ],
+          "#size-cells": [
+            "0x1"
+          ],
+          "#address-cells": [
+            "0x1"
+          ],
+          "ranges": [],
+          "interrupts": [
+            "0x0",
+            "0x40",
+            "0x4",
+            "0x0",
+            "0x41",
+            "0x4",
+            "0x0",
+            "0x61",
+            "0x4",
+            "0x0",
+            "0x62",
+            "0x4",
+            "0x0",
+            "0x63",
+            "0x4",
+            "0x0",
+            "0x64",
+            "0x4",
+            "0x0",
+            "0x65",
+            "0x4",
+            "0x0",
+            "0x66",
+            "0x4",
+            "0x0",
+            "0x67",
+            "0x4",
+            "0x0",
+            "0x68",
+            "0x4",
+            "0x0",
+            "0x69",
+            "0x4",
+            "0x0",
+            "0x6a",
+            "0x4",
+            "0x0",
+            "0x6b",
+            "0x4",
+            "0x0",
+            "0x6c",
+            "0x4",
+            "0x0",
+            "0x6d",
+            "0x4",
+            "0x0",
+            "0x6e",
+            "0x4",
+            "0x0",
+            "0x6f",
+            "0x4",
+            "0x0",
+            "0x70",
+            "0x4",
+            "0x0",
+            "0x71",
+            "0x4",
+            "0x0",
+            "0x72",
+            "0x4",
+            "0x0",
+            "0x73",
+            "0x4",
+            "0x0",
+            "0x74",
+            "0x4",
+            "0x0",
+            "0x75",
+            "0x4",
+            "0x0",
+            "0x76",
+            "0x4",
+            "0x0",
+            "0xb5",
+            "0x4",
+            "0x0",
+            "0xb6",
+            "0x4",
+            "0x0",
+            "0xb7",
+            "0x4",
+            "0x0",
+            "0xb8",
+            "0x4",
+            "0x0",
+            "0xb9",
+            "0x4",
+            "0x0",
+            "0xba",
+            "0x4",
+            "0x0",
+            "0xbb",
+            "0x4",
+            "0x0",
+            "0xbc",
+            "0x4",
+            "0x0",
+            "0xbd",
+            "0x4",
+            "0x0",
+            "0xbe",
+            "0x4",
+            "0x0",
+            "0xbf",
+            "0x4",
+            "0x0",
+            "0xc0",
+            "0x4",
+            "0x0",
+            "0x13b",
+            "0x4",
+            "0x0",
+            "0x13c",
+            "0x4",
+            "0x0",
+            "0x13d",
+            "0x4",
+            "0x0",
+            "0x13e",
+            "0x4",
+            "0x0",
+            "0x13f",
+            "0x4",
+            "0x0",
+            "0x140",
+            "0x4",
+            "0x0",
+            "0x141",
+            "0x4",
+            "0x0",
+            "0x142",
+            "0x4",
+            "0x0",
+            "0x143",
+            "0x4",
+            "0x0",
+            "0x144",
+            "0x4",
+            "0x0",
+            "0x145",
+            "0x4",
+            "0x0",
+            "0x146",
+            "0x4",
+            "0x0",
+            "0x147",
+            "0x4",
+            "0x0",
+            "0x148",
+            "0x4",
+            "0x0",
+            "0x149",
+            "0x4",
+            "0x0",
+            "0x14a",
+            "0x4",
+            "0x0",
+            "0x14b",
+            "0x4",
+            "0x0",
+            "0x14c",
+            "0x4",
+            "0x0",
+            "0x14d",
+            "0x4",
+            "0x0",
+            "0x14e",
+            "0x4",
+            "0x0",
+            "0x14f",
+            "0x4",
+            "0x0",
+            "0x150",
+            "0x4",
+            "0x0",
+            "0x151",
+            "0x4",
+            "0x0",
+            "0x152",
+            "0x4",
+            "0x0",
+            "0x153",
+            "0x4",
+            "0x0",
+            "0x154",
+            "0x4",
+            "0x0",
+            "0x155",
+            "0x4",
+            "0x0",
+            "0x156",
+            "0x4",
+            "0x0",
+            "0x157",
+            "0x4",
+            "0x0",
+            "0x158",
+            "0x4",
+            "0x0",
+            "0x159",
+            "0x4",
+            "0x0",
+            "0x18b",
+            "0x4",
+            "0x0",
+            "0x18c",
+            "0x4",
+            "0x0",
+            "0x18d",
+            "0x4",
+            "0x0",
+            "0x18e",
+            "0x4",
+            "0x0",
+            "0x18f",
+            "0x4",
+            "0x0",
+            "0x190",
+            "0x4",
+            "0x0",
+            "0x191",
+            "0x4",
+            "0x0",
+            "0x192",
+            "0x4",
+            "0x0",
+            "0x193",
+            "0x4",
+            "0x0",
+            "0x194",
+            "0x4",
+            "0x0",
+            "0x195",
+            "0x4",
+            "0x0",
+            "0x196",
+            "0x4",
+            "0x0",
+            "0x197",
+            "0x4",
+            "0x0",
+            "0x198",
+            "0x4",
+            "0x0",
+            "0x199",
+            "0x4",
+            "0x0",
+            "0x19c",
+            "0x4",
+            "0x0",
+            "0x1a2",
+            "0x4",
+            "0x0",
+            "0x1a3",
+            "0x4",
+            "0x0",
+            "0x1a5",
+            "0x4",
+            "0x0",
+            "0x1a7",
+            "0x4",
+            "0x0",
+            "0x1a8",
+            "0x4",
+            "0x0",
+            "0x1a9",
+            "0x4",
+            "0x0",
+            "0x2b2",
+            "0x4",
+            "0x0",
+            "0x2b3",
+            "0x4",
+            "0x0",
+            "0x2b4",
+            "0x4",
+            "0x0",
+            "0x2b5",
+            "0x4",
+            "0x0",
+            "0x2b6",
+            "0x4",
+            "0x0",
+            "0x2b7",
+            "0x4",
+            "0x0",
+            "0x2b8",
+            "0x4",
+            "0x0",
+            "0x2b9",
+            "0x4",
+            "0x0",
+            "0x2c3",
+            "0x4"
+          ],
+          "phandle": [
+            "0x47"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/anoc_1_tbu@15185000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x15185000",
+            "0x1000",
+            "0x15182200",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3f9"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/anoc_2_tbu@15189000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x15189000",
+            "0x1000",
+            "0x15182208",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3fa"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/mnoc_hf_0_tbu@1518d000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x1518d000",
+            "0x1000",
+            "0x15182210",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3fb"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/mnoc_hf_1_tbu@15191000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x15191000",
+            "0x1000",
+            "0x15182218",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3fc"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/compute_dsp_1_tbu@15195000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x15195000",
+            "0x1000",
+            "0x15182220",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3fd"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/compute_dsp_0_tbu@15199000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x15199000",
+            "0x1000",
+            "0x15182228",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3fe"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/adsp_tbu@1519d000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x1519d000",
+            "0x1000",
+            "0x15182230",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x3ff"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/anoc_1_pcie_tbu@151a1000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x151a1000",
+            "0x1000",
+            "0x15182238",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "clock-names": [
+            "gcc_aggre_noc_pcie_tbu_clk"
+          ],
+          "clocks": [
+            "0x16",
+            "0x3"
+          ],
+          "phandle": [
+            "0x400"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/mnoc_sf_0_tbu@151a5000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x151a5000",
+            "0x1000",
+            "0x15182240",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x401"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/apps-smmu@15000000/mnoc_sf_1_tbu@151a9000",
+        "properties": {
+          "compatible": [
+            "qcom,qsmmuv500-tbu"
+          ],
+          "reg": [
+            "0x151a9000",
+            "0x1000",
+            "0x15182248",
+            "0x8"
+          ],
+          "reg-names": [
+            "base",
+            "status-reg"
+          ],
+          "phandle": [
+            "0x402"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,smmu_sde_unsec_cb",
+        "properties": {
+          "compatible": [
+            "qcom,smmu_sde_unsec"
+          ],
+          "iommus": [
+            "0x47",
+            "0x820",
+            "0x402"
+          ],
+          "phandle": [
+            "0x572"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,smmu_sde_sec_cb",
+        "properties": {
+          "compatible": [
+            "qcom,smmu_sde_sec"
+          ],
+          "iommus": [
+            "0x47",
+            "0x821",
+            "0x400"
+          ],
+          "phandle": [
+            "0x573"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_cmd",
+        "properties": {
+          "phandle": [
+            "0x681"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xb40"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xb40"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xb40"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_video",
+        "properties": {
+          "phandle": [
+            "0x760"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_amoled_wqhd_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xb40"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_fhd_plus_cmd",
+        "properties": {
+          "phandle": [
+            "0x761"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_fhd_plus_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sw43404_fhd_plus_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x870"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_4k_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x762"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_4k_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_4k_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_4k_dsc_video",
+        "properties": {
+          "phandle": [
+            "0x763"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_4k_dsc_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_4k_dsc_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd",
+        "properties": {
+          "phandle": [
+            "0x682"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@3",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@4",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@5",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@6",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_cmd/qcom,mdss-dsi-display-timings/timing@7",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_video",
+        "properties": {
+          "phandle": [
+            "0x764"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_qsync_wqhd_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_1080p_cmd",
+        "properties": {
+          "phandle": [
+            "0x765"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_1080p_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sharp_1080p_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_truly_wqxga_cmd",
+        "properties": {
+          "phandle": [
+            "0x766"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_truly_wqxga_cmd/config0",
+        "properties": {
+          "phandle": [
+            "0x66b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_truly_wqxga_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_truly_wqxga_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_wqxga_video_truly",
+        "properties": {
+          "phandle": [
+            "0x767"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_wqxga_video_truly/config0",
+        "properties": {
+          "phandle": [
+            "0x66c"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_wqxga_video_truly/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35597_wqxga_video_truly/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35695b_truly_fhd_cmd",
+        "properties": {
+          "phandle": [
+            "0x768"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35695b_truly_fhd_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35695b_truly_fhd_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35695b_truly_fhd_video",
+        "properties": {
+          "phandle": [
+            "0x769"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35695b_truly_fhd_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_nt35695b_truly_fhd_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_ext_bridge_1080p",
+        "properties": {
+          "phandle": [
+            "0x76a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_ext_bridge_1080p/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_ext_bridge_1080p/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x780"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x438"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_ext_bridge_4k_video",
+        "properties": {
+          "phandle": [
+            "0x76b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_ext_bridge_4k_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_ext_bridge_4k_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x780"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x870"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd",
+        "properties": {
+          "phandle": [
+            "0x76c"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd/qcom,mdss-dsi-display-timings/timing@3",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_cmd/qcom,mdss-dsi-display-timings/timing@4",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x500"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_video",
+        "properties": {
+          "phandle": [
+            "0x76d"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x280"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x1e0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_375_cmd",
+        "properties": {
+          "phandle": [
+            "0x76e"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_10b_cmd",
+        "properties": {
+          "phandle": [
+            "0x76f"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_10b_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_10b_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_10b_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_dsc_10b_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_cmd",
+        "properties": {
+          "phandle": [
+            "0x770"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x500"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x5a0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_video",
+        "properties": {
+          "phandle": [
+            "0x771"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x500"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x5a0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd",
+        "properties": {
+          "phandle": [
+            "0x683"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@3",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xf00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@4",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@5",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@6",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@7",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@8",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@9",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@10",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@11",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@12",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x9d8"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x870"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@13",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x168"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x500"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@14",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x168"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x500"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@15",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x168"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x500"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@16",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x168"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x500"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_dual_sim_dsc_375_cmd/qcom,mdss-dsi-display-timings/timing@17",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x21c"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x780"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_sec_hd_cmd",
+        "properties": {
+          "phandle": [
+            "0x772"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_sec_hd_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_sim_sec_hd_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x2d0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x500"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_xrsmrtvwr_video_jdi",
+        "properties": {
+          "phandle": [
+            "0x773"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_xrsmrtvwr_video_jdi/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_xrsmrtvwr_video_jdi/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x5a0"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x5a0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_38_0c_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x684"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_38_0c_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x685"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x686"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p1_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x687"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p1_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p1_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p1_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x688"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_p2_1_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x689"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_post_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x774"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_post_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_post_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2_mp_42_02_0b_post_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x68a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_p1_1_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x68b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_p1_1_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_p1_1_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_p1_1_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_mp_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x68c"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_mp_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_mp_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1s_42_02_0a_mp_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k11a_38_08_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x68d"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k11a_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k11a_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k11a_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k11a_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1u_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x68e"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1u_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1u_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1u_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j11_38_08_0a_fhd_cmd",
+        "properties": {
+          "phandle": [
+            "0x775"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j11_38_08_0a_fhd_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j11_38_08_0a_fhd_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1t_38_0c_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x68f"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1t_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1t_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j1t_38_0c_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j3s_37_02_0a_dsc_video",
+        "properties": {
+          "phandle": [
+            "0x690"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j3s_37_02_0a_dsc_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j3s_37_02_0a_dsc_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x695"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x696"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_j2s_mp_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l3a_mp_42_02_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x697"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l3a_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l3a_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l3a_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l3a_mp_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x698"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0b_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x699"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_42_02_0b_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_36_02_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x69a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_36_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_36_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l10a_36_02_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video",
+        "properties": {
+          "phandle": [
+            "0x67d"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x320"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_35_02_0b_dual_cphy_video",
+        "properties": {
+          "phandle": [
+            "0x691"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_35_02_0b_dual_cphy_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_35_02_0b_dual_cphy_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x320"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l11r_38_08_0a_dsc_cmd",
+        "properties": {
+          "phandle": [
+            "0x69b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l11r_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l11r_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l11r_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@1",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l11r_38_08_0a_dsc_cmd/qcom,mdss-dsi-display-timings/timing@2",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x960"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l81a_42_04_0a_dual_dphy_video",
+        "properties": {
+          "phandle": [
+            "0x692"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l81a_42_04_0a_dual_dphy_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_l81a_42_04_0a_dual_dphy_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x320"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xa00"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_m82_36_02_0a_dual_dphy_video",
+        "properties": {
+          "phandle": [
+            "0x693"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_m82_36_02_0a_dual_dphy_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_m82_36_02_0a_dual_dphy_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x384"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xb40"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_m82_42_02_0b_dual_dphy_video",
+        "properties": {
+          "phandle": [
+            "0x694"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_m82_42_02_0b_dual_dphy_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_m82_42_02_0b_dual_dphy_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x384"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0xb40"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_r66451_fhd_plus_144hz_cmd",
+        "properties": {
+          "phandle": [
+            "0x776"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_r66451_fhd_plus_144hz_cmd/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_r66451_fhd_plus_144hz_cmd/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x438"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x924"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_arglass_seeya_video",
+        "properties": {
+          "phandle": [
+            "0x777"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_arglass_seeya_video/qcom,mdss-dsi-display-timings",
+        "properties": {},
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_arglass_seeya_video/qcom,mdss-dsi-display-timings/timing@0",
+        "properties": {
+          "qcom,mdss-dsi-panel-width": [
+            "0x780"
+          ],
+          "qcom,mdss-dsi-panel-height": [
+            "0x438"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_rotator@aea8800/qcom,smmu_rot_unsec_cb",
+        "properties": {
+          "compatible": [
+            "qcom,smmu_sde_rot_unsec"
+          ],
+          "iommus": [
+            "0x47",
+            "0x215c",
+            "0x400"
+          ],
+          "phandle": [
+            "0x578"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl0@ae94000",
+        "properties": {
+          "compatible": [
+            "qcom,dsi-ctrl-hw-v2.4"
+          ],
+          "reg": [
+            "0xae94000",
+            "0x400",
+            "0xaf08000",
+            "0x4",
+            "0xae6b800",
+            "0x300"
+          ],
+          "reg-names": [
+            "dsi_ctrl",
+            "disp_cc_base",
+            "mdp_intf_base"
+          ],
+          "interrupt-parent": [
+            "0x24d"
+          ],
+          "interrupts": [
+            "0x4",
+            "0x0"
+          ],
+          "clocks": [
+            "0x6b",
+            "0x2",
+            "0x6b",
+            "0x3",
+            "0x6b",
+            "0x5",
+            "0x6b",
+            "0x2e",
+            "0x6b",
+            "0x2f",
+            "0x6b",
+            "0x26"
+          ],
+          "clock-names": [
+            "byte_clk",
+            "byte_clk_rcg",
+            "byte_intf_clk",
+            "pixel_clk",
+            "pixel_clk_rcg",
+            "esc_clk"
+          ],
+          "phandle": [
+            "0x579"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl0@ae94000/qcom,ctrl-supply-entries",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl0@ae94000/qcom,ctrl-supply-entries/qcom,ctrl-supply-entry@0",
+        "properties": {
+          "reg": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl0@ae94000/qcom,core-supply-entries",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl0@ae94000/qcom,core-supply-entries/qcom,core-supply-entry@0",
+        "properties": {
+          "reg": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl1@ae96000",
+        "properties": {
+          "compatible": [
+            "qcom,dsi-ctrl-hw-v2.4"
+          ],
+          "reg": [
+            "0xae96000",
+            "0x400",
+            "0xaf08000",
+            "0x4",
+            "0xae6c000",
+            "0x300"
+          ],
+          "reg-names": [
+            "dsi_ctrl",
+            "disp_cc_base",
+            "mdp_intf_base"
+          ],
+          "interrupt-parent": [
+            "0x24d"
+          ],
+          "interrupts": [
+            "0x5",
+            "0x0"
+          ],
+          "clocks": [
+            "0x6b",
+            "0x6",
+            "0x6b",
+            "0x7",
+            "0x6b",
+            "0x9",
+            "0x6b",
+            "0x30",
+            "0x6b",
+            "0x31",
+            "0x6b",
+            "0x28"
+          ],
+          "clock-names": [
+            "byte_clk",
+            "byte_clk_rcg",
+            "byte_intf_clk",
+            "pixel_clk",
+            "pixel_clk_rcg",
+            "esc_clk"
+          ],
+          "phandle": [
+            "0x57a"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl1@ae96000/qcom,ctrl-supply-entries",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl1@ae96000/qcom,ctrl-supply-entries/qcom,ctrl-supply-entry@0",
+        "properties": {
+          "reg": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl1@ae96000/qcom,core-supply-entries",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_ctrl1@ae96000/qcom,core-supply-entries/qcom,core-supply-entry@0",
+        "properties": {
+          "reg": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_phy0@ae94400",
+        "properties": {
+          "compatible": [
+            "qcom,dsi-phy-v4.1"
+          ],
+          "reg": [
+            "0xae94400",
+            "0x7c0",
+            "0xae94200",
+            "0x100"
+          ],
+          "reg-names": [
+            "dsi_phy",
+            "dyn_refresh_base"
+          ],
+          "phandle": [
+            "0x57b"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_phy0@ae94400/qcom,phy-supply-entries",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_phy0@ae94400/qcom,phy-supply-entries/qcom,phy-supply-entry@0",
+        "properties": {
+          "reg": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_phy1@ae96400",
+        "properties": {
+          "compatible": [
+            "qcom,dsi-phy-v4.1"
+          ],
+          "reg": [
+            "0xae96400",
+            "0x7c0",
+            "0xae96200",
+            "0x100"
+          ],
+          "reg-names": [
+            "dsi_phy",
+            "dyn_refresh_base"
+          ],
+          "phandle": [
+            "0x57c"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_phy1@ae96400/qcom,phy-supply-entries",
+        "properties": {
+          "#address-cells": [
+            "0x1"
+          ],
+          "#size-cells": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_phy1@ae96400/qcom,phy-supply-entries/qcom,phy-supply-entry@0",
+        "properties": {
+          "reg": [
+            "0x0"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_pll@ae94900",
+        "properties": {
+          "compatible": [
+            "qcom,mdss_dsi_pll_7nm_v4_1"
+          ],
+          "reg": [
+            "0xae94900",
+            "0x260",
+            "0xae94400",
+            "0x800",
+            "0xaf03000",
+            "0x8",
+            "0xae94200",
+            "0x100"
+          ],
+          "reg-names": [
+            "pll_base",
+            "phy_base",
+            "gdsc_base",
+            "dynamic_pll_base"
+          ],
+          "clocks": [
+            "0x6b",
+            "0x0"
+          ],
+          "clock-names": [
+            "iface_clk"
+          ],
+          "phandle": [
+            "0x57d"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,mdss_dsi_pll@ae96900",
+        "properties": {
+          "compatible": [
+            "qcom,mdss_dsi_pll_7nm_v4_1"
+          ],
+          "reg": [
+            "0xae96900",
+            "0x260",
+            "0xae96400",
+            "0x800",
+            "0xaf03000",
+            "0x8",
+            "0xae96200",
+            "0x100"
+          ],
+          "reg-names": [
+            "pll_base",
+            "phy_base",
+            "gdsc_base",
+            "dynamic_pll_base"
+          ],
+          "clocks": [
+            "0x6b",
+            "0x0"
+          ],
+          "clock-names": [
+            "iface_clk"
+          ],
+          "phandle": [
+            "0x57e"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu"
+          ],
+          "status": [
+            "ok"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_smmu_ife",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x800",
+            "0x400",
+            "0x47",
+            "0x801",
+            "0x400",
+            "0x47",
+            "0x840",
+            "0x400",
+            "0x47",
+            "0x841",
+            "0x400",
+            "0x47",
+            "0xc00",
+            "0x400",
+            "0x47",
+            "0xc01",
+            "0x400",
+            "0x47",
+            "0xc40",
+            "0x400",
+            "0x47",
+            "0xc41",
+            "0x400"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_smmu_jpeg",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x2040",
+            "0x400",
+            "0x47",
+            "0x2440",
+            "0x400"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_icp_fw",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-fw-dev"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_smmu_icp",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x20e2",
+            "0x400",
+            "0x47",
+            "0x24e2",
+            "0x400",
+            "0x47",
+            "0x2000",
+            "0x400",
+            "0x47",
+            "0x2001",
+            "0x400",
+            "0x47",
+            "0x2400",
+            "0x400",
+            "0x47",
+            "0x2401",
+            "0x400",
+            "0x47",
+            "0x2060",
+            "0x400",
+            "0x47",
+            "0x2061",
+            "0x400",
+            "0x47",
+            "0x2460",
+            "0x400",
+            "0x47",
+            "0x2461",
+            "0x400",
+            "0x47",
+            "0x2020",
+            "0x400",
+            "0x47",
+            "0x2021",
+            "0x400",
+            "0x47",
+            "0x2420",
+            "0x400",
+            "0x47",
+            "0x2421",
+            "0x400"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_smmu_cpas_cdm",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x20c0",
+            "0x400",
+            "0x47",
+            "0x24c0",
+            "0x400"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_smmu_secure",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-cb"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,cam_smmu/msm_cam_smmu_fd",
+        "properties": {
+          "compatible": [
+            "qcom,msm-cam-smmu-cb"
+          ],
+          "iommus": [
+            "0x47",
+            "0x2080",
+            "0x400",
+            "0x47",
+            "0x2480",
+            "0x400"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/spi@990000/novatek@0",
+        "properties": {
+          "compatible": [
+            "novatek,NVT-ts-spi"
+          ],
+          "reg": [
+            "0x0"
+          ],
+          "status": [
+            "ok"
+          ],
+          "novatek,irq-gpio": [
+            "0x65",
+            "0x27",
+            "0x2001"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          0
+        ]
+      },
+      {
+        "path": "/soc/spi@990000/novatek@0/novatek,cfg_0",
+        "properties": {
+          "novatek,fw-name": [
+            "novatek_nt36523_k81_fw01.bin"
+          ],
+          "novatek,mp-name": [
+            "novatek_nt36523_k81_mp01.bin"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,kgsl-busmon",
+        "properties": {
+          "compatible": [
+            "qcom,kgsl-busmon"
+          ],
+          "phandle": [
+            "0x634"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,kgsl-3d0@3d00000",
+        "properties": {
+          "compatible": [
+            "qcom,kgsl-3d0",
+            "qcom,kgsl-3d"
+          ],
+          "status": [
+            "ok"
+          ],
+          "reg": [
+            "0x3d00000",
+            "0x40000",
+            "0x3d61000",
+            "0x800",
+            "0x3de0000",
+            "0x10000",
+            "0x3d8b000",
+            "0x2000",
+            "0x6900000",
+            "0x80000"
+          ],
+          "reg-names": [
+            "kgsl_3d0_reg_memory",
+            "cx_dbgc",
+            "rscc",
+            "isense_cntl",
+            "qdss_gfx"
+          ],
+          "interrupts": [
+            "0x0",
+            "0x12c",
+            "0x4"
+          ],
+          "qcom,chipid": [
+            "0x6050002"
+          ],
+          "clocks": [
+            "0x6d",
+            "0x9",
+            "0x16",
+            "0x16",
+            "0x16",
+            "0x26",
+            "0x6d",
+            "0x3",
+            "0x6d",
+            "0x0",
+            "0x1af",
+            "0x3"
+          ],
+          "clock-names": [
+            "rbbmtimer_clk",
+            "mem_clk",
+            "mem_iface_clk",
+            "gmu_clk",
+            "gpu_cc_ahb",
+            "l3_vote"
+          ],
+          "phandle": [
+            "0x1c"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,kgsl-iommu@3da0000",
+        "properties": {
+          "compatible": [
+            "qcom,kgsl-smmu-v2"
+          ],
+          "reg": [
+            "0x3da0000",
+            "0x10000"
+          ],
+          "clocks": [
+            "0x16",
+            "0x26",
+            "0x16",
+            "0x27",
+            "0x6d",
+            "0x0"
+          ],
+          "clock-names": [
+            "gcc_gpu_memnoc_gfx",
+            "gcc_gpu_snoc_dvm_gfx",
+            "gpu_cc_ahb"
+          ],
+          "phandle": [
+            "0x636"
+          ]
+        },
+        "parent_address_cells": [
+          1
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,kgsl-iommu@3da0000/gfx3d_user",
+        "properties": {
+          "compatible": [
+            "qcom,smmu-kgsl-cb"
+          ],
+          "iommus": [
+            "0x182",
+            "0x0",
+            "0x401"
+          ],
+          "phandle": [
+            "0x637"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,kgsl-iommu@3da0000/gfx3d_secure",
+        "properties": {
+          "compatible": [
+            "qcom,smmu-kgsl-cb"
+          ],
+          "iommus": [
+            "0x182",
+            "0x2",
+            "0x400"
+          ],
+          "phandle": [
+            "0x638"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,gmu@3d6a000/gmu_user",
+        "properties": {
+          "compatible": [
+            "qcom,smmu-gmu-user-cb"
+          ],
+          "iommus": [
+            "0x182",
+            "0x4",
+            "0x400"
+          ],
+          "phandle": [
+            "0x63a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/soc/qcom,gmu@3d6a000/gmu_kernel",
+        "properties": {
+          "compatible": [
+            "qcom,smmu-gmu-kernel-cb"
+          ],
+          "iommus": [
+            "0x182",
+            "0x5",
+            "0x400"
+          ],
+          "phandle": [
+            "0x63b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          1
+        ]
+      },
+      {
+        "path": "/psci",
+        "properties": {
+          "compatible": [
+            "arm,psci-1.0"
+          ],
+          "method": [
+            "smc"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/hyp_region@80000000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x80000000",
+            "0x0",
+            "0x600000"
+          ],
+          "phandle": [
+            "0x643"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/xbl_aop_region@80700000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x80600000",
+            "0x0",
+            "0x260000"
+          ],
+          "phandle": [
+            "0x644"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/reserved-memory@80860000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x80860000",
+            "0x0",
+            "0x20000"
+          ],
+          "compatible": [
+            "qcom,cmd-db"
+          ],
+          "phandle": [
+            "0x645"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/res_xbl_uefi_log_region@80880000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x80880000",
+            "0x0",
+            "0x14000"
+          ],
+          "phandle": [
+            "0x646"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/smem_region@80900000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x80900000",
+            "0x0",
+            "0x200000"
+          ],
+          "phandle": [
+            "0x84"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/removed_region@80b00000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x80b00000",
+            "0x0",
+            "0x5300000"
+          ],
+          "phandle": [
+            "0x647"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_camera_region@86200000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x86200000",
+            "0x0",
+            "0x500000"
+          ],
+          "phandle": [
+            "0x25d"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_wlan_fw_region@86700000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x86700000",
+            "0x0",
+            "0x100000"
+          ],
+          "phandle": [
+            "0x648"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_ipa_fw_region@86800000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x86800000",
+            "0x0",
+            "0x10000"
+          ],
+          "phandle": [
+            "0x8a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_ipa_gsi_region@86810000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x86810000",
+            "0x0",
+            "0xa000"
+          ],
+          "phandle": [
+            "0x89"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_gpu_region@8681a000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x8681a000",
+            "0x0",
+            "0x2000"
+          ],
+          "phandle": [
+            "0x649"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_npu_region@86900000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x86900000",
+            "0x0",
+            "0x500000"
+          ],
+          "phandle": [
+            "0x9e"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_video_region@86e00000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x86e00000",
+            "0x0",
+            "0x500000"
+          ],
+          "phandle": [
+            "0x9c"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_cvp_region@87300000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x87300000",
+            "0x0",
+            "0x500000"
+          ],
+          "phandle": [
+            "0x9d"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_cdsp_region@87800000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x87800000",
+            "0x0",
+            "0x1400000"
+          ],
+          "phandle": [
+            "0x98"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_slpi_region@88c00000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x88c00000",
+            "0x0",
+            "0x2f00000"
+          ],
+          "phandle": [
+            "0xa4"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_adsp_region@8bb00000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x8bb00000",
+            "0x0",
+            "0x2500000"
+          ],
+          "phandle": [
+            "0x95"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/pil_spss_region@8e000000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x8e000000",
+            "0x0",
+            "0x100000"
+          ],
+          "phandle": [
+            "0x88"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/cdsp_secure_heap@8e100000",
+        "properties": {
+          "compatible": [
+            "removed-dma-pool"
+          ],
+          "reg": [
+            "0x0",
+            "0x8e100000",
+            "0x0",
+            "0x4600000"
+          ],
+          "phandle": [
+            "0x165"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/adsp_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0xa2"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/sdsp_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x160"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/cdsp_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x33f"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/cont_splash_region@9c000000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x9c000000",
+            "0x0",
+            "0x2300000"
+          ],
+          "phandle": [
+            "0x64a"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/disp_rdump_region@9c000000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0xb0400000",
+            "0x0",
+            "0x1000000"
+          ],
+          "phandle": [
+            "0x64b"
+          ],
+          "compatible": [
+            "removed-dma-pool"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/dfps_data_region@9e300000",
+        "properties": {
+          "reg": [
+            "0x0",
+            "0x9e300000",
+            "0x0",
+            "0x100000"
+          ],
+          "phandle": [
+            "0x24f"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/mem_dump_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0xa3"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/sp_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x163"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/user_contig_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x161"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/qseecom_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x5f"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/qseecom_ta_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x162"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/secure_display_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x164"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/cnss_wlan_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x16e"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/linux,cma",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      },
+      {
+        "path": "/reserved-memory/mailbox_region",
+        "properties": {
+          "compatible": [
+            "shared-dma-pool"
+          ],
+          "phandle": [
+            "0x33b"
+          ]
+        },
+        "parent_address_cells": [
+          2
+        ],
+        "parent_size_cells": [
+          2
+        ]
+      }
+    ],
+    "scope": "historical Android FDT; reg cells are bus-relative, not translated physical addresses; presence is not driver binding",
+    "excluded": [
+      "chosen bootargs",
+      "serial-number",
+      "unique identifiers"
+    ]
+  },
+  "historical_cpu": {
+    "input": {
+      "path": "D:/Code/PortingiOS/common/reports/enuma-cpu-cache-execution.json",
+      "bytes": 4269,
+      "sha256": "c13e29044c1486c5fa10cf241e9f794d8a72665ac0f01dde4a07ce3a9a58426e",
+      "sha384": "8e51655f3196d2b9f8656127371d2886bd30631717481ebe5037d1024f688b232b683c8c67f7ce4db52cf35d4da83243"
+    },
+    "origin": "android_kernel_saved_cpu_cache",
+    "decoded": [
+      {
+        "cpu": 0,
+        "midr": "0x0000000051df805e",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 1,
+        "midr": "0x0000000051df805e",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 2,
+        "midr": "0x0000000051df805e",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 3,
+        "midr": "0x0000000051df805e",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 4,
+        "midr": "0x00000000411fd0d0",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 5,
+        "midr": "0x00000000411fd0d0",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 6,
+        "midr": "0x00000000411fd0d0",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      },
+      {
+        "cpu": 7,
+        "midr": "0x00000000411fd0d0",
+        "mmfr0": "0x0000000000101122",
+        "tgran4_encoding": 0,
+        "tgran4": "supported",
+        "tgran16_encoding": 1,
+        "tgran16": "supported",
+        "parange_encoding": 2,
+        "physical_address_bits": 40
+      }
+    ],
+    "status": "inherited_only_not_rerun"
+  }
+}

@@ -52,4 +52,4 @@
 - 上游更新先 diff，跟进另开提交。固定仓库、提交、文件哈希、许可和依赖。
 - 优先复用真实通用实现及同 SoC 来源，不使用空实现冒充驱动。
 - enuma 不是 elish/nabu/sheng；SM8250 不是 SM8550。MMIO、IRQ、面板、触控、电源、GPU、UFS PHY 和 SMMU 必须逐项核对。
-- iPadOS 身份由匹配的 IPSW、BuildIdentity、ADT 产品节点和用户态决定；`ipad_identity` 仅涉及安全/激活属性，不是 OS 选择器。
+- iPadOS 身份由匹配的 IPSW、BuildIdentity、ADT 产品节点和用户态共同决定。固定版本 sheng 生成器的 `ipad_identity` 同时控制产品节点和安全属性，不能当成独立的 OS 选择器，也不能说它只控制激活；新工具须按自身实现审查。

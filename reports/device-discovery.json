@@ -1,0 +1,11 @@
+{
+  "scope": "read-only ADB discovery; serials excluded",
+  "devices": [
+    {
+      "state": "device",
+      "product": "nuwa",
+      "exit_code": 0
+    }
+  ],
+  "enuma_available": false
+}
