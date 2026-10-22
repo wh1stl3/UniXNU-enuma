@@ -4,34 +4,35 @@
 
 ## 当前结论
 
-**首次 Probe 01 r2 临时启动已执行：fastboot 返回 Sending/Booting OKAY，但用户报告黑屏，没有 Probe/GOP 证据。已由按键恢复 fastboot，再正常重启 Android；sys.boot_completed=1、root 可用，boot_a/vendor_boot_a 摘要未变。** 未刷写或改槽，未运行 XNU payload。黑屏的具体执行阶段未知，不能仅凭 Booting OKAY 宣称进入 UEFI。
+**黑屏定位取得执行阶段证据：BootShim 入口 2/7 秒门、复制/缓存维护后的门、SEC C 入口、DXE Core C 入口，以及 CoreDispatcher 前的门，六次临时启动均自动回到 Android。最后一次 20:57:59 发出，32.018 秒后确认 sys.boot_completed=1、root 和 boot/vendor_boot 摘要不变。** 未 flash/erase/改槽；没有运行 XNU/iPadOS payload。GOP 仍未得到。
 
-目标保持 iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。R-001 请求仍为 512 MiB；board.toml 保持 example=true，没有修改物理内存字段。
+诊断构建能走到 DXE 驱动调度前，后续重点是驱动调度、原厂显示依赖及 BDS/Probe 启动路径。各构建有插桩和链接布局变化，不能倒推最初 Probe 01 r2 黑屏镜像停在完全相同的位置，也不能把门之前所有硬件都标为 verified。
 
-## 已测试候选（黑屏，暂不原样重试）
+目标保持 iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。owned-memory 请求保持已批准的 512 MiB；board.toml example=true，物理内存字段及 *_verified 标记未改。
 
-- 本次测试使用 out/boot-candidate/enuma-uefi-probe01-r2-boot-v3.img，3153920 bytes，SHA256 3db695db10c1114352994ab64e551abc74391c2e50bbabfd48be0b37acec790a。
-- FD 为 3 MiB，SHA256 a169c9dbb894dfacc5d421779a2e855639bc1d0b4e4c0c224602a582b7471dc2。完整 CLANGPDB 构建通过，81 个固件文件；33 个本机原厂 PE/DEPEX 仍逐字节一致。实际 UniXNUDxe PE 包含 Probe 启动目标 GUID。
-- Probe 原样复用 DarwinBoot 的 GOP 验证、GetMap、RunEnd 和大字诊断绘制，显示 EL/CNTFRQ/4K 字段、GOP base/尺寸/stride/format、连续 free run 摘要；停留 60 秒后进入原 UniXNULib。只观察内存图，不分配 512 MiB，不调用 ExitBootServices。本次实机未显示 Probe，实际 GOP 和协议调度仍未知。
-- 192-byte 上游 BootShim + FD，raw boot v3，空 ramdisk，官方 unpack 字节回读通过，保留 vendor_boot；不带 XNU/完整 ADT/iPadOS 用户态。
-- enuma-uefi-gic-boot-v3.img 保留为无 Probe 的历史基线；遗漏 GIC 的最早 enuma-uefi-boot-v3.img 继续禁用。
+## 当前候选与证据
 
-## 基础平台与触控
+- 当前构建为 **诊断 stage 10，到 CoreDispatcher 前延迟 2 秒并复位**，不能当作正常固件使用。镜像 out/boot-candidate/enuma-dxe-dispatch-stage10-boot-v3.img，3153920 bytes，SHA256 fe97cac064925e430e4b2d4c8f058aa1cf8a0a05fb051e1c7c1b484b1eadc43b。
+- 实测镜像内 FD 为 3 MiB，SHA256 da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d654aeaabe。stage 3 / 9 / 10 的实际构建报告与 raw 保存在 out/entry-probe/ 对应子目录。随后仅规范补丁的空白上下文行并重建，当前 reports/enuma-firmware-build.json / enuma-fd-audit.json 对应未启动的重建 FD d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c；完整构建和 81 文件/33 OEM 字节审计通过，但重建摘要不一致尚未归因，不能把旧实测结论转移给新二进制。未覆盖已测镜像/raw。
+- stage 0 恢复正常路径；3..10 是可选择的 SEC/DXE 门，复用 Mu TimerLib / ResetCold。BootShim 门复用固定上游编译函数与复制逻辑，不猜 framebuffer/MMIO 日志地址。
+- 六次实测命令、镜像摘要、定时与恢复结果：reports/enuma-entry-device-tests.json。2/7 秒入口门的 ADB 返回差 5.422 秒；用户明确确认 2 秒实验未按键。
+- 原 Probe 01 r2 黑屏历史保留在 reports/enuma-probe01-device-test.json，不原样重试。更早遗漏 GIC 的候选继续禁用。boot v3 保留原厂 vendor_boot、空 ramdisk，不含完整 ADT/XNU/用户态。
 
-- 用固定 sheng node 编码器生成 2956-byte 硬件片段：8 个 qcom,kryo、affinity 0/100..700、19.2 MHz、PSCI SMC、GIC 0x17a00000/0x17a60000、stride 0x20000。实际 identity ranges 转为 ArmCpu 布局；virtual timer INTID 27 与 FDT 对应。没有 /chosen、DRAM、GOP、根卷、donor/product，不能作为完整启动 ADT。
-- EnumaNvt 新增 SPI dummy 去除、66/80-byte 规范包的触控前缀校验、十点 ID/坐标/压力、ESD/WDT 分类与 FWINFO 闭区间归一化；错误不交付部分帧。
-- NativeHidInput 坐标仍写死 sheng 的 30480×20320，不能直接喂本板坐标。没有本板 HID 发布、IRQ/IOKit、FWINFO 读取、固件上传、恢复或笔输入支持。
-- GENI 继续复用固定 NativeGeniSpi；UFS 只读时钟支持保持。Sheng PMGR、SM8550 NativeUfs 和 A740 NativeAdreno 仍关闭。
+## 仍有效的基础适配
 
-## 验证与下一步
+- 本机 XBL 的 45 项内存/MMIO 配置、31 项数值配置、33 个 OEM 驱动和 K81 面板资源已接入。实际 GOP format/base/stride、UEFI GetMemoryMap、连续 512 MiB 分配和 EBS 显示保持仍未观察。
+- 本板硬件 ADT 片段包含 8 核 affinity、19.2 MHz、SMC PSCI、GIC 及 stride/ranges；缺 /chosen、DRAM、GOP、根卷和 donor/product，不能作为完整 ADT。
+- GENI 复用通用 NativeGeniSpi；NT36523 解码核心有主机证据。FWINFO/轴向、固件上传、IRQ/IOKit/HID 和笔输入仍缺；sheng 坐标常量及 SM8550 UFS/A740 驱动不能照用。
 
-27 项 Python 检查通过；GENI/时钟/NT36523 主机 ASan/UBSan 通过，4 个 AArch64 对象编译通过；源码/补丁图和 FD/boot 字节审计通过。这些不等于 QEMU、IOKit 链接或实机通过；未设置 *_verified=true。
+## 验证层次
 
-1. 先定位 BootShim/SEC/DXE/GOP 阶段。检查 ARM64 入口/加载契约、SEC 与 DXE 初始化路径和显示依赖，设计更早的可观察证据，不原样重复黑屏候选。
-2. 实际 GOP/GetMemoryMap、512 MiB 分配及 EBS 显示保持均未得到；取得证据后再推进。board.toml 新内存字段仍需审查。
-3. 基础 ADT 片段、NT36523 主机核心保持离线结果；完整 ADT、内核链接/预链接和触控 IRQ/HID 仍未完成。
-4. 本次恢复闭环已完成，无待按键事项；后续新实验仍核对在旁按键条件和设备身份。
+30 项 Python 检查在 Windows Python 通过；共享检查点头部的 stage 0/3..10 主机 ASan/UBSan 通过。BootShim 门和 SEC 入口门有 QEMU virt/SMC 执行证据，仅代表该平台。stage 3/9/10 的固件构建、OEM 字节审计和 boot v3 往返通过；上述六个点有实机返回证据。没有宣称完整 DXE、GOP、XNU 或触控运行通过。
 
-详见 [本轮离线报告](operations/2026-10-22-probe-platform-touch.md)。上游只读；产物在本仓 out/；仅本地 main 提交，未推送。
+## 下一步与远端
 
-首次实机记录：[Probe 01 临时启动](operations/2026-10-22-first-device-probe.md)，结构化证据 reports/enuma-probe01-device-test.json。
+1. 在 CoreDispatcher 内及其返回处补观察，区分具体驱动、厂商显示协议闭包、BDS 与 Probe 入口。优先复用已有 TimerLib/ResetCold 门，保持恢复路径；新内存字段及验证标记仍需审查。
+2. 取得实际 GOP 和 UEFI map 后再推进 owned-window / XNU 基础平台；完整内核链接、预链接及 ADT 仍未闭合。
+3. 本仓只有本地 main，未配置 origin、未推送、未触发 CI。nuwa 远端为 wh1stl3/UniXNU-nuwa（PUBLIC），其 Actions 只有 Ubuntu 固件任务。enuma 还需自己的远端及 macOS XNU 作业；固定 UniXNU 的内核脚本依赖 Xcode/iPhoneOS SDK，当前 WSL 固件构建不能代替该环节。
+4. 设备已恢复 Android，当前无待按键事项。
+
+详见 [入口定位报告](operations/2026-10-22-entry-checkpoints.md) 与 [构建环境核对](operations/2026-10-22-build-environments.md)。上游和 nuwa 只读，二进制与私有设备标识仅在忽略的 out/ 中。

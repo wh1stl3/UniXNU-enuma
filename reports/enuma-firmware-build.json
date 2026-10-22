@@ -32,6 +32,8 @@
         "-D",
         "BUILDID_STRING=enuma-research",
         "-D",
+        "ENUMA_DIAG_STAGE=10",
+        "-D",
         "ENUMA_PLATFORM_CONFIG=enumaPkg/Include/PlatformConfig.inc",
         "-D",
         "ENUMA_VENDOR_DSC=EnumaInputs/Vendor.dsc.inc",
@@ -58,6 +60,7 @@
     "Common/Mu": "b8d46c71610318e36a661819e1e3c0b8bdda413a",
     "Common/Mu_OEM_Sample": "b70b4b7bb02c43bf9db2172dfb3ed0457e2361d6"
   },
+  "diagnostic_stop_stage": 10,
   "probe_upstream_sha256": {
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
@@ -75,11 +78,14 @@
     "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
-    "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "d52b842852f2e78345781ee6c5c53f4dee3fd9cfb94812d877d970c9930bc81e",
+    "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "a4f23cb13b0ba440fe9f383fc4270892fca8c355113b3065d76b25197e2bff62",
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+    "firmware/diagnostics/EnumaStageCheckpoint.h": "1ed2d215a267d2cde5ac15b4089392195a78fc6bbbfa223ab1d1bfb16937e277",
+    "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
     "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
-    "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb"
+    "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+    "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7"
   },
-  "fd_sha256": "a169c9dbb894dfacc5d421779a2e855639bc1d0b4e4c0c224602a582b7471dc2"
+  "fd_sha256": "d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c"
 }

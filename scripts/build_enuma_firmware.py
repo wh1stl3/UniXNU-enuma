@@ -53,6 +53,8 @@ def main():
     parser.add_argument('--reference', type=Path, required=True)
     parser.add_argument('--unixnu', type=Path, required=True)
     parser.add_argument('--jobs', type=int, default=4)
+    parser.add_argument('--stop-stage', type=int, choices=(0,3,4,5,6,7,8,9,10), default=0,
+                        help='diagnostic PSCI reset gate; 0 keeps normal execution')
     args = parser.parse_args()
     lock = json.loads((ROOT / 'config/firmware-build.lock.json').read_text())
     stage_archives(lock)
@@ -97,9 +99,14 @@ def main():
     records = []
     sec_source = uefi / 'Silicon/Silicium/SiliciumPkg/Sec/Sec.c'
     sec_source.write_bytes(sec_source.read_bytes().replace(b'\r\n', b'\n'))
+    for path in (uefi/'Silicon/Silicium/SiliciumPkg/Sec/Sec.inf',
+                 core/'MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c', core/'MdeModulePkg/Core/Dxe/DxeMain.inf'):
+        path.write_bytes(path.read_bytes().replace(b'\r\n', b'\n'))
     # Patches are applied only to our archive staging, and only if not already present.
     for target, patch in [(uefi, ROOT / 'firmware/patches/kona-preserve-display.patch'),
                           (uefi, ROOT / 'firmware/patches/sec-preserve-display.patch'),
+                          (uefi, ROOT / 'firmware/patches/sec-stage-checkpoints.patch'),
+                          (core, ROOT / 'firmware/patches/dxe-stage-checkpoints.patch'),
                           (core, uefi / 'Resources/MuPatches/Gic-Spurious.patch')]:
         # A nested staging directory must be its own patch root. Otherwise git
         # can silently skip paths outside the parent repository's current prefix.
@@ -110,6 +117,18 @@ def main():
         if reverse.returncode:
             subprocess.run(['git', 'apply', '--check', str(patch)], cwd=target, check=True)
             subprocess.run(['git', 'apply', str(patch)], cwd=target, check=True)
+    for target in (uefi/'Silicon/Silicium/SiliciumPkg/Sec', core/'MdeModulePkg/Core/Dxe/DxeMain'):
+        shutil.copyfile(ROOT/'firmware/diagnostics/EnumaStageCheckpoint.h', target/'EnumaStageCheckpoint.h')
+    for source, stages in [(uefi/'Silicon/Silicium/SiliciumPkg/Sec/Sec.c', range(3,9)),
+                           (core/'MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c', (9,10))]:
+        text = source.read_text()
+        for stage in stages:
+            if text.count('EnumaStageCheckpoint ('+str(stage)+');') != 1:
+                raise ValueError('diagnostic checkpoint missing/duplicated: '+str(stage))
+    reset_pins = json.loads((ROOT/'config/entry-contract-sources.lock.json').read_text())['mu_reset_sha256']
+    for relative, expected in reset_pins.items():
+        if hashlib.sha256((core/relative).read_bytes()).hexdigest() != expected:
+            raise ValueError('reset implementation changed: '+relative)
     gic_source = core / 'ArmPkg/Drivers/ArmGicDxe/GicV3/ArmGicV3Dxe.c'
     if 'cannot be masked' not in gic_source.read_text():
         raise ValueError('GIC patch was not actually applied')
@@ -131,7 +150,7 @@ def main():
     if not records or records[-1]['exit_code'] == 0:
         defines = {'FD_BASE': '0x9fc00000', 'FD_SIZE': '0x300000', 'FD_BLOCKS': '768',
                    'ENABLE_SECUREBOOT': '0', 'DEVICE_MODEL': 'enuma', 'MEMORY_PROTECTION': 'TRUE',
-                   'SHIP_MODE': 'FALSE', 'BUILDID_STRING': 'enuma-research',
+                   'SHIP_MODE': 'FALSE', 'BUILDID_STRING': 'enuma-research', 'ENUMA_DIAG_STAGE': str(args.stop_stage),
                    'ENUMA_PLATFORM_CONFIG': 'enumaPkg/Include/PlatformConfig.inc',
                    'ENUMA_VENDOR_DSC': 'EnumaInputs/Vendor.dsc.inc',
                    'ENUMA_VENDOR_DXE': 'EnumaInputs/Vendor.fdf.inc',
@@ -147,6 +166,7 @@ def main():
               'complete': all(r['exit_code'] == 0 for r in records) and fd.exists()}
     report['archive_sha256'] = lock['archive_sha256']
     report['reference_gitlinks'] = lock['reference_gitlinks']
+    report['diagnostic_stop_stage'] = args.stop_stage
     report['probe_upstream_sha256'] = reused
     report['source_inputs_sha256'] = {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes().replace(b'\r\n', b'\n')).hexdigest()

@@ -1,0 +1,58 @@
+{
+  "scope": "static concrete image and pinned comparison sources; not exact Xiaomi ABL disassembly",
+  "baseline_image_sha256": "3db695db10c1114352994ab64e551abc74391c2e50bbabfd48be0b37acec790a",
+  "baseline_header": {
+    "text_offset": "0x9fc00000",
+    "image_size": 3145920,
+    "flags": 0,
+    "shim_bytes": 192,
+    "fd_destination": "0x9fc00000",
+    "fd_bytes": 3145728
+  },
+  "entry_requirements": {
+    "exception_level": "non-secure EL1 or EL2 per ARM64 Linux contract; actual EL not yet sampled",
+    "mmu": "off at Linux entry; not yet directly sampled on device",
+    "register_x0": "preserved through shim and saved as gSecEntryArg0 by pinned SEC",
+    "stack": "shim needs no stack; SEC selects SPSel and initializes OEM stack before C",
+    "cache": "shim cleans copied FD to PoC, invalidates I-cache, barriers before branch"
+  },
+  "comparison_sources": [
+    {
+      "repository": "SHIFTPHONES/android_bootable_bootloader_edk2",
+      "commit": "7d391d8b1059ed48259728cab004ca6f16ee3de2",
+      "path": "QcomModulePkg/Library/BootLib/BootLinux.c",
+      "sha256": "63702580308a217796022b133979c705e6de34cb75c5c79b7eb6d89176131573",
+      "url": "https://raw.githubusercontent.com/SHIFTPHONES/android_bootable_bootloader_edk2/7d391d8b1059ed48259728cab004ca6f16ee3de2/QcomModulePkg/Library/BootLib/BootLinux.c",
+      "scope": "comparison source; not exact Xiaomi ABL",
+      "observed_source_contract": {
+        "text_offset_referenced": false,
+        "raw_copy_to_kernel_load_addr": true,
+        "image_size_space_check": true,
+        "vendor_boot_v3_support": true
+      }
+    },
+    {
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "tools/BootShim/BootShim.S",
+      "sha256": "5e8003b860f6f32cb4cdebd015364b7684112d28f946d225b126ab08d3bcc099",
+      "url": "https://raw.githubusercontent.com/edk2-porting/edk2-msm/e1952621f419f8db60ed28271264e1b5184c571d/tools/BootShim/BootShim.S",
+      "scope": "comparison source; not exact Xiaomi ABL"
+    }
+  ],
+  "limits": [
+    "comparison ABL source is not enuma vendor binary",
+    "reset timing gates observe reached control points, not all register/memory contents",
+    "do not change FD/stack/DRAM addresses from a generic text_offset comparison"
+  ],
+  "checkpoint_stages": {
+    "3": "SEC C entry before cache changes",
+    "4": "platform initialize returned",
+    "5": "InitializeMemory returned",
+    "6": "PlatformPeim returned",
+    "7": "library constructors returned",
+    "8": "FV decompression returned",
+    "9": "DXE Core C entry",
+    "10": "DXE ready to dispatch"
+  }
+}

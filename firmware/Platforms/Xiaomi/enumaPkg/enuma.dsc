@@ -31,7 +31,7 @@
 !include enumaPkg/Include/UniXNU.dsc.inc
 
 [BuildOptions]
-  *_*_AARCH64_CC_FLAGS = -DENUMA_PRESERVE_DISPLAY=1
+  *_*_AARCH64_CC_FLAGS = -DENUMA_PRESERVE_DISPLAY=1 -DENUMA_DIAG_STAGE=$(ENUMA_DIAG_STAGE)
 
 [PcdsFixedAtBuild]
   gSiliciumPkgTokenSpaceGuid.PcdSmbiosSystemManufacturer|"Xiaomi"

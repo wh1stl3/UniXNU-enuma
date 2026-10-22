@@ -1,0 +1,276 @@
+{
+  "scope": "actual gate header with host adapters; not PSCI/firmware execution",
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=0",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-0"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-0"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 0 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=3",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-3"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-3"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 3 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=4",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-4"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-4"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 4 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=5",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-5"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-5"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 5 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=6",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-6"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-6"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 6 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=7",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-7"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-7"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 7 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=8",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-8"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-8"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 8 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=9",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-9"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-9"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 9 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=10",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-10"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-10"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 10 selection, delay and no fall-through\n",
+      "stderr": ""
+    }
+  ],
+  "unsupported_stage_rejected": true
+}
