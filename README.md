@@ -4,7 +4,7 @@
 
 先读 [AGENTS.md](AGENTS.md)、[当前状态](docs/STATUS.md)、[决策](docs/DECISIONS.md)、[待审查事项](docs/NEED-REVIEW.md)。仓库和交接纪律继承 UniXNU-nuwa，板级参数与 iPhone donor 不继承。
 
-设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表已有可启动镜像。固件需要单独的 uefi-enuma 适配，禁止把 sheng 固件直接用于 enuma。
+设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表已有可启动镜像。固件通过本仓独立脚本构建，使用Kona源码与本机XBL驱动，当前已有待实机测试的v3候选。
 
 目录：`config/` 路线和来源锁；`configs/` 内核候选配置；`drivers/EnumaPlatform/` 板级支持代码；`firmware/` Kona 源码增量；`scripts/` 审计和主机检查；`reports/` 可复现证据；`docs/` 五件套与操作记录。
 
@@ -13,3 +13,5 @@
 本轮 Kona/GENI/UFS 接入、编译检查和待决内存范围见 [固件与驱动报告](docs/operations/2026-10-22-kona-platform.md)。当前通过的是源码检查、主机寄存器模型和 AArch64 对象编译，尚未完成固件/IOKit 链接或设备执行。
 
 R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-22-owned-memory.md) 记录真实 DarwinBoot ADT 解析和窗口选择函数的主机检查。物理分配未观察，镜像生成/启动仍须单独确认。
+
+本机内存/GOP来源、33个厂商驱动接入、完整UEFI构建、v3候选及实机待测表见[本机平台固件报告](docs/operations/2026-10-22-native-platform-firmware.md)。最新候选路径与摘要以 reports/enuma-boot-candidate.json 为准；当前候选只包含固件阶段。

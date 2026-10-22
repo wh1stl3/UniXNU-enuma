@@ -81,7 +81,10 @@ READ_LOCK_STATUS   = TRUE
 
   !include enumaPkg/Include/APRIORI.inc
   !include enumaPkg/Include/DXE.inc
-  # No unaudited vendor RAW payloads are included.
+!ifndef ENUMA_VENDOR_RAW
+  !error ENUMA_VENDOR_RAW must provide the native K81 panel resources
+!endif
+  !include $(ENUMA_VENDOR_RAW)
   !include enumaPkg/Include/UniXNU.fdf.inc
 
   # RAM Manager
@@ -122,3 +125,12 @@ READ_LOCK_STATUS   = TRUE
   }
 
   !include SiliciumPkg/Common.fdf.inc
+
+# The selected base has binary DXE_DRIVER rules but no runtime-binary rule.
+# Preserve OEM runtime PE subsystems and original dependency expressions.
+[Rule.Common.DXE_RUNTIME_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional |.depex
+    PE32 PE32 |.efi
+    UI STRING="$(MODULE_NAME)" Optional
+  }

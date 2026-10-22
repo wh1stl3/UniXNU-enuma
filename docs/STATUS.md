@@ -1,34 +1,40 @@
 # STATUS
 
-更新：2026-10-22（Asia/Shanghai）。当前唯一真相；历史见 WORKLOG。
+更新：2026-10-22（Asia/Shanghai）。当前唯一真相；历史见WORKLOG。
 
 ## 当前结论
 
-**512 MiB 配置已按 R-001 落实，DarwinBoot 内存交接约定已通过主机检查；尚无可启动固件。** Kona 固件源码增量和 SM8250 板级支持代码已落地。 目标保持 iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。只做离线工作，未访问设备。
+**enuma平台配置、原厂驱动接入及完整UEFI构建已完成，已生成首阶段boot v3候选；尚未启动候选或运行XNU。** 目标保持iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。R-001的owned-memory请求仍为512 MiB。
 
 ## 已完成
 
-- 512 MiB 请求进入 ADT 输入计划：/chosen/darwinboot-memory-size，LE uint64。固定 DarwinBoot 的真实 AdtNode、RunEnd、AllocateWindow 函数通过 ASan/UBSan 主机测试，覆盖144种截断、重复/错位属性、保留洞、相邻描述符、对齐和失败处理；没有生成 ADT 文件或实际 UEFI 分配。
+- 本轮只读确认当前设备为enuma，BL解锁、root uid0、Android boot_completed=1。当前FDT与历史摘要完全一致，触控绑定NVT-ts，DRM为1600×2560的120/60/30Hz模式。
+- 从本机XBL生成45项内存/MMIO区域及31项数值配置，提供MemoryMapLib、ConfigurationMapLib、DDR/栈/FD配置。保留本机EnableUfsIOC=0，未加入board.toml总DRAM/物理基址。
+- 提取33个AArch64原厂驱动与原始DEPEX/APRIORI、K81面板资源；GOP选择本机DisplayDxe/CPRDxe。跳过SEC清空含DFPS的显示保留区，早期SerialPortLib使用Null，Kona保留显示SMMU映射。
+- 独立工作区内BaseTools与完整enuma UEFI构建通过；补齐架构协议/变量/磁盘/控制台以及runtime二进制打包规则。复核发现并修复GIC补丁根目录问题后重新构建成功。
+- 最终3 MiB FD经解析确认：33个原厂PE和DEPEX逐字节一致，UniXNU、UniXNUDxe、DarwinBoot已入卷；未使用SimpleFb。源码/补丁图检查、8项反向测试、6项v3打包测试通过。
+- 192字节参考BootShim+FD使用固定AOSP工具打为raw Android boot v3，官方unpack逐字节回读通过，保留原厂vendor_boot。候选不带XNU/ADT/iPadOS payload，先用于固件入口实验。
+- 首轮donor摘要、4 KiB配置、GENI/UFS支持核心与512 MiB真实DarwinBoot主机检查继续有效；不等于实机驱动结果。
 
-- 固件继续使用 UniXNU/uefi-sheng 329b473d 中的 KonaPkg；Mu_Basecore cfb93724 与 UniXNU feeds 匹配，无需升级底座。选定 Kona/alioth 文件与 Mu-Silicium 42fe5637 相同。
-- enuma DSC 和 FvMain 均接入真实 UniXNU app、UniXNUDxe、DarwinBoot；平台/厂商输入缺失时拒绝构建。没有借用 alioth 内存图或二进制。
-- Kona PlatformSec 最小补丁保留显示 SMMU 映射；精确应用及三种预处理分支检查通过，watchdog 行为保留。尚不证明显示能保持到 XNU。
-- EnumaGeniSpi 复用 NativeGeniSpi，增加本板 FIFO/PIO 入口、mode0/CS0 实际配置和错误后失效处理。EnumaUfsClock 提供九项 Kona GCC 只读快照；偏移逐项与固定厂商源码比对。
-- 上游 GENI 寄存器模型、本板适配和 UFS 快照的 ASan/UBSan 检查通过；三个 freestanding AArch64 对象编译通过。不是 IOKit/固件链接或硬件结果。
-- 固件增量七项检查测试通过；完整镜像前置检查按预期拒绝。选定来源可从锁文件重取，参考仓保持只读。
-- 首轮 donor 六组件/两个 DMG 摘要、FDT 4613 节点、GIC/PSCI/timer/CPU 计划及 example 防护继续有效。
+## 当前唯一候选
 
-复现和证据：[内存交接检查](operations/2026-10-22-owned-memory.md)、[固件与驱动报告](operations/2026-10-22-kona-platform.md)、reports/。已按 R-001 配置 512 MiB owned-memory 请求，物理基址与总 DRAM 未设置；未生成镜像，未设置任何 *_verified=true。
+- 路径：`out/boot-candidate/enuma-uefi-gic-boot-v3.img`
+- 大小：3153920 bytes；SHA256：`2c9d14dcdff12a00fb7bf606249a944a60f4b311d6c50905a3bc3725ea76e423`。
+- 前一份enuma-uefi-boot-v3.img遗漏GIC补丁，仅留历史记录，不用于设备测试。
+- 构建与内容审计：reports/enuma-firmware-build.json、reports/enuma-fd-audit.json、reports/enuma-boot-candidate.json。
 
-## 下一步与待决项
+## 下一步与必须实机确认的内容
 
-1. **R-001 已批准并落实**：owned_memory_size="0x20000000"（512 MiB）；配置检查只接受此范围，example 防护继续有效。ADT 到固定 DarwinBoot 解析器及窗口选择函数的主机检查已完成，尚无实际 UEFI 分配结果。
-2. 继续闭合 enuma 固件的 MemoryMapLib/ConfigurationMapLib、DDR/栈/GOP、厂商协议和 FD/boot header。当前没有完整 enuma 厂商依赖，R-001 的批准不会自动解决它们。
-3. SPI 仍缺真实时钟/供电/pinmux/独占状态交接；NT36523 触点协议及固件名需核实。UFS 仍缺 QMPv4 PHY、电源、时钟写入、SMMU 和链路启动，不能启用 SM8550 NativeUfs。
-4. 用户方便时接入 enuma 后只读复核 ROM/FDT/内存/驱动绑定；本轮不等待设备、不操作 nuwa。
+1. 在A-002授权范围，核对enuma身份和回fastboot条件后，进行首次可恢复的临时启动，观察ABL/BootShim/UEFI入口。
+2. 获取自制UEFI的GetMemoryMap、RAM Partition协议、实际512 MiB连续分配；Android内存图只能提供旁证。
+3. 确认原厂DisplayDxe初始化、真实GOP base/stride/format及ExitBootServices后的显示；验证Env/SCM/Clock/PMIC依赖调度、UFS只读和复位。
+4. 之后再接XNU/ADT/预链接与iPadOS payload，验证中断、定时器、多核、NT36523和用户态。当前GENI板级核心尚未注册IOKit，SM8550 NativeUfs分支继续关闭。
 
-## 限制
+完整实机待测表与复现命令见[本机平台固件报告](operations/2026-10-22-native-platform-firmware.md)。
 
-- 本板代码尚未接到 IOKit service；无完整 XNU/UEFI 构建、prelink、QEMU、实机或 iPadOS GUI 验收。
-- board.toml 仍为 example=true；具体内存基址、UEFI 配置、镜像打包和任何设备启动仍须各自审查。
-- 仅本地 main 提交，未建立或推送远端；提交记录见 Git 和 WORKLOG。
+## 授权与限制
+
+- A-002已授权生成镜像及可恢复推送/启动，以能恢复fastboot为前提；不重复请求同范围确认。本轮只做Android读取，未重启、flash、erase、改槽或临时启动。
+- 固件构建通过与Android采集不等于自制UEFI/QEMU/XNU/iPadOS实机通过；未设置任何*_verified=true。
+- 原厂模块来自本机XBL，未独立校验厂商签名或与官方ROM逐字节匹配。原始镜像/二进制/序列号均在忽略目录。
+- board.toml仍为example=true。完整固件走独立脚本，通用UniXNU旧打包入口不直接用于本板。源仓只读，全部构建输出在本仓out/，仅本地main提交，未推送远端。

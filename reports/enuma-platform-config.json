@@ -1,0 +1,652 @@
+{
+  "source_xbl_sha256": "7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057",
+  "config_sha256": "29affca455090a26b223ebae2c02bf294547bb699f9b65a891af3c186d99c610",
+  "regions": [
+    {
+      "name": "IPC SHM",
+      "base": 2153578496,
+      "size": 131072,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "MPSS EFS",
+      "base": 2153775104,
+      "size": 1048576,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "Reserv",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "BOOT INFO",
+      "base": 2154823680,
+      "size": 1048576,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "AOP CMD DB",
+      "base": 2156265472,
+      "size": 131072,
+      "attributes": [
+        "AddMem",
+        "MEM_RES",
+        "UNCACHEABLE",
+        "Reserv",
+        "UNCACHED_UNBUFFERED_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "XBL Log Buffer",
+      "base": 2156412928,
+      "size": 65536,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "Reserv",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "SMEM",
+      "base": 2156920832,
+      "size": 2097152,
+      "attributes": [
+        "AddMem",
+        "MEM_RES",
+        "UNCACHEABLE",
+        "Reserv",
+        "UNCACHED_UNBUFFERED_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "TZApps Reserved",
+      "base": 2185232384,
+      "size": 60817408,
+      "attributes": [
+        "HobOnlyNoCacheSetting",
+        "MEM_RES",
+        "UNCACHEABLE",
+        "Reserv",
+        "UNCACHED_UNBUFFERED_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "PIL Reserved",
+      "base": 2248146944,
+      "size": 220200960,
+      "attributes": [
+        "AddMem",
+        "MEM_RES",
+        "UNCACHEABLE",
+        "Reserv",
+        "UNCACHED_UNBUFFERED_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "DXE Heap",
+      "base": 2559574016,
+      "size": 53477376,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "Conv",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "Sched Heap",
+      "base": 2613051392,
+      "size": 4194304,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "Display Reserved",
+      "base": 2617245696,
+      "size": 37748736,
+      "attributes": [
+        "AddMem",
+        "MEM_RES",
+        "SYS_MEM_CAP",
+        "Reserv",
+        "WRITE_THROUGH_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "DBI Dump",
+      "base": 2654994432,
+      "size": 15728640,
+      "attributes": [
+        "NoHob",
+        "MMAP_IO",
+        "INITIALIZED",
+        "Conv",
+        "UNCACHED_UNBUFFERED_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "FV Region",
+      "base": 2675965952,
+      "size": 2097152,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "ABOOT FV",
+      "base": 2678063104,
+      "size": 2097152,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "Reserv",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "UEFI FD",
+      "base": 2680160256,
+      "size": 3145728,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "SEC Heap",
+      "base": 2683305984,
+      "size": 573440,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "CPU Vectors",
+      "base": 2683879424,
+      "size": 4096,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "MMU PageTables",
+      "base": 2683883520,
+      "size": 12288,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "UEFI Stack",
+      "base": 2683895808,
+      "size": 262144,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "BsData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "Log Buffer",
+      "base": 2684317696,
+      "size": 32768,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "RtData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "Info Blk",
+      "base": 2684350464,
+      "size": 4096,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "RtData",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "Kernel",
+      "base": 2684354560,
+      "size": 268435456,
+      "attributes": [
+        "AddMem",
+        "SYS_MEM",
+        "SYS_MEM_CAP",
+        "Reserv",
+        "WRITE_BACK_XN"
+      ],
+      "section": "[MemoryMap]"
+    },
+    {
+      "name": "IMEM Base",
+      "base": 342360064,
+      "size": 262144,
+      "attributes": [
+        "NoHob",
+        "MMAP_IO",
+        "INITIALIZED",
+        "Conv",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "IMEM Cookie Base",
+      "base": 342618112,
+      "size": 4096,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "INITIALIZED",
+        "Conv",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "IPC_ROUTER_TOP",
+      "base": 4194304,
+      "size": 1048576,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "SECURITY CONTROL",
+      "base": 7864320,
+      "size": 28672,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "QUPV3_2_GSI",
+      "base": 8388608,
+      "size": 851968,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "QUPV3_0_GSI",
+      "base": 9437184,
+      "size": 851968,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "QUPV3_1_GSI",
+      "base": 10485760,
+      "size": 851968,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "PRNG_CFG_PRNG",
+      "base": 7929856,
+      "size": 65536,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "CRYPTO0 CRYPTO",
+      "base": 31195136,
+      "size": 262144,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "TCSR_TCSR_REGS",
+      "base": 33292288,
+      "size": 196608,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "GPU_GMU_CX_BLK",
+      "base": 46649344,
+      "size": 8192,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "GPU_CC",
+      "base": 46727168,
+      "size": 40960,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "QUPV3_SSC_GSI",
+      "base": 94371840,
+      "size": 851968,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "PERIPH_SS",
+      "base": 142606336,
+      "size": 2097152,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "USB30_PRIM",
+      "base": 174063616,
+      "size": 1159168,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "USB_RUMI",
+      "base": 175243264,
+      "size": 65536,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "USB30_SEC",
+      "base": 176160768,
+      "size": 1159168,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "AOSS",
+      "base": 184549376,
+      "size": 67108864,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "TLMM_WEST",
+      "base": 252706816,
+      "size": 3145728,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "TLMM_SOUTH",
+      "base": 256901120,
+      "size": 3145728,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "TLMM_NORTH",
+      "base": 261095424,
+      "size": 3145728,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "SMMU",
+      "base": 352321536,
+      "size": 851968,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    },
+    {
+      "name": "APSS_HM",
+      "base": 394264576,
+      "size": 228069376,
+      "attributes": [
+        "AddDev",
+        "MMAP_IO",
+        "UNCACHEABLE",
+        "MmIO",
+        "NS_DEVICE"
+      ],
+      "section": "[RegisterMap]"
+    }
+  ],
+  "numeric_parameters": {
+    "NumCpusFuseAddr": 376908,
+    "EnableShell": 1,
+    "EUDEnableAddr": 143532032,
+    "SecPagePoolCount": 2048,
+    "SharedIMEMBaseAddr": 342618112,
+    "DloadCookieAddr": 33370112,
+    "DloadCookieValue": 16,
+    "NumCpus": 8,
+    "NumActiveCores": 8,
+    "MaxLogFileSize": 4194304,
+    "UefiMemUseThreshold": 119,
+    "USBHS1_Config": 0,
+    "UsbFnIoRevNum": 65537,
+    "PwrBtnShutdownFlag": 0,
+    "Sdc1GpioConfigOn": 7826,
+    "Sdc2GpioConfigOn": 7826,
+    "Sdc1GpioConfigOff": 2560,
+    "Sdc2GpioConfigOff": 2560,
+    "EnableSDHCSwitch": 1,
+    "EnableUfsIOC": 0,
+    "UfsSmmuConfigForOtherBootDev": 1,
+    "SecurityFlag": 196,
+    "EnableLogFsSyncInRetail": 1,
+    "ShmBridgememSize": 10485760,
+    "EnableMultiThreading": 1,
+    "MaxCoreCnt": 8,
+    "EarlyInitCoreCnt": 1,
+    "EnableUefiSecAppDebugLogDump": 0,
+    "AllowNonPersistentVarsInRetail": 1,
+    "EnableDisplayThread": 1,
+    "EnableDisplayImageFv": 0
+  },
+  "string_parameters_not_representable_in_Mu_table": [
+    "PlatConfigFileName",
+    "OsTypeString",
+    "SpecialLogPartition",
+    "DefaultChargerApp",
+    "DefaultBDSBootApp"
+  ],
+  "gop": {
+    "width": 1600,
+    "height": 2560,
+    "source": "live Android DRM modes and FDT dual DSI",
+    "provider": "native enuma DisplayDxe + CPRDxe + K81 XML; runtime initialization pending",
+    "boot_framebuffer_address": null,
+    "boot_stride": null,
+    "boot_pixel_format": null
+  },
+  "cautions": [
+    "OEM map describes original firmware; re-entry placement and lifetimes still need testing",
+    "OEM Display Reserved combines 35 MiB splash and 1 MiB DFPS; never assume all is pixel storage",
+    "numeric parameters preserve OEM values including EnableUfsIOC=0",
+    "UEFI map and RamPartition protocol after dispatch are not observed"
+  ],
+  "generated_sha256": {
+    "firmware\\Platforms\\Xiaomi\\enumaPkg\\Library\\ConfigurationMapLib\\ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+    "firmware\\Platforms\\Xiaomi\\enumaPkg\\Library\\ConfigurationMapLib\\ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+    "firmware\\Platforms\\Xiaomi\\enumaPkg\\Library\\MemoryMapLib\\MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+    "firmware\\Platforms\\Xiaomi\\enumaPkg\\Library\\MemoryMapLib\\MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4"
+  }
+}

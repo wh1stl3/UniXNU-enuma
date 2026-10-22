@@ -1,0 +1,66 @@
+{
+  "scope": "live Android read-only collection; serial excluded; no boot or writes",
+  "product": "enuma",
+  "records": [
+    {
+      "name": "identity",
+      "exit_code": 0,
+      "bytes": 97,
+      "sha256": "58ca397d7f0ea2dee7a08c153324c1debe9936e18963ce150857e9cb005d1d3e"
+    },
+    {
+      "name": "iomem",
+      "exit_code": 0,
+      "bytes": 11251,
+      "sha256": "49486793f5492b782c83e3a2272a670467ef5fcb72c86b154d4fe3babbe88a23"
+    },
+    {
+      "name": "memory",
+      "exit_code": 0,
+      "bytes": 1104,
+      "sha256": "7bcc463f45f804ef053620d32ba314ec92342b48f4ae680c4cc409581410140d"
+    },
+    {
+      "name": "display-modes",
+      "exit_code": 0,
+      "bytes": 73,
+      "sha256": "f1f8867daf10c73f04caf270a5e6a96992df9ee313a2a614796d7375b939ce16"
+    },
+    {
+      "name": "touch-binding",
+      "exit_code": 0,
+      "bytes": 45,
+      "sha256": "7fd21c7154a153ae3bbfb858cc00563f6694a786e81ee5d41df3c40065c4e964"
+    },
+    {
+      "name": "boot-hashes",
+      "exit_code": 0,
+      "bytes": 681,
+      "sha256": "778854698b1fb71b50ef03bfbd61d1bce81fe4f63db51328a22feb0f592389dc"
+    },
+    {
+      "name": "live-fdt",
+      "exit_code": 0,
+      "bytes": 941691,
+      "sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62"
+    },
+    {
+      "name": "xbl_a",
+      "exit_code": 0,
+      "bytes": 8388608,
+      "sha256": "7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057"
+    },
+    {
+      "name": "xbl_config_a",
+      "exit_code": 0,
+      "bytes": 8343552,
+      "sha256": "8f6e198629fefc710552a89cf41688323e353806dc812c5b435e23f9c88e6756"
+    },
+    {
+      "name": "abl_a",
+      "exit_code": 0,
+      "bytes": 2097152,
+      "sha256": "ff00cd26595d81f97673a7dacaf12e025d25053747bd3819c73dbefd02cc802a"
+    }
+  ]
+}

@@ -59,6 +59,12 @@ class OverlayTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'escapes package'):
             check_graph(self.package)
 
+    def test_unqualified_framebuffer_rejected(self):
+        self.change('Include/DXE.inc', '  INF FatPkg/EnhancedFatDxe/Fat.inf',
+                    '  INF SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf')
+        with self.assertRaisesRegex(ValueError, 'unqualified SimpleFb'):
+            check_graph(self.package)
+
 
 if __name__ == '__main__':
     unittest.main()

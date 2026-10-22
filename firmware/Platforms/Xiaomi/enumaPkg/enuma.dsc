@@ -17,7 +17,7 @@
   BUILD_TARGETS = DEBUG
   SKUID_IDENTIFIER = DEFAULT
   FLASH_DEFINITION = enumaPkg/enuma.fdf
-  USE_CUSTOM_DISPLAY_DRIVER = 0
+  USE_CUSTOM_DISPLAY_DRIVER = 1
   SOC_TYPE = 2
 
 # This is a source overlay, not an alioth memory-map copy. The reviewed file

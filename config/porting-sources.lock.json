@@ -74,6 +74,13 @@
       "path": "drivers/input/touchscreen/nt36523/nt36xxx.h",
       "cache_path": "Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.h",
       "sha256": "d411b6aebf5b23cd2e6f819c870abd002dceb733d73f8271fc2ceb82e063b23c"
+    },
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": "Silicon/Silicium/SiliciumPkg/Sec/Sec.c",
+      "cache_path": "uefi-sheng/Silicon/Silicium/SiliciumPkg/Sec/Sec.c",
+      "sha256": "960823c3c59fd7cbf5f235468989bf4e06d8fef37658ec302c2228b611a1fb25"
     }
   ],
   "unixnu_interface_sha256": {
@@ -83,6 +90,17 @@
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.inf": "cb10851277b53b355794c1bca3fa16d3bf18a0dc2dee857091837b63599019df",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
-    "drivers/DarwinBoot/Test/window-size.c": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21"
+    "drivers/DarwinBoot/Test/window-size.c": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21",
+    "scripts/unixnu/bootimg.py": "466c29e14332381c4506b4ccbafd437159a4fe575f888b8f26ba13026e26da6f",
+    "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e"
+  },
+  "aosp_mkbootimg": {
+    "path": "D:/Code/PortingiOS/common/sources/aosp-mkbootimg",
+    "commit": "028bdc06ce87ab1ee23204feb5cd5ee406484618",
+    "sha256": {
+      "mkbootimg.py": "d99136f30bda966e8820c8ae53a82c659ca36e6d1aaf49a4cd63ae4795a6845a",
+      "unpack_bootimg.py": "7012fe91c4032446f23f3bd6f86fe1bc274517eb4e7aef923ed8396a5b619aef",
+      "gki/generate_gki_certificate.py": "ac0b0612ac1d590c6b987d0e849ce3a77ab4b67e34f34c56118e12e2eb3ad684"
+    }
   }
 }

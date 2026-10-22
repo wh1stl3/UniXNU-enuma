@@ -1,0 +1,84 @@
+{
+  "scope": "isolated firmware build; no device boot",
+  "checks": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/mnt/d/Code/UniXNU-enuma/out/firmware-build/Mu_Basecore/BaseTools/Source/Python/build/build.py",
+        "-p",
+        "Platforms/Xiaomi/enumaPkg/enuma.dsc",
+        "-a",
+        "AARCH64",
+        "-b",
+        "DEBUG",
+        "-t",
+        "CLANGPDB",
+        "-n",
+        "4",
+        "-D",
+        "FD_BASE=0x9fc00000",
+        "-D",
+        "FD_SIZE=0x300000",
+        "-D",
+        "FD_BLOCKS=768",
+        "-D",
+        "ENABLE_SECUREBOOT=0",
+        "-D",
+        "DEVICE_MODEL=enuma",
+        "-D",
+        "MEMORY_PROTECTION=TRUE",
+        "-D",
+        "SHIP_MODE=FALSE",
+        "-D",
+        "BUILDID_STRING=enuma-research",
+        "-D",
+        "ENUMA_PLATFORM_CONFIG=enumaPkg/Include/PlatformConfig.inc",
+        "-D",
+        "ENUMA_VENDOR_DSC=EnumaInputs/Vendor.dsc.inc",
+        "-D",
+        "ENUMA_VENDOR_DXE=EnumaInputs/Vendor.fdf.inc",
+        "-D",
+        "ENUMA_VENDOR_APRIORI=EnumaInputs/Vendor.apriori.inc",
+        "-D",
+        "ENUMA_VENDOR_RAW=EnumaInputs/Vendor.raw.fdf.inc"
+      ],
+      "exit_code": 0,
+      "log": "out/firmware-build/logs/firmware.log"
+    }
+  ],
+  "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
+  "fd_exists": true,
+  "complete": true,
+  "archive_sha256": {
+    "uefi-source.tar.gz": "7118851d4e46f6f3336c82bcad4ee5820cb7a2079103e075c9961e3f1c3a3a27",
+    "mu-basecore.tar.gz": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826"
+  },
+  "reference_gitlinks": {
+    "Mu_Basecore": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+    "Common/Mu": "b8d46c71610318e36a661819e1e3c0b8bdda413a",
+    "Common/Mu_OEM_Sample": "b70b4b7bb02c43bf9db2172dfb3ed0457e2361d6"
+  },
+  "source_inputs_sha256": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "268a49bc4c417cbb3989272e2c9d9df6de44771d9bab2aeb53eb630bb808a6c9",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "e1f08e837776f2d0b6dbca8d8c9cfcbb09e813a8af911d0c5c5fb478bb893228",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
+    "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "d52b842852f2e78345781ee6c5c53f4dee3fd9cfb94812d877d970c9930bc81e",
+    "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
+    "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+    "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+    "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb"
+  },
+  "fd_sha256": "445756cb4b18b4f5a72f6ba943c9c6e99220799d475518c0cfebed50556d7f62",
+  "build_log_sha256": "664d5e397d8479b4bbdc10c5014dd767f328bb2bacc38a36aa8f2683f6126b7b",
+  "source_hash_policy": "LF-normalized source bytes",
+  "build_warnings": [
+    "inherited HwResetSystemLib library-class warning",
+    "make clock-skew warnings; complete build exited 0"
+  ]
+}

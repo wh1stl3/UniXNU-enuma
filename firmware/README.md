@@ -1,19 +1,15 @@
-# uefi-enuma source overlay
+# enuma 固件接入
 
-本目录是未来独立 uefi-enuma 仓的设备增量源码，基于 UniXNU/uefi-sheng `329b473df1e53a3bfa64b2b39b79670c4c02279b` 中已有的 Kona 实现。其 Mu_Basecore `cfb93724a06ff86ff5ba971413368a7809ee42a5` 与 UniXNU feeds 一致。Kona/alioth 参考文件与较新的 Mu-Silicium `42fe563791e51bf5500c2e470ed294ca0c94b97c` 内容相同，无需为此升级底座。不包含整棵上游树，也不是已构建固件。
+底座为 UniXNU/uefi-sheng 329b473df1e53a3bfa64b2b39b79670c4c02279b 的 KonaPkg，Mu_Basecore cfb93724 与 UniXNU feeds 一致。设备增量在 Platforms/Xiaomi/enumaPkg；完整源码和输出只放忽略的 out/。
 
-`enuma.dsc` 复用 KonaPkg，UniXNU.dsc.inc 绑定真实 UniXNU/UniXNUDxe/DarwinBoot 模块，UniXNU.fdf.inc 将三者放入 FvMain。不能只添加 DSC 声明而漏掉 FDF。
+本机原厂 XBL 已只读采集并锁定 SHA256，从中提取45项内存/MMIO区域、31项数值配置、33个 AArch64 厂商驱动及原始 DEPEX/APRIORI、两份 K81 面板资源。MemoryMapLib、ConfigurationMapLib、PlatformConfig.inc 和 Resources/Configs/enuma.toml 从这些事实生成。原厂二进制与原始配置仅保存在 out/firmware-vendor，不提交或再分发。
 
-必须提供三项经过审查的输入才允许完整 EDK II 构建：
+GOP 使用本机 DisplayDxe、CPRDxe 和 K81 XML；1600×2560 同时得到当前 Android DRM 和原厂面板资源支持。framebuffer 的基址、stride、格式由运行时 GOP 提供，不用面板24bpp链路参数推断它们。DEBUG 早期 SerialPortLib 先使用 Null，避免基于未知 framebuffer 写屏。
 
-- `ENUMA_PLATFORM_CONFIG`：实际 enuma MemoryMapLib、ConfigurationMapLib、DDR/栈/GOP；不提供 alioth 的默认内存值。
-- `ENUMA_VENDOR_APRIORI` 与 `ENUMA_VENDOR_DXE`：enuma 厂商驱动及依赖顺序；未找到官方 Device-Binaries enuma 包，禁止改用 alioth 包充数。
-- Resource config 的 FD 基址/尺寸及 boot header，需对应本板装载方案；尚未新增包含这些值的配置文件。
+补丁包括：Kona 保留 MDP SMMU 映射；SEC 跳过清空整个 Display Reserved（该区域包含 DFPS）；复用参考 GIC 未处理 IRQ 屏蔽补丁。完整编译在独立可写归档工作区执行，补丁根目录单独初始化，参考仓只读。
 
-`patches/kona-preserve-display.patch` 是针对固定上游的最小修改：ENUMA_PRESERVE_DISPLAY=1 时跳过 Kona PlatformSec 的显示 SMMU detach，保留原 watchdog 处理。原实现会写显示 stream 映射；尚无 enuma GOP/地址空间交接证据，因此不能原样执行。此开关不证明 scan-out 可跨 ExitBootServices 保持。
+完整 FD 构建和最终 PE/DEPEX 字节审计结果见 reports/enuma-firmware-build.json、reports/enuma-fd-audit.json；候选镜像见 reports/enuma-boot-candidate.json。候选用于首阶段固件实验，未附带 XNU/iPadOS payload，也没有实机启动结论。
 
-运行 `scripts/check_firmware_overlay.py` 做源码级检查；不会运行 EDK II、生成镜像或改变参考树。`--require-image-ready` 在缺少前置输入时必须失败。
+打包使用固定 AOSP 工具的 Android boot v3、raw BootShim+FD、空 ramdisk，保留原厂 vendor_boot。当前固定 UniXNU 通用 bootimg.py 的 gzip+追加DTB及旧头部校验不适用于此布局，因此使用 scripts/package_enuma_boot.py，并只复用其 compile_shim。
 
-先用 `scripts/fetch_porting_references.py --fetch` 获取缺少的固定文件；默认不联网，只核验缓存。来源和许可证见 `config/porting-sources.lock.json` 与 `THIRD-PARTY.md`。本地参考树是 sparse checkout，根 LICENSE 未展开不等于上游没有许可证。
-
-固件构建还要求独立可写 Mu/EDK2 工作树；UniXNU firmware.py 会初始化子模块、临时 apply 补丁，不能把只读资料库直接传给它。
+完整操作与必须实机确认的项目见 docs/operations/2026-10-22-native-platform-firmware.md。生成镜像和可恢复启动的授权已记录于 docs/NEED-REVIEW.md A-002；owned-memory仍为获批512 MiB，物理内存窗口需实际UEFI图确认。

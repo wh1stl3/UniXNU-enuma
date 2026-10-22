@@ -45,6 +45,10 @@
     {
       "path": "Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.h",
       "sha256": "d411b6aebf5b23cd2e6f819c870abd002dceb733d73f8271fc2ceb82e063b23c"
+    },
+    {
+      "path": "uefi-sheng/Silicon/Silicium/SiliciumPkg/Sec/Sec.c",
+      "sha256": "960823c3c59fd7cbf5f235468989bf4e06d8fef37658ec302c2228b611a1fb25"
     }
   ],
   "graph": {
@@ -58,6 +62,7 @@
       "$(ENUMA_PLATFORM_CONFIG)",
       "$(ENUMA_VENDOR_APRIORI)",
       "$(ENUMA_VENDOR_DXE)",
+      "$(ENUMA_VENDOR_RAW)",
       "QcomPkg/Extra.fdf.inc",
       "SiliciumPkg/Common.fdf.inc"
     ]
@@ -81,23 +86,42 @@
     },
     "scope": "exact patch application and preprocessing; not EDK II compilation"
   },
+  "sec_patch": {
+    "source_sha256": "960823c3c59fd7cbf5f235468989bf4e06d8fef37658ec302c2228b611a1fb25",
+    "patch_sha256": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+    "branches": {
+      "0": {
+        "framebuffer_clear_present": true
+      },
+      "1": {
+        "framebuffer_clear_present": false
+      }
+    }
+  },
   "gic": {
     "distributor_pa": "0x17A00000",
     "redistributor_pa": "0x17A60000"
   },
   "overlay_sha256": {
     "Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
-    "Include/DXE.inc": "e543bc267a77ae049a71e93b0b6d948d27af07a21586d2581aab37303837c052",
+    "Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+    "Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
     "Include/UniXNU.dsc.inc": "268a49bc4c417cbb3989272e2c9d9df6de44771d9bab2aeb53eb630bb808a6c9",
     "Include/UniXNU.fdf.inc": "e1f08e837776f2d0b6dbca8d8c9cfcbb09e813a8af911d0c5c5fb478bb893228",
-    "enuma.dsc": "5b671f062e077cd8ed51d6128f419b1fd326b2cc1087c9d4122c8b310959d97b",
-    "enuma.fdf": "9e18acf30fcad55140de639bfb3d434bce970dcc0899d45cdc8dba5a6eb98e7c"
+    "Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+    "Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+    "Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+    "Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
+    "enuma.dsc": "d52b842852f2e78345781ee6c5c53f4dee3fd9cfb94812d877d970c9930bc81e",
+    "enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7"
   },
-  "image_ready": false,
-  "missing_inputs": [
-    "ENUMA_PLATFORM_CONFIG: reviewed enuma memory/configuration libraries, DDR, stack and GOP",
-    "ENUMA_VENDOR_APRIORI: qualified enuma vendor protocol ordering",
-    "ENUMA_VENDOR_DXE: qualified enuma vendor binaries and dependency closure",
-    "Resource config: reviewed FD layout and Android boot header/packaging"
+  "image_ready": true,
+  "artifact": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
+  "hardware_ready": false,
+  "missing_inputs": [],
+  "pending_runtime_checks": [
+    "Native enuma DisplayDxe initialization and GOP/ExitBootServices behavior",
+    "Re-entry placement and real UEFI allocation map for the OEM memory layout",
+    "BootShim raw ARM64 entry acceptance with stock vendor_boot v3"
   ]
 }

@@ -1,0 +1,57 @@
+{
+  "scope": "AArch64 compile using read-only Mu headers, not firmware link or execution",
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "--target=aarch64-none-elf",
+        "-ffreestanding",
+        "-fshort-wchar",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-include",
+        "/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/MdePkg/Include/Uefi.h",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/ArmPkg/Include",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Silicon/Silicium/SiliciumPkg/Include",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Silicon/Qualcomm/QcomPkg/Include",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/platform-objects/MemoryMapLib.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "--target=aarch64-none-elf",
+        "-ffreestanding",
+        "-fshort-wchar",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-include",
+        "/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/MdePkg/Include/Uefi.h",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Mu_Basecore/ArmPkg/Include",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Silicon/Silicium/SiliciumPkg/Include",
+        "-I/mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware/Silicon/Qualcomm/QcomPkg/Include",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/platform-objects/ConfigurationMapLib.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

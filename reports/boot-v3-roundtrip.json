@@ -1,0 +1,20 @@
+{
+  "header_version": 3,
+  "page_bytes": 4096,
+  "kernel_bytes": 8193,
+  "ramdisk_bytes": 4515,
+  "os_version_field": 0,
+  "kernel_sha256": "7860fd2bcc835e8b7c01497cababff97a5ca487ea0832f33f68dcc158d60690b",
+  "ramdisk_sha256": "6c3ad62927951930f7a49997b76da8326216346ff67c1cb6e1e607e493f8fe9d",
+  "image_sha256": "bfb47db5f9e09d5f747fda694735e67dc4f6e908bf53080cdc19a4e5598e05cc",
+  "image_bytes": 24576,
+  "fixture_only": true,
+  "hardware_ready": false,
+  "aosp_commit": "028bdc06ce87ab1ee23204feb5cd5ee406484618",
+  "vendor_boot_policy": "retain captured stock v3 vendor_boot; no DTB append or vendor_boot rewrite",
+  "unresolved": [
+    "ABL acceptance of raw BootShim ARM64 entry",
+    "UEFI FD relocation/handoff",
+    "GOP and vendor protocol runtime closure"
+  ]
+}

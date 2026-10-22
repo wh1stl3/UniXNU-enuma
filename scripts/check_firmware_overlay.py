@@ -14,10 +14,10 @@ MODULES = (
     'DarwinBootPkg/Driver/DarwinBoot.inf',
 )
 MISSING = (
-    'ENUMA_PLATFORM_CONFIG: reviewed enuma memory/configuration libraries, DDR, stack and GOP',
-    'ENUMA_VENDOR_APRIORI: qualified enuma vendor protocol ordering',
-    'ENUMA_VENDOR_DXE: qualified enuma vendor binaries and dependency closure',
-    'Resource config: reviewed FD layout and Android boot header/packaging',
+    'Isolated complete EDK II build and OEM protocol ABI/dependency closure',
+    'Native enuma DisplayDxe initialization and GOP/ExitBootServices behavior',
+    'Re-entry placement and real UEFI allocation map for the OEM memory layout',
+    'BootShim raw ARM64 entry acceptance with stock vendor_boot v3',
 )
 
 
@@ -68,6 +68,8 @@ def check_graph(package):
     # Reject actual references; comments discussing the foreign board are fine.
     if re.search(r'(?i)(?:alioth|sheng|nabu|elish)Pkg|Binaries[/\\](?:alioth|sheng|nabu|elish)', dsc + fdf):
         raise ValueError('foreign board reference in active overlay')
+    if 'SiliciumPkg/Drivers/SimpleFbDxe/' in fdf:
+        raise ValueError('unqualified SimpleFb must not replace native enuma GOP')
     if 'KonaPkg/KonaPkg.dsc.inc' not in external:
         raise ValueError('Kona platform is not included')
     sections = section_entries(dsc)
@@ -77,7 +79,7 @@ def check_graph(package):
         if components.count(module) != 1 or fv.count('INF ' + module) != 1:
             raise ValueError(f'module missing/duplicated in Components or FvMain: {module}')
     for macro, document in [('ENUMA_PLATFORM_CONFIG', dsc), ('ENUMA_VENDOR_APRIORI', fdf),
-                            ('ENUMA_VENDOR_DXE', fdf)]:
+                            ('ENUMA_VENDOR_DXE', fdf), ('ENUMA_VENDOR_RAW', fdf)]:
         guard = rf'!ifndef {macro}\s+!error[^\n]+\s+!endif'
         if not re.search(guard, document) or '$(' + macro + ')' not in ' '.join(external):
             raise ValueError(f'missing fail-closed input guard: {macro}')
@@ -125,6 +127,28 @@ def check_patch():
             'branches': variants, 'scope': 'exact patch application and preprocessing; not EDK II compilation'}
 
 
+def check_sec_patch():
+    relative = Path('Silicon/Silicium/SiliciumPkg/Sec/Sec.c')
+    source = ROOT / 'out/references/uefi-sheng' / relative
+    stage = ROOT / 'out/firmware-overlay-check/sec'
+    dest = stage / relative; dest.parent.mkdir(parents=True, exist_ok=True)
+    # The pinned original uses CRLF; normalize only this disposable copy.
+    dest.write_bytes(source.read_bytes().replace(b'\r\n', b'\n'))
+    patch = ROOT / 'firmware/patches/sec-preserve-display.patch'
+    prefix = '--directory=' + stage.relative_to(ROOT).as_posix()
+    run(['git', 'apply', '--check', prefix, patch], ROOT)
+    run(['git', 'apply', prefix, patch], ROOT)
+    body = re.sub(r'^\s*#include[^\n]*', '', dest.read_text(), flags=re.M)
+    results = {}
+    for setting in ('0', '1'):
+        processed = run(['clang', '-E', '-P', '-x', 'c', '-DENUMA_PRESERVE_DISPLAY=' + setting, '-'], stdin=body)
+        clear = 'ClearFrameBuffer (' in processed
+        if clear != (setting == '0'): raise ValueError('SEC framebuffer clearing switch failed')
+        results[setting] = {'framebuffer_clear_present': clear}
+    return {'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+            'patch_sha256': hashlib.sha256(patch.read_bytes()).hexdigest(), 'branches': results}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--unixnu', type=Path, required=True)
@@ -161,15 +185,29 @@ def main():
             raise ValueError(f'Kona {pcd} disagrees with enuma ADT input plan')
         gic[key] = match[1]
     patch = check_patch()
+    sec_patch = check_sec_patch()
+    artifact = None
+    build_path = ROOT / 'reports/enuma-firmware-build.json'
+    if build_path.exists():
+        built = json.loads(build_path.read_text())
+        if built.get('complete'):
+            fd = ROOT / built['fd']
+            inputs_current = bool(built.get('source_inputs_sha256')) and all((ROOT / name).is_file() and
+                                 hashlib.sha256((ROOT / name).read_bytes().replace(b'\r\n', b'\n')).hexdigest() == expected
+                                 for name, expected in built.get('source_inputs_sha256', {}).items())
+            if inputs_current and fd.exists() and hashlib.sha256(fd.read_bytes()).hexdigest() == built.get('fd_sha256'):
+                artifact = built['fd']
     report = {'scope': 'source graph, fixed references and patch branches; not complete EDK II parsing/linking',
               'firmware_base': pins['uefi-sheng']['commit'], 'gitlinks': gitlinks,
-              'references': refs, 'graph': graph, 'patch': patch, 'gic': gic,
+              'references': refs, 'graph': graph, 'patch': patch, 'sec_patch': sec_patch, 'gic': gic,
               'overlay_sha256': {p.relative_to(package).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                                  for p in sorted(package.rglob('*')) if p.is_file()},
-              'image_ready': False, 'missing_inputs': list(MISSING)}
+              'image_ready': artifact is not None, 'artifact': artifact, 'hardware_ready': False,
+              'missing_inputs': [] if artifact else [MISSING[0]],
+              'pending_runtime_checks': list(MISSING[1:])}
     (ROOT / 'reports/firmware-overlay-check.json').write_text(json.dumps(report, indent=2) + '\n')
-    print('PASS: source overlay and patch checks; image inputs remain incomplete')
-    if args.require_image_ready:
+    print('PASS: source overlay and patch checks; artifact=' + str(artifact is not None) + '; runtime checks pending')
+    if args.require_image_ready and not artifact:
         parser.exit(2, 'NOT IMAGE READY: ' + '; '.join(MISSING) + '\n')
 
 

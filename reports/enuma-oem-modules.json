@@ -1,0 +1,860 @@
+{
+  "scope": "own-device OEM module reuse; dependency expressions preserved, provider/runtime closure not proven",
+  "xbl_sha256": "7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057",
+  "extractor": "uefi_firmware==1.16",
+  "fv_offset": 559280,
+  "oem_file_count": 149,
+  "oem_apriori_count": 84,
+  "selected_modules": [
+    {
+      "name": "CPRDxe",
+      "guid": "1b52138d-3fa3-4e50-b958-20887353f809",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/CPRDxe/CPRDxe.inf",
+      "pe_bytes": 65536,
+      "pe_sha256": "5fb0add6c3f2689c12d4c1af809adee39c5a2170a2752e204a0f8882b4407790",
+      "depex_sha256": "51e48aff95a5c61299f0c6b7550d1e2348078025c313f63c206f4d6f5cf36477",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "ChipInfo",
+      "guid": "10e193df-9966-44e7-b17c-59dd831e20fc",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/ChipInfo/ChipInfo.inf",
+      "pe_bytes": 45056,
+      "pe_sha256": "fbb3aad104c7ea0d06ab932961d55ebd5b19a6548c6813476099474e91997838",
+      "depex_sha256": "5a2204901e9095761d883230974b7d3265bb85eb6eecfd02550ce4d17ec61802",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "PUSH",
+          "guid": "9e61de7c-9927-4f28-9f3d-320705d81801"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "CipherDxe",
+      "guid": "5f0937cd-73f9-445e-b320-bb6fd5d3cbde",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/CipherDxe/CipherDxe.inf",
+      "pe_bytes": 98304,
+      "pe_sha256": "d165c1d05451d42106d64b590917beefa5eabd00ef3fd3295074114d916a92c9",
+      "depex_sha256": null,
+      "depex": null
+    },
+    {
+      "name": "ClockDxe",
+      "guid": "4db5dea6-5302-4d1a-8a82-677a683b0d29",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/ClockDxe/ClockDxe.inf",
+      "pe_bytes": 217088,
+      "pe_sha256": "834428700f5e034e52285e1d516b98e86e71ce4b6d7211a9b40fa87d92137cab",
+      "depex_sha256": "24476b524f5b0157f0adac9dc10697740b7e8f832feb09e32ed24d077378e4b2",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "PUSH",
+          "guid": "b0760469-970c-487a-a4b5-28db7b45cef1"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "CmdDbDxe",
+      "guid": "aba01ff8-2ccb-4e12-8b2e-cd3f4a742993",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/CmdDbDxe/CmdDbDxe.inf",
+      "pe_bytes": 32768,
+      "pe_sha256": "60957d12079f756f60e6b16db921c9efce2614bf05e17fd08b6b59a2a130469f",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "DALSys",
+      "guid": "8e9bd160-b184-11df-94e2-0800200c9a66",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/DALSys/DALSys.inf",
+      "pe_bytes": 344064,
+      "pe_sha256": "e6b151c5506f52196e6ea687d15ffa074b7e3d518e8c52621ef62413000a8204",
+      "depex_sha256": "445084b65f55991565be20b692e489f28006a91c3d0a050eae2a8eebdf12f563",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "f4e5c7d0-d239-47cb-aacd-7f66ef763238"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "DALTLMM",
+      "guid": "8681cc5a-0df6-441e-b4b8-e915c538f067",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/DALTLMM/DALTLMM.inf",
+      "pe_bytes": 36864,
+      "pe_sha256": "009f17ac2ce81717bb6e32c6ba4a9fc13a39d66d54adc1e6383805ebe90c948a",
+      "depex_sha256": "51e48aff95a5c61299f0c6b7550d1e2348078025c313f63c206f4d6f5cf36477",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "DDRInfoDxe",
+      "guid": "7db0793a-4402-4be1-906e-d0fabad2707e",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/DDRInfoDxe/DDRInfoDxe.inf",
+      "pe_bytes": 40960,
+      "pe_sha256": "ee354d5ce257d02cb41bbed0006c8b80ab2ce946ccac92262185a0479907422d",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "DisplayDxe",
+      "guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/DisplayDxe/DisplayDxe.inf",
+      "pe_bytes": 315392,
+      "pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+      "depex_sha256": "1160a8a2f29f1ca18fa4b8384384536925bac48301e59f7235e43b0aff451b62",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "157a5c45-21b2-43c5-ba7c-822fee5fe599"
+        },
+        {
+          "op": "PUSH",
+          "guid": "b0760469-970c-487a-a4b5-28db7b45cef1"
+        },
+        {
+          "op": "PUSH",
+          "guid": "5bef7c41-a560-435b-835b-3c3ebf2bd151"
+        },
+        {
+          "op": "PUSH",
+          "guid": "c1bff82d-6c92-48fb-8355-c7fb4218a4ea"
+        },
+        {
+          "op": "PUSH",
+          "guid": "a966cc4f-ee6c-424d-a762-8ed3b5a4a501"
+        },
+        {
+          "op": "PUSH",
+          "guid": "47861dff-556f-4269-9b28-062ec3ecb30d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "ad9aec18-7bf0-4809-9e96-3012309f3df7"
+        },
+        {
+          "op": "PUSH",
+          "guid": "b27ae8b1-3e10-4d07-ab5c-eb9a6dc6fa8f"
+        },
+        {
+          "op": "PUSH",
+          "guid": "241afae6-885f-4f6c-a7ea-c28eab79c3e5"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "EnvDxe",
+      "guid": "90a49afd-422f-08ae-9611-e788d3804845",
+      "module_type": "DXE_RUNTIME_DRIVER",
+      "inf": "Binaries/enuma/EnvDxe/EnvDxe.inf",
+      "pe_bytes": 65536,
+      "pe_sha256": "62e81b81dc507a5ecd2e9e2d732c3e642c7c107bcdd51a236bbc029800b645ed",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "GpiDxe",
+      "guid": "569ea0de-b557-4043-84cf-01103fe516e5",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/GpiDxe/GpiDxe.inf",
+      "pe_bytes": 86016,
+      "pe_sha256": "052827b90dd2a7d89c1f659cb704510347a20d93dc32bc84115c9f963a501a67",
+      "depex_sha256": "8d212b55931b8b7178a06d7d5ff305306299accdbd845743b3c58bdf2e62a45f",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "665e3ff6-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb1-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb2-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "1da97072-bddc-4b30-99f1-72a0b56fff2a"
+        },
+        {
+          "op": "PUSH",
+          "guid": "27cfac87-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "27cfac88-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "b7dfb4e1-052f-449f-87be-9818fc91b733"
+        },
+        {
+          "op": "PUSH",
+          "guid": "a46423e3-4617-49f1-b9ff-d1bfa9115839"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb3-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "6441f818-6362-4e44-b570-7dba31dd2453"
+        },
+        {
+          "op": "PUSH",
+          "guid": "1e5668e2-8481-11d4-bcf1-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "665e3ff5-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "HALIOMMU",
+      "guid": "9a00771f-36d4-4dd5-8916-c48ed9b16b86",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/HALIOMMU/HALIOMMU.inf",
+      "pe_bytes": 45056,
+      "pe_sha256": "36a5adbe91a796940f4c09eb53ae4ffb1632ef20d8c3085f7cceb2a706c1e306",
+      "depex_sha256": "8d212b55931b8b7178a06d7d5ff305306299accdbd845743b3c58bdf2e62a45f",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "665e3ff6-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb1-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb2-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "1da97072-bddc-4b30-99f1-72a0b56fff2a"
+        },
+        {
+          "op": "PUSH",
+          "guid": "27cfac87-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "27cfac88-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "PUSH",
+          "guid": "b7dfb4e1-052f-449f-87be-9818fc91b733"
+        },
+        {
+          "op": "PUSH",
+          "guid": "a46423e3-4617-49f1-b9ff-d1bfa9115839"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb3-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "6441f818-6362-4e44-b570-7dba31dd2453"
+        },
+        {
+          "op": "PUSH",
+          "guid": "1e5668e2-8481-11d4-bcf1-0080c73c8881"
+        },
+        {
+          "op": "PUSH",
+          "guid": "665e3ff5-46cc-11d4-9a38-0090273fc14d"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "HWIODxeDriver",
+      "guid": "af9763a2-033b-4109-8e17-56a98d380c92",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/HWIODxeDriver/HWIODxeDriver.inf",
+      "pe_bytes": 36864,
+      "pe_sha256": "694da8c47f5a7c24d1eb1075bab1c1b729bb2c5aea270a62da3924738b1e8668",
+      "depex_sha256": "51e48aff95a5c61299f0c6b7550d1e2348078025c313f63c206f4d6f5cf36477",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "HashDxe",
+      "guid": "3adf8dda-1850-44c5-8c63-bb991849bc6f",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/HashDxe/HashDxe.inf",
+      "pe_bytes": 102400,
+      "pe_sha256": "a3fe8c103a8aa3252fb3f1d890ec221e8c5952eb1c3ca38ca71ba32eca600e67",
+      "depex_sha256": null,
+      "depex": null
+    },
+    {
+      "name": "I2C",
+      "guid": "04de8591-d2b3-4077-bbbe-b12070094eb6",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/I2C/I2C.inf",
+      "pe_bytes": 40960,
+      "pe_sha256": "71845af503fc8bc18aa885ac7d86e6630220a990b789cc9cca85f2af76ce4dc4",
+      "depex_sha256": "95cfa13b1308bf157c24a44e7492c34335e9af953a0056da17fb047bdeb2dd50",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "PUSH",
+          "guid": "241afae6-885f-4f6c-a7ea-c28eab79c3e5"
+        },
+        {
+          "op": "PUSH",
+          "guid": "ad9aec18-7bf0-4809-9e96-3012309f3df7"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb3-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "MacDxe",
+      "guid": "20583a66-3c26-4d9e-9a8c-e2dfa2914015",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/MacDxe/MacDxe.inf",
+      "pe_bytes": 98304,
+      "pe_sha256": "01808cb80fca49c7c13af46be88f2a9544afcd25fead4c23b3f2b4806f3ddc19",
+      "depex_sha256": null,
+      "depex": null
+    },
+    {
+      "name": "NpaDxe",
+      "guid": "cb29f4d1-7f37-4692-a416-93e82e219711",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/NpaDxe/NpaDxe.inf",
+      "pe_bytes": 81920,
+      "pe_sha256": "8c31a7f77bb0c6f0944ef3f55590df27d7a03d4a55863883536c7514f4bd7f32",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "PdcDxe",
+      "guid": "b43c22db-6333-490c-872d-0a73439059fd",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/PdcDxe/PdcDxe.inf",
+      "pe_bytes": 32768,
+      "pe_sha256": "f3e0cfae7393ffaa27990ef28755b68580ad236b5d085626305efb7b1457d54c",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "PlatformInfoDxeDriver",
+      "guid": "b105211b-bbbd-4add-a3b0-d1cf4a52154c",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/PlatformInfoDxeDriver/PlatformInfoDxeDriver.inf",
+      "pe_bytes": 36864,
+      "pe_sha256": "ffd02def7bc2c1035b20b58e3d75e6cd6b43a8245ea5b00b84519a6ae5dfb135",
+      "depex_sha256": "51e48aff95a5c61299f0c6b7550d1e2348078025c313f63c206f4d6f5cf36477",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "PmicDxe",
+      "guid": "5776232e-082d-4b75-9a0e-fe1d13f7a5d9",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/PmicDxe/PmicDxe.inf",
+      "pe_bytes": 192512,
+      "pe_sha256": "f4facb7652ef283d552ef93d724c13a0c499145b5a33bc04a2eac0d7b84b510a",
+      "depex_sha256": "038334472dbe9b774f4e06715b2c42aef25afd4c1b83403b9a97bcc1262ce23e",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "PUSH",
+          "guid": "fa5f306b-f47d-4ac4-a47d-882f8204ec30"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "PwrUtilsDxe",
+      "guid": "0401b830-bff9-44a2-a5f6-95734a33c017",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/PwrUtilsDxe/PwrUtilsDxe.inf",
+      "pe_bytes": 32768,
+      "pe_sha256": "6174bcfeb0c61fa23c1469af11258da200ce5a20b770b96bc10725292efc1c10",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "ResetRuntimeDxe",
+      "guid": "3ae17db7-3cc5-4b89-9304-9549211057ef",
+      "module_type": "DXE_RUNTIME_DRIVER",
+      "inf": "Binaries/enuma/ResetRuntimeDxe/ResetRuntimeDxe.inf",
+      "pe_bytes": 40960,
+      "pe_sha256": "c4a5646652f687671272f59e3b86abe364f5ca15509ff8c369bd8a9e49d3baf7",
+      "depex_sha256": "59c488736c51c1d46da25ec3249770d7baf8f6e65a21c6d899d14aa8cf697284",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "fa5f306b-f47d-4ac4-a47d-882f8204ec30"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "RngDxe",
+      "guid": "b0d3689e-11f8-43c6-8ece-023a29cec35b",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/RngDxe/RngDxe.inf",
+      "pe_bytes": 32768,
+      "pe_sha256": "213fe5cb11ad6543f8ed02f2d31db2aa1b58f0a182286769fd8fd95102c010bd",
+      "depex_sha256": null,
+      "depex": null
+    },
+    {
+      "name": "RpmhDxe",
+      "guid": "cb29f4d1-7f37-4692-a416-93e82e219766",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/RpmhDxe/RpmhDxe.inf",
+      "pe_bytes": 65536,
+      "pe_sha256": "08ea576ea100e36f7b0916e932856e9b8bf34f9f5fe10a4c5a882be7f12c34c5",
+      "depex_sha256": "51e48aff95a5c61299f0c6b7550d1e2348078025c313f63c206f4d6f5cf36477",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "SPI",
+      "guid": "7a32bd23-f735-4f57-aa1a-447d2fe3be0d",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/SPI/SPI.inf",
+      "pe_bytes": 40960,
+      "pe_sha256": "8c0a943468f9aa9e97adecd0cbc48322954adf21d6ca6c373f2ccc7c079dddf9",
+      "depex_sha256": "95cfa13b1308bf157c24a44e7492c34335e9af953a0056da17fb047bdeb2dd50",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "PUSH",
+          "guid": "241afae6-885f-4f6c-a7ea-c28eab79c3e5"
+        },
+        {
+          "op": "PUSH",
+          "guid": "ad9aec18-7bf0-4809-9e96-3012309f3df7"
+        },
+        {
+          "op": "PUSH",
+          "guid": "26baccb3-6f42-11d4-bce7-0080c73c8881"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "SPMI",
+      "guid": "2a7b4bef-80cd-49e1-b473-374ba4d673fc",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/SPMI/SPMI.inf",
+      "pe_bytes": 45056,
+      "pe_sha256": "b062b30ffe231da3333c1a4a7ba57896f3e59e0d6d5478e8e89c259b8f63766f",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "ScmDxe",
+      "guid": "2d7a83e3-e343-4ffb-9109-631f2ee11694",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/ScmDxe/ScmDxe.inf",
+      "pe_bytes": 49152,
+      "pe_sha256": "8e6351aabd0b2f3c75a57b8227f32ef7ee2e4ea3f495fe0e19a937a11e4f25f2",
+      "depex_sha256": "8d746ae0973ed59c7084339ae8e841a207e47c5024cce6741ce0a224837954c7",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "ShmBridgeDxe",
+      "guid": "9c1eb71f-dd6c-4ed5-9f6a-5cc0ca789f16",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/ShmBridgeDxe/ShmBridgeDxe.inf",
+      "pe_bytes": 36864,
+      "pe_sha256": "3d3cd129754c0d566272b7ae8ee7aedabdd45964df5c21ac435da0bf85832a1f",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "SmemDxe",
+      "guid": "f541d663-4a48-40aa-aabf-ff158ccae34c",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/SmemDxe/SmemDxe.inf",
+      "pe_bytes": 40960,
+      "pe_sha256": "4ad21b61ab64d1d91403403c8ce23b60648a2fb29c781fe4a7cb5a3996d727aa",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "TzDxe",
+      "guid": "6925fad3-e243-4b69-ad61-3f978c8abc60",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/TzDxe/TzDxe.inf",
+      "pe_bytes": 61440,
+      "pe_sha256": "dfc36c4c0ee54d251b9bb9cae1a5782526305d815af7ce23b3ca9b3406e57601",
+      "depex_sha256": "8d746ae0973ed59c7084339ae8e841a207e47c5024cce6741ce0a224837954c7",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "UFSDxe",
+      "guid": "0d35cd8e-97ea-4f9a-96af-0f0d89f76567",
+      "module_type": "DXE_RUNTIME_DRIVER",
+      "inf": "Binaries/enuma/UFSDxe/UFSDxe.inf",
+      "pe_bytes": 118784,
+      "pe_sha256": "ffeaed467f8251b7e30a45075da84a1c563e2bac7dc4be0f79f0ed49a88b8dc9",
+      "depex_sha256": "d24ba46b9b195a4affe0c6d783f99361fb08fa85894d0e9ec3a070a995ef5d44",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "f4e5c7d0-d239-47cb-aacd-7f66ef763238"
+        },
+        {
+          "op": "PUSH",
+          "guid": "fa5f306b-f47d-4ac4-a47d-882f8204ec30"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "ULogDxe",
+      "guid": "e43128a8-8692-42b6-8afa-676158578d18",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/ULogDxe/ULogDxe.inf",
+      "pe_bytes": 77824,
+      "pe_sha256": "10c79d0f217187aeb930231cc501e77dadd67f63aa9d5ab8fcac5145a5d8bfda",
+      "depex_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+      "depex": [
+        {
+          "op": "TRUE"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    },
+    {
+      "name": "VcsDxe",
+      "guid": "8bd3b475-401a-4b0b-9315-edee61a1eae5",
+      "module_type": "DXE_DRIVER",
+      "inf": "Binaries/enuma/VcsDxe/VcsDxe.inf",
+      "pe_bytes": 49152,
+      "pe_sha256": "991b135591a825e02dd9b7304c00422e4b5ecf269d8356e9596584aab82ff3fd",
+      "depex_sha256": "24476b524f5b0157f0adac9dc10697740b7e8f832feb09e32ed24d077378e4b2",
+      "depex": [
+        {
+          "op": "PUSH",
+          "guid": "ae37b942-457f-4c91-a196-d9669fd347a3"
+        },
+        {
+          "op": "PUSH",
+          "guid": "b0760469-970c-487a-a4b5-28db7b45cef1"
+        },
+        {
+          "op": "AND"
+        },
+        {
+          "op": "END"
+        }
+      ]
+    }
+  ],
+  "selected_without_apriori": [],
+  "raw_inputs": {
+    "Panel_K81_35_02_0b_dualdsi_cphy_lcd_vid.xml": "a1516b6927b2684b9df9fb3abb8fb481e374c4c295711d3cca95585aa9a7dce9",
+    "Panel_K81_42_02_0a_dualdsi_cphy_lcd_vid.xml": "62aa7bd9b434c7622da7b3bb1709c69c1962a9a3ea026c2fea25602b557f480f",
+    "uefiplat.cfg": "29affca455090a26b223ebae2c02bf294547bb699f9b65a891af3c186d99c610"
+  },
+  "closure_gaps": [
+    "DEPEX GUID providers must be checked against new Mu core plus selected modules",
+    "OEM config/SMEM/SCM protocol ABI and dispatch need runtime validation",
+    "UEFI USB/storage and reset behavior not executed"
+  ]
+}

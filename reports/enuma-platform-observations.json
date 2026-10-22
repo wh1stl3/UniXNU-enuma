@@ -1,0 +1,49 @@
+{
+  "scope": "live Android observations plus matching stock firmware inputs; no custom firmware executed",
+  "identity": {
+    "device": "enuma",
+    "fingerprint": "Xiaomi/enuma/enuma:13/TKQ1.221114.001/V816.0.3.0.TKZCNXM:user/release-keys",
+    "bootloader_lock_value": 0,
+    "verifiedbootstate": "orange",
+    "root_uid": 0,
+    "boot_completed": 1
+  },
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "panel": {
+    "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video",
+    "controllers": [
+      0,
+      1
+    ],
+    "link_width": 800,
+    "height": 2560,
+    "link_bpp": 24,
+    "drm_modes": [
+      "1600x2560@120",
+      "1600x2560@60",
+      "1600x2560@30"
+    ],
+    "boot_framebuffer_format": "not observed; panel link bpp is not framebuffer format",
+    "gop_provider": "native DisplayDxe from captured XBL"
+  },
+  "touch_driver": "NVT-ts",
+  "boot_inputs": {
+    "boot_sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+    "boot_header_version": 3,
+    "boot_partition_bytes": 201326592,
+    "vendor_boot_sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+    "vendor_header_version": 3,
+    "vendor_boot_partition_bytes": 100663296,
+    "vendor_kernel_load_field": "0x8000",
+    "vendor_ramdisk_load_field": "0x1000000",
+    "vendor_dtb_address_field": "0x1f00000",
+    "vendor_dtb_bytes": 1613832
+  },
+  "pending_hardware": [
+    "bootloader ARM64 BootShim entry and exception level",
+    "new UEFI GetMemoryMap and 512 MiB contiguous allocation",
+    "native display/GOP initialization and persistence across ExitBootServices",
+    "OEM driver protocol ABI/dispatch, UFS reads, reset to fastboot",
+    "XNU interrupt/timer/CPU and NT36523 transport execution"
+  ]
+}
