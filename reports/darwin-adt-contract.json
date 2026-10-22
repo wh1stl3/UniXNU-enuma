@@ -1,0 +1,107 @@
+{
+  "scope": "real source function with host adapters and in-memory synthetic inputs; no UEFI allocation or hardware",
+  "request_bytes": 536870912,
+  "property_path": "/chosen/darwinboot-memory-size",
+  "property_value_hex": "0000002000000000",
+  "sources": {
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
+    "drivers/DarwinBoot/Test/window-size.c": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21"
+  },
+  "extracted_function_sha256": "5de0ee1390f15d869c5077efbe76ce93b6170f813ef4537cc08a85e87fea7ffb",
+  "harness_sha256": "70e1967edbe0032cda2c9d4096dc04aa427ecf1d9fe7af408b33668472dc107c",
+  "allocation_functions_sha256": "4fc9e1c118586e975f881af929faeb51f5e84ef3ae1555d0108ac0c5ba363851",
+  "allocation_harness_sha256": "6d135298fceec581d1e84cc0eb471fda1fd38395621a22a8853f2a0a14162b80",
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/DarwinBoot/DarwinBootPkg/Driver",
+        "-DDARWIN_ADT_SOURCE=\"/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/AdtNode.inc\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/darwin_adt_contract.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/adt-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/adt-test",
+        "0x20000000"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: real DarwinBoot AdtNode accepts 512 MiB; rejects 144 truncations, trailing bytes, invalid values, duplicate/misplaced/short properties\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/DarwinBoot/DarwinBootPkg/Driver",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/DarwinBoot/Test/window-size.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/window-size-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/window-size-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/DarwinBoot/DarwinBootPkg/Driver",
+        "-fshort-wchar",
+        "-DDARWIN_WINDOW_SOURCE=\"/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/AllocateWindow.inc\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/darwin_window_contract.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/allocation-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/allocation-test"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: real RunEnd/AllocateWindow with 512 MiB; contiguous/coalesced ranges, reserved holes, alignment, allocation and map failures\n",
+      "stderr": ""
+    }
+  ],
+  "image_generated": false,
+  "runtime_allocation_observed": false
+}

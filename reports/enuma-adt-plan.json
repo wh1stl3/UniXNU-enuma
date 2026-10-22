@@ -80,5 +80,21 @@
     "SM8550 NativeUfs path",
     "Sheng PMGR",
     "A740 NativeAdreno path"
-  ]
+  ],
+  "loader_memory": {
+    "review": "R-001",
+    "request_bytes": 536870912,
+    "adt_path": "/chosen",
+    "adt_property": "darwinboot-memory-size",
+    "encoding": "little-endian uint64",
+    "value_hex": "0000002000000000",
+    "board_input": {
+      "path": "D:/Code/UniXNU-enuma/board.toml",
+      "bytes": 1408,
+      "sha256": "d66dce82d1cd856b989800a75f7c66b9230ba0e07d991d4b6cacd7200b76ae40",
+      "sha384": "ad62de026d18e9f893e802a69fd0e4b3021fcb603ce209651c28754995e2983a9e449d290fb0337ce8e135850c3a9b24"
+    },
+    "allocation": "runtime UEFI EfiConventionalMemory allocation required; not observed",
+    "physical_base": null
+  }
 }

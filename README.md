@@ -11,3 +11,5 @@
 复现命令与驱动差异见 [首轮报告](docs/operations/2026-10-22-offline-bringup.md)。audit_inputs.py 全量核对缓存 donor，plan_adt.py 只生成 JSON 计划，check_workspace.py 验证固定输入及上游配置接口，均不生成启动镜像。
 
 本轮 Kona/GENI/UFS 接入、编译检查和待决内存范围见 [固件与驱动报告](docs/operations/2026-10-22-kona-platform.md)。当前通过的是源码检查、主机寄存器模型和 AArch64 对象编译，尚未完成固件/IOKit 链接或设备执行。
+
+R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-22-owned-memory.md) 记录真实 DarwinBoot ADT 解析和窗口选择函数的主机检查。物理分配未观察，镜像生成/启动仍须单独确认。

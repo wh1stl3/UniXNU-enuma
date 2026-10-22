@@ -82,6 +82,7 @@
     "package/UniXNUPkg/Library/UniXNULib/UniXNULib.inf": "c141b4fbbd0e9c91e5b798db7e372000e6395f03ad67513155b14d54e5d7b381",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.inf": "cb10851277b53b355794c1bca3fa16d3bf18a0dc2dee857091837b63599019df",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
-    "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb"
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
+    "drivers/DarwinBoot/Test/window-size.c": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21"
   }
 }

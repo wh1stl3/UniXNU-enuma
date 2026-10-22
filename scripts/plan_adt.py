@@ -1,6 +1,7 @@
 """Derive an enuma ADT input plan from historical FDT; never emit an ADT/image."""
 import argparse
 import json
+import tomllib
 from pathlib import Path
 from audit_inputs import cells, hashes, parse_fdt, strings
 
@@ -71,6 +72,20 @@ def main():
     parser.add_argument('--fdt', type=Path, default=Path('D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout'))
     args = parser.parse_args()
     result = plan(args.fdt)
+    board_path = ROOT / 'board.toml'
+    board = tomllib.loads(board_path.read_text('utf-8'))
+    request = board['payload']['adt']['owned_memory_size']
+    if request != '0x20000000':
+        raise ValueError('owned-memory request differs from approved R-001')
+    result['loader_memory'] = {
+        'review': 'R-001', 'request_bytes': int(request, 0),
+        'adt_path': '/chosen', 'adt_property': 'darwinboot-memory-size',
+        'encoding': 'little-endian uint64',
+        'value_hex': int(request, 0).to_bytes(8, 'little').hex(),
+        'board_input': hashes(board_path),
+        'allocation': 'runtime UEFI EfiConventionalMemory allocation required; not observed',
+        'physical_base': None,
+    }
     output = ROOT / 'reports/enuma-adt-plan.json'
     output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(f'PASS: enuma GIC/PSCI/timer/topology plan; {len(result["unresolved"])} unresolved contracts; no binary emitted')
