@@ -24,11 +24,17 @@ class OverlayTests(unittest.TestCase):
 
     def test_complete_local_graph(self):
         result = check_graph(self.package)
-        self.assertEqual(len(result['packaged_modules']), 3)
+        self.assertEqual(len(result['packaged_modules']), 4)
 
     def test_dsc_only_loader_rejected(self):
         self.change('Include/UniXNU.fdf.inc', 'INF DarwinBootPkg/Driver/DarwinBoot.inf', '')
         with self.assertRaisesRegex(ValueError, 'Components or FvMain'):
+            check_graph(self.package)
+
+    def test_probe_not_selected_rejected(self):
+        self.change('Include/UniXNU.dsc.inc', 'AEF8C196-230E-4E19-A306-D62E21E3D780',
+                    '9B665204-A133-47A2-9396-9E2B370A4E25')
+        with self.assertRaisesRegex(ValueError, 'boot target'):
             check_graph(self.package)
 
     def test_wrong_volume_rejected(self):

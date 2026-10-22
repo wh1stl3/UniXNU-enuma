@@ -4,9 +4,9 @@
   "kernel_bytes": 3145920,
   "ramdisk_bytes": 0,
   "os_version_field": 0,
-  "kernel_sha256": "4087dedd795bf72c57d5d64ee1ba4f16ab21a47040be5cfc19fe5adc2808731c",
+  "kernel_sha256": "27438a5dcc98dbd641f70c0e56a732d04b0ce6d677aec798a0d7f45dc45135b8",
   "ramdisk_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "image_sha256": "2c9d14dcdff12a00fb7bf606249a944a60f4b311d6c50905a3bc3725ea76e423",
+  "image_sha256": "3db695db10c1114352994ab64e551abc74391c2e50bbabfd48be0b37acec790a",
   "image_bytes": 3153920,
   "fixture_only": false,
   "hardware_ready": false,
@@ -17,6 +17,7 @@
     "UEFI FD relocation/handoff",
     "GOP and vendor protocol runtime closure"
   ],
-  "path": "out/boot-candidate/enuma-uefi-gic-boot-v3.img",
-  "supersedes": "out/boot-candidate/enuma-uefi-boot-v3.img (GIC patch omitted; do not deploy)"
+  "path": "out/boot-candidate/enuma-uefi-probe01-r2-boot-v3.img",
+  "supersedes": "out/boot-candidate/enuma-uefi-probe01-boot-v3.img (earlier build; retained, use r2)",
+  "probe": "EnumaProbe 01; CPU/GOP/free-map observations for 60 seconds, then original UniXNU; no XNU payload"
 }

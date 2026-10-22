@@ -72,6 +72,23 @@ def main():
                             ignore=shutil.ignore_patterns('.git', 'unit_test', 'os_stub', 'doc', 'samples'))
     # Libraries from the reference remain read-only. Only extracted OEM data and our source overlay are copied.
     shutil.copytree(ROOT / 'firmware/Platforms/Xiaomi/enumaPkg', uefi / 'Platforms/Xiaomi/enumaPkg', dirs_exist_ok=True)
+    # Reuse exact upstream GOP validation, map collection, run merging and large
+    # diagnostic font. All generated copies stay in out/, with original notices.
+    probe = uefi / 'Platforms/Xiaomi/enumaPkg/Application/EnumaProbe'
+    source_lock = json.loads((ROOT / 'config/porting-sources.lock.json').read_text())['unixnu_interface_sha256']
+    upstream = args.unixnu / 'drivers/DarwinBoot/DarwinBootPkg/Driver'
+    reused = {}
+    for name in ('DarwinBoot.c', 'BootVideo.h', 'DiagFont.h'):
+        data = (upstream / name).read_bytes()
+        relative = 'drivers/DarwinBoot/DarwinBootPkg/Driver/' + name
+        if hashlib.sha256(data).hexdigest() != source_lock[relative]:
+            raise ValueError('probe source pin mismatch: ' + name)
+        reused[relative] = source_lock[relative]
+        if name != 'DarwinBoot.c': shutil.copyfile(upstream / name, probe / name)
+    original = (upstream / 'DarwinBoot.c').read_text()
+    begin = original.index('STATIC\nEFI_STATUS\nGetMap (')
+    end = original.index('STATIC\nEFI_STATUS\nAllocateWindow (', begin)
+    (probe / 'DarwinProbe.inc').write_text('// SPDX-License-Identifier: BSD-2-Clause-Patent\n' + original[begin:end])
     for relative in ('Binaries', 'raw'):
         shutil.copytree(ROOT / 'out/firmware-vendor' / relative, uefi / relative, dirs_exist_ok=True)
     includes = uefi / 'EnumaInputs'; includes.mkdir(exist_ok=True)
@@ -130,6 +147,7 @@ def main():
               'complete': all(r['exit_code'] == 0 for r in records) and fd.exists()}
     report['archive_sha256'] = lock['archive_sha256']
     report['reference_gitlinks'] = lock['reference_gitlinks']
+    report['probe_upstream_sha256'] = reused
     report['source_inputs_sha256'] = {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
         for p in sorted((ROOT / 'firmware').rglob('*'))

@@ -53,6 +53,24 @@ def main():
     if [int(v, 16) for v in re.findall(r'0x[0-9a-fA-F]+', array)] != [f['enable_reg'] for f in facts]:
         raise ValueError('local UFS offsets disagree with pinned manufacturer branches')
     out = ROOT / 'out/enuma-drivers'; out.mkdir(parents=True, exist_ok=True)
+    nvt_path = ROOT / 'out/references/Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.c'
+    if digest(nvt_path) != pins['nvt_sha256']:
+        raise ValueError('NT36523 source pin mismatch')
+    nvt_header = nvt_path.with_suffix('.h')
+    source_files = json.loads((ROOT / 'config/porting-sources.lock.json').read_text())['files']
+    header_pin = next(f['sha256'] for f in source_files if f['cache_path'].endswith('nt36523/nt36xxx.h'))
+    if digest(nvt_header) != header_pin: raise ValueError('NT36523 header pin mismatch')
+    header = nvt_header.read_text()
+    for name, value in {'TOUCH_MAX_FINGER_NUM':10, 'TOUCH_FORCE_NUM':1000,
+                        'POINT_DATA_CHECKSUM_LEN':65, 'DUMMY_BYTES':1}.items():
+        match = re.search(r'^#define\s+'+name+r'\s+\(?([0-9]+)\)?\s*$', header, re.M)
+        if not match or int(match[1]) != value: raise ValueError('NT36523 format constant changed: '+name)
+    original = nvt_path.read_text()
+    begin = original.index('static int32_t nvt_ts_point_data_checksum(')
+    end = original.index('#endif /* POINT_DATA_CHECKSUM */', begin)
+    checksum_source = out / 'NvtChecksum.inc'
+    checksum_source.write_text(original[:original.index('*/')+2] +
+                              '\n// Unchanged MiCode/Novatek function; host oracle only.\n' + original[begin:end])
     flags = ['clang', '-std=c11', '-Wall', '-Wextra', '-Werror', '-I'+str(gen), '-I'+str(local)]
     sanitizer = ['-fsanitize=address,undefined', '-fno-omit-frame-pointer', '-fno-pie', '-no-pie']
     records = []
@@ -61,15 +79,20 @@ def main():
     records.append(run([out/'spi-test']))
     records.append(run([*flags, *sanitizer, ROOT/'tests/enuma_ufs_clock.c', local/'EnumaUfsClock.c', '-o', out/'ufs-clock-test']))
     records.append(run([out/'ufs-clock-test']))
-    for source in [local/'EnumaGeniSpi.c', local/'EnumaUfsClock.c', gen/'GeniSpi.c']:
+    records.append(run([*flags, *sanitizer, '-DNVT_CHECKSUM_SOURCE="'+str(checksum_source)+'"',
+                        ROOT/'tests/enuma_nvt.c', local/'EnumaNvt.c', '-o', out/'nvt-test']))
+    records.append(run([out/'nvt-test']))
+    for source in [local/'EnumaGeniSpi.c', local/'EnumaUfsClock.c', local/'EnumaNvt.c', gen/'GeniSpi.c']:
         records.append(run([*flags, '--target=aarch64-none-elf', '-ffreestanding', '-fno-builtin', '-O2',
                             '-c', source, '-o', out/(source.stem+'.o')]))
     report = {'scope': 'host register model and AArch64 objects; not IOKit link, QEMU or hardware execution',
               'gcc_branch_facts': facts, 'checks': records,
+              'nvt_reference_sha256': digest(nvt_path), 'nvt_header_sha256': header_pin,
+              'nvt_checksum_oracle_sha256': digest(checksum_source),
               'objects': {p.name: digest(p) for p in out.glob('*.o')},
               'local_sources': {p.name: digest(p) for p in local.glob('*.[ch]')}}
     (ROOT/'reports/enuma-driver-check.json').write_text(json.dumps(report, indent=2)+'\n')
-    print('PASS: upstream GENI + enuma adapter, nine Kona GCC facts, atomic snapshots, three AArch64 objects')
+    print('PASS: upstream GENI, Kona GCC snapshots, NT36523 decoder and four AArch64 objects')
 
 
 if __name__ == '__main__':

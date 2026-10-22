@@ -9,6 +9,7 @@ from pathlib import Path
 from fetch_porting_references import ROOT, check_references
 
 MODULES = (
+    'enumaPkg/Application/EnumaProbe/EnumaProbe.inf',
     'UniXNUPkg/Application/UniXNU/UniXNU.inf',
     'UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf',
     'DarwinBootPkg/Driver/DarwinBoot.inf',
@@ -87,6 +88,8 @@ def check_graph(package):
         raise ValueError('display preservation switch missing')
     if 'UniXNULib|UniXNUPkg/Library/UniXNULib/UniXNULib.inf' not in sections.get('libraryclasses', []):
         raise ValueError('UniXNULib not bound')
+    if 'gUniXNUPkgTokenSpaceGuid.PcdUniXNUApplicationFile|{ GUID("AEF8C196-230E-4E19-A306-D62E21E3D780") }' not in sections.get('pcdsfixedatbuild', []):
+        raise ValueError('diagnostic boot target not selected')
     return {'packaged_modules': list(MODULES), 'external_includes': external}
 
 

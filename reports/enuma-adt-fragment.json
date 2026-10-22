@@ -1,0 +1,45 @@
+{
+  "scope": "serialized hardware fragment only; not bootable, linked or executed",
+  "path": "out/enuma-platform/hardware.adt-fragment",
+  "bytes": 2956,
+  "sha256": "5771d95333672ed494ad1692dca43d43107505628790b16fdfcfe12a3061cee9",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "cpu_compatible": "qcom,kryo",
+  "cpu_affinities": [
+    "0x0",
+    "0x100",
+    "0x200",
+    "0x300",
+    "0x400",
+    "0x500",
+    "0x600",
+    "0x700"
+  ],
+  "gic": {
+    "path": "/soc/interrupt-controller@17a00000",
+    "distributor_pa": "0x17a00000",
+    "distributor_size": "0x10000",
+    "redistributor_pa": "0x17a60000",
+    "redistributor_size": "0x100000",
+    "redistributor_stride": "0x20000",
+    "translation_evidence": "/soc ranges maps bus [0,0xffffffff) to identical root physical addresses"
+  },
+  "timer_intid": 27,
+  "psci": {
+    "path": "/psci",
+    "method": "smc"
+  },
+  "interface_sha256": {
+    "drivers/ArmCpu/ArmCpu.cpp": "3c87b3bd617be5582a6a24ff797c359497ee9feaa702ee883ecee4270db21c9f",
+    "drivers/ArmDTPlatform/ArmDTPlatform.cpp": "07f96a42bdd638022960f5fcaf9e3a07dd73a82c869a70815781cac6d4873b3b",
+    "drivers/NativeHidInput/NativeHidInput.cpp": "76d899121196247e759a60229e3e85b3126ad8bf9df288d8a97fb92ba34f7275"
+  },
+  "smp_policy": "boot CPU first; do not enable sheng-smp workaround flags by inheritance",
+  "missing_for_boot": [
+    "chosen/NVRAM proxy and donor/product identity",
+    "runtime memory allocation and matching DRAM contract",
+    "actual GOP video contract",
+    "enuma kernel link, root payload and prelink"
+  ],
+  "hardware_execution": false
+}

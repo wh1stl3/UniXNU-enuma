@@ -1,8 +1,8 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "445756cb4b18b4f5a72f6ba943c9c6e99220799d475518c0cfebed50556d7f62",
+  "fd_sha256": "a169c9dbb894dfacc5d421779a2e855639bc1d0b4e4c0c224602a582b7471dc2",
   "fd_bytes": 3145728,
-  "file_count": 80,
+  "file_count": 81,
   "matched_oem_modules": [
     "CPRDxe",
     "ChipInfo",
@@ -66,6 +66,7 @@
     "DxeCore",
     "EmbeddedMonotonicCounter",
     "EnglishDxe",
+    "EnumaProbe",
     "EnvDxe",
     "Fat",
     "GpiDxe",
@@ -120,6 +121,7 @@
     "fc510ee7-ffdc-11d4-bd41-0080c73c8881",
     "ufpdevicefw"
   ],
+  "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
   "hardware_execution": false
 }

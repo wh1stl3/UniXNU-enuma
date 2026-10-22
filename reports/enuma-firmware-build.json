@@ -58,12 +58,19 @@
     "Common/Mu": "b8d46c71610318e36a661819e1e3c0b8bdda413a",
     "Common/Mu_OEM_Sample": "b70b4b7bb02c43bf9db2172dfb3ed0457e2361d6"
   },
+  "probe_upstream_sha256": {
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e"
+  },
   "source_inputs_sha256": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
-    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "268a49bc4c417cbb3989272e2c9d9df6de44771d9bab2aeb53eb630bb808a6c9",
-    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "e1f08e837776f2d0b6dbca8d8c9cfcbb09e813a8af911d0c5c5fb478bb893228",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
@@ -74,11 +81,5 @@
     "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
     "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb"
   },
-  "fd_sha256": "445756cb4b18b4f5a72f6ba943c9c6e99220799d475518c0cfebed50556d7f62",
-  "build_log_sha256": "664d5e397d8479b4bbdc10c5014dd767f328bb2bacc38a36aa8f2683f6126b7b",
-  "source_hash_policy": "LF-normalized source bytes",
-  "build_warnings": [
-    "inherited HwResetSystemLib library-class warning",
-    "make clock-skew warnings; complete build exited 0"
-  ]
+  "fd_sha256": "a169c9dbb894dfacc5d421779a2e855639bc1d0b4e4c0c224602a582b7471dc2"
 }

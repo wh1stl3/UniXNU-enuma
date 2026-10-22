@@ -128,6 +128,37 @@
         "-Werror",
         "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
         "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-DNVT_CHECKSUM_SOURCE=\"/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/NvtChecksum.inc\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_nvt.c",
+        "/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform/EnumaNvt.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/nvt-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/nvt-test"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: NT36523 ten contacts, checksum oracle/65 corruptions, 79 truncations, wire dummy, ranges, recovery, inclusive HID endpoints\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
         "--target=aarch64-none-elf",
         "-ffreestanding",
         "-fno-builtin",
@@ -177,6 +208,28 @@
         "-fno-builtin",
         "-O2",
         "-c",
+        "/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform/EnumaNvt.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/EnumaNvt.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "--target=aarch64-none-elf",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-O2",
+        "-c",
         "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi/GeniSpi.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/GeniSpi.o"
@@ -186,14 +239,20 @@
       "stderr": ""
     }
   ],
+  "nvt_reference_sha256": "e34cad1b799348d1a952e660a1576e0776abd9ce2c95cf31199a5c429d17a299",
+  "nvt_header_sha256": "d411b6aebf5b23cd2e6f819c870abd002dceb733d73f8271fc2ceb82e063b23c",
+  "nvt_checksum_oracle_sha256": "4eaf06c1f411f4306f971450d551d84ab34fa15ec40b74a609b5dc9badea57f8",
   "objects": {
     "EnumaGeniSpi.o": "3c91dc2a1f23f13d6f725f73b73be570c264aac8330d51926f80d2362fe470aa",
+    "EnumaNvt.o": "4548cd9127b8e9feb4a0304d9a98cc6bd30f7c73ee869c643db8fc9bbbe836a6",
     "EnumaUfsClock.o": "015c2ed50ae81f8f12b83000044377e631a61b67dc5a4ede8df4861fe2869b80",
     "GeniSpi.o": "e00b26ab278bb36836c98170811887e3a89a8a34be04686b8d4e4ca1926dfaa7"
   },
   "local_sources": {
     "EnumaGeniSpi.c": "436d268fac82f857679a916276abfdd175e6ab68410523bf23ed427b685b781c",
     "EnumaGeniSpi.h": "4aaec11c00d7bd9a17dcda1efa15955b698d96b376aa9f3ff36ba8c6ec101390",
+    "EnumaNvt.c": "196c8bb083d9f0c36030f70825784718ae7d71e5135d0ea999b08fe7610d4542",
+    "EnumaNvt.h": "4d0f2dc1835a96aba00714802ad0e9ab9710b80f12cc9b903fde1a64f67209db",
     "EnumaUfsClock.c": "88da85fa83f2f276374a1b2af4089bd6cbf823823c3aaeec9d2a93d188514d0b",
     "EnumaUfsClock.h": "64e7b3088536197a294d570fc79f724512e4eef8b4dd7634bb6dc74e83370db3"
   }

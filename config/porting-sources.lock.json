@@ -92,7 +92,12 @@
     "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
     "drivers/DarwinBoot/Test/window-size.c": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21",
     "scripts/unixnu/bootimg.py": "466c29e14332381c4506b4ccbafd437159a4fe575f888b8f26ba13026e26da6f",
-    "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e"
+    "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e",
+    "drivers/ArmCpu/ArmCpu.cpp": "3c87b3bd617be5582a6a24ff797c359497ee9feaa702ee883ecee4270db21c9f",
+    "drivers/ArmDTPlatform/ArmDTPlatform.cpp": "07f96a42bdd638022960f5fcaf9e3a07dd73a82c869a70815781cac6d4873b3b",
+    "drivers/NativeHidInput/NativeHidInput.cpp": "76d899121196247e759a60229e3e85b3126ad8bf9df288d8a97fb92ba34f7275"
   },
   "aosp_mkbootimg": {
     "path": "D:/Code/PortingiOS/common/sources/aosp-mkbootimg",

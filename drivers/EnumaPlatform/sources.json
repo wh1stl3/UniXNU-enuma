@@ -13,5 +13,10 @@
   "gcc_path": "drivers/clk/qcom/gcc-kona.c",
   "gcc_sha256": "ed208678508c983d0989f1f135fac898c5a9a91c14af1fa42cd7ea2f24cd14cd",
   "fdt_path": "D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout",
-  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62"
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "nvt_sha256": "e34cad1b799348d1a952e660a1576e0776abd9ce2c95cf31199a5c429d17a299",
+  "nvt_repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+  "nvt_commit": "52a2f180865f8368828985d6384130acd093fa93",
+  "nvt_path": "drivers/input/touchscreen/nt36523/nt36xxx.c",
+  "nvt_scope": "Packet-format facts; exact GPL checksum function extracted only into out/ for host oracle. No Linux code linked into local decoder."
 }

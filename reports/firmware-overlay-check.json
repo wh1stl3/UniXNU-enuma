@@ -53,6 +53,7 @@
   ],
   "graph": {
     "packaged_modules": [
+      "enumaPkg/Application/EnumaProbe/EnumaProbe.inf",
       "UniXNUPkg/Application/UniXNU/UniXNU.inf",
       "UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf",
       "DarwinBootPkg/Driver/DarwinBoot.inf"
@@ -103,11 +104,13 @@
     "redistributor_pa": "0x17A60000"
   },
   "overlay_sha256": {
+    "Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+    "Application/EnumaProbe/EnumaProbe.inf": "2e53e16f0bfcc33aef41bdef535ec2ebfc7503b431eaf51ce460ec14b76e900e",
     "Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
     "Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
     "Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
-    "Include/UniXNU.dsc.inc": "268a49bc4c417cbb3989272e2c9d9df6de44771d9bab2aeb53eb630bb808a6c9",
-    "Include/UniXNU.fdf.inc": "e1f08e837776f2d0b6dbca8d8c9cfcbb09e813a8af911d0c5c5fb478bb893228",
+    "Include/UniXNU.dsc.inc": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824",
+    "Include/UniXNU.fdf.inc": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee",
     "Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
     "Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
     "Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
