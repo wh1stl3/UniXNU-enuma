@@ -17,8 +17,8 @@ def main():
     if board['board'] != {'name': 'enuma', 'soc': 'SM8250',
                           'description': 'Xiaomi Pad 5 Pro 5G / iPadOS 17.7.11 bring-up', 'example': True}:
         raise ValueError('board contract changed; review before updating the guard')
-    if any(key in board.get('payload', {}) for key in ('dram_size', 'dram_base')) or 'owned_memory_size' in board['payload']['adt']:
-        raise ValueError('memory fields require review')
+    if board.get('payload') != {'adt': {'ipad_identity': True, 'owned_memory_size': '0x20000000'}}:
+        raise ValueError('payload contract differs from R-001: only the approved 512 MiB request is allowed')
     for name, source in pins['sources'].items():
         path = Path(source['path'])
         revision = subprocess.check_output(['git', '-c', f'safe.directory={path.as_posix()}', '-C', str(path), 'rev-parse', 'HEAD'], text=True).strip()
@@ -67,6 +67,8 @@ def main():
     commands.append({'argv': command, 'exit_code': run.returncode, 'stdout': run.stdout, 'stderr': run.stderr})
     result = {'evidence_level': 'static_only', 'source_pins_checked': len(pins['sources']),
               'example_guard': guard, 'defconfig': commands, 'build_performed': False,
+              'owned_memory_request': {'review': 'R-001', 'bytes': 0x20000000,
+                                       'physical_allocation_observed': False},
               'hardware_executed': False, 'donor_note': 'uses saved audit; rerun audit_inputs.py for complete content hashing'}
     (ROOT / 'reports/workspace-check.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print('PASS: source pins, donor identity, upstream defconfig and example guard; no build performed')

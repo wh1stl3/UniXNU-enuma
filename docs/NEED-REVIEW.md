@@ -4,7 +4,9 @@
 
 ## R-001 · 第一阶段 DarwinBoot owned-memory 预算
 
-状态：pending，2026-10-22；尚未修改 board.toml。
+状态：approved，2026-10-22；用户明确批准推荐方案 A（512 MiB），已写入 board.toml。
+
+批准原文：“先按推荐配置 512 MiB，批准 R-001，继续离线适配。后续根据实际 UEFI 内存图再调整，生成或启动镜像前另行确认。”仅执行下述最小范围，其他内存值/基址变更仍需新的确认。
 
 背景：固件源码接线和 SM8250 支持核心已可检查，下一阶段要把 enuma ADT 与 DarwinBoot 的内存请求约定接通。该值是 loader 请求的连续窗口大小，不是 enuma 总内存、可用内存结论或固定物理地址。修改 board.toml 内存字段触发 AGENTS.md 硬停第 1 类。
 

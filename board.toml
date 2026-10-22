@@ -26,8 +26,10 @@ defconfig = "enuma_defconfig"
 
 [payload.adt]
 ipad_identity = true
+# R-001 approved 2026-10-22: first-entry budget, not observed available RAM.
+owned_memory_size = "0x20000000"
 # The pinned sheng generator gates product AND security properties with this flag.
 # A future enuma generator must preserve the reviewed donor/product contract.
 # TODO: enuma ADT tool, product node, CPU topology and platform seed.
-# Memory sizes/bases intentionally absent: historical Android FDT is not a UEFI allocation map.
+# Physical bases and total DRAM remain unset; allocation needs the actual UEFI map.
 # TODO: userdata layout, firmware configuration, boot-image parameters.

@@ -21,6 +21,11 @@
     }
   ],
   "build_performed": false,
+  "owned_memory_request": {
+    "review": "R-001",
+    "bytes": 536870912,
+    "physical_allocation_observed": false
+  },
   "hardware_executed": false,
   "donor_note": "uses saved audit; rerun audit_inputs.py for complete content hashing"
 }

@@ -16,12 +16,12 @@
 - 固件增量七项检查测试通过；完整镜像前置检查按预期拒绝。选定来源可从锁文件重取，参考仓保持只读。
 - 首轮 donor 六组件/两个 DMG 摘要、FDT 4613 节点、GIC/PSCI/timer/CPU 计划及 example 防护继续有效。
 
-复现和证据：[固件与驱动报告](operations/2026-10-22-kona-platform.md)、reports/。内存字段未改，未生成镜像，未设置任何 *_verified=true。
+复现和证据：[固件与驱动报告](operations/2026-10-22-kona-platform.md)、reports/。已按 R-001 配置 512 MiB owned-memory 请求，物理基址与总 DRAM 未设置；未生成镜像，未设置任何 *_verified=true。
 
 ## 下一步与待决项
 
-1. **R-001 待用户确认**：下一阶段 ADT/DarwinBoot 的 owned-memory 请求预算；推荐仅先配置 512 MiB，具体范围见 NEED-REVIEW。确认不代表有可用物理窗口，也不授权生成/启动镜像。
-2. 继续闭合 enuma 固件的 MemoryMapLib/ConfigurationMapLib、DDR/栈/GOP、厂商协议和 FD/boot header。当前没有完整 enuma 厂商依赖，批准 R-001 也不会自动解决它们。
+1. **R-001 已批准并落实**：owned_memory_size="0x20000000"（512 MiB）；配置检查只接受此范围，example 防护继续有效。下一步离线验证 ADT 到固定 DarwinBoot 解析器的请求约定，尚无实际 UEFI 分配结果。
+2. 继续闭合 enuma 固件的 MemoryMapLib/ConfigurationMapLib、DDR/栈/GOP、厂商协议和 FD/boot header。当前没有完整 enuma 厂商依赖，R-001 的批准不会自动解决它们。
 3. SPI 仍缺真实时钟/供电/pinmux/独占状态交接；NT36523 触点协议及固件名需核实。UFS 仍缺 QMPv4 PHY、电源、时钟写入、SMMU 和链路启动，不能启用 SM8550 NativeUfs。
 4. 用户方便时接入 enuma 后只读复核 ROM/FDT/内存/驱动绑定；本轮不等待设备、不操作 nuwa。
 
