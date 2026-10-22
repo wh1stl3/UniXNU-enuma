@@ -1,0 +1,24 @@
+{
+  "scope": "host parser tests, no device identity success inferred",
+  "suite_command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests"
+  ],
+  "tests_run": 36,
+  "exit_code": 0,
+  "identity_cases": [
+    "exact bare and bootloader-prefixed values accepted",
+    "prefix suffix and wrong variable rejected",
+    "duplicate contradictory and missing values rejected",
+    "FAILED and nonzero status rejected",
+    "slot and lock fields exact"
+  ],
+  "private_query_log": "out/device-tests/<attempt>/fastboot-identity.local.json",
+  "identity_attempts": 5,
+  "all_three_fields_required_each_attempt": true
+}

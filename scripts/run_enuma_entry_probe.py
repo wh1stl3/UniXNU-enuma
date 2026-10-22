@@ -17,6 +17,20 @@ ADB = 'D:/Code/PortingiOS/common/tools/platform-tools/adb.exe'
 FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
 
 
+def fastboot_value_matches(result, variable, expected):
+    """Require one exact GetVar value; prefixes and contradictory values fail."""
+    output = (result.stdout + result.stderr).decode(errors='replace')
+    values = []
+    for line in output.splitlines():
+        line = line.strip()
+        if line.startswith('(bootloader)'):
+            line = line[len('(bootloader)'):].strip()
+        key, separator, value = line.partition(':')
+        if separator and key == variable:
+            values.append(value.strip())
+    return result.returncode == 0 and 'FAILED' not in output and values == [expected]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', type=Path, required=True)
@@ -66,16 +80,23 @@ def main():
     def fastboot_identity():
         # USB enumeration can precede stable GetVar responses. Retry complete
         # sets; never accept a missing or mismatched identity field.
+        queries = []
         for attempt in range(5):
             failed=[]
             for var, expected in [('product','enuma'),('current-slot',state['slot'][1:]),('unlocked','yes')]:
                 r=invoke(FASTBOOT,['-s',serial,'getvar',var])
-                if r.returncode or (var+': '+expected).encode() not in r.stdout+r.stderr:
+                queries.append({'attempt': attempt, 'variable': var, 'returncode': r.returncode,
+                    'output': (r.stdout+r.stderr).decode(errors='replace').replace(serial, '<target>')})
+                if not fastboot_value_matches(r, var, expected):
                     failed.append(var)
+            (out/'fastboot-identity.local.json').write_text(json.dumps(queries,indent=2)+'\n')
             if not failed:
                 state['fastboot_identity_retry_count']=attempt
                 return
             time.sleep(1)
+        state['phase']='fastboot-return-identity-aborted' if 'issued_at' in state else 'fastboot-identity-aborted'
+        state['identity_failed_fields']=failed
+        save()
         raise ValueError('fastboot identity mismatch: '+','.join(failed))
     save()
     r=invoke(ADB,['-s',serial,'reboot','bootloader'])

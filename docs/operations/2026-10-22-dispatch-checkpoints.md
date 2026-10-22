@@ -72,3 +72,9 @@ wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B
 2026-10-22续测，官方backend、固件3376c44不变。第2项delay2 ADB15.938秒/Android32.704秒；第4项delay2 ADB16.944秒/Android31.829秒，先作为单点初步边界。第8项delay2 ADB20.142秒/Android33.399秒；delay7 ADB21.233秒/Android34.952秒，首轮差1.091秒不能作命中证明，因此复测完全相同2秒镜像：ADB15.917秒/Android29.285秒，7秒与复测2秒差5.316秒支持第8项CoreStartImage返回后门命中。所有样本保留，恢复时序包含USB与Android波动；未采集EFI_STATUS/GUID，不认定初始化成功或完整调度完成。
 
 五次都自动恢复Android/root/boot与vendor_boot摘要，无flash/erase/改槽。每份固件均33OEM PE-DEPEX字节审计与v3回读通过。快照out/entry-probe/official-queue{2,4,8}-stage13-delay{2,7}/，精确镜像/FD摘要见entry-device-tests各variant。当前编译第16项；后续按真实边界推进，而非猜测第9项就是故障模块。
+
+## 第16项与第二次推送前查询异常
+
+第16项stage13/delay2完整FD ebdb9017106c9f76790f4ac6a45bc9fe9176609493dce29d714478637444d2f0，镜像647503568b075796af2a0944e0b4d25d195023707cec80887512048282481a59。首次完整身份查询五次均缺字段，未发boot，仅正常重启回Android并核对root/槽/boot与vendor_boot摘要。公开报告分别保留中止与启动记录。重试23:29:16发出，ADB16.953秒、Android30.316秒，全部恢复核对通过；单点尚无独立延时对照，不能推断EFI_SUCCESS/GUID。
+
+GetVar解析现要求恰好一个完整值，拒绝错误变量、enuma后缀、重复/冲突、FAILED和非零返回；每轮完整查询的输出保存在当前私有attempt目录fastboot-identity.local.json，失败phase显式区分boot前/后。首次异常未有完整原始查询日志，不能追认其错误文字；根因仍未知。36项Python通过，包括三组解析回归，重试当场三字段首轮通过。第32项继续构建。

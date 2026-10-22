@@ -27,6 +27,39 @@
       "partition_digests_unchanged": true,
       "boot_command_issued": false,
       "abort_reason": "Fastboot product initially matched, current-slot query failed, then all GetVar identity responses were Variable Not found. No boot command issued; normal reboot restored Android, root and hashes."
+    },
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/official-queue16-stage13-delay2-boot-v3.img",
+      "candidate_sha256": "647503568b075796af2a0944e0b4d25d195023707cec80887512048282481a59",
+      "label": "dxe-driver-return",
+      "phase": "fastboot-query-aborted-recovered-android",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "variant": "official-queue16-stage13-delay2",
+      "stop_stage": 13,
+      "dispatch_ordinal": 16,
+      "delay_seconds": 2,
+      "fd_sha256": "ebdb9017106c9f76790f4ac6a45bc9fe9176609493dce29d714478637444d2f0",
+      "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8",
+      "image_boot_issued": false,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "interpretation": "Identity GetVar preflight aborted before boot; selected target normally rebooted, Android/root/slot/partition hashes checked. No ordinal16 execution evidence."
     }
   ],
   "cause_identified": false
