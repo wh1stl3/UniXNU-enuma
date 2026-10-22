@@ -32,7 +32,9 @@
 
 1. 在 CoreDispatcher 内及其返回处补观察，区分具体驱动、厂商显示协议闭包、BDS 与 Probe 入口。优先复用已有 TimerLib/ResetCold 门，保持恢复路径；新内存字段及验证标记仍需审查。
 2. 取得实际 GOP 和 UEFI map 后再推进 owned-window / XNU 基础平台；完整内核链接、预链接及 ADT 仍未闭合。
-3. 用户已批准公开建仓：origin=https://github.com/wh1stl3/UniXNU-enuma.git，main 已推送到 8aa2d95。已准备 enuma 自身的手动 macOS Actions：preflight 核对 Xcode 16.4 / iPhoneOS SDK 18.5 并编译 arm64 探针，bootstrap 编译固定 XNU 通用 4 KiB 基线；尚待远端执行。后者关闭本板功能，只验证工具链/基线，不是完整 enuma 内核或预链接。板级 archives / prelink 输入仍缺。
+3. 用户已批准公开建仓：origin=https://github.com/wh1stl3/UniXNU-enuma.git，main 已推送，CI 配置提交 2312231。macOS preflight 实际通过：run 39784132935，Apple Silicon、macOS 15.7.9 / image 20260907.0337.1、Xcode 16.4 / SDK 18.5、arm64 对象编译成功；见 reports/enuma-macos-preflight.json。通用 4 KiB XNU bootstrap 已启动，run 39784240390 仍在运行，尚无构建成功结论；实时状态见 https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39784240390 。该模式关闭本板功能，只验证工具链/基线，不是完整 enuma 内核或预链接，板级 archives / prelink 输入仍缺。SDK 18.5 不改变 donor 17.7.11。
 4. 设备已恢复 Android，当前无待按键事项。
+
+重建差异进一步检查：SEC 含 __TIME__ 字符串（20:56:24 → 21:02:55）与相应常量池变化；PcdDxe 仅 CodeView RSDS 标识中的 8 字节改变。其余解码文件除承载它们的压缩容器外一致。见 reports/enuma-fd-rebuild-comparison.json；不是完整语义等价或新镜像实测证明，仍分别绑定摘要。
 
 详见 [入口定位报告](operations/2026-10-22-entry-checkpoints.md) 与 [构建环境核对](operations/2026-10-22-build-environments.md)。上游和 nuwa 只读，二进制与私有设备标识仅在忽略的 out/ 中。

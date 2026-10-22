@@ -1,0 +1,97 @@
+{
+  "scope": "decoded section byte comparison, not hardware validation",
+  "file_count": 81,
+  "old_fd_sha256": "da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d654aeaabe",
+  "new_fd_sha256": "d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c",
+  "changed_sections": [
+    {
+      "name": "9affb503-e643-4141-8b90-17e8588b1d35",
+      "guid": "9affb503-e643-4141-8b90-17e8588b1d35",
+      "section_type": 18,
+      "old_bytes": 65192,
+      "new_bytes": 65192,
+      "differing_positions": 22,
+      "first_offsets": [
+        4101,
+        26905,
+        46840,
+        46841,
+        46842,
+        46843,
+        46844,
+        46845,
+        46846,
+        46847,
+        46848,
+        46849,
+        46856,
+        46857,
+        46858,
+        46859
+      ],
+      "old_sha256": "2ce46e1fc356ca6da8bd51042524d0996048da5a4c2119fe1184e7dfc07f0bdf",
+      "new_sha256": "ceee318c046fbcc9e051624e7202f4b4ace58e96a379d77135b0587071dac0a1"
+    },
+    {
+      "name": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+      "guid": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+      "section_type": 2,
+      "old_bytes": 1010256,
+      "new_bytes": 1010187,
+      "differing_positions": 932067,
+      "first_offsets": [
+        74395,
+        74396,
+        74397,
+        74398,
+        74399,
+        74400,
+        74401,
+        74402,
+        74403,
+        74404,
+        74405,
+        74406,
+        74407,
+        74408,
+        74409,
+        74410
+      ],
+      "old_sha256": "f7cfaec65db4e9739f2fba6abb355dedd82dcc90455733bcf578ef991a66b8c9",
+      "new_sha256": "99f49a85f98964d399a1b86c3c64d38a5b45585c2c2c56fac682d8f6edb77f36"
+    },
+    {
+      "name": "PcdDxe",
+      "guid": "80cf7257-87ab-47f9-a3fe-d50b76d89541",
+      "section_type": 16,
+      "old_bytes": 28672,
+      "new_bytes": 28672,
+      "differing_positions": 8,
+      "first_offsets": [
+        24904,
+        24905,
+        24906,
+        24907,
+        24908,
+        24909,
+        24910,
+        24911
+      ],
+      "old_sha256": "51212083589ecddf23f8f9b7783972a77cb1171f11414d2b896587e1eb376998",
+      "new_sha256": "867937e3d810beb6088e201aa478f63fb4f044b3e9712c46a45b1fb03ea0a839"
+    }
+  ],
+  "findings": [
+    {
+      "module": "SEC",
+      "source": "Silicon/Silicium/SiliciumPkg/Sec/Sec.c:58",
+      "old_time_string": "20:56:24",
+      "new_time_string": "21:02:55",
+      "note": "Time literal and literal-pool layout differ; not a full semantic equivalence proof"
+    },
+    {
+      "module": "PcdDxe",
+      "note": "Only eight bytes changed, all within the CodeView RSDS identifier at PE offsets 24904..24911; other decoded PE bytes identical"
+    }
+  ]
+}

@@ -30,3 +30,5 @@ preflight 从已锁 UniXNU 提交读取源/feeds，编译一个 arm64 freestandi
 本板候选 defconfig 的 BOOT_PROGRESS 从 y 修正为 n：固定脚本明确要求 UFS/owner-root/Virtio/corecrypto 的组合，当前 UFS 已禁用，保留 y 会在配置检查阶段必然失败。本次未开启这些尚未审查的硬件路径，也未修改 board.toml 或 example 标记。
 
 工作流仅有 contents:read，checkout 不保留凭据，只上传 out/ci/macos/evidence（日志/来源/SDK/可选通用基线）到短期 Actions artifact。设备镜像、备份、私有标识和上游整树不提交 Git；macOS 克隆及全部中间文件在本仓 out/ 下，与本机只读上游无关。实际 run 链接/结论将记录在 STATUS 和 reports 中。
+
+实际执行：2312231 对应 [preflight run 39784132935](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39784132935) 成功；回读 artifact 确认为 arm64/macOS15.7.9、image 20260907.0337.1、Xcode16.4 build16F6 / SDK18.5，固定 UniXNU 源及 arm64 探针均通过。结构化报告 reports/enuma-macos-preflight.json。随后触发 [bootstrap run 39784240390](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39784240390)，记录时仍在执行，不能宣称通用内核或本板链接成功；运行状态以 GitHub 为准。

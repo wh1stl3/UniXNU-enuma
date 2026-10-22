@@ -1,0 +1,10 @@
+{
+  "conclusion": "",
+  "createdAt": "2026-10-22T13:08:24Z",
+  "headSha": "23122319144c05deaa3bb2e07c8c9ca1bc9086e5",
+  "status": "in_progress",
+  "updatedAt": "2026-10-22T13:08:29Z",
+  "url": "https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39784240390",
+  "scope": "generic XNU 4KiB bootstrap with board features disabled; not a device kernel",
+  "recorded_at_utc": "2026-10-22T13:12:48.111945+00:00"
+}

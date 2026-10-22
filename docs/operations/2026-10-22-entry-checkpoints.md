@@ -31,6 +31,8 @@ stage 10 固件 SHA256 da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d65
 
 提交前把补丁中标准的单空格空白上下文行规范为空行，git apply --reverse --check 仍确认与已应用源码相同，随后完成一次重建与 OEM 审计。新 FD SHA256 d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c，尚未启动。重建未得到相同二进制摘要，原因未归因；标准构建/FD 审计报告记录此次新构建，历史实测报告保留原始输入哈希，boot-payload 报告和已测镜像/raw 仍对应原实测版，不能混用。没有因重复构建而重复设备测试。
 
+后续解码比较见 reports/enuma-fd-rebuild-comparison.json：81 个固件文件中只有 SEC 的 TE、PcdDxe 的 PE 及外层压缩容器 section 发生变化。SEC 源 Sec.c:58 使用 __TIME__/__DATE__，观察到 20:56:24 与 21:02:55 两个时间字符串及常量池布局差异；PcdDxe 仅 RSDS 标识的 8 字节不同，其他 PE 字节一致。此处定位了具体可变元数据，尚未做 SEC 的完整语义等价证明，也不改变旧实测与新构建分别记录的原则。
+
 这些变体有诊断插桩及链接变化，不能据此倒推最初黑屏镜像停在完全相同的位置。已证明当前路径可以越过 BootShim/SEC，下一步优先区分 DXE 初始化、驱动调度、显示依赖和 BDS/Probe 启动，而非盲改 BootShim 地址。
 
 ## 可复用诊断和检查
