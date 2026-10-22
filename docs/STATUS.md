@@ -4,37 +4,47 @@
 
 ## 当前结论
 
-**黑屏定位取得执行阶段证据：BootShim 入口 2/7 秒门、复制/缓存维护后的门、SEC C 入口、DXE Core C 入口，以及 CoreDispatcher 前的门，六次临时启动均自动回到 Android。最后一次 20:57:59 发出，32.018 秒后确认 sys.boot_completed=1、root 和 boot/vendor_boot 摘要不变。** 未 flash/erase/改槽；没有运行 XNU/iPadOS payload。GOP 仍未得到。
+**官网全站审阅完成：144 个文档页（中英文各 72）全部访问成功，与源码路由清单一致，两个指定入口可到达全部页面。结论是保持 iPadOS 17.7.11 / 4 KiB，继续 UEFI/GOP → XNU 基础平台 → NT36523，先补版本一致的构建归档和交接契约。** 本轮只读网页、源接口和已有缓存，未操作设备、生成镜像或更改固定构建来源。
 
-诊断构建能走到 DXE 驱动调度前，后续重点是驱动调度、原厂显示依赖及 BDS/Probe 启动路径。各构建有插桩和链接布局变化，不能倒推最初 Probe 01 r2 黑屏镜像停在完全相同的位置，也不能把门之前所有硬件都标为 verified。
+按官网阶段划分，本板仍在 **阶段 1：UEFI** 内部。已有实机证据是 BootShim/SEC/DXE 的六个定时复位门，最远到 CoreDispatcher 前；`stop-stage 10` 只是固件内部诊断编号。没有 GOP、菜单、负载卷、DarwinBoot 或 XNU 运行证明。
 
-目标保持 iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。owned-memory 请求保持已批准的 512 MiB；board.toml example=true，物理内存字段及 *_verified 标记未改。
+目标保持 iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。owned-memory 请求为已批准的 512 MiB；board.toml example=true，物理内存字段及 *_verified 标记未改。
 
-## 当前候选与证据
+## 官网核对的有效发现
 
-- 当前构建为 **诊断 stage 10，到 CoreDispatcher 前延迟 2 秒并复位**，不能当作正常固件使用。镜像 out/boot-candidate/enuma-dxe-dispatch-stage10-boot-v3.img，3153920 bytes，SHA256 fe97cac064925e430e4b2d4c8f058aa1cf8a0a05fb051e1c7c1b484b1eadc43b。
-- 实测镜像内 FD 为 3 MiB，SHA256 da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d654aeaabe。stage 3 / 9 / 10 的实际构建报告与 raw 保存在 out/entry-probe/ 对应子目录。随后仅规范补丁的空白上下文行并重建，当前 reports/enuma-firmware-build.json / enuma-fd-audit.json 对应未启动的重建 FD d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c；完整构建和 81 文件/33 OEM 字节审计通过，但重建摘要不一致尚未归因，不能把旧实测结论转移给新二进制。未覆盖已测镜像/raw。
-- stage 0 恢复正常路径；3..10 是可选择的 SEC/DXE 门，复用 Mu TimerLib / ResetCold。BootShim 门复用固定上游编译函数与复制逻辑，不猜 framebuffer/MMIO 日志地址。
-- 六次实测命令、镜像摘要、定时与恢复结果：reports/enuma-entry-device-tests.json。2/7 秒入口门的 ADB 返回差 5.422 秒；用户明确确认 2 秒实验未按键。
-- 原 Probe 01 r2 黑屏历史保留在 reports/enuma-probe01-device-test.json，不原样重试。更早遗漏 GIC 的候选继续禁用。boot v3 保留原厂 vendor_boot、空 ramdisk，不含完整 ADT/XNU/用户态。
+- 页面、3836 条有向站内链接、144 个源路由完整覆盖；1 个中文跨页锚点失效，未发现缺失页面目标。中文正文逐页审阅，英文结构及关键段交叉核对；223 个站外链接仅编目，不把外站算入已遍历范围。
+- 官网源码参考 HEAD d704728a6df9d1eb113873dc1b57e87f6846e361 比构建固定的 75bc13dd 领先 89 个提交，完整树差异 509 个文件/条目，gitlink 从 0 增到 21。已审阅 archive/bootstrap、模块和 macOS workflow 接口，不等于审查全部变更。未更新锁或切换上游工作树。
+- 新工具可复用真实 archive builders、编译记录 bootstrap、存储头准备及官方 macOS 工作流；新版文档不能直接套在旧固定接口上。新版仍保留本次导致 legacy probe 链接缺符号的调用，不能假设升级 HEAD 自动修复。
+- pipa 同为 SM8250，但官网未记录实机验证且缺存储驱动；sheng 仍是同 donor 的通用链路参考。NT36532E/THP、SM8550 PMGR/A740 以及其他设备内存/分区值不能继承。
+- 缓存 enuma Android FDT 已有 /reserved-memory/cont_splash_region@9c000000（label cont_splash_region，35 MiB），没有名称恰为 splash_region 的节点。应核对临时启动最终 FDT 与本机 ABL 查找语义；这不是黑屏根因证明，也不是修改地址的依据。
+- 官网建议设备仓与 uefi-enuma 分离。当前 firmware/ 为已构建/测试的隔离增量原型，拆仓可后续整理；本轮未新建第二个远端。
 
-## 仍有效的基础适配
+详细结论：[官网路线核对](operations/2026-10-22-official-docs-route-review.md)；[完整网页清单](operations/2026-10-22-official-site-inventory.md)。机器证据：reports/enuma-official-docs-audit.json、enuma-upstream-docs-comparison.json、enuma-docs-splash-crosscheck.json。
 
-- 本机 XBL 的 45 项内存/MMIO 配置、31 项数值配置、33 个 OEM 驱动和 K81 面板资源已接入。实际 GOP format/base/stride、UEFI GetMemoryMap、连续 512 MiB 分配和 EBS 显示保持仍未观察。
-- 本板硬件 ADT 片段包含 8 核 affinity、19.2 MHz、SMC PSCI、GIC 及 stride/ranges；缺 /chosen、DRAM、GOP、根卷和 donor/product，不能作为完整 ADT。
-- GENI 复用通用 NativeGeniSpi；NT36523 解码核心有主机证据。FWINFO/轴向、固件上传、IRQ/IOKit/HID 和笔输入仍缺；sheng 坐标常量及 SM8550 UFS/A740 驱动不能照用。
+## 最后实机与固件证据
 
-## 验证层次
+- 六次临时复位门：BootShim 入口 2/7 秒、复制/缓存维护后、SEC C 入口、DXE C 入口、CoreDispatcher 前，均回 Android。最后一次 20:57:59 发出，32.018 秒后确认 sys.boot_completed=1、root 和 boot/vendor_boot 摘要不变。未 flash/erase/改槽。本轮未重新查询设备。
+- 最后实测为 stage10 镜像 out/boot-candidate/enuma-dxe-dispatch-stage10-boot-v3.img，3153920 bytes，SHA256 fe97cac064925e430e4b2d4c8f058aa1cf8a0a05fb051e1c7c1b484b1eadc43b；内含 FD da56498bcb5f8ce804bc9d1719d9be8cf2c4d7ed35113ec18bce70d654aeaabe。
+- 当前构建报告对应后续未启动 FD d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c，仍通过完整构建/81 文件/33 OEM PE-DEPEX 字节审计。重建差异含 SEC 的编译时间/常量池与 PcdDxe 的 8-byte RSDS 标识；不把旧实测结论转移给新二进制。
+- 历史 Probe 01 r2 黑屏记录与已测各变体保留；不原样盲重试。门镜像到选定点会主动复位，正常路径须 --stop-stage 0，不运行 iPadOS payload。
 
-30 项 Python 检查在 Windows Python 通过；共享检查点头部的 stage 0/3..10 主机 ASan/UBSan 通过。BootShim 门和 SEC 入口门有 QEMU virt/SMC 执行证据，仅代表该平台。stage 3/9/10 的固件构建、OEM 字节审计和 boot v3 往返通过；上述六个点有实机返回证据。没有宣称完整 DXE、GOP、XNU 或触控运行通过。
+证据：reports/enuma-entry-device-tests.json、enuma-probe01-device-test.json、enuma-fd-rebuild-comparison.json；构建变体在 out/entry-probe/ 对应子目录。
 
-## 下一步与远端
+## 构建与远端的实际状态
 
-1. 在 CoreDispatcher 内及其返回处补观察，区分具体驱动、厂商显示协议闭包、BDS 与 Probe 入口。优先复用已有 TimerLib/ResetCold 门，保持恢复路径；新内存字段及验证标记仍需审查。
-2. 取得实际 GOP 和 UEFI map 后再推进 owned-window / XNU 基础平台；完整内核链接、预链接及 ADT 仍未闭合。
-3. 用户已批准公开建仓：origin=https://github.com/wh1stl3/UniXNU-enuma.git，main 已推送，CI 配置提交 2312231。macOS preflight 实际通过：run 39784132935，Apple Silicon、macOS 15.7.9 / image 20260907.0337.1、Xcode 16.4 / SDK 18.5、arm64 对象编译成功；见 reports/enuma-macos-preflight.json。通用 4 KiB XNU bootstrap 已启动，run 39784240390 仍在运行，尚无构建成功结论；实时状态见 https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39784240390 。该模式关闭本板功能，只验证工具链/基线，不是完整 enuma 内核或预链接，板级 archives / prelink 输入仍缺。SDK 18.5 不改变 donor 17.7.11。
-4. 设备已恢复 Android，当前无待按键事项。
+公开 origin：https://github.com/wh1stl3/UniXNU-enuma.git，main 已推送；本轮文档提交号见 Git 日志。
 
-重建差异进一步检查：SEC 含 __TIME__ 字符串（20:56:24 → 21:02:55）与相应常量池变化；PcdDxe 仅 CodeView RSDS 标识中的 8 字节改变。其余解码文件除承载它们的压缩容器外一致。见 reports/enuma-fd-rebuild-comparison.json；不是完整语义等价或新镜像实测证明，仍分别绑定摘要。
+- macOS preflight run 39784132935 **通过**：Apple Silicon、macOS15.7.9、Xcode16.4/SDK18.5、固定源及 arm64 对象编译。SDK 不改变 donor 版本。
+- 通用 4 KiB bootstrap run 39784240390 **失败**：已推进到最终链接，_bsd_init 引用的 _native_legacy_display_probe 未解析；artifact 和日志已回读。先前“运行中”的记录已由此结论取代。它关闭板级功能，本来就不是完整 enuma 内核；本轮不重新触发 CI。
+- 当前 30 项 Python、主机 sanitizer、4 个 AArch64 板级对象、固件/OEM/v3 审计和复位门证据仍分别有效；无完整 IOKit、最终 XNU/预链接或触控运行通过记录。
 
-详见 [入口定位报告](operations/2026-10-22-entry-checkpoints.md) 与 [构建环境核对](operations/2026-10-22-build-environments.md)。上游和 nuwa 只读，二进制与私有设备标识仅在忽略的 out/ 中。
+## 基础适配与下一步
+
+已有本机 XBL 的 45 项内存/MMIO、31 项配置、33 个原厂模块与 K81 资源；GOP base/stride/format、UEFI map、连续 512 MiB 分配和 EBS 显示保持未观察。硬件 ADT 片段缺 chosen/NVRAM/DRAM/GOP/产品/根；NT36523 只有协议解码核心与通用 GENI 接入证据，缺 FWINFO/IRQ/IOKit/HID/固件恢复/笔输入。
+
+1. 继续 DXE 模块与协议门，核对本机 splash/显示依赖和 BDS/Probe，完成实际 GOP、菜单、输入与 FAT 卷观察。
+2. 独立修复未选显示功能的链接引用，审查并复用正确版本的 archive/bootstrap；不用空 stub。随后完成真实静态库、最终内核、donor prelink，不能把仅有编译记录的 bootstrap 失败当成功。
+3. 补完整 ADT/NVRAM/种子/占位符，先做 QEMU 的 UniXNU→DarwinBoot 契约验证，再测本板基础平台。新内存字段或预算仍需审查。
+4. 按 GENI/ID/FWINFO/帧→IRQ/HID 推进 NT36523，审查软件显示；A650 GPU 后置。原生 UFS/PHY/电源、GPT/OS/SystemOS/root UUID/Data/trust cache 随后闭合。
+
+无新增硬停审批或待按键事项。上游与 nuwa 只读，镜像/备份/设备标识和网页全文缓存不进 Git。

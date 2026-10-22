@@ -17,3 +17,5 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 本机内存/GOP 来源与 33 个厂商驱动见[本机平台固件报告](docs/operations/2026-10-22-native-platform-firmware.md)。最新已测诊断镜像、重建差异和限制以 STATUS 为准；诊断门镜像会主动复位，只包含固件阶段。
 
 公开远端：[wh1stl3/UniXNU-enuma](https://github.com/wh1stl3/UniXNU-enuma)。[macOS Actions](https://github.com/wh1stl3/UniXNU-enuma/actions/workflows/macos-xnu.yml) 手动选择 preflight 或 bootstrap；bootstrap 是关闭本板功能的通用 XNU 4 KiB 基线，不是 enuma 完整内核，不能刷机。构建日志、SDK/来源记录及基线产物保存为 Actions artifact；镜像、设备备份和凭据不进 Git。
+
+已完成[官网144页路线核对](docs/operations/2026-10-22-official-docs-route-review.md)及[完整页面清单](docs/operations/2026-10-22-official-site-inventory.md)。macOS预检通过；首次通用bootstrap在最终链接缺少legacy display probe符号，尚未构建成功。官网新工具与本仓固定源码有版本差异，后续按独立审查接入真实静态库/预链接流程。

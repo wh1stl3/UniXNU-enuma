@@ -1,0 +1,20 @@
+{
+  "scope": "cached live Android FDT; not the boot-test runtime tree or GOP proof",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "selected_splash_nodes": [
+    {
+      "path": "/reserved-memory/cont_splash_region@9c000000",
+      "label": [
+        "cont_splash_region"
+      ],
+      "reg": [
+        "0x0",
+        "0x9c000000",
+        "0x0",
+        "0x2300000"
+      ]
+    }
+  ],
+  "exact_splash_region_node_present": false,
+  "device_accessed": false
+}

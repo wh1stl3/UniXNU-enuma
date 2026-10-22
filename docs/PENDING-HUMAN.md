@@ -1,4 +1,4 @@
 # PENDING-HUMAN
 
-- 2026-10-22：入口定位六次定时复位探针均自动回 Android；最后一次 stage 10 于 20:57:59 发出，32.018 秒后确认 sys.boot_completed=1、root、槽 A 及 boot/vendor_boot 摘要不变。当前无待按键事项。
-- 用户明确确认 2 秒 BootShim 入口实验未按键。后续可能越过未知驱动，仍须保留电源长按及音量下回 fastboot 的人工恢复条件。
+- 当前无新的待按键事项。本轮为官网文档与缓存审阅，未操作或重新查询设备；最后实机观察仍为 stage10 探针已回 Android，sys.boot_completed=1、root、槽 A 及 boot/vendor_boot 摘要不变。
+- 后续越过未知 DXE 驱动前，仍需保留长按电源、音量下回 fastboot 的人工恢复条件。
