@@ -16,7 +16,7 @@
 - 当前完整FD **bc3e16ffd0ab46ceff6bee689c2ba18c496e31e43be553163755fd0922c1f917**，81文件/33原厂PE-DEPEX字节一致，当前overlay检查通过。
 - 新候选out/boot-candidate/enuma-official-backend-stage12-boot-v3.img，3153920 bytes，SHA **25d6947b0eeb2112baeab69d301d97984747b17082d279808e72bcd3d09525d7**，boot v3回读通过，**未实机启动**。快照out/uefi-migration/official-backend-stage12/。raw BootShim/空ramdisk/原厂vendor_boot契约保留。
 - 33项Python通过，包括新预检拒绝不安全暂存和缺OEM输入。ADT计划只因新增firmware表刷新board摘要，512MiB与原硬件数据不变；真实DarwinBoot主机契约回归通过。
-- 固件仓源码Actions run39796073610通过（a1215b7）；run39796926508对应当前3376c44，记录时排队。它仅检查源码，不构建OEM镜像。本地当前源码契约已通过。
+- 固件仓源码Actions run39796073610通过（a1215b7）；当前固定3376c44的run39796926508也已通过，日志已回读并核对PASS行。它仅检查源码，不构建OEM镜像。本地当前源码契约已通过。
 - UniXNU底座仍固定5fdbd5d及21模块；macOS通用4KiB XNU最终链接/审计run39790786938通过，产物de5ccd24…已回读。这关闭板级功能，仍不是enuma最终内核或donor prelink。本轮未重跑macOS内核构建。
 
 ## 最新实机边界
@@ -33,6 +33,6 @@ stage11的2/7秒ADB差仅0.005秒，不认定CoreDispatcher完成；stage12支�
 2. 取得真实GOP、UEFI map、BDS/Probe与菜单协议闭包。新内存值或验证标记仍需审查。
 3. 再补完整ADT/NVRAM/种子/占位符、真实板级archives/最终内核/donor prelink，推进基础平台与NT36523 IRQ/HID；SM8550专用参数不继承，A650后置。
 
-远端：https://github.com/wh1stl3/UniXNU-enuma 与 https://github.com/wh1stl3/uefi-enuma。固件a1215b7/3376c44已推送，设备迁移提交号及推送见Git/后续记录。无新增待批准硬停或待按键事项。
+远端：https://github.com/wh1stl3/UniXNU-enuma 与 https://github.com/wh1stl3/uefi-enuma。固件a1215b7/3376c44已推送，设备迁移51f9c0c已推送，CI证据补齐提交号见Git。无新增待批准硬停或待按键事项。
 
 详情：[双仓接入](operations/2026-10-22-uefi-repository.md)、[DXE实测](operations/2026-10-22-dispatch-checkpoints.md)、[主分支接入](operations/2026-10-22-upstream-integration.md)。

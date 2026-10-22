@@ -41,7 +41,7 @@ Python需tomllib（3.11+，或既有firmware-tools venv的tomli兼容），固�
 ## 验证与边界
 
 - 最新33项Python通过，含真实重叠patch重复应用、禁止把源树当暂存和缺少OEM输入时停止。
-- 固件仓首轮源码Actions run39796073610通过（a1215b7）；最新固定3376c44的run39796926508记录时排队，不能记为通过。本地最新源码契约已通过。
+- 固件仓首轮源码Actions run39796073610通过（a1215b7）；最新固定3376c44的run39796926508随后完成并通过，已回读日志及源码契约PASS行。本地最新源码契约也通过。
 - 官方backend实际完成完整UEFI构建。当前FD **bc3e16ffd0ab46ceff6bee689c2ba18c496e31e43be553163755fd0922c1f917**，81文件/33原厂PE-DEPEX字节审计通过；Mu core补丁已恢复。
 - 新v3候选 out/boot-candidate/enuma-official-backend-stage12-boot-v3.img，3153920 bytes，SHA **25d6947b0eeb2112baeab69d301d97984747b17082d279808e72bcd3d09525d7**，回读通过，**未启动**。快照out/uefi-migration/official-backend-stage12/。
 - 最新实机仍为迁移前stage12首项加载前镜像d9740693…，GOP、BDS、菜单、完整内存图和XNU仍未观察。新构建不能继承旧实机结论。
