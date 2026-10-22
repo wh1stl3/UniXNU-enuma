@@ -2,35 +2,40 @@
 
 更新：2026-10-23（Asia/Shanghai）。当前唯一真相，历史见 WORKLOG。
 
-## 当前结论与停点
+## 当前工作与边界
 
-**R-002 已批准；临时 Android FDT 的 32 KiB 日志候选保留已实机通过。按用户“做完这笔实机验证就停下，写好文档”要求，本轮已停止，不再启动镜像或加载模块。设备在 Android，启动完成、root、boot/vendor_boot 原摘要正常，无待按键事项。**
+**alioth/elish 的 SimpleFb GOP 诊断变体离线审计已完成，文档与来源证据已归档；变体尚未实现，尚不能直接启动。用户明确暂不操作实机，本轮没有 ADB/fastboot 查询、模块加载、镜像生成、构建或CI。**
 
-这次证明的是当前诊断 Android 启动保护了 `[0x9fff7000, 0x9ffff000)`，不是持久日志可用。未加载内核模块、未读取物理日志内容、未写标记、未验证跨复位存活，也未设置任何 `*_verified=true`。
+推荐复用本固件已有 Mu SimpleFbDxe/FrameBufferBltLib，加最小板级参数/错误路径保护与独立诊断选择；不新写DSI/GPU栈，不替换默认原生路线。详见 [SimpleFb离线审计](operations/2026-10-23-simplefb-gop-offline-audit.md) 与 reports/enuma-simplefb-reuse-audit.json。
 
-## R-002 本轮结果
+## SimpleFb 审计结论
 
-- board 新增独立 diagnostics.persistent_log，默认 enabled=false，physical_base=0x9fff7000、size=0x8000。来源是本机 OEM Log Buffer，不是运行中 UEFI GetMap。严格检查只允许这组字段；既有内存表、512 MiB owned 请求、example=true、验证标记保持不变。
-- 复用原厂 ARM64 Image 与 v3 boot/ramdisk、固定 AOSP 解包器；只改 Image 第一条分支及 image_size，并追加入口封装/临时栈；原厂 vendor_boot 保留。入口在原 FDT 缓冲区内加入唯一保留项，不增大 FDT，不改属性值或随机种子。输入不满足空间/结构要求则不修改，继续原厂入口，主机侧门禁会拒绝后续回读。
-- 第一次 01:00:21 临时启动恢复 Android，但 FDT 与原样本一致，8 页仍非 reserved；作为失败样本保留。不能据此认定入口未执行或 Bootloader 清空日志。旧实现依赖运行中 FDT 的 NOP；该 NOP 位于 chosen，固定 MiCode 源码会在读取 rng-seed 后生成 NOP，这是入口前/运行后布局差异的合理解释，未直接观测入口前 FDT。
-- 第二次 01:04:27，采用 NOP 不足时复用相同名称后缀的修复，镜像 SHA256 e0bd9b25d6e472a52735893dac970bb6f475e6c5394e6d878c615e54d6fc0e42。ADB 16.079 秒、启动完成 31.722 秒；实际 FDT 唯一 reserve tuple 为 0x9fff7000/0x8000，8 页标志全部 0x100000000（KPF_RESERVED）。与原 Android FDT 比较，所有节点/属性值相同。恢复核对正常，无 flash/erase/改槽。
-- 实际内核头、原厂 rdbg/wifi 模块核对后，离线 ABI 探针编译成功：实际 release/vermagic 一致、struct module 832 字节、module_layout/printk CRC 精确匹配。**未 insmod，因此仍不是运行时 ABI 通过。** 16 字节只读 marker 模式仅有源码，未构建/执行。
-- 45 项 Python、实际 C 的 21 组 ASan/UBSan、原 board/固件来源/defconfig/example 检查通过；临时镜像经固定 AOSP 解包逐字节回读。真实 marker、固件日志、异常采集未启用。
+- 核对22个源码文件的提交/Git blob/SHA256及保存的本机输入。固件仍 b988fa418de55de2dcaa396d016e30231159d1fe；alioth默认开关、APRIORI、SimpleFb和framebuffer serial四文件与选定uefi-sheng 0eb4514相同，没有合并上游。
+- alioth用SimpleFb代替原厂Display并条件排除CPR；elish/SM8250显式打包SimpleFb，分辨率1600×2560。本板不能只改USE_CUSTOM_DISPLAY_DRIVER：独立Vendor清单仍打包/调度Display/CPR，SimpleFb需同时接入Components/FV/APRIORI。
+- enuma有1600×2560模式和原厂Display Reserved事实，但实际入口scanout base/stride/格式/线性布局/存活均未知。面板链路24bpp不能作为framebuffer格式；本板未给SimpleFb的ColorDepth，DEC默认0，并非已知32位。
+- 现有Mu SimpleFb假定stride=width，且区域查找、模式范围、分配清理和GOP安装失败传播需要保护。仅协议注册成功不证明出图；当前DarwinBoot视频契约只接受BGRX32，需第三层独立验收。
+- 现成framebuffer日志的handoff/cursor按本机区域会落入DFPS（0x9e3fffc0/0x9e3ffff8），不能照搬。保留Null SerialPortLib、SEC不清屏和Kona不detach MDP的现有补丁；不启用显示尾部元数据写入。
+- 推荐未来显式SimpleFb+no-UFS诊断：只缺CPRDxe、DisplayDxe、UFSDxe，其余30 OEM PE/DEPEX不变，唯一SimpleFb。该组合尚未实现或证明运行时闭包。当前33/32模式审计仍禁止SimpleFb，未来需单独的严格分支，不能删除默认保护。
 
-**临时保留只在本次诊断 Android 启动有效；普通 Android 重启后可能恢复普通 RAM，未来模块加载/回读前必须重新采集活动 FDT 与 8 页状态，不能沿用旧报告。**
+本轮仅静态审计，未运行新代码测试或QEMU；不把历史Python/FDT测试当SimpleFb通过。原25迁移文件/六patch、42项固件源锁、board/内存/512MiB/example/验证标记均未改。对其他板的同地址/同分辨率仅作对照，不视为实机参数确认。
 
-## 主线与固定来源
+## 最后一次实机证据（本轮未重查）
 
-- 完整 GUID 与延时对照支持到达 UFSDxe 和 UFS 隔离模式下 DisplayDxe 的 CoreStartImage 调用前；返回后门均未观察到。公共包装器、库构造器、驱动主体和复位来源尚不能区分归因。
-- UFS 前门 7/2 秒差 5.357 秒；提前真实 Metronome 未解决 UFS。隔离 Display 前门四样本 7/2/2/7，重复差 5.277 秒，返回后仍长复位。不代表驱动主体/GOP/完整调度成功。
-- 尚无 GOP/UEFI map、菜单、DarwinBoot/XNU 或 NT36523 运行证明。
-- 固件仓/gitlink 仍 b988fa418de55de2dcaa396d016e30231159d1fe，42 项源锁、原 25 迁移文件/六 patch 不变。默认保留 33 OEM；显式无 UFS 变体保留其余 32 OEM 字节，不能代替完整存储验证。本轮未改固件仓或重建 UEFI，也未运行 macOS CI。
-- 目标 enuma/SM8250，iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU5fdbd5d/21 模块不变。历史 macOS 通用 4KiB 内核成功不是本板最终内核。
+R-002已批准，临时Android日志候选保留于01:04:27的第二次启动通过：FDT唯一0x9fff7000/0x8000，8页全部reserved，节点/属性值与原样本相同。ADB16.079秒、启动完成31.722秒，root与boot/vendor_boot原摘要正常。镜像e0bd9b25d6e472a52735893dac970bb6f475e6c5394e6d878c615e54d6fc0e42。首版未保留的失败样本也保留。
 
-## 恢复工作后的顺序（本轮不执行）
+该结论只适用于当次诊断Android；普通重启可能恢复普通RAM，未来必须重新核对活动FDT/页状态。不能声称本轮重新验证了设备或当前页保护。未加载模块、未读写物理日志/标记、未验证跨复位存活；ABI探针仅离线构建，正常内核加载仍未验收。R-002资料见 [实测交接](operations/2026-10-23-log-reservation-validation.md)。
 
-1. 重新核对 enuma 身份、恢复备份、活动 FDT、8 页保护与完整内核 ABI，正常加载/卸载无物理访问的 ABI 探针；不得强载。
-2. 构建并审计 16 字节只读回读模块，设计不会经过未保留 Linux 启动的最小标记/复位/回读链，先证明存活。若 ABI/临时启动契约不满足或候选被 Bootloader 清空，按 R-002 停下，不换地址或刷分区。
-3. 存活与回读都成功后才接同范围有界 SEC/DXE 日志，定位 UFS/Display，再验证 GOP/map/BDS，最后推进 ADT/NVRAM、板级最终内核/prelink 和最小 XNU 入口。
+## 主线位置与固定目标
 
-本里程碑记录见 Git；上次设备提交 73f34e5 已推送。本轮证据与可复现命令见 [R-002 实测交接](operations/2026-10-23-log-reservation-validation.md)；总报告为 reports/enuma-log-reservation-device.json。
+完整GUID与延时对照支持到达UFSDxe及无UFS时DisplayDxe的CoreStartImage调用前，返回后门未观察到。UFS前门差5.357秒，Display四样本重复差5.277秒；Metronome提前未解决UFS。尚不能区分公共包装器/构造器/主体或复位来源。
+
+没有GOP/UEFI map、菜单、DarwinBoot/XNU或NT36523运行证明。默认33 OEM、已实施无UFS32 OEM和拟议SimpleFb30 OEM证据必须分开。目标仍enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU5fdbd5d/21模块。历史通用4KiB内核成功不是本板最终内核。
+
+## 下一步
+
+1. 仍离线：整理实际scanout各缺失字段与可观测来源；在参数及所有权闭合后，按审计文档接最小SimpleFb暂存适配、精确30项FD策略与错误/范围检查。几何未知时不盲写或宣称硬件ready。
+2. 恢复实机须用户后续指令；按文档G0–G6依次核对身份/恢复保障、唯一GOP、真实可见输出、loader视频契约和恢复。当前无待按键或在场操作，不自动续测。
+3. R-002日志链保持独立：活动FDT/8页保护→正常ABI探针加载/卸载→最小标记与只读回读/跨复位存活→有界SEC/DXE日志。候选清空、ABI或临时契约不满足即停，不换址或刷分区。
+4. GOP/内存图/BDS闭合后，再推进ADT/NVRAM、板级最终内核/prelink及最小XNU入口。EBS后显示、512MiB连续分配与触控均未由本审计验证。
+
+设备上个里程碑 d3d1492 已推送；本次文档里程碑提交与发布状态以Git记录为准，固件仓/gitlink未改。

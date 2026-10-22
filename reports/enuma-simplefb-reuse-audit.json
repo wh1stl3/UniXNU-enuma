@@ -1,0 +1,685 @@
+{
+  "scope": "offline source/saved-input audit; no code changes, image generation, builds or device operations",
+  "date": "2026-10-23 Asia/Shanghai",
+  "device_commit_before_audit": "d3d14925b13265d325abc921b4413192315acc9b",
+  "firmware_commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+  "upstream_comparison": {
+    "commit": "0eb4514db0744b8136a3897ab1af93b713c2c27b",
+    "identical_source_ids": [
+      "A1",
+      "A2",
+      "M1",
+      "M6"
+    ]
+  },
+  "sources": [
+    {
+      "id": "A1",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "local_path": "firmware/Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "sha256": "62ea05001fa3cef8a95a4dadabb9bc08a31871f3d29865d6121015f22ae02e01",
+      "git_blob_sha1": "aad1039030f58586ce6c5f291ba0a2f043fd1d45",
+      "line_count": 95,
+      "anchors": {
+        "USE_CUSTOM_DISPLAY_DRIVER": [
+          26
+        ],
+        "PcdFrameBuffer": [
+          71,
+          72,
+          73
+        ]
+      }
+    },
+    {
+      "id": "A2",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Platforms/Xiaomi/aliothPkg/Include/APRIORI.inc",
+      "local_path": "firmware/Platforms/Xiaomi/aliothPkg/Include/APRIORI.inc",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Platforms/Xiaomi/aliothPkg/Include/APRIORI.inc",
+      "sha256": "3fe0e65a86e7c8fd27917cdf7bf3894650b39d3813c088eb076d00a6d80f8b59",
+      "git_blob_sha1": "5cd21ac3cd426ca92765534c4a946d1a727392d2",
+      "line_count": 106,
+      "anchors": {
+        "USE_CUSTOM_DISPLAY_DRIVER": [
+          54,
+          63
+        ],
+        "SimpleFbDxe": [
+          57
+        ],
+        "DisplayDxe": [
+          55
+        ],
+        "CPRDxe": [
+          64
+        ]
+      }
+    },
+    {
+      "id": "M1",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFb.c",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFb.c",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFb.c",
+      "sha256": "926136fbf45aef45fda9a18c797e21cc361c2dbe34003176eadf9e98034a05d6",
+      "git_blob_sha1": "7264cf3e6bb0bca65f75b5c16d25f8b74ecd5c88",
+      "line_count": 306,
+      "anchors": {
+        "PcdFrameBuffer": [
+          107,
+          108,
+          109
+        ],
+        "FrameBufferSize =": [
+          169
+        ],
+        "PixelsPerScanLine": [
+          39,
+          177
+        ],
+        "PixelFormat": [
+          38,
+          182,
+          186,
+          194
+        ],
+        "FrameBufferQueryMode": [
+          17,
+          81
+        ],
+        "FrameBufferSetMode": [
+          45,
+          82
+        ],
+        "LocateMemoryRegionByName": [
+          97,
+          98
+        ],
+        "FreeMemoryBuffers": [
+          238,
+          303
+        ],
+        "InstallMultipleProtocolInterfaces": [
+          293
+        ]
+      }
+    },
+    {
+      "id": "M2",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf",
+      "sha256": "46a6ebe23cd5e4c9ec15dedb18a4e5a34d0fb5560143b0b2924dbb9b8ff0ff53",
+      "git_blob_sha1": "5f4255436a486300395271d085d8b515b7cb0087",
+      "line_count": 38,
+      "anchors": {
+        "SimpleFbDxe": [
+          3
+        ],
+        "PcdFrameBuffer": [
+          29,
+          30,
+          31
+        ]
+      }
+    },
+    {
+      "id": "M3",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/SiliciumPkg.dec",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/SiliciumPkg.dec",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/SiliciumPkg.dec",
+      "sha256": "0dca7e7f8b24351f6cc1a1886643ce988f01afd6a7b34b0da7705e1f366218e2",
+      "git_blob_sha1": "6f9dcdedae1b156d90b5d6ae384e666fb47dd039",
+      "line_count": 58,
+      "anchors": {
+        "PcdFrameBuffer": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      }
+    },
+    {
+      "id": "M4",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/SiliciumPkg.dsc.inc",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/SiliciumPkg.dsc.inc",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/SiliciumPkg.dsc.inc",
+      "sha256": "82f76ccf6e6341caeda867ad42d2bd8a34bba00dbeb4282bdf5a5bbc2875c8b8",
+      "git_blob_sha1": "00ec09e1e64f0d649f45767c8f39d135e16280d3",
+      "line_count": 508,
+      "anchors": {
+        "USE_CUSTOM_DISPLAY_DRIVER": [
+          463
+        ],
+        "SimpleFbDxe": [
+          464
+        ],
+        "PcdFrameBuffer": [
+          97
+        ],
+        "BaseSerialPortLibNull": [
+          165
+        ]
+      }
+    },
+    {
+      "id": "M5",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/Library/MemoryMapHelperLib/MemoryMapHelper.c",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/Library/MemoryMapHelperLib/MemoryMapHelper.c",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/Library/MemoryMapHelperLib/MemoryMapHelper.c",
+      "sha256": "ec9c5e0f7b9a23fabb8ad7316906742139e0c8f8e49fec74f91a7822b41d5c79",
+      "git_blob_sha1": "6e09b1c33a52cdbf359d825f3d4039c8a3ade49c",
+      "line_count": 67,
+      "anchors": {
+        "LocateMemoryRegionByName": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "M6",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/Library/FrameBufferSerialPortLib/FrameBufferSerialPortLib.c",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/Library/FrameBufferSerialPortLib/FrameBufferSerialPortLib.c",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/Library/FrameBufferSerialPortLib/FrameBufferSerialPortLib.c",
+      "sha256": "07d3b7034159420a074947ccb38db235b95202d9928ed79e367ee770505be61a",
+      "git_blob_sha1": "68af9f34f8ebccef7b1e9016626f1abdabb478b1",
+      "line_count": 387,
+      "anchors": {
+        "PcdFrameBuffer": [
+          282,
+          283
+        ],
+        "LocateMemoryRegionByName": [
+          259,
+          260
+        ],
+        "FB_HANDOFF_OFFSET": [
+          287
+        ],
+        "FbBase + FbLength": [
+          166,
+          287
+        ],
+        "DataCacheRange": [
+          334
+        ]
+      }
+    },
+    {
+      "id": "M7",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Silicon/Silicium/SiliciumPkg/Include/Library/FrameBufferHandoff.h",
+      "local_path": "firmware/Silicon/Silicium/SiliciumPkg/Include/Library/FrameBufferHandoff.h",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Silicon/Silicium/SiliciumPkg/Include/Library/FrameBufferHandoff.h",
+      "sha256": "b859ba848ce80c2564c30506a563956732d1c8ef3534d6dafa54ffcc89c41494",
+      "git_blob_sha1": "c617ab23a8b83315d5e09f6a977245f643b68644",
+      "line_count": 27,
+      "anchors": {
+        "FB_HANDOFF_OFFSET": [
+          17
+        ]
+      }
+    },
+    {
+      "id": "N1",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Platforms/Xiaomi/enumaPkg/enuma.dsc",
+      "local_path": "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Platforms/Xiaomi/enumaPkg/enuma.dsc",
+      "sha256": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
+      "git_blob_sha1": "2309b02c5567be456909a4a1b8a974dd61266e67",
+      "line_count": 42,
+      "anchors": {
+        "USE_CUSTOM_DISPLAY_DRIVER": [
+          20
+        ],
+        "ENUMA_PRESERVE_DISPLAY": [
+          34
+        ]
+      }
+    },
+    {
+      "id": "N2",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc",
+      "local_path": "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc",
+      "sha256": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+      "git_blob_sha1": "fcdff326d6b7d251f63b6d53565e4ae3eae03d52",
+      "line_count": 21,
+      "anchors": {
+        "DisplayDxe": [
+          15
+        ],
+        "PcdFrameBuffer": [
+          12,
+          13
+        ],
+        "BaseSerialPortLibNull": [
+          6
+        ]
+      }
+    },
+    {
+      "id": "N3",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c",
+      "local_path": "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c",
+      "sha256": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+      "git_blob_sha1": "d156f66deaaebe9811b04a6a8e42d279836bb80c",
+      "line_count": 93,
+      "anchors": {
+        "PixelsPerScanLine": [
+          59
+        ],
+        "PixelFormat": [
+          59
+        ],
+        "DarwinBootVideoFromGop": [
+          52
+        ],
+        "NO EXITBOOTSERVICES TEST": [
+          86
+        ],
+        "DataCacheRange": [
+          89
+        ]
+      }
+    },
+    {
+      "id": "N4",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "patches/sec-preserve-display.patch",
+      "local_path": "firmware/patches/sec-preserve-display.patch",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/patches/sec-preserve-display.patch",
+      "sha256": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+      "git_blob_sha1": "c6ebbc7811f58ad4b510ad0b103b69947cc6ceb8",
+      "line_count": 28,
+      "anchors": {
+        "ENUMA_PRESERVE_DISPLAY": [
+          8,
+          23
+        ]
+      }
+    },
+    {
+      "id": "N5",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "patches/kona-preserve-display.patch",
+      "local_path": "firmware/patches/kona-preserve-display.patch",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/patches/kona-preserve-display.patch",
+      "sha256": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+      "git_blob_sha1": "a063101c7044d78e73c86889a9be3bfefbcde4f5",
+      "line_count": 14,
+      "anchors": {
+        "ENUMA_PRESERVE_DISPLAY": [
+          7
+        ]
+      }
+    },
+    {
+      "id": "L1",
+      "repository": "wh1stl3/uefi-enuma",
+      "commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
+      "path": "LICENSE",
+      "local_path": "firmware/LICENSE",
+      "url": "https://github.com/wh1stl3/uefi-enuma/blob/b988fa418de55de2dcaa396d016e30231159d1fe/LICENSE",
+      "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187",
+      "git_blob_sha1": "df13dfe48db04be105e3f31219e9e53ff5ba5bcf",
+      "line_count": 36,
+      "anchors": {
+        "Redistribution and use": [
+          14
+        ]
+      }
+    },
+    {
+      "id": "E1",
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "Platform/Xiaomi/sm8250/elish.dsc",
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Platform/Xiaomi/sm8250/elish.dsc",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Xiaomi/sm8250/elish.dsc",
+      "sha256": "a54dca5dcfab109aa1bd7e13ac7cc0e1669c15efa762ffb27655a921bca33469",
+      "git_blob_sha1": "29ac362d207a7a51d7ef49509baa0110bf2aed4c",
+      "line_count": 28,
+      "anchors": {
+        "PcdMipiFrameBuffer": [
+          20,
+          21
+        ]
+      }
+    },
+    {
+      "id": "E2",
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "Platform/Qualcomm/sm8250/sm8250.dsc",
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Platform/Qualcomm/sm8250/sm8250.dsc",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Qualcomm/sm8250/sm8250.dsc",
+      "sha256": "0523a5100f8c43b434aedf872506646a39dc9fe1b55256317524f95067c8f992",
+      "git_blob_sha1": "aa11657d7c0b146833b09c6ee862aec023c20888",
+      "line_count": 67,
+      "anchors": {
+        "PcdMipiFrameBuffer": [
+          43
+        ]
+      }
+    },
+    {
+      "id": "E3",
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "Platform/Qualcomm/sm8250/sm8250.fdf",
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Platform/Qualcomm/sm8250/sm8250.fdf",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Qualcomm/sm8250/sm8250.fdf",
+      "sha256": "e616abd7d4262ed6d00e32b21af85f7434a4b378b9d96fab15c9b2356edd1f7d",
+      "git_blob_sha1": "5602994d636d58cc5e6f40cabd9439b41aa7ae10",
+      "line_count": 252,
+      "anchors": {
+        "SimpleFbDxe": [
+          133
+        ]
+      }
+    },
+    {
+      "id": "E4",
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "Platform/Qualcomm/sm8250/Apriori.fdf.inc",
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Platform/Qualcomm/sm8250/Apriori.fdf.inc",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Qualcomm/sm8250/Apriori.fdf.inc",
+      "sha256": "263bb6c5622913ef2f05e9dcb19804a46ff34ef02c87ec5153266fc699532042",
+      "git_blob_sha1": "c15c437fe86fa13ff512836faa6ca89fea02de96",
+      "line_count": 230,
+      "anchors": {}
+    },
+    {
+      "id": "E5",
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "Silicon/Qualcomm/QcomPkg/Drivers/SimpleFbDxe/SimpleFbDxe.c",
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Silicon/Qualcomm/QcomPkg/Drivers/SimpleFbDxe/SimpleFbDxe.c",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Silicon/Qualcomm/QcomPkg/Drivers/SimpleFbDxe/SimpleFbDxe.c",
+      "sha256": "9f4f2aa95d8358d78f15000c6750163bae5050b280bff4e88c6f4100d32cc5f5",
+      "git_blob_sha1": "d5d6fe154f49f02583049160af98fa4d7ac9783b",
+      "line_count": 255,
+      "anchors": {
+        "SimpleFbDxe": [
+          1,
+          156,
+          166,
+          174
+        ],
+        "FrameBufferSize =": [
+          220
+        ],
+        "PixelsPerScanLine": [
+          107,
+          216
+        ],
+        "PixelFormat": [
+          106,
+          217
+        ],
+        "InstallMultipleProtocolInterfaces": [
+          248
+        ],
+        "PcdMipiFrameBuffer": [
+          167,
+          168,
+          169
+        ],
+        "DataCacheRange": [
+          147,
+          243
+        ]
+      }
+    },
+    {
+      "id": "E6",
+      "repository": "edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "path": "LICENSE",
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/LICENSE",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/LICENSE",
+      "sha256": "77f6b2287dc20fe110238158ed869ec35d649a72ef6d43147b90e2b21c6ee424",
+      "git_blob_sha1": "300ea7017ec605ffd84a7f0fb8daf26cc9240361",
+      "line_count": 39,
+      "anchors": {
+        "Redistribution and use": [
+          17
+        ]
+      }
+    },
+    {
+      "id": "S1",
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "0eb4514db0744b8136a3897ab1af93b713c2c27b",
+      "path": "Platforms/Xiaomi/shengPkg/Drivers/ShengGopLogDxe/ShengGopLogDxe.c",
+      "local_path": "out/reference-audit/UniXNU/uefi-sheng/Platforms/Xiaomi/shengPkg/Drivers/ShengGopLogDxe/ShengGopLogDxe.c",
+      "url": "https://github.com/UniXNU/uefi-sheng/blob/0eb4514db0744b8136a3897ab1af93b713c2c27b/Platforms/Xiaomi/shengPkg/Drivers/ShengGopLogDxe/ShengGopLogDxe.c",
+      "sha256": "7049b1b89fee4bc6bb69302875226202e326318a6e3bc93e3206967f333ca52d",
+      "git_blob_sha1": "70a3b4eb54d92681b442d45b6454a245b183a6f8",
+      "line_count": 176,
+      "anchors": {
+        "DisplayDxe": [
+          5
+        ],
+        "PixelsPerScanLine": [
+          93,
+          128
+        ],
+        "PixelFormat": [
+          94,
+          108,
+          109
+        ],
+        "LocateMemoryRegionByName": [
+          116,
+          117
+        ],
+        "FB_HANDOFF_OFFSET": [
+          118,
+          123
+        ]
+      }
+    }
+  ],
+  "saved_inputs": [
+    {
+      "path": "scripts/audit_enuma_fd.py",
+      "sha256": "91f4f4db303695ee626d62c8c07704af0e554de6853080c5308b22d7eeb39d2c"
+    },
+    {
+      "path": "scripts/firmware_audit_policy.py",
+      "sha256": "0c33df867c246390ccf773872b1b96b1a30e7db16e0edc927f92e4465dbdf328"
+    },
+    {
+      "path": "scripts/build_enuma_firmware.py",
+      "sha256": "a88cc44245e02fec6515ff7213b77b18f7bc0c8f6f5dd749d43ab4e63df24811"
+    },
+    {
+      "path": "config/uefi-source.lock.json",
+      "sha256": "ac180735821aa5b439948c27d833bd0b90c416584c95a82282640adc239d874a"
+    },
+    {
+      "path": "reports/enuma-platform-config.json",
+      "sha256": "2b0704a238a498ca876066d8ff3ed8fc6c717d39cad201cdc1be1090ba461a50"
+    },
+    {
+      "path": "reports/enuma-platform-observations.json",
+      "sha256": "683c1ec8e914304ca292f8d5380bce921b3372fd18b306ab058e8ca56b445e85"
+    },
+    {
+      "path": "reports/enuma-oem-modules.json",
+      "sha256": "f1355b9e9d9aa72e6a99c78b389ea3f140b275b35074f92df36b448ac4a280e3"
+    },
+    {
+      "path": "out/device/live-fdt.bin",
+      "sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62"
+    },
+    {
+      "path": "out/sources/UniXNU/drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h",
+      "sha256": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4"
+    }
+  ],
+  "evidence_level": "static_only",
+  "device_operations_performed": false,
+  "firmware_source_changed": false,
+  "board_memory_changed": false,
+  "verification_flags_changed": false,
+  "eligibility": "not ready to build/boot unchanged; scanout facts and guarded variant still required",
+  "observed_display": {
+    "oem_region_base": "0x9c000000",
+    "oem_region_bytes": "0x2400000",
+    "fdt_cont_splash": [
+      "0x9c000000",
+      "0x2300000"
+    ],
+    "fdt_dfps": [
+      "0x9e300000",
+      "0x100000"
+    ],
+    "android_mode": [
+      1600,
+      2560
+    ],
+    "panel_link_bits_per_pixel": 24,
+    "framebuffer_base": null,
+    "stride_bytes": null,
+    "pixel_format": null,
+    "linear_layout": null,
+    "bootloader_scanout_survival": null,
+    "saved_fdt_simple_framebuffer_nodes": 0,
+    "native_getmap_or_gop_observed": false
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "text": "Reuse Mu SimpleFb and FrameBufferBltLib core; qualify surviving linear scanout first",
+      "sources": [
+        "A1",
+        "A2",
+        "M1",
+        "M2",
+        "E1",
+        "E3"
+      ]
+    },
+    {
+      "id": "F2",
+      "text": "Macro alone does not remove enuma native DisplayDxe/CPRDxe; consistent DSC/FDF/APRIORI selection required",
+      "sources": [
+        "N1",
+        "N2",
+        "M4"
+      ]
+    },
+    {
+      "id": "F3",
+      "text": "Enuma omits ColorDepth; selected DEC default is zero, not measured 32-bit format",
+      "sources": [
+        "M3",
+        "N2"
+      ]
+    },
+    {
+      "id": "F4",
+      "text": "Both drivers assume stride equals width; reserved range and panel bpp do not prove scanout geometry",
+      "sources": [
+        "M1",
+        "E2",
+        "E5"
+      ]
+    },
+    {
+      "id": "F5",
+      "text": "Mu SimpleFb needs guarded lookup, null-safe cleanup, mode validation and real install-error propagation",
+      "sources": [
+        "M1",
+        "M5"
+      ]
+    },
+    {
+      "id": "F6",
+      "text": "Framebuffer serial handoff/cursor fall in DFPS; preserve Null SerialPortLib, no display-tail metadata",
+      "sources": [
+        "M6",
+        "M7",
+        "N2",
+        "S1"
+      ]
+    },
+    {
+      "id": "F7",
+      "text": "Existing FD policy rejects SimpleFb and only permits UFS omission; separate narrow policy required",
+      "saved_inputs": [
+        "scripts/audit_enuma_fd.py",
+        "scripts/firmware_audit_policy.py"
+      ]
+    },
+    {
+      "id": "F8",
+      "text": "Pinned DarwinBoot accepts BGRX32 only; registration, actual scanout and loader acceptance are separate gates",
+      "sources": [
+        "N3"
+      ],
+      "saved_inputs": [
+        "out/sources/UniXNU/drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h"
+      ]
+    }
+  ],
+  "illustrative_only": {
+    "assumption": "1600x2560 packed 32-bit, not device evidence",
+    "minimum_stride_bytes": 6400,
+    "frame_bytes": 16384000
+  },
+  "forbidden_tail_writes": {
+    "handoff_candidate": "0x9e3fffc0",
+    "cursor_candidate": "0x9e3ffff8",
+    "reason": "inside DFPS; not R-002-owned log range"
+  },
+  "proposed_future_diagnostic": {
+    "implemented": false,
+    "default_native_oem_count": 33,
+    "exact_oem_omissions": [
+      "CPRDxe",
+      "DisplayDxe",
+      "UFSDxe"
+    ],
+    "remaining_oem_count": 30,
+    "simplefb_guid": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+    "single_gop_provider_required": true,
+    "null_serial_preserved": true,
+    "oem_pe_depex_changes_allowed": false
+  },
+  "tests_or_ci_run_this_audit": false,
+  "hardware_status": "not tested; last R-002 state is historical and was not re-queried"
+}
