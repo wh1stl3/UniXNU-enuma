@@ -1,0 +1,48 @@
+{
+  "scope": "read-only audit, no memory writes, module loading, reservations or image changes",
+  "review": "R-002 pending",
+  "oem_region": {
+    "name": "Log Buffer",
+    "base": 2684317696,
+    "size": 32768,
+    "attributes": [
+      "AddMem",
+      "SYS_MEM",
+      "SYS_MEM_CAP",
+      "RtData",
+      "WRITE_BACK_XN"
+    ],
+    "section": "[MemoryMap]"
+  },
+  "source_xbl_sha256": "7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057",
+  "live_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "covering_reserved_memory_nodes": [],
+  "overlapping_memory_banks": [
+    {
+      "node": "/memory",
+      "base": "0x80000000",
+      "bytes": "0x3bb00000"
+    }
+  ],
+  "fdt_header_reservations": [],
+  "kernel_iomem_covering_ranges": [
+    "92700000-b03fffff : System RAM"
+  ],
+  "kernel_iomem_sha256": "49486793f5492b782c83e3a2272a670467ef5fcb72c86b154d4fe3babbe88a23",
+  "kernel_page_reserved_bits": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "page_flags_source_sha256": "5198489e79880bbba59e55b84a7dac309d88a5b3c32571804abaf0fcb17932fa",
+  "kernel_page_size": 4096,
+  "kernel_autoconf_sha256": "ea6b9217e9e9eadc3f723d12a2ea824434338b7a9a3fdccbf10e7cbf8e92fe9a",
+  "linux_reclaims_candidate_range": true,
+  "safe_to_use_for_persistent_log_now": false,
+  "conclusion": "Do not write/read this as retained UEFI log: Linux treats it as ordinary pages. A dedicated reservation plus survival/readback tests or external UART is needed."
+}

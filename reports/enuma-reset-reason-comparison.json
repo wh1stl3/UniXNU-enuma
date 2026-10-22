@@ -1,0 +1,36 @@
+{
+  "scope": "read-only Android boot properties and PMIC kernel messages after two probes",
+  "observations": [
+    {
+      "variant": "official-queue26-stage13-delay2",
+      "candidate_sha256": "e79df01f8f9569a517b8f8115027f28680c04ebc888fb72befbe68c4263ce470",
+      "adb_return_seconds": 16.965,
+      "properties": {
+        "ro.boot.bootreason": "bootloader",
+        "sys.boot.reason": "bootloader",
+        "sys.boot.reason.last": "bootloader",
+        "persist.sys.boot.reason": ""
+      },
+      "sid0_power_on": "Hard Reset/cold",
+      "sid0_power_off": "PS_HOLD",
+      "secondary_pmic_power_off": "SOFT",
+      "source_log_sha256": "1f08048e328164c781dce36ece464ebeb367af606042d36c0a982ff87eca46e4"
+    },
+    {
+      "variant": "official-queue27-stage13-delay2",
+      "candidate_sha256": "c836e080c5f98c613700c70dfbab744e056e250017a1dbc64460e85ed60cbf11",
+      "adb_return_seconds": 31.886,
+      "properties": {
+        "ro.boot.bootreason": "bootloader",
+        "sys.boot.reason": "bootloader",
+        "sys.boot.reason.last": "bootloader",
+        "persist.sys.boot.reason": ""
+      },
+      "sid0_power_on": "Hard Reset/cold",
+      "sid0_power_off": "PS_HOLD",
+      "secondary_pmic_power_off": "SOFT",
+      "source_log_sha256": "c0f9cb2c983be58af34a891df7b96702b43661ba8b6bf2f23be65aa8057e435f"
+    }
+  ],
+  "interpretation": "Same bootloader/PS_HOLD/SOFT records do not identify which gate or the reset source. No watchdog or exception cause claimed."
+}

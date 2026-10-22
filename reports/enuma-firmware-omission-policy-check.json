@@ -1,0 +1,8 @@
+{
+  "scope": "negative audit of real complete FD, no device I/O",
+  "fd_sha256": "34bef40a9ba59a6306420f234c9d5907c2bb07813dfc9b526d85425a82e77521",
+  "false_omission_claim_rejected": true,
+  "expected_failure": "diagnostically excluded module still packaged: UFSDxe",
+  "unit_tests_total": 42,
+  "normal_complete_fd_oem_modules_checked": 33
+}

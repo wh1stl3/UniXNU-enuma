@@ -1,0 +1,609 @@
+{
+  "scope": "static original XBL APRIORI comparison; omitted OEM entries may have Mu replacements, no runtime/provider proof",
+  "xbl_sha256": "7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057",
+  "original_apriori": [
+    {
+      "name": "DxeCore",
+      "guid": "d6a2cb7f-6a18-4e2f-b43b-9920a733700a",
+      "selected": false,
+      "original_ordinal": 1
+    },
+    {
+      "name": "EnvDxe",
+      "guid": "90a49afd-422f-08ae-9611-e788d3804845",
+      "selected": true,
+      "original_ordinal": 2
+    },
+    {
+      "name": "RscRtDxe",
+      "guid": "d93ce3d8-a7eb-4730-8c8e-cc466a9ecc3c",
+      "selected": false,
+      "original_ordinal": 3
+    },
+    {
+      "name": "SCHandlerRtDxe",
+      "guid": "6c2004ef-4e0e-4be4-b14c-340eb4aa5891",
+      "selected": false,
+      "original_ordinal": 4
+    },
+    {
+      "name": "RuntimeDxe",
+      "guid": "b601f8c4-43b7-4784-95b1-f4226cb40cee",
+      "selected": false,
+      "original_ordinal": 5
+    },
+    {
+      "name": "ArmCpuDxe",
+      "guid": "b8d9777e-d72a-451f-9bdb-bafb52a68415",
+      "selected": false,
+      "original_ordinal": 6
+    },
+    {
+      "name": "ArmGicDxe",
+      "guid": "de371f7c-dec4-4d21-adf1-593abcc15882",
+      "selected": false,
+      "original_ordinal": 7
+    },
+    {
+      "name": "MetronomeDxe",
+      "guid": "4c6e0267-c77d-410d-8100-1495911a989d",
+      "selected": false,
+      "original_ordinal": 8
+    },
+    {
+      "name": "ArmTimerDxe",
+      "guid": "49ea041e-6752-42ca-b0b1-7344fe2546b7",
+      "selected": false,
+      "original_ordinal": 9
+    },
+    {
+      "name": "SmemDxe",
+      "guid": "f541d663-4a48-40aa-aabf-ff158ccae34c",
+      "selected": true,
+      "original_ordinal": 10
+    },
+    {
+      "name": "DALSys",
+      "guid": "8e9bd160-b184-11df-94e2-0800200c9a66",
+      "selected": true,
+      "original_ordinal": 11
+    },
+    {
+      "name": "HWIODxeDriver",
+      "guid": "af9763a2-033b-4109-8e17-56a98d380c92",
+      "selected": true,
+      "original_ordinal": 12
+    },
+    {
+      "name": "ChipInfo",
+      "guid": "10e193df-9966-44e7-b17c-59dd831e20fc",
+      "selected": true,
+      "original_ordinal": 13
+    },
+    {
+      "name": "PlatformInfoDxeDriver",
+      "guid": "b105211b-bbbd-4add-a3b0-d1cf4a52154c",
+      "selected": true,
+      "original_ordinal": 14
+    },
+    {
+      "name": "HALIOMMU",
+      "guid": "9a00771f-36d4-4dd5-8916-c48ed9b16b86",
+      "selected": true,
+      "original_ordinal": 15
+    },
+    {
+      "name": "ULogDxe",
+      "guid": "e43128a8-8692-42b6-8afa-676158578d18",
+      "selected": true,
+      "original_ordinal": 16
+    },
+    {
+      "name": "CmdDbDxe",
+      "guid": "aba01ff8-2ccb-4e12-8b2e-cd3f4a742993",
+      "selected": true,
+      "original_ordinal": 17
+    },
+    {
+      "name": "PwrUtilsDxe",
+      "guid": "0401b830-bff9-44a2-a5f6-95734a33c017",
+      "selected": true,
+      "original_ordinal": 18
+    },
+    {
+      "name": "NpaDxe",
+      "guid": "cb29f4d1-7f37-4692-a416-93e82e219711",
+      "selected": true,
+      "original_ordinal": 19
+    },
+    {
+      "name": "RpmhDxe",
+      "guid": "cb29f4d1-7f37-4692-a416-93e82e219766",
+      "selected": true,
+      "original_ordinal": 20
+    },
+    {
+      "name": "PdcDxe",
+      "guid": "b43c22db-6333-490c-872d-0a73439059fd",
+      "selected": true,
+      "original_ordinal": 21
+    },
+    {
+      "name": "VcsDxe",
+      "guid": "8bd3b475-401a-4b0b-9315-edee61a1eae5",
+      "selected": true,
+      "original_ordinal": 22
+    },
+    {
+      "name": "ClockDxe",
+      "guid": "4db5dea6-5302-4d1a-8a82-677a683b0d29",
+      "selected": true,
+      "original_ordinal": 23
+    },
+    {
+      "name": "SPMI",
+      "guid": "2a7b4bef-80cd-49e1-b473-374ba4d673fc",
+      "selected": true,
+      "original_ordinal": 24
+    },
+    {
+      "name": "ShmBridgeDxe",
+      "guid": "9c1eb71f-dd6c-4ed5-9f6a-5cc0ca789f16",
+      "selected": true,
+      "original_ordinal": 25
+    },
+    {
+      "name": "ScmDxe",
+      "guid": "2d7a83e3-e343-4ffb-9109-631f2ee11694",
+      "selected": true,
+      "original_ordinal": 26
+    },
+    {
+      "name": "DALTLMM",
+      "guid": "8681cc5a-0df6-441e-b4b8-e915c538f067",
+      "selected": true,
+      "original_ordinal": 27
+    },
+    {
+      "name": "ResetRuntimeDxe",
+      "guid": "3ae17db7-3cc5-4b89-9304-9549211057ef",
+      "selected": true,
+      "original_ordinal": 28
+    },
+    {
+      "name": "PmicDxe",
+      "guid": "5776232e-082d-4b75-9a0e-fe1d13f7a5d9",
+      "selected": true,
+      "original_ordinal": 29
+    },
+    {
+      "name": "DiskIoDxe",
+      "guid": "6b38f7b4-ad98-40e9-9093-aca2b5a253c4",
+      "selected": false,
+      "original_ordinal": 30
+    },
+    {
+      "name": "PartitionDxe",
+      "guid": "1fa1f39e-feff-4aae-bd7b-38a070a3b609",
+      "selected": false,
+      "original_ordinal": 31
+    },
+    {
+      "name": "EnglishDxe",
+      "guid": "cd3bafb6-50fb-4fe8-8e4e-ab74d2c1a600",
+      "selected": false,
+      "original_ordinal": 32
+    },
+    {
+      "name": "FvSimpleFileSystem",
+      "guid": "907125c0-a5f1-11e3-a3fe-a3198b49350c",
+      "selected": false,
+      "original_ordinal": 33
+    },
+    {
+      "name": "SdccDxe",
+      "guid": "f10f76db-42c1-533f-34a8-69be24653110",
+      "selected": false,
+      "original_ordinal": 34
+    },
+    {
+      "name": "UFSDxe",
+      "guid": "0d35cd8e-97ea-4f9a-96af-0f0d89f76567",
+      "selected": true,
+      "original_ordinal": 35
+    },
+    {
+      "name": "Fat",
+      "guid": "961578fe-b6b7-44c3-af35-6bc705cd2b1f",
+      "selected": false,
+      "original_ordinal": 36
+    },
+    {
+      "name": "TzDxe",
+      "guid": "6925fad3-e243-4b69-ad61-3f978c8abc60",
+      "selected": true,
+      "original_ordinal": 37
+    },
+    {
+      "name": "VariableDxe",
+      "guid": "2b0ecdce-01ae-446e-9ffd-c4217de0340f",
+      "selected": false,
+      "original_ordinal": 38
+    },
+    {
+      "name": "FeatureEnablerDxe",
+      "guid": "1c04f529-0612-4319-9315-b2e75c16810a",
+      "selected": false,
+      "original_ordinal": 39
+    },
+    {
+      "name": "QcomWDogDxe",
+      "guid": "040e1e61-0afb-411b-9ec9-00f3fc59cc13",
+      "selected": false,
+      "original_ordinal": 40
+    },
+    {
+      "name": "DDRInfoDxe",
+      "guid": "7db0793a-4402-4be1-906e-d0fabad2707e",
+      "selected": true,
+      "original_ordinal": 41
+    },
+    {
+      "name": "SPI",
+      "guid": "7a32bd23-f735-4f57-aa1a-447d2fe3be0d",
+      "selected": true,
+      "original_ordinal": 42
+    },
+    {
+      "name": "I2C",
+      "guid": "04de8591-d2b3-4077-bbbe-b12070094eb6",
+      "selected": true,
+      "original_ordinal": 43
+    },
+    {
+      "name": "DisplayDxe",
+      "guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+      "selected": true,
+      "original_ordinal": 44
+    },
+    {
+      "name": "PILProxyDxe",
+      "guid": "8cf9c920-d5e6-4dac-bef9-6e6a4eec7add",
+      "selected": false,
+      "original_ordinal": 45
+    },
+    {
+      "name": "PILDxe",
+      "guid": "1d317734-4083-47c6-83ea-e3a42f2a6bff",
+      "selected": false,
+      "original_ordinal": 46
+    },
+    {
+      "name": "SPSSDxe",
+      "guid": "5d787b6c-6254-43f5-a7a8-cb25329cf97e",
+      "selected": false,
+      "original_ordinal": 47
+    },
+    {
+      "name": "CPRDxe",
+      "guid": "1b52138d-3fa3-4e50-b958-20887353f809",
+      "selected": true,
+      "original_ordinal": 48
+    },
+    {
+      "name": "WatchdogTimer",
+      "guid": "f099d67f-71ae-4c36-b2a3-dceb0eb2b7d8",
+      "selected": false,
+      "original_ordinal": 49
+    },
+    {
+      "name": "ASN1X509Dxe",
+      "guid": "c2f9a4f5-f7b4-43e7-ba99-5ea804cc103a",
+      "selected": false,
+      "original_ordinal": 50
+    },
+    {
+      "name": "SecRSADxe",
+      "guid": "32c71e68-83a8-46ed-aed1-094e71b12057",
+      "selected": false,
+      "original_ordinal": 51
+    },
+    {
+      "name": "VerifiedBootDxe",
+      "guid": "a25f5839-4d55-428f-8f0b-5ce1d565f53e",
+      "selected": false,
+      "original_ordinal": 52
+    },
+    {
+      "name": "EmbeddedMonotonicCounter",
+      "guid": "37795ba0-e1cf-4ed5-bd8b-16df6bcb1e1a",
+      "selected": false,
+      "original_ordinal": 53
+    },
+    {
+      "name": "RealTimeClock",
+      "guid": "b336f62d-4135-4a55-ae4e-4971bbf0885d",
+      "selected": false,
+      "original_ordinal": 54
+    },
+    {
+      "name": "PrintDxe",
+      "guid": "79e4a61c-ed73-4312-94fe-e3e7563362a9",
+      "selected": false,
+      "original_ordinal": 55
+    },
+    {
+      "name": "DevicePathDxe",
+      "guid": "9b680fce-ad6b-4f3a-b60b-f59899003443",
+      "selected": false,
+      "original_ordinal": 56
+    },
+    {
+      "name": "CapsuleRuntimeDxe",
+      "guid": "42857f0a-13f2-4b21-8a23-53d3f714b840",
+      "selected": false,
+      "original_ordinal": 57
+    },
+    {
+      "name": "HiiDatabase",
+      "guid": "348c4d62-bfbd-4882-9ece-c80bb1c4783b",
+      "selected": false,
+      "original_ordinal": 58
+    },
+    {
+      "name": "FontDxe",
+      "guid": "ed15ffd5-bc96-4107-9118-95366600188e",
+      "selected": false,
+      "original_ordinal": 59
+    },
+    {
+      "name": "QcomBds",
+      "guid": "5a50aa81-c3ae-4608-a0e3-41a2e69baf94",
+      "selected": false,
+      "original_ordinal": 60
+    },
+    {
+      "name": "VibratorDxe",
+      "guid": "82c22dec-6375-4a61-aae1-573b137a3dec",
+      "selected": false,
+      "original_ordinal": 61
+    },
+    {
+      "name": "AdcDxe",
+      "guid": "5a5cb8ca-9382-4e0c-b383-77fb517cd9eb",
+      "selected": false,
+      "original_ordinal": 62
+    },
+    {
+      "name": "UsbPwrCtrlDxe",
+      "guid": "11faed4c-b21f-4d88-8e48-c4c28a1e50df",
+      "selected": false,
+      "original_ordinal": 63
+    },
+    {
+      "name": "QcomChargerDxeLA",
+      "guid": "4bce7f36-428e-4393-99e3-7e0844404dba",
+      "selected": false,
+      "original_ordinal": 64
+    },
+    {
+      "name": "ChargerExDxe",
+      "guid": "2e3042f3-2bb9-463f-8866-56d75b7c4ab0",
+      "selected": false,
+      "original_ordinal": 65
+    },
+    {
+      "name": "UsbfnDwc3Dxe",
+      "guid": "94f8a6a7-dc34-4101-88c1-99179cceae83",
+      "selected": false,
+      "original_ordinal": 66
+    },
+    {
+      "name": "XhciPciEmulation",
+      "guid": "beb12bee-f6e1-11e1-9fb8-6c626de4aeb1",
+      "selected": false,
+      "original_ordinal": 67
+    },
+    {
+      "name": "XhciDxe",
+      "guid": "b7f50e91-a759-412c-ade4-dcd03e7f7c28",
+      "selected": false,
+      "original_ordinal": 68
+    },
+    {
+      "name": "UsbBusDxe",
+      "guid": "240612b7-a063-11d4-9a3a-0090273fc14d",
+      "selected": false,
+      "original_ordinal": 69
+    },
+    {
+      "name": "UsbKbDxe",
+      "guid": "2d2e62cf-9ecf-43b7-8219-94e7fc713dfe",
+      "selected": false,
+      "original_ordinal": 70
+    },
+    {
+      "name": "UsbMassStorageDxe",
+      "guid": "9fb4b4a7-42c0-4bcd-8540-9bcc6711f83e",
+      "selected": false,
+      "original_ordinal": 71
+    },
+    {
+      "name": "UsbConfigDxe",
+      "guid": "cd823a4d-7dec-4531-ae5d-4134fa4127b8",
+      "selected": false,
+      "original_ordinal": 72
+    },
+    {
+      "name": "ButtonsDxe",
+      "guid": "5bd181db-0487-4f1a-ae73-820e165611b3",
+      "selected": false,
+      "original_ordinal": 73
+    },
+    {
+      "name": "TsensDxe",
+      "guid": "f09ad92e-485c-9cdb-3e05-3385c38f94cc",
+      "selected": false,
+      "original_ordinal": 74
+    },
+    {
+      "name": "LimitsDxe",
+      "guid": "f09ad92e-4e91-490f-ab99-e69939b840b2",
+      "selected": false,
+      "original_ordinal": 75
+    },
+    {
+      "name": "GpiDxe",
+      "guid": "569ea0de-b557-4043-84cf-01103fe516e5",
+      "selected": true,
+      "original_ordinal": 76
+    },
+    {
+      "name": "HashDxe",
+      "guid": "3adf8dda-1850-44c5-8c63-bb991849bc6f",
+      "selected": true,
+      "original_ordinal": 77
+    },
+    {
+      "name": "CipherDxe",
+      "guid": "5f0937cd-73f9-445e-b320-bb6fd5d3cbde",
+      "selected": true,
+      "original_ordinal": 78
+    },
+    {
+      "name": "MacDxe",
+      "guid": "20583a66-3c26-4d9e-9a8c-e2dfa2914015",
+      "selected": true,
+      "original_ordinal": 79
+    },
+    {
+      "name": "RngDxe",
+      "guid": "b0d3689e-11f8-43c6-8ece-023a29cec35b",
+      "selected": true,
+      "original_ordinal": 80
+    },
+    {
+      "name": "SimpleTextInOutSerial",
+      "guid": "857a8741-0eec-43bd-9482-27d14ed47d72",
+      "selected": false,
+      "original_ordinal": 81
+    },
+    {
+      "name": "ConPlatformDxe",
+      "guid": "51ccf399-4fdf-4e55-a45b-e123f84d456a",
+      "selected": false,
+      "original_ordinal": 82
+    },
+    {
+      "name": "ConSplitterDxe",
+      "guid": "408edcec-cf6d-477c-a5a8-b4844e3de281",
+      "selected": false,
+      "original_ordinal": 83
+    },
+    {
+      "name": "GraphicsConsoleDxe",
+      "guid": "cccb0c28-4b24-11d5-9a5a-0090273fc14d",
+      "selected": false,
+      "original_ordinal": 84
+    }
+  ],
+  "unselected_before_ufs": [
+    {
+      "name": "DxeCore",
+      "guid": "d6a2cb7f-6a18-4e2f-b43b-9920a733700a",
+      "selected": false,
+      "original_ordinal": 1
+    },
+    {
+      "name": "RscRtDxe",
+      "guid": "d93ce3d8-a7eb-4730-8c8e-cc466a9ecc3c",
+      "selected": false,
+      "original_ordinal": 3
+    },
+    {
+      "name": "SCHandlerRtDxe",
+      "guid": "6c2004ef-4e0e-4be4-b14c-340eb4aa5891",
+      "selected": false,
+      "original_ordinal": 4
+    },
+    {
+      "name": "RuntimeDxe",
+      "guid": "b601f8c4-43b7-4784-95b1-f4226cb40cee",
+      "selected": false,
+      "original_ordinal": 5
+    },
+    {
+      "name": "ArmCpuDxe",
+      "guid": "b8d9777e-d72a-451f-9bdb-bafb52a68415",
+      "selected": false,
+      "original_ordinal": 6
+    },
+    {
+      "name": "ArmGicDxe",
+      "guid": "de371f7c-dec4-4d21-adf1-593abcc15882",
+      "selected": false,
+      "original_ordinal": 7
+    },
+    {
+      "name": "MetronomeDxe",
+      "guid": "4c6e0267-c77d-410d-8100-1495911a989d",
+      "selected": false,
+      "original_ordinal": 8
+    },
+    {
+      "name": "ArmTimerDxe",
+      "guid": "49ea041e-6752-42ca-b0b1-7344fe2546b7",
+      "selected": false,
+      "original_ordinal": 9
+    },
+    {
+      "name": "DiskIoDxe",
+      "guid": "6b38f7b4-ad98-40e9-9093-aca2b5a253c4",
+      "selected": false,
+      "original_ordinal": 30
+    },
+    {
+      "name": "PartitionDxe",
+      "guid": "1fa1f39e-feff-4aae-bd7b-38a070a3b609",
+      "selected": false,
+      "original_ordinal": 31
+    },
+    {
+      "name": "EnglishDxe",
+      "guid": "cd3bafb6-50fb-4fe8-8e4e-ab74d2c1a600",
+      "selected": false,
+      "original_ordinal": 32
+    },
+    {
+      "name": "FvSimpleFileSystem",
+      "guid": "907125c0-a5f1-11e3-a3fe-a3198b49350c",
+      "selected": false,
+      "original_ordinal": 33
+    },
+    {
+      "name": "SdccDxe",
+      "guid": "f10f76db-42c1-533f-34a8-69be24653110",
+      "selected": false,
+      "original_ordinal": 34
+    }
+  ],
+  "fixed_mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+  "fixed_mu_sources_sha256": {
+    "MdeModulePkg/Core/Dxe/Misc/Stall.c": "7e0cffddc64b70ae32900d531c0cba4c38ff5aecc708c218aa6024fcfdd56a3c",
+    "EmbeddedPkg/MetronomeDxe/Metronome.c": "132d601defd9ff7118d8f2b127c9800aba54fff163f09cd875bd55cd352ee405",
+    "EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf": "c86900d8958bacb7b0a854f64946a88fe589718cd1ac63760fc8ed88d8241096"
+  },
+  "mu_service_comparison": {
+    "metronome": {
+      "already_packaged": true,
+      "previously_early": false,
+      "new_early_patch": "firmware/patches/apriori-metronome.patch",
+      "driver": "EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf",
+      "oem_ordinal": 8,
+      "core_stall_source": "MdeModulePkg/Core/Dxe/Misc/Stall.c:57",
+      "behavior_without_protocol": "EFI_NOT_AVAILABLE_YET",
+      "hardware_causality_for_ufs": "not established by this static audit"
+    },
+    "other_unselected_oem_entries": "Some have Mu replacements; packaging does not prove early dispatch or protocol installation."
+  }
+}

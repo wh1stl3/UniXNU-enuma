@@ -1,7 +1,7 @@
 {
   "scope": "source migration and official board configuration only; no device execution",
   "firmware_repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "firmware_commit": "d6900d29700a901e876702cfebea62570a1e9958",
+  "firmware_commit": "b988fa418de55de2dcaa396d016e30231159d1fe",
   "source_device_commit": "1ab7ee8",
   "migrated_files": {
     "LICENSE": {
@@ -109,8 +109,10 @@
     "diagnostics/EnumaDispatchDetailCheckpoint.h": "ee4953700e8e308a947b7ae29e92b2f638006a23c9ed5ccc213a6173c4b00650",
     "patches/dxe-dispatch-details.patch": "e75e481422f456869d726368ebed6851423d1a30e4e62876b535aa54b55e27b5",
     "patches/dispatch-detail-options.patch": "f0e38b16a5a26730d5de057ead268f30d8f2675a6c66a900c693e1943e8878b3",
-    "Resources/Scripts/enuma_preflight.py": "39cc3025dbc00e7204798a27acd009f69095012982d633f9d2936a93242da4a9",
-    "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af"
+    "Resources/Scripts/enuma_preflight.py": "842e756b90f43eff8b257469cd924a53ff561a768dda2a5c24f8b42902c0f219",
+    "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
+    "patches/apriori-metronome.patch": "59f37df69981dc61593fedb1e20b382d0881b01d3dfefc05d6fcc1028f85f01f",
+    "patches/diagnostic-ufs-selection.patch": "b79be283dc09951a91aa6fc99ec26aea7187f9845080d28445bf6dd50db5a523"
   },
   "new_firmware_table": {
     "config": "enuma",
@@ -151,6 +153,7 @@
       "ENUMA_DIAG_GUID_ENABLED": "0",
       "ENUMA_DIAG_GUID_LOW64": "0",
       "ENUMA_DIAG_GUID_HIGH64": "0",
+      "ENUMA_DIAG_DISABLE_UFS": "0",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
@@ -159,5 +162,5 @@
     }
   },
   "other_board_tables_unchanged": true,
-  "firmware_input_files_checked": 38
+  "firmware_input_files_checked": 42
 }

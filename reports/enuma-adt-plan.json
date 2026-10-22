@@ -90,9 +90,9 @@
     "value_hex": "0000002000000000",
     "board_input": {
       "path": "D:/Code/UniXNU-enuma/board.toml",
-      "bytes": 2900,
-      "sha256": "097e0bf31746a960d9312804c1c7b5e00ff845d4572e2b99f591f90048c01bd2",
-      "sha384": "7cb56f843ab831253bcd234fbc29e21c2deb3a79d89e68c68164e048335a4aa5f2d092dcc4ba087c54769a1dbce9dcbb"
+      "bytes": 2929,
+      "sha256": "a77be828d61d5588524f779be9553b7352cbeec0187691d8609df37f59558468",
+      "sha384": "c843b2d275e23a70ed91a1f975f70c054cbbf635f6cee7bc41b8043bfd7496050aa430b2e90092dfc50936f0fa556079"
     },
     "allocation": "runtime UEFI EfiConventionalMemory allocation required; not observed",
     "physical_base": null

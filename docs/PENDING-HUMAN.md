@@ -1,3 +1,3 @@
 # PENDING-HUMAN
 
-当前无待按键事项。第32/24项及新版第28项均自动恢复Android/root/boot与vendor_boot摘要，最后为第28项后正常Android。新版第26项构建中；继续保留长按电源及音量下回fastboot的恢复路径。
+当前无待按键或在场操作。最后为DisplayDxe入口前7秒相同镜像复测，已自动恢复Android，启动完成、root、boot/vendor_boot摘要不变。新增配置审查见NEED-REVIEW/R-002，不属于按键待办；当前不继续设备测试。

@@ -1,0 +1,29 @@
+{
+  "readable": {
+    "/dev/mem": false,
+    "/dev/kmem": false,
+    "/proc/kcore": false,
+    "/proc/config.gz": true
+  },
+  "kernel_options": {
+    "CONFIG_MODVERSIONS": "CONFIG_MODVERSIONS=y",
+    "CONFIG_MODULE_SIG": "# CONFIG_MODULE_SIG is not set",
+    "CONFIG_MODULE_SIG_FORCE": "unavailable",
+    "CONFIG_IKHEADERS": "CONFIG_IKHEADERS=y",
+    "CONFIG_DEBUG_INFO_BTF": "unavailable",
+    "CONFIG_KALLSYMS": "CONFIG_KALLSYMS=y",
+    "CONFIG_KALLSYMS_ALL": "CONFIG_KALLSYMS_ALL=y"
+  },
+  "kernel_release": "4.19.157-perf-gf8cf95f4dc15",
+  "kernel_headers_exported": true,
+  "scope": "read-only Android capabilities; no kernel module, RAM marker or physical-memory read performed",
+  "live_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "ramoops_nodes_in_captured_fdt": 0,
+  "binary_transport": "adb exec-out; shell transport corrupted gzip on first attempt",
+  "exported_headers": {
+    "bytes": 3433340,
+    "sha256": "e2482393e1d7ae0d2ec9c8155f940ae70317c907f54ef4f04f186f3c3db63c5c",
+    "archive_entries": 8998,
+    "built_or_loaded_module": false
+  }
+}

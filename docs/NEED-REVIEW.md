@@ -63,3 +63,18 @@ A-004执行补充（2026-10-22）：设备迁移51f9c0c已推送，固定固件3
 2026-10-22 身份校验续修：第16项首次因GetVar缺字段在boot前中止，正常重启恢复后重试，全部恢复核对通过。A-002内继续，只收紧解析/补私有日志，不放宽身份/备份，不改内存或验证标记，无新增硬停。
 
 2026-10-22 诊断细分：A-002/A-004内新增扩展补丁及非内存固件选项，原六patch/25迁移字节保留。新版第28项启动后自动恢复全部核对，同版第26项构建中；不改内存或 *_verified，不flash/erase/改槽，无新增硬停项。
+
+## R-002 · 早期日志的独立32KiB保留配置
+
+状态：pending，2026-10-23。已定位UFSDxe和UFS隔离模式下DisplayDxe的CoreStartImage前门，返回后未观察到。当前日志区属于Android普通页，不能直接写或当持久日志读取，详见enuma-log-reservation-audit.json。
+
+审查依据：[AGENTS.md](../AGENTS.md)第1类硬停：`修改任何 bringup-plan.json / board.toml 中内存大小或基址字段`。本项申请新增诊断地址/大小，未被R-001的512MiB或A-002镜像授权覆盖。
+
+| 候选 | 代价与范围 |
+| --- | --- |
+| A：软件日志（推荐） | 仅候选OEM Log Buffer [0x9fff7000,0x9ffff000)，32KiB；新增独立诊断配置，在临时Android FDT保留同范围，匹配真实内核ABI做只读回读/最小标记试验，再接固件日志。无需先拆机，但可能被Bootloader清空，必须先验证存活 |
+| B：UART | 先查明enuma接点/电平及真实串口实现，再人工连接采集；不需新日志内存配置，但需要硬件/在场，接点电平尚未确认，不猜测接线 |
+
+最小批准范围：仅允许拟议[board配置补丁](proposals/R-002-board-config.patch)中physical_base=0x9fff7000、size=0x8000，默认enabled=false；实现同范围临时FDT保留、ABI正常校验的只读回读和最小存活标记，成功后才有界日志。不得改UEFI FD/栈/heap、DRAM银行、512MiB、example或任何 *_verified 标记；只用A-002临时boot，不flash/erase/改槽或改写stock vendor_boot。候选清空、ABI或临时镜像契约不满足即停，不自行换地址/扩大/借显示与SMEM区域。
+
+配置提案未应用，日志与内核模块未启用。具体分阶段验收与不确定性见[方案](operations/2026-10-23-early-log-review.md)。所有已授权测试和恢复已完成，当前Android/root/原分区摘要正常；等待本项选择。
