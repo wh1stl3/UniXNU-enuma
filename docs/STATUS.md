@@ -2,11 +2,15 @@
 
 更新：2026-10-23（Asia/Shanghai）。当前唯一真相，历史见WORKLOG。
 
-## 当前结论与停点
+## 当前结论与进行中工作
 
-**新强停规则及允许有界黑屏/定时返回的澄清已写入AGENTS。主线实测推进到：正常ABI探针与受保护16字节回读均通过；固定marker同次启动匹配，经Bootloader进入不写marker的保留Android后不匹配。按R-002批准边界停止跨复位日志路线，不换地址、不扩大、不启用持久固件日志。**
+**用户已选择R-003推荐方案。已接入真正Image->EntryPoint前后/Exit返回门；无UFS的Display完整GUID实际PE调用前point20完成2/7/2实测，支持到达该调用前。直接C返回后point21未观察到短延时返回（ADB33.063秒/Android45.293秒），已恢复；point22正在构建，继续检查Exit路径。尚不能确认PE内部构造器/主体执行或返回，也没有GOP/XNU证明。**
 
-最后设备为Android，sys.boot_completed=1、root、原boot/vendor_boot摘要正常；测试模块均卸载、临时KO上传已清理。无flash/erase/改槽，无board/bringup-plan/既有内存/512MiB/example/验证标记或固件gitlink/42项源锁变更。无待按键事项。
+point20三次ADB16.977/22.272/16.367秒，差5.295/5.905秒，全部样本保留；均自动Android/root/原boot和vendor_boot摘要正常。无flash/erase/改槽，无board/bringup-plan/内存/512MiB/example/验证标记变化。R-002跨复位日志仍停止，不再写RAM标记。
+
+新固件gitlink a927ca1（入口功能0924fbd + Image.c LF基线修复），43项源锁；原25迁移文件/六patch及其余32OEM PE/DEPEX保持字节。35组实际头/bridge ASan/UBSan、45项Python/补丁重复重放通过；两源CI回读成功。官方backend真实构建/32OEM/BootShim/v3审计及补丁还原已通过两份point20候选。此提交默认完整33模式未重建，不以无UFS测试代替完整存储。
+
+详见 [真实PE细分门](operations/2026-10-23-direct-pe-entry-gates.md)。最终结论待point22后门实测，点20只能证明到达PE调用前；原厂入口RVA0x1000仍含系统表/配置表包装。
 
 ## 当前授权
 
@@ -31,13 +35,13 @@
 
 - UFS及无UFS时DisplayDxe仍只有CoreStartImage前门支持证据，后门未观察。包装器/库构造器/主体/异常与具体改写阶段未知，没有GOP/map/BDS/DarwinBoot/XNU/NT36523运行证明。
 - SimpleFb离线审计已完成，优先复用Mu核心，真实入口base/stride/格式/线性布局/跨度/存活仍缺。当前只读DRM state两个路径正文为不存在（虽然su返回0），panel enabled不等于入口几何。没有启用SimpleFb或DFPS尾部日志。
-- 默认原生33OEM、已实施无UFS32OEM、拟议SimpleFb30OEM保持区分。固件仍b988fa418de55de2dcaa396d016e30231159d1fe，原25文件/六patch保持。
+- 默认原生33OEM、已实施无UFS32OEM、拟议SimpleFb30OEM保持区分。固件现为a927ca1，原25文件/六patch保持。
 - 目标仍enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块；历史通用内核成功不是本板最终内核。
 
 ## 下一步
 
-R-002跨复位日志路线已停，后续候选见NEED-REVIEW/R-003。推荐在用户允许的可控返回探针范围细分真实Image EntryPoint/构造器/异常边界，并准备经核实的UART；不将失败改为新地址重试。另一条同次GOP/USB输出路线需要先有真实可用通道，不能假装已具备。
+R-002跨复位日志路线已停；用户已选择NEED-REVIEW/R-003推荐A，正在细分真实Image EntryPoint/构造器/异常边界，不再等重复批准。不将失败改为新地址重试。另一条同次GOP/USB输出路线需要先有真实可用通道，不能假装已具备。
 
 GOP/map/BDS闭合后再推进ADT/NVRAM、板级最终内核/prelink与最小XNU入口；不从此次Android marker回读推导UEFI/内核启动成功。
 
-上次设备提交217dd29已推送；本里程碑以Git提交/发布记录为准。五件套已更新，参考仓及固件仓未改。
+上次设备提交f97a91c已推送；本里程碑以Git提交/发布记录为准。五件套已更新，参考仓及固件仓未改。

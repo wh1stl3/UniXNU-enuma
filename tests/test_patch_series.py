@@ -20,7 +20,8 @@ class PatchSeriesTests(unittest.TestCase):
             self.assertTrue(stage.is_relative_to((ROOT/'out').resolve()))
             names=['MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c',
                    'MdeModulePkg/Core/Dxe/DxeMain.inf',
-                   'MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c']
+                   'MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c',
+                   'MdeModulePkg/Core/Dxe/Image/Image.c']
             with tarfile.open(archive) as source:
                 for name in names:
                     member=next(m for m in source.getmembers() if m.name.endswith('/'+name))
@@ -40,6 +41,9 @@ class PatchSeriesTests(unittest.TestCase):
             self.assertNotIn(b'EnumaDispatchCheckpoint (13);',dispatcher)
             for point in (13,14,15):
                 self.assertEqual(dispatcher.count(f'EnumaDispatchDetailCheckpoint ({point},'.encode()),1)
+            image=once['MdeModulePkg/Core/Dxe/Image/Image.c']
+            for point in (20,21,22):
+                self.assertEqual(image.count(f'EnumaImageEntryCheckpoint ({point},'.encode()),1)
             apply_patch_series(patches)
             self.assertEqual(once,{n:(stage/n).read_bytes() for n in names})
 

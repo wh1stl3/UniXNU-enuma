@@ -1,0 +1,10 @@
+{
+  "scope": "read-only static inspection of locked OEM DisplayDxe; no binary changes or runtime claim",
+  "pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+  "entry_rva": "0x1000",
+  "image_base": "0x0",
+  "entry_wrapper_config_table_guid": "b898d8dc-080a-40f7-99e3-31627b806a5a",
+  "inspection": "Entry checks handle/system-table signature, searches configuration table before branching to RVA 0x114c; this is why direct PE call is not synonymous with vendor C driver body",
+  "disassembly_sha256": "ad76e9c88fdc484025ab6669a1cfa4165b219ef552695f8d3ceb97166f88f5dc",
+  "root_cause_identified": false
+}

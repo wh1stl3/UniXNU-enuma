@@ -1,7 +1,8 @@
 {
   "scope": "actual header with host adapters, no firmware/device execution",
-  "source_header_sha256": "ee4953700e8e308a947b7ae29e92b2f638006a23c9ed5ccc213a6173c4b00650",
-  "cases": 20,
+  "source_header_sha256": "4883fcd4c309d32aa6813d7d8a63842b007d07619d7a153af988e0a2f9382663",
+  "image_bridge_sha256": "0a44e20d2f9592fb8dfb9becb225e7038ec0cfb98eb9170843db209ab2f015e1",
+  "cases": 35,
   "checks": [
     {
       "argv": [
@@ -25,6 +26,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-0"
@@ -63,6 +65,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-1"
@@ -101,6 +104,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-2"
@@ -139,6 +143,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-3"
@@ -177,6 +182,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-4"
@@ -215,6 +221,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-5"
@@ -253,6 +260,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-6"
@@ -291,6 +299,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-7"
@@ -329,6 +338,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-8"
@@ -367,6 +377,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-9"
@@ -405,6 +416,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-10"
@@ -443,6 +455,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-11"
@@ -481,6 +494,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-12"
@@ -519,6 +533,7 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x8000000000000001ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-13"
@@ -530,6 +545,240 @@
     {
       "argv": [
         "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-13"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=20",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=0",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-14"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-14"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=20",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=0",
+        "-DTEST_STATUS=0x8000000000000001ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-15"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-15"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=21",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=0",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-16"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-16"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=21",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=0",
+        "-DTEST_STATUS=0x8000000000000001ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-17"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-17"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=22",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=0",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-18"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-18"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=22",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=0",
+        "-DTEST_STATUS=0x8000000000000001ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-19"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-19"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -557,9 +806,10 @@
         "-DTEST_GUID_CASE=1",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-14"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-20"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -567,7 +817,7 @@
     },
     {
       "argv": [
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-14"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-20"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -595,9 +845,10 @@
         "-DTEST_GUID_CASE=2",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-15"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-21"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -605,7 +856,7 @@
     },
     {
       "argv": [
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-15"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-21"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -633,9 +884,10 @@
         "-DTEST_GUID_CASE=3",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-16"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-22"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -643,7 +895,7 @@
     },
     {
       "argv": [
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-16"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-22"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -671,9 +923,10 @@
         "-DTEST_GUID_CASE=3",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-17"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-23"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -681,7 +934,7 @@
     },
     {
       "argv": [
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-17"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-23"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -709,9 +962,10 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-18"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-24"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -719,7 +973,7 @@
     },
     {
       "argv": [
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-18"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-24"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -747,9 +1001,10 @@
         "-DTEST_GUID_CASE=0",
         "-DTEST_STATUS=0x0ULL",
         "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
         "-o",
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-19"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-25"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -757,7 +1012,358 @@
     },
     {
       "argv": [
-        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-19"
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-25"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=20",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=1",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-26"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-26"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=20",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=2",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-27"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-27"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=20",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=3",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-28"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-28"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=21",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=1",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-29"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-29"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=21",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=2",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-30"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-30"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=21",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=3",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-31"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-31"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=22",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=1",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-32"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-32"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=22",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=2",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-33"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-33"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DETAIL_POINT=22",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_GUID_ENABLED=1",
+        "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+        "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+        "-DTEST_GUID_CASE=3",
+        "-DTEST_STATUS=0x0ULL",
+        "-DDETAIL_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+        "-DIMAGE_HEADER=\"/mnt/d/Code/uefi-enuma/diagnostics/EnumaImageEntryCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_detail_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-34"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/dispatch-detail-test/case-34"
       ],
       "exit_code": 0,
       "stdout": "",

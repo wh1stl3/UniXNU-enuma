@@ -78,7 +78,7 @@ def main():
     parser.add_argument('--stop-stage', type=int, choices=(0,3,4,5,6,7,8,9,10,11,12,13), default=0)
     parser.add_argument('--stop-delay', type=int, choices=(2,7), default=2)
     parser.add_argument('--dispatch-ordinal', type=int, default=1)
-    parser.add_argument('--detail-point', type=int, choices=range(13,20), default=13)
+    parser.add_argument('--detail-point', type=int, choices=range(13,23), default=13)
     parser.add_argument('--dispatch-guid', help='optional complete file UUID filter for stage 13 detail gates')
     parser.add_argument('--diagnostic-without-ufs',action='store_true',help='GOP isolation only; default firmware retains OEM UFSDxe')
     args = parser.parse_args()

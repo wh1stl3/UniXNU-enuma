@@ -24,6 +24,7 @@ typedef uintptr_t UINTN;
 typedef uint64_t UINT64;
 typedef uint8_t UINT8;
 typedef uint64_t EFI_STATUS;
+typedef void *EFI_HANDLE;
 typedef struct { uint64_t low, high; } EFI_GUID;
 #define STATIC static
 #define VOID void
@@ -34,9 +35,10 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
 '''
     for name in ('BaseLib.h','ResetSystemLib.h','TimerLib.h'):
         (out/'Library'/name).write_text(adapter)
-    cases = [(13,point,status,1,0) for point in range(13,20) for status in (0,0x8000000000000001)]
+    cases = [(13,point,status,1,0) for point in range(13,23) for status in (0,0x8000000000000001)]
     cases += [(13,15,0,1,guid) for guid in (1,2,3)]
     cases += [(13,15,0,0,3),(0,13,0,1,0),(12,13,0,1,0)]
+    cases += [(13,point,0,1,guid) for point in (20,21,22) for guid in (1,2,3)]
     records=[]
     for index,(stage,point,status,enabled,guid) in enumerate(cases):
         command=['clang','-std=c11','-O1','-Wall','-Wextra','-Werror',
@@ -48,20 +50,23 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
           '-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL',
           '-DTEST_GUID_CASE='+str(guid),'-DTEST_STATUS='+hex(status)+'ULL',
           '-DDETAIL_HEADER="'+str(header)+'"',
+          '-DIMAGE_HEADER="'+str(header.with_name('EnumaImageEntryCheckpoint.h'))+'"',
           ROOT/'tests/enuma_dispatch_detail_gate.c','-o',out/('case-'+str(index))]
         records.append(run(command));records.append(run([command[-1]]))
     invalid=list(command)
-    invalid[invalid.index('-DENUMA_DIAG_DETAIL_POINT=13')]='-DENUMA_DIAG_DETAIL_POINT=20'
+    # Last case may use point 22; reject the first unsupported point explicitly.
+    invalid[next(i for i,v in enumerate(invalid) if str(v).startswith('-DENUMA_DIAG_DETAIL_POINT='))]='-DENUMA_DIAG_DETAIL_POINT=23'
     result=subprocess.run([str(x) for x in invalid],capture_output=True,text=True)
     if result.returncode==0 or 'Unsupported enuma dispatch detail point' not in result.stderr:
         raise ValueError('invalid detail point accepted')
     (ROOT/'reports/enuma-dispatch-details-host.json').write_text(json.dumps({
         'scope':'actual header with host adapters, no firmware/device execution',
         'source_header_sha256':hashlib.sha256(header.read_bytes()).hexdigest(),
+        'image_bridge_sha256':hashlib.sha256(header.with_name('EnumaImageEntryCheckpoint.h').read_bytes()).hexdigest(),
         'cases':len(cases),'checks':records,'invalid_detail_rejected':True,
         'guid_checks':'both 64-bit halves, NULL, and disabled filter',
         'status_checks':'any/error/success returns for real LoadImage/StartImage hooks'},indent=2)+'\n')
-    print('PASS: detail points 13..19, status classes, complete GUID and ordinal filters, normal/legacy stages')
+    print('PASS: points 13..22, shared Image/Dispatcher bridge, nested-handle exclusion, status/GUID/ordinal filters')
 
 
 if __name__=='__main__':main()
