@@ -161,6 +161,14 @@
       "ENUMA_VENDOR_RAW": "EnumaInputs/Vendor.raw.fdf.inc"
     }
   },
+  "approved_diagnostics": {
+    "persistent_log": {
+      "enabled": false,
+      "source_region": "Log Buffer",
+      "physical_base": "0x9fff7000",
+      "size": "0x8000"
+    }
+  },
   "other_board_tables_unchanged": true,
   "firmware_input_files_checked": 42
 }

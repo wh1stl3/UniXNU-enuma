@@ -1,0 +1,175 @@
+{
+  "scope": "R-002 reservation phase only; no kernel module loading or physical log access",
+  "review": "R-002 approved 2026-10-23",
+  "attempts": [
+    {
+      "number": "01",
+      "image": {
+        "scope": "R-002 reservation only; no physical log read/write and no device actions",
+        "image_sha256": "5c219c89f635f44732e085ba0a94f6d17d3c7ba990f472c0e3310bc58e625d20",
+        "image_bytes": 116359168,
+        "stock_boot_sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "stock_kernel_sha256": "2b6f267ab0c3e3b262871cb44d2b0a621c10efcddf4454e427b53cbc8292d07d",
+        "stock_ramdisk_sha256": "8fe06db987b23124311c011f57860c725e6d33890a47586111b18c79a4f9832c",
+        "stock_image_size": 66211840,
+        "patched_image_size": 66229872,
+        "stock_entry_offset": "0x2b80000",
+        "hook_offset": "0x3f25000",
+        "hook_sha256": "e5f6bb8a942b0cb3962837e9e4a4ca7f735cbb93d397cb5311fa0e94b82c1553",
+        "header_version": 3,
+        "preserved": "stock kernel placement, code except entry branch/size, ramdisk, header except kernel_size, vendor_boot untouched",
+        "reservation": [
+          "0x9fff7000",
+          "0x8000"
+        ],
+        "on_unsupported_fdt": "no writes; continue original Android entry",
+        "source_sha256": {
+          "fdt_reserve.c": "ddd2204aef62dbc40fa08db4be17d88ecd05b831dd145516140cdba32d09b272",
+          "android_fdt_entry.S": "e2b95841485a996066e653652e92e225b71b21cd84f7a81b3250f3488268dab6"
+        },
+        "hardware_executed": false,
+        "log_memory_accessed": false,
+        "verified_flags_changed": false
+      },
+      "device": {
+        "scope": "active Android FDT and page metadata only; no log contents accessed",
+        "image_sha256": "5c219c89f635f44732e085ba0a94f6d17d3c7ba990f472c0e3310bc58e625d20",
+        "android_boot_complete": true,
+        "root": true,
+        "partition_digests_unchanged": true,
+        "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+        "fdt_bytes": 941691,
+        "header_reservations": [],
+        "page_flags": [
+          "0x5868",
+          "0x5868",
+          "0x5868",
+          "0x5868",
+          "0x5868",
+          "0x5868",
+          "0x40000002c",
+          "0x5868"
+        ],
+        "all_eight_pages_reserved": false,
+        "kernel_page_shift": 12,
+        "log_memory_accessed": false
+      }
+    },
+    {
+      "number": "02",
+      "image": {
+        "scope": "R-002 reservation only; no physical log read/write and no device actions",
+        "image_sha256": "e0bd9b25d6e472a52735893dac970bb6f475e6c5394e6d878c615e54d6fc0e42",
+        "image_bytes": 116359168,
+        "stock_boot_sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "stock_kernel_sha256": "2b6f267ab0c3e3b262871cb44d2b0a621c10efcddf4454e427b53cbc8292d07d",
+        "stock_ramdisk_sha256": "8fe06db987b23124311c011f57860c725e6d33890a47586111b18c79a4f9832c",
+        "stock_image_size": 66211840,
+        "patched_image_size": 66230800,
+        "stock_entry_offset": "0x2b80000",
+        "hook_offset": "0x3f25000",
+        "hook_sha256": "c96ce9413b1e0ea95e3ea7252985879e3074a970a264512ce11e4e88c08c0d94",
+        "header_version": 3,
+        "preserved": "stock kernel placement, code except entry branch/size, ramdisk, header except kernel_size, vendor_boot untouched",
+        "reservation": [
+          "0x9fff7000",
+          "0x8000"
+        ],
+        "on_unsupported_fdt": "no writes; continue original Android entry",
+        "source_sha256": {
+          "fdt_reserve.c": "9ac4688b6e4b0e1ff3349619b2f5976cf5a0821854071cbfa6ef6cf79f8c6eb3",
+          "android_fdt_entry.S": "e2b95841485a996066e653652e92e225b71b21cd84f7a81b3250f3488268dab6"
+        },
+        "hardware_executed": false,
+        "log_memory_accessed": false,
+        "verified_flags_changed": false
+      },
+      "device": {
+        "scope": "Android FDT and page metadata only; no log bytes accessed",
+        "image_sha256": "e0bd9b25d6e472a52735893dac970bb6f475e6c5394e6d878c615e54d6fc0e42",
+        "issued_at": "2026-10-23 01:04:27",
+        "android_boot_complete": true,
+        "root": true,
+        "partition_digests_unchanged": true,
+        "adb_return_seconds": 16.079,
+        "boot_complete_seconds": 31.722,
+        "fdt_sha256": "6e88ca4a3bfaf8823da9bcf44defdd5ad7a3f8eec671223675076fd5457a0d09",
+        "fdt_bytes": 941691,
+        "header_reservations": [
+          {
+            "base": "0x9fff7000",
+            "size": "0x8000"
+          }
+        ],
+        "page_flags": [
+          "0x100000000",
+          "0x100000000",
+          "0x100000000",
+          "0x100000000",
+          "0x100000000",
+          "0x100000000",
+          "0x100000000",
+          "0x100000000"
+        ],
+        "all_eight_pages_reserved": true,
+        "kernel_page_shift": 12,
+        "runtime_reservation_observed": true,
+        "log_memory_accessed": false,
+        "persistence_proven": false,
+        "verified_flags_changed": false
+      }
+    }
+  ],
+  "final_android_boot_complete": true,
+  "final_root": true,
+  "partition_digests_unchanged": true,
+  "runtime_reservation_observed": true,
+  "persistent_log_usable": false,
+  "log_module_loaded": false,
+  "minimal_marker_written": false,
+  "persistence_proven": false,
+  "stopped_at_user_request": true,
+  "verified_flags_changed": false,
+  "runtime_property_difference_names": [],
+  "abi_offline": {
+    "scope": "offline compilation only; normal kernel loader checks still required",
+    "mode": "abi",
+    "module_sha256": "43b6bbd06fa16af578501db60ed917c5c205243aa6f8429763ca79671e4e2313",
+    "module_bytes": 3808,
+    "vermagic": "vermagic=4.19.157-perf-gf8cf95f4dc15 SMP preempt mod_unload modversions aarch64",
+    "module_struct_bytes": 832,
+    "symbol_crcs": {
+      "module_layout": "0xaad0c453",
+      "printk": "0x7c32d0f0"
+    },
+    "stock_module_sources": [
+      {
+        "name": "rdbg.ko",
+        "sha256": "0c840042d1b6a5e6ef6db542a58025ab08094cf4f52cfccc528fdf4b75fbe9fe"
+      },
+      {
+        "name": "qca_cld3_qca6390.ko",
+        "sha256": "fabfbfb7293247abc9880b6af392a76959484eb86e3f0f4c16fdab98d6c0dea5"
+      }
+    ],
+    "link_script_sources": {
+      "scripts/module-common.lds": {
+        "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/scripts/module-common.lds",
+        "sha256": "b0842afec1a7948546fe6d0dac813b5b9e045a2f3b326a1df946f7045ab1a77f"
+      },
+      "arch/arm64/kernel/module.lds": {
+        "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/arch/arm64/kernel/module.lds",
+        "sha256": "372647a6b25521d671b4388ecb20531368722ed203f8ce75f7bb0a10fe3e256c"
+      },
+      "drivers/of/fdt.c": {
+        "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/drivers/of/fdt.c",
+        "sha256": "89cd4094bc85f5c3c17a4c5686ae9184796bff753b8ecc0da32976c18b3a797e"
+      }
+    },
+    "source_sha256": "d4b771a61b5ef6f3c92c4728d06221aaa5eb5519abf5aba2c1934bf187d72240",
+    "kernel_headers_sha256": "e2482393e1d7ae0d2ec9c8155f940ae70317c907f54ef4f04f186f3c3db63c5c",
+    "physical_writes": false,
+    "read_limit_bytes": 0,
+    "hardware_loaded": false
+  }
+}

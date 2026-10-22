@@ -34,7 +34,7 @@ def fastboot_value_matches(result, variable, expected):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', type=Path, required=True)
-    parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch','dxe-dispatch-return','dxe-queue-entry','dxe-driver-return','gop-probe'))
+    parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch','dxe-dispatch-return','dxe-queue-entry','dxe-driver-return','gop-probe','android-log-reservation'))
     args = parser.parse_args()
     image = args.image.resolve()
     if not image.is_relative_to((ROOT/'out').resolve()): raise ValueError('image outside own out/')

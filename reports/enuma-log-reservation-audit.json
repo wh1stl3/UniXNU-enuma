@@ -1,6 +1,6 @@
 {
   "scope": "read-only audit, no memory writes, module loading, reservations or image changes",
-  "review": "R-002 pending",
+  "review": "R-002 approved 2026-10-23; original Android sample remains unprotected",
   "oem_region": {
     "name": "Log Buffer",
     "base": 2684317696,

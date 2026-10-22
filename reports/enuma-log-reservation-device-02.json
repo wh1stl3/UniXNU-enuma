@@ -1,0 +1,34 @@
+{
+  "scope": "Android FDT and page metadata only; no log bytes accessed",
+  "image_sha256": "e0bd9b25d6e472a52735893dac970bb6f475e6c5394e6d878c615e54d6fc0e42",
+  "issued_at": "2026-10-23 01:04:27",
+  "android_boot_complete": true,
+  "root": true,
+  "partition_digests_unchanged": true,
+  "adb_return_seconds": 16.079,
+  "boot_complete_seconds": 31.722,
+  "fdt_sha256": "6e88ca4a3bfaf8823da9bcf44defdd5ad7a3f8eec671223675076fd5457a0d09",
+  "fdt_bytes": 941691,
+  "header_reservations": [
+    {
+      "base": "0x9fff7000",
+      "size": "0x8000"
+    }
+  ],
+  "page_flags": [
+    "0x100000000",
+    "0x100000000",
+    "0x100000000",
+    "0x100000000",
+    "0x100000000",
+    "0x100000000",
+    "0x100000000",
+    "0x100000000"
+  ],
+  "all_eight_pages_reserved": true,
+  "kernel_page_shift": 12,
+  "runtime_reservation_observed": true,
+  "log_memory_accessed": false,
+  "persistence_proven": false,
+  "verified_flags_changed": false
+}

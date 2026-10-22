@@ -8,6 +8,13 @@ import tomllib
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def check_board_contract(board, old):
+    assert {k:v for k,v in board.items() if k not in ('firmware','diagnostics')} == old
+    assert board['diagnostics'] == {'persistent_log': {
+        'enabled': False, 'source_region': 'Log Buffer',
+        'physical_base': '0x9fff7000', 'size': '0x8000'}}, 'outside approved R-002 configuration'
+
+
 def main():
     lock = json.loads((ROOT/'config/uefi-source.lock.json').read_text())
     source = ROOT/lock['path']
@@ -28,7 +35,7 @@ def main():
         assert hashlib.sha256((source/name).read_bytes()).hexdigest() == wanted, name
     old = tomllib.loads(git(ROOT,'show','1ab7ee8:board.toml'))
     board = tomllib.loads((ROOT/'board.toml').read_text())
-    assert {k:v for k,v in board.items() if k!='firmware'} == old
+    check_board_contract(board, old)
     assert board['firmware']['preflight'] == ['scripts/enuma_firmware_preflight.py']
     expected = ['patches/dxe-stage-checkpoints.patch','patches/dxe-dispatch-return.patch',
                 'patches/dxe-driver-checkpoints.patch','patches/dxe-dispatch-details.patch',
@@ -39,9 +46,10 @@ def main():
         'firmware_repository':lock['repository'],'firmware_commit':lock['commit'],
         'source_device_commit':migration['device_commit'],'migrated_files':migration['files'],
         'firmware_extensions':extensions,
-        'new_firmware_table':board['firmware'],'other_board_tables_unchanged':True,
+        'new_firmware_table':board['firmware'],'approved_diagnostics':board['diagnostics'],
+        'other_board_tables_unchanged':True,
         'firmware_input_files_checked':len(lock['file_sha256'])},indent=2)+'\n')
-    print('PASS: fixed firmware gitlink, migrated bytes and official table; all other board tables unchanged')
+    print('PASS: fixed firmware gitlink, migrated bytes, official table and exact R-002 configuration; legacy board tables unchanged')
 
 
 if __name__=='__main__':main()

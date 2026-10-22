@@ -74,3 +74,10 @@ ENUMA_VENDOR_DSC = "EnumaInputs/Vendor.dsc.inc"
 ENUMA_VENDOR_DXE = "EnumaInputs/Vendor.fdf.inc"
 ENUMA_VENDOR_APRIORI = "EnumaInputs/Vendor.apriori.inc"
 ENUMA_VENDOR_RAW = "EnumaInputs/Vendor.raw.fdf.inc"
+
+# R-002 approved 2026-10-23; protection and persistence require runtime proof.
+[diagnostics.persistent_log]
+enabled = false
+source_region = "Log Buffer"
+physical_base = "0x9fff7000"
+size = "0x8000"

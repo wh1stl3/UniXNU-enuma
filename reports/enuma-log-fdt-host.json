@@ -1,0 +1,117 @@
+{
+  "scope": "host ASan/UBSan only; no boot or physical log access",
+  "source_sha256": "9ac4688b6e4b0e1ff3349619b2f5976cf5a0821854071cbfa6ef6cf79f8c6eb3",
+  "input_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "cases": [
+    {
+      "case": "actual",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "case": "synthetic-pre-entry-seed-no-nops",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "case": "bad-magic",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "oversize",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "bad-structure",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "bad-strings",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "reserve-offset",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "bad-version",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "future-version",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "bad-strings-size",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "bad-structure-size",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "existing-owner",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "bad-root",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "invalid-token",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "truncated-0",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "truncated-39",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "truncated-55",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "truncated-100",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "truncated-941690",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "no-nops",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "case": "sufficient-nops",
+      "accepted": true,
+      "passed": true
+    }
+  ],
+  "all_node_property_bytes_preserved": true,
+  "range": [
+    "0x9fff7000",
+    "0x8000"
+  ]
+}

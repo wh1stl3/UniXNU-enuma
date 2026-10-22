@@ -1,40 +1,36 @@
 # STATUS
 
-更新：2026-10-23（Asia/Shanghai）。当前唯一真相，历史见WORKLOG。
+更新：2026-10-23（Asia/Shanghai）。当前唯一真相，历史见 WORKLOG。
 
 ## 当前结论与停点
 
-**完整GUID与延时对照支持到达UFSDxe、UFS隔离模式下DisplayDxe的CoreStartImage调用前；两者的返回后门均未观察到命中。正在等待R-002的新日志内存配置审查，不再启动新测试。设备已恢复Android，root和boot/vendor_boot摘要不变，无待按键事项。**
+**R-002 已批准；临时 Android FDT 的 32 KiB 日志候选保留已实机通过。按用户“做完这笔实机验证就停下，写好文档”要求，本轮已停止，不再启动镜像或加载模块。设备在 Android，启动完成、root、boot/vendor_boot 原摘要正常，无待按键事项。**
 
-- 原d6900d2实际队列27，UFSDxe GUID0d35cd8e-97ea-4f9a-96af-0f0d89f76567，入口前7/2秒ADB22.311/16.954秒，差5.357秒。加载成功、到达入口调用前获得支持；不能确认已跳入驱动主体或具体故障。
-- 281179c提前真实Mu Metronome后UFS变成28，返回后门仍30.841秒，未解决UFS边界。
-- b988fa4显式排除UFS后，整个调度后门仍31.879秒。实际队列32、完整DisplayDxe GUID4138022f-06c7-4f79-9c94-7e33b511a4e7，入口前7/2/2/7秒ADB22.299/15.913/15.970/21.247秒；全部样本保留，重复对照差5.277秒支持该门。返回后门30.846秒，不当作返回证明。
-- 尚无GOP/UEFI map、菜单、DarwinBoot/XNU或NT36523运行证明。公共CoreStartImage包装器、库构造器、驱动主体和复位来源仍不能互相替代归因。
+这次证明的是当前诊断 Android 启动保护了 `[0x9fff7000, 0x9ffff000)`，不是持久日志可用。未加载内核模块、未读取物理日志内容、未写标记、未验证跨复位存活，也未设置任何 `*_verified=true`。
 
-本轮从第2项起累计20次实际临时启动全部恢复Android/root/分区摘要，另一次第16项推送前GetVar中止，正常恢复后才重试。最后测试为相同Display入口前7秒镜像复测（00:42:07），ADB21.247秒、Android36.259秒。没有flash/erase/改槽。
+## R-002 本轮结果
 
-## R-002：实际日志内存保护缺口
+- board 新增独立 diagnostics.persistent_log，默认 enabled=false，physical_base=0x9fff7000、size=0x8000。来源是本机 OEM Log Buffer，不是运行中 UEFI GetMap。严格检查只允许这组字段；既有内存表、512 MiB owned 请求、example=true、验证标记保持不变。
+- 复用原厂 ARM64 Image 与 v3 boot/ramdisk、固定 AOSP 解包器；只改 Image 第一条分支及 image_size，并追加入口封装/临时栈；原厂 vendor_boot 保留。入口在原 FDT 缓冲区内加入唯一保留项，不增大 FDT，不改属性值或随机种子。输入不满足空间/结构要求则不修改，继续原厂入口，主机侧门禁会拒绝后续回读。
+- 第一次 01:00:21 临时启动恢复 Android，但 FDT 与原样本一致，8 页仍非 reserved；作为失败样本保留。不能据此认定入口未执行或 Bootloader 清空日志。旧实现依赖运行中 FDT 的 NOP；该 NOP 位于 chosen，固定 MiCode 源码会在读取 rng-seed 后生成 NOP，这是入口前/运行后布局差异的合理解释，未直接观测入口前 FDT。
+- 第二次 01:04:27，采用 NOP 不足时复用相同名称后缀的修复，镜像 SHA256 e0bd9b25d6e472a52735893dac970bb6f475e6c5394e6d878c615e54d6fc0e42。ADB 16.079 秒、启动完成 31.722 秒；实际 FDT 唯一 reserve tuple 为 0x9fff7000/0x8000，8 页标志全部 0x100000000（KPF_RESERVED）。与原 Android FDT 比较，所有节点/属性值相同。恢复核对正常，无 flash/erase/改槽。
+- 实际内核头、原厂 rdbg/wifi 模块核对后，离线 ABI 探针编译成功：实际 release/vermagic 一致、struct module 832 字节、module_layout/printk CRC 精确匹配。**未 insmod，因此仍不是运行时 ABI 通过。** 16 字节只读 marker 模式仅有源码，未构建/执行。
+- 45 项 Python、实际 C 的 21 组 ASan/UBSan、原 board/固件来源/defconfig/example 检查通过；临时镜像经固定 AOSP 解包逐字节回读。真实 marker、固件日志、异常采集未启用。
 
-OEM Log Buffer为0x9fff7000/0x8000（32KiB），只是本机OEM来源事实，未以运行中GetMap确认。当前Android FDT的/memory覆盖该区，无reserved-memory或头部reserve条目保护；/proc/iomem归入System RAM，实际4KiB内核的8页KPF_RESERVED全部false，已有普通LRU/映射/buddy页。因此不能直接写作持久日志。
+**临时保留只在本次诊断 Android 启动有效；普通 Android 重启后可能恢复普通 RAM，未来模块加载/回读前必须重新采集活动 FDT 与 8 页状态，不能沿用旧报告。**
 
-推荐有界软件路线：申请独立诊断配置，只允许同一32KiB范围、临时Android FDT保留、匹配内核ABI的只读回读及最小标记存活试验，成功后再接日志。Bootloader可能清空，失败不得自行换地址或扩大。备选是核对UART接点/电平后人工连接。精确提案及范围见NEED-REVIEW/R-002和docs/proposals/R-002-board-config.patch，未应用。
+## 主线与固定来源
 
-Android未启用DEVMEM/PROC_KCORE；MODULES/MODVERSIONS/IKHEADERS可用、MODULE_SIG未启用，已只读取回匹配头文件。没有构建/加载回读模块、物理内存内容读取、RAM标记或FDT保留变更。AGENTS的新增内存大小/基址字段审查规则要求先确认；A-002镜像授权保留，512MiB不变。
+- 完整 GUID 与延时对照支持到达 UFSDxe 和 UFS 隔离模式下 DisplayDxe 的 CoreStartImage 调用前；返回后门均未观察到。公共包装器、库构造器、驱动主体和复位来源尚不能区分归因。
+- UFS 前门 7/2 秒差 5.357 秒；提前真实 Metronome 未解决 UFS。隔离 Display 前门四样本 7/2/2/7，重复差 5.277 秒，返回后仍长复位。不代表驱动主体/GOP/完整调度成功。
+- 尚无 GOP/UEFI map、菜单、DarwinBoot/XNU 或 NT36523 运行证明。
+- 固件仓/gitlink 仍 b988fa418de55de2dcaa396d016e30231159d1fe，42 项源锁、原 25 迁移文件/六 patch 不变。默认保留 33 OEM；显式无 UFS 变体保留其余 32 OEM 字节，不能代替完整存储验证。本轮未改固件仓或重建 UEFI，也未运行 macOS CI。
+- 目标 enuma/SM8250，iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU5fdbd5d/21 模块不变。历史 macOS 通用 4KiB 内核成功不是本板最终内核。
 
-## 已实现与验证
+## 恢复工作后的顺序（本轮不执行）
 
-- 固件仓公开main/设备gitlink固定 **b988fa418de55de2dcaa396d016e30231159d1fe**，源锁42项。原25迁移文件与六patch保留，通过独立extensions增加detail、Metronome和UFS选择补丁，仅写out暂存。
-- 默认ENUMA_DIAG_DISABLE_UFS=0保留33OEM。--diagnostic-without-ufs明确从Components/FDF/APRIORI三处排除UFSDxe，无空协议。报告必须有唯一缺项及匹配完成FD，审计检查文件和APRIORI GUID均不存在，其余32PE/DEPEX逐字节不变且无悬空引用。
-- 42项Python、真实detail头20组ASan/UBSan、各补丁重复应用、来源/旧board表/defconfig/example检查通过；普通33模块FD、伪造缺项报告的实际负向审计通过。b988本轮实际构建的是32模块隔离变体，默认完整33模式未在此提交重建；281179c完整模式已构建审计。
-- 当前完成构建为Display入口前2秒：FD5212eb5f11e6de0a0d45475db7325103bae16bf0bdaa352d808ce274d173f725。最后设备复测使用另一份已有7秒镜像54bb808e3147892d2f40c159f6dbe51b43774d345fe44721bd65629b4e23c4eb，不混用两份证据。各快照含FD/构建/预检/审计/payload/日志。
-- 281179c/run39810564733及b988fa4/run39811887053源码CI通过且日志回读PASS。仍未重跑macOS内核CI；历史通用4KiB XNU run39790786938成功不是本板最终内核。
+1. 重新核对 enuma 身份、恢复备份、活动 FDT、8 页保护与完整内核 ABI，正常加载/卸载无物理访问的 ABI 探针；不得强载。
+2. 构建并审计 16 字节只读回读模块，设计不会经过未保留 Linux 启动的最小标记/复位/回读链，先证明存活。若 ABI/临时启动契约不满足或候选被 Bootloader 清空，按 R-002 停下，不换地址或刷分区。
+3. 存活与回读都成功后才接同范围有界 SEC/DXE 日志，定位 UFS/Display，再验证 GOP/map/BDS，最后推进 ADT/NVRAM、板级最终内核/prelink 和最小 XNU 入口。
 
-目标仍enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU5fdbd5d及21模块。example=true、owned_memory_size=0x20000000、既有内存字段和所有 *_verified 标记不变。
-
-## 下一步
-
-1. 等待R-002选择；批准后仅在限定范围实现临时保留和只读回读，先验证存活，再接入真实日志。未批准不改实际内存配置。
-2. 据实际入口/异常/协议日志修复UFS与Display公共或厂商路径；保持GOP隔离与完整存储证据分开。
-3. 取得GOP/UEFI map/BDS闭包后，补齐ADT/NVRAM、板级archives/最终内核/donor prelink，验证最小XNU入口，再推进NT36523。GPU后置。
-
-固件281179c/b988fa4已推送；设备上次8dc4347已推送，本里程碑状态见Git。详见[入口边界](operations/2026-10-23-ufs-entry-boundary.md)、[R-002方案](operations/2026-10-23-early-log-review.md)。
+本里程碑记录见 Git；上次设备提交 73f34e5 已推送。本轮证据与可复现命令见 [R-002 实测交接](operations/2026-10-23-log-reservation-validation.md)；总报告为 reports/enuma-log-reservation-device.json。

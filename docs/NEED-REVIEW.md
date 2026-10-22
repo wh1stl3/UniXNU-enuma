@@ -66,7 +66,7 @@ A-004执行补充（2026-10-22）：设备迁移51f9c0c已推送，固定固件3
 
 ## R-002 · 早期日志的独立32KiB保留配置
 
-状态：pending，2026-10-23。已定位UFSDxe和UFS隔离模式下DisplayDxe的CoreStartImage前门，返回后未观察到。当前日志区属于Android普通页，不能直接写或当持久日志读取，详见enuma-log-reservation-audit.json。
+状态：approved，2026-10-23。用户明确选择“批准 R-002 软件日志路线（推荐）”。批准范围严格沿用下列32KiB及分阶段门禁；批准不等于地址/持久性已验证。已定位UFSDxe和UFS隔离模式下DisplayDxe的CoreStartImage前门，返回后未观察到。当前日志区属于Android普通页，不能直接写或当持久日志读取，详见enuma-log-reservation-audit.json。
 
 审查依据：[AGENTS.md](../AGENTS.md)第1类硬停：`修改任何 bringup-plan.json / board.toml 中内存大小或基址字段`。本项申请新增诊断地址/大小，未被R-001的512MiB或A-002镜像授权覆盖。
 
@@ -77,4 +77,6 @@ A-004执行补充（2026-10-22）：设备迁移51f9c0c已推送，固定固件3
 
 最小批准范围：仅允许拟议[board配置补丁](proposals/R-002-board-config.patch)中physical_base=0x9fff7000、size=0x8000，默认enabled=false；实现同范围临时FDT保留、ABI正常校验的只读回读和最小存活标记，成功后才有界日志。不得改UEFI FD/栈/heap、DRAM银行、512MiB、example或任何 *_verified 标记；只用A-002临时boot，不flash/erase/改槽或改写stock vendor_boot。候选清空、ABI或临时镜像契约不满足即停，不自行换地址/扩大/借显示与SMEM区域。
 
-配置提案未应用，日志与内核模块未启用。具体分阶段验收与不确定性见[方案](operations/2026-10-23-early-log-review.md)。所有已授权测试和恢复已完成，当前Android/root/原分区摘要正常；等待本项选择。
+2026-10-23 批准后：已应用精确诊断字段（默认false），原内存/512MiB/example/验证标记不变；日志与内核模块未启用。具体分阶段验收与不确定性见[方案](operations/2026-10-23-early-log-review.md)。所有已授权测试和恢复已完成，当前Android/root/原分区摘要正常；按批准范围执行保护验证。
+
+R-002 执行记录（2026-10-23）：默认 false 的精确诊断字段已应用，严格守卫只允许这组例外；同范围临时 Android FDT 保留与 8 页 reserved 实测通过，原表/512MiB/example/验证标记不变。两次临时 boot 均恢复原摘要；未加载模块或读写物理日志/标记。用户要求做完当前验证后停止，已停并交接。无新增待批准项；R-002 不被解释为持久日志已验证，后续仍须满足实际活动 FDT/页面/ABI 与存活门禁。

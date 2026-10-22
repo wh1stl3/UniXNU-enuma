@@ -61,7 +61,7 @@ def main():
     reserved=[bool(v&(1<<32)) for v in flags]
     unprotected=bool(banks) and not covering and not any(r['covers_log'] for r in reservations) and not any(reserved)
     report={'scope':'read-only audit, no memory writes, module loading, reservations or image changes',
-        'review':'R-002 pending','oem_region':region,'source_xbl_sha256':platform['source_xbl_sha256'],
+        'review':'R-002 approved 2026-10-23; original Android sample remains unprotected','oem_region':region,'source_xbl_sha256':platform['source_xbl_sha256'],
         'live_fdt_sha256':hashlib.sha256(blob).hexdigest(),'covering_reserved_memory_nodes':covering,
         'overlapping_memory_banks':banks,'fdt_header_reservations':reservations,'kernel_iomem_covering_ranges':ranges,
         'kernel_iomem_sha256':hashlib.sha256(iomem.read_bytes()).hexdigest(),
@@ -71,7 +71,7 @@ def main():
         'safe_to_use_for_persistent_log_now':False,
         'conclusion':'Do not write/read this as retained UEFI log: Linux treats it as ordinary pages. A dedicated reservation plus survival/readback tests or external UART is needed.' if unprotected else 'Reservation ownership requires further review; no logger enabled.'}
     (ROOT/'reports/enuma-log-reservation-audit.json').write_text(json.dumps(report,indent=2)+'\n')
-    print('AUDIT: ordinary Linux pages='+str(unprotected)+'; persistent logging remains disabled; R-002 pending')
+    print('AUDIT: ordinary Linux pages='+str(unprotected)+'; persistent logging remains disabled; R-002 approved')
 
 
 if __name__=='__main__':main()
