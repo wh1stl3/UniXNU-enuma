@@ -1,3 +1,3 @@
 # PENDING-HUMAN
 
-当前无新增待按键事项。本轮只迁移仓库和离线构建，没有操作设备；新官方backend候选未启动。最后实机仍为旧stage12首项加载前探针恢复Android/root/摘要不变的记录。下一次越过未知驱动前继续保留长按电源、音量下回fastboot的恢复条件。
+当前无待按键事项。官方backend的stage12基线与stage13/ordinal1的2/7/2秒四次临时启动均自动恢复Android；最后2秒镜像复测后已确认启动完成、root与boot_a/vendor_boot_a摘要不变。下一次越过未知队列项仍沿A-002保留长按电源、音量下返回fastboot的恢复路径。

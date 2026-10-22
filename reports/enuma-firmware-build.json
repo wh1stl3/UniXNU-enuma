@@ -67,8 +67,8 @@
       "MEMORY_PROTECTION": "TRUE",
       "SHIP_MODE": "FALSE",
       "BUILDID_STRING": "enuma-research",
-      "ENUMA_DIAG_STAGE": "12",
-      "ENUMA_DIAG_DELAY_US": "2000000",
+      "ENUMA_DIAG_STAGE": "13",
+      "ENUMA_DIAG_DELAY_US": "7000000",
       "ENUMA_DIAG_DISPATCH_ORDINAL": "1",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
@@ -77,8 +77,8 @@
       "ENUMA_VENDOR_RAW": "EnumaInputs/Vendor.raw.fdf.inc"
     }
   },
-  "diagnostic_stop_stage": 12,
-  "diagnostic_delay_seconds": 2,
+  "diagnostic_stop_stage": 13,
+  "diagnostic_delay_seconds": 7,
   "diagnostic_dispatch_ordinal": 1,
   "archive_sha256": {
     "uefi-source.tar.gz": "7118851d4e46f6f3336c82bcad4ee5820cb7a2079103e075c9961e3f1c3a3a27",
@@ -97,7 +97,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "bc3e16ffd0ab46ceff6bee689c2ba18c496e31e43be553163755fd0922c1f917",
+  "fd_sha256": "1a6b17b0e3eb6bd34ef9d5128d31ee37c80aad3931e2bb7738f402395e2ee59b",
   "source_inputs_sha256": {
     "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
     "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",

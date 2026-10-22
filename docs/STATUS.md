@@ -4,35 +4,29 @@
 
 ## 当前结论
 
-**双仓结构已落地：wh1stl3/uefi-enuma承接固件源码，设备firmware/固定引用3376c4411e08442f45f4120ed6d96f2e302c51e8。board.toml已接入官方[firmware]配置，真实unixnu.firmware.build完成固件构建与Mu core补丁恢复；33OEM字节审计、boot v3回读和33项测试通过。新候选未启动。**
+**已支持到达首个实际调度项的 CoreStartImage 返回后检查点。stage13/ordinal1 的 2/7/2 秒实测 ADB 恢复为15.903/22.308/16.939秒；7秒与复测2秒差5.369秒，符合设定5秒差值。返回状态和模块GUID未采集，不能说驱动初始化成功或整个DXE调度完成。**
 
-固件迁移25个原文件逐字节保持，六个补丁/诊断/DSC-FDF/板级内存配置保留；source gitlink与33项摘要互锁。旧LICENSE/README仅改路径，设备仓不再维护另一份板级源码。厂商二进制、cfg/XML原文与备份不入Git，仅发布输入摘要。两个工作树与nuwa/PortingiOS只读边界已写入AGENTS。
+新官方backend的stage12加载前基线也已临时启动，ADB16.986秒、Android完成30.151秒。四次测试全部自动恢复Android，启动完成、root与boot_a/vendor_boot_a摘要逐次核对不变；没有flash/erase/改槽。当前设备最后运行的是同一份stage13/ordinal1/2秒镜像复测后恢复的Android。
 
-目标仍为enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。board.toml仅新增firmware表，所有旧表与1ab7ee8一致；example=true、512MiB请求、物理内存字段和 *_verified 标记不变。官方顶层CLI的example保护已实测仍拒绝完整build；现阶段只通过已授权的固件包装器调用backend。
+目标仍为enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。512MiB请求、example=true、物理内存字段和所有 *_verified 标记不变。仍处官网阶段1 UEFI；没有GOP、UEFI map、菜单/FAT卷、DarwinBoot/XNU或NT36523运行证明。
 
-## 当前构建证据
+## 构建与来源
 
-- 官方preflight核对102个私有输入、三Mu依赖、DarwinBoot接口和规范化基线。Mu core补丁由官方backend应用并在finally恢复，恢复后再核对DxeMain/Dispatcher原始LF摘要。源码树保持干净，输出只在设备out/。
-- 当前完整FD **bc3e16ffd0ab46ceff6bee689c2ba18c496e31e43be553163755fd0922c1f917**，81文件/33原厂PE-DEPEX字节一致，当前overlay检查通过。
-- 新候选out/boot-candidate/enuma-official-backend-stage12-boot-v3.img，3153920 bytes，SHA **25d6947b0eeb2112baeab69d301d97984747b17082d279808e72bcd3d09525d7**，boot v3回读通过，**未实机启动**。快照out/uefi-migration/official-backend-stage12/。raw BootShim/空ramdisk/原厂vendor_boot契约保留。
-- 33项Python通过，包括新预检拒绝不安全暂存和缺OEM输入。ADT计划只因新增firmware表刷新board摘要，512MiB与原硬件数据不变；真实DarwinBoot主机契约回归通过。
-- 固件仓源码Actions run39796073610通过（a1215b7）；当前固定3376c44的run39796926508也已通过，日志已回读并核对PASS行。它仅检查源码，不构建OEM镜像。本地当前源码契约已通过。
-- UniXNU底座仍固定5fdbd5d及21模块；macOS通用4KiB XNU最终链接/审计run39790786938通过，产物de5ccd24…已回读。这关闭板级功能，仍不是enuma最终内核或donor prelink。本轮未重跑macOS内核构建。
+- 双仓保持：设备firmware固定公开uefi-enuma **3376c4411e08442f45f4120ed6d96f2e302c51e8**，25原文件/六patch保持；33项摘要及gitlink互锁。UniXNU固定5fdbd5d及21模块。
+- 继续复用真实unixnu.firmware.build、Mu加载/计时/PSCI复位；只通过临时defines选择诊断门。本轮无固件源码改动、无需新增固件提交或源码CI。
+- 两个stage13完整固件均完成102输入预检、Mu core补丁恢复、81文件/33OEM PE-DEPEX字节审计及boot v3回读。当前构建报告是7秒变体，FD **1a6b17b0e3eb6bd34ef9d5128d31ee37c80aad3931e2bb7738f402395e2ee59b**，镜像 **a8cc8f442f39bf8b8ebe64a61253f4fadc42ad8d75918bdd5ee61af1cac1ec48**。
+- 2秒FD **abc2c264b7f93d09121b198d5d582ca72b0d2697d8a6809ce577cacdc24453cb**，镜像 **d815d4d450c69679514b6cffb4cbf3749d0e222921723a1267aba4359ec5787c**，两次启动复用完全相同镜像。快照out/entry-probe/official-queue1-stage13-delay{2,7}/；新旧FD证据不混用。
+- 本轮来源锁、全部旧board表不变、donor身份、defconfig与example保护检查通过。此前33项Python和共享门sanitizer通过，本轮无代码变化未重复整套测试。
+- 固件源码Actions run39796926508通过；macOS通用4KiB XNU最终链接/审计run39790786938通过，产物de5ccd24…，仍不是enuma最终内核或donor prelink。本轮未重跑这两项CI。
 
-## 最新实机边界
+## 未闭合边界与下一步
 
-本轮没有USB/启动/刷写/改槽操作。最后实测仍是迁移前stage12首个队列项加载前探针：ADB15.870秒、Android完成31.623秒，root与boot/vendor_boot摘要不变。镜像SHA d974069340e6fc69d5e8eb898bd3cdab4eff202a226fb449cbdfdc0dfd40850e，FD33d8dcc5d62ab61064dbb760672d989155f3968467c42b538250eedbeb641af9。
+stage11调度后门的2/7秒差仍仅0.005秒，不能认定CoreDispatcher返回。新实测支持越过首项StartImage，但不识别首项GUID、不采集其EFI_STATUS、不证明协议安装成功，也不能认定第二项就是故障模块。计时含USB/Android延迟，2秒镜像两次ADB出现相差1.036秒；全部样本保留。
 
-stage11的2/7秒ADB差仅0.005秒，不认定CoreDispatcher完成；stage12支持到达首项加载前，尚无该门独立2/7对照。一次fastboot身份查询在推送前中止并恢复后重试的记录保留。
+1. 依次用stage12/13的ordinal2及后续实际队列边界定位首次未返回项，必要时增加GUID/加载状态诊断；保留延时对照。
+2. 获取GOP、真实UEFI map、BDS/Probe与菜单协议闭包，再审查新内存值或验证标记。
+3. 补齐ADT/NVRAM、真实板级archives/最终内核/donor prelink，推进基础平台与NT36523 IRQ/HID。A650后置，不继承SM8550参数。
 
-仍在官网阶段1UEFI；没有GOP base/stride/format、UEFI map、菜单/FAT卷、DarwinBoot/XNU或NT36523运行证明。Android分辨率与35MiB cont_splash不替代GOP或根因证据。
+远端：https://github.com/wh1stl3/UniXNU-enuma 与 https://github.com/wh1stl3/uefi-enuma。此前设备7d6e23e与固件3376c44已推送，本轮实测里程碑发布状态见Git。无新增待批准硬停或待按键事项。
 
-## 下一步
-
-1. 继续使用新固件仓的stage13/ordinal1区分首项加载和入口返回，再按实际队列/必要GUID门定位调度内问题；不盲重试黑屏镜像。
-2. 取得真实GOP、UEFI map、BDS/Probe与菜单协议闭包。新内存值或验证标记仍需审查。
-3. 再补完整ADT/NVRAM/种子/占位符、真实板级archives/最终内核/donor prelink，推进基础平台与NT36523 IRQ/HID；SM8550专用参数不继承，A650后置。
-
-远端：https://github.com/wh1stl3/UniXNU-enuma 与 https://github.com/wh1stl3/uefi-enuma。固件a1215b7/3376c44已推送，设备迁移51f9c0c已推送，CI证据补齐提交号见Git。无新增待批准硬停或待按键事项。
-
-详情：[双仓接入](operations/2026-10-22-uefi-repository.md)、[DXE实测](operations/2026-10-22-dispatch-checkpoints.md)、[主分支接入](operations/2026-10-22-upstream-integration.md)。
+详情：[DXE实测](operations/2026-10-22-dispatch-checkpoints.md)、[双仓接入](operations/2026-10-22-uefi-repository.md)。
