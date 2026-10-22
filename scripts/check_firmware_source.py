@@ -23,17 +23,22 @@ def main():
     migration = json.loads((source/'Resources/Enuma/migration.json').read_text())
     for old, item in migration['files'].items():
         assert hashlib.sha256((source/item['destination']).read_bytes()).hexdigest() == item['sha256'], old
+    extensions = json.loads((source/'Resources/Enuma/extensions.json').read_text())['files']
+    for name, wanted in extensions.items():
+        assert hashlib.sha256((source/name).read_bytes()).hexdigest() == wanted, name
     old = tomllib.loads(git(ROOT,'show','1ab7ee8:board.toml'))
     board = tomllib.loads((ROOT/'board.toml').read_text())
     assert {k:v for k,v in board.items() if k!='firmware'} == old
     assert board['firmware']['preflight'] == ['scripts/enuma_firmware_preflight.py']
     expected = ['patches/dxe-stage-checkpoints.patch','patches/dxe-dispatch-return.patch',
-                'patches/dxe-driver-checkpoints.patch','Resources/MuPatches/Gic-Spurious.patch']
+                'patches/dxe-driver-checkpoints.patch','patches/dxe-dispatch-details.patch',
+                'Resources/MuPatches/Gic-Spurious.patch']
     assert board['firmware']['patches'] == expected
     (ROOT/'reports/enuma-firmware-source-migration.json').write_text(json.dumps({
         'scope':'source migration and official board configuration only; no device execution',
         'firmware_repository':lock['repository'],'firmware_commit':lock['commit'],
         'source_device_commit':migration['device_commit'],'migrated_files':migration['files'],
+        'firmware_extensions':extensions,
         'new_firmware_table':board['firmware'],'other_board_tables_unchanged':True,
         'firmware_input_files_checked':len(lock['file_sha256'])},indent=2)+'\n')
     print('PASS: fixed firmware gitlink, migrated bytes and official table; all other board tables unchanged')

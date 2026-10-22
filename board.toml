@@ -51,7 +51,8 @@ packages = [
 ]
 patches = [
   "patches/dxe-stage-checkpoints.patch", "patches/dxe-dispatch-return.patch",
-  "patches/dxe-driver-checkpoints.patch", "Resources/MuPatches/Gic-Spurious.patch",
+  "patches/dxe-driver-checkpoints.patch", "patches/dxe-dispatch-details.patch",
+  "Resources/MuPatches/Gic-Spurious.patch",
 ]
 
 [firmware.defines]
@@ -63,6 +64,10 @@ BUILDID_STRING = "enuma-research"
 ENUMA_DIAG_STAGE = "0"
 ENUMA_DIAG_DELAY_US = "2000000"
 ENUMA_DIAG_DISPATCH_ORDINAL = "1"
+ENUMA_DIAG_DETAIL_POINT = "13"
+ENUMA_DIAG_GUID_ENABLED = "0"
+ENUMA_DIAG_GUID_LOW64 = "0"
+ENUMA_DIAG_GUID_HIGH64 = "0"
 ENUMA_PLATFORM_CONFIG = "enumaPkg/Include/PlatformConfig.inc"
 ENUMA_VENDOR_DSC = "EnumaInputs/Vendor.dsc.inc"
 ENUMA_VENDOR_DXE = "EnumaInputs/Vendor.fdf.inc"

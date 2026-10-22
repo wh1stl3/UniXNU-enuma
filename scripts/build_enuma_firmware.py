@@ -14,10 +14,20 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import uuid
 from types import SimpleNamespace
 ROOT = Path(__file__).resolve().parents[1]
 WORK = ROOT / 'out/firmware-build'
 SOURCE = ROOT / 'firmware'
+
+
+def diagnostic_guid_defines(value):
+    if value is None:
+        return {'ENUMA_DIAG_GUID_ENABLED':'0', 'ENUMA_DIAG_GUID_LOW64':'0', 'ENUMA_DIAG_GUID_HIGH64':'0'}
+    data = uuid.UUID(value).bytes_le
+    return {'ENUMA_DIAG_GUID_ENABLED':'1',
+            'ENUMA_DIAG_GUID_LOW64':'0x'+data[:8][::-1].hex()+'ULL',
+            'ENUMA_DIAG_GUID_HIGH64':'0x'+data[8:][::-1].hex()+'ULL'}
 
 
 def source_helper():
@@ -68,8 +78,16 @@ def main():
     parser.add_argument('--stop-stage', type=int, choices=(0,3,4,5,6,7,8,9,10,11,12,13), default=0)
     parser.add_argument('--stop-delay', type=int, choices=(2,7), default=2)
     parser.add_argument('--dispatch-ordinal', type=int, default=1)
+    parser.add_argument('--detail-point', type=int, choices=range(13,20), default=13)
+    parser.add_argument('--dispatch-guid', help='optional complete file UUID filter for stage 13 detail gates')
     args = parser.parse_args()
     if not 1 <= args.dispatch_ordinal <= 128: parser.error('--dispatch-ordinal must be 1..128')
+    if args.stop_stage != 13 and (args.detail_point != 13 or args.dispatch_guid is not None):
+        parser.error('detail point and GUID filters require --stop-stage 13')
+    try:
+        guid_defines = diagnostic_guid_defines(args.dispatch_guid)
+    except ValueError:
+        parser.error('--dispatch-guid must be a valid UUID')
     if sys.version_info < (3,11):
         import tomli
         sys.modules['tomllib'] = tomli
@@ -134,7 +152,8 @@ def main():
     assert board['board']['example'] is True
     board=copy.deepcopy(board)
     board['firmware']['defines'].update(ENUMA_DIAG_STAGE=str(args.stop_stage),
-        ENUMA_DIAG_DELAY_US=str(args.stop_delay*1000000),ENUMA_DIAG_DISPATCH_ORDINAL=str(args.dispatch_ordinal))
+        ENUMA_DIAG_DELAY_US=str(args.stop_delay*1000000),ENUMA_DIAG_DISPATCH_ORDINAL=str(args.dispatch_ordinal),
+        ENUMA_DIAG_DETAIL_POINT=str(args.detail_point), **guid_defines)
     ctx=SimpleNamespace(board=board,args=SimpleNamespace(skip_preflight=False),tree=tree,
                         logs=WORK/'logs',work=WORK/'context',jobs=args.jobs)
     fd=uefi/board['firmware']['fd'].format(target='DEBUG')
@@ -144,16 +163,17 @@ def main():
         'unixnu_qualification':qualification,'firmware_configuration':board['firmware'],
         'diagnostic_stop_stage':args.stop_stage,'diagnostic_delay_seconds':args.stop_delay,
         'diagnostic_dispatch_ordinal':args.dispatch_ordinal,'archive_sha256':lock['archive_sha256'],
+        'diagnostic_detail_point':args.detail_point,
+        'diagnostic_dispatch_guid':str(uuid.UUID(args.dispatch_guid)) if args.dispatch_guid else None,
         'reference_gitlinks':lock['reference_gitlinks'],'checks':[]}
     try:
         firmware.build(ctx,{},uefi,core)
         report['complete']=fd.is_file()
         report['fd_exists']=fd.is_file()
         if fd.is_file():report['fd_sha256']=hashlib.sha256(fd.read_bytes()).hexdigest()
-        migration=json.loads((SOURCE/'Resources/Enuma/migration.json').read_text())['files']
         report['source_inputs_sha256']={
-            'firmware/'+item['destination']:hashlib.sha256((SOURCE/item['destination']).read_bytes().replace(b'\r\n',b'\n')).hexdigest()
-            for item in migration.values() if Path(item['destination']).suffix in ('.c','.h','.inf','.inc','.dsc','.fdf','.patch','.toml')}
+            'firmware/'+name:hashlib.sha256((SOURCE/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest()
+            for name in pin['file_sha256'] if Path(name).suffix in ('.c','.h','.inf','.inc','.dsc','.fdf','.patch','.toml','.py','.json')}
         report['probe_upstream_sha256']=json.loads((ROOT/'reports/enuma-firmware-preflight.json').read_text())['probe_upstream_sha256']
         baseline=json.loads((SOURCE/'Resources/Enuma/reset.json').read_text())['diagnostic_baseline_lf_sha256']
         report['core_patch_reversion_checked']=all(hashlib.sha256((core/n).read_bytes()).hexdigest()==sha

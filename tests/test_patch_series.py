@@ -13,6 +13,36 @@ from build_enuma_firmware import apply_patch_series
 
 
 class PatchSeriesTests(unittest.TestCase):
+    def test_detail_extension_series_and_dsc_are_idempotent(self):
+        archive = ROOT/'out/firmware-build/mu-basecore.tar.gz'
+        with tempfile.TemporaryDirectory(dir=ROOT/'out',prefix='detail-replay-') as temp:
+            stage=Path(temp).resolve()
+            self.assertTrue(stage.is_relative_to((ROOT/'out').resolve()))
+            names=['MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c',
+                   'MdeModulePkg/Core/Dxe/DxeMain.inf',
+                   'MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c']
+            with tarfile.open(archive) as source:
+                for name in names:
+                    member=next(m for m in source.getmembers() if m.name.endswith('/'+name))
+                    target=stage/name;target.parent.mkdir(parents=True,exist_ok=True)
+                    target.write_bytes(source.extractfile(member).read().replace(b'\r\n',b'\n'))
+            dsc='Platforms/Xiaomi/enumaPkg/enuma.dsc'
+            target=stage/dsc;target.parent.mkdir(parents=True)
+            target.write_bytes((ROOT/'firmware'/dsc).read_bytes().replace(b'\r\n',b'\n'))
+            patches=[(stage,ROOT/'firmware/patches'/p) for p in
+                ('dxe-stage-checkpoints.patch','dxe-dispatch-return.patch','dxe-driver-checkpoints.patch',
+                 'dxe-dispatch-details.patch','dispatch-detail-options.patch')]
+            apply_patch_series(patches)
+            names.append(dsc)
+            once={n:(stage/n).read_bytes() for n in names}
+            dispatcher=once[names[2]]
+            self.assertEqual(dispatcher.count(b'EnumaDispatchCheckpoint (12);'),1)
+            self.assertNotIn(b'EnumaDispatchCheckpoint (13);',dispatcher)
+            for point in (13,14,15):
+                self.assertEqual(dispatcher.count(f'EnumaDispatchDetailCheckpoint ({point},'.encode()),1)
+            apply_patch_series(patches)
+            self.assertEqual(once,{n:(stage/n).read_bytes() for n in names})
+
     def test_overlapping_dxe_series_is_idempotent(self):
         archive = ROOT / 'out/firmware-build/mu-basecore.tar.gz'
         lock = json.loads((ROOT / 'config/firmware-build.lock.json').read_text())

@@ -78,3 +78,11 @@ wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B
 第16项stage13/delay2完整FD ebdb9017106c9f76790f4ac6a45bc9fe9176609493dce29d714478637444d2f0，镜像647503568b075796af2a0944e0b4d25d195023707cec80887512048282481a59。首次完整身份查询五次均缺字段，未发boot，仅正常重启回Android并核对root/槽/boot与vendor_boot摘要。公开报告分别保留中止与启动记录。重试23:29:16发出，ADB16.953秒、Android30.316秒，全部恢复核对通过；单点尚无独立延时对照，不能推断EFI_SUCCESS/GUID。
 
 GetVar解析现要求恰好一个完整值，拒绝错误变量、enuma后缀、重复/冲突、FAILED和非零返回；每轮完整查询的输出保存在当前私有attempt目录fastboot-identity.local.json，失败phase显式区分boot前/后。首次异常未有完整原始查询日志，不能追认其错误文字；根因仍未知。36项Python通过，包括三组解析回归，重试当场三字段首轮通过。第32项继续构建。
+
+## 第24/32项及细分诊断接入
+
+原3376c44：第32项23:33:05发出，ADB32.917秒/Android46.204秒；回查第24项23:37:31发出，ADB16.954秒/Android32.252秒。前者仅长复位，不认定返回门，后者仅短门单点。所有恢复核对通过。
+
+新固件d6900d2以extensions.json独立锁新增detail header和两补丁，原25迁移文件/六patch保持。stage13可选point13任意入口返回、14加载返回、15入口前、16/17入口错误/非错误返回、18/19加载错误/非错误返回；可用完整GUID两半限定。LoadImage门对已加载项/FV项会绕过；非错误返回不证明协议闭包。真实头20组ASan/UBSan、40项Python、四core重叠patch与DSC幂等/来源/旧board表/example/WSL DarwinBoot契约通过。源CI39807061433通过并回读日志。
+
+新版本默认point13第28项23:44:13发出，ADB31.877秒/Android45.206秒，自动恢复root/分区摘要，长复位不当作返回证明。FD15442416f8647a566e6bdc2f673d1bbabfcaf0d2bfaa11c27af3c83b2d59798c，镜像4f06b9fb5d19b142f423b54f286643edbb0e1e122b2642e35fed01975c66134f；33OEM/v3/补丁恢复通过。新版第26项构建中，先取同版较前门再细分，避免跨布局直接锁模块。具体CLI见build_enuma_firmware.py --help，GUID参数由UUID.bytes_le生成两半，不用文本顺序猜测。
