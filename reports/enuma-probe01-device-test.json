@@ -1,0 +1,72 @@
+{
+  "slot": "_a",
+  "candidate": "D:\\Code\\UniXNU-enuma\\out\\boot-candidate\\enuma-uefi-probe01-r2-boot-v3.img",
+  "candidate_sha256": "3db695db10c1114352994ab64e551abc74391c2e50bbabfd48be0b37acec790a",
+  "phase": "recovered-android-boot-complete",
+  "backups": [
+    {
+      "partition": "boot_a",
+      "bytes": 201326592,
+      "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+      "matches_device": true
+    },
+    {
+      "partition": "vendor_boot_a",
+      "bytes": 100663296,
+      "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+      "matches_device": true
+    }
+  ],
+  "fastboot_checks": {
+    "product": {
+      "exit_code": 0,
+      "output": "product: enuma\r\nFinished. Total time: 0.009s"
+    },
+    "current-slot": {
+      "exit_code": 0,
+      "output": "current-slot: a\r\nFinished. Total time: 0.009s"
+    },
+    "unlocked": {
+      "exit_code": 0,
+      "output": "unlocked: yes\r\nFinished. Total time: 0.008s"
+    },
+    "is-userspace": {
+      "exit_code": 0,
+      "output": "is-userspace: no\r\nFinished. Total time: 0.009s"
+    }
+  },
+  "stock_roundtrip_boot_completed": true,
+  "boot_issued_at": "2026-10-22 20:16:21",
+  "boot_returncode": 0,
+  "boot_output": "Sending 'boot.img' (3080 KB)                       OKAY [  0.081s]\r\nBooting                                            OKAY [  0.259s]\r\nFinished. Total time: 0.342s\r\n",
+  "usb_observations": [
+    {
+      "at": "2026-10-22 20:16:39",
+      "adb_selected_present": false,
+      "fastboot_selected_present": false
+    }
+  ],
+  "visual_observation": "user reports black screen; no visible Probe or GOP evidence",
+  "physical_fastboot_return": true,
+  "recovery_boot_completed": true,
+  "post_partition_checks": [
+    {
+      "partition": "boot_a",
+      "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+      "unchanged": true
+    },
+    {
+      "partition": "vendor_boot_a",
+      "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+      "unchanged": true
+    }
+  ],
+  "recovered_at": "2026-10-22 20:18:24",
+  "scope": "first temporary boot and completed Android recovery; no flash/erase/slot changes",
+  "transport_result": "fastboot Sending OKAY / Booting OKAY; does not establish firmware entry",
+  "uefi_result": "unknown execution stage; user observed black screen, no Probe text or menu",
+  "gop_result": "not observed",
+  "pstore_bytes": 0,
+  "follow_up": "localize BootShim/SEC/DXE/GOP with an earlier observable stage; no identical retry",
+  "user_observation_source": "current conversation: black screen; then physical FASTBOOT return"
+}

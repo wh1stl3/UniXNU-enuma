@@ -13,11 +13,13 @@
   "aosp_commit": "028bdc06ce87ab1ee23204feb5cd5ee406484618",
   "vendor_boot_policy": "retain captured stock v3 vendor_boot; no DTB append or vendor_boot rewrite",
   "unresolved": [
-    "ABL acceptance of raw BootShim ARM64 entry",
-    "UEFI FD relocation/handoff",
-    "GOP and vendor protocol runtime closure"
+    "Execution beyond ABL boot-command acceptance",
+    "BootShim to SEC/DXE handoff and progress visibility",
+    "GOP/vendor protocol runtime closure"
   ],
   "path": "out/boot-candidate/enuma-uefi-probe01-r2-boot-v3.img",
   "supersedes": "out/boot-candidate/enuma-uefi-probe01-boot-v3.img (earlier build; retained, use r2)",
-  "probe": "EnumaProbe 01; CPU/GOP/free-map observations for 60 seconds, then original UniXNU; no XNU payload"
+  "probe": "EnumaProbe 01; CPU/GOP/free-map observations for 60 seconds, then original UniXNU; no XNU payload",
+  "last_device_attempt": "reports/enuma-probe01-device-test.json",
+  "last_device_outcome": "fastboot boot accepted; black screen; recovered Android, partitions unchanged"
 }
