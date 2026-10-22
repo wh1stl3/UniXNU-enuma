@@ -32,7 +32,7 @@
 
 1. 在 CoreDispatcher 内及其返回处补观察，区分具体驱动、厂商显示协议闭包、BDS 与 Probe 入口。优先复用已有 TimerLib/ResetCold 门，保持恢复路径；新内存字段及验证标记仍需审查。
 2. 取得实际 GOP 和 UEFI map 后再推进 owned-window / XNU 基础平台；完整内核链接、预链接及 ADT 仍未闭合。
-3. 本仓只有本地 main，未配置 origin、未推送、未触发 CI。nuwa 远端为 wh1stl3/UniXNU-nuwa（PUBLIC），其 Actions 只有 Ubuntu 固件任务。enuma 还需自己的远端及 macOS XNU 作业；固定 UniXNU 的内核脚本依赖 Xcode/iPhoneOS SDK，当前 WSL 固件构建不能代替该环节。
+3. 用户已批准公开建仓：origin=https://github.com/wh1stl3/UniXNU-enuma.git，main 已推送到 8aa2d95。已准备 enuma 自身的手动 macOS Actions：preflight 核对 Xcode 16.4 / iPhoneOS SDK 18.5 并编译 arm64 探针，bootstrap 编译固定 XNU 通用 4 KiB 基线；尚待远端执行。后者关闭本板功能，只验证工具链/基线，不是完整 enuma 内核或预链接。板级 archives / prelink 输入仍缺。
 4. 设备已恢复 Android，当前无待按键事项。
 
 详见 [入口定位报告](operations/2026-10-22-entry-checkpoints.md) 与 [构建环境核对](operations/2026-10-22-build-environments.md)。上游和 nuwa 只读，二进制与私有设备标识仅在忽略的 out/ 中。

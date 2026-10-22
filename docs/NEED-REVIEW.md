@@ -35,3 +35,7 @@
 2026-10-22 首次实机：用户“可以开始实机推送了”后在 A-002 内完成一次临时启动。黑屏后已恢复 Android；没有 flash/erase/改槽、内存字段修改或 *_verified=true。无新增审批项，见 D-016 与首次实机报告。
 
 2026-10-22 入口定位：用户允许操作实机后，A-002 内完成六个定时复位门测试，已全部回 Android；最后为 stage 10 调度前门。没有 flash/erase/改槽、新内存字段或 *_verified=true，无新增待批准硬停项。远端/Actions 仅做只读核对，尚未发布。
+
+## A-003 · enuma 公开远端
+
+状态：approved，2026-10-22。用户明确选择“在 wh1stl3 下新建公开 UniXNU-enuma，沿用 nuwa”。已创建 https://github.com/wh1stl3/UniXNU-enuma 并推送 main。发布范围为已检查源码、脱敏报告和交接文档；不含 out/ 镜像、备份、序列号或凭据。该授权不改变内存字段/验证标记的硬停规则。
