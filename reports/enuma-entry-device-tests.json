@@ -498,6 +498,197 @@
       "delay_seconds": 2,
       "fd_sha256": "abc2c264b7f93d09121b198d5d582ca72b0d2697d8a6809ce577cacdc24453cb",
       "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8"
+    },
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/official-queue2-stage13-delay2-boot-v3.img",
+      "candidate_sha256": "4e08bbe8986ca6be6d8e3374ac313659c3501336f7c2c19724255a87c8cd27ec",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-22 23:11:45",
+      "boot_returncode": 0,
+      "boot_output": "Sending 'boot.img' (3080 KB)                       OKAY [  0.084s]\r\nBooting                                            OKAY [  0.259s]\r\nFinished. Total time: 0.345s\r\n",
+      "adb_return_seconds": 15.938,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 32.704,
+      "boot_reason": "bootloader",
+      "variant": "official-queue2-stage13-delay2",
+      "stop_stage": 13,
+      "dispatch_ordinal": 2,
+      "delay_seconds": 2,
+      "fd_sha256": "63dcdee0944bcc4157136932d8523f1ddf29fa976fb3bb7e6ba814baa618f860",
+      "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8"
+    },
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/official-queue4-stage13-delay2-boot-v3.img",
+      "candidate_sha256": "01c0a8ace503195d97ba674cab83ead15ab7f24ae4650517c76f5eae3639526b",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-22 23:15:32",
+      "boot_returncode": 0,
+      "boot_output": "Sending 'boot.img' (3080 KB)                       OKAY [  0.084s]\r\nBooting                                            OKAY [  0.259s]\r\nFinished. Total time: 0.345s\r\n",
+      "adb_return_seconds": 16.944,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 31.829,
+      "boot_reason": "bootloader",
+      "variant": "official-queue4-stage13-delay2",
+      "stop_stage": 13,
+      "dispatch_ordinal": 4,
+      "delay_seconds": 2,
+      "fd_sha256": "879e0f643e8383678d571024c2df122c21faec82954cc5323d88240d1efc160f",
+      "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8"
+    },
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/official-queue8-stage13-delay2-boot-v3.img",
+      "candidate_sha256": "7f31ad357a0de1ddc8c9dd866cee87783eb243f2d3eae9f9050bac70a15b38c0",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-22 23:19:58",
+      "boot_returncode": 0,
+      "boot_output": "Sending 'boot.img' (3080 KB)                       OKAY [  0.080s]\r\nBooting                                            OKAY [  0.259s]\r\nFinished. Total time: 0.341s\r\n",
+      "adb_return_seconds": 20.142,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 33.399,
+      "boot_reason": "bootloader",
+      "variant": "official-queue8-stage13-delay2",
+      "stop_stage": 13,
+      "dispatch_ordinal": 8,
+      "delay_seconds": 2,
+      "fd_sha256": "f65114a902d8cfa4448b59c71514f7d9a7b5f81a695aad35774dc7524ff7109f",
+      "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8"
+    },
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/official-queue8-stage13-delay7-boot-v3.img",
+      "candidate_sha256": "0458637b57052c0c6698c363609dcbc7ddfb7bff84dc30bebbfff8aca6bed113",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-22 23:23:55",
+      "boot_returncode": 0,
+      "boot_output": "Sending 'boot.img' (3080 KB)                       OKAY [  0.083s]\r\nBooting                                            OKAY [  0.259s]\r\nFinished. Total time: 0.344s\r\n",
+      "adb_return_seconds": 21.233,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 34.952,
+      "boot_reason": "bootloader",
+      "variant": "official-queue8-stage13-delay7",
+      "stop_stage": 13,
+      "dispatch_ordinal": 8,
+      "delay_seconds": 7,
+      "fd_sha256": "9ada716f7fed80a44317e1e264759efcd08ec910aedcdd722265b3169415f7c0",
+      "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8"
+    },
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/official-queue8-stage13-delay2-boot-v3.img",
+      "candidate_sha256": "7f31ad357a0de1ddc8c9dd866cee87783eb243f2d3eae9f9050bac70a15b38c0",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-22 23:24:58",
+      "boot_returncode": 0,
+      "boot_output": "Sending 'boot.img' (3080 KB)                       OKAY [  0.084s]\r\nBooting                                            OKAY [  0.260s]\r\nFinished. Total time: 0.346s\r\n",
+      "adb_return_seconds": 15.917,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 29.285,
+      "boot_reason": "bootloader",
+      "variant": "official-queue8-stage13-delay2",
+      "repeat": 2,
+      "stop_stage": 13,
+      "dispatch_ordinal": 8,
+      "delay_seconds": 2,
+      "fd_sha256": "f65114a902d8cfa4448b59c71514f7d9a7b5f81a695aad35774dc7524ff7109f",
+      "uefi_source_commit": "3376c4411e08442f45f4120ed6d96f2e302c51e8"
     }
   ],
   "qemu": [
@@ -831,6 +1022,138 @@
         "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f"
       },
       "local_build_report": "out/entry-probe/official-queue1-stage13-delay7/enuma-firmware-build.json"
+    },
+    {
+      "variant": "official-queue2-stage13-delay2",
+      "fd_sha256": "63dcdee0944bcc4157136932d8523f1ddf29fa976fb3bb7e6ba814baa618f860",
+      "stop_stage": 13,
+      "dispatch_ordinal": 2,
+      "delay_seconds": 2,
+      "complete": true,
+      "source_inputs_sha256": {
+        "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
+        "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
+        "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
+        "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
+        "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
+        "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+        "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+        "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7",
+        "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f"
+      },
+      "local_build_report": "out/entry-probe/official-queue2-stage13-delay2/enuma-firmware-build.json"
+    },
+    {
+      "variant": "official-queue4-stage13-delay2",
+      "fd_sha256": "879e0f643e8383678d571024c2df122c21faec82954cc5323d88240d1efc160f",
+      "stop_stage": 13,
+      "dispatch_ordinal": 4,
+      "delay_seconds": 2,
+      "complete": true,
+      "source_inputs_sha256": {
+        "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
+        "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
+        "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
+        "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
+        "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
+        "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+        "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+        "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7",
+        "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f"
+      },
+      "local_build_report": "out/entry-probe/official-queue4-stage13-delay2/enuma-firmware-build.json"
+    },
+    {
+      "variant": "official-queue8-stage13-delay2",
+      "fd_sha256": "f65114a902d8cfa4448b59c71514f7d9a7b5f81a695aad35774dc7524ff7109f",
+      "stop_stage": 13,
+      "dispatch_ordinal": 8,
+      "delay_seconds": 2,
+      "complete": true,
+      "source_inputs_sha256": {
+        "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
+        "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
+        "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
+        "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
+        "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
+        "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+        "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+        "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7",
+        "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f"
+      },
+      "local_build_report": "out/entry-probe/official-queue8-stage13-delay2/enuma-firmware-build.json"
+    },
+    {
+      "variant": "official-queue8-stage13-delay7",
+      "fd_sha256": "9ada716f7fed80a44317e1e264759efcd08ec910aedcdd722265b3169415f7c0",
+      "stop_stage": 13,
+      "dispatch_ordinal": 8,
+      "delay_seconds": 7,
+      "complete": true,
+      "source_inputs_sha256": {
+        "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
+        "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
+        "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
+        "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
+        "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
+        "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+        "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+        "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7",
+        "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.dsc": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8",
+        "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824",
+        "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+        "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
+        "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f"
+      },
+      "local_build_report": "out/entry-probe/official-queue8-stage13-delay7/enuma-firmware-build.json"
     }
   ],
   "entry_delay_adb_delta_seconds": 5.422,
@@ -887,5 +1210,29 @@
     "measurement": "host monotonic elapsed until ADB enumeration, includes USB and Android boot latency",
     "interpretation": "Timing response supports reaching the gate after CoreStartImage returns for actual scheduled ordinal 1. Return status and module GUID were not captured; this is not successful initialization, dispatcher completion or GOP proof.",
     "all_recovered_android_root_and_partition_digests_unchanged": true
+  },
+  "ordinal8_return_timing_control": {
+    "stage": 13,
+    "dispatch_ordinal": 8,
+    "delays_seconds": [
+      2,
+      7,
+      2
+    ],
+    "adb_return_seconds": [
+      20.142,
+      21.233,
+      15.917
+    ],
+    "boot_complete_seconds": [
+      33.399,
+      34.952,
+      29.285
+    ],
+    "expected_delta_seconds": 5,
+    "initial_pair_adb_delta_seconds": 1.091,
+    "repeat_pair_adb_delta_seconds": 5.316,
+    "same_2s_image_reused": true,
+    "interpretation": "Initial pair inconclusive; repeat with identical 2s image supports reaching ordinal8 post-CoreStartImage gate. Preserve all samples; GUID/status/whole-dispatch completion unobserved."
   }
 }

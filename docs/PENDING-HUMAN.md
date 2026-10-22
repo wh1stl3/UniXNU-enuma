@@ -1,3 +1,3 @@
 # PENDING-HUMAN
 
-当前无待按键事项。官方backend的stage12基线与stage13/ordinal1的2/7/2秒四次临时启动均自动恢复Android；最后2秒镜像复测后已确认启动完成、root与boot_a/vendor_boot_a摘要不变。下一次越过未知队列项仍沿A-002保留长按电源、音量下返回fastboot的恢复路径。
+当前无待按键事项。新增第2/4/8项及第8项2/7/2秒五次临时启动全部自动恢复Android/root/分区摘要；当前最后为第8项2秒镜像复测后正常Android。正在离线构建第16项，继续保留长按电源及音量下回fastboot的恢复路径。

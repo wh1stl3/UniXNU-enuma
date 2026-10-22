@@ -66,3 +66,9 @@ wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B
 ```
 
 构建后须先audit_enuma_fd、prepare_enuma_boot_payload、package_enuma_boot完成一致性审计和独立v3回读，才可运行临时启动工具；输出不得覆盖已有候选。下一步从ordinal2及后续实际队列边界继续，必要时增加GUID/LoadImage状态诊断。没有GOP/UEFI map/XNU或触控运行证明。
+
+## 扩大至第8项返回后
+
+2026-10-22续测，官方backend、固件3376c44不变。第2项delay2 ADB15.938秒/Android32.704秒；第4项delay2 ADB16.944秒/Android31.829秒，先作为单点初步边界。第8项delay2 ADB20.142秒/Android33.399秒；delay7 ADB21.233秒/Android34.952秒，首轮差1.091秒不能作命中证明，因此复测完全相同2秒镜像：ADB15.917秒/Android29.285秒，7秒与复测2秒差5.316秒支持第8项CoreStartImage返回后门命中。所有样本保留，恢复时序包含USB与Android波动；未采集EFI_STATUS/GUID，不认定初始化成功或完整调度完成。
+
+五次都自动恢复Android/root/boot与vendor_boot摘要，无flash/erase/改槽。每份固件均33OEM PE-DEPEX字节审计与v3回读通过。快照out/entry-probe/official-queue{2,4,8}-stage13-delay{2,7}/，精确镜像/FD摘要见entry-device-tests各variant。当前编译第16项；后续按真实边界推进，而非猜测第9项就是故障模块。
