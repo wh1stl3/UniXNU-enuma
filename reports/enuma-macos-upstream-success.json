@@ -1,0 +1,283 @@
+{
+  "scope": "toolchain qualification and optional generic 4K bootstrap only",
+  "mode": "bootstrap",
+  "status": "passed",
+  "device_boot_claimed": false,
+  "enuma_kernel_link_claimed": false,
+  "device_commit": "d3ce3c4a508a5f65ec88ab08b8c88ff412094c3d",
+  "runner_image": "20260907.0337.1",
+  "runner_arch": "arm64",
+  "os": "macOS-15.7.9-arm64-arm-64bit",
+  "run_id": "39790786938",
+  "xcode": "Xcode 16.4\nBuild version 16F6",
+  "sdk_version": "18.5",
+  "qualified_source": {
+    "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+    "modules": {
+      "drivers/ArmCpu": "1951cc8444b340d7d8879e9418220cf29eb711d7",
+      "drivers/ArmDTPlatform": "0d544705c2e89725caabc0542bb96bc8febd8c70",
+      "drivers/ArmVirtPlatform": "532de8c017e394e69a0b48dc0ffc4ac0d0701177",
+      "drivers/DarwinBoot": "d099354d0eab34df5088ca1ba89c9c88bc3260bb",
+      "drivers/NativeAES": "a34964b8c2fec2e83c8e4f68fb7d6fb7e4b2227b",
+      "drivers/NativeAdreno": "cedcaa2949c795e71a47e78ae413c8a41b17d7d0",
+      "drivers/NativeGeniSpi": "b5399b5646c4d7415deec6d887fd51715a97a024",
+      "drivers/NativeHidInput": "28f9b463b48e862f2def91d29c11b9143785715e",
+      "drivers/NativeKeyStoreEvents": "e59bac4ad1ac8825919ae94da8440a64d8ab90b3",
+      "drivers/NativeMetal": "bcbbc707cf112026ace2a11fa0ed62260b4e16b0",
+      "drivers/NativeMobileDisplay": "c031d882b9721d943383d11f66dc4748252ce929",
+      "drivers/NativeRamBlock": "d4d22d9819b0162eda49f6402235dddc2279410d",
+      "drivers/NativeUfs": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "drivers/NativeVirtioBlock": "98909eb9198a4360d7a43be831887cb8b74d814d",
+      "drivers/NativeVirtioConsole": "066f9bded311233ed56824e13a5628077619efda",
+      "kits/AdrenoFirmware": "40fdb8ea87606612ac6f1e80bbb49955d0ce4051",
+      "kits/AdrenoPM4": "445f8fe6d115738352b9d78dc70af6d61aa7f62f",
+      "kits/AirNir": "032a867b5dc3121164bbd706e4e81e3b9fcd2b8f",
+      "kits/ArmSmmu4K": "4d0d6598b1a36aeec3de01091893fa6660e49388",
+      "kits/NativePrelink": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+      "kits/VerifiedRoot": "2854c61f6c4dfda870ac3d93e1f03d9181edb041"
+    },
+    "patches": [
+      {
+        "path": "patches/upstream/0001-guard-optional-legacy-display.patch",
+        "sha256": "86fa152c567558bdf3cdcf551e19c6caa5ea0a81173cb14e80c472a156a85104"
+      }
+    ]
+  },
+  "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+  "feeds": [
+    {
+      "name": "xnu",
+      "kind": "refer",
+      "git": "https://github.com/apple-oss-distributions/xnu.git",
+      "ref": "xnu-10063.141.1",
+      "commit": "d8b80295118ef25ac3a784134bcf95cd8e88109f",
+      "darwin": "23.6.0",
+      "version": "10063.141.1",
+      "driverkit_tag": "xnu-10063.121.3",
+      "trustcache_tag": "xnu-8796.101.5"
+    },
+    {
+      "name": "libplatform",
+      "kind": "refer",
+      "git": "https://github.com/apple-oss-distributions/libplatform.git",
+      "ref": "libplatform-316.100.10",
+      "commit": "a00a4cc36da2110578bcf3b8eeeeb93dcc7f4e11"
+    },
+    {
+      "name": "libdispatch",
+      "kind": "refer",
+      "git": "https://github.com/apple-oss-distributions/libdispatch.git",
+      "ref": "libdispatch-1477.100.9",
+      "commit": "30fe6a7d945340ce69cef121132f049e810089a5"
+    },
+    {
+      "name": "AvailabilityVersions",
+      "kind": "refer",
+      "git": "https://github.com/apple-oss-distributions/AvailabilityVersions.git",
+      "ref": "AvailabilityVersions-141.1",
+      "commit": "933f9360f1b70dfbda5548386a3d65e0358b4f7d"
+    },
+    {
+      "name": "edk2",
+      "kind": "refer",
+      "git": "https://github.com/microsoft/mu_basecore.git",
+      "ref": "release/202608",
+      "commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+      "submodules": [
+        "MdePkg/Library/BaseFdtLib/libfdt",
+        "MdePkg/Library/MipiSysTLib/mipisyst",
+        "BaseTools/Source/C/BrotliCompress/brotli",
+        "MdeModulePkg/Library/BrotliCustomDecompressLib/brotli",
+        "SecurityPkg/DeviceSecurity/SpdmLib/libspdm"
+      ]
+    },
+    {
+      "name": "libpthread",
+      "kind": "refer",
+      "git": "https://github.com/apple-oss-distributions/libpthread.git",
+      "ref": "libpthread-519.120.4",
+      "commit": "c0e60fb5ecfc54cf379c261d3f9572cc22ded891"
+    },
+    {
+      "name": "corecrypto-2023",
+      "kind": "refer",
+      "git": "https://github.com/ONLYA/corecrypto-2023.git",
+      "commit": "11fba65b12d8830630e248dfa8344caf8b065f26"
+    },
+    {
+      "name": "IOStorageFamily",
+      "kind": "refer",
+      "git": "https://github.com/apple-oss-distributions/IOStorageFamily.git",
+      "ref": "main",
+      "commit": "e45fbe30a7879e0b16e26dddb78538f1b00e0bff"
+    }
+  ],
+  "defconfig_sha256": "569a8c356931e52264599751288e6b84b2b693162ab5f0f43d2322f9f9efb4fe",
+  "sdk_arm64_compile_passed": true,
+  "effective_bootstrap_switches": {
+    "XNU_SOURCE_CORECRYPTO14": "0",
+    "XNU_SOURCE_PTHREAD": "0",
+    "XNU_ARM_DT_PLATFORM": "0",
+    "XNU_ARMCPU": "0",
+    "XNU_NATIVE_ARCH_TIMER": "0",
+    "XNU_NATIVE_PAN": "0",
+    "XNU_DT_PANIC_REGION": "0",
+    "XNU_BOOT_PROGRESS": "0",
+    "XNU_ARMVIRT_PLATFORM": "0",
+    "XNU_SHENG_PMGR": "0",
+    "XNU_NATIVE_UFS": "0",
+    "XNU_NATIVE_ADRENO": "0",
+    "XNU_NATIVE_MOBILE_DISPLAY": "0",
+    "XNU_NATIVE_LEGACY_DISPLAY": "0"
+  },
+  "header_inputs": [
+    {
+      "path": "iokit/DriverKit/IOKernelReportStructs.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "71c98a84650a7da3c66618d4306852d3df1c4d60"
+    },
+    {
+      "path": "iokit/DriverKit/IOKitKeys.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "f4c43e837eab552e6e308896775dd3b96656fe29"
+    },
+    {
+      "path": "iokit/DriverKit/IORPC.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "7ffc6b73e32ba98616e35c999945d367d2b8751d"
+    },
+    {
+      "path": "iokit/DriverKit/IOReportTypes.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "dd81759a416ba5cc3b5f6b79f843554765053c22"
+    },
+    {
+      "path": "iokit/DriverKit/IOReturn.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "e36d37b374d1443c7721ade372a92ccc60d1d129"
+    },
+    {
+      "path": "iokit/DriverKit/IOTypes.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "661b05e764addaf97bee13e5f935b85aac3855da"
+    },
+    {
+      "path": "iokit/DriverKit/OSBoundedArray.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "e413229b982880b91350e82520e4aaa6dfd18124"
+    },
+    {
+      "path": "iokit/DriverKit/OSBoundedArrayRef.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "4467f6b6ff2ff3e50f495bcfce751adb82bd72a4"
+    },
+    {
+      "path": "iokit/DriverKit/OSBoundedPtr.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "6ea9b1340603fbb5edf7072a276650aed2223f58"
+    },
+    {
+      "path": "iokit/DriverKit/OSBoundedPtrFwd.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "04c4df48c508f6c9c1a3f53fbb613130ede06b2f"
+    },
+    {
+      "path": "iokit/DriverKit/bounded_array.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "57e102743d6f6039a27a6ff8310e9ce63d878d0e"
+    },
+    {
+      "path": "iokit/DriverKit/bounded_array_ref.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "fe060a6d72a9f6930071a701caf162d9bf275fff"
+    },
+    {
+      "path": "iokit/DriverKit/bounded_ptr.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "4c7de13f1a5bfe6d130413bde4c9c3de444a93ad"
+    },
+    {
+      "path": "iokit/DriverKit/bounded_ptr_fwd.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "9613279e9841fef46f10398d4d5ac0d2c44a589a"
+    },
+    {
+      "path": "iokit/DriverKit/macro_help.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "02fff0602846c259670822c9766424c106ea6a2b"
+    },
+    {
+      "path": "iokit/DriverKit/queue_implementation.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "1d14efdeb7370869d2360a100ff07125c3055119"
+    },
+    {
+      "path": "iokit/DriverKit/safe_allocation.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "1d4759b1ab36d76e7604adce3939ef5b6a56d12f"
+    },
+    {
+      "path": "iokit/DriverKit/crypto/aes.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "9e962a873c50d4bb5d37fb8e333c77985bbe532e"
+    },
+    {
+      "path": "iokit/DriverKit/crypto/md5.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "4ecd947d7a61464543059eb6265ec4cc548c84f6"
+    },
+    {
+      "path": "iokit/DriverKit/crypto/sha1.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "706d10f88a499090bbd9fe2b03b4028a6069f7ca"
+    },
+    {
+      "path": "iokit/DriverKit/crypto/sha2.h",
+      "commit": "2c2f96dc2b9a4408a43d3150ae9c105355ca3daa",
+      "git_blob": "2e93f35d7cc6766f0996014362a7b6c57fa14f19"
+    },
+    {
+      "path": "EXTERNAL_HEADERS/TrustCache/API.h",
+      "commit": "aca3beaa3dfbd42498b42c5e5ce20a938e6554e5",
+      "git_blob": "d13cddf36560638696223559c210797fa0442f5d"
+    },
+    {
+      "path": "EXTERNAL_HEADERS/TrustCache/RawTypes.h",
+      "commit": "aca3beaa3dfbd42498b42c5e5ce20a938e6554e5",
+      "git_blob": "16b684e219975b21f954813cad13bc243d2f6fe0"
+    },
+    {
+      "path": "EXTERNAL_HEADERS/TrustCache/Return.h",
+      "commit": "aca3beaa3dfbd42498b42c5e5ce20a938e6554e5",
+      "git_blob": "440a53c4f85a025155a9ac408b4f31acf04089d8"
+    },
+    {
+      "path": "EXTERNAL_HEADERS/TrustCache/Types.h",
+      "commit": "aca3beaa3dfbd42498b42c5e5ce20a938e6554e5",
+      "git_blob": "f3412f3869c69d1d2e40a0f8883aa9e3f5b3c7ae"
+    },
+    {
+      "path": "EXTERNAL_HEADERS/TrustCache/TypesConfig.h",
+      "commit": "aca3beaa3dfbd42498b42c5e5ce20a938e6554e5",
+      "git_blob": "d93e8b09336ea508a968c563f2b2483e074e3cd4"
+    }
+  ],
+  "bootstrap_exit_code": 0,
+  "kernel_sha256": "de5ccd244f0b4fd6c0ebe5f6173aa6f7be993e31aa45db583150cd65c2f4c0fd",
+  "bootstrap_build_and_audit_passed": true,
+  "url": "https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39790786938",
+  "kernel_audit": {
+    "sha256": "de5ccd244f0b4fd6c0ebe5f6173aa6f7be993e31aa45db583150cd65c2f4c0fd",
+    "cpu_subtype": 0,
+    "deployment": "iOS 17.0",
+    "entry_va": "0xfffffff0073e9488",
+    "initial_tcr": "0x22a51a251a",
+    "tg0_bytes": 4096,
+    "tg1_bytes": 4096,
+    "hardware_boot_demonstrated": false,
+    "os_boot_demonstrated": false
+  },
+  "kernel_bytes": 21041528,
+  "bootstrap_log_sha256": "57720e2ae9c01789cad8550e92b1817a88f952898676b06658fbf23d6e2599f4",
+  "artifact_hash_rechecked": true
+}

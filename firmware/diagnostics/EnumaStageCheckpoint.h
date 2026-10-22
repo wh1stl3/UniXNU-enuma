@@ -9,13 +9,19 @@
 #ifndef ENUMA_DIAG_STAGE
 #define ENUMA_DIAG_STAGE 0
 #endif
-#if ENUMA_DIAG_STAGE != 0 && (ENUMA_DIAG_STAGE < 3 || ENUMA_DIAG_STAGE > 10)
+#ifndef ENUMA_DIAG_DELAY_US
+#define ENUMA_DIAG_DELAY_US 2000000
+#endif
+#if ENUMA_DIAG_DELAY_US != 2000000 && ENUMA_DIAG_DELAY_US != 7000000
+#error Unsupported enuma diagnostic delay
+#endif
+#if ENUMA_DIAG_STAGE != 0 && (ENUMA_DIAG_STAGE < 3 || ENUMA_DIAG_STAGE > 13)
 #error Unsupported enuma diagnostic stop stage
 #endif
 STATIC VOID EnumaStageCheckpoint (UINTN Stage)
 {
   if (ENUMA_DIAG_STAGE != 0 && Stage == ENUMA_DIAG_STAGE) {
-    MicroSecondDelay (2000000);
+    MicroSecondDelay (ENUMA_DIAG_DELAY_US);
     ResetCold ();
     CpuDeadLoop (); // Reset returned: never accidentally continue the probe.
   }

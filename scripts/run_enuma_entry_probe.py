@@ -20,7 +20,7 @@ FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', type=Path, required=True)
-    parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch'))
+    parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch','dxe-dispatch-return','dxe-queue-entry','dxe-driver-return'))
     args = parser.parse_args()
     image = args.image.resolve()
     if not image.is_relative_to((ROOT/'out').resolve()): raise ValueError('image outside own out/')
@@ -64,9 +64,19 @@ def main():
         (ROOT/'out/device-tests/current.local.json').write_text(json.dumps(state,indent=2))
         (out/'result.json').write_text(json.dumps({k:v for k,v in state.items() if k not in ('directory','recovery_backup_directory')},indent=2)+'\n')
     def fastboot_identity():
-        for var, expected in [('product','enuma'),('current-slot',state['slot'][1:]),('unlocked','yes')]:
-            r=invoke(FASTBOOT,['-s',serial,'getvar',var])
-            if r.returncode or (var+': '+expected).encode() not in r.stdout+r.stderr: raise ValueError('fastboot identity mismatch: '+var)
+        # USB enumeration can precede stable GetVar responses. Retry complete
+        # sets; never accept a missing or mismatched identity field.
+        for attempt in range(5):
+            failed=[]
+            for var, expected in [('product','enuma'),('current-slot',state['slot'][1:]),('unlocked','yes')]:
+                r=invoke(FASTBOOT,['-s',serial,'getvar',var])
+                if r.returncode or (var+': '+expected).encode() not in r.stdout+r.stderr:
+                    failed.append(var)
+            if not failed:
+                state['fastboot_identity_retry_count']=attempt
+                return
+            time.sleep(1)
+        raise ValueError('fastboot identity mismatch: '+','.join(failed))
     save()
     r=invoke(ADB,['-s',serial,'reboot','bootloader'])
     if r.returncode: raise ValueError('reboot bootloader failed')

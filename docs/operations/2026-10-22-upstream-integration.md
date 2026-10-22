@@ -39,3 +39,9 @@ WSL 使用 `/mnt/d/Code/UniXNU-enuma/out/sources/UniXNU` 作为 `--unixnu` / `--
 新scripts/ci/header_inputs.py从固定Git树列出DriverKit/crypto/TrustCache文件blob，提供同格式缓存元数据，download_url指向固定commit的raw内容。其余下载、blob校验及恢复仍为原始上游实现。补充锁config/ci-header-sources.lock.json固定Apple头文件提交2c2f96dc和aca3beaa，校验其tag与当前feeds匹配；只需浅取树，避免匿名API和整树blob下载。未传入或记录访问令牌。
 
 Windows第一次raw HTTPS读取出现SSL EOF；在WSL使用不变上游恢复器完成26个文件恢复，逐个Git blob SHA-1与SHA256核对通过，reports/enuma-ci-header-check.json。该主机证据不等于macOS最终链接；修复后另跑CI。
+
+## macOS 真实最终链接通过
+
+修复提交d3ce3c4已推送。run39790786938成功，artifact已回读，固定主分支5fdbd5d、21模块与本地patch均吻合。真实通用基线最终链接完成，产物21,041,528 bytes，SHA256 de5ccd244f0b4fd6c0ebe5f6173aa6f7be993e31aa45db583150cd65c2f4c0fd，TG0/TG1均4 KiB，Mach-O/初始TCR审计通过。reports/enuma-macos-upstream-success.json记录完整来源、SDK、头文件与日志摘要；二进制和28MB日志只在out/ci-runs/39790786938/。
+
+这次验证关闭全部本板功能，没有板级archives、donor prelink或enuma XNU启动声明。链接还保留不存在的platform搜索目录和dsymutil --minimize选项警告，最终命令退出0且审计通过；不把警告隐去或升格为设备能力。旧两次失败证据保留。

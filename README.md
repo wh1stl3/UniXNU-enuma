@@ -20,4 +20,4 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 
 已完成[官网144页路线核对](docs/operations/2026-10-22-official-docs-route-review.md)及[完整页面清单](docs/operations/2026-10-22-official-site-inventory.md)。macOS预检通过；首次通用bootstrap在最终链接缺少legacy display probe符号，尚未构建成功。官网新工具与本仓固定源码有版本差异，后续按独立审查接入真实静态库/预链接流程。
 
-已[接入 UniXNU 主分支固定版本及21个模块](docs/operations/2026-10-22-upstream-integration.md)，保留 enuma 补丁与 boot v3，新增关闭 legacy 功能时的编译期引用修复。本地完整固件与主机回归通过；新版 macOS 最终链接和实机进度见 STATUS。
+已[接入 UniXNU 主分支固定版本及21个模块](docs/operations/2026-10-22-upstream-integration.md)，保留 enuma 补丁与 boot v3，新增关闭 legacy 功能时的编译期引用修复。本地完整固件与主机回归通过；[macOS新版通用最终链接已通过](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39790786938)，实机仍在[DXE队列定位](docs/operations/2026-10-22-dispatch-checkpoints.md)，GOP尚未验证。

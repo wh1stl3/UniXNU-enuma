@@ -1,0 +1,101 @@
+{
+  "scope": "actual dispatcher header with host adapters; no firmware execution",
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=0",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DDISPATCH_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaDispatchCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/dispatch-0"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/dispatch-0"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=12",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DDISPATCH_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaDispatchCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/dispatch-12"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/dispatch-12"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DDISPATCH_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaDispatchCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_dispatch_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/dispatch-13"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/dispatch-13"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

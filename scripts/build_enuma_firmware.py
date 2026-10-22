@@ -13,6 +13,22 @@ ROOT = Path(__file__).resolve().parents[1]
 WORK = ROOT / 'out/firmware-build'
 
 
+def apply_patch_series(patches):
+    # Nested staging must be its own patch root, otherwise Git can silently
+    # skip files outside the enclosing device repository's current prefix.
+    for target in dict.fromkeys(target for target, _ in patches):
+        if not (target / '.git').exists():
+            subprocess.run(['git', 'init', '-q', str(target)], check=True)
+    for target, patch in reversed(patches):
+        reverse = subprocess.run(['git', 'apply', '--reverse', '--check', str(patch)], cwd=target,
+                                 capture_output=True)
+        if not reverse.returncode:
+            subprocess.run(['git', 'apply', '--reverse', str(patch)], cwd=target, check=True)
+    for target, patch in patches:
+        subprocess.run(['git', 'apply', '--check', str(patch)], cwd=target, check=True)
+        subprocess.run(['git', 'apply', str(patch)], cwd=target, check=True)
+
+
 def stage_archives(lock):
     WORK.mkdir(parents=True, exist_ok=True)
     for name, url in lock['archives'].items():
@@ -53,9 +69,14 @@ def main():
     parser.add_argument('--reference', type=Path, required=True)
     parser.add_argument('--unixnu', type=Path, required=True)
     parser.add_argument('--jobs', type=int, default=4)
-    parser.add_argument('--stop-stage', type=int, choices=(0,3,4,5,6,7,8,9,10), default=0,
+    parser.add_argument('--stop-stage', type=int, choices=(0,3,4,5,6,7,8,9,10,11,12,13), default=0,
                         help='diagnostic PSCI reset gate; 0 keeps normal execution')
+    parser.add_argument('--stop-delay', type=int, choices=(2,7), default=2,
+                        help='seconds at the selected reset gate; compare 2/7 to identify the reset source')
+    parser.add_argument('--dispatch-ordinal', type=int, default=1)
     args = parser.parse_args()
+    if not 1 <= args.dispatch_ordinal <= 128:
+        parser.error('--dispatch-ordinal must be 1..128')
     lock = json.loads((ROOT / 'config/firmware-build.lock.json').read_text())
     stage_archives(lock)
     uefi = WORK / 'uefi'; core = WORK / 'Mu_Basecore'
@@ -100,27 +121,29 @@ def main():
     sec_source = uefi / 'Silicon/Silicium/SiliciumPkg/Sec/Sec.c'
     sec_source.write_bytes(sec_source.read_bytes().replace(b'\r\n', b'\n'))
     for path in (uefi/'Silicon/Silicium/SiliciumPkg/Sec/Sec.inf',
-                 core/'MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c', core/'MdeModulePkg/Core/Dxe/DxeMain.inf'):
+                 core/'MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c', core/'MdeModulePkg/Core/Dxe/DxeMain.inf',
+                 core/'MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c'):
         path.write_bytes(path.read_bytes().replace(b'\r\n', b'\n'))
-    # Patches are applied only to our archive staging, and only if not already present.
-    for target, patch in [(uefi, ROOT / 'firmware/patches/kona-preserve-display.patch'),
+    # Reverse the complete series first: later patches may touch earlier hunk
+    # context, so testing each patch in isolation is not idempotent.
+    patches = [(uefi, ROOT / 'firmware/patches/kona-preserve-display.patch'),
                           (uefi, ROOT / 'firmware/patches/sec-preserve-display.patch'),
                           (uefi, ROOT / 'firmware/patches/sec-stage-checkpoints.patch'),
                           (core, ROOT / 'firmware/patches/dxe-stage-checkpoints.patch'),
-                          (core, uefi / 'Resources/MuPatches/Gic-Spurious.patch')]:
-        # A nested staging directory must be its own patch root. Otherwise git
-        # can silently skip paths outside the parent repository's current prefix.
-        if not (target / '.git').exists():
-            subprocess.run(['git', 'init', '-q', str(target)], check=True)
-        reverse = subprocess.run(['git', 'apply', '--reverse', '--check', str(patch)], cwd=target,
-                                 capture_output=True)
-        if reverse.returncode:
-            subprocess.run(['git', 'apply', '--check', str(patch)], cwd=target, check=True)
-            subprocess.run(['git', 'apply', str(patch)], cwd=target, check=True)
+                          (core, ROOT / 'firmware/patches/dxe-dispatch-return.patch'),
+                          (core, ROOT / 'firmware/patches/dxe-driver-checkpoints.patch'),
+                          (core, uefi / 'Resources/MuPatches/Gic-Spurious.patch')]
+    apply_patch_series(patches)
     for target in (uefi/'Silicon/Silicium/SiliciumPkg/Sec', core/'MdeModulePkg/Core/Dxe/DxeMain'):
         shutil.copyfile(ROOT/'firmware/diagnostics/EnumaStageCheckpoint.h', target/'EnumaStageCheckpoint.h')
+    dispatcher = core/'MdeModulePkg/Core/Dxe/Dispatcher'
+    for name in ('EnumaStageCheckpoint.h', 'EnumaDispatchCheckpoint.h'):
+        shutil.copyfile(ROOT/'firmware/diagnostics'/name, dispatcher/name)
+    for point in (12,13):
+        if (dispatcher/'Dispatcher.c').read_text().count('EnumaDispatchCheckpoint ('+str(point)+');') != 1:
+            raise ValueError('dispatcher checkpoint missing/duplicated: '+str(point))
     for source, stages in [(uefi/'Silicon/Silicium/SiliciumPkg/Sec/Sec.c', range(3,9)),
-                           (core/'MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c', (9,10))]:
+                           (core/'MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c', (9,10,11))]:
         text = source.read_text()
         for stage in stages:
             if text.count('EnumaStageCheckpoint ('+str(stage)+');') != 1:
@@ -151,6 +174,8 @@ def main():
         defines = {'FD_BASE': '0x9fc00000', 'FD_SIZE': '0x300000', 'FD_BLOCKS': '768',
                    'ENABLE_SECUREBOOT': '0', 'DEVICE_MODEL': 'enuma', 'MEMORY_PROTECTION': 'TRUE',
                    'SHIP_MODE': 'FALSE', 'BUILDID_STRING': 'enuma-research', 'ENUMA_DIAG_STAGE': str(args.stop_stage),
+                   'ENUMA_DIAG_DELAY_US': str(args.stop_delay * 1000000),
+                   'ENUMA_DIAG_DISPATCH_ORDINAL': str(args.dispatch_ordinal),
                    'ENUMA_PLATFORM_CONFIG': 'enumaPkg/Include/PlatformConfig.inc',
                    'ENUMA_VENDOR_DSC': 'EnumaInputs/Vendor.dsc.inc',
                    'ENUMA_VENDOR_DXE': 'EnumaInputs/Vendor.fdf.inc',
@@ -167,6 +192,8 @@ def main():
     report['archive_sha256'] = lock['archive_sha256']
     report['reference_gitlinks'] = lock['reference_gitlinks']
     report['diagnostic_stop_stage'] = args.stop_stage
+    report['diagnostic_delay_seconds'] = args.stop_delay
+    report['diagnostic_dispatch_ordinal'] = args.dispatch_ordinal
     report['probe_upstream_sha256'] = reused
     report['source_inputs_sha256'] = {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes().replace(b'\r\n', b'\n')).hexdigest()

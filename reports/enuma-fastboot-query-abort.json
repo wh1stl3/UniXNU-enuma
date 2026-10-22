@@ -1,0 +1,33 @@
+{
+  "scope": "pre-boot fail-closed identity check and authorized normal recovery; not a candidate boot",
+  "events": [
+    {
+      "slot": "_a",
+      "backups": [
+        {
+          "partition": "boot_a",
+          "bytes": 201326592,
+          "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+          "matches_device": true
+        },
+        {
+          "partition": "vendor_boot_a",
+          "bytes": 100663296,
+          "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+          "matches_device": true
+        }
+      ],
+      "candidate": "out/boot-candidate/enuma-dxe-queue1-stage12-boot-v3.img",
+      "candidate_sha256": "d974069340e6fc69d5e8eb898bd3cdab4eff202a226fb449cbdfdc0dfd40850e",
+      "label": "dxe-queue-entry",
+      "phase": "preflight-fastboot-query-aborted-recovered-android",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_command_issued": false,
+      "abort_reason": "Fastboot product initially matched, current-slot query failed, then all GetVar identity responses were Variable Not found. No boot command issued; normal reboot restored Android, root and hashes."
+    }
+  ],
+  "cause_identified": false
+}

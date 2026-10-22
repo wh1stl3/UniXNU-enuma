@@ -14,6 +14,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=0",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -44,6 +45,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=3",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -74,6 +76,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=4",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -104,6 +107,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=5",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -134,6 +138,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=6",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -164,6 +169,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=7",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -194,6 +200,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=8",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -224,6 +231,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=9",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -254,6 +262,7 @@
         "-no-pie",
         "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
         "-DENUMA_DIAG_STAGE=10",
+        "-DENUMA_DIAG_DELAY_US=2000000",
         "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
         "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
         "-o",
@@ -269,6 +278,130 @@
       ],
       "exit_code": 0,
       "stdout": "PASS: diagnostic stage 10 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=11",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-11"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-11"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 11 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=12",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-12"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-12"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 12 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DELAY_US=2000000",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-13"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-13"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 13 selection, delay and no fall-through\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/stage-gate-test",
+        "-DENUMA_DIAG_STAGE=13",
+        "-DENUMA_DIAG_DELAY_US=7000000",
+        "-DSTAGE_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaStageCheckpoint.h\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_stage_gate.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-13-delay7"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/stage-gate-test/stage-13-delay7"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: diagnostic stage 13 selection, delay and no fall-through\n",
       "stderr": ""
     }
   ],
