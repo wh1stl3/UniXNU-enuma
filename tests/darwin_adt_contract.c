@@ -60,11 +60,20 @@ static void fixture(uint64_t bytes, enum variant variant) {
     }
 }
 static int parse(size_t length, uint64_t *window) {
-    size_t offset = 0, ramdisk = SIZE_MAX, trustcache = SIZE_MAX;
+    size_t offset = 0, ramdisk = SIZE_MAX, trustcache = SIZE_MAX, addon = SIZE_MAX;
     int keep_packed = 0;
     *window = 0;
-    return AdtNode(data, length, &offset, 0, 3, &ramdisk, &trustcache, window, &keep_packed)
+    return AdtNode(data, length, &offset, 0, 3, &ramdisk, &trustcache, &addon, window, &keep_packed)
            && offset == length;
+}
+static void addon_fixture(uint64_t bytes, unsigned length, int duplicate) {
+    unsigned char placeholder[16] = {0};
+    used = 0; memset(data, 0, sizeof data);
+    word(1); word(1); property("name", "/", 2);
+    word(2); word(1); property("name", "chosen", 7); memory(bytes, 8);
+    word(duplicate ? 3 : 2); word(0); property("name", "memory-map", 11);
+    property("GpuAddon", placeholder, length);
+    if (duplicate) property("GpuAddon", placeholder, length);
 }
 int main(int argc, char **argv) {
     assert(argc == 2);
@@ -87,6 +96,13 @@ int main(int argc, char **argv) {
         fixture(good[i], NORMAL); assert(parse(used, &window) && window == good[i]);
     }
     fixture(approved, MISSING); assert(parse(used, &window) && window == 0);
+    addon_fixture(approved, 16, 0);
+    size_t offset = 0, ramdisk = SIZE_MAX, trustcache = SIZE_MAX, addon = SIZE_MAX;
+    int packed = 0; window = 0;
+    assert(AdtNode(data, used, &offset, 0, 3, &ramdisk, &trustcache, &addon, &window, &packed));
+    assert(offset == used && addon == used - 16 && window == approved);
+    addon_fixture(approved, 8, 0); assert(!parse(used, &window));
+    addon_fixture(approved, 16, 1); assert(!parse(used, &window));
     printf("PASS: real DarwinBoot AdtNode accepts 512 MiB; rejects %zu truncations, trailing bytes, invalid values, duplicate/misplaced/short properties\n", valid_size);
     return 0;
 }

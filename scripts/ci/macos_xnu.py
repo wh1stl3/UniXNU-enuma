@@ -15,6 +15,9 @@ import subprocess
 import sys
 import tomllib
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from upstream_source import qualify
+
 ROOT = Path(__file__).resolve().parents[2]
 WORK = ROOT / 'out/ci/macos'
 EVIDENCE = WORK / 'evidence'
@@ -69,11 +72,9 @@ def main():
         subprocess.run(['git', '-C', str(source), 'checkout', '--detach', 'FETCH_HEAD'], check=True)
         if capture(['git', 'rev-parse', 'HEAD'], source) != lock['commit']:
             raise ValueError('UniXNU revision mismatch')
-        if capture(['git', 'status', '--porcelain'], source):
-            raise ValueError('Fetched UniXNU source must start clean')
-        for name, wanted in lock['file_sha256'].items():
-            if digest(source / name) != wanted:
-                raise ValueError('Pinned source hash mismatch: ' + name)
+        subprocess.run(['git', '-C', str(source), 'submodule', 'update', '--init',
+                        '--recursive', '--depth', '1', '--jobs', '4'], check=True)
+        report['qualified_source'] = qualify(source, lock)
         feeds = tomllib.loads((source / 'feeds.toml').read_text())['source']
         xnu = next(item for item in feeds if item['name'] == 'xnu')
         if xnu['version'] != '10063.141.1' or xnu['commit'] != 'd8b80295118ef25ac3a784134bcf95cd8e88109f':

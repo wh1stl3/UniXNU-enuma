@@ -2,16 +2,45 @@
   "schema": 1,
   "sources": {
     "UniXNU": {
-      "path": "D:/Code/PortingiOS/common/sources/UniXNU",
-      "commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+      "path": "D:/Code/UniXNU-enuma/out/sources/UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
       "repository": "https://github.com/UniXNU/UniXNU.git",
       "file_sha256": {
         "LICENSE": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
-        "feeds.toml": "dec145fe25ed9cf1c50292a1e16ccbaa690b450a1de9e1ed687395e5fef88294",
-        "scripts/unixnu/config.py": "990e7fd512270e471ff66b399963aedb216c453cf32dcbba06213338338118fb",
-        "drivers/NativeUfs/NativeUfs.cpp": "3fbd24df8e9517b30d369fe64f4133aa6fb05bd90577d220dab8c58c0f5232f4",
-        "drivers/NativeAdreno/NativeAdrenoService.cpp": "3bfecd81fd86d38d314b1d8df9fcd213fe9957c2fe7f947e21752c7b25ed805a"
-      }
+        "feeds.toml": "d0a55d82dc011a3c1cf95d3bcd5333c67283b8c9d44010e4d154ab59562b3091",
+        "scripts/unixnu/config.py": "727902be15769f400bba6a58e4230df9261551fd9734c7d2003a6dfdb56549a5",
+        "drivers/NativeUfs/NativeUfs.cpp": "24f549be5006ab5c463c67aa01ee38511b185853f878e12b4bb70830313ae9ed",
+        "drivers/NativeAdreno/NativeAdrenoService.cpp": "b4a668c1e1e2b38c04249ae035052228246859233a4df1a4333681a037058a7a"
+      },
+      "gitlinks": {
+        "drivers/ArmCpu": "1951cc8444b340d7d8879e9418220cf29eb711d7",
+        "drivers/ArmDTPlatform": "0d544705c2e89725caabc0542bb96bc8febd8c70",
+        "drivers/ArmVirtPlatform": "532de8c017e394e69a0b48dc0ffc4ac0d0701177",
+        "drivers/DarwinBoot": "d099354d0eab34df5088ca1ba89c9c88bc3260bb",
+        "drivers/NativeAES": "a34964b8c2fec2e83c8e4f68fb7d6fb7e4b2227b",
+        "drivers/NativeAdreno": "cedcaa2949c795e71a47e78ae413c8a41b17d7d0",
+        "drivers/NativeGeniSpi": "b5399b5646c4d7415deec6d887fd51715a97a024",
+        "drivers/NativeHidInput": "28f9b463b48e862f2def91d29c11b9143785715e",
+        "drivers/NativeKeyStoreEvents": "e59bac4ad1ac8825919ae94da8440a64d8ab90b3",
+        "drivers/NativeMetal": "bcbbc707cf112026ace2a11fa0ed62260b4e16b0",
+        "drivers/NativeMobileDisplay": "c031d882b9721d943383d11f66dc4748252ce929",
+        "drivers/NativeRamBlock": "d4d22d9819b0162eda49f6402235dddc2279410d",
+        "drivers/NativeUfs": "af785c1777161a62931425c2faaa536ce0bebd5b",
+        "drivers/NativeVirtioBlock": "98909eb9198a4360d7a43be831887cb8b74d814d",
+        "drivers/NativeVirtioConsole": "066f9bded311233ed56824e13a5628077619efda",
+        "kits/AdrenoFirmware": "40fdb8ea87606612ac6f1e80bbb49955d0ce4051",
+        "kits/AdrenoPM4": "445f8fe6d115738352b9d78dc70af6d61aa7f62f",
+        "kits/AirNir": "032a867b5dc3121164bbd706e4e81e3b9fcd2b8f",
+        "kits/ArmSmmu4K": "4d0d6598b1a36aeec3de01091893fa6660e49388",
+        "kits/NativePrelink": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+        "kits/VerifiedRoot": "2854c61f6c4dfda870ac3d93e1f03d9181edb041"
+      },
+      "patches": [
+        {
+          "path": "patches/upstream/0001-guard-optional-legacy-display.patch",
+          "sha256": "86fa152c567558bdf3cdcf551e19c6caa5ea0a81173cb14e80c472a156a85104"
+        }
+      ]
     },
     "UniXNU-sheng": {
       "path": "D:/Code/PortingiOS/common/sources/UniXNU-sheng",

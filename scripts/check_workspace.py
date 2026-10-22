@@ -28,6 +28,8 @@ def main():
             if hashlib.sha256((path / relative).read_bytes()).hexdigest() != expected:
                 raise ValueError(f'{name}/{relative}: source content changed')
     base = Path(pins['sources']['UniXNU']['path'])
+    from upstream_source import qualify
+    qualify(base, pins['sources']['UniXNU'])
     feeds = tomllib.loads((base / 'feeds.toml').read_text('utf-8'))
     xnu = next(x for x in feeds['source'] if x['name'] == 'xnu')
     if xnu['commit'] != pins['sources']['xnu-ios17-full']['commit'] or xnu['version'] != '10063.141.1':

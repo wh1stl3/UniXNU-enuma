@@ -7,7 +7,7 @@
       "argv": [
         "C:\\Program Files\\WorkBuddy\\resources\\vendor\\python\\python.exe",
         "-B",
-        "D:\\Code\\PortingiOS\\common\\sources\\UniXNU\\unixnu",
+        "D:\\Code\\UniXNU-enuma\\out\\sources\\UniXNU\\unixnu",
         "defconfig",
         "-D",
         "D:\\Code\\UniXNU-enuma",

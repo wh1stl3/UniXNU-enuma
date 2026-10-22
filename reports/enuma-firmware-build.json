@@ -62,7 +62,7 @@
   },
   "diagnostic_stop_stage": 10,
   "probe_upstream_sha256": {
-    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e"
   },
@@ -87,5 +87,5 @@
     "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
     "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7"
   },
-  "fd_sha256": "d6bf6bb203cd71da4b049db7f8a259c9d702be05180060e3b259c2c2d6c05d8c"
+  "fd_sha256": "10d813fce9a1d503a8b2152aa3c21acaf56885201233b48546db2d1023703e27"
 }

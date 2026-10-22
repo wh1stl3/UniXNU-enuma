@@ -1,7 +1,7 @@
 {
   "license": "BSD-2-Clause-Patent; manufacturer register facts referenced, no Linux driver code copied",
-  "geni_repository": "https://github.com/UniXNU/UniXNU",
-  "geni_commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+  "geni_repository": "https://github.com/UniXNU/NativeGeniSpi.git",
+  "geni_commit": "b5399b5646c4d7415deec6d887fd51715a97a024",
   "geni_sha256": {
     "GeniSpi.c": "2042cfc9647391e24d5a558202046425ac62a05adfc73afe769367b8374e3f91",
     "GeniSpi.h": "e73891e4571c5323bca27aaf987bafa002856dfa1dcee156ff31b119e2d3ae3c",
@@ -18,5 +18,6 @@
   "nvt_repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
   "nvt_commit": "52a2f180865f8368828985d6384130acd093fa93",
   "nvt_path": "drivers/input/touchscreen/nt36523/nt36xxx.c",
-  "nvt_scope": "Packet-format facts; exact GPL checksum function extracted only into out/ for host oracle. No Linux code linked into local decoder."
+  "nvt_scope": "Packet-format facts; exact GPL checksum function extracted only into out/ for host oracle. No Linux code linked into local decoder.",
+  "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca"
 }

@@ -1,0 +1,164 @@
+{
+  "previous_commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+  "main_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+  "gitlinks": {
+    "drivers/ArmCpu": "1951cc8444b340d7d8879e9418220cf29eb711d7",
+    "drivers/ArmDTPlatform": "0d544705c2e89725caabc0542bb96bc8febd8c70",
+    "drivers/ArmVirtPlatform": "532de8c017e394e69a0b48dc0ffc4ac0d0701177",
+    "drivers/DarwinBoot": "d099354d0eab34df5088ca1ba89c9c88bc3260bb",
+    "drivers/NativeAES": "a34964b8c2fec2e83c8e4f68fb7d6fb7e4b2227b",
+    "drivers/NativeAdreno": "cedcaa2949c795e71a47e78ae413c8a41b17d7d0",
+    "drivers/NativeGeniSpi": "b5399b5646c4d7415deec6d887fd51715a97a024",
+    "drivers/NativeHidInput": "28f9b463b48e862f2def91d29c11b9143785715e",
+    "drivers/NativeKeyStoreEvents": "e59bac4ad1ac8825919ae94da8440a64d8ab90b3",
+    "drivers/NativeMetal": "bcbbc707cf112026ace2a11fa0ed62260b4e16b0",
+    "drivers/NativeMobileDisplay": "c031d882b9721d943383d11f66dc4748252ce929",
+    "drivers/NativeRamBlock": "d4d22d9819b0162eda49f6402235dddc2279410d",
+    "drivers/NativeUfs": "af785c1777161a62931425c2faaa536ce0bebd5b",
+    "drivers/NativeVirtioBlock": "98909eb9198a4360d7a43be831887cb8b74d814d",
+    "drivers/NativeVirtioConsole": "066f9bded311233ed56824e13a5628077619efda",
+    "kits/AdrenoFirmware": "40fdb8ea87606612ac6f1e80bbb49955d0ce4051",
+    "kits/AdrenoPM4": "445f8fe6d115738352b9d78dc70af6d61aa7f62f",
+    "kits/AirNir": "032a867b5dc3121164bbd706e4e81e3b9fcd2b8f",
+    "kits/ArmSmmu4K": "4d0d6598b1a36aeec3de01091893fa6660e49388",
+    "kits/NativePrelink": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+    "kits/VerifiedRoot": "2854c61f6c4dfda870ac3d93e1f03d9181edb041"
+  },
+  "interfaces": [
+    {
+      "path": "package/UniXNUPkg/Application/UniXNU/UniXNU.inf",
+      "before": "8afae643b8f99a923e9c89ed371538f15895ab974a639e894da9a36f7fc5efad",
+      "after": "8afae643b8f99a923e9c89ed371538f15895ab974a639e894da9a36f7fc5efad",
+      "changed": false
+    },
+    {
+      "path": "package/UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf",
+      "before": "077045b9876cf528cf9f9b9e21fd5c5ed857798fd009ff265966c81d86e1249c",
+      "after": "077045b9876cf528cf9f9b9e21fd5c5ed857798fd009ff265966c81d86e1249c",
+      "changed": false
+    },
+    {
+      "path": "package/UniXNUPkg/Library/UniXNULib/UniXNULib.inf",
+      "before": "c141b4fbbd0e9c91e5b798db7e372000e6395f03ad67513155b14d54e5d7b381",
+      "after": "c141b4fbbd0e9c91e5b798db7e372000e6395f03ad67513155b14d54e5d7b381",
+      "changed": false
+    },
+    {
+      "path": "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.inf",
+      "before": "cb10851277b53b355794c1bca3fa16d3bf18a0dc2dee857091837b63599019df",
+      "after": "cb10851277b53b355794c1bca3fa16d3bf18a0dc2dee857091837b63599019df",
+      "changed": false
+    },
+    {
+      "path": "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c",
+      "before": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
+      "after": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
+      "changed": true
+    },
+    {
+      "path": "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h",
+      "before": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
+      "after": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
+      "changed": false
+    },
+    {
+      "path": "drivers/DarwinBoot/Test/window-size.c",
+      "before": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21",
+      "after": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21",
+      "changed": false
+    },
+    {
+      "path": "scripts/unixnu/bootimg.py",
+      "before": "466c29e14332381c4506b4ccbafd437159a4fe575f888b8f26ba13026e26da6f",
+      "after": "466c29e14332381c4506b4ccbafd437159a4fe575f888b8f26ba13026e26da6f",
+      "changed": false
+    },
+    {
+      "path": "scripts/unixnu/util.py",
+      "before": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+      "after": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+      "changed": false
+    },
+    {
+      "path": "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h",
+      "before": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+      "after": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+      "changed": false
+    },
+    {
+      "path": "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h",
+      "before": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e",
+      "after": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e",
+      "changed": false
+    },
+    {
+      "path": "drivers/ArmCpu/ArmCpu.cpp",
+      "before": "3c87b3bd617be5582a6a24ff797c359497ee9feaa702ee883ecee4270db21c9f",
+      "after": "3c87b3bd617be5582a6a24ff797c359497ee9feaa702ee883ecee4270db21c9f",
+      "changed": false
+    },
+    {
+      "path": "drivers/ArmDTPlatform/ArmDTPlatform.cpp",
+      "before": "07f96a42bdd638022960f5fcaf9e3a07dd73a82c869a70815781cac6d4873b3b",
+      "after": "07f96a42bdd638022960f5fcaf9e3a07dd73a82c869a70815781cac6d4873b3b",
+      "changed": false
+    },
+    {
+      "path": "drivers/NativeHidInput/NativeHidInput.cpp",
+      "before": "76d899121196247e759a60229e3e85b3126ad8bf9df288d8a97fb92ba34f7275",
+      "after": "d7b82b5f3046cdb03a898aded5e15545dd3d7d44ec9eb6f2d2c40728931d1579",
+      "changed": true
+    }
+  ],
+  "firmware_patches": {
+    "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
+    "firmware/patches/kona-preserve-display.patch": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+    "firmware/patches/sec-preserve-display.patch": "eb91098bf2cd2fae24be4d8460e11b46f4c24587560061512c6542818369dfeb",
+    "firmware/patches/sec-stage-checkpoints.patch": "8e7fae5710a9d57cb5dbfdda672c92d74d44f69ba380e02abbdc2868786f69a7"
+  },
+  "board_sha256": "d66dce82d1cd856b989800a75f7c66b9230ba0e07d991d4b6cacd7200b76ae40",
+  "device_execution": false,
+  "commits_ahead": 101,
+  "approved_patches": [
+    {
+      "path": "patches/upstream/0001-guard-optional-legacy-display.patch",
+      "sha256": "86fa152c567558bdf3cdcf551e19c6caa5ea0a81173cb14e80c472a156a85104"
+    }
+  ],
+  "scope": "device dependency update; module source trees remain ignored; no device boot",
+  "interface_review": {
+    "DarwinBoot.c": "Adds optional GpuAddon 16-byte memory-map slot and sidecar handling, plus failure diagnostics. Probe map/video extraction unchanged; ADT harness updated to actual signature and validates addon size/duplicates.",
+    "NativeHidInput.cpp": "New upstream gestures/hotkeys and sheng-specific input/GENI path remain reference only. Local NT36523 decoder unchanged; no automatic enable.",
+    "NativeUfs.cpp": "Upstream owner-root/Data and diagnostics changes remain disabled on enuma; pure helper tests rerun. No SM8550 PHY/power settings inherited.",
+    "NativeAdrenoService.cpp": "New GPU client stack remains disabled for SM8250; not an A650 adaptation.",
+    "config.py": "Zero-prefixed integer strings parse as decimal unless explicit hex; example guard remains effective.",
+    "feeds.toml": "Adds pinned libpthread, corecrypto and IOStorageFamily; donor XNU unchanged."
+  },
+  "firmware_regression": {
+    "complete": true,
+    "stop_stage": 10,
+    "fd_sha256": "10d813fce9a1d503a8b2152aa3c21acaf56885201233b48546db2d1023703e27",
+    "oem_payloads_byte_identical": 33,
+    "boot_v3": {
+      "header_version": 3,
+      "page_bytes": 4096,
+      "kernel_bytes": 3145920,
+      "ramdisk_bytes": 0,
+      "os_version_field": 0,
+      "kernel_sha256": "8b64e0adb67fed7c38ee0aa4a58988849767ae654beb3075c2debba3012a1e44",
+      "ramdisk_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "image_sha256": "6544805170361cfce3311945e6133be87ac997b8fb62b75101efe811b8a3decf",
+      "image_bytes": 3153920,
+      "fixture_only": false,
+      "hardware_ready": false,
+      "aosp_commit": "028bdc06ce87ab1ee23204feb5cd5ee406484618",
+      "vendor_boot_policy": "retain captured stock v3 vendor_boot; no DTB append or vendor_boot rewrite",
+      "unresolved": [
+        "ABL acceptance of raw BootShim ARM64 entry",
+        "UEFI FD relocation/handoff",
+        "GOP and vendor protocol runtime closure"
+      ]
+    },
+    "hardware_booted": false
+  }
+}
