@@ -4,29 +4,29 @@
 
 ## 当前结论
 
-**首轮离线适配已落地；尚未构建或启动 enuma 的 XNU/UEFI。** 独立设备仓沿用 nuwa 的提交、五件套与四类硬停规则。用户已确认 iPadOS 17.7.11；目标为 iPad7,1 / j120ap / 21H461、XNU 10063.141.1、4 KiB。
+**Kona 固件源码增量和 SM8250 板级支持代码已落地，尚无可启动固件。** 目标保持 iPadOS 17.7.11 / 21H461、iPad7,1 / j120ap、XNU 10063.141.1、4 KiB。只做离线工作，未访问设备。
 
 ## 已完成
 
-- board.toml、候选 enuma_defconfig、固定源码锁建立；真实 UniXNU defconfig 接口通过，example=true 保护仍有效。
-- 六组件全量摘要与 BuildManifest 相等，两个 DMG 同时匹配 sheng 哈希；Apple 签名和 prelink 未验证。
-- 历史 FDT 4613 节点解析、dtc 反编译与 GIC/PSCI/timer/八核 ADT 输入计划完成；内存/基址未写入 board。
-- 固定 Kona/alioth、MiCode NT36523 真实来源，记录许可、哈希和差异。
-- 9 项输入审计测试通过；四组 UFS 通用逻辑在 WSL non-PIE ASan/UBSan 下通过，仅主机侧验证。
+- 固件继续使用 UniXNU/uefi-sheng 329b473d 中的 KonaPkg；Mu_Basecore cfb93724 与 UniXNU feeds 匹配，无需升级底座。选定 Kona/alioth 文件与 Mu-Silicium 42fe5637 相同。
+- enuma DSC 和 FvMain 均接入真实 UniXNU app、UniXNUDxe、DarwinBoot；平台/厂商输入缺失时拒绝构建。没有借用 alioth 内存图或二进制。
+- Kona PlatformSec 最小补丁保留显示 SMMU 映射；精确应用及三种预处理分支检查通过，watchdog 行为保留。尚不证明显示能保持到 XNU。
+- EnumaGeniSpi 复用 NativeGeniSpi，增加本板 FIFO/PIO 入口、mode0/CS0 实际配置和错误后失效处理。EnumaUfsClock 提供九项 Kona GCC 只读快照；偏移逐项与固定厂商源码比对。
+- 上游 GENI 寄存器模型、本板适配和 UFS 快照的 ASan/UBSan 检查通过；三个 freestanding AArch64 对象编译通过。不是 IOKit/固件链接或硬件结果。
+- 固件增量七项检查测试通过；完整镜像前置检查按预期拒绝。选定来源可从锁文件重取，参考仓保持只读。
+- 首轮 donor 六组件/两个 DMG 摘要、FDT 4613 节点、GIC/PSCI/timer/CPU 计划及 example 防护继续有效。
 
-复现命令、失败记录与证据见 [离线报告](operations/2026-10-22-offline-bringup.md) 和 reports/。
+复现和证据：[固件与驱动报告](operations/2026-10-22-kona-platform.md)、reports/。内存字段未改，未生成镜像，未设置任何 *_verified=true。
 
-## 下一步
+## 下一步与待决项
 
-1. 离线准备 uefi-enuma Kona 适配及 UniXNU/DarwinBoot 固件卷接入，核对 enuma 厂商输入。
-2. 独立复现 10063.141.1 通用内核构建/平台链接，不能用 nuwa 的 8796 队列。
-3. 用户稍后接入 enuma 后只读核对 ROM、FDT、内存、驱动绑定、GPT；本轮按用户选择继续离线。
-4. 有具体内存/镜像方案后再审查；当前缺 UEFI 内存图、GOP 交接和 SM8250 UFS/电源/SMMU 证据。
+1. **R-001 待用户确认**：下一阶段 ADT/DarwinBoot 的 owned-memory 请求预算；推荐仅先配置 512 MiB，具体范围见 NEED-REVIEW。确认不代表有可用物理窗口，也不授权生成/启动镜像。
+2. 继续闭合 enuma 固件的 MemoryMapLib/ConfigurationMapLib、DDR/栈/GOP、厂商协议和 FD/boot header。当前没有完整 enuma 厂商依赖，批准 R-001 也不会自动解决它们。
+3. SPI 仍缺真实时钟/供电/pinmux/独占状态交接；NT36523 触点协议及固件名需核实。UFS 仍缺 QMPv4 PHY、电源、时钟写入、SMMU 和链路启动，不能启用 SM8550 NativeUfs。
+4. 用户方便时接入 enuma 后只读复核 ROM/FDT/内存/驱动绑定；本轮不等待设备、不操作 nuwa。
 
-## 边界与已知坑
+## 限制
 
-- enuma 历史 GIC stride=0x20000，不能照抄 sheng 的 0x40000；UFS HC 同地址不代表 PHY/GCC 兼容。
-- 历史 touch 固件名含 _k81_，不同于 MiCode 候选；实际绑定待确认。
-- ipad_identity 在固定 sheng 源码中同时控制产品和安全属性，D-004 已修正继承说明。
-- XNU 完整构建、UEFI、prelink、QEMU、实机及 iPadOS GUI 均未验收；未生成新诊断/固件镜像，未设置任何 *_verified=true。
-- 参考仓只读。远端仅查询；本仓当前仅本地 main 提交，未建立/推送远端。
+- 本板代码尚未接到 IOKit service；无完整 XNU/UEFI 构建、prelink、QEMU、实机或 iPadOS GUI 验收。
+- board.toml 仍为 example=true；具体内存基址、UEFI 配置、镜像打包和任何设备启动仍须各自审查。
+- 仅本地 main 提交，未建立或推送远端；提交记录见 Git 和 WORKLOG。

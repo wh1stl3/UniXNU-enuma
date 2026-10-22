@@ -1,0 +1,200 @@
+{
+  "scope": "host register model and AArch64 objects; not IOKit link, QEMU or hardware execution",
+  "gcc_branch_facts": [
+    {
+      "name": "axi",
+      "symbol": "gcc_ufs_phy_axi_clk",
+      "enable_reg": 487440,
+      "line": 3569
+    },
+    {
+      "name": "ahb",
+      "symbol": "gcc_ufs_phy_ahb_clk",
+      "enable_reg": 487448,
+      "line": 3554
+    },
+    {
+      "name": "aggre",
+      "symbol": "gcc_aggre_ufs_phy_axi_clk",
+      "enable_reg": 487628,
+      "line": 1620
+    },
+    {
+      "name": "unipro",
+      "symbol": "gcc_ufs_phy_unipro_core_clk",
+      "enable_reg": 487516,
+      "line": 3728
+    },
+    {
+      "name": "ice",
+      "symbol": "gcc_ufs_phy_ice_core_clk",
+      "enable_reg": 487524,
+      "line": 3609
+    },
+    {
+      "name": "aux",
+      "symbol": "gcc_ufs_phy_phy_aux_clk",
+      "enable_reg": 487580,
+      "line": 3649
+    },
+    {
+      "name": "tx0",
+      "symbol": "gcc_ufs_phy_tx_symbol_0_clk",
+      "enable_reg": 487452,
+      "line": 3715
+    },
+    {
+      "name": "rx0",
+      "symbol": "gcc_ufs_phy_rx_symbol_0_clk",
+      "enable_reg": 487456,
+      "line": 3689
+    },
+    {
+      "name": "rx1",
+      "symbol": "gcc_ufs_phy_rx_symbol_1_clk",
+      "enable_reg": 487608,
+      "line": 3702
+    }
+  ],
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-DGENI_TEST_SOURCE=\"/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi/Test/geni-spi.c\"",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_spi.c",
+        "/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform/EnumaGeniSpi.c",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi/GeniSpi.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/spi-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/spi-test"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: GeniSpi init, clock, mode, packing, PIO and SE DMA transfers (20 PIO lengths) against the register model\nPASS: enuma FIFO transport, actual mode programming, rejection before writes, timeout invalidation\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_ufs_clock.c",
+        "/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform/EnumaUfsClock.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/ufs-clock-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/ufs-clock-test"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: nine GCC observations, each read failure preserves output, no HC/DMA/write interface\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "--target=aarch64-none-elf",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform/EnumaGeniSpi.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/EnumaGeniSpi.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "--target=aarch64-none-elf",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform/EnumaUfsClock.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/EnumaUfsClock.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi",
+        "-I/mnt/d/Code/UniXNU-enuma/drivers/EnumaPlatform",
+        "--target=aarch64-none-elf",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/PortingiOS/common/sources/UniXNU/drivers/NativeGeniSpi/GeniSpi.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/enuma-drivers/GeniSpi.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "objects": {
+    "EnumaGeniSpi.o": "3c91dc2a1f23f13d6f725f73b73be570c264aac8330d51926f80d2362fe470aa",
+    "EnumaUfsClock.o": "015c2ed50ae81f8f12b83000044377e631a61b67dc5a4ede8df4861fe2869b80",
+    "GeniSpi.o": "e00b26ab278bb36836c98170811887e3a89a8a34be04686b8d4e4ca1926dfaa7"
+  },
+  "local_sources": {
+    "EnumaGeniSpi.c": "436d268fac82f857679a916276abfdd175e6ab68410523bf23ed427b685b781c",
+    "EnumaGeniSpi.h": "4aaec11c00d7bd9a17dcda1efa15955b698d96b376aa9f3ff36ba8c6ec101390",
+    "EnumaUfsClock.c": "88da85fa83f2f276374a1b2af4089bd6cbf823823c3aaeec9d2a93d188514d0b",
+    "EnumaUfsClock.h": "64e7b3088536197a294d570fc79f724512e4eef8b4dd7634bb6dc74e83370db3"
+  }
+}

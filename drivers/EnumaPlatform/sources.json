@@ -1,0 +1,17 @@
+{
+  "license": "BSD-2-Clause-Patent; manufacturer register facts referenced, no Linux driver code copied",
+  "geni_repository": "https://github.com/UniXNU/UniXNU",
+  "geni_commit": "75bc13dd34dc4e403826793739e316a264ce00dd",
+  "geni_sha256": {
+    "GeniSpi.c": "2042cfc9647391e24d5a558202046425ac62a05adfc73afe769367b8374e3f91",
+    "GeniSpi.h": "e73891e4571c5323bca27aaf987bafa002856dfa1dcee156ff31b119e2d3ae3c",
+    "Test/geni-spi.c": "a5b8a9ab217590064fc8ce701ceee5f2dcfbc0b3f0b0d8907505bae25fb2c113",
+    "LICENSE": "45e326bc5ca67488a547a30fbb713f1303d2770b3340443ebcf38717a62534f9"
+  },
+  "gcc_repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+  "gcc_commit": "52a2f180865f8368828985d6384130acd093fa93",
+  "gcc_path": "drivers/clk/qcom/gcc-kona.c",
+  "gcc_sha256": "ed208678508c983d0989f1f135fac898c5a9a91c14af1fa42cd7ea2f24cd14cd",
+  "fdt_path": "D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62"
+}

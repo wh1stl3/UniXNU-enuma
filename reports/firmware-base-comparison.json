@@ -1,0 +1,38 @@
+{
+  "selected_repository": "UniXNU/uefi-sheng",
+  "selected_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+  "mu_candidate_commit": "42fe563791e51bf5500c2e470ed294ca0c94b97c",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187",
+      "same_as_mu_candidate": null
+    },
+    {
+      "path": ".gitmodules",
+      "sha256": "86fb199bcc333e142654fe47c3dd9c7f946bdced8dd3835bd5a40573302dc1aa",
+      "same_as_mu_candidate": true
+    },
+    {
+      "path": "Silicon/Qualcomm/KonaPkg/KonaPkg.dsc.inc",
+      "sha256": "99e80dd57212cb7262e55e2b595e28dc1c54d0d52526ba26539e4411d9896564",
+      "same_as_mu_candidate": true
+    },
+    {
+      "path": "Silicon/Qualcomm/KonaPkg/Library/PlatformSecLib/PlatformSec.c",
+      "sha256": "edefc16cb567dea168b2749295fc34947231364c29e08968d1903337a6ed9f9b",
+      "same_as_mu_candidate": true
+    },
+    {
+      "path": "Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "sha256": "62ea05001fa3cef8a95a4dadabb9bc08a31871f3d29865d6121015f22ae02e01",
+      "same_as_mu_candidate": true
+    },
+    {
+      "path": "Platforms/Xiaomi/aliothPkg/alioth.fdf",
+      "sha256": "e0977653b07d391fec980f89c4ed54141971a90a247aab4ccddc4ded442a3dc5",
+      "same_as_mu_candidate": true
+    }
+  ],
+  "reason": "retain UniXNU-matched Mu_Basecore pin; compare Kona and alioth inputs before selecting base"
+}

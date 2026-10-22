@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "firmware_gitlinks": {
+    "Mu_Basecore": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+    "Binaries": "a1501e0c2e642d6ac0d8f52c85af2a67b75a7799"
+  },
+  "files": [
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": "LICENSE",
+      "cache_path": "uefi-sheng/LICENSE",
+      "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187"
+    },
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": ".gitmodules",
+      "cache_path": "uefi-sheng/.gitmodules",
+      "sha256": "86fb199bcc333e142654fe47c3dd9c7f946bdced8dd3835bd5a40573302dc1aa"
+    },
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": "Silicon/Qualcomm/KonaPkg/KonaPkg.dsc.inc",
+      "cache_path": "uefi-sheng/Silicon/Qualcomm/KonaPkg/KonaPkg.dsc.inc",
+      "sha256": "99e80dd57212cb7262e55e2b595e28dc1c54d0d52526ba26539e4411d9896564"
+    },
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": "Silicon/Qualcomm/KonaPkg/Library/PlatformSecLib/PlatformSec.c",
+      "cache_path": "uefi-sheng/Silicon/Qualcomm/KonaPkg/Library/PlatformSecLib/PlatformSec.c",
+      "sha256": "edefc16cb567dea168b2749295fc34947231364c29e08968d1903337a6ed9f9b"
+    },
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": "Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "cache_path": "uefi-sheng/Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "sha256": "62ea05001fa3cef8a95a4dadabb9bc08a31871f3d29865d6121015f22ae02e01"
+    },
+    {
+      "repository": "UniXNU/uefi-sheng",
+      "commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+      "path": "Platforms/Xiaomi/aliothPkg/alioth.fdf",
+      "cache_path": "uefi-sheng/Platforms/Xiaomi/aliothPkg/alioth.fdf",
+      "sha256": "e0977653b07d391fec980f89c4ed54141971a90a247aab4ccddc4ded442a3dc5"
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/clk/qcom/gcc-kona.c",
+      "cache_path": "Xiaomi_Kernel_OpenSource/drivers/clk/qcom/gcc-kona.c",
+      "sha256": "ed208678508c983d0989f1f135fac898c5a9a91c14af1fa42cd7ea2f24cd14cd"
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/pinctrl/qcom/pinctrl-kona.c",
+      "cache_path": "Xiaomi_Kernel_OpenSource/drivers/pinctrl/qcom/pinctrl-kona.c",
+      "sha256": "87014b0ea67da00fb7c78f543c0030647a546797a15f3192657d0ca5840820ff"
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/input/touchscreen/nt36523/nt36xxx.c",
+      "cache_path": "Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.c",
+      "sha256": "e34cad1b799348d1a952e660a1576e0776abd9ce2c95cf31199a5c429d17a299"
+    },
+    {
+      "repository": "MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "drivers/input/touchscreen/nt36523/nt36xxx.h",
+      "cache_path": "Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.h",
+      "sha256": "d411b6aebf5b23cd2e6f819c870abd002dceb733d73f8271fc2ceb82e063b23c"
+    }
+  ],
+  "unixnu_interface_sha256": {
+    "package/UniXNUPkg/Application/UniXNU/UniXNU.inf": "8afae643b8f99a923e9c89ed371538f15895ab974a639e894da9a36f7fc5efad",
+    "package/UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf": "077045b9876cf528cf9f9b9e21fd5c5ed857798fd009ff265966c81d86e1249c",
+    "package/UniXNUPkg/Library/UniXNULib/UniXNULib.inf": "c141b4fbbd0e9c91e5b798db7e372000e6395f03ad67513155b14d54e5d7b381",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.inf": "cb10851277b53b355794c1bca3fa16d3bf18a0dc2dee857091837b63599019df",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "cd141d002f24b951d3dfa7773f29cf645712be3c71f4b6e801d1114eb81b5c0a",
+    "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb"
+  }
+}

@@ -13,7 +13,7 @@
 | xnu-ios17-full | d8b80295118ef25ac3a784134bcf95cd8e88109f | feeds 对应 10063.141.1；Apple 源码许可按文件审查 |
 | MiCode kernel_devicetree | 43b11af42a275b9415634f4d196579938820896d | enuma 厂商 DT 候选；本地根目录无 LICENSE，暂仅引用事实 |
 | MiCode Xiaomi_Kernel_OpenSource | 52a2f180865f8368828985d6384130acd093fa93 | NT36523/Linux 时序参考；COPYING 和文件声明，不直接混入 BSD 驱动 |
-| uefi-sheng | 329b473df1e53a3bfa64b2b39b79670c4c02279b | 接线参考；根目录无 LICENSE，组件按文件许可证 |
+| uefi-sheng | 329b473df1e53a3bfa64b2b39b79670c4c02279b | Kona/接线参考；上游根 LICENSE 为 BSD-2-Clause，组件按文件许可证。初次本地未见 LICENSE 是 sparse checkout 未展开，已核对修正 |
 | Mu-Silicium | 42fe563791e51bf5500c2e470ed294ca0c94b97c | KonaPkg/alioth 候选；BSD-2-Clause，GPL 子目录另审 |
 
 参考仓全部只读。没有复制整棵源码、生成镜像或修改 nuwa。远端只做读取，没有创建或推送 enuma 仓库。

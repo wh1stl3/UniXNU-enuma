@@ -1,0 +1,40 @@
+[
+  {
+    "argv": [
+      "C:/Program Files/WorkBuddy/resources/vendor/python/python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_firmware_overlay.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "stdout": "",
+    "stderr": "test_complete_local_graph (test_firmware_overlay.OverlayTests.test_complete_local_graph) ... ok\ntest_dsc_only_loader_rejected (test_firmware_overlay.OverlayTests.test_dsc_only_loader_rejected) ... ok\ntest_foreign_vendor_rejected (test_firmware_overlay.OverlayTests.test_foreign_vendor_rejected) ... ok\ntest_include_cycle_rejected (test_firmware_overlay.OverlayTests.test_include_cycle_rejected) ... ok\ntest_include_escape_rejected (test_firmware_overlay.OverlayTests.test_include_escape_rejected) ... ok\ntest_missing_guard_rejected (test_firmware_overlay.OverlayTests.test_missing_guard_rejected) ... ok\ntest_wrong_volume_rejected (test_firmware_overlay.OverlayTests.test_wrong_volume_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.104s\n\nOK\n"
+  },
+  {
+    "argv": [
+      "wsl",
+      "-d",
+      "Ubuntu-22.04",
+      "--",
+      "python3",
+      "-B",
+      "/mnt/d/Code/UniXNU-enuma/scripts/check_firmware_overlay.py",
+      "--unixnu",
+      "/mnt/d/Code/PortingiOS/common/sources/UniXNU",
+      "--firmware-root",
+      "/mnt/d/Code/PortingiOS/common/sources/uefi-sheng",
+      "--require-image-ready"
+    ],
+    "exit_code": 2,
+    "expected_exit": 2,
+    "stdout": "PASS: source overlay and patch checks; image inputs remain incomplete\n",
+    "stderr": "NOT IMAGE READY: ENUMA_PLATFORM_CONFIG: reviewed enuma memory/configuration libraries, DDR, stack and GOP; ENUMA_VENDOR_APRIORI: qualified enuma vendor protocol ordering; ENUMA_VENDOR_DXE: qualified enuma vendor binaries and dependency closure; Resource config: reviewed FD layout and Android boot header/packaging\n"
+  }
+]

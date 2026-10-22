@@ -1,0 +1,103 @@
+{
+  "scope": "source graph, fixed references and patch branches; not complete EDK II parsing/linking",
+  "firmware_base": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
+  "gitlinks": {
+    "Mu_Basecore": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+    "Binaries": "a1501e0c2e642d6ac0d8f52c85af2a67b75a7799"
+  },
+  "references": [
+    {
+      "path": "uefi-sheng/LICENSE",
+      "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187"
+    },
+    {
+      "path": "uefi-sheng/.gitmodules",
+      "sha256": "86fb199bcc333e142654fe47c3dd9c7f946bdced8dd3835bd5a40573302dc1aa"
+    },
+    {
+      "path": "uefi-sheng/Silicon/Qualcomm/KonaPkg/KonaPkg.dsc.inc",
+      "sha256": "99e80dd57212cb7262e55e2b595e28dc1c54d0d52526ba26539e4411d9896564"
+    },
+    {
+      "path": "uefi-sheng/Silicon/Qualcomm/KonaPkg/Library/PlatformSecLib/PlatformSec.c",
+      "sha256": "edefc16cb567dea168b2749295fc34947231364c29e08968d1903337a6ed9f9b"
+    },
+    {
+      "path": "uefi-sheng/Platforms/Xiaomi/aliothPkg/alioth.dsc",
+      "sha256": "62ea05001fa3cef8a95a4dadabb9bc08a31871f3d29865d6121015f22ae02e01"
+    },
+    {
+      "path": "uefi-sheng/Platforms/Xiaomi/aliothPkg/alioth.fdf",
+      "sha256": "e0977653b07d391fec980f89c4ed54141971a90a247aab4ccddc4ded442a3dc5"
+    },
+    {
+      "path": "Xiaomi_Kernel_OpenSource/drivers/clk/qcom/gcc-kona.c",
+      "sha256": "ed208678508c983d0989f1f135fac898c5a9a91c14af1fa42cd7ea2f24cd14cd"
+    },
+    {
+      "path": "Xiaomi_Kernel_OpenSource/drivers/pinctrl/qcom/pinctrl-kona.c",
+      "sha256": "87014b0ea67da00fb7c78f543c0030647a546797a15f3192657d0ca5840820ff"
+    },
+    {
+      "path": "Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.c",
+      "sha256": "e34cad1b799348d1a952e660a1576e0776abd9ce2c95cf31199a5c429d17a299"
+    },
+    {
+      "path": "Xiaomi_Kernel_OpenSource/drivers/input/touchscreen/nt36523/nt36xxx.h",
+      "sha256": "d411b6aebf5b23cd2e6f819c870abd002dceb733d73f8271fc2ceb82e063b23c"
+    }
+  ],
+  "graph": {
+    "packaged_modules": [
+      "UniXNUPkg/Application/UniXNU/UniXNU.inf",
+      "UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf",
+      "DarwinBootPkg/Driver/DarwinBoot.inf"
+    ],
+    "external_includes": [
+      "KonaPkg/KonaPkg.dsc.inc",
+      "$(ENUMA_PLATFORM_CONFIG)",
+      "$(ENUMA_VENDOR_APRIORI)",
+      "$(ENUMA_VENDOR_DXE)",
+      "QcomPkg/Extra.fdf.inc",
+      "SiliciumPkg/Common.fdf.inc"
+    ]
+  },
+  "patch": {
+    "source_sha256": "edefc16cb567dea168b2749295fc34947231364c29e08968d1903337a6ed9f9b",
+    "patch_sha256": "5a13ce912afc79e998f71a7065ced7b3a9786bbb4e78f0301fefc2081975e524",
+    "branches": {
+      "None": {
+        "display_detach_present": true,
+        "watchdog_preserved": true
+      },
+      "0": {
+        "display_detach_present": true,
+        "watchdog_preserved": true
+      },
+      "1": {
+        "display_detach_present": false,
+        "watchdog_preserved": true
+      }
+    },
+    "scope": "exact patch application and preprocessing; not EDK II compilation"
+  },
+  "gic": {
+    "distributor_pa": "0x17A00000",
+    "redistributor_pa": "0x17A60000"
+  },
+  "overlay_sha256": {
+    "Include/APRIORI.inc": "d20b2329812681e76a5b9ff530c34c6dc05c81216a15ef5dd39a5873e36ebce4",
+    "Include/DXE.inc": "e543bc267a77ae049a71e93b0b6d948d27af07a21586d2581aab37303837c052",
+    "Include/UniXNU.dsc.inc": "268a49bc4c417cbb3989272e2c9d9df6de44771d9bab2aeb53eb630bb808a6c9",
+    "Include/UniXNU.fdf.inc": "e1f08e837776f2d0b6dbca8d8c9cfcbb09e813a8af911d0c5c5fb478bb893228",
+    "enuma.dsc": "5b671f062e077cd8ed51d6128f419b1fd326b2cc1087c9d4122c8b310959d97b",
+    "enuma.fdf": "9e18acf30fcad55140de639bfb3d434bce970dcc0899d45cdc8dba5a6eb98e7c"
+  },
+  "image_ready": false,
+  "missing_inputs": [
+    "ENUMA_PLATFORM_CONFIG: reviewed enuma memory/configuration libraries, DDR, stack and GOP",
+    "ENUMA_VENDOR_APRIORI: qualified enuma vendor protocol ordering",
+    "ENUMA_VENDOR_DXE: qualified enuma vendor binaries and dependency closure",
+    "Resource config: reviewed FD layout and Android boot header/packaging"
+  ]
+}
