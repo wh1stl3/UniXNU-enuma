@@ -1,0 +1,30 @@
+{
+  "scope": "host only, actual C source with kernel API mocks; not kernel ABI/runtime proof",
+  "source_sha256": {
+    "diagnostics/enuma_log_reader.c": "d4b771a61b5ef6f3c92c4728d06221aaa5eb5519abf5aba2c1934bf187d72240",
+    "tests/log_reader_guard.c": "8178958cf27b488ba202358e69866c5f434f3257613ec04aca65929a7cebe526",
+    "tests/log_reader_shim/linux/module.h": "9d1c5ebce9ae6d453a1818c4562b75add65698ff51896a42c76751ac0342ff51",
+    "tests/log_reader_shim/linux/mm.h": "637b6d42c42de7cac0957c6c29c96c61731bc59c3b00a3833646517f64a70093",
+    "tests/log_reader_shim/asm/memory.h": "fb569870493fae80e509485aea7d01e87f47bc9ce381fc9c93a745204e394d35"
+  },
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "unreserved_page_positions_rejected": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "mapping_and_output_calls_on_rejection": 0,
+  "reserved_pages_required_before_mapping": 8,
+  "exact_marker_bytes": 16,
+  "source_bytes_unchanged": true,
+  "hardware_loaded": false,
+  "physical_memory_accessed": false
+}

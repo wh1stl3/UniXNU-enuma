@@ -1,0 +1,122 @@
+{
+  "scope": "saved input audit only; no device commands, memory access or image generation",
+  "inputs": {
+    "out/device/live-fdt.bin": {
+      "sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+      "bytes": 941691
+    },
+    "out/device/collection.json": {
+      "sha256": "480e51fb90d6fe4107f5183f200a40f24fbe533f4d9a0d116b0c40b699273212",
+      "bytes": 1752
+    },
+    "out/device/framebuffer.stdout": {
+      "sha256": "c31e745182c68a50c2310309608841f648b46d3e29314899ccf000778a92c6fb",
+      "bytes": 99
+    },
+    "out/device/drm-state.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "out/log-readback/reservation-device-02/dmesg.txt": {
+      "sha256": "2d7aa688714e49314e7e8f9f373c86c11ac0123e206e375c9e1a6c562611b904",
+      "bytes": 1769617
+    },
+    "out/device-tests/20261022T201404/post-dmesg.stdout": {
+      "sha256": "f2208201a40bef3e9f8a7b3de18a6ee58d713070393143c407bdbfcae8f7dc24",
+      "bytes": 1573716
+    },
+    "reports/enuma-platform-config.json": {
+      "sha256": "2b0704a238a498ca876066d8ff3ed8fc6c717d39cad201cdc1be1090ba461a50",
+      "bytes": 14644
+    },
+    "reports/enuma-platform-observations.json": {
+      "sha256": "683c1ec8e914304ca292f8d5380bce921b3372fd18b306ab058e8ca56b445e85",
+      "bytes": 1802
+    }
+  },
+  "saved_fdt_reservations": [
+    {
+      "node": "/reserved-memory/cont_splash_region@9c000000",
+      "base": "0x9c000000",
+      "size": "0x2300000",
+      "label": [
+        "cont_splash_region"
+      ]
+    },
+    {
+      "node": "/reserved-memory/dfps_data_region@9e300000",
+      "base": "0x9e300000",
+      "size": "0x100000",
+      "label": [
+        "dfps_data_region"
+      ]
+    }
+  ],
+  "simple_framebuffer_nodes": [],
+  "unavailable_captures": [
+    {
+      "capture": "framebuffer",
+      "original_collection_record": {
+        "name": "framebuffer",
+        "exit_code": 1,
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "matches_original_collection": false,
+      "current_exit_code": null,
+      "empty": false,
+      "file_labels_without_values": true,
+      "can_supply_scanout_geometry": false,
+      "note": "Different current stdout: retain original metadata separately; no inferred status for replacement"
+    },
+    {
+      "capture": "drm-state",
+      "original_collection_record": {
+        "name": "drm-state",
+        "exit_code": 1,
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "matches_original_collection": true,
+      "current_exit_code": 1,
+      "empty": true,
+      "file_labels_without_values": false,
+      "can_supply_scanout_geometry": false,
+      "note": "Original attempt metadata matches"
+    }
+  ],
+  "android_splash_hints": [
+    {
+      "source": "out/log-readback/reservation-device-02/dmesg.txt",
+      "line": 1464,
+      "text": "\u001b[32m[    1.229399] \u001b[0m[drm] cont_splash enabled in 1 of 1 display(s)",
+      "meaning": "Android continuous splash handoff hint; not custom UEFI entry geometry"
+    },
+    {
+      "source": "out/device-tests/20261022T201404/post-dmesg.stdout",
+      "line": 1534,
+      "text": "[    1.238789] [drm] cont_splash enabled in 1 of 1 display(s)",
+      "meaning": "Android continuous splash handoff hint; not custom UEFI entry geometry"
+    }
+  ],
+  "known_android_modes": [
+    "1600x2560@120",
+    "1600x2560@60",
+    "1600x2560@30"
+  ],
+  "panel_link_bpp_is_not_framebuffer_format": 24,
+  "missing_entry_time_evidence": [
+    "entry_scanout_base",
+    "entry_stride_bytes",
+    "entry_pixel_format",
+    "entry_linear_uncompressed_layout",
+    "entry_valid_pixel_span",
+    "scanout_survival_during_custom_uefi"
+  ],
+  "simplefb_write_eligible": false,
+  "candidate_generated": false,
+  "memory_fields_changed": false,
+  "verification_flags_changed": false,
+  "next_observation": "Read-only current DRM/bootloader handoff evidence after device work resumes; if absent use bounded early logs, never guessed framebuffer/MMIO writes",
+  "same_soc_references": "See enuma-simplefb-reuse-audit.json; alioth/elish are evaluated sources, not enuma runtime proof"
+}

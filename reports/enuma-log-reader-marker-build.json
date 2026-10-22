@@ -1,0 +1,55 @@
+{
+  "scope": "offline compilation only; normal kernel loader checks still required",
+  "mode": "marker",
+  "module_sha256": "6644cf40bd4ee85ce6ec8a0a57eeef08aa0a6a2e79b61b75e1230f6b469bd6f2",
+  "module_bytes": 4088,
+  "vermagic": "vermagic=4.19.157-perf-gf8cf95f4dc15 SMP preempt mod_unload modversions aarch64",
+  "module_struct_bytes": 832,
+  "symbol_crcs": {
+    "memstart_addr": "0x9688de8b",
+    "module_layout": "0xaad0c453",
+    "printk": "0x7c32d0f0"
+  },
+  "stock_module_sources": [
+    {
+      "name": "rdbg.ko",
+      "sha256": "0c840042d1b6a5e6ef6db542a58025ab08094cf4f52cfccc528fdf4b75fbe9fe"
+    },
+    {
+      "name": "qca_cld3_qca6390.ko",
+      "sha256": "fabfbfb7293247abc9880b6af392a76959484eb86e3f0f4c16fdab98d6c0dea5"
+    }
+  ],
+  "link_script_sources": {
+    "scripts/module-common.lds": {
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/scripts/module-common.lds",
+      "sha256": "b0842afec1a7948546fe6d0dac813b5b9e045a2f3b326a1df946f7045ab1a77f"
+    },
+    "arch/arm64/kernel/module.lds": {
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/arch/arm64/kernel/module.lds",
+      "sha256": "372647a6b25521d671b4388ecb20531368722ed203f8ce75f7bb0a10fe3e256c"
+    },
+    "drivers/of/fdt.c": {
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/drivers/of/fdt.c",
+      "sha256": "89cd4094bc85f5c3c17a4c5686ae9184796bff753b8ecc0da32976c18b3a797e"
+    }
+  },
+  "source_sha256": "d4b771a61b5ef6f3c92c4728d06221aaa5eb5519abf5aba2c1934bf187d72240",
+  "kernel_headers_sha256": "e2482393e1d7ae0d2ec9c8155f940ae70317c907f54ef4f04f186f3c3db63c5c",
+  "physical_writes": false,
+  "read_limit_bytes": 16,
+  "hardware_loaded": false,
+  "disassembly_sha256": "4ca8e4772756c6045fa13dbd8321f55e4d2a1b20bf9e2361d368e6941b7b812b",
+  "manual_disassembly_review": {
+    "eight_reserved_flags_checked_before_marker_load": true,
+    "marker_load_loop_bytes": 16,
+    "writes_observed": "stack-local copies only in init routine; cleanup is return",
+    "limitation": "manual static review of this exact object, not runtime safety, FDT ownership or persistence proof"
+  },
+  "runtime_required": [
+    "current exact FDT tuple and eight page flags",
+    "normal ABI probe load/unload first",
+    "normal module loader checks; no force-load",
+    "bounded marker writer and safe reboot/readback chain not implemented"
+  ]
+}
