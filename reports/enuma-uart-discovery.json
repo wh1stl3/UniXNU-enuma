@@ -1,0 +1,424 @@
+{
+  "scope": "live enuma Android root read-only UART configuration discovery; no reboot, mount, driver bind, pinmux or MMIO write",
+  "captured_at": "2026-10-23T15:18:10.084895+08:00",
+  "records": {
+    "cmdline": {
+      "exit_code": 0,
+      "bytes": 1581,
+      "sha256": "01f065d5679f494036a1465b4d6557335e776423f2bb2d9faea555d882568d3e"
+    },
+    "consoles": {
+      "exit_code": 0,
+      "bytes": 35,
+      "sha256": "4dd47f0bdfd1cba04498eb22a3f1a861bf70b0e5a0a4654a099f1be6089c5ab8"
+    },
+    "tty-drivers": {
+      "exit_code": 0,
+      "bytes": 570,
+      "sha256": "cd974b3d4b19c13c717075a5045aa80e5f940cde128418b062177c423d97dfad"
+    },
+    "uart-bindings": {
+      "exit_code": 0,
+      "bytes": 340,
+      "sha256": "d254954428eab6eed1e0ae1ca1f21f8014954361055be0fef7eb17ecb9152728"
+    },
+    "uart-kconfig": {
+      "exit_code": 0,
+      "bytes": 2235,
+      "sha256": "9bee1c3d72c816a4d62fc38967a6e6529d7874433978611ffab8887497f73d5c"
+    },
+    "uart-dmesg": {
+      "exit_code": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pinmux": {
+      "exit_code": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "identity": {
+      "exit_code": 0,
+      "bytes": 7,
+      "sha256": "45ddf8c2eb1d36ab4df2d59ee0cc73585b8e122164e673650215d4fdb65078c5"
+    }
+  },
+  "fdt_sha256": "fd2b74dcc6d0022c20e58e8d3b39f061111c722dd03a5704d97bacb70dc674f6",
+  "console_boot_tokens": [
+    "console=ttyMSM0,115200n8",
+    "androidboot.console=ttyMSM0"
+  ],
+  "stdout_properties": {},
+  "serial_aliases": {
+    "serial0": "/soc/qcom,qup_uart@988000"
+  },
+  "serial_nodes": [
+    {
+      "path": "/soc/qcom,qup_uart@988000",
+      "compatible": [
+        "qcom,msm-geni-console"
+      ],
+      "status": [
+        "disabled"
+      ],
+      "reg": [
+        "0x988000",
+        "0x4000"
+      ],
+      "interrupts": [
+        "0x0",
+        "0x25b",
+        "0x4"
+      ],
+      "pinctrl-names": [
+        "default",
+        "sleep"
+      ],
+      "pinctrl-0": [
+        "0x279"
+      ],
+      "pinctrl-1": [
+        "0x27a"
+      ],
+      "qcom,wrapper-core": [
+        "0x275"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    },
+    {
+      "path": "/soc/qcom,qup_uart@998000",
+      "compatible": [
+        "qcom,msm-geni-serial-hs"
+      ],
+      "status": [
+        "ok"
+      ],
+      "reg": [
+        "0x998000",
+        "0x4000"
+      ],
+      "pinctrl-names": [
+        "default",
+        "active",
+        "sleep"
+      ],
+      "pinctrl-0": [
+        "0x27b",
+        "0x27c",
+        "0x27d"
+      ],
+      "pinctrl-1": [
+        "0x27e",
+        "0x27f",
+        "0x280"
+      ],
+      "pinctrl-2": [
+        "0x27e",
+        "0x27f",
+        "0x280"
+      ],
+      "qcom,wakeup-byte": [
+        "0xfd"
+      ],
+      "qcom,wrapper-core": [
+        "0x275"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    },
+    {
+      "path": "/soc/qcom,qup_uart@a90000",
+      "compatible": [
+        "qcom,msm-geni-console"
+      ],
+      "status": [
+        "ok"
+      ],
+      "reg": [
+        "0xa90000",
+        "0x4000"
+      ],
+      "interrupts": [
+        "0x0",
+        "0x165",
+        "0x4"
+      ],
+      "pinctrl-names": [
+        "default",
+        "sleep",
+        "init"
+      ],
+      "pinctrl-0": [
+        "0x2a2"
+      ],
+      "pinctrl-1": [
+        "0x2a3"
+      ],
+      "pinctrl-2": [
+        "0x2a4"
+      ],
+      "qcom,wrapper-core": [
+        "0x2a5"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    },
+    {
+      "path": "/soc/qcom,qup_uart@a94000",
+      "compatible": [
+        "qcom,msm-geni-serial-hs"
+      ],
+      "status": [
+        "disabled"
+      ],
+      "reg": [
+        "0xa94000",
+        "0x4000"
+      ],
+      "pinctrl-names": [
+        "default",
+        "active",
+        "sleep"
+      ],
+      "pinctrl-0": [
+        "0x2a6",
+        "0x2a7",
+        "0x2a8"
+      ],
+      "pinctrl-1": [
+        "0x2a9",
+        "0x2aa",
+        "0x2ab"
+      ],
+      "pinctrl-2": [
+        "0x2a9",
+        "0x2aa",
+        "0x2ab"
+      ],
+      "qcom,wakeup-byte": [
+        "0xfd"
+      ],
+      "qcom,wrapper-core": [
+        "0x2a5"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    },
+    {
+      "path": "/soc/qcom,qup_uart@88c000",
+      "compatible": [
+        "qcom,msm-geni-serial-hs"
+      ],
+      "status": [
+        "disabled"
+      ],
+      "reg": [
+        "0x88c000",
+        "0x4000"
+      ],
+      "pinctrl-names": [
+        "default",
+        "sleep"
+      ],
+      "pinctrl-0": [
+        "0x2c4",
+        "0x2c5",
+        "0x2c6"
+      ],
+      "pinctrl-1": [
+        "0x2c4",
+        "0x2c5",
+        "0x2c6"
+      ],
+      "qcom,wakeup-byte": [
+        "0xfd"
+      ],
+      "qcom,wrapper-core": [
+        "0x2c7"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    },
+    {
+      "path": "/soc/qcom,qup_uart@890000",
+      "compatible": [
+        "qcom,msm-geni-serial-hs"
+      ],
+      "status": [
+        "disabled"
+      ],
+      "reg": [
+        "0x890000",
+        "0x4000"
+      ],
+      "pinctrl-names": [
+        "default",
+        "sleep"
+      ],
+      "pinctrl-0": [
+        "0x2c8",
+        "0x2c9"
+      ],
+      "pinctrl-1": [
+        "0x2c8",
+        "0x2c9"
+      ],
+      "qcom,wakeup-byte": [
+        "0xfd"
+      ],
+      "qcom,wrapper-core": [
+        "0x2c7"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    },
+    {
+      "path": "/soc/qcom,qup_uart@994000",
+      "compatible": [
+        "qcom,msm-geni-serial-hs"
+      ],
+      "status": [
+        "disabled"
+      ],
+      "reg": [
+        "0x994000",
+        "0x4000"
+      ],
+      "pinctrl-names": [
+        "default",
+        "active",
+        "sleep"
+      ],
+      "pinctrl-0": [
+        "0x2e4",
+        "0x2e5",
+        "0x2e6"
+      ],
+      "pinctrl-1": [
+        "0x2e7",
+        "0x2e8",
+        "0x2e9"
+      ],
+      "pinctrl-2": [
+        "0x2e7",
+        "0x2e8",
+        "0x2e9"
+      ],
+      "qcom,wakeup-byte": [
+        "0xfd"
+      ],
+      "qcom,wrapper-core": [
+        "0x275"
+      ],
+      "reg-names": [
+        "se_phys"
+      ]
+    }
+  ],
+  "physical_testpoint_mapping_known": false,
+  "voltage_measured": false,
+  "external_uart_connected": false,
+  "uefi_uart_output_verified": false,
+  "usb_adb_is_uart_transport": false,
+  "selected_route": "screen diagnostics; UART software metadata alone cannot establish physical wiring/electrical characteristics",
+  "active_console_registered": false,
+  "bound_uart_device_names": [
+    "998000.qcom,qup_uart"
+  ],
+  "console_alias_node": {
+    "path": "/soc/qcom,qup_uart@988000",
+    "compatible": [
+      "qcom,msm-geni-console"
+    ],
+    "status": [
+      "disabled"
+    ],
+    "reg": [
+      "0x988000",
+      "0x4000"
+    ],
+    "interrupts": [
+      "0x0",
+      "0x25b",
+      "0x4"
+    ],
+    "pinctrl-names": [
+      "default",
+      "sleep"
+    ],
+    "pinctrl-0": [
+      "0x279"
+    ],
+    "pinctrl-1": [
+      "0x27a"
+    ],
+    "qcom,wrapper-core": [
+      "0x275"
+    ],
+    "reg-names": [
+      "se_phys"
+    ]
+  },
+  "console_pin_groups": [
+    {
+      "path": "/soc/pinctrl@f000000/qupv3_se2_2uart_pins/qupv3_se2_2uart_active"
+    },
+    {
+      "path": "/soc/pinctrl@f000000/qupv3_se2_2uart_pins/qupv3_se2_2uart_active/mux",
+      "pins": [
+        "gpio117",
+        "gpio118"
+      ],
+      "function": [
+        "qup2"
+      ]
+    },
+    {
+      "path": "/soc/pinctrl@f000000/qupv3_se2_2uart_pins/qupv3_se2_2uart_active/config",
+      "pins": [
+        "gpio117",
+        "gpio118"
+      ],
+      "drive-strength": [
+        "0x2"
+      ],
+      "bias-disable": []
+    },
+    {
+      "path": "/soc/pinctrl@f000000/qupv3_se2_2uart_pins/qupv3_se2_2uart_sleep"
+    },
+    {
+      "path": "/soc/pinctrl@f000000/qupv3_se2_2uart_pins/qupv3_se2_2uart_sleep/mux",
+      "pins": [
+        "gpio117",
+        "gpio118"
+      ],
+      "function": [
+        "gpio"
+      ]
+    },
+    {
+      "path": "/soc/pinctrl@f000000/qupv3_se2_2uart_pins/qupv3_se2_2uart_sleep/config",
+      "pins": [
+        "gpio117",
+        "gpio118"
+      ],
+      "drive-strength": [
+        "0x2"
+      ],
+      "bias-pull-down": []
+    }
+  ],
+  "identity": "enuma",
+  "root_confirmed": true,
+  "boot_completed": true,
+  "slot": "_a",
+  "partition_hashes_rechecked": false
+}
