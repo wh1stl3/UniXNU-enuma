@@ -4,11 +4,13 @@
 
 ## 当前状态
 
-**晚间SimpleFb完整GUID调用前2/7/2时序已完成，支持point20到达；返回探针正离线构建。** 三笔18:27:42/18:31:06/18:32:22 +08，ADB16.065/21.482/16.069秒，7减两端为5.417/5.413秒，2秒重复差0.004秒。均恢复Android完成/root/原boot与vendor_boot摘要；用户确认三次均无按键。无flash/erase/改槽。外置相机四段（含一次启动前拦截）完整解码通过，抽查无需辨读的UEFI文字，暂无需手机复现。
+**晚间已完成SimpleFb调用前point20及直接PE返回point21两组2/7/2时序，均恢复Android。** 最新核验为18:43:41 +08最后point21候选返回：ADB16.081s、Android完成29.909s，root/槽/解锁和原boot_a/vendor_boot_a摘要通过。用户明确确认两组三笔均无按键，未flash/erase/改槽。实际时序支持调用前及PE入口返回，但返回EFI状态/GOP安装尚未知。
 
-中途18:28一笔7秒准备因fastboot产品/槽/解锁五组查询不完整而拦截，未发送镜像。普通reboot恢复Android/root/原摘要后，重新建立会话并完整通过原门禁，才启动实际7秒；未弱化校验，异常根因未定。当前设备为最后2秒恢复核验后的Android。
+point20 ADB16.065/21.482/16.069s，差5.417/5.413s；point21为16.102/22.565/16.081s，差6.463/6.484s，后者不是精确5秒响应、保留USB/启动噪声。两组末次2秒均严格复用原镜像。外置相机共7段（6启动+1拦截）已完整解码，抽查无UEFI文字需手机补录。此前early-control一笔已自行回Android。
 
-point20在PE包装器调用前，不是构造器/驱动主体或GOP成功；下一步point21返回探针保持禁绘制和Probe早退，正常Dispatcher完成7秒兜底不能救驱动内部卡死。233a9d8历史首次需人工恢复失败保持。见[整组实测](operations/2026-10-23-simplefb-guid-timing-result.md)、[脱敏结果](../reports/enuma-evening-simplefb-first-pass.json)。此前早期对照16.134/30.613秒自行恢复见原报告。
+point20组中一次7秒准备因fastboot身份查询失败被拦截，未发送镜像；普通reboot恢复完整核验后新会话重新通过原门禁再执行。根因未定，没有弱化身份检查。旧233a9d8无返回/人工恢复历史仍保留。
+
+见[调用前整组](operations/2026-10-23-simplefb-guid-timing-result.md)、[返回整组](operations/2026-10-23-simplefb-return-timing-result.md)及对应公开报告。下一层先判断StartImage成功/失败与实际GOP元数据；不直接放行菜单或写屏，若出现看不清日志再请用户手机复现。
 
 ## 本轮结果
 
@@ -33,10 +35,10 @@ UART软件线索ttyMSM0/115200n8、serial0=988000/GPIO117/118，但console disab
 
 FAT载荷、OS/SystemOS只读根镜像、Data分开；NativeUfs含SM8550硬件参数且当前禁用，根卷载荷还要求未接入的PMGR契约。GPT/UUID/Data seed未定，未下载大DMG/生成系统卷/写userdata。固定userdata dry-run不比较展开后容量。详见[系统预研](operations/2026-10-23-system-kernel-userland-roadmap.md)。
 
-51MiB DXE Heap、512MiB owned、内存/example/verified均不变。R-002跨Bootloader不保留，持久日志仍停，不换地址/扩大/借DFPS或SMEM。build/workspace qualification保持串行。尚未验证SimpleFb入口/返回、GOP可见、真实scanout、BDS、XNU、存储根卷或NT36523；UART/TWRP未验证。
+51MiB DXE Heap、512MiB owned、内存/example/verified均不变。R-002跨Bootloader不保留，持久日志仍停，不换地址/扩大/借DFPS或SMEM。build/workspace qualification保持串行。SimpleFb调用前/PE返回已有时序支持；EFI状态、GOP可见、真实scanout、BDS、XNU、存储根卷或NT36523尚未验证；UART/TWRP未验证。
 
 ## 下一步
 
 下一轮离线审查donor解压Mach-O与预链接roots/依赖/AMFI入口/slide，并把已成功配方接回正式板级构建；不复制外板常量。实机开始时重新核对身份/备份/原摘要/在场恢复条件，按既有四次顺序逐次检查Android/root/分区摘要；任次无返回停追加先恢复。入口门命中不当作驱动/协议成功。候选实际x0/FDT/UEFI map取得前不接initrd发布；新内存/verified或破坏性分区操作仍按编号审查，无新待批准项。
 
-设备上一里程碑1e1ab25已推送，固件82ce8a5；本轮补充发布见Git/WORKLOG。参考仓只读，产物/原始设备数据仅out。
+设备上一里程碑3f288f1已推送，固件82ce8a5；本轮补充发布见Git/WORKLOG。参考仓只读，产物/原始设备数据仅out。
