@@ -4,7 +4,7 @@
 
 先读 [AGENTS.md](AGENTS.md)、[当前状态](docs/STATUS.md)、[决策](docs/DECISIONS.md)、[待审查事项](docs/NEED-REVIEW.md)。仓库和交接纪律继承 UniXNU-nuwa，板级参数与 iPhone donor 不继承。
 
-设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表 iPadOS 已可启动。实机已覆盖SimpleFb安装返回、分层GOP元数据和只读MDP地址/格式探针；固定几何假设被受控拒绝，正在离线构建实际描述解码器。尚未写屏或进入XNU，精确步骤及限制以STATUS为准。
+设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表 iPadOS 已可启动。实机已覆盖SimpleFb安装返回、分层GOP元数据和只读MDP地址/格式探针；固定几何假设被受控拒绝，实际描述解码候选已完成离线资格、尚未实测。尚未写屏或进入XNU，精确步骤及限制以STATUS为准。
 
 目录：`config/` 路线和来源锁；`configs/` 内核候选配置；`drivers/EnumaPlatform/` 板级支持代码；`firmware/` 固定提交的独立 UEFI 仓子模块；`scripts/` 审计和主机检查；`reports/` 可复现证据；`docs/` 五件套与操作记录。
 
