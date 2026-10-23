@@ -1,0 +1,29 @@
+{
+  "scope": "same-source progress control and first-source staging association with selected DSI progression; no numeric dump",
+  "firmware_commit": "f0cef6f1505f636f815f5d3653ed467f84f72922",
+  "tests": [
+    {
+      "candidate_sha256": "0c0700b7565d2cc54cb9b2ef41ac954e3181df294a50d812ac75b3d3134a1936",
+      "issued_at": "2026-10-24 03:30:35",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.937,
+      "boot_complete_seconds": 31.14,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "route-control",
+      "step": 18,
+      "query": 1,
+      "fd_sha256": "776217c67a2999fec6983630b3b9570c55087debf57be36fb7c6109f218542f5",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T03:31:14.434696+08:00"
+    }
+  ],
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "xnu_entered": false,
+  "interpretation": "关联互补尚未齐备，未判定首候选的稳定staging关联。"
+}
