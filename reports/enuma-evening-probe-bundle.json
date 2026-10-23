@@ -1,0 +1,57 @@
+{
+  "scope": "offline bundle source/FD/image audit only",
+  "firmware_commit": "82ce8a53b6146df003414cf712237929348bbc57",
+  "plan_sha256": "7a27ca6be5827e32d19152a1113b4b83dc18e21b3e4816f6378fb29a994b73bf",
+  "images": [
+    {
+      "id": "early-control-2s",
+      "variant": "evening-early-control-queue1-stage12-delay2-simplefb-metadata",
+      "image": "out/boot-candidate/evening-early-control-queue1-stage12-delay2-simplefb-metadata-boot-v3.img",
+      "image_sha256": "297110a4b97fb05a146b128050837445d719806e21f2e4ddb0cd63c388601996",
+      "fd_sha256": "d0901dc384146c98acf034b9cbd0d5840c668ad304d382d24111f334a5bd3c6c",
+      "stage": 12,
+      "delay_seconds": 2,
+      "guid_only": false,
+      "completion_fallback": false,
+      "device_tested": false
+    },
+    {
+      "id": "simplefb-pre-2s",
+      "variant": "simplefb-retry-bounds-guid-only-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata",
+      "image": "out/boot-candidate/simplefb-retry-bounds-guid-only-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata-boot-v3.img",
+      "image_sha256": "6baf95968292746998d260810596d090b42ed28e991d3157866e93330a093bc4",
+      "fd_sha256": "75c34141a785d4dc38f1475e6ce1a60b894f30db98c18b58926958c6e2bd203f",
+      "stage": 13,
+      "delay_seconds": 2,
+      "guid_only": true,
+      "completion_fallback": true,
+      "device_tested": false
+    },
+    {
+      "id": "simplefb-pre-7s",
+      "variant": "evening-simplefb-pre-queue1-stage13-delay7-point20-guiddcfd1e6d-simplefb-metadata",
+      "image": "out/boot-candidate/evening-simplefb-pre-queue1-stage13-delay7-point20-guiddcfd1e6d-simplefb-metadata-boot-v3.img",
+      "image_sha256": "fea7478b6fe5556c26b3ca592a2c434fb0c881f4f15441685c5de19bc4de977b",
+      "fd_sha256": "15579755a85b09a491ed6fba7291ff687b49e1ce4d0c793a34202ffd4107bae9",
+      "stage": 13,
+      "delay_seconds": 7,
+      "guid_only": true,
+      "completion_fallback": true,
+      "device_tested": false
+    }
+  ],
+  "sequence": [
+    "early-control-2s",
+    "simplefb-pre-2s",
+    "simplefb-pre-7s",
+    "simplefb-pre-2s"
+  ],
+  "repeat_2s_uses_identical_image": true,
+  "new_device_trials": 0,
+  "reads_device_state": false,
+  "launches_device": false,
+  "recovery_guaranteed_by_offline_audit": false,
+  "target_checkpoint_before_pe_call": true,
+  "unexpected_fallthrough_not_excluded": true,
+  "fallback_limit": "only runs after normal initial Dispatcher completion; fixed 7s, not an asynchronous watchdog"
+}

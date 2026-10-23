@@ -1,0 +1,82 @@
+{
+  "scope": "retained generic kernel re-audit and offline dependency closure only",
+  "kernel_sha256": "de5ccd244f0b4fd6c0ebe5f6173aa6f7be993e31aa45db583150cd65c2f4c0fd",
+  "kernel_bytes": 21041528,
+  "native_prelink_commit": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+  "native_parser_sha256": "5bd80b8c63deec29b747c28253e02308a56d5f8cdb37c9d315e7c8af7012d017",
+  "artifact_origin_run": 39790786938,
+  "format_audit": {
+    "entry_va": "0xfffffff0073e9488",
+    "entry_segment": "__TEXT_EXEC",
+    "initial_tcr": "0x22a51a251a",
+    "deployment": "iOS 17.0",
+    "tg0_bytes": 4096,
+    "tg1_bytes": 4096,
+    "segment_count": 18,
+    "exported_symbols": 22339,
+    "selected_platform_symbols": {
+      "_armdt_platform_configured": false,
+      "_armcpu_registered": false,
+      "_source_pthread_status": false
+    }
+  },
+  "mutated_images_rejected": [
+    {
+      "case": "arm64e subtype",
+      "reason": "Only ordinary little-endian ARM64 is supported"
+    },
+    {
+      "case": "unmapped entry",
+      "reason": "Entry must be aligned and uniquely backed by executable bytes"
+    },
+    {
+      "case": "wrong thread state",
+      "reason": "Unexpected ARM64 thread flavor/count"
+    },
+    {
+      "case": "wrong deployment",
+      "reason": "Expected iOS 17.0 deployment"
+    },
+    {
+      "case": "16K TG0",
+      "reason": "Both initial translation granules must be 4K"
+    },
+    {
+      "case": "truncated image",
+      "reason": "Load commands outside image"
+    }
+  ],
+  "generic_bootstrap_all_device_features_disabled": true,
+  "requested_platform_features": {
+    "XNU_SOURCE_CORECRYPTO14": true,
+    "XNU_SOURCE_PTHREAD": true,
+    "XNU_ARM_DT_PLATFORM": true,
+    "XNU_ARMCPU": true
+  },
+  "retained_bootstrap_feature_values": {
+    "XNU_SOURCE_CORECRYPTO14": "0",
+    "XNU_SOURCE_PTHREAD": "0",
+    "XNU_ARM_DT_PLATFORM": "0",
+    "XNU_ARMCPU": "0"
+  },
+  "upstream_link_archive_paths": {
+    "XNU_SOURCE_CORECRYPTO14": "build/corecrypto-2023/libcorecrypto_kernel_noasm-namespaced.a",
+    "XNU_SOURCE_PTHREAD": "build/libpthread-kernel/libpthread_kernel.a",
+    "XNU_ARM_DT_PLATFORM": "build/armdt-platform/libArmDTPlatform.a",
+    "XNU_ARMCPU": "build/armcpu/libArmCpu.a"
+  },
+  "archive_build_opt_in": false,
+  "upstream_build_script_sha256": "d4e4e63291cd044c22ec11e61ec1bb246ecea77e2261f88c19aabc4137e59fbe",
+  "enuma_defconfig_sha256": "569a8c356931e52264599751288e6b84b2b693162ab5f0f43d2322f9f9efb4fe",
+  "owned_memory_request": "0x20000000",
+  "integration_gaps": {
+    "kernel_archives_declared": false,
+    "kernel_prelink_declared": false,
+    "payload_adt_tool_declared": false
+  },
+  "candidate_enuma_kernel": false,
+  "prelink_generated": false,
+  "new_device_trials": 0,
+  "physical_address_selected": false,
+  "hardware_boot_demonstrated": false
+}

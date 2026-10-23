@@ -1,0 +1,45 @@
+{
+  "scope": "offline preparation; candidates are not started automatically",
+  "firmware_commit": "82ce8a53b6146df003414cf712237929348bbc57",
+  "images": [
+    {
+      "id": "early-control-2s",
+      "variant": "evening-early-control-queue1-stage12-delay2-simplefb-metadata",
+      "stage": 12,
+      "delay_seconds": 2,
+      "guid_only": false,
+      "completion_fallback": false,
+      "guid": null
+    },
+    {
+      "id": "simplefb-pre-2s",
+      "variant": "simplefb-retry-bounds-guid-only-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata",
+      "stage": 13,
+      "delay_seconds": 2,
+      "guid_only": true,
+      "completion_fallback": true,
+      "guid": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92"
+    },
+    {
+      "id": "simplefb-pre-7s",
+      "variant": "evening-simplefb-pre-queue1-stage13-delay7-point20-guiddcfd1e6d-simplefb-metadata",
+      "stage": 13,
+      "delay_seconds": 7,
+      "guid_only": true,
+      "completion_fallback": true,
+      "guid": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92"
+    }
+  ],
+  "sequence": ["early-control-2s", "simplefb-pre-2s", "simplefb-pre-7s", "simplefb-pre-2s"],
+  "required_before_each_attempt": [
+    "Recheck exactly one enuma, boot complete, root, slot, unlock and original partition digests",
+    "Confirm operator available for recovery and collect current image/FD/source hashes",
+    "Continue only after the preceding attempt has returned and Android/root/digests are verified"
+  ],
+  "stop_conditions": [
+    "No observable return: stop all additional candidates and recover using the established path",
+    "Identity, backup, source or digest mismatch: do not boot",
+    "A return time alone does not prove driver or GOP success"
+  ],
+  "not_a_goal_of_this_batch": ["SimpleFb body execution", "GOP pixel output", "ExitBootServices", "XNU boot", "flash/erase/slot change"]
+}
