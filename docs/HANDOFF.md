@@ -26,11 +26,13 @@ counter-control（step14/query1）：2026-10-24 02:35:38，recovered-android-boo
 
 counter-ready（step15/query1）：2026-10-24 02:37:25，recovered-android-boot-complete；ADB21.219秒/Android完成36.047秒；用户无按键确认True，原分区摘要True，独立root/槽/解锁核验True。
 
-。互补时序非寄存器数值日志；配置/进展支持不证明buffer路由、面板或可见写屏；拒绝不证明不活动，近回绕复位/瞬变仍有歧义。
+counter-not-ready（step15/query2）：2026-10-24 02:39:01，recovered-android-boot-complete；ADB15.922秒/Android完成31.407秒；用户无按键确认True，原分区摘要True，独立root/槽/解锁核验True。
+
+configuration: refused (query1-query2 ADB 5.297秒)。互补时序非寄存器数值日志；配置/进展支持不证明buffer路由、面板或可见写屏；拒绝不证明不活动，近回绕复位/瞬变仍有歧义。 计数采样前置未获支持；即便step16也拒绝，不能据此断言已实际等待/采样、帧计数为零或显示停摆。ABL可能未启用计数而仍在输出；本轮保持只读，不为获得数值而写计数使能。
 
 ## 下一步、恢复和限制
 
-先对齐提交推送全部当前文档，再即时核验身份/备份/恢复并临时启动 counter-not-ready；逐笔受控返回和恢复核验后再推进。
+先对齐提交推送全部当前文档，再即时核验身份/备份/恢复并临时启动 counter-progress；逐笔受控返回和恢复核验后再推进。
 
 只读采用必要前后截图和主机日志/时序，实际设备输出、判读变化或恢复时再录像。白点是用户键盘反光，不能记为显示成功。Android/fastboot恢复已有证据，TWRP/UART未验证；无返回即停追加、先恢复，当轮落实STATUS/HANDOFF/WORKLOG/DECISIONS及审核/人工状态，恢复核验后继续离线分析和新软件，不原样重试失败镜像。
 
