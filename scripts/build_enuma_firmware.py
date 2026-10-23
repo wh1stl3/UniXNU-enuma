@@ -86,7 +86,7 @@ def main():
     selection.add_argument('--diagnostic-simplefb',action='store_true',help='metadata-only SimpleFb; omit exact CPR/Display/UFS set, no pixel drawing')
     selection.add_argument('--diagnostic-without-ufs',action='store_true',help='GOP isolation only; default firmware retains OEM UFSDxe')
     parser.add_argument('--diagnostic-gop-query', type=int, choices=(0,1,2), default=0, help='1: reset on read-only GOP audit pass; 2: reset on failure; 0: disabled')
-    parser.add_argument('--diagnostic-gop-step', type=int, choices=range(5), default=0, help='0: post-install control; 1: enumerate/free; 2: add HandleProtocol; 3: add Mode checks; 4: add QueryMode/free')
+    parser.add_argument('--diagnostic-gop-step', type=int, choices=range(8), default=0, help='0: control; 1: enumerate/free; 2: HandleProtocol; 3: full Mode/span; 4: QueryMode; 5: Mode pointer presence; 6: Mode header; 7: Info fields')
     args = parser.parse_args()
     if args.diagnostic_gop_step and not args.diagnostic_gop_query:
         parser.error('GOP steps require --diagnostic-gop-query')

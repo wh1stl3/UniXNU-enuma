@@ -1,0 +1,26 @@
+{
+  "scope": "new Mode-split control; no XNU/pixel claim",
+  "tests": [
+    {
+      "slot": "_a",
+      "candidate_sha256": "d247e44aca6aaa3d1bdd4157e9b2cee37a5d81786442e2932a26082e8b9c6c39",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-23 21:45:28",
+      "boot_returncode": 0,
+      "adb_return_seconds": 17.024,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 28.813,
+      "boot_reason": "bootloader",
+      "step": 2,
+      "firmware_commit": "26b1f9997aead60fec5b67a5ed24ac89cac1feb9",
+      "button_confirmation": "pending",
+      "automatic_return_confirmed": false,
+      "local_evidence": "out/device-tests/20261023T214514-dxe-driver-return"
+    }
+  ]
+}

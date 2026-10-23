@@ -87,7 +87,7 @@ int main(void) {
   assert(EnumaGopAudit(&bs,NULL,&gop,4)==EFI_INVALID_PARAMETER);
   assert(EnumaGopAudit(&bs,owner,NULL,4)==EFI_INVALID_PARAMETER);
   assert(EnumaGopAudit(&bs,owner,&gop,0)==EFI_INVALID_PARAMETER);
-  assert(EnumaGopAudit(&bs,owner,&gop,5)==EFI_INVALID_PARAMETER);
+  assert(EnumaGopAudit(&bs,owner,&gop,8)==EFI_INVALID_PARAMETER);
   assert(locate_calls==0);
   for(unsigned step=1;step<=4;step++) for(int f=0;f<=32;f++) {
     setup(f);EFI_STATUS s=EnumaGopAudit(&bs,owner,&gop,step);
@@ -98,8 +98,26 @@ int main(void) {
     if(step<4)assert(query_calls==0);
     if(f==0)assert(query_calls==(step==4) && handle_calls==(step>=2));
   }
+  // New steps retain cleanup and reject all faults reached before their stop.
+  for(unsigned step=5;step<=7;step++) for(int f=0;f<=32;f++) {
+    setup(f);EFI_STATUS s=EnumaGopAudit(&bs,owner,&gop,step);
+    int error=(f>=1 && f<=8) || f==28 ||
+      (step>=6 && f>=9 && f<=12) ||
+      (step>=7 && ((f>=13 && f<=15) || f==31 || f==32));
+    assert(EFI_ERROR(s)==error);assert(live==0);
+    assert(query_calls==0 && locate_calls==1);
+  }
+  // Invalid addresses MUST remain untouched before the corresponding boundary.
+  setup(0);gop.Mode=(VOID *)(UINTN)1;
+  assert(EnumaGopAudit(&bs,owner,&gop,5)==EFI_SUCCESS);assert(live==0);
+  setup(0);mode.Info=(VOID *)(UINTN)1;
+  assert(EnumaGopAudit(&bs,owner,&gop,6)==EFI_SUCCESS);assert(live==0);
+  setup(0);mode.FrameBufferBase=0;mode.FrameBufferSize=0;
+  assert(EnumaGopAudit(&bs,owner,&gop,7)==EFI_SUCCESS);assert(live==0);
+  setup(29);
+  assert(EnumaGopAudit(&bs,owner,&gop,7)==EFI_SUCCESS);assert(live==0);
   // Framebuffer base is deliberately an unmapped integer. Sanitizers prove
   // these metadata checks do not dereference it; no Blt/SetMode is supplied.
-  puts("PASS: 132 staged GOP cases and 5 invalid arguments; no framebuffer access");
+  puts("PASS: 231 staged GOP cases, 5 invalid arguments, 4 boundary cases; no framebuffer access");
   return 0;
 }

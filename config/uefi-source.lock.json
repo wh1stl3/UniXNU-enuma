@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "e2868342daee0c196942f1a5569526d3ecb80850",
+  "commit": "26b1f9997aead60fec5b67a5ed24ac89cac1feb9",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -21,7 +21,7 @@
     "Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "Resources/Enuma/extensions.json": "e60df4e7f1b18fb511fa95c64a3714fc7ed3340002497811e02ac2c3f9ed52e5",
+    "Resources/Enuma/extensions.json": "4f1e2547886eb9f6d325b5b39cb9dc71561dc7ab7bf3dd0a70642196fbe33b64",
     "Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
@@ -55,9 +55,9 @@
     "patches/simplefb-contract.patch": "1d23beb189b4aa14808e15f6cdb60e3d3580c6b9353a17ea60dbd3e49a38ffea",
     "patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
-    "diagnostics/EnumaGopAudit.h": "d97e058fea990a1122f5fb44839b1e0270917ade8c22a59ca796e6ce8b5fad1c",
-    "patches/simplefb-gop-query.patch": "aaf5bb6a39a0057f38858aaa1ef84ea7a97ec4e8a1bbdebfd36f2e9922a7bd79",
-    "docs/gop-query.md": "122d12d84abe00d570aa08219637825e39285ba395b744411138ec0395489e26",
+    "diagnostics/EnumaGopAudit.h": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
+    "patches/simplefb-gop-query.patch": "f60706f9c9905f72fa2a7296830eecd86ef2d508a368a1e8c33d1f4bbb672921",
+    "docs/gop-query.md": "f9b22e0198ad0c39be2c5230ff0399ab6485915f38e74f4643eea21fe783c5c8",
     "diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184"
   }
 }

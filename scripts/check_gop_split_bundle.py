@@ -7,12 +7,12 @@ SUFFIXES=('.c','.h','.inf','.inc','.dsc','.fdf','.patch','.toml','.py','.json')
 def read(path):return json.loads(path.read_text(encoding='utf-8'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
-def main():
-    config=read(ROOT/'config/gop-split-probes.json')
+def main(config_name='gop-split-probes.json',report_name='enuma-gop-core-split.json'):
+    config=read(ROOT/'config'/config_name)
     pin=read(ROOT/'config/uefi-source.lock.json')
     assert config['firmware_commit']==pin['commit']
     assert config['transport']=='core-warning-v2'
-    assert [x['step'] for x in config['profiles']]==[0,1]
+    assert [x['step'] for x in config['profiles']] in ([0,1],[2,5])
     wanted={}
     for name,sha in pin['file_sha256'].items():
         raw=(ROOT/'firmware'/name).read_bytes();assert digest(raw)==sha,name
@@ -65,8 +65,13 @@ def main():
         prior_timeout_unresolved=True,old_timeout_candidate_not_retested=True,
         reuse_reference={k:reference[k] for k in ('repository','commit','path','sha256')},
         reuse_assessment='Reuse provider/consumer separation; do not import physical clear/cache/address assumptions',
-        remaining_steps=[2,3,4],runtime_limit='Core return gate and completion fallback cannot recover a hung service')
-    (ROOT/'reports/enuma-gop-core-split.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+        remaining_steps=([6,7,3,4] if config['profiles'][0]['step']==2 else [2,3,4]),runtime_limit='Core return gate and completion fallback cannot recover a hung service')
+    (ROOT/'reports'/report_name).write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     print('PASS: two Core-owned GOP profiles, fixed sources, no provider reset dependency, matching embedded FD and image hashes; no device calls')
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--config',default='gop-split-probes.json',choices=('gop-split-probes.json','gop-mode-split-probes.json'))
+    args=parser.parse_args()
+    main(args.config,'enuma-gop-mode-split.json' if args.config=='gop-mode-split-probes.json' else 'enuma-gop-core-split.json')

@@ -27,9 +27,11 @@ def main():
     cmd=flags+['-I'+str(inc/'X64'),'-O1','-fsanitize=address,undefined','-fno-pie','-no-pie',
         str(ROOT/'tests/enuma_gop_audit.c'),'-o',str(out/'test')]
     subprocess.run(cmd,check=True);subprocess.run([cmd[-1]],check=True)
+    optimized=[('-Oz' if x=='-O1' else x) for x in cmd]
+    subprocess.run(optimized,check=True);subprocess.run([optimized[-1]],check=True)
     unit=out/'query.c';objects=[]
     unit.write_text('#include "EnumaGopAudit.h"\nEFI_STATUS Audit(EFI_BOOT_SERVICES *s, EFI_HANDLE h, EFI_GRAPHICS_OUTPUT_PROTOCOL *g){return EnumaGopAudit(s,h,g,TEST_STAGE);}\n')
-    for step in range(1,5):
+    for step in range(1,8):
         obj=out/('query-step'+str(step)+'.obj')
         subprocess.run(flags+['-I'+str(inc/'AArch64'),'-target','aarch64-unknown-windows-msvc','-ffreestanding','-Oz',
             '-DTEST_STAGE='+str(step),'-fno-builtin','-fno-stack-protector','-mno-implicit-float','-c',str(unit),'-o',str(obj)],check=True)
@@ -66,7 +68,7 @@ def main():
         'for(unsigned i=0;i<3;i++){calls=0;supplied=statuses[i];uint64_t result=f();'
         'assert(result==((ENUMA_DIAG_GOP_STEP>0 && EFI_ERROR(supplied))?ENUMA_GOP_RESULT_FAIL:ENUMA_GOP_RESULT_PASS));'
         'assert(calls==(ENUMA_DIAG_GOP_STEP>0));assert(!EFI_ERROR(result));}return 0;}\n')
-    for step in range(5):
+    for step in range(8):
         for selector in (1,2):
             subprocess.run(['clang','-std=c11','-Wall','-Wextra','-Werror','-I'+str(header.parent),
                 '-DENUMA_DIAG_GOP_STEP='+str(step),'-DENUMA_DIAG_GOP_QUERY='+str(selector),str(gate),'-o',str(out/'gate')],check=True)
@@ -97,11 +99,12 @@ def main():
     result=subprocess.run(base+['--diagnostic-gop-query','0','--diagnostic-gop-step','1'],capture_output=True,text=True)
     assert result.returncode==2 and 'GOP steps require' in result.stderr
     report=dict(scope='host fault injection and real Mu-header AArch64 object only; no hardware claim',
-        all_passed=True,cases=137,sanitizers=['address','undefined'],mu_commit=lock['reference_gitlinks']['Mu_Basecore'],
+        all_passed=True,cases=240,host_optimizations=['O1','Oz'],sanitizers=['address','undefined'],mu_commit=lock['reference_gitlinks']['Mu_Basecore'],
         source_sha256=hashlib.sha256(header.read_bytes()).hexdigest(),aarch64_objects=objects,
         framebuffer_access=False,blt_or_setmode=False,allocations_freed=True,
-        real_provider_patch_composed=True,post_install_marker_cases=30,
+        real_provider_patch_composed=True,post_install_marker_cases=48,
         invalid_build_profiles_rejected=len(bad_profiles)+1,
+        mode_substeps=[5,6,7],poison_pointer_and_deferred_span_cases=4,
         provider_inf_unchanged=True,provider_reset_removed=True,
         actual_mu_warning_transport_cases=6,warning_driver_not_unloaded=True,
         core_exit_preserves_status_source_checked=True,

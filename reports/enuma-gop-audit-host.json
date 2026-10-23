@@ -1,38 +1,63 @@
 {
   "scope": "host fault injection and real Mu-header AArch64 object only; no hardware claim",
   "all_passed": true,
-  "cases": 137,
+  "cases": 240,
+  "host_optimizations": [
+    "O1",
+    "Oz"
+  ],
   "sanitizers": [
     "address",
     "undefined"
   ],
   "mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
-  "source_sha256": "d97e058fea990a1122f5fb44839b1e0270917ade8c22a59ca796e6ce8b5fad1c",
+  "source_sha256": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
   "aarch64_objects": [
     {
       "step": 1,
-      "object_sha256": "d4fd122e405fcb1d9823649f95dbdf5c90dc078cd5ff62b2a5a6e52449f5b44f",
+      "object_sha256": "c489a2dcd5318a88551c616a78a0a3d8aa635fb23c63e018fe8640da2eaf2546",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 2,
-      "object_sha256": "7d288bfab918ad68a2b84d08b87464df2831a28c3aa10834ca088e2f8c697943",
+      "object_sha256": "ed1418a333261b1229706f50c357ce7dc28263a6d5e6a8797a247359a934ca79",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 3,
-      "object_sha256": "b17e267e9994e0b1178a3f27dcb89a042a508c4bc70765c26329bf3f1e59e6a8",
+      "object_sha256": "dad05d01dea3d8b21d306a1bdc441acdf94ab299086ba42a50fa3a6342d55281",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 4,
-      "object_sha256": "4d30775544460652b2fc15be490188c38309e79f937f2b4394b0d60fe175e724",
+      "object_sha256": "05e7bec795082ab46c47a6a4b6284c65604a2d1131499d1cabda315887c3e2f9",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    },
+    {
+      "step": 5,
+      "object_sha256": "8abcd6beb57683eec0c41a8a8fd720dd9a7a023a6c59e4c51bdce45a2874aab8",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    },
+    {
+      "step": 6,
+      "object_sha256": "a15008fabb3c430c59ecd6a70ff8ed57c19b36346b2d37cfaaddc65af43d63a3",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    },
+    {
+      "step": 7,
+      "object_sha256": "c0069929275819dc60f822aa1b14ce1d91020f952f53902e183a71a8b04c545c",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
@@ -42,8 +67,14 @@
   "blt_or_setmode": false,
   "allocations_freed": true,
   "real_provider_patch_composed": true,
-  "post_install_marker_cases": 30,
+  "post_install_marker_cases": 48,
   "invalid_build_profiles_rejected": 7,
+  "mode_substeps": [
+    5,
+    6,
+    7
+  ],
+  "poison_pointer_and_deferred_span_cases": 4,
   "provider_inf_unchanged": true,
   "provider_reset_removed": true,
   "actual_mu_warning_transport_cases": 6,
