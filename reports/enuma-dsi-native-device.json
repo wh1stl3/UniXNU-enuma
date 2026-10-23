@@ -1,0 +1,29 @@
+{
+  "scope": "same-source native-status control and two-window bounded frame progression; no numeric early trace",
+  "firmware_commit": "60f38e9eee70151c09d4fe30bc992ee6835f9b79",
+  "tests": [
+    {
+      "candidate_sha256": "9068815fc7d5eb5862686aae1500404bf0c5e7f0a8ef9221ba66a1c190bf1fc4",
+      "issued_at": "2026-10-24 03:04:04",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.063,
+      "boot_complete_seconds": 29.266,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "native-active",
+      "step": 17,
+      "query": 1,
+      "fd_sha256": "7175c9cf7dd346c4e97df6f296da59921929a2e8b237dcd6cbeddb503a2a297e",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T03:04:42.279980+08:00"
+    }
+  ],
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "xnu_entered": false,
+  "interpretation": "双窗互补尚未齐备，未取得有效增量证据。"
+}
