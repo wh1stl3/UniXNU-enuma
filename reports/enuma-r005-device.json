@@ -1,0 +1,24 @@
+{
+  "scope": "R-005 matching-control and one-shot preview runtime evidence; target success requires more than return",
+  "firmware_commit": "c73eb6e18e3dcb49fb9bb39676aaf3179dcab17a",
+  "tests": [
+    {
+      "candidate_sha256": "d656b861d4054c7165bfbfc370818776266cea5930942b803434e883ccf7b0d5",
+      "issued_at": "2026-10-24 01:20:42",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 15.875,
+      "boot_complete_seconds": 32.281,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "step": 12,
+      "variant": "pixel-r005-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "5ad3039820ef8e1c99c88ee68c147b75f15927e85ce1ba42d3f6542f79489250",
+      "no_buttons_confirmed_by_user": true
+    }
+  ],
+  "xnu_entered": false,
+  "register_writes": false,
+  "partition_writes": false
+}
