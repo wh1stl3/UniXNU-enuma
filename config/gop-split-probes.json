@@ -16,5 +16,10 @@
     }
   ],
   "hardware_order": "Reassess recovery first; test control only, then consider enumeration after verified controlled return. Any timeout stops additional candidates.",
-  "unbuilt_steps": [2, 3, 4]
+  "unbuilt_steps": [
+    2,
+    3,
+    4
+  ],
+  "source_lock": "source-history/uefi-e286834.lock.json"
 }

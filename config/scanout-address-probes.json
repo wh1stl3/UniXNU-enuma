@@ -17,5 +17,6 @@
   ],
   "hardware_order": "Control return then step9; predicate rejection with controlled recovery is not a hard-stop. Timeout stops additional boots and starts recovery.",
   "pixel_access": false,
-  "mmio_writes": false
+  "mmio_writes": false,
+  "source_lock": "source-history/uefi-17aa47a.lock.json"
 }

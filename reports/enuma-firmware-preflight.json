@@ -1,5 +1,7 @@
 {
   "scope": "fixed inputs and writable staging, no firmware execution",
+  "sec_fixed_source_epoch": 1792540800,
+  "sec_staged_sha256": "e9f219693dac1a38655d8f2ad45805b6e4fc3fa60bb3250a4ad3a115f3c6e2fa",
   "vendor_files_checked": 102,
   "reference_gitlinks": {
     "Mu_Basecore": "cfb93724a06ff86ff5ba971413368a7809ee42a5",

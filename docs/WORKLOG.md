@@ -118,3 +118,9 @@
 2026-10-23 · 23:16:54 838b38f linear-control step3临时boot后75秒无返回，23:18硬停追加并落实HANDOFF/STATUS，当前待人工恢复；step10未执行。证据reports/enuma-linear-control-timeout.json。
 
 2026-10-23 · 人工恢复核验完成：2026-10-23 23:20:44 Android/root/原槽/解锁/原摘要通过；已同步刷新HANDOFF/STATUS，不再等待按键。step10离线审计通过但未实测，继续离线SEC布局稳定化与新基线。
+
+
+2026-10-23 · 23:40 · f15d520双构建/全链接/打包/候选资格通过，SEC载荷一致，Pcd仅RSDS八字节变化。历史源锁审计与五负例/workspace通过。下一步新step0门禁，不是硬件通过。
+
+
+2026-10-23 · 23:41:10 · f15d520 epoch-control-b step0：ADB15.856秒/完成31.445秒，身份/root/原摘要通过，用户无按键确认；新step9/10待构建。

@@ -2,7 +2,7 @@
   "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
   "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "uefi_source_commit": "838b38f3f1a0e927b187d63c6f17db1c5cf7ab88",
+  "uefi_source_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
   "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
   "unixnu_qualification": {
     "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
@@ -80,7 +80,7 @@
       "ENUMA_DIAG_GUID_ONLY": "1",
       "ENUMA_DIAG_DISPATCH_FALLBACK": "1",
       "ENUMA_DIAG_GOP_QUERY": "1",
-      "ENUMA_DIAG_GOP_STEP": "10",
+      "ENUMA_DIAG_GOP_STEP": "0",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
@@ -107,7 +107,7 @@
   ],
   "diagnostic_simplefb_metadata_only": true,
   "diagnostic_gop_query": 1,
-  "diagnostic_gop_step": 10,
+  "diagnostic_gop_step": 0,
   "diagnostic_gop_reset_owner": "DxeCore",
   "diagnostic_gop_transport": "core-warning-v2",
   "reference_gitlinks": {
@@ -123,7 +123,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "c13a02abd83110ce21fd0f2b239875334aaceabdb0e65751487dc6c1ce2f7ef4",
+  "fd_sha256": "5eaf4ae0444b8657157164adf09b72cf02545cb5e3cef0f9b58db0e8894197b2",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -140,13 +140,13 @@
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "firmware/Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "firmware/Resources/Enuma/extensions.json": "7270bc8eeb7266bac2fe09a73a12c0651eabf0ee947c5be20928881242faa9c8",
+    "firmware/Resources/Enuma/extensions.json": "e1d7ec11e7e7c4c138f6b0a26bf416a51e0cb5f4f417073086feefeeba4b6336",
     "firmware/Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "firmware/Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "firmware/Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
     "firmware/Resources/Enuma/vendor.json": "9c37197536afc0eeb6deeb708fa8b436692a4c693e2eb3b4653f7108931f8fec",
     "firmware/Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
-    "firmware/Resources/Scripts/enuma_preflight.py": "2e39ff082537e0bb3fd73859bb94731d5f56ab0534e04c10a927e572dbe1e747",
+    "firmware/Resources/Scripts/enuma_preflight.py": "f4fde34753b3a1cce7d781c94f927cab8874634eb5ae8164796c7140ca42773c",
     "firmware/Resources/Scripts/mkbootimg.py": "55037fd1a6d6cd861add76c2083d5d4321373bf714acae3f6a40deb004c27d47",
     "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
     "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "d5d0e4875d8331e3d8f516f5c38a97c51e8cf5766d7fca7441f4965aea83ea41",
@@ -175,7 +175,8 @@
     "firmware/Resources/Scripts/build_enuma_firmware.py": "ef05705a3a4295799da9c8903a36eab1bded51efcadc7284e2bb65a0f7f5f151",
     "firmware/Resources/Scripts/enuma_firmware_preflight.py": "eb9af118480cf90166854337ed76cf850485b6e2f890e592ed7a339fbc39521a",
     "firmware/diagnostics/EnumaScanoutAudit.h": "cdf6ef74f6309c069fb4ac73f83e5393726f59274cec7021e95fbe3c5b4e7b90",
-    "firmware/patches/display-mdp-map.patch": "5aa0f4e584349354000c50a181fb7a0aa31c43b1f4128a72bc35469e90fd14b4"
+    "firmware/patches/display-mdp-map.patch": "5aa0f4e584349354000c50a181fb7a0aa31c43b1f4128a72bc35469e90fd14b4",
+    "firmware/patches/sec-fixed-epoch-banner.patch": "37bbf193ffd4d2cd38a8a782a7fc584becde14bdfe649cc338f13f0f36f08d2f"
   },
   "probe_upstream_sha256": {
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",

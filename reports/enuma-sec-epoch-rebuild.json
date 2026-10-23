@@ -1,0 +1,31 @@
+{
+  "scope": "offline identical-input rebuild; not hardware fix",
+  "firmware_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
+  "source_inputs_equal": true,
+  "configuration_equal": true,
+  "sec_payload_equal": true,
+  "sec_sha256": "807c543145290eb7ff4c9fa7d30c58746e92fc8216fb5e33c6d2d7360cc843a2",
+  "fd_equal": false,
+  "fd_sha256_a": "da7f012282354fa7c2312ed9150fa3dc8cfb18e382087726bbd0247e311b2d12",
+  "fd_sha256_b": "5eaf4ae0444b8657157164adf09b72cf02545cb5e3cef0f9b58db0e8894197b2",
+  "changed_executable_sections": [
+    {
+      "section": "80cf7257-87ab-47f9-a3fe-d50b76d89541:2:16",
+      "size_a": 28672,
+      "size_b": 28672,
+      "different_bytes": 8,
+      "offsets": [
+        24904,
+        24905,
+        24906,
+        24907,
+        24908,
+        24909,
+        24910,
+        24911
+      ],
+      "rsds_offset_a": 24900,
+      "rsds_offset_b": 24900
+    }
+  ]
+}

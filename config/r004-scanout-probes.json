@@ -17,5 +17,6 @@
   ],
   "hardware_order": "Verify same-source mapped control return before step8; timeout stops all additional boots, recover then offline isolation.",
   "pixel_access": false,
-  "mmio_writes": false
+  "mmio_writes": false,
+  "source_lock": "source-history/uefi-9f50890.lock.json"
 }

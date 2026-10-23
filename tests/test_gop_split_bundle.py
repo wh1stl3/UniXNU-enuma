@@ -18,6 +18,13 @@ class GuardTests(unittest.TestCase):
             if path.name=='scanout-linear-probes.json':value['firmware_commit']='0'*40
         self.altered_metadata(change)
 
+    def test_historical_source_hash_changed(self):
+        def change(path,value):
+            if path.parent.name=='source-history':
+                first=next(iter(value['file_sha256']))
+                value['file_sha256'][first]='0'*64
+        self.altered_metadata(change)
+
     def test_old_transport(self):
         def change(path,value):
             if path.name=='enuma-firmware-build.json':value['diagnostic_gop_transport']='provider-local-v1'
@@ -25,7 +32,7 @@ class GuardTests(unittest.TestCase):
 
     def test_additional_define_difference(self):
         def change(path,value):
-            if path.name=='enuma-firmware-build.json' and 'pointer' in path.parent.name:
+            if path.name=='enuma-firmware-build.json' and value['diagnostic_gop_step']==10:
                 value['firmware_configuration']['defines']['ENUMA_DIAG_DELAY_US']='7000000'
         self.altered_metadata(change)
 

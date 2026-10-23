@@ -1,0 +1,14 @@
+{
+  "candidate_sha256": "603a799ba2ce0e82651e23ef6f9e99351a63153e3ee388ea6fc815ae4d506cda",
+  "issued_at": "2026-10-23 23:41:10",
+  "phase": "recovered-android-boot-complete",
+  "adb_return_seconds": 15.856,
+  "boot_complete_seconds": 31.445,
+  "recovery_boot_completed": true,
+  "partition_digests_unchanged": true,
+  "partition_writes": false,
+  "firmware_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
+  "step": 0,
+  "no_buttons_confirmed_by_user": true,
+  "scope": "installation-only controlled return; not GOP/scanout/XNU proof"
+}

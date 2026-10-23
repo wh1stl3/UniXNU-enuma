@@ -3,6 +3,7 @@
   "firmware_commit": "17aa47ad900fb1c3934f4d68c07780067a26a0de",
   "transport": "core-warning-v2",
   "all_passed": true,
+  "source_evidence": "fixed historical Git objects",
   "source_inputs_identical": true,
   "only_firmware_define_difference": "ENUMA_DIAG_GOP_STEP",
   "profiles": [

@@ -1,5 +1,5 @@
 """Audit staged Core-owned GOP candidates without invoking ADB or fastboot."""
-import hashlib,json,struct
+import hashlib,json,struct,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 SUFFIXES=('.c','.h','.inf','.inc','.dsc','.fdf','.patch','.toml','.py','.json')
@@ -9,13 +9,18 @@ def digest(data):return hashlib.sha256(data).hexdigest()
 
 def main(config_name='gop-split-probes.json',report_name='enuma-gop-core-split.json'):
     config=read(ROOT/'config'/config_name)
-    pin=read(ROOT/'config/uefi-source.lock.json')
+    pin_path=(ROOT/'config'/config.get('source_lock','uefi-source.lock.json')).resolve()
+    assert pin_path.is_relative_to((ROOT/'config').resolve())
+    pin=read(pin_path)
+    checkout_commit=subprocess.check_output(['git','-C',str(ROOT/'firmware'),'rev-parse','HEAD'],text=True).strip()
     assert config['firmware_commit']==pin['commit']
     assert config['transport']=='core-warning-v2'
     assert [x['step'] for x in config['profiles']] in ([0,1],[2,5],[3,8],[3,9],[3,10])
     wanted={}
     for name,sha in pin['file_sha256'].items():
-        raw=(ROOT/'firmware'/name).read_bytes();assert digest(raw)==sha,name
+        raw=((ROOT/'firmware'/name).read_bytes() if checkout_commit==pin['commit'] else
+             subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show',pin['commit']+':'+name]))
+        assert digest(raw)==sha,name
         if Path(name).suffix in SUFFIXES:wanted['firmware/'+name]=digest(raw.replace(b'\r\n',b'\n'))
     records=[];definitions=[]
     for profile in config['profiles']:
@@ -59,6 +64,7 @@ def main(config_name='gop-split-probes.json',report_name='enuma-gop-core-split.j
     assert digest((ROOT/reference['local_path']).read_bytes())==reference['sha256']
     report=dict(scope='offline bundle audit; no device calls, no new runtime evidence',
         firmware_commit=pin['commit'],transport=config['transport'],all_passed=True,
+        source_evidence=('current checkout' if checkout_commit==pin['commit'] else 'fixed historical Git objects'),
         source_inputs_identical=True,only_firmware_define_difference='ENUMA_DIAG_GOP_STEP',
         profiles=records,host_report='reports/enuma-gop-audit-host.json',
         core_report='reports/enuma-dispatch-details-host.json',hardware_execution=False,
