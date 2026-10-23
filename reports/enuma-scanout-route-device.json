@@ -37,11 +37,33 @@
       "no_buttons_confirmed_by_user": true,
       "independent_recovery_check": true,
       "recovery_checked_at": "2026-10-24T03:32:53.823388+08:00"
+    },
+    {
+      "candidate_sha256": "d01bd6e3d1f66c7eff5a36563dd5c8a79c20c27ee1845f3b4a6d09e0fc0a4d32",
+      "issued_at": "2026-10-24 03:35:18",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 21.235,
+      "boot_complete_seconds": 33.781,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "route-unproven",
+      "step": 19,
+      "query": 2,
+      "fd_sha256": "84c3b03576f0eb383769d67e6c63874ce122aaf50083c94bf357637ab96d6f76",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T03:36:08.198889+08:00"
     }
   ],
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false,
   "xnu_entered": false,
-  "interpretation": "关联互补尚未齐备，未判定首候选的稳定staging关联。"
+  "interpretation": "同源step18对照和step19正/互补时序支持：major/minor6.0下首个合法描述的非virtual SSPP在某CTL/LM中staged，CTL选择的同一活动DSI两窗各递增1..64；描述/选中staging/接口掩码/时序配置保持。仅稳定配置关联和所选接口推进，不证明LM实际输出、fetch成功或物理/可见路由。 query1-query2 ADB差-4.297秒包含启动噪声，不能当精确频率或实测100ms。",
+  "association_predicate": "supported",
+  "query1_minus_query2_adb_seconds": -4.297,
+  "stable_staged_association_supported": true,
+  "next_action": "稳定挂接关联获得支持，降低“首候选完全未挂接”嫌疑，下一步优先核对LM实际输出/pingpong/DSC、混合裁剪和fetch/地址可见性，再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。"
 }

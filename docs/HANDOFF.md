@@ -1,4 +1,4 @@
-# 当前进度：候选SSPP挂接与所选DSI双窗关联探针完成构建审计
+# 当前进度：候选SSPP挂接与所选DSI双窗关联探针完成受控返回，关联结果见下
 
 2026-10-24 Asia/Shanghai。用户“继续”，沿已确认在场恢复、按需摄像及直接只读实测授权推进。主判断：接口计数已能推进，首查原候选buffer/SSPP图层选择与后续显示接管，Boot v3格式低优先级。每笔前全部当前文档提交推送、即时身份/备份/恢复及超时停追加规则保持。
 
@@ -26,11 +26,13 @@ route-control step18/query1：2026-10-24 03:30:35，recovered-android-boot-compl
 
 route-associated step19/query1：2026-10-24 03:32:02，recovered-android-boot-complete；ADB16.938秒/Android完成32.422秒；用户无按键True，原分区摘要True，独立恢复核验True。
 
-关联互补尚未齐备，未判定首候选的稳定staging关联。
+route-unproven step19/query2：2026-10-24 03:35:18，recovered-android-boot-complete；ADB21.235秒/Android完成33.781秒；用户无按键True，原分区摘要True，独立恢复核验True。
+
+同源step18对照和step19正/互补时序支持：major/minor6.0下首个合法描述的非virtual SSPP在某CTL/LM中staged，CTL选择的同一活动DSI两窗各递增1..64；描述/选中staging/接口掩码/时序配置保持。仅稳定配置关联和所选接口推进，不证明LM实际输出、fetch成功或物理/可见路由。 query1-query2 ADB差-4.297秒包含启动噪声，不能当精确频率或实测100ms。
 
 ## 下一步与恢复边界
 
-先提交推送全部当前文档，再以即时身份/备份/恢复门禁临时启动 route-unproven；每笔受控返回和独立恢复/无按键核验后推进。
+稳定挂接关联获得支持，降低“首候选完全未挂接”嫌疑，下一步优先核对LM实际输出/pingpong/DSC、混合裁剪和fetch/地址可见性，再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。
 
 用户可在场恢复；必要前后截图与主机日志，实际输出/判读变化/恢复动作时录像。键盘反光不作输出。Android/fastboot恢复已核对，TWRP/UART未验证；超时停追加先恢复并当轮落实交接，恢复核验后继续离线分析和新软件，不原样重试失败镜像。
 

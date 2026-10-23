@@ -39,3 +39,9 @@ configuration: refused (query1-query2 ADB 5.297秒)；progress: refused (query1-
 三笔均已由用户确认全程无按键且通过独立Android/root/原槽/解锁/原分区摘要核验。双窗判据以本节实测解释为准；活动路由及持续显示交接仍须独立核对，不能升级为面板或Boot v3故障定论。后续优先对应小米版本INTF_STATUS与CTL/LM挂接的有来源只读观测，而非重复相同前置或写计数使能。
 
 主判断更新：整条SDE接口完全停摆的嫌疑下降，活动buffer/SSPP图层路由、fetch/地址可见性和面板后段成为首查；Boot v3头解析仍低优先级。旧时序/计数enable组合前置不适合直接判定当前ABL遗留管线的活动性，不能把旧拒绝当停止。双窗推进不证明内存fetch成功或物理面板显示，下一项最有区分力的观测是将先前候选Source与实际CTL/LM挂接及INTF绑定对应。
+
+## 候选staging关联实测更新
+
+同源step18对照和step19正/互补时序支持：major/minor6.0下首个合法描述的非virtual SSPP在某CTL/LM中staged，CTL选择的同一活动DSI两窗各递增1..64；描述/选中staging/接口掩码/时序配置保持。仅稳定配置关联和所选接口推进，不证明LM实际输出、fetch成功或物理/可见路由。 query1-query2 ADB差-4.297秒包含启动噪声，不能当精确频率或实测100ms。
+
+稳定挂接关联获得支持，降低“首候选完全未挂接”嫌疑，下一步优先核对LM实际输出/pingpong/DSC、混合裁剪和fetch/地址可见性，再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。
