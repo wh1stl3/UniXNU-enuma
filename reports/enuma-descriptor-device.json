@@ -1,0 +1,21 @@
+{
+  "scope": "bounded descriptor hypothesis; no pixel/activity/IOVA proof",
+  "firmware_commit": "7dc3bf19c2997d7203e305697564e7a2586b57cd",
+  "tests": [
+    {
+      "candidate_sha256": "93a787117d8b72bf24c9397141b13b95332e694f2ef8c055b9a3eca29abc6b21",
+      "issued_at": "2026-10-24 00:24:06",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 15.877,
+      "boot_complete_seconds": 30.799,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 10,
+      "selector": 1,
+      "variant": "descriptor-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "de159ec291cdfb30cabc083757eb4e755c059fc5eb37d756d32212ba3b4b29d4",
+      "no_buttons_confirmed_by_user": true
+    }
+  ]
+}
