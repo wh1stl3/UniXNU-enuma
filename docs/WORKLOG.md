@@ -204,3 +204,7 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 · 用户要求沿判断继续并取得有效增量，可在场恢复和按需摄像。固件60f38e9已推送，64项源锁/gitlink固定；新step17/18使用对应小米52a2f18原生INTF_STATUS和get_status计数读路径，major6+同一活动接口两窗各1..64非回绕递增，最多26读/两次Stall，不写计数使能。27项O1/Oz+ASan/UBSan、真实AArch64仅gBS、GOP/Mu回归、像素禁旗标与恢复/源锁/workspace通过，三份全链接/补丁回退、30OEM、AutoGen/库/实际FD/Boot v3与同源bundle离线资格通过。新候选尚未实测，先全部文档提交推送。证据reports/enuma-dsi-native-{host,bundle,source-contract}.json及operations/2026-10-24-dsi-native-progress.md。
 
 2026-10-24 03:04:04 · 全套文档/资格48b5651推送后执行60f38e9 native-active（step17/query1），image 9068815fc7d5eb5862686aae1500404bf0c5e7f0a8ef9221ba66a1c190bf1fc4；ADB16.063秒/Android完成29.266秒。用户确认全程无按键，独立Android/root/原槽/解锁/boot和vendor_boot原摘要通过；无MMIO/像素/分区写入或恢复故障。证据reports/enuma-dsi-native-device.json、enuma-dsi-native-preflight.json及out/native-active-device.log。下一动作见当前STATUS，继续前先提交推送全部文档。
+
+2026-10-24 · 用户再次明确要求将“基于具体情况、结合公开资料，对故障原因做大胆判断”计入规则。已写入AGENTS持久规则：给出主判断/嫌疑排序/可推翻条件并据此验证，区分推断与已证实事实，不绕过门禁。当前step18/query1已无按键受控返回并独立恢复核验，互补尚未执行。
+
+2026-10-24 03:05:34 · 全套文档/资格3a686b7推送后执行60f38e9 native-progress（step18/query1），image f1fb4d377744ba7aa69162aa7998a18e51c12cb0575d961208219843b58203a3；ADB16.969秒/Android完成32.266秒。用户确认全程无按键，独立Android/root/原槽/解锁/boot和vendor_boot原摘要通过；无MMIO/像素/分区写入或恢复故障。证据reports/enuma-dsi-native-device.json、enuma-dsi-native-preflight.json及out/native-progress-device.log。下一动作见当前STATUS，继续前先提交推送全部文档。

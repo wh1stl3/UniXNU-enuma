@@ -24,11 +24,13 @@ query1为非错误标记门、query2为错误标记门，Core命中延时2秒；
 
 native-active step17/query1：2026-10-24 03:04:04，recovered-android-boot-complete；ADB16.063秒/Android完成29.266秒；用户无按键True，原摘要True，独立恢复核验True。
 
+native-progress step18/query1：2026-10-24 03:05:34，recovered-android-boot-complete；ADB16.969秒/Android完成32.266秒；用户无按键True，原摘要True，独立恢复核验True。
+
 双窗互补尚未齐备，未取得有效增量证据。
 
 ## 下一步和边界
 
-先提交推送所有当前文档，再以即时身份/备份/恢复门禁临时启动 native-progress，逐笔独立恢复与无按键确认后再推进。
+先提交推送所有当前文档，再以即时身份/备份/恢复门禁临时启动 native-no-progress，逐笔独立恢复与无按键确认后再推进。
 
 只读留必要前后相机截图及主机时序/日志；实际输出、变化判读或恢复时再录像。白点是用户键盘反光，不算输出。用户已确认可在场恢复，Android/fastboot恢复已核对，TWRP/UART未验证；超时停追加先恢复并当轮落实交接，恢复核验后继续离线修复，不原样重试失败镜像。
 
