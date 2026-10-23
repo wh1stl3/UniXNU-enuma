@@ -80,7 +80,7 @@
       "ENUMA_DIAG_GUID_ONLY": "1",
       "ENUMA_DIAG_DISPATCH_FALLBACK": "1",
       "ENUMA_DIAG_GOP_QUERY": "1",
-      "ENUMA_DIAG_GOP_STEP": "7",
+      "ENUMA_DIAG_GOP_STEP": "3",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
@@ -107,7 +107,7 @@
   ],
   "diagnostic_simplefb_metadata_only": true,
   "diagnostic_gop_query": 1,
-  "diagnostic_gop_step": 7,
+  "diagnostic_gop_step": 3,
   "diagnostic_gop_reset_owner": "DxeCore",
   "diagnostic_gop_transport": "core-warning-v2",
   "reference_gitlinks": {
@@ -123,7 +123,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "43faa99c0a6cb9e5bbeb8bc3df7617a7f271682b6062f77a9ebf63ad0121105b",
+  "fd_sha256": "23b94b54193f10536e79a1bff2f2681f4f6aa3e78cd11ef75dcaceda6b44ac90",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
