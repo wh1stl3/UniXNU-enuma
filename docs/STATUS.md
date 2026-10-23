@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-**SimpleFb最终StartImage非错误/错误/非错误三笔分类已完成，支持最终返回非错误；GOP运行时查询仍未做。** 18:52:06/18:57:15/18:58:31 +08，ADB16.057/22.524/16.082秒；两次17短返回差0.025s，16长6.467/6.442s。均Android完成/root/原boot与vendor_boot摘要通过，无flash/erase/改槽。按键确认等待用户单独答复，以报告字段为准。
+**SimpleFb最终StartImage非错误/错误/非错误三笔分类已完成，支持最终返回非错误；GOP运行时查询仍未做。** 18:52:06/18:57:15/18:58:31 +08，ADB16.057/22.524/16.082秒；两次17短返回差0.025s，16长6.467/6.442s。均Android完成/root/原boot与vendor_boot摘要通过，无flash/erase/改槽。用户已明确确认这组三次均未按键，设备自行返回。
 
 本组实际AArch64/core还原/30OEM/FD/BootShim/v3通过，源输入一致，147组真实诊断头/桥接及完成门host回归重跑通过，workspace串行通过。17表示!EFI_ERROR，包括warning，未读数值EFI状态。结合固定SimpleFb源码支持正常GOP安装路径完成，但未枚举/HandleProtocol/QueryMode，不能称实际GOP或出图通过。见[状态分类](operations/2026-10-23-simplefb-status-classification.md)、[结构报告](../reports/enuma-simplefb-status-classification.json)。
 

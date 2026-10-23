@@ -82,3 +82,5 @@
 - 2026-10-23 Asia/Shanghai · 上一里程碑3f288f1已推送。复用既有point21生成GUID-only2/7候选，实际AArch64/core还原/30OEM/FD/BootShim/v3与同源检查通过，依持续实机授权再做2/7/2。ADB16.102/22.565/16.081s，差6.463/6.484s、2秒重复差-0.021，三笔Android/root/原摘要通过，用户确认无按键。支持直接PE返回，不证明EFI成功/GOP，差额不称精确5s。三录像完整解码、抽查无UEFI文字，暂不需手机；workspace串行通过。保持metadata/Probe守卫，无代码/内存/verified/分区写入变化 · 本提交号见后续Git · reports/enuma-simplefb-return-timing.json、operations/2026-10-23-simplefb-return-timing-result.md。
 
 - 2026-10-23 Asia/Shanghai · 上一里程碑12c4e74已推送。复用既有16/17门构建同源30OEM候选并做17/16/17实机分类，ADB16.057/22.524/16.082s、全部Android/root/原摘要；三录像完整解码。支持最终非错误返回而非数值EFI零或实际GOP快照；warning保留。147实际诊断头/桥接/完成门host回归重跑及workspace串行通过，无代码/内存/verified/分区写入。按键用户确认待补充，暂无手机补录需求。下一步只读GOP协议与模式，不撤绘制守卫 · 本提交号见后续Git · reports/enuma-simplefb-status-classification.json、operations/2026-10-23-simplefb-status-classification.md。
+
+- 2026-10-23 Asia/Shanghai · 上一里程碑f214eb0已推送。用户补充确认18:52—18:59三笔状态分类均无按键，补入报告/STATUS，排除本组人工按键恢复；不扩展为数值EFI状态/GOP已验证。本轮无设备查询/启动 · 本提交号见后续Git · reports/enuma-simplefb-status-classification.json。

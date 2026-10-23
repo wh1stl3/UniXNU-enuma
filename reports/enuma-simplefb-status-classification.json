@@ -168,7 +168,7 @@
   "efi_warning_excluded": false,
   "gop_runtime_handle_query_executed": false,
   "pixels_or_menu_observed": false,
-  "manual_keys_confirmation": "pending",
+  "manual_keys_confirmation": "user explicitly confirmed no keys during all three status-classification probes",
   "new_device_trials": 3,
   "flash_erase_slot_changes": false,
   "next": "Read actual GOP provider/handle/current mode/QueryMode without enabling Blt; screen integration follows separate evidence"
