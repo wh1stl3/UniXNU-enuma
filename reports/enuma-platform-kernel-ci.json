@@ -1,0 +1,57 @@
+{
+  "scope": "actual macOS source-platform link and local Mach-O audit; no donor prelink/boot",
+  "run_id": 39927966148,
+  "head_sha": "250cdf9261e6c43e14f9364a393320a809e234a2",
+  "url": "https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39927966148",
+  "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+  "kernel_bytes": 21417672,
+  "kernel_sha256": "b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d",
+  "native_prelink_parser_commit": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+  "parser_sha256": "5bd80b8c63deec29b747c28253e02308a56d5f8cdb37c9d315e7c8af7012d017",
+  "kernel_audit": {
+    "entry_va": "0xfffffff0073f9488",
+    "entry_segment": "__TEXT_EXEC",
+    "initial_tcr": "0x22a51a251a",
+    "deployment": "iOS 17.0",
+    "tg0_bytes": 4096,
+    "tg1_bytes": 4096,
+    "segment_count": 18,
+    "exported_symbols": 23367,
+    "selected_platform_symbols": {
+      "_armdt_platform_configured": true,
+      "_armcpu_registered": true,
+      "_source_pthread_status": true
+    }
+  },
+  "effective_platform_switches": {
+    "XNU_SOURCE_CORECRYPTO14": "1",
+    "XNU_SOURCE_PTHREAD": "1",
+    "XNU_ARM_DT_PLATFORM": "1",
+    "XNU_ARMCPU": "1",
+    "XNU_NATIVE_ARCH_TIMER": "1",
+    "XNU_NATIVE_PAN": "1",
+    "XNU_DT_PANIC_REGION": "1",
+    "XNU_BOOT_PROGRESS": "0",
+    "XNU_ARMVIRT_PLATFORM": "0",
+    "XNU_SHENG_PMGR": "0",
+    "XNU_NATIVE_UFS": "0",
+    "XNU_NATIVE_ADRENO": "0",
+    "XNU_NATIVE_MOBILE_DISPLAY": "0",
+    "XNU_NATIVE_LEGACY_DISPLAY": "0"
+  },
+  "ci_archive_sha256": {
+    "build/corecrypto-2023/libcorecrypto_kernel_noasm-namespaced.a": "34b431c4229a4120695c6de6c6fde2b17f9b1c416f2600792a33c4e266e16e11",
+    "build/libpthread-kernel/libpthread_kernel.a": "a42ee6e19910d7d723b7138cf2b6848ac2fb4dc24227d2199e5444bb1c71f79e",
+    "build/armdt-platform/libArmDTPlatform.a": "e2243f61759be93525eafcdb404cb9ee158f4c593910fdf94ec8c56e509f82a3",
+    "build/armcpu/libArmCpu.a": "e166685fbfb679cd29a93db6d9791cd527d307d5657d38bbb710ddb383e0273d"
+  },
+  "archive_hashes_independently_recomputed_locally": false,
+  "archive_steps_passed": 5,
+  "sdk_version": "18.5",
+  "xcode": "Xcode 16.4\nBuild version 16F6",
+  "new_device_trials": 0,
+  "donor_prelink_generated": false,
+  "complete_adt_generated": false,
+  "boot_candidate_generated": false,
+  "ipados_userspace_observed": false
+}

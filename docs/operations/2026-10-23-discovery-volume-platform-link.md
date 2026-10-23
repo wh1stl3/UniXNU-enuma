@@ -64,3 +64,17 @@ macos-xnu.yml增加独立platform手动模式；preflight/bootstrap原语义保�
 首轮实际CI39926725474/head a801314：通用bootstrap通过，corecrypto plain/namespace和pthread三步通过，第4步ArmDTPlatform因Apple Clang不支持-Wno-unnecessary-virtual-specifier、配方-Werror而失败。原始日志/结果下载到out/ci-runs/39926725474，脱敏结构报告见reports/enuma-platform-kernel-first-failure.json。
 
 新增patches/kernel/0001-apple-clang-driver-warning.patch仅移除该不支持开关，保留-Werror与其余warnings；lock固定补丁及完整输出SHA，隔离副本严格git apply通过，参考源码未改。不使用-Wno-unknown-warning-option整体屏蔽未知参数。修复后CI需重跑，不能以本地补丁通过代替macOS构建。新增audit_enuma_platform_kernel.py供成功产物按run/head/配方/feature/摘要及锁定NativePrelink解析器独立核验普通ARM64/入口/TCR/平台符号；未取得成功产物前不运行成功审计或造报告。
+
+## 第二轮实际结果（取代上文待重跑状态）
+
+[CI39927966148](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39927966148)，head250cdf9261e6c43e14f9364a393320a809e234a2，2026-10-23 09:03:35 UTC job完成，结论success。五个归档步骤、四最终归档与源平台内核实际链接通过；ArmDTPlatform/ArmCpu的-Werror与对象ARM64/iOS17审计通过。kernel为21417672B，SHAb940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d，原件/全部日志仅out/ci-runs/39927966148。
+
+下载后独立解析：普通ARM64、MH_EXECUTE、入口0xfffffff0073f9488位于__TEXT_EXEC且有文件字节支撑，双页粒度4K/TCR0x22a51a251a、iOS17.0 deployment；23367导出符号中含_armdt_platform_configured/_armcpu_registered/_source_pthread_status。四服务、timer/PAN/DT panic区域开关匹配既有defconfig；UFS/PMGR/Adreno等保持关闭。run/head/源版本/精确recipe patch与归档清单一致。[公开复核报告](../../reports/enuma-platform-kernel-ci.json)。
+
+```powershell
+& 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -X utf8 -B scripts/audit_enuma_platform_kernel.py --evidence out/ci-runs/39927966148/enuma-macos-platform-39927966148 --run 39927966148 --head 250cdf9261e6c43e14f9364a393320a809e234a2
+```
+
+四归档哈希来自CI实算报告，未下载归档到本地重算，报告明确区分；本地独立核对的是下载kernel的摘要/格式/符号。内核构建日志仍有缺失搜索目录及dsymutil忽略--minimize等warning，没有声称零warning。源kernel POST字段生成不代表运行初始化/密码自检通过。首轮失败产物被成功审计器拒绝，未产出成功记录。
+
+本里程碑解决“仅有设备功能全关的通用内核”这一缺口，但输出尚无donor预链接、完整ADT/根卷/实机执行。正式board的archives/opt-in与包装器闭环仍待后续接入，不能拿platform CI绕过example保护。下一轮离线优先donor解压/roots/AMFI/slide审计，再结合晚间UEFI证据推进loader；本轮没有生成XNU启动镜像或操作设备。

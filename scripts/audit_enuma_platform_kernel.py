@@ -27,6 +27,10 @@ def main():
     recipe = json.loads((ROOT / 'config/kernel-archives.lock.json').read_text())
     if result['archive_recipe_lock'] != recipe or len(result['archive_steps']) != len(recipe['steps']):
         raise ValueError('CI archive recipe differs')
+    if result['staged_generic_recipe_sha256'] != recipe['staged_recipe_patch']['output_sha256']:
+        raise ValueError('CI did not use the reviewed patched recipe')
+    if set(result['platform_archive_sha256']) != set(recipe['archives']):
+        raise ValueError('CI archive inventory differs')
     for actual, expected in zip(result['archive_steps'], recipe['steps']):
         if actual['recipe'] != expected or actual['exit_code'] != 0:
             raise ValueError('Missing or failed archive step')
