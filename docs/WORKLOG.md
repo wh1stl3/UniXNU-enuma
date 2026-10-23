@@ -110,3 +110,5 @@
 2026-10-23 · 固定表MDP覆盖审计及无交叠检查通过，R-004最小映射提案dry-run通过但未应用；前序9433465已推送。新增scanout设备动作停止待批准，未访问MMIO/像素或新boot。证据reports/enuma-display-mmio-coverage.json、patches/proposals/r004-display-mdp-map.patch。
 
 2026-10-23 · R-004已批准；固件9f50890已推送，设备前序83d0fe1已推送。25 host/对象/240 GOP、两实构建/bundle负例/workspace/staging唯一差异通过；对照与step8无按键返回，后者慢5.309秒，互补构建中。证据operations/2026-10-23-r004-scanout-device.md。
+
+2026-10-23 · R-004互补候选22:45:27自行回Android，ADB15.876秒/核验31.930秒，root/原摘要通过且用户确认无按键；较selector1快5.311秒。三份全链接/审计与同源互补差异校验通过。前序33159d2已推送，源固件9f50890。

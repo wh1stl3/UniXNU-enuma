@@ -1,20 +1,20 @@
 # STATUS
 
-更新：2026-10-23 22:40（Asia/Shanghai）。尚未写屏或进入XNU。
+更新：2026-10-23 22:46（Asia/Shanghai）。尚未写屏或进入XNU。
 
 ## 当前状态
 
 R-004已获用户明确批准并执行最小映射：固件9f50890，staging新增且仅新增MDP 0x0ae00000/0x85000设备区，原迁移表字节保持。58项输入锁，无RAM/heap/owned/example/verified变化。原已测Mode/Info/跨度结论见历史报告。
 
-新映射step3对照22:37:26 ADB15.878秒/核验29.626秒；step8只读探针22:39:15 ADB21.187秒/核验37.050秒。两次Android/root/原摘要通过，用户确认无按键自行返回。step8长时序提示未命中成功门，尚无描述匹配或数值GOP/scanout快照。互补selector2构建中，用同读取代码分类结果，不把单次时序当唯一证明。
+新映射step3对照22:37:26 ADB15.878秒/核验29.626秒；step8只读探针22:39:15 ADB21.187秒/核验37.050秒。两次Android/root/原摘要通过，用户确认无按键自行返回。step8长时序提示未命中成功门，尚无描述匹配或数值GOP/scanout快照。互补selector2于22:45:27启动，ADB15.876秒/核验31.930秒，用户确认无按键。与selector1差5.311秒，支持扫描返回严格描述拒绝（EFI_UNSUPPORTED）；不称异常PC或数值寄存器快照。三笔候选均受控返回。
 
 首轮fastboot GetVar身份门中止，未发boot；正常reboot后完整恢复核验通过，另存identity-abort，不计为镜像失败或通过。新一轮身份门通过才执行对照，无校验放宽。
 
 ## 验证与下一步
 
-25 scanout用例O1/Oz+ASan/UBSan、AArch64对象、既有240 GOP回归通过；两份全链接FD/30OEM/BootShim/v3、生成依赖、bundle四负例、workspace与staging唯一映射差异均通过。证据operations/2026-10-23-r004-scanout-device.md、reports/enuma-r004-{device,staged-map,scanout-bundle,identity-abort}.json、enuma-scanout-host.json。
+25 scanout用例O1/Oz+ASan/UBSan、AArch64对象、既有240 GOP回归通过；三份全链接FD/30OEM/BootShim/v3、生成依赖、bundle四负例、workspace与staging唯一映射差异均通过。证据operations/2026-10-23-r004-scanout-device.md、reports/enuma-r004-{device,staged-map,scanout-bundle,identity-abort}.json、enuma-scanout-host.json。
 
-step8仅检查源描述，最多72次32位读取，无像素访问或寄存器写入。谓词匹配不证明管线活动或颜色顺序；互补分类后进一步离线隔离描述字段。R-004不包含写屏。无返回立即停追加并恢复，之后按用户要求继续离线分析和新软件。未flash/erase/改槽。
+step8仅检查源描述，最多72次32位读取，无像素访问或寄存器写入。谓词匹配不证明管线活动或颜色顺序；下一步离线拆分splash地址候选存在性、几何和格式谓词，区分未找到、多个候选或字段拒绝；不直接重试相同完整谓词或放开写屏。R-004不包含写屏。无返回立即停追加并恢复，之后按用户要求继续离线分析和新软件。未flash/erase/改槽。
 
 ## 系统与内核现状
 

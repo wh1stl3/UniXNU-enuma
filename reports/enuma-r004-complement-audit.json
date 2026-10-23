@@ -1,0 +1,15 @@
+{
+  "scope": "offline complementary selector build comparison",
+  "all_passed": true,
+  "source_inputs_identical": true,
+  "only_define_difference": "ENUMA_DIAG_GOP_QUERY",
+  "variants": [
+    "r004-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+    "r004-reject-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+  ],
+  "selectors": [
+    1,
+    2
+  ],
+  "runtime": false
+}

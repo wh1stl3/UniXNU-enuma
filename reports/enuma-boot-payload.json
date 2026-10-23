@@ -1,8 +1,8 @@
 {
   "scope": "BootShim assembly and header checks; no execution",
   "shim_bytes": 192,
-  "fd_sha256": "3ad19920f132eaee66df165133d30ec2d3f6a0ace2c03eb991e5fc84cf748f86",
-  "raw_sha256": "e67c885e844ff77b61bf361b635a920a63ebd34a2fd57f2cd5b3fa565807911e",
+  "fd_sha256": "de3e7731493e99af29dcfe71f5dbd7447c187470e90e5f1d9c301516a0c19d8e",
+  "raw_sha256": "5620ce8ca881d80c4098bd18d090036303002bb5b08b3f227fdc933e05885359",
   "compiler_source_sha256": "466c29e14332381c4506b4ccbafd437159a4fe575f888b8f26ba13026e26da6f",
   "shim_source_sha256": "e3c053fe31bda28780c048b7144cdd407576234bd344bcc2f405f6a985aeb552"
 }

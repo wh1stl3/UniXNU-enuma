@@ -190,3 +190,5 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 可审查补丁patches/proposals/r004-display-mdp-map.patch已git apply --check通过但未应用。检测脚本scripts/audit_display_mmio_coverage.py和reports/enuma-display-mmio-coverage.json可重放。沿R-003“保持地址/大小…新内存字段…单列真实审查范围”边界，批准前不把此补丁接入源锁或镜像。
 
 R-004执行：原始迁移表保持不变，在固件构建staging应用精确一条映射补丁。固件9f50890已推送；像素和寄存器写入仍不在此次批准内。
+
+2026-10-23 · R-004执行结果：映射对照及step8正/互补三笔均无按键自行恢复Android/root/原摘要。时序支持严格描述拒绝；没有触及像素/寄存器写入，未新增内存范围或审批项。
