@@ -4,13 +4,13 @@
 
 ## 当前状态
 
-**晚间已完成SimpleFb调用前point20及直接PE返回point21两组2/7/2时序，均恢复Android。** 最新核验为18:43:41 +08最后point21候选返回：ADB16.081s、Android完成29.909s，root/槽/解锁和原boot_a/vendor_boot_a摘要通过。用户明确确认两组三笔均无按键，未flash/erase/改槽。实际时序支持调用前及PE入口返回，但返回EFI状态/GOP安装尚未知。
+**SimpleFb最终StartImage非错误/错误/非错误三笔分类已完成，支持最终返回非错误；GOP运行时查询仍未做。** 18:52:06/18:57:15/18:58:31 +08，ADB16.057/22.524/16.082秒；两次17短返回差0.025s，16长6.467/6.442s。均Android完成/root/原boot与vendor_boot摘要通过，无flash/erase/改槽。按键确认等待用户单独答复，以报告字段为准。
 
-point20 ADB16.065/21.482/16.069s，差5.417/5.413s；point21为16.102/22.565/16.081s，差6.463/6.484s，后者不是精确5秒响应、保留USB/启动噪声。两组末次2秒均严格复用原镜像。外置相机共7段（6启动+1拦截）已完整解码，抽查无UEFI文字需手机补录。此前early-control一笔已自行回Android。
+本组实际AArch64/core还原/30OEM/FD/BootShim/v3通过，源输入一致，147组真实诊断头/桥接及完成门host回归重跑通过，workspace串行通过。17表示!EFI_ERROR，包括warning，未读数值EFI状态。结合固定SimpleFb源码支持正常GOP安装路径完成，但未枚举/HandleProtocol/QueryMode，不能称实际GOP或出图通过。见[状态分类](operations/2026-10-23-simplefb-status-classification.md)、[结构报告](../reports/enuma-simplefb-status-classification.json)。
 
-point20组中一次7秒准备因fastboot身份查询失败被拦截，未发送镜像；普通reboot恢复完整核验后新会话重新通过原门禁再执行。根因未定，没有弱化身份检查。旧233a9d8无返回/人工恢复历史仍保留。
+此前point20/21两组2/7/2已支持调用前与PE直接返回，用户确认均无按键；历史early-control自行恢复保持。point20组一次身份查询拦截未发镜像、普通reboot恢复后新会话完整门禁通过，根因未定；旧233a9d8需人工恢复的历史失败不改写。所有原录像只在out，抽查无需手机补录文字。
 
-见[调用前整组](operations/2026-10-23-simplefb-guid-timing-result.md)、[返回整组](operations/2026-10-23-simplefb-return-timing-result.md)及对应公开报告。下一层先判断StartImage成功/失败与实际GOP元数据；不直接放行菜单或写屏，若出现看不清日志再请用户手机复现。
+下一层准备只读GOP句柄/provider/Mode/QueryMode审计，保持禁绘制/Probe早退，不直接放行菜单或XNU。任何新候选先编译/全链接/边界检查与恢复条件，无返回停追加。当前设备仍为最后一笔恢复核验后的Android，摄像头已释放。
 
 ## 本轮结果
 
@@ -41,4 +41,4 @@ FAT载荷、OS/SystemOS只读根镜像、Data分开；NativeUfs含SM8550硬件�
 
 下一轮离线审查donor解压Mach-O与预链接roots/依赖/AMFI入口/slide，并把已成功配方接回正式板级构建；不复制外板常量。实机开始时重新核对身份/备份/原摘要/在场恢复条件，按既有四次顺序逐次检查Android/root/分区摘要；任次无返回停追加先恢复。入口门命中不当作驱动/协议成功。候选实际x0/FDT/UEFI map取得前不接initrd发布；新内存/verified或破坏性分区操作仍按编号审查，无新待批准项。
 
-设备上一里程碑3f288f1已推送，固件82ce8a5；本轮补充发布见Git/WORKLOG。参考仓只读，产物/原始设备数据仅out。
+设备上一里程碑12c4e74已推送，固件82ce8a5；本轮补充发布见Git/WORKLOG。参考仓只读，产物/原始设备数据仅out。
