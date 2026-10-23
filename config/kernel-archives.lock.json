@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "scope": "four real source archives for enuma platform-link CI, no prelink or device boot",
+  "inputs": [
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/build-corecrypto-14.py",
+      "sha256": "cd2898c5987b65b9af626c1017936e0f8824c9cc866a8f53adf4673f43401d6b"
+    },
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/build-libpthread-kernel.py",
+      "sha256": "587384f0a27a4428565e69935b7dae94b0f51afd45c841cc0beac36f235e1103"
+    },
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/xnu_symbols.py",
+      "sha256": "21b4b9b503b8a8f8893d09c10bec1d0a0acb780a3d77a0fe2d9f7265b5c77423"
+    },
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/build-xnu-4k-baseline.sh",
+      "sha256": "d4e4e63291cd044c22ec11e61ec1bb246ecea77e2261f88c19aabc4137e59fbe"
+    },
+    {
+      "source": "UniXNU-sheng",
+      "commit": "a599a1a8a92093b5077543e071b72130769eb325",
+      "path": "scripts/build-arm-driver.py",
+      "sha256": "2434483a89dfe3ff1ad2aceeb7e57229b956c0351ddd604b8d6acc9f9a8cdf4c"
+    },
+    {
+      "source": "UniXNU-sheng",
+      "commit": "a599a1a8a92093b5077543e071b72130769eb325",
+      "path": "LICENSE",
+      "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b"
+    }
+  ],
+  "steps": [
+    [
+      "build-corecrypto-14.py"
+    ],
+    [
+      "build-corecrypto-14.py",
+      "--namespace"
+    ],
+    [
+      "build-libpthread-kernel.py"
+    ],
+    [
+      "enuma-build-arm-driver.py",
+      "ArmDTPlatform"
+    ],
+    [
+      "enuma-build-arm-driver.py",
+      "ArmCpu"
+    ]
+  ],
+  "archives": [
+    "build/corecrypto-2023/libcorecrypto_kernel_noasm-namespaced.a",
+    "build/libpthread-kernel/libpthread_kernel.a",
+    "build/armdt-platform/libArmDTPlatform.a",
+    "build/armcpu/libArmCpu.a"
+  ]
+}

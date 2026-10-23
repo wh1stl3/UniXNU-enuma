@@ -1,0 +1,19 @@
+# Offline discovery fixture. No kernel, EFI executable, kit or Data seed.
+version = 1
+
+[boot]
+timeout = 10
+fallback_timeout = 10
+default = "enuma-fat-discovery-01"
+
+[ui]
+title = "ENUMA FAT DISCOVERY 01"
+
+[kits]
+autoload = false
+
+[[entry]]
+id = "enuma-fat-discovery-01"
+title = "ENUMA FAT DISCOVERY 01 - Restart"
+type = "action"
+action = "reset"

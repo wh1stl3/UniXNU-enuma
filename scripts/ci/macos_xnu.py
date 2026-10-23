@@ -1,4 +1,4 @@
-"""Qualify macOS/Xcode, optionally build the pinned generic XNU 4K baseline.
+"""Qualify macOS/Xcode, build the generic baseline or source platform link.
 
 This is not the device build command: no enuma prelink, payload, boot image,
 donor extraction or USB operation. board.example stays true. All fetched
@@ -34,12 +34,12 @@ def capture(argv, cwd=ROOT):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mode', choices=('preflight', 'bootstrap'), default='preflight')
+    parser.add_argument('--mode', choices=('preflight', 'bootstrap', 'platform'), default='preflight')
     args = parser.parse_args()
     if platform.system() != 'Darwin':
         raise SystemExit('Requires macOS with Xcode; local firmware builds use separate scripts')
     EVIDENCE.mkdir(parents=True, exist_ok=True)
-    report = {'scope': 'toolchain qualification and optional generic 4K bootstrap only',
+    report = {'scope': 'toolchain qualification; optional generic bootstrap or source platform link; no prelink/boot',
               'mode': args.mode, 'status': 'running', 'device_boot_claimed': False,
               'enuma_kernel_link_claimed': False,
               'device_commit': capture(['git', 'rev-parse', 'HEAD']),
@@ -90,7 +90,7 @@ def main():
                         '-o', str(EVIDENCE / 'sdk_probe.o')], check=True)
         report['sdk_arm64_compile_passed'] = True
         save()
-        if args.mode == 'bootstrap':
+        if args.mode in ('bootstrap', 'platform'):
             # Deliberately compile the generic baseline with all device features off.
             # This does not bypass the device CLI's example/prelink safety checks.
             sys.path.insert(0, str(source / 'scripts'))
@@ -107,7 +107,10 @@ def main():
             env['JOBS'] = '2'
             report['effective_bootstrap_switches'] = disabled
             save()
-            for name in ('xnu', 'libplatform', 'libdispatch', 'AvailabilityVersions'):
+            reference_names = ['xnu', 'libplatform', 'libdispatch', 'AvailabilityVersions']
+            if args.mode == 'platform':
+                reference_names += ['corecrypto-2023', 'libpthread']
+            for name in reference_names:
                 item = next(entry for entry in feeds if entry['name'] == name)
                 target = source / 'refer' / name
                 target.mkdir(parents=True, exist_ok=True)
@@ -133,6 +136,16 @@ def main():
             shutil.copyfile(kernel, EVIDENCE / 'bootstrap-kernel.macho')
             report['kernel_sha256'] = digest(kernel)
             report['bootstrap_build_and_audit_passed'] = True
+            if args.mode == 'platform':
+                from platform_archives import build as build_platform
+                from unixnu.kernel import xnu_env
+                from types import SimpleNamespace
+                platform_env = dict(env)
+                platform_env.update(xnu_env(SimpleNamespace(need_config=lambda: config, tree=source)))
+                report['effective_platform_switches'] = {
+                    key: value for key, value in platform_env.items() if key.startswith('XNU_')}
+                save()
+                build_platform(source, EVIDENCE, platform_env, report, save)
         report['status'] = 'passed'
     except Exception as error:
         report['status'] = 'failed'

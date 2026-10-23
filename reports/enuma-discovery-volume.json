@@ -1,0 +1,33 @@
+{
+  "scope": "offline mtools FAT build/readback, not UEFI discovery or a boot candidate",
+  "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+  "source_sha256": {
+    "scripts/unixnu/payload.py": "05a79e171be8d0336d0125a556e90a7e0195cef138b195878102d366befb75f0",
+    "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+    "package/UniXNUPkg/Library/UniXNULib/Config.c": "0adf75d98639015731fa3879ca4e7c5a9dd383527af520d48ed7b75e6e2b6800",
+    "package/UniXNUPkg/Library/UniXNULib/Menu.c": "aca6ce5b73aac9c2baa7abaeb10683399e98d4b7efccb3f9afdbc32f3311bc17"
+  },
+  "config_sha256": "45376dd5ee07ff03a97937c3f5a11e4f03d1c37151a15a5a64cef2297cab3705",
+  "image": "out/payload-discovery/enuma-fat-discovery-01.img",
+  "image_bytes": 67108864,
+  "image_sha256": "567431ade5af6d74cd963ded01d74d568babcd0995cfb5a92036e0b76fde9fb7",
+  "logical_sector_bytes": 512,
+  "fat_type": "FAT32",
+  "volume_label": "ENUMAPROBE",
+  "source_date_epoch": 315532800,
+  "free_cluster_normalization": "Only FAT32 free clusters and post-cluster padding; identical FAT copies required",
+  "nonzero_free_clusters_cleared": [
+    1,
+    1
+  ],
+  "files": [
+    "::/EFI/UniXNU/unixnu.toml"
+  ],
+  "repeat_build_identical": true,
+  "mcopy_readback_identical": true,
+  "contains_kernel_or_efi": false,
+  "boot_image_packaged": false,
+  "firmware_publisher_integrated": false,
+  "new_device_trials": 0,
+  "reset_limit": "Menu countdown only; input cancels countdown; not a watchdog"
+}

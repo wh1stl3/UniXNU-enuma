@@ -1,12 +1,12 @@
-name: enuma macOS XNU toolchain and 4K bootstrap
+name: enuma macOS XNU toolchain and source platform
 
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'preflight checks the SDK; bootstrap also builds the generic 4K baseline (not an enuma boot kernel)'
+        description: 'preflight=SDK; bootstrap=generic 4K; platform=real archives and board feature link (no prelink/boot)'
         type: choice
-        options: [preflight, bootstrap]
+        options: [preflight, bootstrap, platform]
         default: preflight
 
 permissions:
