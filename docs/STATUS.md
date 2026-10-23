@@ -4,9 +4,11 @@
 
 ## 当前状态
 
-**用户已选择UART条件不足时使用屏幕诊断，镜像实测仍留到晚上。** 本轮15:18仅对已识别enuma/root做只读UART/FDT查询，确认Android完成1、槽_a；未重启/启动镜像/写设备。本次未重读分区摘要，原boot/vendor_boot摘要核验仍为12:11恢复记录。首测233a9d8未自动返回的历史失败保留。
+**继续离线推进屏幕诊断，镜像实测仍留到晚上。** 本轮没有设备查询/启动/写入。最近15:18 UART只读核对为enuma/root/Android完成1/槽_a；原boot/vendor_boot摘要核验仍为12:11恢复记录，不是本轮重查。首测233a9d8未自动返回的历史失败保留。
 
 ## 当前路线与已完成工作
+
+新增独立EnumaScreen受控GOP Blt后端，复用锁定DarwinBoot字模，可显示阶段、完整64位EFI状态、GOP字段与内存摘要快照。每行一次Blt、显式写门禁、caller持有有界scratch、模式/错误锁存及重入拒绝；不解引用物理帧缓冲。真实Mu头的host ASan/UBSan与AArch64 COFF编译通过，合成预览已检查。**尚未集成固件、未完成全链接、未上屏**；对象有memset依赖，需接入时验证。今晚三候选和82ce8a5源锁不变，bundle复查通过。见[后端与接入条件](operations/2026-10-23-bounded-screen-renderer.md)。
 
 UART已取得软件线索：命令行请求ttyMSM0/115200n8、serial0=988000、GPIO117/118；但console节点disabled、无活动ttyMSM控制台，绑定998000是另一设备。实物测试点/TX-RX/电平与外部采集、UEFI输出均未验证，现有USB/ADB不是UART传输。因此按用户选择走屏幕诊断，先建立真实GOP/几何再受控显示阶段/错误码，不撤metadata绘制守卫。见[只读核对与路线](operations/2026-10-23-uart-or-screen.md)。
 
@@ -28,4 +30,4 @@ UART已取得软件线索：命令行请求ttyMSM0/115200n8、serial0=988000、G
 
 重新核对设备身份/备份/原摘要和按键恢复条件后，按上述四次顺序逐次执行并核验Android/root/分区摘要。任何一次无返回即停追加、先恢复。目标门命中只支持PE调用前，不能当主体/协议/内核成功；通过后再准备返回与GOP字段观测。没有新的内存/verified/破坏性操作审批项。
 
-设备上一里程碑a1b2b01、固件82ce8a5已推送；本轮设备发布见Git/WORKLOG。参考仓只读，镜像不入Git。
+设备上一里程碑a1322b9、固件82ce8a5已推送；本轮设备发布见Git/WORKLOG。参考仓只读，镜像不入Git。

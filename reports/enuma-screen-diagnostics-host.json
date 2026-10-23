@@ -1,0 +1,94 @@
+{
+  "scope": "GOP Blt renderer host tests and real Mu-header AArch64 COFF compile only",
+  "source_sha256": "07bf429e756a1f4060ffbc245aaa365de5e6382d3de71e318bdb3e823c47ee94",
+  "header_sha256": "3d2656457aad682f6b36c9cca1033948fa68377f5738ff34f6a67e75595c7050",
+  "font_sha256": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e",
+  "mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+  "mu_archive_sha256": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826",
+  "object_sha256": "fc18df34bfcdc31879b59c57a9986d3440a80584d33cca7e2c0d81c9e95658dd",
+  "object_machine": "AArch64 COFF",
+  "checks": [
+    {
+      "exit_code": 0,
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fshort-wchar",
+        "-I/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/MuInclude",
+        "-I/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics",
+        "-I/mnt/d/Code/UniXNU-enuma/diagnostics/screen",
+        "-I/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/MuInclude/X64",
+        "-O1",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/d/Code/UniXNU-enuma/diagnostics/screen/EnumaScreen.c",
+        "/mnt/d/Code/UniXNU-enuma/tests/enuma_screen.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/screen-test"
+      ]
+    },
+    {
+      "exit_code": 0,
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/screen-test",
+        "/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/preview.bgra"
+      ]
+    },
+    {
+      "exit_code": 0,
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fshort-wchar",
+        "-I/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/MuInclude",
+        "-I/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics",
+        "-I/mnt/d/Code/UniXNU-enuma/diagnostics/screen",
+        "-I/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/MuInclude/AArch64",
+        "-target",
+        "aarch64-unknown-windows-msvc",
+        "-ffreestanding",
+        "-Oz",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-fno-stack-protector",
+        "-mno-implicit-float",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/diagnostics/screen/EnumaScreen.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/screen-diagnostics/EnumaScreen.obj"
+      ]
+    }
+  ],
+  "object_undefined_symbols": [
+    "memset"
+  ],
+  "full_firmware_link_checked": false,
+  "host_checks": [
+    "write gate denies before Blt",
+    "BltOnly with zero physical framebuffer",
+    "region and scratch bounds",
+    "fixed A glyph golden pixels",
+    "replacement glyph",
+    "row/label/count rejection",
+    "callback reentry refusal",
+    "error latches closed",
+    "mode/pointer change latches closed",
+    "single bulk Blt per line",
+    "scratch canary",
+    "12-row snapshot page and stop after injected third-call failure",
+    "64-bit EFI error high bit preserved in rendered hex"
+  ],
+  "preview": "out/screen-diagnostics/host-preview.png",
+  "preview_is_device_screenshot": false,
+  "firmware_integrated": false,
+  "write_enabled_on_device": false,
+  "new_device_trials": 0,
+  "evening_82ce8a5_bundle_unchanged": true
+}

@@ -133,3 +133,5 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 2026-10-23晚间准备：用户要求留晚上实测，本轮仅离线同版候选构建和只读内核审计，无新审批项、物理地址/内存/verified或分区操作。通用kernel尚非enuma候选，后续归档/预链接/ADT要先闭合接口，不借示例地址。计划见operations/2026-10-23-evening-validation-plan.md；逐次恢复门禁保持，当前不执行设备。
 
 2026-10-23 UART/屏幕选择：按用户要求只读发现UART软件配置，但实物接线/电平/早期输出不足，采用屏幕主线；没有开启UART、切GPIO或设备写入，无新增内存/verified审批项。屏幕像素仍待实际几何/范围证据，未撤守卫；详见operations/2026-10-23-uart-or-screen.md。
+
+2026-10-23屏幕后端补充：仅新增独立受控GOP Blt模块、主机与目标对象检查，未接入/启用固件、未写屏或改内存/verified。没有新的审批项；caller显式写开关不是硬件验证，实际接入仍须满足GOP/几何/像素范围及完整链接门禁，不绕过metadata守卫。见operations/2026-10-23-bounded-screen-renderer.md。
