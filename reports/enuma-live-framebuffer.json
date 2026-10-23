@@ -1,0 +1,22 @@
+{
+  "scope": "live Android DT reservation and DRM modes; no bootloader scanout proof",
+  "device": "enuma",
+  "boot_complete": true,
+  "root": true,
+  "splash_base": "0x9c000000",
+  "splash_length": "0x2300000",
+  "uefi_declared_length": "0x2400000",
+  "common_reserved_length": "0x2300000",
+  "drm_modes": [
+    "1600x2560x120x626176vid",
+    "1600x2560x60x626176vid",
+    "1600x2560x30x626176vid"
+  ],
+  "stride": "unverified",
+  "pixel_format": "unverified",
+  "compression": "unverified",
+  "metadata_32bpp_is_hypothesis": true,
+  "pixel_memory_access": false,
+  "device_mutation": false,
+  "next": "Resolve bootloader scanout layout and cache handling before integrating a reversible stripe"
+}

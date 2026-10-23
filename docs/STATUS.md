@@ -8,6 +8,10 @@
 
 当前完整跨度候选image SHA805bfabfa23b0f4e0db8a00bab94a143a61636cfa76292d6148185a8ebfab4fd。原e286834 step3失败镜像未重试，故障PC/根因仍未知，当前成功不证明旧故障已修复。短时序与源码支持检查路径，但缺数值GOP快照和真实scanout证据。
 
+## 新增实机映射证据
+
+只读Android确认splash为0x9c000000/0x2300000（比UEFI Display Reserved小0x100000）；DRM为1600x2560。live MDP base0xae00000和八管线偏移与固定SDE源码布局一致。真实pitch/像素格式/压缩仍未知，未访问MMIO/像素或新临时boot。下一软件先只读实际管线描述，再门控可恢复亮条；不直接启用整屏日志。证据reports/enuma-live-framebuffer.json和enuma-scanout-source-audit.json。
+
 ## 构建与下一步
 
 实际编译实现已迁至uefi-enuma Resources/Scripts/build_enuma_firmware.py，设备同名脚本为版本/摘要校验薄封装；56项源锁。设备仓保留契约、打包、实机、恢复和out输出。两仓相关里程碑已推送。构建/打包/源锁和既有主机检查通过；详情reports/enuma-firmware-build-ownership.json。
