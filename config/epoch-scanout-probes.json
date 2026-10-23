@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "scope": "Fixed SEC epoch; installation-only step0 returned, then matched read-only address/packing pair",
+  "firmware_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "id": "same-source-address-control",
+      "step": 9,
+      "variant": "epoch-address-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "id": "packing-predicate",
+      "step": 10,
+      "variant": "epoch-linear-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "hardware_order": "New step0 return then step9 controlled return and user no-button confirmation, then step10 only after offline qualification and fresh full device gate. Timeout stops additional boots. Predicate rejection with controlled recovery is not a hard-stop.",
+  "installation_baseline": "reports/enuma-sec-epoch-step0-device.json",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "source_lock": "source-history/uefi-f15d520.lock.json"
+}

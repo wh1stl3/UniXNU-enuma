@@ -7,3 +7,9 @@
 选择A：新源码step0最小路径，先重新确认设备/备份/root/槽/摘要/fastboot身份，使用已有现场恢复条件及前后截图；75秒不返回立即停止追加、请求恢复并当轮落实交接。选择B：只继续离线等待异常PC，当前无可用UART或持久日志，不能获得运行证据。根据用户持续推进和恢复后出新软件授权执行A，范围不新增内存/verified/分区审批；完整step3和step10保持未获新基线前禁止追加。
 
 证据reports/enuma-sec-epoch-rebuild.json，两份out/entry-probe/epoch-control-{a,b}-.../candidate-qualification.json。历史bundle使用各自固定Git对象源锁；真实构建/启动仍受当前源锁和全部设备门禁约束。
+
+
+2026-10-23 23:46:56 · f15d520 step9：ADB16.964秒/启动完成30.109秒，root/原摘要通过，用户确认无按键。image9a1cd385f7b7ecb77543db442acb71adf9167506346dbb24d12d8795c61d7864，FDe1f907465cd8d5b1908b4a3d9fb4e1515051fd975faa0773ff4b77fb40b44463。短返回支持splash地址存在性；step10正在离线构建，尚未实测。
+
+
+2026-10-23 23:50:53 · f15d520 step10：ADB16.947秒/启动完成30.745秒，root/原摘要通过，用户确认无按键。image3364f1726954f246ef3f7f82f52f69fc3aa75e50c2eced8ec62566558b639473，FDea1fb90a73dfe0ecf1413e9d7dfdb2c989bafab0b40c9e1b693d6450ffe795bc。仅格式/压缩谓词时序证据；不能证明活动性、唯一性、几何、pitch或像素安全。

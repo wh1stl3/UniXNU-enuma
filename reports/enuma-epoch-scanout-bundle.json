@@ -1,0 +1,63 @@
+{
+  "scope": "offline bundle audit; no device calls, no new runtime evidence",
+  "firmware_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
+  "transport": "core-warning-v2",
+  "all_passed": true,
+  "source_evidence": "current checkout",
+  "source_inputs_identical": true,
+  "only_firmware_define_difference": "ENUMA_DIAG_GOP_STEP",
+  "profiles": [
+    {
+      "id": "same-source-address-control",
+      "step": 9,
+      "variant": "epoch-address-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "image_sha256": "9a1cd385f7b7ecb77543db442acb71adf9167506346dbb24d12d8795c61d7864",
+      "fd_sha256": "e1f907465cd8d5b1908b4a3d9fb4e1515051fd975faa0773ff4b77fb40b44463",
+      "generated_contract": {
+        "inf_matches_baseline": true,
+        "reset_library_absent": true,
+        "psci_constructor_absent": true,
+        "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+        "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+        "core_checkpoint_sha256": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39"
+      },
+      "image_local_path": "out/boot-candidate/epoch-address-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata-boot-v3.img",
+      "local_build_report": "out/entry-probe/epoch-address-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata/enuma-firmware-build.json"
+    },
+    {
+      "id": "packing-predicate",
+      "step": 10,
+      "variant": "epoch-linear-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "image_sha256": "3364f1726954f246ef3f7f82f52f69fc3aa75e50c2eced8ec62566558b639473",
+      "fd_sha256": "ea1fb90a73dfe0ecf1413e9d7dfdb2c989bafab0b40c9e1b693d6450ffe795bc",
+      "generated_contract": {
+        "inf_matches_baseline": true,
+        "reset_library_absent": true,
+        "psci_constructor_absent": true,
+        "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+        "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+        "core_checkpoint_sha256": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39"
+      },
+      "image_local_path": "out/boot-candidate/epoch-linear-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata-boot-v3.img",
+      "local_build_report": "out/entry-probe/epoch-linear-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata/enuma-firmware-build.json"
+    }
+  ],
+  "host_report": "reports/enuma-gop-audit-host.json",
+  "core_report": "reports/enuma-dispatch-details-host.json",
+  "hardware_execution": false,
+  "prior_timeout_unresolved": true,
+  "old_timeout_candidate_not_retested": true,
+  "reuse_reference": {
+    "repository": "edk2-porting/edk2-msm",
+    "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+    "path": "Silicon/Qualcomm/QcomPkg/Drivers/SimpleFbDxe/SimpleFbDxe.c",
+    "sha256": "9f4f2aa95d8358d78f15000c6750163bae5050b280bff4e88c6f4100d32cc5f5"
+  },
+  "reuse_assessment": "Reuse provider/consumer separation; do not import physical clear/cache/address assumptions",
+  "remaining_steps": [
+    2,
+    3,
+    4
+  ],
+  "runtime_limit": "Core return gate and completion fallback cannot recover a hung service"
+}

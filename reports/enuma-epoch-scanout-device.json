@@ -1,0 +1,36 @@
+{
+  "scope": "bounded read-only predicates; not active scanout or write permission",
+  "firmware_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
+  "tests": [
+    {
+      "candidate_sha256": "9a1cd385f7b7ecb77543db442acb71adf9167506346dbb24d12d8795c61d7864",
+      "issued_at": "2026-10-23 23:46:56",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.964,
+      "boot_complete_seconds": 30.109,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 9,
+      "variant": "epoch-address-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "e1f907465cd8d5b1908b4a3d9fb4e1515051fd975faa0773ff4b77fb40b44463",
+      "no_buttons_confirmed_by_user": true,
+      "selector": 1
+    },
+    {
+      "candidate_sha256": "3364f1726954f246ef3f7f82f52f69fc3aa75e50c2eced8ec62566558b639473",
+      "issued_at": "2026-10-23 23:50:53",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.947,
+      "boot_complete_seconds": 30.745,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 10,
+      "variant": "epoch-linear-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "ea1fb90a73dfe0ecf1413e9d7dfdb2c989bafab0b40c9e1b693d6450ffe795bc",
+      "no_buttons_confirmed_by_user": true,
+      "selector": 1
+    }
+  ]
+}
