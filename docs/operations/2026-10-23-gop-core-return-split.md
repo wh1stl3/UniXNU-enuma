@@ -75,7 +75,7 @@ Core矩阵保留原用例并增加1/5标记、错误GUID、NULL、非目标hook�
 完整构建额外检查AutoGen无新增PSCI构造器、SimpleFb静态库清单无reset库、INF与基线相同。
 `scripts/check_gop_split_bundle.py`再核对固定输入、FD与镜像SHA、v3镜像实际嵌入的FD、
 两配置唯一差异和同SoC参考缓存摘要；不调用设备。配置见`config/gop-split-probes.json`。
-后续补记实际构建结果；未记载的步骤仍未验证。
+实际构建结果见本文末尾完成记录和候选审计；未记载的步骤仍未验证。
 
 可复现的固件命令：
 

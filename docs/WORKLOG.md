@@ -88,3 +88,5 @@
 2026-10-23 · 上一里程碑22768a6已推送。新增只读GOP审计与默认关闭门禁；固件019191f首次INF解析失败，250849f修正后两份候选全链接/30OEM/FD/BootShim/v3通过。36元数据参数+6谓词+6CLI、155诊断门及串行workspace通过。2026-10-23 19:45:38首笔临时boot无自动返回，硬停追加；用户恢复Android，2026-10-23 19:48:15核验原状态/摘要通过。互补镜像未启动，GOP结果未知。证据：reports/enuma-gop-query-device.json、reports/enuma-gop-audit-host.json、docs/operations/2026-10-23-readonly-gop-query.md。用户更新无渲染时的录像策略并写入AGENTS。当前提交号下一条补记。
 
 2026-10-23 · 上一里程碑7b7a789已推送。按用户要求继续离线拆分GOP与复位，固件e286834已推送/54输入锁；提供者INF回基线，移除本地复位依赖，以非错误标记回既有Core门。137阶段/参数、30标记、6实际Mu传输、7CLI、177 Core回归及四个AArch64对象通过；step0/1两候选实际全链接/30OEM/FD/BootShim/v3与嵌入FD/源一致审计通过，均未启动。串行workspace通过，旧超时根因未定，下一轮先安装后返回对照。证据：reports/enuma-gop-core-split.json、reports/enuma-gop-audit-host.json、docs/operations/2026-10-23-gop-core-return-split.md。当前提交号下轮补记。
+
+2026-10-23 Asia/Shanghai · 上一实现里程碑595d6a6已推送。按用户要求补齐HANDOFF交接入口，记录两仓固定版本、失败/人工恢复事实、两候选路径与摘要、逐笔验证顺序和执行器未自动处理的停点标志；本次重新计算两镜像SHA均匹配报告。未重跑构建测试、未操作实机，无新增决策或审批项，PENDING-HUMAN仍无按键待办。证据：docs/HANDOFF.md、docs/STATUS.md、reports/enuma-gop-core-split.json。本文档提交号见后续Git。
