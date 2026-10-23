@@ -30,8 +30,8 @@ SimpleFb仍为离线审计，优先复用Mu SimpleFb/FrameBufferBltLib及alioth/
 
 ## 下一步与授权
 
-配置表前缀存在已有对照支持，降低“缺表触发canary RNG初始化”的嫌疑；不能据此认定canary值正确或排除其他SMC。下一步优先细分库构造器/UEFI服务调用，使用真实Mu服务边界并核对调用归属，保持原厂PE字节；尚未实现该下一层门。无新固定内存/verified变更，也无待人工按键。详细契约及证据见[PE入口门记录](operations/2026-10-23-direct-pe-entry-gates.md)。
+配置表前缀存在已有对照支持，降低“缺表触发canary RNG初始化”的嫌疑；不能据此认定canary值正确或排除其他SMC。只读对照nuwa后，将真实分配失败/free/largest/type等状态提升为下一轮优先观测项，并配合库构造器/UEFI服务调用归属检查；尚未实现下一层门。两边Mu同版，nuwa分配诊断严格dry-run通过；enuma实际SEC Heap51MiB与本机XBL一致，不能照搬nuwa扩堆。详见[nuwa复用审计](operations/2026-10-23-nuwa-progress-reuse-audit.md)。无新固定内存/verified变更，也无待人工按键。详细契约及证据见[PE入口门记录](operations/2026-10-23-direct-pe-entry-gates.md)。
 
 生成镜像无需确认；有身份、备份和返回证据的有界临时boot允许黑屏/定时复位。恢复失败、越权、内存字段或verified变更仍按AGENTS硬停。TWRP未测试。难题继续评估同SoC UniXNU/UEFI真实实现，不直接照搬板级参数。
 
-目标保持enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。旧通用内核CI不是本板最终内核。设备上一里程碑df705f6已推送；后续以Git/WORKLOG发布记录为准。
+目标保持enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。旧通用内核CI不是本板最终内核。设备上一里程碑11bd36f已推送；后续以Git/WORKLOG发布记录为准。

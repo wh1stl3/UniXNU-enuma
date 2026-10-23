@@ -1,0 +1,99 @@
+{
+  "scope": "read-only sibling progress and compatibility audit; no device actions, builds, source patches applied or reference writes",
+  "date": "2026-10-23 Asia/Shanghai",
+  "nuwa_commit": "f6a5f3beb9d25a58fb43385889617a3fe74c1cd6",
+  "inputs": [
+    {
+      "path": "docs/STATUS.md",
+      "sha256": "8bf168061fabf111ba8a644fc34a14cc7e1004aea1ea275352f54ef1a1d2917a",
+      "lines": 45,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "docs/operations/2026-10-23-dxe-allocation-build-trial.md",
+      "sha256": "7e8b5fe2a3833c5e5fe3269d981da839cc64d7d9f73645b1eb7ec0aa7d24b86b",
+      "lines": 70,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "docs/operations/2026-10-23-factory-heap-build-trial.md",
+      "sha256": "d1da3ab9a35109ea4b9295f595ae8c93e0eb726b742f027730f99a534f94d2dd",
+      "lines": 35,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "patches/firmware-candidates/0008-nuwa-dxe-allocation-trace.patch",
+      "sha256": "4a859ab6108270229fd305d091deaa6cd2d76c37e62dbce823b7e848c73750e1",
+      "lines": 108,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "scripts/audit-factory-heap-artifact.py",
+      "sha256": "a9e7e63d38bcb242880cf022883092423e1feb242485a115ccd2248c8286d9fb",
+      "lines": 63,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "scripts/ci/inspect-firmware-candidate.py",
+      "sha256": "0d2d718b86c70f4cc248d4a64e584934c2c77e593910344cebbe1279aa20a1d1",
+      "lines": 353,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "reports/dxe-allocation/39829943950/screen-observation.json",
+      "sha256": "d80192e8c84ba54a63a66fef1773b2c57281aaffe76cfe08afe33db4e69bdf05",
+      "lines": 79,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "reports/factory-heap/39835052901/memory-table-comparison.json",
+      "sha256": "64987adbab41a45d019e9f83391bda00c4e6ee75af0e7bc56281a49e51e19fd0",
+      "lines": 21,
+      "matches_commit_after_lf_normalization": true
+    },
+    {
+      "path": "reports\\factory-heap\\39835052901\\postcondition.json",
+      "sha256": "3a63c3c022445d3440e44a3ebd287d02bcaa6fa8991a9d17a94156fde1429dad",
+      "untracked_snapshot": true
+    }
+  ],
+  "mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+  "allocation_patch_check": {
+    "argv": [
+      "git",
+      "--no-optional-locks",
+      "-C",
+      "D:\\Code\\UniXNU-enuma\\out\\nuwa-progress-audit\\mu-raw",
+      "apply",
+      "--check",
+      "-p2",
+      "D:\\Code\\UniXNU-nuwa\\patches\\firmware-candidates\\0008-nuwa-dxe-allocation-trace.patch"
+    ],
+    "exit_code": 0,
+    "patch_sha256": "4a859ab6108270229fd305d091deaa6cd2d76c37e62dbce823b7e848c73750e1",
+    "applied": false,
+    "compile_tested_for_enuma": false
+  },
+  "enuma_actual_sec": {
+    "fd_sha256": "6e029dc1307f8b7d677d92d33f2f48a2c260c0bca86a7bca45c1ce8ef3d4eedb",
+    "sec_sha256": "5ea4329ee42cdc7cc5b93292ee30d3494d03ba7216da60545f70b8763904ae53",
+    "heap": {
+      "offset": 56056,
+      "base": "0x98900000",
+      "bytes": 53477376,
+      "mib": 51.0,
+      "descriptor_prefix_sha256": "964ba1209db048015ea60e54838df3a01155e6e7da79aa8c02904082159894a8"
+    },
+    "matches_enuma_xbl_source": true,
+    "runtime_heap_measured": false
+  },
+  "nuwa_latest_recovery_snapshot": {
+    "at": "2026-10-23T01:14:28.564124+00:00",
+    "android_completed": true,
+    "three_partition_hashes_unchanged": true,
+    "not_committed_at_audit": true,
+    "new_heap_runtime_success_not_established": true
+  },
+  "licensing": "Mu target files BSD-2-Clause-Patent. No license file found in the nuwa device repository search; retain provenance and do not infer licensing of new patch additions solely from Mu. No source is copied into version control by this audit.",
+  "priority": "Check actual allocation failures/free pages/largest raw extent and pool/guard constraints before any heap-size change; retain Display constructor/service investigation. Use controlled timing gates until an enuma output channel exists. Do not copy SM8550 addresses or heap sizes."
+}
