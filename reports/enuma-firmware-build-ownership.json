@@ -1,0 +1,210 @@
+{
+  "scope": "build ownership migration and offline comparison; hardware separately recorded",
+  "firmware_commit": "00ddc0189a07006e0a2d090c8466d593cd551a98",
+  "previous_commit": "26b1f9997aead60fec5b67a5ed24ac89cac1feb9",
+  "implementation": "firmware/Resources/Scripts/build_enuma_firmware.py",
+  "adapter": "scripts/build_enuma_firmware.py",
+  "source_pin_files": 56,
+  "linked_profiles": [
+    2,
+    5
+  ],
+  "bundle_passed": true,
+  "bundle_negative_tests": 4,
+  "ownership_tests": 3,
+  "compatibility_tests": 10,
+  "workspace_passed": true,
+  "byte_identical": false,
+  "comparison": {
+    "control": [
+      {
+        "module": "9affb503-e643-4141-8b90-17e8588b1d35",
+        "sections": [
+          {
+            "type": 18,
+            "size_before": 65192,
+            "size_after": 65192,
+            "different_bytes": 27,
+            "first_offsets": [
+              4101,
+              4102,
+              17641,
+              17642,
+              18261,
+              46856,
+              46857,
+              46858,
+              46859,
+              46860,
+              46861,
+              46862,
+              46863,
+              46864,
+              46865,
+              46879,
+              46880,
+              46881,
+              46888,
+              46889,
+              46890,
+              46891,
+              46892,
+              46893,
+              46894,
+              46895,
+              46896
+            ]
+          }
+        ]
+      },
+      {
+        "module": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+        "sections": [
+          {
+            "type": 2,
+            "size_before": 874527,
+            "size_after": 874513,
+            "different_bytes": 796693,
+            "first_offsets": [
+              74632,
+              74633,
+              74634,
+              74635,
+              74636,
+              74637,
+              74638,
+              74639,
+              74640,
+              74641,
+              74642,
+              74643,
+              74644,
+              74645,
+              74646,
+              74647,
+              74648,
+              74649,
+              74650,
+              74651,
+              74652,
+              74653,
+              74654,
+              74655,
+              74656,
+              74657,
+              74658,
+              74659,
+              74660,
+              74661
+            ]
+          }
+        ]
+      },
+      {
+        "module": "PcdDxe",
+        "sections": [
+          {
+            "type": 16,
+            "size_before": 28672,
+            "size_after": 28672,
+            "different_bytes": 8,
+            "first_offsets": [
+              24904,
+              24905,
+              24906,
+              24907,
+              24908,
+              24909,
+              24910,
+              24911
+            ]
+          }
+        ]
+      }
+    ],
+    "pointer": [
+      {
+        "module": "9affb503-e643-4141-8b90-17e8588b1d35",
+        "sections": [
+          {
+            "type": 18,
+            "size_before": 65192,
+            "size_after": 65192,
+            "different_bytes": 3,
+            "first_offsets": [
+              46827,
+              46830,
+              46831
+            ]
+          }
+        ]
+      },
+      {
+        "module": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+        "sections": [
+          {
+            "type": 2,
+            "size_before": 874529,
+            "size_after": 874503,
+            "different_bytes": 796665,
+            "first_offsets": [
+              74632,
+              74633,
+              74634,
+              74635,
+              74636,
+              74637,
+              74638,
+              74639,
+              74640,
+              74641,
+              74642,
+              74643,
+              74644,
+              74645,
+              74646,
+              74647,
+              74648,
+              74649,
+              74650,
+              74651,
+              74652,
+              74653,
+              74654,
+              74655,
+              74656,
+              74657,
+              74658,
+              74659,
+              74660,
+              74661
+            ]
+          }
+        ]
+      },
+      {
+        "module": "PcdDxe",
+        "sections": [
+          {
+            "type": 16,
+            "size_before": 28672,
+            "size_after": 28672,
+            "different_bytes": 8,
+            "first_offsets": [
+              24904,
+              24905,
+              24906,
+              24907,
+              24908,
+              24909,
+              24910,
+              24911
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "interpretation": "SEC build-time string and corresponding string-reference layout; PcdDxe RSDS debug identifier; compression cascades. SimpleFb/DxeCore and other leaf payloads unchanged. Not a reproducible-build claim.",
+  "device_report": "reports/enuma-gop-mode-device.json"
+}

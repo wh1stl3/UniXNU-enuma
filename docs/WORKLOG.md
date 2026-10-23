@@ -96,3 +96,5 @@
 2026-10-23 Asia/Shanghai · 上一里程碑990d225已推送。本轮按继续至XNU请求完成step2/3全链接与打包审计；step2于21:20:06接受，ADB16.923秒、完成31.178秒，用户确认无按键；step3于21:24:57接受，75秒无返回，停止追加，用户人工恢复后21:27:29核验Android/root/原槽/解锁/原摘要通过。step4未构建/启动；实际链接反汇编保留但根因未定。donor解压摘要匹配固定同版本pin、三组闭包/绑定计划通过，未emit预链接镜像。无内存/verified/flash变化。证据reports/enuma-gop-step23-device.json、reports/enuma-gop-step3-offline-boundary.json、reports/enuma-donor-decompression.json、reports/enuma-donor-closure-audit.json；本提交号见后续Git。
 
 2026-10-23 21:47 · 按人工恢复后持续工作规则完成Mode拆分，固件26b1f99已推送；设备前序b0376ce已推送。两新镜像审计/主机/负例/workspace通过，新step2 Android核验通过、无按键确认待答。证据operations/2026-10-23-gop-mode-split.md、reports/enuma-gop-mode-split.json；step5未测。
+
+2026-10-23 21:58 · 编译入口归属迁移：固件00ddc01已推送，设备前序1b92a58已推送。两档重建、bundle/四负例/workspace、三ownership及10兼容测试通过；差异记录为SEC时间/引用与Pcd调试标识，不称字节复现。旧step2/5及迁移step2无按键返回已确认；step6构建中。证据reports/enuma-firmware-build-ownership.json、reports/enuma-gop-mode-device.json。

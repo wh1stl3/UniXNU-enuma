@@ -1,20 +1,24 @@
 # STATUS
 
-更新：2026-10-23 21:47（Asia/Shanghai）。
+更新：2026-10-23 21:58（Asia/Shanghai）。
 
 ## 当前结论
 
-尚未写屏或进入XNU。旧step3超时已人工恢复；按用户最新规则，恢复后自动继续离线分析、修复和新候选，不作为整轮停止点。
+尚未写屏或进入XNU。Mode拆分step5（只检查指针存在）已自行回Android，用户确认无按键。旧step3超时原因仍未定，按新用户规则人工恢复后持续离线分析和新软件，不原样重试失败包。
 
-固件26b1f99已推送，新增Mode拆分step5/6/7。step2对照与step5已完整构建打包、审计通过；240主机用例O1/Oz、七对象、48标记、六Mu传输、七CLI、四bundle负例及workspace通过。
+26b1f99的step2/5 ADB17.024/16.943秒；迁移后00ddc01的step2 ADB15.865秒。三笔均完成Android/root/原摘要核验，用户逐笔确认无按键。迁移后step5已构建未测，其SimpleFb/Core与旧step5一致；迁移版step2已重验返回。
 
-新step2 21:45:28启动，ADB17.024秒、完整核验28.813秒，Android/root/原分区摘要通过；本次无按键确认待答，暂不启动step5。step5仅指针存在检查，6/7尚未全链接。旧step3失败原因仍未定位，不原样重试。
+## 编译归属与验证
 
-## 下一步
+固件仓00ddc01已推送，实际编译实现和preflight桥在Resources/Scripts；设备仓只保留校验固定版本/全部摘要后的兼容调用。设备契约、依赖锁、打包、实机/恢复和out位置不变，56项固件输入锁。
 
-确认新对照是否自行返回后，按相同恢复门禁测试step5，再逐层推进Mode头、Info与跨度。无返回停止追加启动并恢复，随即继续离线隔离。用户提出构建归属调整，已准备将实际编译入口迁到uefi-enuma，设备仓保留校验调用、打包/实机/恢复；迁移后须实际构建验证。
+迁移版step2/5实际全链接、30OEM/FD/BootShim/v3、bundle/四负例/workspace通过；三ownership测试及10兼容测试通过。迁移前后整包不一致，已解包定位SEC时间字符串/引用布局及PcdDxe调试标识差异，SimpleFb/Core等其余叶载荷一致；不声称可重现构建。
 
-证据见operations/2026-10-23-gop-mode-split.md及reports/enuma-gop-mode-split.json、reports/enuma-gop-mode-device.json。没有数值GOP快照或真实scanout证据；禁绘制保持。原内存/example/verified不变，未flash/erase/改槽。
+## 下一步与限制
+
+step6（Mode头，不解引用Info）正在构建。审计后沿现有临时boot/身份备份/恢复门禁推进；超时停止追加并先恢复，之后继续离线迭代。step7/完整跨度/QueryMode尚未获得新实机结论。无数值GOP快照或真实scanout，禁绘制保持。
+
+证据operations/2026-10-23-firmware-build-ownership.md、reports/enuma-firmware-build-ownership.json、reports/enuma-gop-mode-device.json。原内存/example/verified不变，未flash/erase/改槽。
 
 ## 系统与内核现状
 

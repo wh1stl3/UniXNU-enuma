@@ -2,7 +2,7 @@
   "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
   "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "uefi_source_commit": "26b1f9997aead60fec5b67a5ed24ac89cac1feb9",
+  "uefi_source_commit": "00ddc0189a07006e0a2d090c8466d593cd551a98",
   "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
   "unixnu_qualification": {
     "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
@@ -123,7 +123,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "1cccae5fb00104f6b6dd82eb5519ac05e53d4bcf28e9c6da8480876a7dbb8622",
+  "fd_sha256": "1524fd247994ec87d4491348c4404e9f9bb5f901213a84bb35b5472ecede4860",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -140,7 +140,7 @@
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "firmware/Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "firmware/Resources/Enuma/extensions.json": "4f1e2547886eb9f6d325b5b39cb9dc71561dc7ab7bf3dd0a70642196fbe33b64",
+    "firmware/Resources/Enuma/extensions.json": "5ecd57ce684cd319c735cd66edd4ebf08b6fa23308d711886f076aeb590efd32",
     "firmware/Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "firmware/Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "firmware/Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
@@ -171,7 +171,9 @@
     "firmware/diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
     "firmware/diagnostics/EnumaGopAudit.h": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
     "firmware/patches/simplefb-gop-query.patch": "f60706f9c9905f72fa2a7296830eecd86ef2d508a368a1e8c33d1f4bbb672921",
-    "firmware/diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184"
+    "firmware/diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184",
+    "firmware/Resources/Scripts/build_enuma_firmware.py": "10817b590ca4a7f4e87486d9bf514826bfe780ee1bf1222ac3ffb2aaf3a290b2",
+    "firmware/Resources/Scripts/enuma_firmware_preflight.py": "eb9af118480cf90166854337ed76cf850485b6e2f890e592ed7a339fbc39521a"
   },
   "probe_upstream_sha256": {
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",

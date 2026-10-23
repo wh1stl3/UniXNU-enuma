@@ -1,18 +1,18 @@
 {
   "schema": 1,
   "scope": "offline-qualified candidates; runtime evidence recorded separately",
-  "firmware_commit": "26b1f9997aead60fec5b67a5ed24ac89cac1feb9",
+  "firmware_commit": "00ddc0189a07006e0a2d090c8466d593cd551a98",
   "transport": "core-warning-v2",
   "profiles": [
     {
       "id": "same-source-handle-control",
       "step": 2,
-      "variant": "gop-mode-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+      "variant": "gop-owned-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
     },
     {
       "id": "mode-pointer-presence",
       "step": 5,
-      "variant": "gop-mode-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+      "variant": "gop-owned-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
     }
   ],
   "hardware_order": "Recheck recovery and identity; same-source step2 control must return before step5. On timeout stop boots, recover, then continue offline isolation and new builds.",

@@ -9,6 +9,7 @@
 - `D:\Code\PortingiOS`、`D:\Code\PortingiOSWithUniXNU` 及其中上游源码全部只读。
 - 上游源码按固定提交和本地路径引用，不整棵复制进设备仓。WSL 路径大小写须保持真实名称。
 - 所有工具输出显式指向本仓 `out/`，不得使用上游默认输出目录。`local.toml` 不提交。
+- 固件编译实现由 `uefi-enuma/Resources/Scripts/build_enuma_firmware.py` 维护；设备仓同名脚本仅做版本/摘要校验和兼容调用。设备契约、Android boot打包、实机与恢复留在设备仓，不把编译实现复制回来。
 
 ## 版本管理（沿用 UniXNU-nuwa）
 
