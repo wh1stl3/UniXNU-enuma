@@ -37,10 +37,33 @@
       "no_buttons_confirmed_by_user": true,
       "independent_recovery_check": true,
       "recovery_checked_at": "2026-10-24T02:04:20.634395+08:00"
+    },
+    {
+      "candidate_sha256": "25662b789fdbd1b6f82ddcad8b6e9f077d26bfad40b8b866519fae7d0053b466",
+      "issued_at": "2026-10-24 02:05:38",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 22.281,
+      "boot_complete_seconds": 36.625,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "dsi-disabled",
+      "step": 14,
+      "query": 2,
+      "fd_sha256": "93ad4f44d6ad80ada7e9dc49625b4133d93204115072e61eb68fa44b5b66d17c",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T02:06:40.854652+08:00"
     }
   ],
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false,
-  "xnu_entered": false
+  "xnu_entered": false,
+  "query1_minus_query2_adb_seconds": -6.375,
+  "interpretation": "query1较短、query2较长的互补时序支持“至少一个接口时序使能非零”的谓词分支。仍非寄存器数值日志，不证明SSPP路由、计数活动、面板或物理/IOVA。",
+  "next_action": "本轮只读对照及正/互补验证已完成，设备Android/root/原槽/解锁/原摘要通过。下一步依据互补结果离线分析路由及计数前置；不追加像素或寄存器写入，R-005保持consumed。",
+  "nominal_gate_delay_difference_seconds": 5,
+  "timing_caveat": "Observed 6.375s ADB difference is not exact nominal 5s; other boot-path timing is included. No direct numeric register or active-scanout trace."
 }

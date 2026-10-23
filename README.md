@@ -26,4 +26,4 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 
 固件编译实现位于uefi-enuma/Resources/Scripts/build_enuma_firmware.py；本仓同名脚本为校验固定源锁的适配入口。文档职责与历史记录索引见[docs/README.md](docs/README.md)。
 
-2026-10-24当前：固件338db59新增step14 DSI时序使能两读探针；step12/step14正/互补三份完整离线资格通过，设备结果和下一步以STATUS为准。用户要求落实全部文档后直接验证，已确认可在场恢复。R-005保持consumed，未进入XNU。
+2026-10-24当前：固件338db59新增step14 DSI时序使能两读探针；step12/step14正/互补三份完整离线资格通过且均无按键返回Android/root/原槽/解锁/原摘要；互补时序支持至少一接口使能非零，尚非数值/活动显示证明。下一步以STATUS为准。用户要求落实全部文档后直接验证，已确认可在场恢复。R-005保持consumed，未进入XNU。
