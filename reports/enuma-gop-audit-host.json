@@ -1,0 +1,21 @@
+{
+  "scope": "host fault injection and real Mu-header AArch64 object only; no hardware claim",
+  "all_passed": true,
+  "cases": 36,
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+  "source_sha256": "317dc3488e695db4c45e8b0dbc813960d608862ae2e661f9e8b13eee895ffd19",
+  "undefined_symbols": [
+    "gEfiGraphicsOutputProtocolGuid"
+  ],
+  "framebuffer_access": false,
+  "blt_or_setmode": false,
+  "allocations_freed": true,
+  "real_provider_patch_composed": true,
+  "post_install_gate_cases": 6,
+  "invalid_build_profiles_rejected": 6,
+  "installed_driver_status_preserved": true
+}

@@ -85,7 +85,10 @@ def main():
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument('--diagnostic-simplefb',action='store_true',help='metadata-only SimpleFb; omit exact CPR/Display/UFS set, no pixel drawing')
     selection.add_argument('--diagnostic-without-ufs',action='store_true',help='GOP isolation only; default firmware retains OEM UFSDxe')
+    parser.add_argument('--diagnostic-gop-query', type=int, choices=(0,1,2), default=0, help='1: reset on read-only GOP audit pass; 2: reset on failure; 0: disabled')
     args = parser.parse_args()
+    if args.diagnostic_gop_query and not (args.diagnostic_simplefb and args.stop_stage == 13 and args.stop_delay == 2 and args.detail_point == 16 and args.dispatch_guid_only and args.dispatch_completion_fallback and args.dispatch_guid and args.dispatch_guid.lower() == 'dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'):
+        parser.error('GOP query requires SimpleFb GUID-only stage13/detail16/delay2 with completion fallback')
     if not 1 <= args.dispatch_ordinal <= 128: parser.error('--dispatch-ordinal must be 1..128')
     if args.dispatch_guid_only and (args.stop_stage != 13 or args.dispatch_guid is None or args.dispatch_ordinal != 1 or args.detail_point in (23,26,27)):
         parser.error('GUID-only requires stage 13, complete GUID, driver detail and ordinal 1 placeholder')
@@ -166,6 +169,7 @@ def main():
         ENUMA_DIAG_DELAY_US=str(args.stop_delay*1000000),ENUMA_DIAG_DISPATCH_ORDINAL=str(args.dispatch_ordinal),
         ENUMA_DIAG_DETAIL_POINT=str(args.detail_point),ENUMA_DIAG_DISABLE_UFS='1' if (args.diagnostic_without_ufs or args.diagnostic_simplefb) else '0',
         ENUMA_DIAG_SIMPLEFB='1' if args.diagnostic_simplefb else '0',
+        ENUMA_DIAG_GOP_QUERY=str(args.diagnostic_gop_query),
         ENUMA_DIAG_GUID_ONLY='1' if args.dispatch_guid_only else '0',
         ENUMA_DIAG_DISPATCH_FALLBACK='1' if args.dispatch_completion_fallback else '0', **guid_defines)
     ctx=SimpleNamespace(board=board,args=SimpleNamespace(skip_preflight=False),tree=tree,
@@ -184,6 +188,7 @@ def main():
         'diagnostic_dispatch_completion_delay_seconds':7 if args.dispatch_completion_fallback else None,
         'diagnostic_omitted_oem_modules':(['CPRDxe','DisplayDxe','UFSDxe'] if args.diagnostic_simplefb else ['UFSDxe'] if args.diagnostic_without_ufs else []),
         'diagnostic_simplefb_metadata_only':args.diagnostic_simplefb,
+        'diagnostic_gop_query':args.diagnostic_gop_query,
         'reference_gitlinks':lock['reference_gitlinks'],'checks':[]}
     try:
         firmware.build(ctx,{},uefi,core)

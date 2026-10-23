@@ -44,14 +44,18 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
     cases = [(*case,0) for case in cases]
     cases += [(13,point,status,1,guid,1) for point in (*range(13,23),24,25)
               for status in (0,0x8000000000000001) for guid in (0,1,2,3)]
+    cases = [(*case,0) for case in cases]
+    cases += [(13,point,status,1,0,1,query) for point in (16,17)
+              for status in (0,0x8000000000000001) for query in (1,2)]
     records=[]
-    for index,(stage,point,status,enabled,guid,guid_only) in enumerate(cases):
+    for index,(stage,point,status,enabled,guid,guid_only,query) in enumerate(cases):
         command=['clang','-std=c11','-O1','-Wall','-Wextra','-Werror',
           '-fsanitize=address,undefined','-fno-pie','-no-pie','-I'+str(out),
           '-DENUMA_DIAG_STAGE='+str(stage),'-DENUMA_DIAG_DETAIL_POINT='+str(point),
           '-DENUMA_DIAG_DELAY_US=2000000','-DENUMA_DIAG_DISPATCH_ORDINAL=3',
           '-DENUMA_DIAG_GUID_ENABLED='+str(enabled),
           '-DENUMA_DIAG_GUID_ONLY='+str(guid_only),
+          '-DENUMA_DIAG_GOP_QUERY='+str(query),
           '-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL',
           '-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL',
           '-DTEST_GUID_CASE='+str(guid),'-DTEST_STATUS='+hex(status)+'ULL',
