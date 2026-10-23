@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "scope": "R-004 unchanged mapping; step9 source-address-only presence",
+  "firmware_commit": "17aa47ad900fb1c3934f4d68c07780067a26a0de",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "id": "same-source-control",
+      "step": 3,
+      "variant": "addr-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "id": "address-presence",
+      "step": 9,
+      "variant": "addr-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "hardware_order": "Control return then step9; predicate rejection with controlled recovery is not a hard-stop. Timeout stops additional boots and starts recovery.",
+  "pixel_access": false,
+  "mmio_writes": false
+}

@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "scope": "R-004 unchanged mapping; step10 packing-only classification",
+  "firmware_commit": "838b38f3f1a0e927b187d63c6f17db1c5cf7ab88",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "id": "same-source-control",
+      "step": 3,
+      "variant": "linear-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "id": "packing-predicate",
+      "step": 10,
+      "variant": "linear-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "hardware_order": "Control return then step10; predicate rejection with controlled recovery is not a hard-stop. Timeout stops additional boots and starts recovery.",
+  "pixel_access": false,
+  "mmio_writes": false
+}

@@ -11,11 +11,11 @@ class GuardTests(unittest.TestCase):
         original=bundle.read
         def edited(path):
             value=copy.deepcopy(original(path));change(path,value);return value
-        with patch.object(bundle,'read',edited),self.assertRaises(AssertionError):bundle.main('r004-scanout-probes.json','enuma-r004-scanout-bundle.json')
+        with patch.object(bundle,'read',edited),self.assertRaises(AssertionError):bundle.main('scanout-linear-probes.json','enuma-scanout-linear-bundle.json')
 
     def test_wrong_firmware(self):
         def change(path,value):
-            if path.name=='r004-scanout-probes.json':value['firmware_commit']='0'*40
+            if path.name=='scanout-linear-probes.json':value['firmware_commit']='0'*40
         self.altered_metadata(change)
 
     def test_old_transport(self):
@@ -36,6 +36,6 @@ class GuardTests(unittest.TestCase):
             if path.suffix=='.img':
                 raw=bytearray(raw);raw[4096+192]^=1;return bytes(raw)
             return raw
-        with patch.object(Path,'read_bytes',edited),self.assertRaises(AssertionError):bundle.main('r004-scanout-probes.json','enuma-r004-scanout-bundle.json')
+        with patch.object(Path,'read_bytes',edited),self.assertRaises(AssertionError):bundle.main('scanout-linear-probes.json','enuma-scanout-linear-bundle.json')
 
 if __name__=='__main__':unittest.main()
