@@ -1,0 +1,30 @@
+{
+  "scope": "same-source timing control plus counter eligibility/progress complementary predicates; no numeric early trace",
+  "firmware_commit": "f6c59badf5ee22f1720f22124a97384ad9739c15",
+  "tests": [
+    {
+      "candidate_sha256": "5f75763ae804b976765e2d81655f17e31c3fb9bf142824ae5b4c7b087b42028c",
+      "issued_at": "2026-10-24 02:35:38",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 15.875,
+      "boot_complete_seconds": 29.828,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "counter-control",
+      "step": 14,
+      "query": 1,
+      "fd_sha256": "a8d6dd93bdf7e5596a74e6b1897b58d41115cd381b26dabbde2b5c576eb473a1",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T02:36:14.046429+08:00"
+    }
+  ],
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "xnu_entered": false,
+  "pairs": [],
+  "interpretation": "。互补时序非寄存器数值日志；配置/进展支持不证明buffer路由、面板或可见写屏；拒绝不证明不活动，近回绕复位/瞬变仍有歧义。"
+}
