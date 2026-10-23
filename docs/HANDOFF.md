@@ -20,11 +20,13 @@ query1在非错误标记后由Core延时2秒返回，query2在错误标记后返
 
 dsi-control（step12/query1）：2026-10-24 01:59:48，recovered-android-boot-complete；ADB15.906秒/Android完成29.797秒；用户无按键确认True，恢复原摘要True，独立后置槽/解锁/root检查True。
 
+dsi-enabled（step14/query1）：2026-10-24 02:03:18，recovered-android-boot-complete；ADB15.906秒/Android完成29.516秒；用户无按键确认True，恢复原摘要True，独立后置槽/解锁/root检查True。
+
 互补结果尚未齐备，配置使能状态未判定。
 
 ## 下一步、恢复和限制
 
-同源step12已返回；先落实用户无按键证据、Android完成/root/槽/解锁/原摘要，提交推送全部当前文档，再临时boot step14/query1。
+step14/query1已返回；先落实用户无按键证据及全部恢复核验，提交推送当前文档，再执行同源step14/query2互补分类。
 
 只读探针按用户偏好留必要的前后截图、主机日志/时序；出现实际屏幕输出、需判读变化或恢复时连续录像。相机反光不算设备输出。用户已确认可在场恢复；Android/fastboot沿既有恢复证据，TWRP/UART未验证。无返回立即停追加，优先恢复并当轮对齐STATUS/HANDOFF/审核/人工/WORKLOG/DECISIONS；恢复核验后继续离线分析及新软件，不原样重试失败镜像。
 

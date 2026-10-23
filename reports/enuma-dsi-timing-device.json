@@ -19,6 +19,24 @@
       "no_buttons_confirmed_by_user": true,
       "independent_recovery_check": true,
       "recovery_checked_at": "2026-10-24T02:00:54.537583+08:00"
+    },
+    {
+      "candidate_sha256": "11311dfc2cd87b7b3a667af3f9a82a3644cc8a830b01e2c3f2f69daacb2dbcd3",
+      "issued_at": "2026-10-24 02:03:18",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 15.906,
+      "boot_complete_seconds": 29.516,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "dsi-enabled",
+      "step": 14,
+      "query": 1,
+      "fd_sha256": "d1f66fa1579073227ab487de48ff718569ade91a275729f9c4d4d2f31c25c2f8",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T02:04:20.634395+08:00"
     }
   ],
   "pixel_access": false,

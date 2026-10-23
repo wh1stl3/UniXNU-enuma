@@ -178,3 +178,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 · 用户要求DSI时序使能只读实现、构建审计/全套文档后直接实测，确认在场恢复和按需摄像。固件338db59已推送，设备62项源锁/gitlink固定。8项DSI O1/Oz+ASan/UBSan、AArch64两加载无存储/调用/依赖、84旧scanout/GOP/源锁/workspace/像素旗标及恢复身份v3门禁通过；step12与step14/query1/query2三份全链接、30OEM、实际FD两目标只读、AutoGen/库、Boot v3/bundle通过，未新增设备启动。证据reports/enuma-dsi-timing-host.json、enuma-dsi-timing-bundle.json，out/dsi-*-build.log。先提交推送全部文档再实测。
 
 2026-10-24 01:59:48 · 资格/全套文档bbecc2d已推送后运行338db59同源step12，image9671a059…5a0e5b，ADB15.906秒/完成29.797秒；用户确认全程无按键，独立核验Android/root/原槽/解锁/boot及vendor_boot原摘要通过。step14尚未运行；本笔结果与全部当前文档提交推送后继续正向两读。证据reports/enuma-dsi-timing-device.json、enuma-dsi-timing-preflight.json，out/dsi-control-device.log。
+
+2026-10-24 02:03:18 · 对照/全套文档9bb31f2已推送后运行338db59 step14/query1，image11311dfc…b2dbcd3，ADB15.906秒/完成29.516秒；用户确认全程无按键，独立Android/root/原槽/解锁/原摘要核验通过。互补query2未执行，不能仅短返回宣称数值或活动输出；本笔全套文档推送后继续。证据reports/enuma-dsi-timing-device.json及out/dsi-enabled-device.log。

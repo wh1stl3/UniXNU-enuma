@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-24T02:00:54.537583+08:00",
+  "at": "2026-10-24T02:04:20.634395+08:00",
   "scope": "read-only current enuma and backup preflight; no reboot or boot issued",
   "identity": "enuma",
   "boot_completed": true,
@@ -19,5 +19,5 @@
   "onsite_recovery": "user confirmed in takeover chat",
   "camera": "USB DSHOW snapshot verified; continuous video required for preview",
   "twrp_verified": false,
-  "candidate_sha256": "9671a05975cebf613fa352e422fbb9f94b103cf296b2b98513713943425a0e5b"
+  "candidate_sha256": "11311dfc2cd87b7b3a667af3f9a82a3644cc8a830b01e2c3f2f69daacb2dbcd3"
 }
