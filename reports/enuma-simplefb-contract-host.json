@@ -1,8 +1,8 @@
 {
   "scope": "complete real SimpleFb source with host UEFI/allocator adapters; no hardware/ABI proof",
   "baseline_sha256": "926136fbf45aef45fda9a18c797e21cc361c2dbe34003176eadf9e98034a05d6",
-  "patch_sha256": "334bd21e74b868078e7793d0142158f920c39e7782d0f265277cede88c1b2d0f",
-  "patched_source_sha256": "87ee1b6c8a88d5d48387b9f556433edcbeb6683899b4925529a9be881261ca7d",
+  "patch_sha256": "1d23beb189b4aa14808e15f6cdb60e3d3580c6b9353a17ea60dbd3e49a38ffea",
+  "patched_source_sha256": "2d1e575924102f4380a8fae1a1cf3e93c9c8722324ebb992f3311e3ea7358ec4",
   "all_passed": true,
   "selection_patch_sha256": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
   "composed_selection_replay": true,

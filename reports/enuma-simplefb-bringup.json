@@ -46,7 +46,8 @@
   },
   "no_probe_commands_until_previous_recovery_cleared": true,
   "manual_recovery_report": "reports/enuma-simplefb-recovery.json",
-  "latest_offline_source": "6bc5b81326c56cb1fadd3aa04072eb2cf30fcbee",
+  "latest_offline_source": "82ce8a53b6146df003414cf712237929348bbc57",
   "latest_offline_source_device_tested": false,
-  "automatic_return_of_original_simplefb_candidate_proven": false
+  "automatic_return_of_original_simplefb_candidate_proven": false,
+  "latest_offline_evidence": "reports/enuma-simplefb-loader-bringup.json"
 }

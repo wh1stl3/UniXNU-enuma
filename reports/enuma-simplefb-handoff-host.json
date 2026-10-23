@@ -1,0 +1,32 @@
+{
+  "scope": "host integration with real Mu configure prefix and pinned DarwinBoot video helper; no mapped framebuffer/UEFI ABI/device execution",
+  "firmware_contract_patch_sha256": "1d23beb189b4aa14808e15f6cdb60e3d3580c6b9353a17ea60dbd3e49a38ffea",
+  "patched_simplefb_sha256": "2d1e575924102f4380a8fae1a1cf3e93c9c8722324ebb992f3311e3ea7358ec4",
+  "mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
+  "mu_archive_sha256": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826",
+  "mu_library_path": "MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c",
+  "mu_library_raw_sha256": "3c4ef872faa7e042bcd2199a225c28ae50afe6768363734210f73645e683fb53",
+  "mu_exact_prefix_sha256": "c852ad6e75c63b6db58b9c22644b4a1f68c448999bb28bc277e93099539e70d5",
+  "mu_extraction": "exact prefix before first VideoFill Doxygen block; library body unchanged, configure symbol renamed by C macro in fixture",
+  "darwin_boot_video_sha256": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
+  "adapter_limit": "UEFI services/allocators and HighBitSet32 adapted; full Blt implementation and MMIO/cache/physical ownership not exercised",
+  "expected_baseline_failures": false,
+  "results": [
+    {
+      "case": "region-span",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "case": "real-configure-retry-and-loader",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "case": "combined-region-real-configure-loader",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "new_device_trials": 0
+}

@@ -23,14 +23,29 @@ EFI_STATUS LocateMemoryRegionByName(const char *name,EFI_MEMORY_REGION_DESCRIPTO
  EFI_STATUS status=lookup_calls==1?first_lookup:second_lookup;
  if(!EFI_ERROR(status)){p->Address=fixture_address;p->Length=fixture_length;}return status;
 }
+#ifdef SIMPLEFB_REAL_CONFIGURE
+#define FrameBufferBltConfigure EnumaRealFrameBufferBltConfigure
+#include SIMPLEFB_REAL_CONFIGURE
+#undef FrameBufferBltConfigure
+#endif
 EFI_STATUS FrameBufferBltConfigure(VOID *base,EFI_GRAPHICS_OUTPUT_MODE_INFORMATION *info,FRAME_BUFFER_CONFIGURE *config,UINTN *size){
+#ifdef SIMPLEFB_REAL_CONFIGURE
+ configure_calls++;
+ if(!config && first_configure!=EFI_BUFFER_TOO_SMALL)return first_configure;
+ if(config && second_configure!=EFI_SUCCESS)return second_configure;
+ return EnumaRealFrameBufferBltConfigure(base,info,config,size);
+#else
  (void)base;(void)info;configure_calls++;
  if(!config){*size=128;return first_configure;}assert(*size==128);return second_configure;
+#endif
 }
 EFI_STATUS FrameBufferBlt(FRAME_BUFFER_CONFIGURE *c,EFI_GRAPHICS_OUTPUT_BLT_PIXEL *p,EFI_GRAPHICS_OUTPUT_BLT_OPERATION op,UINTN a,UINTN b,UINTN d,UINTN e,UINTN f,UINTN g,UINTN h){
  (void)c;(void)p;(void)op;(void)a;(void)b;(void)d;(void)e;(void)f;(void)g;(void)h;blt_calls++;return EFI_SUCCESS;
 }
 #include SIMPLEFB_SOURCE
+#ifdef SIMPLEFB_LOADER_SOURCE
+#include SIMPLEFB_LOADER_SOURCE
+#endif
 static void reset_fixture(void){
  FreeMemoryBuffers();assert(live==0);alloc_calls=fail_alloc=lookup_calls=configure_calls=blt_calls=0;
  first_lookup=second_lookup=install_status=second_configure=EFI_SUCCESS;first_configure=EFI_BUFFER_TOO_SMALL;
@@ -47,6 +62,16 @@ int main(void){
  reset_fixture();fixture_length=0;assert(GetFrameBufferInfos(&base,&w,&h,&d)==EFI_NOT_FOUND);
  reset_fixture();FixturePcd[0]=1;assert(GetFrameBufferInfos(&base,&w,&h,&d)==EFI_UNSUPPORTED);
  reset_fixture();FixturePcd[2]=0;assert(GetFrameBufferInfos(&base,&w,&h,&d)==EFI_UNSUPPORTED);
+#ifdef SIMPLEFB_RANGE_CHECKS
+ reset_fixture();fixture_length=16384000-1;
+ assert(RegisterFrameBuffer(NULL,NULL)==EFI_BAD_BUFFER_SIZE && live==0 && configure_calls==0);
+ reset_fixture();fixture_length=16384000;
+ assert(RegisterFrameBuffer(NULL,NULL)==0 && mFrameBuffer.Mode->FrameBufferSize==fixture_length);
+ reset_fixture();fixture_address=UINT64_MAX-8;
+ assert(RegisterFrameBuffer(NULL,NULL)==EFI_BAD_BUFFER_SIZE && live==0);
+ reset_fixture();FixturePcd[0]=FixturePcd[1]=UINT32_MAX;
+ assert(RegisterFrameBuffer(NULL,NULL)==EFI_BAD_BUFFER_SIZE && live==0);
+#endif
  for(unsigned failure=1;failure<=3;failure++){
   reset_fixture();fail_alloc=failure;assert(RegisterFrameBuffer(NULL,NULL)==EFI_OUT_OF_RESOURCES);assert(live==0 && !mFrameBuffer.Mode && !FrameBufferConfiguration);
  }
@@ -54,6 +79,19 @@ int main(void){
  reset_fixture();first_configure=EFI_SUCCESS;assert(RegisterFrameBuffer(NULL,NULL)==EFI_DEVICE_ERROR && live==0);
  reset_fixture();second_configure=EFI_DEVICE_ERROR;assert(RegisterFrameBuffer(NULL,NULL)==EFI_DEVICE_ERROR && live==0);
  reset_fixture();assert(RegisterFrameBuffer(NULL,NULL)==0 && live==3);unsigned allocations=alloc_calls;
+#ifdef SIMPLEFB_LOADER_SOURCE
+ UINT64 video[6];
+ assert(DarwinBootVideoFromGop(&mFrameBuffer,video)==EFI_SUCCESS);
+ assert(video[0]==fixture_address && video[1]==1 && video[2]==6400 && video[3]==1600 && video[4]==2560 && video[5]==32);
+ mFrameBuffer.Mode->Info->PixelFormat=PixelRedGreenBlueReserved8BitPerColor;
+ assert(DarwinBootVideoFromGop(&mFrameBuffer,video)==EFI_UNSUPPORTED);
+ for(unsigned i=0;i<6;i++)assert(video[i]==0);
+ mFrameBuffer.Mode->Info->PixelFormat=PixelBlueGreenRedReserved8BitPerColor;
+ mFrameBuffer.Mode->FrameBufferSize--;
+ assert(DarwinBootVideoFromGop(&mFrameBuffer,video)==EFI_COMPROMISED_DATA);
+ mFrameBuffer.Mode->FrameBufferSize++;
+ assert(DarwinBootVideoFromGop(&mFrameBuffer,video)==EFI_SUCCESS);
+#endif
  assert(RegisterFrameBuffer(NULL,NULL)==EFI_ALREADY_STARTED && alloc_calls==allocations);
  assert(FrameBufferQueryMode(NULL,0,&size,&info)==EFI_INVALID_PARAMETER);
  assert(FrameBufferQueryMode(&mFrameBuffer,1,&size,&info)==EFI_INVALID_PARAMETER && info==NULL && size==0);

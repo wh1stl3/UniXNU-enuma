@@ -4,28 +4,28 @@
 
 ## 当前状态
 
-**enuma已人工恢复并核验Android；本轮依用户最新指令继续离线，不操作实机。** 12:11:03 +08:00核验enuma/槽_a/完成1/root/解锁及原boot_a、vendor_boot_a摘要，用户确认按键恢复。233a9d8首测未自动返回的历史结果保持，不能称其定时复位或GOP通过。见[恢复报告](../reports/enuma-simplefb-recovery.json)。未flash/erase/改槽，没有新设备试验。
+**继续离线主线，本轮零设备查询、启动或写入。** 最近实机证据仍为12:11:03人工按键恢复后核验enuma/完成1/root/槽_a/解锁/原boot与vendor_boot摘要；不是本轮实时连接状态。233a9d8首测未自动返回仍为历史失败，GOP/BDS/XNU均未通过。
 
-## 本轮主线进展
+## 本轮完成
 
-固件gitlink6bc5b81、50项源锁。增加完整GUID-only选择，保留完整GUID/实际句柄/detail/status守卫，解除未知运行序号与GUID的AND依赖；默认仍旧序号模式。可选正常分派结束7秒复位，置于缺失架构协议检查和BDS之前；默认关闭。它不能处理驱动/构造器/Dispatcher卡死，不是异步看门狗，也不能追溯修复旧镜像。
+固件gitlink82ce8a5、50项源锁。复现并修复SimpleFb静态配置大小导致失败清理后真实Mu库重试失败；新增拟暴露帧缓冲跨度≤原描述符Length、乘法/区域端点溢出检查。没有修改内存表或引入地址，不据范围约束宣称像素归属正确。默认原生33与无UFS32不变，SimpleFb独立诊断保留30 OEM，Blt禁像素和Probe早退保持。
 
-7479da1早期stage12/ordinal1 SimpleFb对照已构建打包，未实测。6bc5b81 GUID-only point20/2秒加正常完成兜底实际AArch64构建/官方core patch还原通过，FD 8f2c6f8a00a311ee63b1c9ca16db7b1b4d5bd501819193aa6875edb7be051ff7；实际编译宏已核对。147组真实头ASan/UBSan、三种完成门配置/非法配置拒绝、50项Python/组合patch重复重放/50源锁检查通过。全部新镜像仅离线生成，不把构建当运行证明。
+新增真实Mu配置前缀+完整SimpleFb+固定DarwinBoot视频helper的host联测，基线两问题可复现，修复后三种配置ASan/UBSan通过；合成BGRX视频元组及拒绝格式/跨度通过，真实scanout仍未知。完整驱动/组合patch、50项Python、50源锁和串行workspace检查通过。资格校验会临时apply/reverse同一out上游补丁，build与workspace检查须串行。
 
-详见[完整GUID与兜底审计](operations/2026-10-23-guid-only-dispatch-offline.md)、[机器证据](../reports/enuma-dispatch-selection-offline.json)。新版本后续FD/30 OEM/BootShim/v3审计以当前reports为准。
+实际AArch64/backend还原、30 OEM/FD/BootShim/v3通过，FD 75c34141a785d4dc38f1475e6ce1a60b894f30db98c18b58926958c6e2bd203f；补丁后实际编译SimpleFb与host源相同。源码CI39912601757回读PASS，仅源码验证。实际AutoGen两构造器和Null串口绑定已审计，不等于实机执行。所有新镜像仅归档未启动。
 
-## 仍有效的证据与边界
+详见[真实库与loader交接](operations/2026-10-23-simplefb-loader-handoff.md)、[机器证据](../reports/enuma-simplefb-loader-bringup.json)。这两个缺陷不等于首测黑屏根因已找到，尤其重试问题不必在首次调用触发。
 
-同SM8250 alioth/elish路线已形成30-OEM独立SimpleFb诊断，排除CPR/Display/UFS，其余本机PE/DEPEX保留。默认33、无UFS32模式分别保留；真实Mu驱动已有查找/模式/分配/错误/清理/溢出修补，metadata模式禁止Blt像素写入，Probe直接绘制入口早退。scanout实际地址偏移、pitch/格式/线性、DFPS子范围、缓存和生命周期仍未知。
+## 仍有效的主线与边界
 
-nuwa同Mu pool成功门有5.370秒延时响应，失败门未观察预期响应；没有堆耗尽/扩堆依据。Native Display历史仅调用前/canary前缀存在门支持，不转移成新SimpleFb运行结论。51MiB DXE Heap、512MiB owned、原内存表/example/verified不变；R-002跨Bootloader不保留，持久日志路线仍停，不换地址/扩大/借DFPS或SMEM。
+6bc5b81的完整GUID-only选择保留实际句柄/detail/status守卫；可选正常Dispatcher结束7秒复位在架构协议检查/BDS之前，默认关闭，不能处理卡死。旧序号32未校准，仍不能解释为新SimpleFb执行事实。7479da1早期队列对照及后续GUID候选都未实测；上轮147组头测试对应头文件本轮未变。
 
-目标enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。尚未证明GOP安装/可见、实时UEFI map、BDS、XNU或NT36523。TWRP未测试。
+Native Display历史仅调用前/canary前缀门支持；同Mu pool成功门有延时响应，失败门未观察，不构成扩堆依据。51MiB DXE Heap、512MiB owned、内存/example/verified均不变。R-002跨Bootloader不保留，日志路线仍停，不换址/扩大/借DFPS或SMEM。TWRP/UART未验证。
+
+目标enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。实际scanout六项、UEFI map/窗口分配、EBS、GOP可见、BDS、XNU及NT36523仍待实机。
 
 ## 下一步
 
-保持离线。下次恢复实机时先重新核验设备并测早期队列对照，再做完整GUID point20的2/7/2延时对照（正常完成兜底固定7秒），有响应后才推进驱动返回/协议状态。单次7秒返回无法区分目标和兜底；卡死仍须按硬停规则停止并恢复。没有待批的新内存/verified/破坏性操作。
+保持既定离线范围。恢复实机工作后重新核对身份/备份与恢复条件，先早期队列对照，再完整GUID point20的2/7/2；确认后推进驱动返回/唯一GOP字段、真实显示、GetMemoryMap与512MiB窗口/EBS，最后XNU入口。单次7秒返回不能区分目标与正常完成兜底；卡死立即恢复并停追加。没有新的内存/verified/破坏性操作审批项。
 
-设备上一里程碑e197e02已推送；本轮发布见Git/WORKLOG。参考仓只读。
-
-发布核验：固件6bc5b81已推送；源码CI39911281252成功并回读PASS（仅源码契约）。GUID-only候选FD审计30个原厂PE/DEPEX逐字节、192字节BootShim+3MiB FD及AOSP v3打包回读通过；全部新镜像未启动。编译宏取自实际DxeCore clang响应文件并随私有归档保存。
+设备上一里程碑00505f8与固件82ce8a5已推送，本轮设备发布见Git/WORKLOG；参考仓只读。

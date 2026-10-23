@@ -1,0 +1,41 @@
+{
+  "scope": "offline source, host integration, actual AArch64 and package audits; no new device action",
+  "firmware_commit": "82ce8a53b6146df003414cf712237929348bbc57",
+  "fd_sha256": "75c34141a785d4dc38f1475e6ce1a60b894f30db98c18b58926958c6e2bd203f",
+  "image_sha256": "6baf95968292746998d260810596d090b42ed28e991d3157866e93330a093bc4",
+  "local_image": "out/boot-candidate/simplefb-retry-bounds-guid-only-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata-boot-v3.img",
+  "local_archive": "out/entry-probe/simplefb-retry-bounds-guid-only-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata",
+  "fixed": [
+    "fresh configure sizing on retries",
+    "advertised span within existing descriptor",
+    "descriptor end wrap rejection"
+  ],
+  "baseline_source": "6bc5b81326c56cb1fadd3aa04072eb2cf30fcbee",
+  "baseline_report": "reports/enuma-simplefb-handoff-regressions.json",
+  "host_report": "reports/enuma-simplefb-handoff-host.json",
+  "host_cases": 3,
+  "python_tests_passed": 50,
+  "source_inputs_checked": 50,
+  "workspace_serial_recheck_passed": true,
+  "qualification_concurrency_limit": "build wrapper and workspace checker both temporarily modify the same qualified upstream out/ checkout; run them serially",
+  "native_patched_simplefb_matches_host": true,
+  "matched_oem_modules": 30,
+  "bootshim_v3_roundtrip": true,
+  "source_ci_run": 39912601757,
+  "source_ci_log_pass_readback": true,
+  "source_ci_scope": "source-only",
+  "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+  "asbuilt_inf_sha256": "a6412f9870aad53fc7be70b4570fb46ab602587b52211b30d5183f2ff0862f62",
+  "autogen_constructors": [
+    "BaseDebugLibSerialPortConstructor",
+    "UefiBootServicesTableLibConstructor"
+  ],
+  "serial_provider": "BaseSerialPortLibNull",
+  "constructors_executed_on_device": false,
+  "actual_gop_or_scanout_verified": false,
+  "actual_window_allocation_or_ebs_verified": false,
+  "xnu_entered": false,
+  "new_device_trials": 0,
+  "memory_or_verified_fields_changed": false,
+  "black_screen_root_cause_proven": false
+}

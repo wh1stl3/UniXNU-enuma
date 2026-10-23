@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "6bc5b81326c56cb1fadd3aa04072eb2cf30fcbee",
+  "commit": "82ce8a53b6146df003414cf712237929348bbc57",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -21,7 +21,7 @@
     "Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "Resources/Enuma/extensions.json": "53bb71d85146052a8fac1bacf2107d5262e4ac973e5c3f61531760e67543ecee",
+    "Resources/Enuma/extensions.json": "d4823389194498b1f8ef2833c3d92105704914744c32a43d50b0fa1b97c9a049",
     "Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
@@ -52,7 +52,7 @@
     "diagnostics/EnumaPoolSearchCheckpoint.h": "42ade1af349e16287e1198814aea079bbc7a846a9b3053ff105d33929053715b",
     "Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFb.c": "926136fbf45aef45fda9a18c797e21cc361c2dbe34003176eadf9e98034a05d6",
     "Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf": "46a6ebe23cd5e4c9ec15dedb18a4e5a34d0fb5560143b0b2924dbb9b8ff0ff53",
-    "patches/simplefb-contract.patch": "334bd21e74b868078e7793d0142158f920c39e7782d0f265277cede88c1b2d0f",
+    "patches/simplefb-contract.patch": "1d23beb189b4aa14808e15f6cdb60e3d3580c6b9353a17ea60dbd3e49a38ffea",
     "patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00"
   }
