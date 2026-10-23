@@ -16,6 +16,21 @@
       "variant": "descriptor-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
       "fd_sha256": "de159ec291cdfb30cabc083757eb4e755c059fc5eb37d756d32212ba3b4b29d4",
       "no_buttons_confirmed_by_user": true
+    },
+    {
+      "candidate_sha256": "3770151e19731745d253cff397f16cb16da752f389dcf321ba8fe3e0e92f09b7",
+      "issued_at": "2026-10-24 00:27:02",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.927,
+      "boot_complete_seconds": 30.978,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 12,
+      "selector": 1,
+      "variant": "descriptor-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "602449c0598f1513dd12f546590653eced359fa5094b755f293d1e848b9ca982",
+      "no_buttons_confirmed_by_user": true
     }
   ]
 }
