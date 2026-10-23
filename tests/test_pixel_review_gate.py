@@ -9,6 +9,8 @@ class ReviewGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'not approved'):probe.require_hardware_review({'hardware_review':'R-005','image_sha256':'a'*64},{'R-005':{'status':'pending','image_sha256':['a'*64]}})
     def test_wrong_image_rejected(self):
         with self.assertRaisesRegex(ValueError,'not approved'):probe.require_hardware_review({'hardware_review':'R-005','image_sha256':'b'*64},{'R-005':{'status':'approved','image_sha256':['a'*64]}})
+    def test_consumed_single_trial_rejected(self):
+        with self.assertRaisesRegex(ValueError,'not approved'):probe.require_hardware_review({'hardware_review':'R-005','image_sha256':'a'*64},{'R-005':{'status':'consumed','image_sha256':['a'*64]}})
     def test_exact_approved_image(self):
         probe.require_hardware_review({'hardware_review':'R-005','image_sha256':'a'*64},{'R-005':{'status':'approved','image_sha256':['a'*64]}})
     def test_unknown_review_rejected(self):

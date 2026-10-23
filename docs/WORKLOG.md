@@ -170,3 +170,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 · c73eb6e同源step12/step13完成完整链接、30OEM、FD/Boot v3/实际像素指令、AutoGen/库归档及bundle资格。控制image d656b861d4054c7165bfbfc370818776266cea5930942b803434e883ccf7b0d5；像素image c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534。用户批准R005并确认在场，精确摘要已绑定；只读预检Android/root/原槽/备份摘要通过。固件文档71cd5cb已推送，运行gitlink仍c73eb6e。未新增临时启动；全套当前文档提交推送后才运行对照。证据reports/enuma-pixel-preview-bundle.json、enuma-r005-preflight.json及out/pixel-r005-*-build.log。
 
 2026-10-24 01:20:42 · 已推送资格80df13a后临时启动c73eb6e step12，image d656b861…f7b0d5，ADB15.875秒/完成32.281秒；用户明确全程没有按键，Android/root/原槽/解锁与原分区摘要通过。未执行step13；下一笔前先提交推送当前文档。证据reports/enuma-r005-device.json及out/pixel-r005-control-device.log。
+
+2026-10-24 01:22:45 · 文档/对照eeee7da已推送后，连续录像执行c73eb6e R-005 step13唯一一次；image c81def7d…5df534，ADB16.953秒/完成30.312秒，Android/root/原槽/原摘要通过，用户确认全程无按键。245帧全部解码、最大间隔0.219秒，早期15.98..22.78秒逐帧检查未确认白条；用户说明白点为键盘反光。视频SHA3d18a250…c470c。账本consumed阻止重复使用，无恢复硬停；继续离线同SoC显示handoff/活动路由分析。证据reports/enuma-r005-device.json及out/camera-capture/20261024T012224-pixel-preview-r005。

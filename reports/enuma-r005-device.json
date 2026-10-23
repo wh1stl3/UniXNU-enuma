@@ -16,9 +16,43 @@
       "variant": "pixel-r005-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
       "fd_sha256": "5ad3039820ef8e1c99c88ee68c147b75f15927e85ce1ba42d3f6542f79489250",
       "no_buttons_confirmed_by_user": true
+    },
+    {
+      "candidate_sha256": "c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534",
+      "issued_at": "2026-10-24 01:22:45",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.953,
+      "boot_complete_seconds": 30.312,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "step": 13,
+      "variant": "pixel-preview-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-pixel-preview",
+      "fd_sha256": "5eba112a1091151cffb1d4ba496cd21d6ea34bfe785f78a625bc324ef21a0394",
+      "no_buttons_confirmed_by_user": true,
+      "camera": {
+        "video_sha256": "3d18a250b31e2228a792afef0a36fde7795558a5ecf9f0af48cdcd95192c470c",
+        "width": 1920,
+        "height": 1080,
+        "fps_header": 5,
+        "camera_wall_seconds": 49.5619999999999,
+        "runner_exit": 0,
+        "frame_count": 245,
+        "video_relative_path": "out/camera-capture/20261024T012224-pixel-preview-r005/pixel-preview-r005.avi",
+        "decoded_frames": 245,
+        "max_frame_gap_seconds": 0.219,
+        "reviewed_early_wall_seconds": [
+          15.98,
+          22.78
+        ]
+      },
+      "visible_pixel_result": "no confirmed white bar in reviewed early video frames; user identified white points as keyboard reflections"
     }
   ],
   "xnu_entered": false,
   "register_writes": false,
-  "partition_writes": false
+  "partition_writes": false,
+  "pixel_success_proven": false,
+  "next_action": "R-005单次授权已消耗，不追加像素测试。设备Android/root/原摘要通过，无硬停或人工恢复待办；继续离线核对同SoC显示handoff、活动路由与面板/背光状态，再形成只读新软件。"
 }

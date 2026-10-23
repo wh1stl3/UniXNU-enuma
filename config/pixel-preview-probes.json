@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "review": "R-005",
-  "status": "approved",
+  "status": "consumed",
   "firmware_commit": "c73eb6e18e3dcb49fb9bb39676aaf3179dcab17a",
   "control": {
     "step": 12,
@@ -20,5 +20,5 @@
   "pixel_stores_max": 2048,
   "mmio_writes": false,
   "new_memory_map": false,
-  "candidate_state": "both c73eb6e profiles fully built and offline-qualified; runtime evidence is in reports/enuma-r005-device.json when present"
+  "candidate_state": "single approved preview executed and returned; no repeat pixel authorization; see runtime report"
 }

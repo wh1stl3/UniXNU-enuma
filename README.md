@@ -26,4 +26,4 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 
 固件编译实现位于uefi-enuma/Resources/Scripts/build_enuma_firmware.py；本仓同名脚本为校验固定源锁的适配入口。文档职责与历史记录索引见[docs/README.md](docs/README.md)。
 
-2026-10-24当前：c73eb6e同源step12/step13完整离线资格通过，用户已批准R-005并确认在场恢复。像素范围及精确摘要见NEED-REVIEW，实测/恢复状态与下一步见STATUS/HANDOFF。每笔新实机前对齐提交推送全部当前文档。
+2026-10-24当前：c73eb6e同源step12/step13完整离线资格通过，R-005单次实验已无按键返回Android/root/原摘要，视频未确认白条；用户说明白点是键盘反光，单次授权已消耗。像素范围及精确摘要见NEED-REVIEW，实测/恢复状态与下一步见STATUS/HANDOFF。每笔新实机前对齐提交推送全部当前文档。
