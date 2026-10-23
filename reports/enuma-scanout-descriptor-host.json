@@ -1,0 +1,19 @@
+{
+  "scope": "offline descriptor hypothesis; not activity/IOVA or pixel proof",
+  "all_passed": true,
+  "random_samples": 10000,
+  "optimizations": [
+    "O1",
+    "Oz"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "max_register_reads": 48,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "source_sha256": "add6ce58d96b7a37d2dd04b48dfff1f266e0af7862c552e5d8990a93839b7314",
+  "object_sha256": "afc302140d27928b7be34c57bf4b17e40f8e9fa41863f6eb143ca0ee2b77337c",
+  "runtime": false
+}

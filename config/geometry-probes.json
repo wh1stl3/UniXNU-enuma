@@ -18,5 +18,6 @@
   "hardware_order": "Control full Android/root/original-digest recovery and no-button confirmation precede step11. Each boot rechecks identity/backups/recovery. Timeout stops additional boots and requires recovery plus same-turn handoff. A controlled predicate rejection is not a hard-stop.",
   "pixel_access": false,
   "mmio_writes": false,
-  "geometry_is_hypothesis": true
+  "geometry_is_hypothesis": true,
+  "source_lock": "source-history/uefi-ab0cb79.lock.json"
 }

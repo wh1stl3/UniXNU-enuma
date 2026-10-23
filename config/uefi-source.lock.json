@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "ab0cb7943594bcd078a2f0c9474e075bfe0b04fc",
+  "commit": "7dc3bf19c2997d7203e305697564e7a2586b57cd",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -21,13 +21,13 @@
     "Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "Resources/Enuma/extensions.json": "3784df370d9e801f04600273e8187e685d39a76f93c5e46b994130ef74ec1598",
+    "Resources/Enuma/extensions.json": "d9530f4004058f3217c4773b647acf989d16a6fed1c05a76babe3c54279383ec",
     "Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
     "Resources/Enuma/vendor.json": "9c37197536afc0eeb6deeb708fa8b436692a4c693e2eb3b4653f7108931f8fec",
     "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
-    "Resources/Scripts/enuma_preflight.py": "f4fde34753b3a1cce7d781c94f927cab8874634eb5ae8164796c7140ca42773c",
+    "Resources/Scripts/enuma_preflight.py": "39aebd487de6b662822f54d1a3ce500cbfaeb3dfc171b7e3af524c74b2ef2095",
     "Resources/Scripts/mkbootimg.py": "55037fd1a6d6cd861add76c2083d5d4321373bf714acae3f6a40deb004c27d47",
     "THIRD-PARTY.md": "281c9bfda789b6251021fc1e76039a6677f2178ab121aefeef8a7bd898833126",
     "diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
@@ -56,13 +56,14 @@
     "patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
     "diagnostics/EnumaGopAudit.h": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
-    "patches/simplefb-gop-query.patch": "e9ac96af8d8a8a148aa1553208a0eb326d9bdd076e1aad05fd55b13d1523f22e",
+    "patches/simplefb-gop-query.patch": "dfa7fd4e09f06cc059c8a63fcd5589057e24b80149d22e38dc8ad3a46ad7461f",
     "docs/gop-query.md": "f9b22e0198ad0c39be2c5230ff0399ab6485915f38e74f4643eea21fe783c5c8",
     "diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184",
-    "Resources/Scripts/build_enuma_firmware.py": "291834b224d54d65a3e683691c0b42db1c2ea0991adb8cb246880cb5dbef5dc8",
+    "Resources/Scripts/build_enuma_firmware.py": "a1edc4ead762c87d341783e5f3b976c136829afe5ff16ee99c07f287d196d4e9",
     "Resources/Scripts/enuma_firmware_preflight.py": "eb9af118480cf90166854337ed76cf850485b6e2f890e592ed7a339fbc39521a",
     "diagnostics/EnumaScanoutAudit.h": "ba17b2095905e8377dae40d1898538efd4016c658fa14739567de6eff5302317",
     "patches/display-mdp-map.patch": "5aa0f4e584349354000c50a181fb7a0aa31c43b1f4128a72bc35469e90fd14b4",
-    "patches/sec-fixed-epoch-banner.patch": "37bbf193ffd4d2cd38a8a782a7fc584becde14bdfe649cc338f13f0f36f08d2f"
+    "patches/sec-fixed-epoch-banner.patch": "37bbf193ffd4d2cd38a8a782a7fc584becde14bdfe649cc338f13f0f36f08d2f",
+    "diagnostics/EnumaScanoutDescriptor.h": "add6ce58d96b7a37d2dd04b48dfff1f266e0af7862c552e5d8990a93839b7314"
   }
 }

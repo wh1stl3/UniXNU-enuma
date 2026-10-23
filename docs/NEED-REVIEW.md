@@ -1,6 +1,6 @@
 # NEED-REVIEW
 
-四类硬停见 AGENTS.md。所有批准必须绑定本仓动作与具体输入；历史 enuma/nuwa 授权不视为新镜像或新配置的授权。
+当前门禁与授权范围以AGENTS.md及以下批准记录为准。2026-10-24：无新增待批准项；S-003已恢复且新基线/step9/10受控返回，step11固定假设被互补时序拒绝。下一版step12仅现有R-004范围内只读；正在离线完整构建、尚未实测。像素/寄存器写入不在R-004内。下方保留历次审查和当时状态，后续有日期的完成记录取代旧待办，不把历史“尚未”当当前状态。
 
 ## R-001 · 第一阶段 DarwinBoot owned-memory 预算
 
@@ -187,7 +187,7 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 
 推荐A理由：地址/长度来自本机live DT，偏移来自固定SDE来源，静态覆盖/无交叠检查已通过。最小批准范围仅该固件映射及后续有界只读探针；不改RAM/heap/owned-memory/board.toml/example/verified，不新增日志保留区，不flash/erase/改槽，不批准像素或寄存器写入。
 
-可审查补丁patches/proposals/r004-display-mdp-map.patch已git apply --check通过但未应用。检测脚本scripts/audit_display_mmio_coverage.py和reports/enuma-display-mmio-coverage.json可重放。沿R-003“保持地址/大小…新内存字段…单列真实审查范围”边界，批准前不把此补丁接入源锁或镜像。
+批准前方案记录：patches/proposals/r004-display-mdp-map.patch当时仅检查未应用；批准后已通过固件staging补丁应用并实测，见本节后续执行记录。检测脚本scripts/audit_display_mmio_coverage.py和reports/enuma-display-mmio-coverage.json可重放。沿R-003“保持地址/大小…新内存字段…单列真实审查范围”边界，批准前不把此补丁接入源锁或镜像。
 
 R-004执行：原始迁移表保持不变，在固件构建staging应用精确一条映射补丁。固件9f50890已推送；像素和寄存器写入仍不在此次批准内。
 
@@ -202,3 +202,6 @@ R-004执行：原始迁移表保持不变，在固件构建staging应用精确�
 
 
 2026-10-23 · S-003最小新基线step0无按键返回通过，根因未知；后续仅同源step9地址存在性与step10格式只读，仍逐笔门禁，无新内存/verified/分区审批。
+
+
+2026-10-24当前汇总：step11正/互补均无按键恢复，支持固定几何条件拒绝，不是硬停。7dc3bf1 step12实际字段解码仅离线通过，同源step10已构建审计，step12完整构建中；新设备动作前先落实全部文档/候选资格/身份备份恢复。没有新内存/verified/分区审批。
