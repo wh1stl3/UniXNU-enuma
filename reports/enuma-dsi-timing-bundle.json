@@ -1,0 +1,70 @@
+{
+  "scope": "Qualify matching DSI candidates offline; archive generated inputs before reuse.",
+  "all_passed": true,
+  "firmware_commit": "338db5943edcc3af99dd1460edb2b0186e4fb10f",
+  "profiles": [
+    {
+      "variant": "dsi-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "step": 12,
+      "query": 1,
+      "image_sha256": "9671a05975cebf613fa352e422fbb9f94b103cf296b2b98513713943425a0e5b",
+      "fd_sha256": "2917d0f0c4cdad9ec77cc79e60338bae3b40eecdc4bc3030942a3f760c3dfd3a",
+      "firmware_commit": "338db5943edcc3af99dd1460edb2b0186e4fb10f",
+      "all_checks_passed": true,
+      "scope": "offline qualification, not hardware result",
+      "generated_contract": {
+        "inf_matches_baseline": true,
+        "reset_library_absent": true,
+        "psci_constructor_absent": true,
+        "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+        "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+        "core_checkpoint_sha256": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39"
+      }
+    },
+    {
+      "variant": "dsi-enabled-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "step": 14,
+      "query": 1,
+      "image_sha256": "11311dfc2cd87b7b3a667af3f9a82a3644cc8a830b01e2c3f2f69daacb2dbcd3",
+      "fd_sha256": "d1f66fa1579073227ab487de48ff718569ade91a275729f9c4d4d2f31c25c2f8",
+      "firmware_commit": "338db5943edcc3af99dd1460edb2b0186e4fb10f",
+      "all_checks_passed": true,
+      "scope": "offline qualification, not hardware result",
+      "generated_contract": {
+        "inf_matches_baseline": true,
+        "reset_library_absent": true,
+        "psci_constructor_absent": true,
+        "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+        "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+        "core_checkpoint_sha256": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39"
+      }
+    },
+    {
+      "variant": "dsi-disabled-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "step": 14,
+      "query": 2,
+      "image_sha256": "25662b789fdbd1b6f82ddcad8b6e9f077d26bfad40b8b866519fae7d0053b466",
+      "fd_sha256": "93ad4f44d6ad80ada7e9dc49625b4133d93204115072e61eb68fa44b5b66d17c",
+      "firmware_commit": "338db5943edcc3af99dd1460edb2b0186e4fb10f",
+      "all_checks_passed": true,
+      "scope": "offline qualification, not hardware result",
+      "generated_contract": {
+        "inf_matches_baseline": true,
+        "reset_library_absent": true,
+        "psci_constructor_absent": true,
+        "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+        "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+        "core_checkpoint_sha256": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39"
+      }
+    }
+  ],
+  "only_define_differences": [
+    "ENUMA_DIAG_GOP_QUERY",
+    "ENUMA_DIAG_GOP_STEP"
+  ],
+  "maximum_dsi_reads": 2,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false,
+  "hardware_executed": false
+}

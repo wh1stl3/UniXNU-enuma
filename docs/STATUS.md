@@ -1,36 +1,36 @@
-# 当前进度：R-005单次实验已返回，视频未确认白条
+# 当前进度：DSI时序使能只读探针已实现并完成构建审计
 
-2026-10-24 Asia/Shanghai。用户在本轮明确“批准R005”，并确认可以在场恢复、在合适时使用摄像头。批准仅对应c73eb6e下述最终step13一次临时启动；单次实测已完成，审批账本标记consumed以阻止重复执行，不扩张为重试失败镜像、寄存器写入、分区操作、新内存字段或verified变更。
+2026-10-24 Asia/Shanghai。用户明确要求实现DSI时序使能只读探针，完成构建审计并落实全部文档后直接实机验证；用户可在场恢复，按需摄像。无逐笔重新审批要求；即时身份/备份/恢复、每笔前当前文档提交推送和超时停止追加规则保持。
 
-## 设备与实测
+## 当前软件与范围
 
-step12：2026-10-24 01:20:42，阶段recovered-android-boot-complete，ADB15.875秒/完成32.281秒，用户无按键确认True，原摘要核验True。
+固件338db59/设备gitlink及62项源锁固定。step14严格按固定Qualcomm SDE及保存enuma DT，只读取0xae6b800与0xae6c000各一次，即两个DSI INTF_TIMING_ENGINE_EN；至少一个非零返回成功，两者零返回EFI_UNSUPPORTED。只分类时序配置使能，不是活动scanout、SSPP路由、计数增量、面板/背光、物理/IOVA或可见输出证明。无需新映射、heap、库/构造器、timer、显示或计数写入、像素访问。
 
-step13：2026-10-24 01:22:45，阶段recovered-android-boot-complete，ADB16.953秒/完成30.312秒，用户无按键确认True，原摘要核验True。
+8项DSI主机用例在O1/Oz+ASan/UBSan通过，含null/两者零/单边及双边非零/非bit0值/最大值、精确顺序和两读上限；真实AArch64对象两次加载、无存储/调用/外部依赖。84项旧scanout回归、GOP provider补丁组合/真实Mu warning传输、像素错误旗标及7项审批门禁通过。三份完整固件链接/补丁回退、30个原OEM PE/DEPEX、AutoGen/库无新增reset/PSCI构造器、实际step14 FD中的两个目标加载且无目标存储、192字节BootShim/3MiB FD/Boot v3和同源bundle通过。只有step/query宏不同，所有像素旗标为0。均为离线资格，未测阶段不能记为硬件通过。
 
-本轮只读预检见reports/enuma-r005-preflight.json：enuma、Android完成/root/原槽/解锁、boot/vendor_boot与备份摘要通过。此预检不替代每笔runner即时核验。Android/fastboot沿既有恢复证据，TWRP/UART仍未验证。
+| 候选 | step/query | Boot v3 SHA-256 | FD SHA-256 |
+| --- | --- | --- | --- |
+| dsi-control | 12/1 | `9671a05975cebf613fa352e422fbb9f94b103cf296b2b98513713943425a0e5b` | `2917d0f0c4cdad9ec77cc79e60338bae3b40eecdc4bc3030942a3f760c3dfd3a` |
+| dsi-enabled | 14/1 | `11311dfc2cd87b7b3a667af3f9a82a3644cc8a830b01e2c3f2f69daacb2dbcd3` | `d1f66fa1579073227ab487de48ff718569ade91a275729f9c4d4d2f31c25c2f8` |
+| dsi-disabled | 14/2 | `25662b789fdbd1b6f82ddcad8b6e9f077d26bfad40b8b866519fae7d0053b466` | `93ad4f44d6ad80ada7e9dc49625b4133d93204115072e61eb68fa44b5b66d17c` |
 
-## 当前c73eb6e候选
+query1在非错误标记后由Core延时2秒返回，query2在错误标记后返回；未命中目标时可能走7秒同步完成兜底，兜底不是watchdog。按同源step12→step14/query1→step14/query2逐笔恢复后推进。单笔短时序不能独立证明目标命中或数值状态。
 
-| 候选 | Android boot v3 SHA-256 | FD SHA-256 |
-| --- | --- | --- |
-| step12 | `d656b861d4054c7165bfbfc370818776266cea5930942b803434e883ccf7b0d5` | `5ad3039820ef8e1c99c88ee68c147b75f15927e85ce1ba42d3f6542f79489250` |
-| step13 | `c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534` | `5eba112a1091151cffb1d4ba496cd21d6ea34bfe785f78a625bc324ef21a0394` |
+## 最新设备结果
 
-62项源锁、完整官方backend链接和补丁回退、30个原OEM PE/DEPEX、AutoGen/静态库无新增reset/PSCI构造器、3MiB FD、192字节BootShim/Boot v3、实际FD内像素缓存指令及成对bundle均通过。两份仅step/显式像素旗标不同；默认及step0..12不写像素。33假显存场景O1/Oz+ASan/UBSan和AArch64对象通过，7审批/4FD策略/7v3/1恢复/3身份测试通过。这些是离线资格，不能当硬件通过。公开顶层build/FD/payload报告现对应最新step13，step12独立快照在out/entry-probe，公开成对摘要在reports/enuma-pixel-preview-bundle.json。固件主分支文档f79e07c已提交推送，记录本轮批准及单次实验结果；设备gitlink保留c73eb6e以固定实测源码，子模块旧pending文字是历史快照，当前批准以本仓用户记录及账本为准。
+尚未执行338db59新候选；最近实际设备结果仍为c73eb6e R-005无按键返回Android/root/原摘要，白条未确认，白点是用户键盘反光。
 
-R-005仅128x8白条500000us：保存4096字节、二次描述核对、绘制、恢复、读回；最多2048像素读/2048存储、96寄存器只读、24行缓存同步。只写八行各128个32位字，各行gap不写；无新映射/heap/构造器/模式切换/显示寄存器存储。选中描述仍可能不活动或为IOVA；无可见白条不能单独证明地址错误。
+互补结果尚未齐备，配置使能状态未判定。
 
-## 下一步和限制
+## 下一步、恢复和限制
 
-R-005单次授权已消耗，不追加像素测试。设备Android/root/原摘要通过，无硬停或人工恢复待办；继续离线核对同SoC显示handoff、活动路由与面板/背光状态，再形成只读新软件。
+先提交推送全部当前文档，再以即时身份/备份/恢复门禁临时boot同源step12对照。
 
-摄像头DSHOW 1920x1080已实际取帧并核对画面；旧cp313 NumPy与当前Python3.12不兼容，已在out/camera-tools-py312隔离安装。只读对照使用前后截图；像素实验必须启动前连续录像，保存实际帧时序、镜像摘要和恢复检查。所有视频/原始日志/备份/设备标识留out，不公开。同步Core复位不是watchdog；异常可能阻止恢复，超时立即停追加、优先现场恢复并当轮更新交接，恢复核验后自动继续离线分析与新软件。
+只读探针按用户偏好留必要的前后截图、主机日志/时序；出现实际屏幕输出、需判读变化或恢复时连续录像。相机反光不算设备输出。用户已确认可在场恢复；Android/fastboot沿既有恢复证据，TWRP/UART未验证。无返回立即停追加，优先恢复并当轮对齐STATUS/HANDOFF/审核/人工/WORKLOG/DECISIONS；恢复核验后继续离线分析及新软件，不原样重试失败镜像。
 
-连续录像245帧全部解码，最大帧间隔0.219秒；重点检查临时boot后到重启的黑屏窗口，未见可确认的128x8白条。用户明确图中白点为键盘反光，亮点不算设备输出。单组时序与成功返回相容，但没有EFI状态/选中数值地址日志，不能宣称绘制/恢复读回已在硬件证明。尚未确认写屏或进入XNU；51MiB DXE heap、512MiB owned、example=true和全部verified不变，不flash/erase/改槽。原838b38f step3失败根因未知，image a8061b8510935bbe8991ec0d8723a1bcc3b1a9460422ecc9ac30ffe13813016a禁重试。参考仓只读。旧4db/d8离线镜像仅历史证据，不能替代当前同源对照。
+R-005已消耗（consumed），旧c73eb6e像素对照与实验仅历史证据，审批账本不变；config/pixel-preview-probes.json通过source-history/uefi-c73eb6e.lock.json重放历史离线资格，不继承为新源码实测或重新授权。没有像素或显示/计数寄存器写入，不flash/erase/改槽；51MiB heap、512MiB owned、example=true及全部verified不变。尚未进入XNU或确认可见写屏。
 
-
-离线后续审计已完成：固定五份Qualcomm SDE源码和elish/SM8250实现，复核保存enuma FDT与原R-004映射，形成最多两读的DSI TIMING_ENGINE_EN计划（0xae6b800/0xae6c000）；只分类使能，不证明路由/物理-IOVA/面板。尚未实现或构建新固件探针、未追加设备动作。复现scripts/audit_display_activity_plan.py，证据reports/enuma-display-activity-plan.json，详见operations/2026-10-24-display-activity-plan.md。下一步集成只读阶段并完成主机/对象/同源完整候选资格。
+当前证据：reports/enuma-dsi-timing-host.json、enuma-dsi-timing-bundle.json、enuma-dsi-timing-device.json（若已执行）、enuma-dsi-timing-preflight.json（若已核验）；原始日志、镜像、标识、备份、相机画面仅out。顶层build/FD/payload报告对应最后构建的step14/query2，每份独立快照在out/entry-probe。复现check_dsi_timing.py、check_dsi_timing_bundle.py、audit_enuma_fd.py；实现/来源见firmware/docs/dsi-timing.md和operations/2026-10-24-display-activity-plan.md。
 
 ## 系统与内核现状
 

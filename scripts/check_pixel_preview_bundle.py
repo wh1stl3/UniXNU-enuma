@@ -5,11 +5,13 @@ ROOT=Path(__file__).resolve().parents[1]
 def read(p):return json.loads(p.read_text(encoding='utf-8'))
 def sha(b):return hashlib.sha256(b).hexdigest()
 def main():
- config=read(ROOT/'config/pixel-preview-probes.json');pin=read(ROOT/'config/uefi-source.lock.json')
- assert config['firmware_commit']==pin['commit']==subprocess.check_output(['git','-C',str(ROOT/'firmware'),'rev-parse','HEAD'],text=True).strip()
+ config=read(ROOT/'config/pixel-preview-probes.json');pin_path=(ROOT/'config'/config.get('source_lock','uefi-source.lock.json')).resolve()
+ assert pin_path.is_relative_to((ROOT/'config').resolve())
+ pin=read(pin_path);checkout=subprocess.check_output(['git','-C',str(ROOT/'firmware'),'rev-parse','HEAD'],text=True).strip()
+ assert config['firmware_commit']==pin['commit']
  wanted={}
  for name,digest in pin['file_sha256'].items():
-  raw=(ROOT/'firmware'/name).read_bytes();assert sha(raw)==digest,name
+  raw=((ROOT/'firmware'/name).read_bytes() if checkout==pin['commit'] else subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show',pin['commit']+':'+name]));assert sha(raw)==digest,name
   if Path(name).suffix in ('.c','.h','.inf','.inc','.dsc','.fdf','.patch','.toml','.py','.json'):wanted['firmware/'+name]=sha(raw.replace(b'\r\n',b'\n'))
  records=[];defines=[];shims=[]
  for profile,step,pixel in [(config['control'],12,False),(config['preview'],13,True)]:

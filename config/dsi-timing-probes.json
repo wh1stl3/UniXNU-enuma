@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "firmware_commit": "338db5943edcc3af99dd1460edb2b0186e4fb10f",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "step": 12,
+      "query": 1,
+      "tag": "dsi-control",
+      "variant": "dsi-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "step": 14,
+      "query": 1,
+      "tag": "dsi-enabled",
+      "variant": "dsi-enabled-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "step": 14,
+      "query": 2,
+      "tag": "dsi-disabled",
+      "variant": "dsi-disabled-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "maximum_dsi_reads": 2,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

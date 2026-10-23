@@ -1,0 +1,26 @@
+{
+  "scope": "Sanitized exact-address DSI read tests and actual AArch64 object; no device.",
+  "all_passed": true,
+  "cases": 8,
+  "optimizations": [
+    "O1",
+    "Oz"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "addresses": [
+    "0xae6b800",
+    "0xae6c000"
+  ],
+  "maximum_reads": 2,
+  "object_loads": 2,
+  "undefined_symbols": [],
+  "object_stores_or_calls": false,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "runtime": false,
+  "source_sha256": "8f49f8c27f1211be834e77e2a79a056010d2de0e637f02f82f6b7bd3464ff702",
+  "object_sha256": "27ce8a7e019b7e02dc5ffee501693d0753ee4b1f671f1ff491fc99bc533ed089"
+}

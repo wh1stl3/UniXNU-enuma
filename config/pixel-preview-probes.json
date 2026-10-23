@@ -20,5 +20,6 @@
   "pixel_stores_max": 2048,
   "mmio_writes": false,
   "new_memory_map": false,
-  "candidate_state": "single approved preview executed and returned; no repeat pixel authorization; see runtime report"
+  "candidate_state": "single approved preview executed and returned; no repeat pixel authorization; see runtime report",
+  "source_lock": "source-history/uefi-c73eb6e.lock.json"
 }

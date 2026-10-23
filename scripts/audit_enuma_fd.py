@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 import subprocess
+import re
 import uuid
 from pathlib import Path
 from uefi_firmware.uefi import FirmwareVolume, FirmwareFile
@@ -87,6 +88,37 @@ def main():
         (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
         report['pixel_preview_code']={'provider_pe_sha256':digest(payloads[0]),'cache_instructions_in_packaged_pe':True,
             'hardware_review_required':'R-005','hardware_execution':False}
+    if build.get('diagnostic_gop_step') == 14:
+        payloads=pe_payloads.get('SimpleFbDxe',[])
+        if len(payloads)!=1:raise ValueError('DSI provider PE missing or ambiguous')
+        out=ROOT/'out/dsi-timing-fd-audit';out.mkdir(exist_ok=True)
+        target=out/'SimpleFbDxe.efi';target.write_bytes(payloads[0])
+        assembly=subprocess.check_output(['llvm-objdump','-d',str(target)],text=True)
+        (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
+        constants={};reads=[];writes=[];wanted={0xae6b800,0xae6c000}
+        for line in assembly.splitlines():
+            fields=line.split('\t')
+            if len(fields)<3:continue
+            op,args=fields[-2].strip(),fields[-1].strip()
+            move=re.fullmatch(r'([wx]\d+), #(-?(?:0x[0-9a-f]+|\d+))(?:, lsl #(\d+))?',args)
+            if op in ('mov','movk') and move:
+                register=move[1][1:];value=int(move[2],0);shift=int(move[3] or 0)
+                if op=='mov':constants[register]=value & (0xffffffff if move[1][0]=='w' else 0xffffffffffffffff)
+                elif register in constants:constants[register]=(constants[register]&~(0xffff<<shift))|((value&0xffff)<<shift)
+                continue
+            access=re.search(r'\[([wx]\d+)(?:, #(-?(?:0x[0-9a-f]+|\d+)))?\]',args)
+            if access and access[1][1:] in constants:
+                address=constants[access[1][1:]]+int(access[2] or '0',0)
+                if address in wanted:
+                    if op in ('ldr','ldur'):reads.append(hex(address))
+                    elif op.startswith('st'):writes.append(hex(address))
+            if op in ('bl','blr'):constants.clear()
+            elif op not in ('cmp','tst','ret') and not op.startswith(('b','st')):
+                dest=re.match(r'[wx](\d+)',args)
+                if dest:constants.pop(dest[1],None)
+        if reads!=['0xae6b800','0xae6c000'] or writes:
+            raise ValueError('packaged DSI code does not match two read-only target accesses: '+repr((reads,writes)))
+        report['dsi_timing_code']={'provider_pe_sha256':digest(payloads[0]),'static_target_loads':reads,'static_target_stores':writes,'scope':'constant-address accesses in actual packaged PE; not runtime proof','hardware_execution':False}
     (ROOT / 'reports/enuma-fd-audit.json').write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: {len(matched)} native PE/DEPEX payloads unchanged; diagnostic omissions={sorted(omitted)}; UniXNU loader modules packaged')
 

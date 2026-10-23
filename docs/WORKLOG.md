@@ -174,3 +174,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 01:22:45 · 文档/对照eeee7da已推送后，连续录像执行c73eb6e R-005 step13唯一一次；image c81def7d…5df534，ADB16.953秒/完成30.312秒，Android/root/原槽/原摘要通过，用户确认全程无按键。245帧全部解码、最大间隔0.219秒，早期15.98..22.78秒逐帧检查未确认白条；用户说明白点为键盘反光。视频SHA3d18a250…c470c。账本consumed阻止重复使用，无恢复硬停；继续离线同SoC显示handoff/活动路由分析。证据reports/enuma-r005-device.json及out/camera-capture/20261024T012224-pixel-preview-r005。
 
 2026-10-24 · 设备实测f99330c及固件结果文档f79e07c已推送。继续离线固定五份Qualcomm SDE源文件、elish/SM8250 SimpleFb与保存enuma FDT，审计通过并形成现有映射内两读DSI时序使能计划；无像素/寄存器/设备动作，无内存/verified变更，尚未生成新固件。证据reports/enuma-display-activity-plan.json及operations/2026-10-24-display-activity-plan.md。
+
+2026-10-24 · 用户要求DSI时序使能只读实现、构建审计/全套文档后直接实测，确认在场恢复和按需摄像。固件338db59已推送，设备62项源锁/gitlink固定。8项DSI O1/Oz+ASan/UBSan、AArch64两加载无存储/调用/依赖、84旧scanout/GOP/源锁/workspace/像素旗标及恢复身份v3门禁通过；step12与step14/query1/query2三份全链接、30OEM、实际FD两目标只读、AutoGen/库、Boot v3/bundle通过，未新增设备启动。证据reports/enuma-dsi-timing-host.json、enuma-dsi-timing-bundle.json，out/dsi-*-build.log。先提交推送全部文档再实测。

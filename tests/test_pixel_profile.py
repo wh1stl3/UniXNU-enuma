@@ -9,6 +9,7 @@ class PixelProfileTests(unittest.TestCase):
         for args in [
             ['--diagnostic-gop-step','13','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','12','--diagnostic-gop-query','1'],
+            ['--diagnostic-pixel-preview','--diagnostic-gop-step','14','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','13','--diagnostic-gop-query','2'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','13','--diagnostic-gop-query','1']]:

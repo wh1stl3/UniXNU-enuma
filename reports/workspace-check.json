@@ -5,7 +5,7 @@
   "defconfig": [
     {
       "argv": [
-        "C:\\Program Files\\WorkBuddy\\resources\\vendor\\python\\python.exe",
+        "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
         "-B",
         "D:\\Code\\UniXNU-enuma\\out\\sources\\UniXNU\\unixnu",
         "defconfig",
