@@ -1,0 +1,43 @@
+{
+  "scope": "two authorized temporary boots; no flash, erase or slot change",
+  "firmware_commit": "e2868342daee0c196942f1a5569526d3ecb80850",
+  "transport": "core-warning-v2",
+  "timezone": "Asia/Shanghai",
+  "bundle_audit_passed": true,
+  "operator_available_for_recovery": true,
+  "tests": [
+    {
+      "candidate_sha256": "b0a144978775dcfb4bd96cd2010fdd70d9c9674b8577eed5ce162cdf7639c054",
+      "issued_at": "2026-10-23 21:10:18",
+      "boot_returncode": 0,
+      "adb_return_seconds": 16.906,
+      "boot_complete_seconds": 30.438,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "phase": "recovered-android-boot-complete",
+      "partition_writes": false,
+      "step": 0,
+      "evidence_directory": "out/device-tests/20261023T211003-dxe-driver-return",
+      "no_buttons_confirmed_by_user": true
+    },
+    {
+      "candidate_sha256": "596967b636a728c469fc0f991a22c11d5697e8c37eafc7aa9f661170630c7944",
+      "issued_at": "2026-10-23 21:11:37",
+      "boot_returncode": 0,
+      "adb_return_seconds": 15.844,
+      "boot_complete_seconds": 30.547,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "phase": "recovered-android-boot-complete",
+      "partition_writes": false,
+      "step": 1,
+      "evidence_directory": "out/device-tests/20261023T211123-dxe-driver-return",
+      "no_buttons_confirmed_by_user": true
+    }
+  ],
+  "interpretation": "Short-return timing supports the new staged Core-return path; not a numeric EFI/GOP snapshot or unique proof of the selected gate.",
+  "prior_timeout_root_cause": "unresolved",
+  "query_mode_executed": false,
+  "pixels_tested": false,
+  "xnu_booted": false
+}
