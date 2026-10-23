@@ -1,0 +1,28 @@
+{
+  "scope": "same-source control and complementary two-read DSI timing predicates; no numeric early trace",
+  "firmware_commit": "338db5943edcc3af99dd1460edb2b0186e4fb10f",
+  "tests": [
+    {
+      "candidate_sha256": "9671a05975cebf613fa352e422fbb9f94b103cf296b2b98513713943425a0e5b",
+      "issued_at": "2026-10-24 01:59:48",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 15.906,
+      "boot_complete_seconds": 29.797,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "dsi-control",
+      "step": 12,
+      "query": 1,
+      "fd_sha256": "2917d0f0c4cdad9ec77cc79e60338bae3b40eecdc4bc3030942a3f760c3dfd3a",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T02:00:54.537583+08:00"
+    }
+  ],
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "xnu_entered": false
+}
