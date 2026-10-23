@@ -1,0 +1,29 @@
+{
+  "variant": "gop-mode-header-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+  "step": 6,
+  "selector": 1,
+  "firmware_commit": "00ddc0189a07006e0a2d090c8466d593cd551a98",
+  "image_sha256": "c0e02ded4f2350cf0ec9ce10f8a17d598baef2d778c4ea959b874acb962a7ff6",
+  "fd_sha256": "1295152f0e6241e99f30b4fac97ad0e816a32c0195178265b18f0ef2d7048fdf",
+  "all_checks_passed": true,
+  "source_inputs_match_control": true,
+  "scope": "step6 actual linked static boundary; not hardware trace",
+  "files": {
+    "SimpleFbDxe.dll": "6ecc3b6e13edc982505cd751747ca6e9c3146b10772e8af5e24531991c40200d",
+    "SimpleFbDxe.map": "9814026331e19efd4e3a8b40f4c676999d91eec5a7e4c1dbf842913956415f3a",
+    "SimpleFbDxe.disassembly.txt": "237fb9300a5175574ae740df8a31a7b31cce92722c91c0db3b4ee9b6fb13f333"
+  },
+  "module_entry_rva": "0x1050",
+  "mode_load_rva": "0x1388",
+  "mode_fields_rva": [
+    "0x1398",
+    "0x13a4",
+    "0x13ac",
+    "0x13b4"
+  ],
+  "exit_to_cleanup_rva": "0x13c0",
+  "cleanup_rva": "0x1544",
+  "info_not_dereferenced_by_audit": true,
+  "query_mode_not_called_by_audit": true,
+  "framebuffer_not_accessed_by_audit": true
+}
