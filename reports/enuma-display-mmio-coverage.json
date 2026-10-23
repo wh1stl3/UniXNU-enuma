@@ -1,0 +1,12 @@
+{
+  "scope": "static fixed firmware map vs live DT evidence; no device operations",
+  "requested_base": "0xae00000",
+  "live_dt_length": "0x84208",
+  "covering_regions": [],
+  "overlapping_regions": [],
+  "existing_mapping_covers_mdp": false,
+  "proposed_page_length": "0x85000",
+  "mapping_applied": false,
+  "runtime_mmio_reads": false,
+  "decision": "R-004 required before extending the fixed memory map"
+}

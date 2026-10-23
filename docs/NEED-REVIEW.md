@@ -175,3 +175,16 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 2026-10-23 · 新版完整跨度检查无按键恢复通过，无新内存/verified/破坏性分区审批项；像素写入仍须明确映射和范围依据。
 
 2026-10-23 · 实机映射发现仅只读，未改内存/verified/设备挂载或分区，无新增审批项。
+
+## R-004 · 显示MDP窗口的最小设备映射
+
+状态：pending，2026-10-23。当前固定内存表没有覆盖实机DT显示的MDP寄存器区0x0ae00000..0x0ae84207；无覆盖也无交叠，不能假设运行时继承映射仍可读。新scanout探针在设备动作前停止，未执行MMIO或像素读写。
+
+| 候选 | 范围与代价 |
+| --- | --- |
+| A（推荐）：补最小页对齐设备映射 | 仅在固件MemoryMapLib增加Display MDP，base0x0ae00000、length0x85000、AddDev/MMAP_IO/UNCACHEABLE/MmIO/NS_DEVICE；较实机DT尾部多0xdf8字节仅用于4KiB页对齐，探针仅访问DT有效范围。先构建审计、受控对照，再只读管线。不写显示寄存器，不开亮条 |
+| B：维持原内存表 | 不增加映射，继续从OEM协议或可用UART获得scanout信息；无新增MMIO访问，但当前OEM日志/早期串口未闭合，推进较慢 |
+
+推荐A理由：地址/长度来自本机live DT，偏移来自固定SDE来源，静态覆盖/无交叠检查已通过。最小批准范围仅该固件映射及后续有界只读探针；不改RAM/heap/owned-memory/board.toml/example/verified，不新增日志保留区，不flash/erase/改槽，不批准像素或寄存器写入。
+
+可审查补丁patches/proposals/r004-display-mdp-map.patch已git apply --check通过但未应用。检测脚本scripts/audit_display_mmio_coverage.py和reports/enuma-display-mmio-coverage.json可重放。沿R-003“保持地址/大小…新内存字段…单列真实审查范围”边界，批准前不把此补丁接入源锁或镜像。

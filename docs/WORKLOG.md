@@ -106,3 +106,5 @@
 2026-10-23 · 当前00ddc01完整跨度step3临时boot后ADB15.926秒、完整核验32.396秒，用户确认全程无按键。step6/7/新step3均受控返回；旧失败原因未知。前序acd11d7已推送。证据reports/enuma-gop-mode-device.json。
 
 2026-10-23 · 只读实机显示发现：确认splash范围、DRM模式、MDP与八管线偏移，固定SDE来源。新增可重放audit_live_framebuffer.py。前序4e72d12已推送；未写屏/MMIO/新boot。
+
+2026-10-23 · 固定表MDP覆盖审计及无交叠检查通过，R-004最小映射提案dry-run通过但未应用；前序9433465已推送。新增scanout设备动作停止待批准，未访问MMIO/像素或新boot。证据reports/enuma-display-mmio-coverage.json、patches/proposals/r004-display-mdp-map.patch。
