@@ -24,8 +24,8 @@ int main(void) {
         for (unsigned i = 0; i < 8; ++i) {
             unsigned point = points[i];
             EFI_STATUS status = point == 15 ? 0 : TEST_STATUS;
-            const unsigned hook[] = {13, 14, 15, 13, 13, 14, 14, 20, 21, 22, 23, 24, 25};
-            const int required_error[] = {-1, -1, -1, 1, 0, 1, 0, -1, -1, -1, -1, -1, -1};
+            const unsigned hook[] = {13, 14, 15, 13, 13, 14, 14, 20, 21, 22, 23, 24, 25, 26, 27};
+            const int required_error[] = {-1, -1, -1, 1, 0, 1, 0, -1, -1, -1, -1, -1, -1, -1, -1};
             unsigned spec = ENUMA_DIAG_DETAIL_POINT - 13;
             unsigned status_ok = required_error[spec] < 0 || required_error[spec] == (int)EFI_ERROR(status);
             before = resets;

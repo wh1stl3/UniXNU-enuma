@@ -23,7 +23,8 @@ class PatchSeriesTests(unittest.TestCase):
                    'MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c',
                    'MdeModulePkg/Core/Dxe/Image/Image.c',
                    'UefiCpuPkg/Library/CpuExceptionHandlerLib/AArch64/CpuExceptionHandlerLib.c',
-                   'UefiCpuPkg/Library/CpuExceptionHandlerLib/DxeCpuExceptionHandlerLib.inf']
+                   'UefiCpuPkg/Library/CpuExceptionHandlerLib/DxeCpuExceptionHandlerLib.inf',
+                   'MdeModulePkg/Core/Dxe/Mem/Page.c']
             with tarfile.open(archive) as source:
                 for name in names:
                     member=next(m for m in source.getmembers() if m.name.endswith('/'+name))
@@ -49,6 +50,9 @@ class PatchSeriesTests(unittest.TestCase):
                 self.assertEqual(image.count(f'EnumaImageEntryCheckpoint ({point},'.encode()),1)
             exception=once['UefiCpuPkg/Library/CpuExceptionHandlerLib/AArch64/CpuExceptionHandlerLib.c']
             self.assertEqual(exception.count(b'EnumaUnhandledExceptionCheckpoint ();'),1)
+            page=once['MdeModulePkg/Core/Dxe/Mem/Page.c']
+            self.assertEqual(page.count(b'EnumaPoolSearchCheckpoint (Start);'),1)
+            self.assertLess(page.index(b'EnumaPoolSearchCheckpoint (Start);'),page.index(b'AllocatePoolPages: failed'))
             apply_patch_series(patches)
             self.assertEqual(once,{n:(stage/n).read_bytes() for n in names})
 

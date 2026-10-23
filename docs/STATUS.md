@@ -16,9 +16,9 @@
 
 ## 当前源码与验证
 
-固件gitlink为d3a0972，源锁44项；此前903ffed加入独立异常门。本版新增只读point24/25，匹配锁定OEM包装器实际使用的canary配置表GUID前64位，不读取VendorTable、不写入canary或调用RNG/SMC。4096项只是诊断遍历上限，异常表结构不报告为缺失。原25迁移文件/六patch、内存字段/512MiB/example/verified保持；OEM PE/DEPEX不修改。
+固件gitlink为7276dcd，源锁45项；新增全局pool后备页搜索失败26/成功27门，成功门2/7 ADB16.108/21.478秒、差5.370，支持hook执行；失败门2/7 ADB31.129/32.248秒，未观察预期5秒响应。四次全部恢复Android/root/原摘要，不能据此断言零失败或堆不足。此前903ffed加入独立异常门，d3a0972新增只读point24/25，匹配锁定OEM包装器实际使用的canary配置表GUID前64位，不读取VendorTable、不写入canary或调用RNG/SMC。4096项只是诊断遍历上限，异常表结构不报告为缺失。原25迁移文件/六patch、内存字段/512MiB/example/verified保持；OEM PE/DEPEX不修改。
 
-47组真实header/bridge ASan/UBSan、6组全局异常门和45项Python/重复patch通过。workspace固定来源、精确R-002配置与example guard通过。903ffed源码CI39834543624成功并回读PASS；d3a0972源码CI39882096705成功并回读PASS。源码CI不代替固件编译与硬件验证。
+51组真实header/bridge、17组pool门ASan/UBSan、既有6组异常门及46项Python/重复patch/CLI检查通过。workspace固定来源、精确R-002配置与example guard通过。903ffed源码CI39834543624成功并回读PASS；d3a0972源码CI39882096705成功并回读PASS。7276dcd源码CI39885298128通过并回读PASS。源码CI不代替固件编译与硬件验证。
 
 已构建/实测的各个候选均完成官方backend及core补丁还原、32原厂PE/DEPEX审计、192字节BootShim+3MiB FD、AOSP v3回读。d3a0972的point24两候选已完成完整构建/审计与2/7/2实测。默认完整33-OEM模式未在新source重建，不以无UFS32模式代替存储验证。
 
@@ -30,8 +30,8 @@ SimpleFb仍为离线审计，优先复用Mu SimpleFb/FrameBufferBltLib及alioth/
 
 ## 下一步与授权
 
-配置表前缀存在已有对照支持，降低“缺表触发canary RNG初始化”的嫌疑；不能据此认定canary值正确或排除其他SMC。只读对照nuwa后，将真实分配失败/free/largest/type等状态提升为下一轮优先观测项，并配合库构造器/UEFI服务调用归属检查；尚未实现下一层门。两边Mu同版，nuwa分配诊断严格dry-run通过；enuma实际SEC Heap51MiB与本机XBL一致，不能照搬nuwa扩堆。详见[nuwa复用审计](operations/2026-10-23-nuwa-progress-reuse-audit.md)。无新固定内存/verified变更，也无待人工按键。详细契约及证据见[PE入口门记录](operations/2026-10-23-direct-pe-entry-gates.md)。
+配置表前缀存在已有对照支持，降低“缺表触发canary RNG初始化”的嫌疑；不能据此认定canary值正确或排除其他SMC。只读对照nuwa后，将真实分配失败/free/largest/type等状态提升为下一轮优先观测项，并配合库构造器/UEFI服务调用归属检查；当前先实施7276dcd全局pool结果门，[契约与进展](operations/2026-10-23-pool-search-gates.md)，2/7对照已完成，当前未观察失败门，没有扩堆依据。用户要求继续借鉴其他设备，下一步优先落成alioth/elish式独立SimpleFb诊断，保留原生默认和全部参数/返回验证边界；新变体尚未完成。两边Mu同版，nuwa分配诊断严格dry-run通过；enuma实际SEC Heap51MiB与本机XBL一致，不能照搬nuwa扩堆。详见[nuwa复用审计](operations/2026-10-23-nuwa-progress-reuse-audit.md)。无新固定内存/verified变更，也无待人工按键。详细契约及证据见[PE入口门记录](operations/2026-10-23-direct-pe-entry-gates.md)。
 
 生成镜像无需确认；有身份、备份和返回证据的有界临时boot允许黑屏/定时复位。恢复失败、越权、内存字段或verified变更仍按AGENTS硬停。TWRP未测试。难题继续评估同SoC UniXNU/UEFI真实实现，不直接照搬板级参数。
 
-目标保持enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。旧通用内核CI不是本板最终内核。设备上一里程碑11bd36f已推送；后续以Git/WORKLOG发布记录为准。
+目标保持enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。旧通用内核CI不是本板最终内核。设备上一里程碑f696da3已推送；后续以Git/WORKLOG发布记录为准。

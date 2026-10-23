@@ -1,7 +1,7 @@
 {
   "scope": "source migration and official board configuration only; no device execution",
   "firmware_repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "firmware_commit": "d3a097231a24ee2c971c6fac8aa8faa9decd43fd",
+  "firmware_commit": "7276dcde81afa346c37ba7ea5f1cc1630f9cac6e",
   "source_device_commit": "1ab7ee8",
   "migrated_files": {
     "LICENSE": {
@@ -106,16 +106,17 @@
     }
   },
   "firmware_extensions": {
-    "diagnostics/EnumaDispatchDetailCheckpoint.h": "7d88cb33d77f5d00343dc3e58fd1421cb23f13b2d606ecacaa67cd7917a2a355",
-    "patches/dxe-dispatch-details.patch": "5fd086e94002b02364ae6f45cf2a88210528b1c6ea0ae71bbdfa7bd3fe084926",
+    "diagnostics/EnumaDispatchDetailCheckpoint.h": "ea0e367d8bdaf020a21d9f351f03c5d3ef31d5c1d2233a2280141aa2fb521291",
+    "patches/dxe-dispatch-details.patch": "e2d6f60c9aa672bb7db0d39ca7564ce7e4e00ce8d885039d82c8fdfd708ce1b3",
     "patches/dispatch-detail-options.patch": "f0e38b16a5a26730d5de057ead268f30d8f2675a6c66a900c693e1943e8878b3",
-    "Resources/Scripts/enuma_preflight.py": "2eaaf3a3652f796a6e0c3d2bf35547b86590957adfbaece0555d18d99005da4f",
+    "Resources/Scripts/enuma_preflight.py": "a209ab70016c32e18ae44757f56a2fe881bfae13ae42f14a81151043fff84337",
     "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
     "patches/apriori-metronome.patch": "59f37df69981dc61593fedb1e20b382d0881b01d3dfefc05d6fcc1028f85f01f",
     "patches/diagnostic-ufs-selection.patch": "b79be283dc09951a91aa6fc99ec26aea7187f9845080d28445bf6dd50db5a523",
     "diagnostics/EnumaImageEntryCheckpoint.h": "ddbdf7f1dd8ddae5fff68ecf1236ee5576c9f0297942763f94ac5ba08842a96a",
-    "Resources/Enuma/reset.json": "511c4946e2eefa4fd2b2bc0cfedfd4bcd34e5bde30c4010d7ee2ab683e29d52c",
-    "diagnostics/EnumaUnhandledExceptionCheckpoint.h": "e43adea43888932a3e690b2cc5c6481ecc4bb3359b9989213a8129b623cde6d6"
+    "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
+    "diagnostics/EnumaUnhandledExceptionCheckpoint.h": "e43adea43888932a3e690b2cc5c6481ecc4bb3359b9989213a8129b623cde6d6",
+    "diagnostics/EnumaPoolSearchCheckpoint.h": "42ade1af349e16287e1198814aea079bbc7a846a9b3053ff105d33929053715b"
   },
   "new_firmware_table": {
     "config": "enuma",
@@ -173,5 +174,5 @@
     }
   },
   "other_board_tables_unchanged": true,
-  "firmware_input_files_checked": 44
+  "firmware_input_files_checked": 45
 }

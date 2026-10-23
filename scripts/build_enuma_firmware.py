@@ -78,13 +78,13 @@ def main():
     parser.add_argument('--stop-stage', type=int, choices=(0,3,4,5,6,7,8,9,10,11,12,13), default=0)
     parser.add_argument('--stop-delay', type=int, choices=(2,7), default=2)
     parser.add_argument('--dispatch-ordinal', type=int, default=1)
-    parser.add_argument('--detail-point', type=int, choices=range(13,26), default=13)
+    parser.add_argument('--detail-point', type=int, choices=range(13,28), default=13)
     parser.add_argument('--dispatch-guid', help='optional complete file UUID filter for stage 13 detail gates')
     parser.add_argument('--diagnostic-without-ufs',action='store_true',help='GOP isolation only; default firmware retains OEM UFSDxe')
     args = parser.parse_args()
     if not 1 <= args.dispatch_ordinal <= 128: parser.error('--dispatch-ordinal must be 1..128')
-    if args.detail_point == 23 and (args.dispatch_guid is not None or args.dispatch_ordinal != 1):
-        parser.error('global exception point 23 has no driver GUID/ordinal attribution; omit GUID and use ordinal 1')
+    if args.detail_point in (23,26,27) and (args.dispatch_guid is not None or args.dispatch_ordinal != 1):
+        parser.error('global exception/pool point has no driver GUID/ordinal attribution; omit GUID and use ordinal 1')
     if args.stop_stage != 13 and (args.detail_point != 13 or args.dispatch_guid is not None):
         parser.error('detail point and GUID filters require --stop-stage 13')
     try:
