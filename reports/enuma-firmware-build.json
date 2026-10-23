@@ -2,7 +2,7 @@
   "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
   "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "uefi_source_commit": "250849f223198f2b89c94f2eb49b6b0daf22d447",
+  "uefi_source_commit": "e2868342daee0c196942f1a5569526d3ecb80850",
   "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
   "unixnu_qualification": {
     "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
@@ -79,7 +79,8 @@
       "ENUMA_DIAG_SIMPLEFB": "1",
       "ENUMA_DIAG_GUID_ONLY": "1",
       "ENUMA_DIAG_DISPATCH_FALLBACK": "1",
-      "ENUMA_DIAG_GOP_QUERY": "2",
+      "ENUMA_DIAG_GOP_QUERY": "1",
+      "ENUMA_DIAG_GOP_STEP": "1",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
@@ -105,7 +106,10 @@
     "UFSDxe"
   ],
   "diagnostic_simplefb_metadata_only": true,
-  "diagnostic_gop_query": 2,
+  "diagnostic_gop_query": 1,
+  "diagnostic_gop_step": 1,
+  "diagnostic_gop_reset_owner": "DxeCore",
+  "diagnostic_gop_transport": "core-warning-v2",
   "reference_gitlinks": {
     "Mu_Basecore": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
     "Common/Mu": "b8d46c71610318e36a661819e1e3c0b8bdda413a",
@@ -119,7 +123,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "fbc7d7bb3137996286e9bb48db696592f74f68ae4d4c1f4cfb23e12eaa2c92c3",
+  "fd_sha256": "e1df770f2c6956f485192ec97b4b74ff2e862deaa6357f9df2a69413ae101457",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -136,20 +140,20 @@
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "firmware/Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "firmware/Resources/Enuma/extensions.json": "6fd98ec988c3a0c875df84fa60712c4f3145b327bce30a3cced080455f64e937",
+    "firmware/Resources/Enuma/extensions.json": "e60df4e7f1b18fb511fa95c64a3714fc7ed3340002497811e02ac2c3f9ed52e5",
     "firmware/Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "firmware/Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "firmware/Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
     "firmware/Resources/Enuma/vendor.json": "9c37197536afc0eeb6deeb708fa8b436692a4c693e2eb3b4653f7108931f8fec",
     "firmware/Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
-    "firmware/Resources/Scripts/enuma_preflight.py": "f791b81735cc403eb4cb79802b1cd04ff198e178f64323a596357e3460168f5c",
+    "firmware/Resources/Scripts/enuma_preflight.py": "2b0bd1116482519f9f207a8d85fd7ca197335d433ca6dc15ec5792a50f0d6163",
     "firmware/Resources/Scripts/mkbootimg.py": "55037fd1a6d6cd861add76c2083d5d4321373bf714acae3f6a40deb004c27d47",
     "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
-    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "abf1b975e49842bbc7c8e188154b7812a96634c5c6c11588979393c8fbc46eea",
+    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "d5d0e4875d8331e3d8f516f5c38a97c51e8cf5766d7fca7441f4965aea83ea41",
     "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
     "firmware/patches/apriori-metronome.patch": "59f37df69981dc61593fedb1e20b382d0881b01d3dfefc05d6fcc1028f85f01f",
     "firmware/patches/diagnostic-ufs-selection.patch": "b79be283dc09951a91aa6fc99ec26aea7187f9845080d28445bf6dd50db5a523",
-    "firmware/patches/dispatch-detail-options.patch": "48ccad217e520b9695d2e0f1f66db5e3f81e685e4cd4aadbf42527d984713e42",
+    "firmware/patches/dispatch-detail-options.patch": "7dbd09f9016ae939d58774ea7941318cfbd96c5d07cb14059f40f1c456e49df9",
     "firmware/patches/dxe-dispatch-details.patch": "49a051195269054894262788f65883c4665db5eec170db2f457e265b523be94d",
     "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
     "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
@@ -165,13 +169,22 @@
     "firmware/patches/simplefb-contract.patch": "1d23beb189b4aa14808e15f6cdb60e3d3580c6b9353a17ea60dbd3e49a38ffea",
     "firmware/patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "firmware/diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
-    "firmware/diagnostics/EnumaGopAudit.h": "317dc3488e695db4c45e8b0dbc813960d608862ae2e661f9e8b13eee895ffd19",
-    "firmware/patches/simplefb-gop-query.patch": "fdfbb0bfa7d0b766dd7000777d8f4723a70357076365191ab5f1ef5303779554"
+    "firmware/diagnostics/EnumaGopAudit.h": "d97e058fea990a1122f5fb44839b1e0270917ade8c22a59ca796e6ce8b5fad1c",
+    "firmware/patches/simplefb-gop-query.patch": "aaf5bb6a39a0057f38858aaa1ef84ea7a97ec4e8a1bbdebfd36f2e9922a7bd79",
+    "firmware/diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184"
   },
   "probe_upstream_sha256": {
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/BootVideo.h": "8d25e85a166b272a1cbc0a5238288670e2707303f4cd97aef180ebf0c42246c4",
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DiagFont.h": "d2a3687db67b069f4e34a961e17fd28b0242986e3fa8dd8a7545cab70834fa8e"
   },
-  "core_patch_reversion_checked": true
+  "core_patch_reversion_checked": true,
+  "gop_provider_generated_contract": {
+    "inf_matches_baseline": true,
+    "reset_library_absent": true,
+    "psci_constructor_absent": true,
+    "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+    "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+    "core_checkpoint_sha256": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39"
+  }
 }

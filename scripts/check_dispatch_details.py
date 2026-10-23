@@ -47,6 +47,10 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
     cases = [(*case,0) for case in cases]
     cases += [(13,point,status,1,0,1,query) for point in (16,17)
               for status in (0,0x8000000000000001) for query in (1,2)]
+    cases += [(13,16,status,1,guid,1,query) for status in (1,5)
+              for guid in (0,1,2,3) for query in (1,2)]
+    cases += [(13,17,status,1,0,1,query) for status in (1,5) for query in (1,2)]
+    cases += [(13,16,2,1,0,1,query) for query in (1,2)]
     records=[]
     for index,(stage,point,status,enabled,guid,guid_only,query) in enumerate(cases):
         command=['clang','-std=c11','-O1','-Wall','-Wextra','-Werror',

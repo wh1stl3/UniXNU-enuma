@@ -86,7 +86,10 @@ def main():
     selection.add_argument('--diagnostic-simplefb',action='store_true',help='metadata-only SimpleFb; omit exact CPR/Display/UFS set, no pixel drawing')
     selection.add_argument('--diagnostic-without-ufs',action='store_true',help='GOP isolation only; default firmware retains OEM UFSDxe')
     parser.add_argument('--diagnostic-gop-query', type=int, choices=(0,1,2), default=0, help='1: reset on read-only GOP audit pass; 2: reset on failure; 0: disabled')
+    parser.add_argument('--diagnostic-gop-step', type=int, choices=range(5), default=0, help='0: post-install control; 1: enumerate/free; 2: add HandleProtocol; 3: add Mode checks; 4: add QueryMode/free')
     args = parser.parse_args()
+    if args.diagnostic_gop_step and not args.diagnostic_gop_query:
+        parser.error('GOP steps require --diagnostic-gop-query')
     if args.diagnostic_gop_query and not (args.diagnostic_simplefb and args.stop_stage == 13 and args.stop_delay == 2 and args.detail_point == 16 and args.dispatch_guid_only and args.dispatch_completion_fallback and args.dispatch_guid and args.dispatch_guid.lower() == 'dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'):
         parser.error('GOP query requires SimpleFb GUID-only stage13/detail16/delay2 with completion fallback')
     if not 1 <= args.dispatch_ordinal <= 128: parser.error('--dispatch-ordinal must be 1..128')
@@ -170,6 +173,7 @@ def main():
         ENUMA_DIAG_DETAIL_POINT=str(args.detail_point),ENUMA_DIAG_DISABLE_UFS='1' if (args.diagnostic_without_ufs or args.diagnostic_simplefb) else '0',
         ENUMA_DIAG_SIMPLEFB='1' if args.diagnostic_simplefb else '0',
         ENUMA_DIAG_GOP_QUERY=str(args.diagnostic_gop_query),
+        ENUMA_DIAG_GOP_STEP=str(args.diagnostic_gop_step),
         ENUMA_DIAG_GUID_ONLY='1' if args.dispatch_guid_only else '0',
         ENUMA_DIAG_DISPATCH_FALLBACK='1' if args.dispatch_completion_fallback else '0', **guid_defines)
     ctx=SimpleNamespace(board=board,args=SimpleNamespace(skip_preflight=False),tree=tree,
@@ -189,6 +193,9 @@ def main():
         'diagnostic_omitted_oem_modules':(['CPRDxe','DisplayDxe','UFSDxe'] if args.diagnostic_simplefb else ['UFSDxe'] if args.diagnostic_without_ufs else []),
         'diagnostic_simplefb_metadata_only':args.diagnostic_simplefb,
         'diagnostic_gop_query':args.diagnostic_gop_query,
+        'diagnostic_gop_step':args.diagnostic_gop_step,
+        'diagnostic_gop_reset_owner':'DxeCore' if args.diagnostic_gop_query else None,
+        'diagnostic_gop_transport':'core-warning-v2' if args.diagnostic_gop_query else 'disabled',
         'reference_gitlinks':lock['reference_gitlinks'],'checks':[]}
     try:
         firmware.build(ctx,{},uefi,core)
@@ -203,6 +210,19 @@ def main():
         report['core_patch_reversion_checked']=all(hashlib.sha256((core/n).read_bytes()).hexdigest()==sha
             for n,sha in baseline.items() if n.startswith(('MdeModulePkg/','UefiCpuPkg/')))
         if not report['core_patch_reversion_checked']:raise ValueError('Official backend left core patches applied')
+        if args.diagnostic_gop_query:
+            module=uefi/'Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe'
+            autogen=(module/'DEBUG/AutoGen.c').read_text()
+            libraries=(module/'OUTPUT/static_library_files.lst').read_text()
+            relative='Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf'
+            assert (uefi/relative).read_bytes().replace(b'\r\n',b'\n')==(SOURCE/relative).read_bytes().replace(b'\r\n',b'\n')
+            assert 'ArmPsciResetSystemLibConstructor' not in autogen
+            assert not any(name in libraries.lower() for name in ('pscireset','resetsystemlib'))
+            report['gop_provider_generated_contract']={
+                'inf_matches_baseline':True,'reset_library_absent':True,'psci_constructor_absent':True,
+                'autogen_sha256':hashlib.sha256(autogen.encode()).hexdigest(),
+                'static_library_list_sha256':hashlib.sha256(libraries.encode()).hexdigest(),
+                'core_checkpoint_sha256':hashlib.sha256((SOURCE/'diagnostics/EnumaStageCheckpoint.h').read_bytes()).hexdigest()}
         report['checks']=[{'backend':'unixnu.firmware.build','exit_code':0,'log':str((ctx.logs/'firmware.log').relative_to(ROOT))}]
     except Exception as error:
         report['complete']=False;report['error']=str(error);raise

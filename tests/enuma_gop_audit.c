@@ -12,7 +12,7 @@ static EFI_BOOT_SERVICES bs;
 static EFI_GRAPHICS_OUTPUT_PROTOCOL gop, other;
 static EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE mode;
 static EFI_GRAPHICS_OUTPUT_MODE_INFORMATION info;
-static int fault, live, query_calls, handle_calls;
+static int fault, live, query_calls, handle_calls, locate_calls;
 static EFI_HANDLE owner = (EFI_HANDLE)(UINTN)1234;
 static EFI_STATUS EFIAPI release(VOID *p) {
   assert(p != NULL);free(p);live--;return fault==28?EFI_DEVICE_ERROR:EFI_SUCCESS;
@@ -20,6 +20,7 @@ static EFI_STATUS EFIAPI release(VOID *p) {
 static EFI_STATUS EFIAPI locate(EFI_LOCATE_SEARCH_TYPE type, EFI_GUID *guid,
   VOID *key, UINTN *count, EFI_HANDLE **handles) {
   assert(type==ByProtocol && guid==&gEfiGraphicsOutputProtocolGuid && key==NULL);
+  locate_calls++;
   if(fault==1)return EFI_NOT_FOUND;
   *count=fault==2?2:1;
   if(fault==3)return EFI_SUCCESS;
@@ -54,7 +55,7 @@ static EFI_STATUS EFIAPI query(EFI_GRAPHICS_OUTPUT_PROTOCOL *self,
   return EFI_SUCCESS;
 }
 static void setup(int f) {
-  assert(live==0);fault=f;query_calls=handle_calls=0;
+  assert(live==0);fault=f;query_calls=handle_calls=locate_calls=0;
   memset(&bs,0,sizeof(bs));memset(&gop,0,sizeof(gop));
   memset(&mode,0,sizeof(mode));memset(&info,0,sizeof(info));
   bs.LocateHandleBuffer=locate;bs.HandleProtocol=handle;bs.FreePool=release;
@@ -82,16 +83,23 @@ static void setup(int f) {
   }
 }
 int main(void) {
-  setup(0);assert(EnumaGopAudit(NULL,owner,&gop)==EFI_INVALID_PARAMETER);
-  assert(EnumaGopAudit(&bs,NULL,&gop)==EFI_INVALID_PARAMETER);
-  assert(EnumaGopAudit(&bs,owner,NULL)==EFI_INVALID_PARAMETER);
-  for(int f=0;f<=32;f++) {
-    setup(f);EFI_STATUS s=EnumaGopAudit(&bs,owner,&gop);
-    assert((f==0)==!EFI_ERROR(s));assert(live==0);
-    if(f==0)assert(query_calls==1 && handle_calls==1);
+  setup(0);assert(EnumaGopAudit(NULL,owner,&gop,4)==EFI_INVALID_PARAMETER);
+  assert(EnumaGopAudit(&bs,NULL,&gop,4)==EFI_INVALID_PARAMETER);
+  assert(EnumaGopAudit(&bs,owner,NULL,4)==EFI_INVALID_PARAMETER);
+  assert(EnumaGopAudit(&bs,owner,&gop,0)==EFI_INVALID_PARAMETER);
+  assert(EnumaGopAudit(&bs,owner,&gop,5)==EFI_INVALID_PARAMETER);
+  assert(locate_calls==0);
+  for(unsigned step=1;step<=4;step++) for(int f=0;f<=32;f++) {
+    setup(f);EFI_STATUS s=EnumaGopAudit(&bs,owner,&gop,step);
+    unsigned first_failure = f==0?5:f<=4?1:f<=6?2:f<=17?3:f<=27?4:f==28?1:3;
+    assert((step<first_failure)==!EFI_ERROR(s));assert(live==0);
+    assert(locate_calls==1);
+    if(step<2)assert(handle_calls==0);
+    if(step<4)assert(query_calls==0);
+    if(f==0)assert(query_calls==(step==4) && handle_calls==(step>=2));
   }
   // Framebuffer base is deliberately an unmapped integer. Sanitizers prove
   // these metadata checks do not dereference it; no Blt/SetMode is supplied.
-  puts("PASS: 33 GOP metadata cases and 3 invalid arguments; no framebuffer access");
+  puts("PASS: 132 staged GOP cases and 5 invalid arguments; no framebuffer access");
   return 0;
 }

@@ -1,21 +1,57 @@
 {
   "scope": "host fault injection and real Mu-header AArch64 object only; no hardware claim",
   "all_passed": true,
-  "cases": 36,
+  "cases": 137,
   "sanitizers": [
     "address",
     "undefined"
   ],
   "mu_commit": "cfb93724a06ff86ff5ba971413368a7809ee42a5",
-  "source_sha256": "317dc3488e695db4c45e8b0dbc813960d608862ae2e661f9e8b13eee895ffd19",
-  "undefined_symbols": [
-    "gEfiGraphicsOutputProtocolGuid"
+  "source_sha256": "d97e058fea990a1122f5fb44839b1e0270917ade8c22a59ca796e6ce8b5fad1c",
+  "aarch64_objects": [
+    {
+      "step": 1,
+      "object_sha256": "d4fd122e405fcb1d9823649f95dbdf5c90dc078cd5ff62b2a5a6e52449f5b44f",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    },
+    {
+      "step": 2,
+      "object_sha256": "7d288bfab918ad68a2b84d08b87464df2831a28c3aa10834ca088e2f8c697943",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    },
+    {
+      "step": 3,
+      "object_sha256": "b17e267e9994e0b1178a3f27dcb89a042a508c4bc70765c26329bf3f1e59e6a8",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    },
+    {
+      "step": 4,
+      "object_sha256": "4d30775544460652b2fc15be490188c38309e79f937f2b4394b0d60fe175e724",
+      "undefined_symbols": [
+        "gEfiGraphicsOutputProtocolGuid"
+      ]
+    }
   ],
   "framebuffer_access": false,
   "blt_or_setmode": false,
   "allocations_freed": true,
   "real_provider_patch_composed": true,
-  "post_install_gate_cases": 6,
-  "invalid_build_profiles_rejected": 6,
-  "installed_driver_status_preserved": true
+  "post_install_marker_cases": 30,
+  "invalid_build_profiles_rejected": 7,
+  "provider_inf_unchanged": true,
+  "provider_reset_removed": true,
+  "actual_mu_warning_transport_cases": 6,
+  "warning_driver_not_unloaded": true,
+  "core_exit_preserves_status_source_checked": true,
+  "mu_warning_transport_sources_sha256": {
+    "MdeModulePkg/Core/Dxe/Image/Image.c": "3da6c13829490d35e19aedeb32d946664873ed5e116ce13211f0932922c72b64",
+    "MdePkg/Library/UefiDriverEntryPoint/DriverEntryPoint.c": "3877c4ed83fff2440702cd06fdc2e422c38d09ba3d26787b29213fe069306244"
+  },
+  "installed_driver_errors_not_marked": true
 }
