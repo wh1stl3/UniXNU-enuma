@@ -84,6 +84,27 @@
       "button_confirmation": "user confirmed no buttons throughout",
       "automatic_return_confirmed": true,
       "local_evidence": "out/device-tests/20261023T220131-dxe-driver-return"
+    },
+    {
+      "slot": "_a",
+      "candidate_sha256": "faef80a5b995ee4aa5c645dfb33b1e4e7b07839b1e6aa107a81abd9110d053ff",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-23 22:07:07",
+      "boot_returncode": 0,
+      "adb_return_seconds": 15.871,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 31.101,
+      "boot_reason": "bootloader",
+      "step": 7,
+      "firmware_commit": "00ddc0189a07006e0a2d090c8466d593cd551a98",
+      "button_confirmation": "user confirmed no buttons throughout",
+      "automatic_return_confirmed": true,
+      "local_evidence": "out/device-tests/20261023T220653-dxe-driver-return"
     }
   ]
 }

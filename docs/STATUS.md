@@ -16,7 +16,7 @@
 
 ## 下一步与限制
 
-step6（Mode头，不解引用Info）已实测无按键自行返回：22:01:45启动，ADB15.879秒、完整核验31.933秒，Android/root/原摘要通过。step7（Info字段）正在构建。审计后沿现有临时boot/身份备份/恢复门禁推进；超时停止追加并先恢复，之后继续离线迭代。step7/完整跨度/QueryMode尚未获得新实机结论。无数值GOP快照或真实scanout，禁绘制保持。
+step6（Mode头，不解引用Info）已实测无按键自行返回：22:01:45启动，ADB15.879秒、完整核验31.933秒，Android/root/原摘要通过。step7（Info字段）也已实测：22:07:07启动，ADB15.871秒、核验31.101秒，用户确认全程未按键。当前构建00ddc01的完整跨度step3新候选；原e286834失败镜像未重试。审计后沿现有临时boot/身份备份/恢复门禁推进；超时停止追加并先恢复，之后继续离线迭代。step7/完整跨度/QueryMode尚未获得新实机结论。无数值GOP快照或真实scanout，禁绘制保持。
 
 证据operations/2026-10-23-firmware-build-ownership.md、reports/enuma-firmware-build-ownership.json、reports/enuma-gop-mode-device.json。原内存/example/verified不变，未flash/erase/改槽。
 

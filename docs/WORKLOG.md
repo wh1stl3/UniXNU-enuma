@@ -100,3 +100,5 @@
 2026-10-23 21:58 · 编译入口归属迁移：固件00ddc01已推送，设备前序1b92a58已推送。两档重建、bundle/四负例/workspace、三ownership及10兼容测试通过；差异记录为SEC时间/引用与Pcd调试标识，不称字节复现。旧step2/5及迁移step2无按键返回已确认；step6构建中。证据reports/enuma-firmware-build-ownership.json、reports/enuma-gop-mode-device.json。
 
 2026-10-23 · Mode头step6实测自行返回，用户确认无按键；ADB15.879秒，Android/root/原摘要通过。设备前序04a2b34已推送。证据reports/enuma-gop-mode-device.json和enuma-gop-mode-header-boundary.json；step7构建中。
+
+2026-10-23 · step7无按键自行返回，Android/root/原摘要通过，ADB15.871秒。前序edb2be4已推送；当前构建00ddc01完整跨度step3新候选。
