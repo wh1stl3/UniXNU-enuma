@@ -25,3 +25,9 @@ RGB/BGR通道顺序也不是白条全无的首选解释：R-005写0xffffffff，�
 先完成本轮已授权的计数配置与100ms有界增量正/互补验证，范围保持。之后优先固定真实硬件版本与对应小米CTL/INTF布局，核对候选SSPP→LM→CTL→pingpong/INTF→双DSI路径以及实际状态，不再把任意第一个合法描述当活动buffer。需要带来源的数值快照时先设计与审计现有日志通道；不盲增非零布尔测试，也不先写使能试错。读探针范围变化仍按AGENTS门禁，不继承R-005像素授权。
 
 来源：[小米CTL](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_ctl.c)、[INTF](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_intf.c)、[catalog](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_catalog.c)、[KMS](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_kms.c)、[AOSP启动头规范](https://source.android.com/docs/core/architecture/bootloader/boot-image-header)。本地实测仅reports/enuma-r005-device.json与enuma-dsi-timing-device.json，当前计数结果未产生前不得填入推断结论。
+
+## 本轮计数实测后的更新
+
+configuration: refused (query1-query2 ADB 5.297秒)；progress: refused (query1-query2 ADB 4.249秒)。互补时序非寄存器数值日志；配置/进展支持不证明buffer路由、面板或可见写屏；拒绝不证明不活动，近回绕复位/瞬变仍有歧义。 计数采样前置未获支持；即便step16也拒绝，不能据此断言已实际等待/采样、帧计数为零或显示停摆。ABL可能未启用计数而仍在输出；本轮保持只读，不为获得数值而写计数使能。
+
+五笔均已由用户确认全程无按键且通过独立Android/root/原槽/解锁/原分区摘要核验。未获得可解释的计数进展观测，因此维持活动路由/持续显示交接优先的工作假设；不能将前置拒绝升级成显示时钟、面板或Boot v3故障定论。后续优先对应小米版本INTF_STATUS与CTL/LM挂接的有来源只读观测，而非重复相同前置或写计数使能。
