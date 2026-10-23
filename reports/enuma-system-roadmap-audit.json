@@ -1,0 +1,97 @@
+{
+  "scope": "offline source-contract inventory, not image or hardware qualification",
+  "sources": [
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/unixnu/userdata.py",
+      "sha256": "7a6fd735ac3f1b3bdc5f21c445b413a5b1d9824b3107beaa01ce78605bafe1fe"
+    },
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/unixnu/payload.py",
+      "sha256": "05a79e171be8d0336d0125a556e90a7e0195cef138b195878102d366befb75f0"
+    },
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "scripts/unixnu/bootimg.py",
+      "sha256": "466c29e14332381c4506b4ccbafd437159a4fe575f888b8f26ba13026e26da6f"
+    },
+    {
+      "source": "UniXNU",
+      "commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+      "path": "docs/concepts/security.md",
+      "sha256": "afecf530af6efd9ec286acef6f1630eb3cb98056b34b197546175022f80ffe0f"
+    },
+    {
+      "source": "UniXNU-sheng",
+      "commit": "a599a1a8a92093b5077543e071b72130769eb325",
+      "path": "board.toml",
+      "sha256": "245a5cfe9dbe8d077f839af6f99dd17fcdc7981c8fdd70e8b428a92d0d7479dd"
+    },
+    {
+      "source": "drivers/NativeUfs",
+      "commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "path": "NativeUfs.cpp",
+      "sha256": "24f549be5006ab5c463c67aa01ee38511b185853f878e12b4bb70830313ae9ed"
+    },
+    {
+      "source": "drivers/NativeUfs",
+      "commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "path": "GccUfs.h",
+      "sha256": "1ef7030533184ecb7efebb8ad3a6fa8e155a8b5b9eea19a6a2af758027d483c3"
+    },
+    {
+      "source": "drivers/NativeUfs",
+      "commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "path": "RootLayout.h",
+      "sha256": "3e25127486a5102cd477fcfabd62366a3b3f02bb12a0b8db2294330a4b233484"
+    },
+    {
+      "source": "drivers/NativeUfs",
+      "commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "path": "RootPublication.h",
+      "sha256": "3c289b44f4d7c082b3f214eda2d4225f53860dd007f4a89402bdc910f268aeda"
+    },
+    {
+      "source": "drivers/NativeUfs",
+      "commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+      "path": "LICENSE",
+      "sha256": "d3cdce3b19df47f2e4dcafdfd54909eb9bc64ac722645ceb1feae58695c97b09"
+    },
+    {
+      "source": "drivers/NativeRamBlock",
+      "commit": "d4d22d9819b0162eda49f6402235dddc2279410d",
+      "path": "NativeRamBlock.cpp",
+      "sha256": "e2ace3522943df38806ef2006525371691beaf0199f971266bd849d4f5253391"
+    },
+    {
+      "source": "drivers/NativeRamBlock",
+      "commit": "d4d22d9819b0162eda49f6402235dddc2279410d",
+      "path": "README.md",
+      "sha256": "c04a84cc6b2856f4eef207527d71f300ae00b8bd14ec8ca0f6f1e3676a90c76b"
+    }
+  ],
+  "board_sha256": "fe566ae9891cace403060c02fae52c44093b4443596b6771aef0fe3bc2dfa0d0",
+  "target": {
+    "product": "iPad7,1",
+    "device_class": "j120ap",
+    "version": "17.7.11",
+    "build": "21H461"
+  },
+  "gaps": {
+    "userdata_geometry_missing": true,
+    "prelink_missing": true,
+    "complete_adt_tool_missing": true,
+    "native_ufs_disabled": true,
+    "upstream_native_root_requires_sheng_pmgr": true,
+    "userdata_dry_run_does_not_compare_expanded_capacity": true
+  },
+  "firmware_initrd_publisher": "not established by this audit",
+  "root_volume_uuid": "not measured",
+  "system_images_built": false,
+  "new_device_trials": 0,
+  "device_writes": 0
+}

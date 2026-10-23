@@ -4,9 +4,11 @@
 
 ## 当前状态
 
-**继续离线推进屏幕诊断，镜像实测仍留到晚上。** 本轮没有设备查询/启动/写入。最近15:18 UART只读核对为enuma/root/Android完成1/槽_a；原boot/vendor_boot摘要核验仍为12:11恢复记录，不是本轮重查。首测233a9d8未自动返回的历史失败保留。
+**完成后续系统卷/内核/iPadOS用户态预研，当前主线仍为屏幕诊断，镜像实测留到晚上。** 本轮没有设备查询/启动/写入。最近15:18 UART只读核对为enuma/root/Android完成1/槽_a；原boot/vendor_boot摘要核验仍为12:11恢复记录，不是本轮重查。首测233a9d8未自动返回的历史失败保留。
 
 ## 当前路线与已完成工作
+
+新增[系统卷/内核/用户态路线](operations/2026-10-23-system-kernel-userland-roadmap.md)及离线审计器，12份固定源码逐字节Git blob比对通过。区分FAT载荷、OS/SystemOS只读窗口和Data；确认本机载荷发现尚未闭合、缺GPT/UUID/完整ADT/prelink，NativeUfs含SM8550参数且当前禁用，原生root载荷检查要求尚未接入的PMGR契约。固定userdata dry-run不做展开后容量比较，不能当容量通过。优先复用通用工具/布局/校验算法，同SM8250固件只作依赖参考，不复制外板参数。未下载大DMG/构建系统卷/写分区，未触发新内存或破坏性操作审批；详见[审计报告](../reports/enuma-system-roadmap-audit.json)。
 
 新增独立EnumaScreen受控GOP Blt后端，复用锁定DarwinBoot字模，可显示阶段、完整64位EFI状态、GOP字段与内存摘要快照。每行一次Blt、显式写门禁、caller持有有界scratch、模式/错误锁存及重入拒绝；不解引用物理帧缓冲。真实Mu头的host ASan/UBSan与AArch64 COFF编译通过，合成预览已检查。**尚未集成固件、未完成全链接、未上屏**；对象有memset依赖，需接入时验证。今晚三候选和82ce8a5源锁不变，bundle复查通过。见[后端与接入条件](operations/2026-10-23-bounded-screen-renderer.md)。
 
@@ -30,4 +32,4 @@ UART已取得软件线索：命令行请求ttyMSM0/115200n8、serial0=988000、G
 
 重新核对设备身份/备份/原摘要和按键恢复条件后，按上述四次顺序逐次执行并核验Android/root/分区摘要。任何一次无返回即停追加、先恢复。目标门命中只支持PE调用前，不能当主体/协议/内核成功；通过后再准备返回与GOP字段观测。没有新的内存/verified/破坏性操作审批项。
 
-设备上一里程碑a1322b9、固件82ce8a5已推送；本轮设备发布见Git/WORKLOG。参考仓只读，镜像不入Git。
+设备上一里程碑15125ea、固件82ce8a5已推送；本轮设备发布见Git/WORKLOG。参考仓只读，镜像不入Git。
