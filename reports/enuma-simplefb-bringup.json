@@ -1,0 +1,43 @@
+{
+  "scope": "actual AArch64 SimpleFb build/FD and failed automatic-return probe; no GOP/runtime success claim",
+  "source_commit": "233a9d8329660ddbb811a029d3034007ece510ef",
+  "native_compiler_metadata_define_observed": true,
+  "fd_sha256": "465c5564003fcb78895861a43a3038644a35b82adfabf4485e466902b8fa690d",
+  "matched_oem_modules": 30,
+  "omitted_oem_modules": [
+    "CPRDxe",
+    "DisplayDxe",
+    "UFSDxe"
+  ],
+  "simplefb_apriori_position": 33,
+  "configured_probe_ordinal": 32,
+  "actual_probe_ordinal_verified": false,
+  "probe": {
+    "issued_at": "2026-10-23 10:16:30",
+    "candidate_sha256": "92b11e7d35351abc6415e0fd2bfe580f52830261014c9c30bfa8656d37de06b4",
+    "phase": "manual-recovery-needed",
+    "partition_writes": false
+  },
+  "post_probe_android_restored": false,
+  "post_probe_partition_hashes_checked": false,
+  "endpoint_check": {
+    "adb_states": [],
+    "fastboot_present": false
+  },
+  "user_recovery_availability": "\u6682\u65f6\u65e0\u6cd5\u6309\u952e",
+  "next_action": "Stop device trials; wait for physical fastboot recovery, then restore and verify Android. Audit actual dispatch count or GUID-only selection before any new trial.",
+  "scanout_geometry_verified": false,
+  "pixel_rendering_verified": false,
+  "gop_installed_verified": false,
+  "host_simplefb_driver_source_matches_native_staged_source": true,
+  "offline_guard_revision": "7479da11e14ff5dc8bdb3584ef67eed06faab301",
+  "new_probe_guard_present_in_tested_firmware": false,
+  "direct_drawing_after_missed_gate_not_excluded": true,
+  "offline_guard_revision_firmware_built": false,
+  "subsequent_device_trials": 0,
+  "latest_endpoint_check": {
+    "adb_states": [],
+    "fastboot_present": false
+  },
+  "no_probe_commands_until_previous_recovery_cleared": true
+}

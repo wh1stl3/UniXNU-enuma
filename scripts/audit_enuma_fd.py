@@ -57,8 +57,14 @@ def main():
         matched.append(module['name'])
     names = {item['name'] for item in files.values()}
     for required in ('EnumaProbe', 'UniXNU', 'UniXNUDxe', 'DarwinBoot', 'DisplayDxe', 'DDRInfoDxe', 'EnvDxe'):
-        if required not in names: raise ValueError('required module missing: ' + required)
-    if 'SimpleFbDxe' in names: raise ValueError('unqualified framebuffer provider included')
+        if required not in names and required not in omitted: raise ValueError('required module missing: ' + required)
+    if 'DisplayDxe' in omitted:
+        simple_guid='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
+        if 'SimpleFbDxe' not in names or apriori.count(simple_guid)!=1:
+            raise ValueError('diagnostic SimpleFb provider missing or not unique in APRIORI')
+        if apriori.index(simple_guid)!=32:
+            raise ValueError('SimpleFb must replace the audited Display APRIORI position 33; do not guess probe ordinal')
+    elif 'SimpleFbDxe' in names: raise ValueError('unqualified framebuffer provider included')
     probe_guid = 'aef8c196-230e-4e19-a306-d62e21e3d780'
     if probe_guid not in files or uuid.UUID(probe_guid).bytes_le not in b''.join(pe_payloads['UniXNUDxe']):
         raise ValueError('UniXNUDxe does not contain the packaged EnumaProbe boot target')

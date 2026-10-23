@@ -1,0 +1,25 @@
+{
+  "scope": "complete real SimpleFb source with host UEFI/allocator adapters; no hardware/ABI proof",
+  "baseline_sha256": "926136fbf45aef45fda9a18c797e21cc361c2dbe34003176eadf9e98034a05d6",
+  "patch_sha256": "334bd21e74b868078e7793d0142158f920c39e7782d0f265277cede88c1b2d0f",
+  "patched_source_sha256": "87ee1b6c8a88d5d48387b9f556433edcbeb6683899b4925529a9be881261ca7d",
+  "all_passed": true,
+  "selection_patch_sha256": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
+  "composed_selection_replay": true,
+  "metadata_only_no_pixel_calls": true,
+  "probe_guard_checked": true,
+  "patched_probe_sha256": "7761b7f16e47e2f68b4612c01e76fd8870116e23ead155109730bd519c786418",
+  "checks": [
+    "lookup fallback and errors",
+    "null/invalid modes and mask copy",
+    "three allocation failure points",
+    "configure/install failure cleanup",
+    "reentry/double cleanup",
+    "64-bit span/base overflow",
+    "Blt returns unsupported without touching framebuffer"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ]
+}

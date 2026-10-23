@@ -2,36 +2,36 @@
 
 更新：2026-10-23（Asia/Shanghai）。当前唯一真相，历史见WORKLOG。
 
-## 已确认与未确认
+## 当前必须先处理的停点
 
-用户已选择R-003推荐A并要求继续主线。正在用真实Mu入口、共享Dispatcher上下文、完整文件GUID及可控定时返回细分Display启动边界。尚未进入XNU；无GOP、UEFI实时内存图、BDS或NT36523实机证明。
+**enuma恢复未确认，实机工作已硬停。** source233a9d8的首个SimpleFb入口前2秒候选10:16:30被fastboot接受，但75秒未回目标ADB/fastboot；后续只读检查仍无端点。用户暂时无法按键。当前不能声称Android/root恢复或试后分区摘要正常，更不能声称SimpleFb/GOP/XNU成功。
 
-- a927ca1、无UFS、Display实际PE调用前point20的2/7/2样本：ADB16.977/22.272/16.367秒，差5.295/5.905秒，支持到达调用前。不是PE内包装器/构造器/主体执行证明。
-- point21直接返回后、point22 Exit代码块后的2秒候选：ADB33.063/32.894秒，均未观察短门。不能把负向时序说成绝无返回。
-- 903ffed独立全局默认DumpCpuContext门point23的2/7秒候选：ADB30.766/30.772秒，差0.006秒，未观察到门；不能排除其他handler/更早故障/其他复位来源，不能归因Display。
-- 903ffed同版point20正对照：ADB15.951秒/Android30.408秒，恢复核对正常，支持该版本调用前门仍可达。
-- d3a0972只读point24存在门2/7/2：ADB17.298/21.464/16.058秒，差4.166/5.406秒；支持调用前已有包装器匹配的canary GUID前缀。保留噪声，未读取canary值、未证明完整GUID或PE内部执行。point25缺失门仅主机检查，未实测。
+没有flash/erase/改槽。最后一次已完整恢复的是09:58:57的7276dcd pool成功门7秒；它只是历史状态，不能当当前状态。具体步骤见[PENDING-HUMAN](PENDING-HUMAN.md)。按照AGENTS的实际恢复失败停点，不追加任何设备试验。
 
-上述所有候选均自动恢复Android，sys.boot_completed/root/原boot和vendor_boot摘要正常。没有flash/erase/改槽；有界定时返回不是驱动成功。
+## 已从其他设备落地的部分
 
-## 当前源码与验证
+1. nuwa同Mu的真实pool搜索诊断：7276dcd成功门2/7 ADB16.108/21.478秒，差5.370；失败门31.129/32.248秒，未观察预期5秒响应。四次均恢复，不能据此断言零失败或堆不足，没有扩堆依据。
+2. alioth/elish式独立SimpleFb：显式交换Display提供者，诊断仅排除CPR/Display/UFS，严格保留30本机OEM PE/DEPEX，默认原生33及无UFS32模式分别保留。真实Mu SimpleFb/FrameBufferBltLib已接通，不拷贝他板地址/二进制。
+3. 补SimpleFb查找/模式/mask/分配/配置/安装错误传播、清理和64位溢出检查。诊断Blt禁用写像素；32位紧密布局仅元数据假设，实际scanout六项条件仍缺。
 
-固件gitlink为7276dcd，源锁45项；新增全局pool后备页搜索失败26/成功27门，成功门2/7 ADB16.108/21.478秒、差5.370，支持hook执行；失败门2/7 ADB31.129/32.248秒，未观察预期5秒响应。四次全部恢复Android/root/原摘要，不能据此断言零失败或堆不足。此前903ffed加入独立异常门，d3a0972新增只读point24/25，匹配锁定OEM包装器实际使用的canary配置表GUID前64位，不读取VendorTable、不写入canary或调用RNG/SMC。4096项只是诊断遍历上限，异常表结构不报告为缺失。原25迁移文件/六patch、内存字段/512MiB/example/verified保持；OEM PE/DEPEX不修改。
+233a9d8实际AArch64固件、30OEM/FD/BootShim/v3审计与源码CI通过。首测只证明命令接受，未观察预期入口门。所用ordinal32来自旧布局，当前实际Dispatcher计数未校准；静态APRIORI位33不能替代它。更早停点/漏门/UEFI仍运行等均未排除。
 
-51组真实header/bridge、17组pool门ASan/UBSan、既有6组异常门及46项Python/重复patch/CLI检查通过。workspace固定来源、精确R-002配置与example guard通过。903ffed源码CI39834543624成功并回读PASS；d3a0972源码CI39882096705成功并回读PASS。7276dcd源码CI39885298128通过并回读PASS。源码CI不代替固件编译与硬件验证。
+## 当前源码与离线守卫
 
-已构建/实测的各个候选均完成官方backend及core补丁还原、32原厂PE/DEPEX审计、192字节BootShim+3MiB FD、AOSP v3回读。d3a0972的point24两候选已完成完整构建/审计与2/7/2实测。默认完整33-OEM模式未在新source重建，不以无UFS32模式代替存储验证。
+固件gitlink7479da1，49项源锁。发现EnumaProbe可绕过Blt直接DiagDraw后，已补诊断入口提前返回；新版本仅host/static/源码CI通过，未重建AArch64固件或启动。实际首测仍是233a9d8，不能把新守卫追溯到旧镜像，也不能宣称旧镜像绝无像素写入。
 
-## R-002与显示路线限制
+公共runner现在在上一轮manual-recovery-needed时拒绝新试验；私有SimpleFb编排只构建归档，不自动启动。48项Python、整份SimpleFb的host ASan/UBSan、Probe守卫宏0/1编译检查、选择/contract组合patch重复重放、49项workspace检查通过。源码CI39888162938（233）/39889743071（747）均回读PASS；源码CI不是固件/硬件证明。
 
-R-002精确范围0x9fff7000/0x8000：活动FDT/8页保护、normal ABI/reader运行和同次16字节marker匹配已实测；经Bootloader进入无writer保留Android后marker不同。按原批准已停止跨复位持久日志，不换址/扩大/借DFPS或SMEM。没有启用SEC/DXE持久日志。
+详见[SimpleFb借鉴及首测交接](operations/2026-10-23-simplefb-metadata-variant.md)、[pool门](operations/2026-10-23-pool-search-gates.md)、[nuwa对照](operations/2026-10-23-nuwa-progress-reuse-audit.md)。
 
-SimpleFb仍为离线审计，优先复用Mu SimpleFb/FrameBufferBltLib及alioth/elish设计。enuma真实入口base/stride/像素格式/线性布局/跨度/生命周期缺失，未开启拟议30-OEM变体；显示区尾部日志落DFPS，保持Null serial。33个本机原厂PE均含同canary GUID，字节线索不等于运行表存在，更不能单独判定Display/RNG根因。
+## 保持的边界与既有证据
 
-## 下一步与授权
+51MiB DXE Heap与512MiB owned请求、原内存表/example/verified均未改。R-002精确范围保护/ABI/同次marker曾通过，但跨Bootloader不保留，持久日志路线仍停，不换址/扩大/借DFPS或SMEM。Native Display此前只有调用前及canary前缀存在门支持，直接返回/Exit后/默认异常门未观察；这些旧source结论不转移为新SimpleFb运行证据。
 
-配置表前缀存在已有对照支持，降低“缺表触发canary RNG初始化”的嫌疑；不能据此认定canary值正确或排除其他SMC。只读对照nuwa后，将真实分配失败/free/largest/type等状态提升为下一轮优先观测项，并配合库构造器/UEFI服务调用归属检查；当前先实施7276dcd全局pool结果门，[契约与进展](operations/2026-10-23-pool-search-gates.md)，2/7对照已完成，当前未观察失败门，没有扩堆依据。用户要求继续借鉴其他设备，下一步优先落成alioth/elish式独立SimpleFb诊断，保留原生默认和全部参数/返回验证边界；新变体尚未完成。两边Mu同版，nuwa分配诊断严格dry-run通过；enuma实际SEC Heap51MiB与本机XBL一致，不能照搬nuwa扩堆。详见[nuwa复用审计](operations/2026-10-23-nuwa-progress-reuse-audit.md)。无新固定内存/verified变更，也无待人工按键。详细契约及证据见[PE入口门记录](operations/2026-10-23-direct-pe-entry-gates.md)。
+目标保持enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。未进入XNU，未验证GOP可见、实时UEFI内存图、BDS或NT36523。默认完整33模式未在新source重建。
 
-生成镜像无需确认；有身份、备份和返回证据的有界临时boot允许黑屏/定时复位。恢复失败、越权、内存字段或verified变更仍按AGENTS硬停。TWRP未测试。难题继续评估同SoC UniXNU/UEFI真实实现，不直接照搬板级参数。
+## 下一步
 
-目标保持enuma/SM8250、iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB、UniXNU5fdbd5d/21模块。旧通用内核CI不是本板最终内核。设备上一里程碑f696da3已推送；后续以Git/WORKLOG发布记录为准。
+先等实体按键回FASTBOOT或Android，沿既有授权恢复并核对身份/完成1/root/原分区摘要。恢复前不再设备试验。随后只离线审计实际分派序号或GUID-only选择，建立包括加载错误、驱动失败和意外BDS落入在内的可观察有界返回，再准备后续实测；不直接重复本候选。生成镜像无需一般确认，但当前恢复失败的硬停有效。TWRP未测试，无新内存/verified审批请求。
+
+设备上一里程碑e4a40fb已推送；本轮以Git/WORKLOG发布记录为准，参考仓保持只读。

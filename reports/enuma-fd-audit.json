@@ -1,10 +1,9 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "90b56ca6cb9ea63b5ef2705e47fdde68793dc56b642764f7bcf603d7738c4856",
+  "fd_sha256": "465c5564003fcb78895861a43a3038644a35b82adfabf4485e466902b8fa690d",
   "fd_bytes": 3145728,
-  "file_count": 80,
+  "file_count": 79,
   "matched_oem_modules": [
-    "CPRDxe",
     "ChipInfo",
     "CipherDxe",
     "ClockDxe",
@@ -12,7 +11,6 @@
     "DALSys",
     "DALTLMM",
     "DDRInfoDxe",
-    "DisplayDxe",
     "EnvDxe",
     "GpiDxe",
     "HALIOMMU",
@@ -47,7 +45,6 @@
     "BootGraphicsResourceTableDxe",
     "BootLogo.bmp",
     "BootManagerMenuApp",
-    "CPRDxe",
     "CapsuleRuntimeDxe",
     "ChipInfo",
     "CipherDxe",
@@ -61,7 +58,6 @@
     "DarwinBoot",
     "DevicePathDxe",
     "DiskIoDxe",
-    "DisplayDxe",
     "DxeCore",
     "EmbeddedMonotonicCounter",
     "EnglishDxe",
@@ -104,6 +100,7 @@
     "SecurityStubDxe",
     "SetupBrowser",
     "ShmBridgeDxe",
+    "SimpleFbDxe",
     "SmBiosTableDxe",
     "SmbiosDxe",
     "SmemDxe",
@@ -120,6 +117,8 @@
     "ufpdevicefw"
   ],
   "diagnostic_omitted_oem_modules": [
+    "CPRDxe",
+    "DisplayDxe",
     "UFSDxe"
   ],
   "apriori_guids": [
@@ -155,8 +154,7 @@
     "7db0793a-4402-4be1-906e-d0fabad2707e",
     "7a32bd23-f735-4f57-aa1a-447d2fe3be0d",
     "04de8591-d2b3-4077-bbbe-b12070094eb6",
-    "4138022f-06c7-4f79-9c94-7e33b511a4e7",
-    "1b52138d-3fa3-4e50-b958-20887353f809",
+    "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
     "569ea0de-b557-4043-84cf-01103fe516e5",
     "3adf8dda-1850-44c5-8c63-bb991849bc6f",
     "5f0937cd-73f9-445e-b320-bb6fd5d3cbde",

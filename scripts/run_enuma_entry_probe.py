@@ -41,6 +41,8 @@ def main():
     meta = json.loads(image.with_suffix('.json').read_text())
     if hashlib.sha256(image.read_bytes()).hexdigest() != meta['image_sha256']: raise ValueError('image changed')
     previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+    if previous.get('phase') == 'manual-recovery-needed':
+        raise ValueError('Previous probe is not recovered; restore and verify Android before any new trial')
     backup_dir = Path(previous.get('recovery_backup_directory', previous['directory']))
     backups = previous['backups']
     for backup in backups:

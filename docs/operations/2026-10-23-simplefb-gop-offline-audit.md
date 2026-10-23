@@ -108,3 +108,7 @@ CPR与Display同选是参考alioth的诊断选择，不表示已证明其他enum
 可复核入口：阅读 reports/enuma-simplefb-reuse-audit.json 的sources逐项按Git提交/路径取文件、核对sha256与blob；保存的FDT仅在out/device/live-fdt.bin，用scripts/audit_inputs.py的parse_fdt读取。工作区保持原board、gitlink及42项固件源锁；没有修改任何参考仓。
 
 下一步（仍离线）：先把G0所缺参数与可获取来源逐项闭合，再实现受控暂存变体/严格FD审计与错误路径检查；在几何未闭合前不生成“硬件可用”候选。是否恢复实机由用户后续指令决定。
+
+## 后续执行索引
+
+2026-10-23后续用户要求借鉴其他设备。独立metadata诊断已实现并完成一次AArch64构建，但首测未自动返回，等待实体恢复；详见[当前执行交接](2026-10-23-simplefb-metadata-variant.md)。本审计的六项真实scanout条件仍未闭合，不能将metadata假设或构建当成它们已通过。新Blt/Probe守卫与未编译/未恢复边界以当前STATUS为准，本文件保留原离线时点记录。
