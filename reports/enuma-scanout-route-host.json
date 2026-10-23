@@ -1,0 +1,34 @@
+{
+  "scope": "Fake MMIO/wait and AArch64 counter objects; no device accesses.",
+  "all_passed": true,
+  "cases": 51,
+  "optimizations": [
+    "O1",
+    "Oz"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "progress_max_reads": 241,
+  "wait_calls_max": 2,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "delta_arithmetic": "strict nonwrapping monotonic per window; two windows same interface",
+  "inactive_interfaces_sampled": false,
+  "mmio_writes": false,
+  "pixel_access": false,
+  "undefined_symbols": [
+    "gBS"
+  ],
+  "new_library_or_constructor": false,
+  "runtime": false,
+  "sources": {
+    "EnumaScanoutRoute.h": "f5b70bd1fba024b840a521b963e1cc58a4e38485cc04789d00bd3c3b418398d3",
+    "EnumaScanoutDescriptor.h": "add6ce58d96b7a37d2dd04b48dfff1f266e0af7862c552e5d8990a93839b7314",
+    "EnumaDsiNativeProgress.h": "c6b095312e8256eb566be2abd5dd43b3b9212a89f04d0cde3847f74e4307367c",
+    "EnumaDsiCounters.h": "5c1c9656b2acbc1ce727dc315bc18e32f67494f66842a1634b387294cac33766",
+    "EnumaScanoutAudit.h": "8f49f8c27f1211be834e77e2a79a056010d2de0e637f02f82f6b7bd3464ff702"
+  },
+  "object_sha256": "dc7f3780b75fd1e73d118147bcebbc8cbcc50f1cd15bb217c9b4c2fde62fdcfa"
+}

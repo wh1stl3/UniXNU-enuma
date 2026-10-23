@@ -130,6 +130,26 @@ def main():
         (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
         code=audit_counter_code(payloads[0],assembly,build['diagnostic_gop_step'])
         code['provider_pe_sha256']=digest(payloads[0]);report['dsi_counter_code']=code
+    if build.get('diagnostic_gop_step') == 19:
+        payloads=pe_payloads.get('SimpleFbDxe',[])
+        if len(payloads)!=1:raise ValueError('route provider PE missing or ambiguous')
+        out=ROOT/'out/scanout-route-fd-audit';out.mkdir(exist_ok=True)
+        target=out/'SimpleFbDxe.efi';target.write_bytes(payloads[0])
+        assembly=subprocess.check_output(['llvm-objdump','-d',str(target)],text=True)
+        (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
+        # Optimized loops compute CTL/source addresses dynamically. These are
+        # packaged instruction fingerprints, not full MMIO dataflow proof.
+        markers={name:bool(re.search(pattern,assembly)) for name,pattern in {
+            'ctl_interface_mask_load':r'ldr\s+w\d+, \[x\d+, #244\]',
+            'frame_counter_load':r'ldr\s+w\d+, \[x\d+, #172\]',
+            'native_status_load':r'ldr\s+w\d+, \[x\d+, #620\]',
+            'bounded_delta_comparison':r'cmp\s+w\d+, #64',
+            'wait_low_half':r'mov\s+w0, #34464',
+            'wait_high_half':r'movk\s+w0, #1, lsl #16'}.items()}
+        if not all(markers.values()):raise ValueError('route PE instruction fingerprint incomplete: '+repr(markers))
+        report['scanout_route_code']=dict(provider_pe_sha256=digest(payloads[0]),instruction_markers=markers,
+            scope='actual packaged PE fingerprints plus separately locked source/host tests; not complete indirect MMIO/store/control-flow proof',
+            complete_mmio_dataflow_proof=False,hardware_execution=False)
     args.report.write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: {len(matched)} native PE/DEPEX payloads unchanged; diagnostic omissions={sorted(omitted)}; UniXNU loader modules packaged')
 

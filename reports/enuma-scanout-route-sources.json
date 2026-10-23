@@ -1,0 +1,84 @@
+{
+  "scope": "Pin native CTL facts and saved enuma offsets; never access hardware.",
+  "all_passed": true,
+  "sources": [
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_intf.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_intf.c",
+      "sha256": "7b02d0b3c116279f0b4ee891cc9267d676942855d3dc58a5b263ad2f10e332da",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_ctl.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_ctl.c",
+      "sha256": "e6cf2778c4137fe6236b9080deb53a09067fd2d53d0e8ab2317630c9ec7ea553",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_catalog.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_catalog.c",
+      "sha256": "8d108cc673708f0ba629b86e0231686ecbd3437d1757c4144a60ad3a8bfc34de",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_sspp.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_sspp.c",
+      "sha256": "b981480d1e1008fc9c7fe6722eb7e140db143d067db9374dbe1f56a254359040",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    }
+  ],
+  "version_header_url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_catalog.h",
+  "version_header_sha256": "9f62423fd22fc515d6295dea0417547ce0ff5244e5ecb58f599f9d6eed35161f",
+  "required_version_major_minor": "6.0",
+  "saved_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "ctl_offsets": [
+    "0x2000",
+    "0x2200",
+    "0x2400",
+    "0x2600",
+    "0x2800",
+    "0x2a00"
+  ],
+  "sspp_offsets": [
+    "0x5000",
+    "0x7000",
+    "0x9000",
+    "0xb000",
+    "0x25000",
+    "0x27000",
+    "0x29000",
+    "0x2b000"
+  ],
+  "dsi_interface_bits": [
+    1,
+    2
+  ],
+  "nonvirtual_stage_tuples": [
+    "{0, 0, 3, BIT(0)}",
+    "{0, 3, 3, BIT(2)}",
+    "{0, 6, 3, BIT(4)}",
+    "{0, 26, 3, BIT(6)}",
+    "{0, 18, 3, BIT(16)}",
+    "{0, 21, 3, BIT(18)}",
+    "{2, 0, 4, 0}",
+    "{2, 4, 4, 0}"
+  ],
+  "maximum_mmio_reads": 241,
+  "maximum_wait_calls": 2,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false,
+  "limitations": [
+    "staging register association may be shadow/stale",
+    "no proven LM output/pingpong/DSC/fetch or visible pixel route",
+    "no numerical device dump"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "firmware_commit": "f0cef6f1505f636f815f5d3653ed467f84f72922",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "route-control",
+      "step": 18,
+      "query": 1,
+      "variant": "route-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "route-associated",
+      "step": 19,
+      "query": 1,
+      "variant": "route-associated-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "route-unproven",
+      "step": 19,
+      "query": 2,
+      "variant": "route-unproven-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-scanout-route-host.json",
+  "maximum_dsi_reads": 241,
+  "wait_calls_max": 2,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

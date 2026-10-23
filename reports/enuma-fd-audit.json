@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "58d378d37093545ca68e518c2b62271d53307ac8758f7bd854253fdb2a4118da",
+  "fd_sha256": "84c3b03576f0eb383769d67e6c63874ce122aaf50083c94bf357637ab96d6f76",
   "fd_bytes": 3145728,
   "file_count": 79,
   "matched_oem_modules": [
@@ -164,38 +164,18 @@
   "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
   "hardware_execution": false,
-  "dsi_counter_code": {
-    "scope": "Restricted constant/table dataflow on the actual packaged AArch64 PE.\n\nThis checks recognizable MMIO sites and the wait argument, not all control flow\nor every possible indirect access. Runtime read bounds come from source+tests.\n",
-    "static_possible_target_loads": [
-      "0xae00000",
-      "0xae6b800",
-      "0xae6b8a8",
-      "0xae6b8ac",
-      "0xae6ba6c",
-      "0xae6c000",
-      "0xae6c0a8",
-      "0xae6c0ac",
-      "0xae6c26c"
-    ],
-    "static_target_stores": [],
-    "recognized_mmio_sites": [
-      "12f8: 13 01 40 b9  \tldr\tw19, [x8]",
-      "1330: 6c 6d 42 b9  \tldr\tw12, [x11, #620]",
-      "1334: 6d 01 40 b9  \tldr\tw13, [x11]",
-      "1344: 6b a9 40 b9  \tldr\tw11, [x11, #168]",
-      "1518: 4a ad 40 b9  \tldr\tw10, [x10, #172]",
-      "158c: 8b ad 40 b9  \tldr\tw11, [x12, #172]",
-      "1590: 8e 6d 42 b9  \tldr\tw14, [x12, #620]",
-      "1594: 8d 01 40 b9  \tldr\tw13, [x12]",
-      "1598: 8c a9 40 b9  \tldr\tw12, [x12, #168]",
-      "15f4: 08 01 40 b9  \tldr\tw8, [x8]"
-    ],
-    "wait_100000_call_sites": 1,
-    "delta_64_comparison": true,
-    "entry_rva": "0x1050",
-    "reachable_instruction_count": 368,
-    "complete_indirect_access_or_control_flow_proof": false,
-    "hardware_execution": false,
-    "provider_pe_sha256": "91f6659847a29a6ec9b62416d55ff1f58140fe468095a4cf0f5f7e822e506eb1"
+  "scanout_route_code": {
+    "provider_pe_sha256": "3b1cc923e4f9a9d53462d13ab5dd6820ab03d21a654be79b3c43256b526a1845",
+    "instruction_markers": {
+      "ctl_interface_mask_load": true,
+      "frame_counter_load": true,
+      "native_status_load": true,
+      "bounded_delta_comparison": true,
+      "wait_low_half": true,
+      "wait_high_half": true
+    },
+    "scope": "actual packaged PE fingerprints plus separately locked source/host tests; not complete indirect MMIO/store/control-flow proof",
+    "complete_mmio_dataflow_proof": false,
+    "hardware_execution": false
   }
 }

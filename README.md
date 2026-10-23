@@ -26,4 +26,4 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 
 固件编译实现位于uefi-enuma/Resources/Scripts/build_enuma_firmware.py；本仓同名脚本为校验固定源锁的适配入口。文档职责与历史记录索引见[docs/README.md](docs/README.md)。
 
-2026-10-24当前：当前固件60f38e9，step17原生状态及step18双窗递增三份完整离线资格通过；实际结果和下一步见STATUS与enuma-dsi-native-device.json。R-005 consumed，Boot v3保持。
+2026-10-24当前：固件f0cef6f，step18计数对照与step19候选staging/所选DSI递增正互补三份离线资格通过；设备结果及下一步见STATUS。R-005 consumed，Boot v3保持，尚未可见写屏或进入XNU。

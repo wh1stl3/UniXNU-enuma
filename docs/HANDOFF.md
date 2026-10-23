@@ -1,46 +1,40 @@
-# 当前进度：同一活动DSI接口双窗有界递增获得互补时序支持
+# 当前进度：候选SSPP挂接与所选DSI双窗关联探针完成构建审计
 
-2026-10-24 Asia/Shanghai。用户明确“按你的判断继续，取得有效增量证据，我可以在场恢复，按需使用摄像头”。沿已有临时boot、全套文档逐笔提交推送、即时身份/备份/恢复门禁执行，无新增逐笔审批。目标是取得可解释的UEFI阶段递增证据，不能用Android计数或静态通过替代。
+2026-10-24 Asia/Shanghai。用户“继续”，沿已确认在场恢复、按需摄像及直接只读实测授权推进。主判断：接口计数已能推进，首查原候选buffer/SSPP图层选择与后续显示接管，Boot v3格式低优先级。每笔前全部当前文档提交推送、即时身份/备份/恢复及超时停追加规则保持。
 
-## 当前实现和资格
+## 当前实现和离线资格
 
-固件60f38e9eee70151c09d4fe30bc992ee6835f9b79，设备gitlink和64项源锁固定。保持R-004既有MDP映射，版本读取0xae00000；DSI基址0xae6b800/0xae6c000，原生INTF_STATUS在+0x26c。
+固件f0cef6f1505f636f815f5d3653ed467f84f72922，设备gitlink与65项源锁固定。step19严格取历史step12/R-005算法的第一个合法有界描述，不自动换后面的buffer来取得通过。硬件major/minor须6.0；原enuma FDT的六CTL在0x2000..0x2a00，非其他SM8250示例的0x1000。CTL_INTF_ACTIVE(+0xf4) bit1/2对应两个DSI；各CTL六LM的四个staging字按固定小米52a2f18位表解码VIG0..3/DMA0..3非virtual源，包含LM5主字偏移0x24。
 
-step17仅在版本major6后检查两接口STATUS bit0，最多3读。step18依照固定小米52a2f18的v1 get_status读取路径：实际活动位作为采样门，记录timing/enable稳定性，不再要求旧Linux完整配置值低两位=3。新契约不改变旧step15/16语义和拒绝结论，不写计数使能。无活动接口不采样/等待，版本不支持不访问接口。
+选择首个挂接该Source、又选择实际活动DSI的CTL/LM，要求该同一DSI在两次既有Stall(100000)窗口各严格非回绕递增1..64。复查活动bit0、timing/enable、CTL完整接口掩码、选中LM四字、候选原始六描述字及最终版本不变。最多241次MMIO只读和两次等待；不访问像素、不写显示/计数寄存器，不新增库/构造器/分配/映射。
 
-step18最多26读及两次既有gBS->Stall(100000)。同一原始活动接口须在两个窗口内各非回绕递增1..64；所有采样接口不允许递减或超64，活动bit0保持、timing/enable原字和最终版本一致。等待错误/警告、状态或配置变化、零进展、回绕/复位拒绝。非原子读不能排除瞬变或巧合复位；支持只说明活动接口计数推进，不证明SSPP/LM路由、像素、面板/背光、物理IOVA或精确频率/实测100ms。
+限制：这是稳定staging配置关联加所选接口递增。CTL/LM可能是shadow/残留寄存器；并未证明该LM实际通过pingpong/DSC送到该接口，也未证明fetch成功、可见区域/alpha/遮挡、面板/背光或物理IOVA关系。失败可来自描述/版本/活动/挂接/稳定性/等待/递增任一条件，不能仅凭失败宣称原buffer无路由。通过则降低“完全未挂接的候选”嫌疑，但不认证像素地址正确或屏幕成功。
 
-27项fake MMIO/wait用例O1/Oz+ASan/UBSan、真实AArch64仅gBS、GOP补丁组合/真实Mu传输、源锁与workspace门禁通过。三份完整链接/补丁回退、30OEM PE/DEPEX、AutoGen/库依赖、实际FD目标加载/无识别到目标存储、BootShim/FD/Boot v3和同源宏差异bundle通过。机器代码审计仅覆盖可识别的入口CFG常量/表访问，不是完整间接访问/所有控制流证明；读数上界和分支契约由固定源码及测试约束。所有资格为离线，实测只见下列结果。
+51项fake MMIO/wait用例O1/Oz+ASan/UBSan通过，含八源位域、secondary位、virtual-only拒绝、LM5、首描述不替换、所选接口/配置变化、回绕/零/过大增量、等待错误及精确241读上界；真实AArch64仅既有gBS。固定小米CTL/catalog/SSPP/INTF摘要及原FDT偏移通过，GOP补丁组合/真实Mu传输、像素旗标/恢复身份、源锁/workspace通过。三份完整链接/补丁回退、30OEM PE/DEPEX、生成AutoGen/库、BootShim/FD/Boot v3与同源宏差异bundle通过。step18 actual PE沿原受限CFG数据流检查；step19优化动态地址只检查实际PE中的CTL/帧/状态/等待/界限指令指纹，非完整MMIO加载/存储/控制流证明。只读边界另由锁定源码callback和主机测试约束，不能将机器指纹说成完整禁写证明。
 
 | 候选 | step/query | Boot v3 SHA-256 | FD SHA-256 |
 | --- | --- | --- | --- |
-| native-active | 17/1 | `9068815fc7d5eb5862686aae1500404bf0c5e7f0a8ef9221ba66a1c190bf1fc4` | `7175c9cf7dd346c4e97df6f296da59921929a2e8b237dcd6cbeddb503a2a297e` |
-| native-progress | 18/1 | `f1fb4d377744ba7aa69162aa7998a18e51c12cb0575d961208219843b58203a3` | `0692327ba65fa877eadd434e35f809854a1dc4bb639ebee962fcc30515eb5de3` |
-| native-no-progress | 18/2 | `cc3a698fcbaa53a6249cd04a7b1150a357743f44beb39768325c58ec30f4d8d1` | `58d378d37093545ca68e518c2b62271d53307ac8758f7bd854253fdb2a4118da` |
+| route-control | 18/1 | `0c0700b7565d2cc54cb9b2ef41ac954e3181df294a50d812ac75b3d3134a1936` | `776217c67a2999fec6983630b3b9570c55087debf57be36fb7c6109f218542f5` |
+| route-associated | 19/1 | `4faec747aa34c4d084fcff1a089ac9373957ece07aff4c77d43a18cbdeb7aebb` | `44305c57daf2730081475928cc29b111821b2013d758749224c10a9c75aae6f7` |
+| route-unproven | 19/2 | `d01bd6e3d1f66c7eff5a36563dd5c8a79c20c27ee1845f3b4a6d09e0fc0a4d32` | `84c3b03576f0eb383769d67e6c63874ce122aaf50083c94bf357637ab96d6f76` |
 
-query1为非错误标记门、query2为错误标记门，Core命中延时2秒；未命中可走7秒同步派发完成兜底，非watchdog。原生状态候选在前，双窗正/互补在后；单笔短返回不能独立证明寄存器数值或活动。双窗成功的互补时序可支持“同一接口每窗差值在1..64”的谓词，仍不是数值快照日志。
+同源step18/query1计数对照后执行step19正/互补。query1命中非错误marker、query2命中错误marker，Core命中延时2秒，未命中7秒同步完成兜底，非watchdog。单笔短返回不当数值或路径证明，互补差异需与同源对照和无按键/恢复事实共同解释。
 
-## 实际设备与结果
+## 最新设备结果
 
-native-active step17/query1：2026-10-24 03:04:04，recovered-android-boot-complete；ADB16.063秒/Android完成29.266秒；用户无按键True，原摘要True，独立恢复核验True。
+f0cef6f新候选尚未实测。最近实际设备为60f38e9原生状态对照约16.06秒、双窗正向约16.97秒、互补约22.27秒ADB返回（精确值以历史报告为准），三笔用户无按键/独立恢复通过，支持同一活动接口两窗各1..64非回绕递增；尚无像素/完整路由证明。
 
-native-progress step18/query1：2026-10-24 03:05:34，recovered-android-boot-complete；ADB16.969秒/Android完成32.266秒；用户无按键True，原摘要True，独立恢复核验True。
+本轮互补结果未齐，候选staging/所选接口关联尚未判定。
 
-native-no-progress step18/query2：2026-10-24 03:08:41，recovered-android-boot-complete；ADB22.265秒/Android完成34.344秒；用户无按键True，原摘要True，独立恢复核验True。
+## 下一步与恢复边界
 
-同源原生状态对照和正/互补时序支持：major6下至少同一活动DSI接口在两个连续窗口各发生1..64的非回绕帧计数递增，采样状态与配置保持。取得双窗有界递增的间接执行证据，非数值寄存器日志、面板可见性或SSPP路由证明。 query1-query2 ADB差-5.296秒包含启动噪声，不能当精确频率或实测100ms。
+先提交推送全部当前文档，再以即时身份/备份/恢复门禁临时启动 route-control；每笔受控返回和独立恢复/无按键核验后推进。
 
-## 下一步和边界
+用户可在场恢复；必要前后截图与主机日志，实际输出/判读变化/恢复动作时录像。键盘反光不作输出。Android/fastboot恢复已核对，TWRP/UART未验证；超时停追加先恢复并当轮落实交接，恢复核验后继续离线分析和新软件，不原样重试失败镜像。
 
-已取得同一活动DSI接口双窗各1..64非回绕递增的互补时序支持，仍无数值dump或可见像素证明。下一步优先只读绑定实际SSPP→LM/CTL→INTF/双DSI路由，检查先前第一个合法描述是否真正被使用，再查fetch/地址翻译及面板后段，不重放R-005。
+R-005 consumed，不重放像素。无MMIO/像素/分区写入、新内存/映射/大小/基址/verified变更，51MiB heap/512MiB owned/example=true/Boot v3保持。旧60f38e9原生资格通过source-history/uefi-60f38e9.lock.json冻结，其余历史沿各自源锁，不冒充新源码实测。顶层build/FD/payload报告对应最后候选，逐份完整快照/镜像/原始日志/相机/标识/备份仅out。
 
-只读留必要前后相机截图及主机时序/日志；实际输出、变化判读或恢复时再录像。白点是用户键盘反光，不算输出。用户已确认可在场恢复，Android/fastboot恢复已核对，TWRP/UART未验证；超时停追加先恢复并当轮落实交接，恢复核验后继续离线修复，不原样重试失败镜像。
-
-R-005 consumed，不重放像素；无像素/MMIO/分区写入、新映射、内存/基址/verified变更，保留51MiB heap/512MiB owned/example=true/Boot v3。旧f6c59ba计数资格用source-history/uefi-f6c59ba.lock.json冻结，旧338db59时序和c73eb6e像素同样沿历史源锁保存。顶层构建/FD报告对应最后候选，各份独立快照在out/entry-probe，镜像/日志/相机/标识/备份仅out。
-
-故障主判断仍优先活动SSPP/LM/CTL路由与持续显示交接，Boot头低优先级，见operations/2026-10-24-display-fault-hypotheses.md。后续应把有意义递增绑定到实际输出链路，不能仅因计数推进宣称可见写屏。文本后端尚未集成，当前诊断固件在Core门主动返回，DXE/BDS/UniXNU菜单未放行，尚未进入XNU。
-
-证据：firmware/docs/dsi-native-progress.md、config/dsi-native-probes.json、reports/enuma-dsi-native-{host,bundle,device,preflight}.json（设备/预检仅实际产生时存在）、enuma-native-display-diagnosis-sources.json。来源为已锁小米内核52a2f18的INTF_STATUS/v1 get_status、catalog major5/6功能选择及KMS core_rev读取；源码未导入。
+证据：firmware/docs/scanout-route.md、config/scanout-route-probes.json、reports/enuma-scanout-route-{sources,host,bundle,device,preflight}.json（设备/预检只在实际产生时存在），operations/2026-10-24-scanout-route.md。故障判断及可推翻条件见operations/2026-10-24-display-fault-hypotheses.md；用户要求基于本机/公开资料大胆给出可推翻主判断已列AGENTS持久规则。尚无可见写屏，文本后端未接入，诊断Core主动返回，DXE/BDS/UniXNU菜单未放行，未进入XNU。
 
 ## 系统与内核现状
 
@@ -50,4 +44,4 @@ R-005 consumed，不重放像素；无像素/MMIO/分区写入、新映射、内
 
 详见operations/2026-10-23-system-kernel-userland-roadmap.md、2026-10-23-discovery-volume-platform-link.md。历史资料不替代当前实测和授权。
 
-接手顺序AGENTS/STATUS/DECISIONS/NEED-REVIEW；发布状态以Git远端核验为准。
+接手顺序AGENTS/STATUS/DECISIONS/NEED-REVIEW，发布状态以Git远端核验为准。

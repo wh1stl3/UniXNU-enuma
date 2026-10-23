@@ -31,5 +31,6 @@
   "wrap_allowed": false,
   "pixel_access": false,
   "mmio_writes": false,
-  "new_mapping": false
+  "new_mapping": false,
+  "source_lock": "source-history/uefi-60f38e9.lock.json"
 }
