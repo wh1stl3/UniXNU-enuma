@@ -1,6 +1,7 @@
 """Replay the actual overlapping DXE patches twice against the pinned Mu files."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tarfile
@@ -8,6 +9,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
+FIRMWARE = Path(os.environ.get('ENUMA_TEST_FIRMWARE', ROOT/'firmware'))
 sys.path.insert(0, str(ROOT / 'scripts'))
 from build_enuma_firmware import apply_patch_series
 
@@ -32,8 +34,8 @@ class PatchSeriesTests(unittest.TestCase):
                     target.write_bytes(source.extractfile(member).read().replace(b'\r\n',b'\n'))
             dsc='Platforms/Xiaomi/enumaPkg/enuma.dsc'
             target=stage/dsc;target.parent.mkdir(parents=True)
-            target.write_bytes((ROOT/'firmware'/dsc).read_bytes().replace(b'\r\n',b'\n'))
-            patches=[(stage,ROOT/'firmware/patches'/p) for p in
+            target.write_bytes((FIRMWARE/dsc).read_bytes().replace(b'\r\n',b'\n'))
+            patches=[(stage,FIRMWARE/'patches'/p) for p in
                 ('dxe-stage-checkpoints.patch','dxe-dispatch-return.patch','dxe-driver-checkpoints.patch',
                  'dxe-dispatch-details.patch','dispatch-detail-options.patch')]
             apply_patch_series(patches)
@@ -53,6 +55,10 @@ class PatchSeriesTests(unittest.TestCase):
             page=once['MdeModulePkg/Core/Dxe/Mem/Page.c']
             self.assertEqual(page.count(b'EnumaPoolSearchCheckpoint (Start);'),1)
             self.assertLess(page.index(b'EnumaPoolSearchCheckpoint (Start);'),page.index(b'AllocatePoolPages: failed'))
+            main=once[names[0]]
+            self.assertEqual(main.count(b'EnumaDispatchCompletionCheckpoint ();'),1)
+            self.assertLess(main.index(b'CoreDispatcher ();'),main.index(b'EnumaDispatchCompletionCheckpoint ();'))
+            self.assertLess(main.index(b'EnumaDispatchCompletionCheckpoint ();'),main.index(b'CoreDisplayMissingArchProtocols ();'))
             apply_patch_series(patches)
             self.assertEqual(once,{n:(stage/n).read_bytes() for n in names})
 
@@ -72,7 +78,7 @@ class PatchSeriesTests(unittest.TestCase):
                     member = next(m for m in source.getmembers() if m.name.endswith('/' + name))
                     target = stage / name; target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_bytes(source.extractfile(member).read().replace(b'\r\n', b'\n'))
-            patches = [(stage, ROOT / 'firmware/patches' / name) for name in
+            patches = [(stage, FIRMWARE / 'patches' / name) for name in
                        ('dxe-stage-checkpoints.patch', 'dxe-dispatch-return.patch',
                         'dxe-driver-checkpoints.patch')]
             apply_patch_series(patches)

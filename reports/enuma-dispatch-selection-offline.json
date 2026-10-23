@@ -1,0 +1,70 @@
+{
+  "scope": "offline source/host/AArch64 build only; no new device action",
+  "firmware_commit": "6bc5b81326c56cb1fadd3aa04072eb2cf30fcbee",
+  "firmware_fd_sha256": "8f2c6f8a00a311ee63b1c9ca16db7b1b4d5bd501819193aa6875edb7be051ff7",
+  "full_guid": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+  "ordinal_is_unused_placeholder": 1,
+  "detail_point": 20,
+  "target_delay_seconds": 2,
+  "normal_dispatch_completion_delay_seconds": 7,
+  "actual_runtime_ordinal_known": false,
+  "root_cause_proven": false,
+  "compiled_macro_checks": {
+    "DxeMain.c": true,
+    "Dispatcher.c": true
+  },
+  "compiler_response_sha256": "be81910ef71a187b682abf1b6622ed89537435aeffd8fe23982bd860420dbb0b",
+  "host_cases": 147,
+  "host_completion_configurations": 3,
+  "invalid_guid_only_combinations_rejected": [
+    "ENUMA_DIAG_GUID_ENABLED",
+    "ENUMA_DIAG_STAGE",
+    "ENUMA_DIAG_GUID_ONLY",
+    "ENUMA_DIAG_DETAIL_POINT"
+  ],
+  "invalid_completion_combinations_rejected": [
+    "ENUMA_DIAG_STAGE",
+    "ENUMA_DIAG_GUID_ONLY",
+    "ENUMA_DIAG_GUID_ENABLED",
+    "ENUMA_DIAG_DISPATCH_FALLBACK",
+    "ENUMA_DIAG_DETAIL_POINT",
+    "ENUMA_DIAG_DETAIL_POINT"
+  ],
+  "python_tests_passed": 50,
+  "source_inputs_checked": 50,
+  "recovery_report": "reports/enuma-simplefb-recovery.json",
+  "early_control_source": "7479da11e14ff5dc8bdb3584ef67eed06faab301",
+  "early_control_fd_sha256": "df7eaae26726ee9f705ff4683e3a9558425d196355e17b90f1992f8cba14b049",
+  "early_control_archive": "out/entry-probe/simplefb-queue-first-control-queue1-stage12-delay2-simplefb-metadata",
+  "early_control_device_tested": false,
+  "all_new_images_device_tested": false,
+  "fallback_covers_if_dispatch_returns": [
+    "missing target GUID",
+    "DEPEX-skipped target",
+    "LoadImage error",
+    "missed return checkpoint",
+    "normal progress toward BDS"
+  ],
+  "fallback_does_not_cover": [
+    "driver or constructor hang",
+    "dispatcher deadlock",
+    "exception loop",
+    "failure before reaching DXE dispatcher"
+  ],
+  "production_defaults": {
+    "guid_only": false,
+    "completion_fallback": false
+  },
+  "no_new_memory_addresses": true,
+  "no_new_verified_flags": true,
+  "new_device_trials": 0,
+  "source_ci_run": 39911281252,
+  "source_ci_pass_readback": true,
+  "source_ci_scope": "source-only, no firmware or hardware execution",
+  "image_sha256": "81d189d7692c91432bb7f4bbcfc53e3dcad41f3d115897d49e63a6401cdf4411",
+  "local_archive": "out/entry-probe/simplefb-guid-only-fallback-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata",
+  "local_image": "out/boot-candidate/simplefb-guid-only-fallback-queue1-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata-boot-v3.img",
+  "fd_audit_passed": true,
+  "oem_pe_depex_matched": 30,
+  "bootshim_and_v3_roundtrip_passed": true
+}

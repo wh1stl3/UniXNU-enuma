@@ -1,0 +1,25 @@
+{
+  "verified_at": "2026-10-23T12:11:03.528030+08:00",
+  "identity": "enuma",
+  "slot": "_a",
+  "boot_completed": true,
+  "root": true,
+  "unlocked": true,
+  "partitions": [
+    {
+      "partition": "boot_a",
+      "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+      "matches_backup": true
+    },
+    {
+      "partition": "vendor_boot_a",
+      "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+      "matches_backup": true
+    }
+  ],
+  "boot_reason": "bootloader",
+  "prior_phase": "manual-recovery-needed",
+  "automatic_return_proven": false,
+  "new_trial_issued": false,
+  "user_confirmed_manual_button_recovery": true
+}

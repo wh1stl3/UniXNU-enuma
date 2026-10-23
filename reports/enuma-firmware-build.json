@@ -2,7 +2,7 @@
   "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
   "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "uefi_source_commit": "233a9d8329660ddbb811a029d3034007ece510ef",
+  "uefi_source_commit": "6bc5b81326c56cb1fadd3aa04072eb2cf30fcbee",
   "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
   "unixnu_qualification": {
     "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
@@ -70,7 +70,7 @@
       "BUILDID_STRING": "enuma-research",
       "ENUMA_DIAG_STAGE": "13",
       "ENUMA_DIAG_DELAY_US": "2000000",
-      "ENUMA_DIAG_DISPATCH_ORDINAL": "32",
+      "ENUMA_DIAG_DISPATCH_ORDINAL": "1",
       "ENUMA_DIAG_DETAIL_POINT": "20",
       "ENUMA_DIAG_GUID_ENABLED": "1",
       "ENUMA_DIAG_GUID_LOW64": "0x4ffc788ddcfd1e6dULL",
@@ -81,18 +81,23 @@
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
       "ENUMA_VENDOR_APRIORI": "EnumaInputs/Vendor.apriori.inc",
       "ENUMA_VENDOR_RAW": "EnumaInputs/Vendor.raw.fdf.inc",
-      "ENUMA_DIAG_SIMPLEFB": "1"
+      "ENUMA_DIAG_SIMPLEFB": "1",
+      "ENUMA_DIAG_GUID_ONLY": "1",
+      "ENUMA_DIAG_DISPATCH_FALLBACK": "1"
     }
   },
   "diagnostic_stop_stage": 13,
   "diagnostic_delay_seconds": 2,
-  "diagnostic_dispatch_ordinal": 32,
+  "diagnostic_dispatch_ordinal": 1,
   "archive_sha256": {
     "uefi-source.tar.gz": "7118851d4e46f6f3336c82bcad4ee5820cb7a2079103e075c9961e3f1c3a3a27",
     "mu-basecore.tar.gz": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826"
   },
   "diagnostic_detail_point": 20,
   "diagnostic_dispatch_guid": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+  "diagnostic_dispatch_guid_only": true,
+  "diagnostic_dispatch_completion_fallback": true,
+  "diagnostic_dispatch_completion_delay_seconds": 7,
   "diagnostic_omitted_oem_modules": [
     "CPRDxe",
     "DisplayDxe",
@@ -112,7 +117,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "465c5564003fcb78895861a43a3038644a35b82adfabf4485e466902b8fa690d",
+  "fd_sha256": "8f2c6f8a00a311ee63b1c9ca16db7b1b4d5bd501819193aa6875edb7be051ff7",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -129,21 +134,21 @@
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "firmware/Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "firmware/Resources/Enuma/extensions.json": "31df1094d342d9424dcf0525dce5fe58a57d76d7859276b20e4ce84e2eebe771",
+    "firmware/Resources/Enuma/extensions.json": "53bb71d85146052a8fac1bacf2107d5262e4ac973e5c3f61531760e67543ecee",
     "firmware/Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "firmware/Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "firmware/Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
     "firmware/Resources/Enuma/vendor.json": "9c37197536afc0eeb6deeb708fa8b436692a4c693e2eb3b4653f7108931f8fec",
     "firmware/Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
-    "firmware/Resources/Scripts/enuma_preflight.py": "326d7fec3b59759679d856ea22ab1a8990181f3a33959fb50b50968614a0db2c",
+    "firmware/Resources/Scripts/enuma_preflight.py": "d5ce72c955974130fbc47bbd9c951096eb4e3a38bdf49ccf9448e5f490e45e1b",
     "firmware/Resources/Scripts/mkbootimg.py": "55037fd1a6d6cd861add76c2083d5d4321373bf714acae3f6a40deb004c27d47",
     "firmware/diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
-    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "ea0e367d8bdaf020a21d9f351f03c5d3ef31d5c1d2233a2280141aa2fb521291",
+    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "3cd504560593c54851b18a1e6ba1c0cb10989c3e0190c4978ac9365c1d91203e",
     "firmware/diagnostics/EnumaStageCheckpoint.h": "8c5dc48ce920167a1e36400d0ce1298f0bc39ae1c11e876ceb21a93f521fbf39",
     "firmware/patches/apriori-metronome.patch": "59f37df69981dc61593fedb1e20b382d0881b01d3dfefc05d6fcc1028f85f01f",
     "firmware/patches/diagnostic-ufs-selection.patch": "b79be283dc09951a91aa6fc99ec26aea7187f9845080d28445bf6dd50db5a523",
-    "firmware/patches/dispatch-detail-options.patch": "1d2751ed718e8d6cd3fa3b7225588188d891f60c8640d76fa5cfe5f9d219c702",
-    "firmware/patches/dxe-dispatch-details.patch": "e2d6f60c9aa672bb7db0d39ca7564ce7e4e00ce8d885039d82c8fdfd708ce1b3",
+    "firmware/patches/dispatch-detail-options.patch": "fff569351812dd2288d70e95f68d5b6832a4c484c91b95a2eb1a813132c6a144",
+    "firmware/patches/dxe-dispatch-details.patch": "49a051195269054894262788f65883c4665db5eec170db2f457e265b523be94d",
     "firmware/patches/dxe-dispatch-return.patch": "c82bf3f7ca763d98b0435909ba77d2a16c670fd934c71a26ae160d3510525c70",
     "firmware/patches/dxe-driver-checkpoints.patch": "bc64616f6c3f0f7269c942078ab0bd5366674058df7c1af4384d51f6ba7f41fa",
     "firmware/patches/dxe-stage-checkpoints.patch": "41b0e6c4c33d9f74d112e8fb65681dec0d9a74fbd34dec54dd0b83c876fcae3e",
@@ -155,8 +160,9 @@
     "firmware/diagnostics/EnumaPoolSearchCheckpoint.h": "42ade1af349e16287e1198814aea079bbc7a846a9b3053ff105d33929053715b",
     "firmware/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFb.c": "926136fbf45aef45fda9a18c797e21cc361c2dbe34003176eadf9e98034a05d6",
     "firmware/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe.inf": "46a6ebe23cd5e4c9ec15dedb18a4e5a34d0fb5560143b0b2924dbb9b8ff0ff53",
-    "firmware/patches/simplefb-contract.patch": "c332e41ab12997b5b72374c66558b347c0d15becb7bdbd223de42d2049beec8e",
-    "firmware/patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364"
+    "firmware/patches/simplefb-contract.patch": "334bd21e74b868078e7793d0142158f920c39e7782d0f265277cede88c1b2d0f",
+    "firmware/patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
+    "firmware/diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00"
   },
   "probe_upstream_sha256": {
     "drivers/DarwinBoot/DarwinBootPkg/Driver/DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",

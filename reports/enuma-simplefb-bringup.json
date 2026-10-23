@@ -18,14 +18,14 @@
     "phase": "manual-recovery-needed",
     "partition_writes": false
   },
-  "post_probe_android_restored": false,
-  "post_probe_partition_hashes_checked": false,
+  "post_probe_android_restored": true,
+  "post_probe_partition_hashes_checked": true,
   "endpoint_check": {
     "adb_states": [],
     "fastboot_present": false
   },
-  "user_recovery_availability": "\u6682\u65f6\u65e0\u6cd5\u6309\u952e",
-  "next_action": "Stop device trials; wait for physical fastboot recovery, then restore and verify Android. Audit actual dispatch count or GUID-only selection before any new trial.",
+  "user_recovery_availability": "User confirmed physical button recovery to Android; latest instruction requests offline work.",
+  "next_action": "Offline work only. First validate early queue control on hardware when resumed; then GUID-only timing controls with normal-dispatch fallback. No repeat of ordinal32+GUID candidate.",
   "scanout_geometry_verified": false,
   "pixel_rendering_verified": false,
   "gop_installed_verified": false,
@@ -33,11 +33,20 @@
   "offline_guard_revision": "7479da11e14ff5dc8bdb3584ef67eed06faab301",
   "new_probe_guard_present_in_tested_firmware": false,
   "direct_drawing_after_missed_gate_not_excluded": true,
-  "offline_guard_revision_firmware_built": false,
+  "offline_guard_revision_firmware_built": true,
   "subsequent_device_trials": 0,
   "latest_endpoint_check": {
-    "adb_states": [],
+    "as_of": "2026-10-23T12:11:03.528030+08:00",
+    "adb_states": [
+      [
+        "device"
+      ]
+    ],
     "fastboot_present": false
   },
-  "no_probe_commands_until_previous_recovery_cleared": true
+  "no_probe_commands_until_previous_recovery_cleared": true,
+  "manual_recovery_report": "reports/enuma-simplefb-recovery.json",
+  "latest_offline_source": "6bc5b81326c56cb1fadd3aa04072eb2cf30fcbee",
+  "latest_offline_source_device_tested": false,
+  "automatic_return_of_original_simplefb_candidate_proven": false
 }

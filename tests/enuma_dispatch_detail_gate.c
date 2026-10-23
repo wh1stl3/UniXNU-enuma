@@ -55,7 +55,7 @@ int main(void) {
                 EnumaImageEntryCheckpoint(point,NULL,status);
                 EnumaStartingFile=NULL;
             } else if (setjmp(stopped) == 0) EnumaDispatchDetailCheckpoint(point, guid, status);
-            assert(resets - before == (ENUMA_DIAG_STAGE == 13 && ordinal == 3 &&
+            assert(resets - before == (ENUMA_DIAG_STAGE == 13 && (ENUMA_DIAG_GUID_ONLY || ordinal == 3) &&
                    point == hook[spec] && status_ok && guid_ok && (point<20 || guid!=NULL)));
         }
     }

@@ -4125,14 +4125,17 @@
     "interpretation": "Success gate27 delay response supports executing the hook. Failed search gate26 was not observed; does not exclude other allocation failures or establish zero failures/exhaustion."
   },
   "latest_recovery_status": {
-    "phase": "manual-recovery-needed",
+    "phase": "recovered-android-boot-complete",
     "device": "enuma",
     "last_probe": "simplefb-pre-queue32-stage13-delay2-point20-guiddcfd1e6d-simplefb-metadata",
-    "android_restore_confirmed": false,
-    "post_probe_partition_hashes_verified": false,
-    "latest_target_adb_detected": false,
-    "latest_target_fastboot_detected": false,
-    "user_can_press_buttons": false,
-    "further_device_trials_stopped": true
+    "android_restore_confirmed": true,
+    "post_probe_partition_hashes_verified": true,
+    "verification_report": "reports/enuma-simplefb-recovery.json",
+    "recovery_method": "user-confirmed physical buttons",
+    "automatic_return_proven": false,
+    "as_of": "2026-10-23T12:11:03.528030+08:00",
+    "user_can_press_buttons": true,
+    "further_device_trials_stopped": true,
+    "stop_reason": "latest user instruction: offline analysis"
   }
 }

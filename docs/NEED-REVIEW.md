@@ -117,7 +117,7 @@ R-003配置表门补充：d3a0972 point24存在门2/7/2对照完成，支持PE�
 
 ## S-001 · SimpleFb首测实际恢复失败，等待实体恢复
 
-状态：runtime hard-stop，2026-10-23；不是新的镜像生成审批或内存审批。触发[AGENTS.md第27–28行](../AGENTS.md)：执行中无法返回时“立即停止追加镜像/写入”，且“实际恢复失败…仍停”。233a9d8候选10:16:30接受后75秒无目标ADB/fastboot，后续只读检查仍无，用户暂无法按键。具体hash/状态见operations/2026-10-23-simplefb-metadata-variant.md及reports/enuma-simplefb-bringup.json。
+状态：历史runtime hard-stop；2026-10-23 12:11:03人工恢复核验后已解除本次恢复阻塞。不是新的镜像生成审批或内存审批。触发[AGENTS.md第27–28行](../AGENTS.md)：执行中无法返回时“立即停止追加镜像/写入”，且“实际恢复失败…仍停”。233a9d8候选10:16:30接受后75秒无目标ADB/fastboot，后续只读检查仍无，用户暂无法按键。具体hash/状态见operations/2026-10-23-simplefb-metadata-variant.md及reports/enuma-simplefb-bringup.json。
 
 | 路线 | 范围与代价 |
 | --- | --- |
@@ -125,3 +125,5 @@ R-003配置表门补充：d3a0972 point24存在门2/7/2对照完成，支持PE�
 | B：当前离线收尾 | 用户目前无法按键，保持设备动作停止，完成代码守卫/host/static/源码CI及交接。不能获得本次恢复或GOP结论 |
 
 当前依用户答复采用B，没有待批准的新地址/大小/verified或刷分区项。恢复动作沿既有授权，不需重批镜像生成；后续新试验必须先满足恢复与观测条件。本轮停后仅离线源代码/检查，无追加固件镜像或设备写入。
+
+S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/root/槽/解锁与原boot、vendor_boot摘要。原233首测自动返回仍未通过，历史“暂无法按键”记录仅是当时状态。用户随后要求继续离线，当前无实机执行；6bc5b81完整GUID-only及正常Dispatcher结束兜底仅离线构建/检查，后者不覆盖卡死。没有新内存/verified/分区审批项，不重复申请生成镜像批准。见operations/2026-10-23-guid-only-dispatch-offline.md。

@@ -80,11 +80,17 @@ def main():
     parser.add_argument('--dispatch-ordinal', type=int, default=1)
     parser.add_argument('--detail-point', type=int, choices=range(13,28), default=13)
     parser.add_argument('--dispatch-guid', help='optional complete file UUID filter for stage 13 detail gates')
+    parser.add_argument('--dispatch-guid-only', action='store_true', help='select a complete file GUID without a guessed runtime ordinal; use ordinal 1 as placeholder')
+    parser.add_argument('--dispatch-completion-fallback', action='store_true', help='GUID-only diagnostic: reset 7 s after initial CoreDispatcher returns, before missing-arch checks/BDS; cannot recover hangs')
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument('--diagnostic-simplefb',action='store_true',help='metadata-only SimpleFb; omit exact CPR/Display/UFS set, no pixel drawing')
     selection.add_argument('--diagnostic-without-ufs',action='store_true',help='GOP isolation only; default firmware retains OEM UFSDxe')
     args = parser.parse_args()
     if not 1 <= args.dispatch_ordinal <= 128: parser.error('--dispatch-ordinal must be 1..128')
+    if args.dispatch_guid_only and (args.stop_stage != 13 or args.dispatch_guid is None or args.dispatch_ordinal != 1 or args.detail_point in (23,26,27)):
+        parser.error('GUID-only requires stage 13, complete GUID, driver detail and ordinal 1 placeholder')
+    if args.dispatch_completion_fallback and not args.dispatch_guid_only:
+        parser.error('dispatch completion fallback requires --dispatch-guid-only')
     if args.detail_point in (23,26,27) and (args.dispatch_guid is not None or args.dispatch_ordinal != 1):
         parser.error('global exception/pool point has no driver GUID/ordinal attribution; omit GUID and use ordinal 1')
     if args.stop_stage != 13 and (args.detail_point != 13 or args.dispatch_guid is not None):
@@ -159,7 +165,9 @@ def main():
     board['firmware']['defines'].update(ENUMA_DIAG_STAGE=str(args.stop_stage),
         ENUMA_DIAG_DELAY_US=str(args.stop_delay*1000000),ENUMA_DIAG_DISPATCH_ORDINAL=str(args.dispatch_ordinal),
         ENUMA_DIAG_DETAIL_POINT=str(args.detail_point),ENUMA_DIAG_DISABLE_UFS='1' if (args.diagnostic_without_ufs or args.diagnostic_simplefb) else '0',
-        ENUMA_DIAG_SIMPLEFB='1' if args.diagnostic_simplefb else '0', **guid_defines)
+        ENUMA_DIAG_SIMPLEFB='1' if args.diagnostic_simplefb else '0',
+        ENUMA_DIAG_GUID_ONLY='1' if args.dispatch_guid_only else '0',
+        ENUMA_DIAG_DISPATCH_FALLBACK='1' if args.dispatch_completion_fallback else '0', **guid_defines)
     ctx=SimpleNamespace(board=board,args=SimpleNamespace(skip_preflight=False),tree=tree,
                         logs=WORK/'logs',work=WORK/'context',jobs=args.jobs)
     fd=uefi/board['firmware']['fd'].format(target='DEBUG')
@@ -171,6 +179,9 @@ def main():
         'diagnostic_dispatch_ordinal':args.dispatch_ordinal,'archive_sha256':lock['archive_sha256'],
         'diagnostic_detail_point':args.detail_point,
         'diagnostic_dispatch_guid':str(uuid.UUID(args.dispatch_guid)) if args.dispatch_guid else None,
+        'diagnostic_dispatch_guid_only':args.dispatch_guid_only,
+        'diagnostic_dispatch_completion_fallback':args.dispatch_completion_fallback,
+        'diagnostic_dispatch_completion_delay_seconds':7 if args.dispatch_completion_fallback else None,
         'diagnostic_omitted_oem_modules':(['CPRDxe','DisplayDxe','UFSDxe'] if args.diagnostic_simplefb else ['UFSDxe'] if args.diagnostic_without_ufs else []),
         'diagnostic_simplefb_metadata_only':args.diagnostic_simplefb,
         'reference_gitlinks':lock['reference_gitlinks'],'checks':[]}
