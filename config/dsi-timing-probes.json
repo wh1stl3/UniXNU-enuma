@@ -25,5 +25,6 @@
   "maximum_dsi_reads": 2,
   "pixel_access": false,
   "mmio_writes": false,
-  "new_mapping": false
+  "new_mapping": false,
+  "source_lock": "source-history/uefi-338db59.lock.json"
 }

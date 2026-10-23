@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "firmware_commit": "f6c59badf5ee22f1720f22124a97384ad9739c15",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "step": 14,
+      "query": 1,
+      "tag": "counter-control",
+      "variant": "counter-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "step": 15,
+      "query": 1,
+      "tag": "counter-ready",
+      "variant": "counter-ready-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "step": 15,
+      "query": 2,
+      "tag": "counter-not-ready",
+      "variant": "counter-not-ready-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "step": 16,
+      "query": 1,
+      "tag": "counter-progress",
+      "variant": "counter-progress-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "step": 16,
+      "query": 2,
+      "tag": "counter-no-progress",
+      "variant": "counter-no-progress-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-dsi-counters-host.json",
+  "maximum_dsi_reads": 12,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

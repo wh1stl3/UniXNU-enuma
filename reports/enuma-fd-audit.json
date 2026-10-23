@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "93ad4f44d6ad80ada7e9dc49625b4133d93204115072e61eb68fa44b5b66d17c",
+  "fd_sha256": "23d217567393dbfd2cd98f7b6beaccda64b7121d46c87163923bdc1cf4e62702",
   "fd_bytes": 3145728,
   "file_count": 79,
   "matched_oem_modules": [
@@ -164,14 +164,31 @@
   "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
   "hardware_execution": false,
-  "dsi_timing_code": {
-    "provider_pe_sha256": "e65e3c7bf6c7fe12982d5ef12ee89b8748654577cbd3c8cbb8972cf5e1c409fc",
-    "static_target_loads": [
+  "dsi_counter_code": {
+    "scope": "Restricted constant/table dataflow on the actual packaged AArch64 PE.\n\nThis checks recognizable MMIO sites and the wait argument, not all control flow\nor every possible indirect access. Runtime read bounds come from source+tests.\n",
+    "static_possible_target_loads": [
       "0xae6b800",
-      "0xae6c000"
+      "0xae6b8a8",
+      "0xae6b8ac",
+      "0xae6c000",
+      "0xae6c0a8",
+      "0xae6c0ac"
     ],
     "static_target_stores": [],
-    "scope": "constant-address accesses in actual packaged PE; not runtime proof",
-    "hardware_execution": false
+    "recognized_mmio_sites": [
+      "131c: 8d 01 40 b9  \tldr\tw13, [x12]",
+      "1324: 8c a9 40 b9  \tldr\tw12, [x12, #168]",
+      "14a8: 4a ad 40 b9  \tldr\tw10, [x10, #172]",
+      "1554: 4a ad 40 b9  \tldr\tw10, [x10, #172]",
+      "1584: 4b 01 40 b9  \tldr\tw11, [x10]",
+      "1588: 4a a9 40 b9  \tldr\tw10, [x10, #168]"
+    ],
+    "wait_100000_call_sites": 1,
+    "delta_64_comparison": true,
+    "entry_rva": "0x1050",
+    "reachable_instruction_count": 365,
+    "complete_indirect_access_or_control_flow_proof": false,
+    "hardware_execution": false,
+    "provider_pe_sha256": "3e0e93796f2f87d3d79f840025dc95c185161b5bec619b5a79b1f12170f16d06"
   }
 }

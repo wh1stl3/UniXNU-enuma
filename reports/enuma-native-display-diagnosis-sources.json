@@ -1,0 +1,53 @@
+{
+  "scope": "offline exact already-pinned Xiaomi kernel sources for fault hypothesis review; no device action or source pin change",
+  "files": [
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_intf.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_intf.c",
+      "sha256": "7b02d0b3c116279f0b4ee891cc9267d676942855d3dc58a5b263ad2f10e332da",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_ctl.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_ctl.c",
+      "sha256": "e6cf2778c4137fe6236b9080deb53a09067fd2d53d0e8ab2317630c9ec7ea553",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_kms.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_kms.c",
+      "sha256": "e75853bbe414c4537c3fe1938c52256dc504aebe8f01765091257f1f6630c1ea",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_catalog.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_catalog.c",
+      "sha256": "8d108cc673708f0ba629b86e0231686ecbd3437d1757c4144a60ad3a8bfc34de",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/sde/sde_hw_sspp.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_sspp.c",
+      "sha256": "b981480d1e1008fc9c7fe6722eb7e140db143d067db9374dbe1f56a254359040",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    },
+    {
+      "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "path": "techpack/display/msm/dsi/dsi_display.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/dsi/dsi_display.c",
+      "sha256": "f6ccaa26d888208c6a4935414e96a4b92fb230f12d425a8f5feb32e215c13222",
+      "license": "GPL-2.0-only; cached reference, no code imported"
+    }
+  ]
+}

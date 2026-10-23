@@ -1,0 +1,32 @@
+{
+  "scope": "Fake MMIO/wait and AArch64 counter objects; no device accesses.",
+  "all_passed": true,
+  "cases": 33,
+  "optimizations": [
+    "O1",
+    "Oz"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "configuration_max_reads": 4,
+  "progress_max_reads": 12,
+  "wait_calls_max": 1,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "delta_arithmetic": "UINT32 modulo; near-wrap reset remains ambiguous",
+  "disabled_counters_sampled": false,
+  "mmio_writes": false,
+  "pixel_access": false,
+  "undefined_symbols": [
+    "gBS"
+  ],
+  "new_library_or_constructor": false,
+  "runtime": false,
+  "sources": {
+    "EnumaDsiCounters.h": "5c1c9656b2acbc1ce727dc315bc18e32f67494f66842a1634b387294cac33766",
+    "EnumaScanoutAudit.h": "8f49f8c27f1211be834e77e2a79a056010d2de0e637f02f82f6b7bd3464ff702"
+  },
+  "object_sha256": "1847f4fd1cc7394c5e4a8f7be135ea3745b868c9f820d899952ec1bdd4136b0a"
+}

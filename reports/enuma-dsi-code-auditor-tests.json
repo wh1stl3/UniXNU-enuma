@@ -1,0 +1,10 @@
+{
+  "scope": "real step16 PE/disassembly positive plus three audit-input negative mutations; no execution",
+  "all_passed": true,
+  "positive_cold_branch_cfg": true,
+  "negative_cases": [
+    "wrong-base-table",
+    "MMIO-store",
+    "wrong-wait"
+  ]
+}

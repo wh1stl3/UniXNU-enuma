@@ -1,0 +1,154 @@
+{
+  "scope": "read-only reference evaluation; no imported code, executed peer scripts, changed source pins or device actions",
+  "repository": "https://github.com/Tlrenhb/UniXNU-enuma",
+  "commit": "b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "5eb85173203f5f12aedf290e48e6baeb6049dc734f728d6a0ee0d07d44a30eeb",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/README.md"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/LICENSE"
+    },
+    {
+      "path": "board.toml",
+      "sha256": "f18019a02c0e2723f9be53303e4426ea5f4c9d8677ae55614131ab928359244d",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/board.toml"
+    },
+    {
+      "path": "measurements.md",
+      "sha256": "bd71767621ce3303a08104402138e8594f9b47264c2c21a6bfdf164ca8f14cba",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/measurements.md"
+    },
+    {
+      "path": "provenance.md",
+      "sha256": "b7c660f3e3909e97fc43dbbc25a36030be4cb3e50d45a2f9c035be35fd8328a9",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/provenance.md"
+    },
+    {
+      "path": "umi-cas-learnings.md",
+      "sha256": "a2159ced9628296a898c598261146dadade6e0589655eead99cadf8844326ae5",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/umi-cas-learnings.md"
+    },
+    {
+      "path": ".github/workflows/checks.yml",
+      "sha256": "29c7c9fd3b7abd7c84dc4cd99590fed33ce673d4310ea9009e99fc6d527d68ab",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/.github/workflows/checks.yml"
+    },
+    {
+      "path": "scripts/build-enuma-uefi.sh",
+      "sha256": "181c700ec1baee3e5b4daa79491c10a19da44cdc89a784ddc32c93217f031d94",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/scripts/build-enuma-uefi.sh"
+    },
+    {
+      "path": "scripts/make-enuma-adt.py",
+      "sha256": "375a2eea19493e684f3853373266230e7e8398d21b07e1bdc0d37400ec66c873",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/scripts/make-enuma-adt.py"
+    },
+    {
+      "path": "scripts/make-trust-bundle-from-members.py",
+      "sha256": "483a9e2b4d3ae57931d307fdf558ae8a7d9d4e87b7401c2d8d688d0e9849068f",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/scripts/make-trust-bundle-from-members.py"
+    },
+    {
+      "path": "scripts/patch-xnu-entry-probe.py",
+      "sha256": "648447292ae7e85be751ff608a934dea2d3efebcdb88176f8045e829ebd6eca2",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/scripts/patch-xnu-entry-probe.py"
+    },
+    {
+      "path": "scripts/xnu-panic-screen.c",
+      "sha256": "1cae38a51c7b0df2a96da7e0a4d3ebcf9e849386e711010b4847597cd0d52af8",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/scripts/xnu-panic-screen.c"
+    },
+    {
+      "path": "package/LinkStubs.c",
+      "sha256": "9d7224af8df755dba7c5d3c9ebf16337a251bd12d1e874e99586c833a44f3daf",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/package/LinkStubs.c"
+    },
+    {
+      "path": "package/ShengPlatformPower.cpp",
+      "sha256": "cf9abdfff931390a6d72162d92ba1c32544cde989cfecfabe06e2ee7a809efce",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe/package/ShengPlatformPower.cpp"
+    }
+  ],
+  "ci_runs": [
+    {
+      "id": 39997395380,
+      "name": "device checks",
+      "head": "b5e9984d07bfbdd9a1b3311e0658c0b61a5288fe",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/actions/runs/39997395380"
+    },
+    {
+      "id": 39993969749,
+      "name": "device checks",
+      "head": "e442c2db62d8ad011402341eb05ffb3f26b7e88c",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/actions/runs/39993969749"
+    },
+    {
+      "id": 39993499602,
+      "name": "device checks",
+      "head": "89eb832d4b24553c3877a9a0099a43e215313c7e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/actions/runs/39993499602"
+    },
+    {
+      "id": 39984222406,
+      "name": "device checks",
+      "head": "3d6e08f26dbe9b8d1cc844ce85db5f27a52ac760",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/actions/runs/39984222406"
+    },
+    {
+      "id": 39977385480,
+      "name": "device checks",
+      "head": "c9c11bcfd3efbff7c14fa1c4f4dbe5e54f2e7632",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Tlrenhb/UniXNU-enuma/actions/runs/39977385480"
+    }
+  ],
+  "ci_scope": "current device checks workflow: board/preflight/syntax/DTS compile+hash, not kernel or hardware execution",
+  "shared_target": {
+    "product": "iPad7,1",
+    "version": "17.7.11",
+    "build": "21H461"
+  },
+  "candidate_reuse": [
+    "DTS provenance and same-SoC umi/cas reference index",
+    "ADT and original trust-member tooling after API/source/input review",
+    "kernel archive/prelink recipes after exact XNU/module/ABI and artifact checks",
+    "panic text formatting ideas after an active owned framebuffer is established"
+  ],
+  "not_adopted": {
+    "boot_header": {
+      "peer": 1,
+      "own": 3,
+      "reason": "own exact enuma v3 temporary boot and recovery evidence; no current format failure"
+    },
+    "owned_memory": {
+      "peer": "0x100000000",
+      "own": "0x20000000",
+      "reason": "peer size and source claims are not this task allocation evidence or authorization"
+    },
+    "dram_and_userdata": "must remain tied to this device and approved fields; no borrowed values",
+    "firmware_round": "peer build-enuma-uefi.sh has TODO log-reader/integration and does not replace our paired audits/recovery gates",
+    "panic_patching": "peer patch tool hardcodes Mach-O addresses and assumes mapped framebuffer; no direct application",
+    "pmgr_and_stubs": "PMGR ABI bridge and an explicitly empty probe hook do not implement board clock/display hardware"
+  },
+  "limitations": [
+    "README/scripts status text and measurements/provenance reflect different preparation stages",
+    "peer kernel/prelink V1 claims not independently qualified from a matching artifact in this evaluation",
+    "no working enuma early display/GOP recovery evidence found in reviewed files",
+    "source-lock.json/unixnu.lock not present in this checkout; require exact dependency pins before integration"
+  ],
+  "decision": "use as a research source; keep current firmware/Boot v3/counter mainline and do not merge board parameters"
+}

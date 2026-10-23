@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--fd', type=Path, default=ROOT / 'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd')
     parser.add_argument('--build-report',type=Path,default=ROOT/'reports/enuma-firmware-build.json')
+    parser.add_argument('--report',type=Path,default=ROOT/'reports/enuma-fd-audit.json')
     args = parser.parse_args()
     blob = args.fd.read_bytes()
     if len(blob) != 0x300000 or blob[40:44] != b'_FVH': raise ValueError('unexpected FD envelope')
@@ -119,7 +120,17 @@ def main():
         if reads!=['0xae6b800','0xae6c000'] or writes:
             raise ValueError('packaged DSI code does not match two read-only target accesses: '+repr((reads,writes)))
         report['dsi_timing_code']={'provider_pe_sha256':digest(payloads[0]),'static_target_loads':reads,'static_target_stores':writes,'scope':'constant-address accesses in actual packaged PE; not runtime proof','hardware_execution':False}
-    (ROOT / 'reports/enuma-fd-audit.json').write_text(json.dumps(report, indent=2) + '\n')
+    if build.get('diagnostic_gop_step') in (15,16):
+        from audit_dsi_counter_code import audit_counter_code
+        payloads=pe_payloads.get('SimpleFbDxe',[])
+        if len(payloads)!=1:raise ValueError('DSI counter provider PE missing or ambiguous')
+        out=ROOT/'out/dsi-counters-fd-audit';out.mkdir(exist_ok=True)
+        target=out/'SimpleFbDxe.efi';target.write_bytes(payloads[0])
+        assembly=subprocess.check_output(['llvm-objdump','-d',str(target)],text=True)
+        (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
+        code=audit_counter_code(payloads[0],assembly,build['diagnostic_gop_step'])
+        code['provider_pe_sha256']=digest(payloads[0]);report['dsi_counter_code']=code
+    args.report.write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: {len(matched)} native PE/DEPEX payloads unchanged; diagnostic omissions={sorted(omitted)}; UniXNU loader modules packaged')
 
 

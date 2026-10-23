@@ -182,3 +182,11 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 02:03:18 · 对照/全套文档9bb31f2已推送后运行338db59 step14/query1，image11311dfc…b2dbcd3，ADB15.906秒/完成29.516秒；用户确认全程无按键，独立Android/root/原槽/解锁/原摘要核验通过。互补query2未执行，不能仅短返回宣称数值或活动输出；本笔全套文档推送后继续。证据reports/enuma-dsi-timing-device.json及out/dsi-enabled-device.log。
 
 2026-10-24 02:05:38 · 正向及全套文档e254234已推送后运行338db59 step14/query2，image25662b78…053b466，ADB22.281秒/完成36.625秒；用户确认全程无按键，独立Android/root/原槽/解锁/原摘要核验通过。与query1 15.906秒差6.375秒，非精确名义5秒，时序支持至少一DSI时序使能非零；不是寄存器数值/活动/路由/面板/IOVA证明。三笔全部完成，无恢复硬停/人工待办，无写入。证据reports/enuma-dsi-timing-device.json和out/dsi-disabled-device.log。
+
+2026-10-24 · 固件f6c59ba已提交推送；step15计数前置4读、step16最多12读/一次既有Stall(100000)/模差1..64只读实现。33项O1/Oz+ASan/UBSan、真实AArch64仅gBS、240项GOP及真实Mu传输、非法像素旗标/身份恢复/源锁/workspace通过。五份同源step14对照及step15/16正互补全链接/补丁回退、30OEM、AutoGen库/实际FD/Boot v3/bundle通过；尚未新增设备启动。完整文档先提交推送再直接实测。证据reports/enuma-dsi-counters-{host,bundle}.json与operations/2026-10-24-dsi-counters-probe.md。
+
+2026-10-24 · 按用户提供链接只读评估Tlrenhb/UniXNU-enuma b5e9984，固定14份文件摘要与CI元数据；未执行对方脚本/导入参数。保留当前已受控实测Boot v3；对方v1来自umi/pipa，显式DTB输入/持续显示交接应独立核对，未发现当前显示问题由v3引起的证据。证据reports/enuma-tlrenhb-reference-audit.json及operations/2026-10-24-tlrenhb-reference-evaluation.md。
+
+2026-10-24 · 用户要求结合具体情况与公开资料明确判断。只读固定已锁小米内核52a2f18的6份显示源码；首查候选SSPP未关联活动LM/CTL，次查持续显示交接与实际状态，Boot头格式低优先级。发现对应小米驱动含INTF_STATUS状态版本路径，不能把旧TIMING_ENGINE_EN谓词升级为完整活动证明；KMS splash一对一映射降低把IOVA直接定为主因的依据。证据operations/2026-10-24-display-fault-hypotheses.md及reports/enuma-native-display-diagnosis-sources.json；均为可推翻工作假设，不是新增实测结论。
+
+2026-10-24 · step16首次完整链接已成功，但线性反汇编审计器未追踪编译器冷分支，资格阶段拒绝打包；未执行设备。修正为PE入口直接分支CFG常量/表数据流并保持间接调用证明范围限制，实际PE确认6个可能目标、一次100000等待和64比较；错误基址/MMIO存储/错误等待三项审计输入负向变异均拒绝。相同FD重新审计打包通过，无固件代码修改或失败实机重试。证据out/counter-progress-build.log、counter-progress-package.log及reports/enuma-dsi-code-auditor-tests.json。
