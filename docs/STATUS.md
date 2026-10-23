@@ -1,32 +1,24 @@
-# 当前进度：实际描述只读探针受控返回，尚未写屏
+# 当前进度：实际描述只读已返回，R-005像素实验仅离线准备
 
-2026-10-24，Asia/Shanghai。当前设备Android启动完成，无人工按键/恢复待办。
+2026-10-24 Asia/Shanghai。设备最后核验为Android启动完成，root/原槽/解锁和boot/vendor_boot原摘要通过，无按键/恢复待办。最近实际测试仍为7dc3bf1 step12，2026-10-24 00:27:02临时启动，ADB16.927秒/完成30.978秒，用户确认无按键；image3770151e19731745d253cff397f16cb16da752f389dcf321ba8fe3e0e92f09b7，FD602449c0598f1513dd12f546590653eced359fa5094b755f293d1e848b9ca982。时序支持一个实际字段解码、自洽有界的线性描述，不证明活动/唯一性或物理/IOVA一致。实测及全套文档6f07283已推送。
 
-2026-10-24 00:27:02 · 7dc3bf1 step12，ADB16.927秒/完成30.978秒，用户确认无按键，Android/root/原槽/解锁及boot/vendor_boot原摘要通过。image3770151e19731745d253cff397f16cb16da752f389dcf321ba8fe3e0e92f09b7，FD602449c0598f1513dd12f546590653eced359fa5094b755f293d1e848b9ca982。
+## 正在准备的新软件
 
-step12已受控返回；只能结合时序评估描述谓词，不认证活动/唯一性或物理-IOVA一致。尚未写屏，不扩大R-004。
+当前固件c73eb6e已推送，设备仓gitlink/62项源锁已固定。R-005像素源码采用显式step13与单独写入构建旗标，默认及step0..12仍不写像素。保存前、绘制后、恢复后都逐行同步缓存：128x8/4096字节备份，白条500000us，正常和可返回错误路径恢复并读回；直接像素读2048次/存储2048次，显示寄存器只读最多96次，缓存行同步24次，不写显示寄存器、不增映射/heap/构造器。
 
-## 源码与资格
+33个假显存事务场景在O1/Oz+ASan/UBSan通过，AArch64对象含本地4096字节scratch及缓存指令，仅依赖既有gBS；6个审批门禁测试、1个恢复硬停门禁、3个fastboot身份解析、7个Boot v3测试通过；5种错误像素构建参数组合被拒绝，既有GOP回归通过。保护像素FD审计策略另有4个测试（含缺少旗标/错误step/query/审核标记等拒绝分支）通过。全部是离线证据，像素源码从未在设备上执行。
 
-代码7dc3bf19c2997d7203e305697564e7a2586b57cd，60项源锁及gitlink固定；固件入口文档2b3849a已推送，代码为同源镜像重建有意保留7dc3bf1。全套文档门禁7c6e1c6/b10b1f2/bc3e29f已推送；本笔结果和当前文档同步发布，精确提交见Git历史。
+4db47e7的step12对照已完整构建并通过离线资格，image d0b371e42b7c72c2f3046656a65d98a2c0651bf12fe8b14c41389286fbeb8361，FD 93a256eb7677117d4a1ba3fb72f0f7f6ec3eaddae798559936e346c1e20ee67b，从未上机。随后发现像素旗标还需从板级defines传入C编译参数，已在c73eb6e修正；因此4db及更早d8对照仅保留历史离线证据。当前c73eb6e的同源step12/step13均尚未构建、未上机，不能复用旧对照为新源码背书。下一步先完成新同源对照与保护像素候选的完整离线构建和资格。两份当前镜像须完成源锁/实际链接/AutoGen与库依赖/FD/原OEM/Boot v3/保护标记和bundle审计，审核前不启动任何像素镜像。R-005尚在软件准备阶段、未向用户请求批准；config/hardware-review-approvals.json保持pending。受保护镜像在审批状态或精确摘要不匹配时，于任何ADB/fastboot命令前拒绝。
 
-两份候选已完整构建、AutoGen/静态库、原OEM、FD、Boot v3、候选资格与同源bundle通过。step10 image93a787117d8b72bf24c9397141b13b95332e694f2ef8c055b9a3eca29abc6b21；step12 image3770151e19731745d253cff397f16cb16da752f389dcf321ba8fe3e0e92f09b7、FD602449c0598f1513dd12f546590653eced359fa5094b755f293d1e848b9ca982。
+## 已知边界和下一步
 
-step12只读实际源矩形、XY裁剪、stride低半字及格式/压缩，最多48读，检查对齐、行宽与裁剪后完整跨度在较小splash区间内。可跳过无效描述选择首个自洽候选，不认证其他候选、唯一性、活动性、颜色顺序或物理/IOVA一致。固定SDE源码610..634行解释两个stride半字，不是本机数值证明。10000样本/O1/Oz/ASan/UBSan/AArch64对象无外部依赖通过；既有84 scanout及GOP240/7对象/48标记/真实Mu6用例/7 CLI拒绝通过。
+R-004明确不批准像素或显示寄存器写入，当前只允许既有0x0ae00000/0x85000映射与有界只读。R-005先准备可审查的软件、精确摘要、恢复/摄像方案及全部当前文档，再单列请求像素批准；若只读同源对照失败，不能绕过它启动像素候选。像素坐标来自实际裁剪/stride与整个跨度检查，直接存储仅8行、每行128个32位字；地址包络不是连续4096字节，各行之间的gap不写。
 
-## 历史结果与限制
+选中描述可能不活动或是IOVA，白条不一定可见；缓存/像素访问异常或Stall卡住可能阻止软件恢复，Core同步复位不是watchdog，仍可能需要现场人工恢复。TWRP/UART未验证，不当恢复路径。真实超时立即停追加、优先恢复、当轮落实全部交接，恢复后继续离线新软件；受控谓词拒绝不硬停。
 
-f15d520 step0/9/10无按键返回（15.856/16.964/16.947秒）。ab0cb79格式对照16.919秒，固定几何step11 selector1 21.196秒/selector2 15.866秒均无按键返回；互补时序支持固定几何/stride/跨度假设拒绝，具体字段未知，不把它当通过或硬停。实测里程碑367134b/a50d0fb/085deac已推送。
+尚未写屏或进入XNU；51MiB DXE heap、512MiB owned、example=true与全部verified不变，不flash/erase/改槽、无新内存字段/保留区。参考仓只读，镜像/备份/原始日志/设备标识仅out/。原838b38f step3失败根因仍未知，旧image a8061b8510935bbe8991ec0d8723a1bcc3b1a9460422ecc9ac30ffe13813016a禁重试；2026-10-23 23:20:44人工恢复核验通过。ab0cb79固定几何step11正/互补21.196/15.866秒均无按键，支持假设拒绝，不被step12新条件覆盖。
 
-旧838b38f step3于2026-10-23 23:16:54启动后75秒无返回，已当轮停追加和落实交接，23:20:44人工恢复及Android/root/原槽/解锁/原摘要通过。失败image a8061b8510935bbe8991ec0d8723a1bcc3b1a9460422ecc9ac30ffe13813016a不原样重试，根因/故障PC未知。固定SEC source epoch后双构建SEC载荷一致，Pcd仅八字节RSDS差异，整FD不一致；不称完全可复现或已修复。新scanout路径不调用GOP Mode审计。
-
-## 执行边界与交接
-
-尚未写屏或进入XNU。R-004仅0x0ae00000/0x85000映射和有界只读，不含像素/显示寄存器写入。51MiB DXE heap、512MiB owned、example=true与全部verified不变，不flash/erase/改槽、不新增保留区；UART/TWRP未验证。参考树只读，镜像/备份/原始日志/私有标识仅out/。
-
-下一实机前先落实并提交推送全套当前文档，再核验唯一enuma/匹配备份/Android完成/root/槽/解锁/原摘要及fastboot身份。真正超时立即停止追加、优先恢复，并同轮补齐模式/候选摘要/恢复结果/继续条件，恢复后刷新；人工恢复后继续离线出新软件。受控谓词拒绝不硬停。当前无新增批准/现场待办。
-
-证据reports/enuma-descriptor-device.json、enuma-descriptor-bundle.json、enuma-scanout-descriptor-host.json；operations/2026-10-24-bounded-descriptor.md、2026-10-23-geometry-layer.md、2026-10-23-linear-control-timeout.md。最新恢复原始目录见out/device-tests/current.local.json，公开文档不含设备标识。
+证据reports/enuma-descriptor-device.json、enuma-pixel-preview-host.json，firmware/docs/pixel-preview.md，NEED-REVIEW的R-005和operations/2026-10-24-pixel-preview-proposal.md。用户最新明确“下一轮实机验证之前落实所有文档”；本轮未执行新的设备动作。下一实机前先对账并提交推送所有当前文档，再做完整身份/备份/Android完成/root/原槽/解锁/原摘要/fastboot身份门禁。固件历史导入文档保持迁移摘要不变；0296ed8已修正2b3849a的历史文档注释位置，设备镜像从未使用中间文档头，固定导入摘要现已通过。
 
 ## 系统与内核现状
 

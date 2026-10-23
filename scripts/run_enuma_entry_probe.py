@@ -17,6 +17,18 @@ ADB = 'D:/Code/PortingiOS/common/tools/platform-tools/adb.exe'
 FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
 
 
+def require_hardware_review(meta, approvals):
+    """A build/package review tag is never authorization to execute pixels."""
+    review = meta.get('hardware_review')
+    if review is None:
+        return
+    if review != 'R-005':
+        raise ValueError('Unknown protected hardware review')
+    entry = approvals.get(review, {})
+    if entry.get('status') != 'approved' or meta['image_sha256'] not in entry.get('image_sha256', []):
+        raise ValueError('R-005 pixel preview is not approved for this exact image; no device action')
+
+
 def fastboot_value_matches(result, variable, expected):
     """Require one exact GetVar value; prefixes and contradictory values fail."""
     output = (result.stdout + result.stderr).decode(errors='replace')
@@ -40,6 +52,8 @@ def main():
     if not image.is_relative_to((ROOT/'out').resolve()): raise ValueError('image outside own out/')
     meta = json.loads(image.with_suffix('.json').read_text())
     if hashlib.sha256(image.read_bytes()).hexdigest() != meta['image_sha256']: raise ValueError('image changed')
+    if meta.get('hardware_review') is not None:
+        require_hardware_review(meta, json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))
     previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
     if previous.get('phase') == 'manual-recovery-needed':
         raise ValueError('Previous probe is not recovered; restore and verify Android before any new trial')

@@ -19,5 +19,6 @@
   "pixel_access": false,
   "mmio_writes": false,
   "first_individually_bounded_candidate_only": true,
-  "active_pipe_or_iova_identity_proven": false
+  "active_pipe_or_iova_identity_proven": false,
+  "source_lock": "source-history/uefi-7dc3bf1.lock.json"
 }

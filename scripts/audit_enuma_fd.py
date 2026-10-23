@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import subprocess
 import uuid
 from pathlib import Path
 from uefi_firmware.uefi import FirmwareVolume, FirmwareFile
@@ -75,6 +76,17 @@ def main():
               'apriori_guids':apriori,
               'probe_boot_target_guid': probe_guid,
               'runtime_protocol_closure': 'pending hardware dispatch', 'hardware_execution': False}
+    if build.get('diagnostic_pixel_preview'):
+        payloads=pe_payloads.get('SimpleFbDxe',[])
+        if len(payloads)!=1:raise ValueError('pixel provider PE missing or ambiguous')
+        out=ROOT/'out/pixel-preview-fd-audit';out.mkdir(exist_ok=True)
+        target=out/'SimpleFbDxe.efi';target.write_bytes(payloads[0])
+        assembly=subprocess.check_output(['llvm-objdump','-d',str(target)],text=True)
+        if not all(x in assembly.lower() for x in ('civac','ctr_el0','dsb')):
+            raise ValueError('protected pixel provider lacks actual in-FD cache instructions')
+        (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
+        report['pixel_preview_code']={'provider_pe_sha256':digest(payloads[0]),'cache_instructions_in_packaged_pe':True,
+            'hardware_review_required':'R-005','hardware_execution':False}
     (ROOT / 'reports/enuma-fd-audit.json').write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: {len(matched)} native PE/DEPEX payloads unchanged; diagnostic omissions={sorted(omitted)}; UniXNU loader modules packaged')
 

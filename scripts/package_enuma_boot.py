@@ -33,7 +33,8 @@ def verify(data, kernel, ramdisk):
             'os_version_field': os_version, 'kernel_sha256': digest(kernel), 'ramdisk_sha256': digest(ramdisk)}
 
 
-def package(kernel_path, ramdisk_path, output, fixture=False):
+def package(kernel_path, ramdisk_path, output, fixture=False, hardware_review=None):
+    if hardware_review not in (None, 'R-005'): raise ValueError('unknown hardware review')
     lock = json.loads((ROOT / 'config/porting-sources.lock.json').read_text())['aosp_mkbootimg']
     base = Path(lock['path'])
     for name, expected in lock['sha256'].items():
@@ -65,6 +66,7 @@ def package(kernel_path, ramdisk_path, output, fixture=False):
                    'vendor_boot_policy': 'retain captured stock v3 vendor_boot; no DTB append or vendor_boot rewrite',
                    'unresolved': ['ABL acceptance of raw BootShim ARM64 entry', 'UEFI FD relocation/handoff',
                                   'GOP and vendor protocol runtime closure']})
+    if hardware_review is not None: report['hardware_review'] = hardware_review
     output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
     return report
 
@@ -74,8 +76,9 @@ def main():
     parser.add_argument('--kernel', type=Path, required=True, help='raw ARM64 BootShim plus real UEFI FD')
     parser.add_argument('--ramdisk', type=Path, required=True, help='explicit input; may be an empty file')
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--hardware-review', choices=('R-005',), help='tag a build-only protected candidate; does not grant execution approval')
     args = parser.parse_args()
-    report = package(args.kernel, args.ramdisk, args.output)
+    report = package(args.kernel, args.ramdisk, args.output, hardware_review=args.hardware_review)
     print(f'PASS: boot v3 roundtrip, {report["image_bytes"]} bytes; hardware readiness not established')
 
 

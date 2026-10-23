@@ -1,0 +1,36 @@
+{
+  "scope": "R-005 proposal; fake pixels and target object only, NOT authorized/runtime-tested",
+  "all_passed": true,
+  "scenarios": 33,
+  "optimizations": [
+    "O1",
+    "Oz"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "window": [
+    128,
+    8
+  ],
+  "saved_bytes": 4096,
+  "pixel_reads_max": 2048,
+  "pixel_stores_max": 2048,
+  "register_reads_max": 96,
+  "row_cache_synchronizations_max": 24,
+  "delay_us": 500000,
+  "restore_on_wait_error": true,
+  "restore_readback_checked": true,
+  "mmio_writes": false,
+  "physical_pixels_accessed": false,
+  "hardware_permission": "pending R-005",
+  "undefined_symbols": [
+    "gBS"
+  ],
+  "sources": {
+    "EnumaPixelPreview.h": "a8448cface6bdc236ec33090e3097e06051930a91e104d686a941086b3928035",
+    "EnumaPixelPreviewArm.h": "b2ce10ba9a9296d14b31375c9c3eff451cc22cc3fbeadf577570313c684401ca"
+  },
+  "object_sha256": "d89d8296a558007337101dec089d2e98bb022bbded6f6f47aab0fcda6f59a714"
+}

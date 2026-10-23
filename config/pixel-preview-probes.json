@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "review": "R-005",
+  "status": "pending",
+  "firmware_commit": "c73eb6e18e3dcb49fb9bb39676aaf3179dcab17a",
+  "control": {
+    "step": 12,
+    "variant": "pixel-r005-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+  },
+  "preview": {
+    "step": 13,
+    "variant": "pixel-preview-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-pixel-preview"
+  },
+  "window": [
+    128,
+    8
+  ],
+  "saved_bytes": 4096,
+  "delay_us": 500000,
+  "pixel_stores_max": 2048,
+  "mmio_writes": false,
+  "new_memory_map": false,
+  "candidate_state": "not built at current source revision; old 4db47e7 control is archived offline evidence only"
+}

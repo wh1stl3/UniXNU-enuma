@@ -79,4 +79,4 @@ R-002候选清空、ABI或临时启动契约不满足即停、不换地址/扩�
 
 ## 下一次硬停前先落实文档（2026-10-24用户补充）
 
-用户明确“下一次硬停前落实所有文档”。每次新实机动作前，先把当前AGENTS、STATUS、HANDOFF、WORKLOG、DECISIONS、NEED-REVIEW、PENDING-HUMAN和适用的NEED-HUMAN/入口说明对齐并提交推送，不能只承诺以后补。STATUS/HANDOFF只留当前有效状态，历史阶段的“未执行/待恢复”保留于WORKLOG/operations而不叠加为当前结论。真实硬停仍必须当轮补齐原因/模式/候选摘要/恢复/继续条件，恢复后及时更新。此文档门禁不妨碍独立离线分析、测试和构建。
+用户先要求“下一次硬停前落实所有文档”，2026-10-24再次明确“下一轮实机验证之前落实所有文档”。每次新实机动作前，先把当前AGENTS、STATUS、HANDOFF、WORKLOG、DECISIONS、NEED-REVIEW、PENDING-HUMAN和适用的NEED-HUMAN/入口说明对齐并提交推送，不能只承诺以后补。STATUS/HANDOFF只留当前有效状态，历史阶段的“未执行/待恢复”保留于WORKLOG/operations而不叠加为当前结论。真实硬停仍必须当轮补齐原因/模式/候选摘要/恢复/继续条件，恢复后及时更新。此文档门禁不妨碍独立离线分析、测试和构建。

@@ -1,0 +1,8 @@
+{
+  "R-005": {
+    "status": "pending",
+    "scope": "Proposed 128x8 all-white 500000us pixel transaction, save/restore/verify; no register writes, new map or partitions",
+    "image_sha256": [],
+    "authorization": null
+  }
+}

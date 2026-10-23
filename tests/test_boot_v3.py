@@ -32,6 +32,11 @@ class BootV3Tests(unittest.TestCase):
         self.assertTrue(self.report['fixture_only'])
         verify(self.data, self.kernel, self.ramdisk)
 
+    def test_review_tag_is_preserved_without_granting_readiness(self):
+        report=package(self.directory/'fixture.raw',self.directory/'ramdisk',self.directory/'review.fixture.img',fixture=True,hardware_review='R-005')
+        self.assertEqual(report['hardware_review'],'R-005')
+        self.assertFalse(report['hardware_ready'])
+
     def test_truncated(self):
         for cut in (0, 43, 1579, 4095, 4096, len(self.data)-1):
             with self.assertRaises(ValueError): verify(self.data[:cut], self.kernel, self.ramdisk)
