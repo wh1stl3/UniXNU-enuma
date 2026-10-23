@@ -15,7 +15,7 @@ def main(config_name='gop-split-probes.json',report_name='enuma-gop-core-split.j
     checkout_commit=subprocess.check_output(['git','-C',str(ROOT/'firmware'),'rev-parse','HEAD'],text=True).strip()
     assert config['firmware_commit']==pin['commit']
     assert config['transport']=='core-warning-v2'
-    assert [x['step'] for x in config['profiles']] in ([0,1],[2,5],[3,8],[3,9],[3,10],[9,10],[10,11])
+    assert [x['step'] for x in config['profiles']] in ([0,1],[2,5],[3,8],[3,9],[3,10],[9,10],[10,11],[10,12])
     wanted={}
     for name,sha in pin['file_sha256'].items():
         raw=((ROOT/'firmware'/name).read_bytes() if checkout_commit==pin['commit'] else

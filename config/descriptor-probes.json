@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "scope": "Read-only first bounded descriptor hypothesis, not pixel or IOVA proof",
+  "firmware_commit": "7dc3bf19c2997d7203e305697564e7a2586b57cd",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "id": "same-source-format-control",
+      "step": 10,
+      "variant": "descriptor-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "id": "bounded-descriptor-predicate",
+      "step": 12,
+      "variant": "descriptor-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "hardware_order": "First reconcile/commit/push current documentation, then full gate and control recovery/no-button confirmation; only then consider step12 with a fresh gate. Actual timeout stops additional boots and records recovery/handoff in the same turn. Controlled predicate rejection is not a hard-stop.",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "first_individually_bounded_candidate_only": true,
+  "active_pipe_or_iova_identity_proven": false
+}

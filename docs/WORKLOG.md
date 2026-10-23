@@ -148,3 +148,6 @@
 
 
 固件文档主分支2b3849a已推送，修正README/构建归属和历史说明；设备代码有意固定7dc3bf1以完成同源重建，子模块中的README/AGENTS属于该提交历史快照，当前工作规则与状态以本仓及固件主分支文档为准。
+
+
+2026-10-24 · 全套当前文档7c6e1c6及固件文档2b3849a已推送。7dc3bf1 step10/step12完整构建/AutoGen与静态库/原OEM/FD/Boot v3/候选资格/同源bundle均通过，尚未上机。先提交本次资格状态再同源step10门禁，见operations/2026-10-24-bounded-descriptor.md。
