@@ -12,6 +12,8 @@ class PixelProfileTests(unittest.TestCase):
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','14','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','15','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','16','--diagnostic-gop-query','1'],
+            ['--diagnostic-pixel-preview','--diagnostic-gop-step','17','--diagnostic-gop-query','1'],
+            ['--diagnostic-pixel-preview','--diagnostic-gop-step','18','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','13','--diagnostic-gop-query','2'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-query','1'],
             ['--diagnostic-pixel-preview','--diagnostic-gop-step','13','--diagnostic-gop-query','1']]:

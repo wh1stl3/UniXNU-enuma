@@ -120,7 +120,7 @@ def main():
         if reads!=['0xae6b800','0xae6c000'] or writes:
             raise ValueError('packaged DSI code does not match two read-only target accesses: '+repr((reads,writes)))
         report['dsi_timing_code']={'provider_pe_sha256':digest(payloads[0]),'static_target_loads':reads,'static_target_stores':writes,'scope':'constant-address accesses in actual packaged PE; not runtime proof','hardware_execution':False}
-    if build.get('diagnostic_gop_step') in (15,16):
+    if build.get('diagnostic_gop_step') in (15,16,17,18):
         from audit_dsi_counter_code import audit_counter_code
         payloads=pe_payloads.get('SimpleFbDxe',[])
         if len(payloads)!=1:raise ValueError('DSI counter provider PE missing or ambiguous')

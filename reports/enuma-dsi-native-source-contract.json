@@ -1,0 +1,16 @@
+{
+  "scope": "fixed Xiaomi read-path contract and existing saved enuma mapping; no runtime observation",
+  "commit": "52a2f180865f8368828985d6384130acd093fa93",
+  "catalog_header_url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_catalog.h",
+  "catalog_header_sha256": "9f62423fd22fc515d6295dea0417547ce0ff5244e5ecb58f599f9d6eed35161f",
+  "version_major_shift": 28,
+  "kona_major": 6,
+  "core_revision_offset": 0,
+  "intf_status_offset": "0x26c",
+  "frame_count_offset": "0xac",
+  "count_enable_offset": "0xa8",
+  "existing_mapping_base": "0xae00000",
+  "existing_mapping_length": "0x85000",
+  "native_status_reads_counts_without_testing_enable_equal_3": true,
+  "register_writes": false
+}

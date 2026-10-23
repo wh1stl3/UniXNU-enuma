@@ -8,7 +8,7 @@ from collections import deque
 
 def audit_counter_code(payload,assembly,step):
     bases=(0xae6b800,0xae6c000)
-    assert struct.pack('<QQ',*bases) in payload,'DSI base table absent in PE'
+    if step!=17:assert struct.pack('<QQ',*bases) in payload,'DSI base table absent in PE'
     pe=struct.unpack_from('<I',payload,0x3c)[0]
     count=struct.unpack_from('<H',payload,pe+6)[0]
     section=pe+24+struct.unpack_from('<H',payload,pe+20)[0]
@@ -46,7 +46,7 @@ def audit_counter_code(payload,assembly,step):
         access=re.search(r'\[x(\d+)(?:, #(-?(?:0x[0-9a-f]+|\d+)))?\]',args)
         if access and access[1] in values:
             targets={v+int(access[2] or '0',0) for v in values[access[1]]}
-            target=targets & {b+off for b in bases for off in (0,0xa8,0xac)}
+            target=targets & ({b+off for b in bases for off in (0,0xa8,0xac,0x26c)}|{0xae00000})
             if target:
                 if op in ('ldr','ldur'):reads.update(target);sites.add(line)
                 elif op.startswith('st'):stores.update(target)
@@ -74,8 +74,10 @@ def audit_counter_code(payload,assembly,step):
             # sets above eight values to unknown to bound loop analysis.
             merged={k:previous[k]|values[k] for k in previous.keys() & values.keys() if len(previous[k]|values[k])<=8}
             if merged!=previous:states[target]=merged;queue.append(target)
-    wanted={b+off for b in bases for off in ((0,0xa8) if step==15 else (0,0xa8,0xac))}
+    offsets={15:(0,0xa8),16:(0,0xa8,0xac),17:(0x26c,),18:(0,0xa8,0xac,0x26c)}[step]
+    wanted={b+off for b in bases for off in offsets}
+    if step>=17:wanted.add(0xae00000)
     assert reads==wanted and not stores,(reads,stores,wanted)
-    waits=len(wait_sites);assert waits==(1 if step==16 else 0),waits
-    if step==16:assert re.search(r'cmp\s+w\d+, #64',assembly),'delta bound absent'
-    return dict(scope=__doc__,static_possible_target_loads=sorted(hex(v) for v in reads),static_target_stores=sorted(hex(v) for v in stores),recognized_mmio_sites=sorted(sites),wait_100000_call_sites=waits,delta_64_comparison=step==16,entry_rva=hex(entry),reachable_instruction_count=len(states),complete_indirect_access_or_control_flow_proof=False,hardware_execution=False)
+    waits=len(wait_sites);assert waits==(1 if step in (16,18) else 0),waits
+    if step in (16,18):assert re.search(r'cmp\s+w\d+, #64',assembly),'delta bound absent'
+    return dict(scope=__doc__,static_possible_target_loads=sorted(hex(v) for v in reads),static_target_stores=sorted(hex(v) for v in stores),recognized_mmio_sites=sorted(sites),wait_100000_call_sites=waits,delta_64_comparison=step in (16,18),entry_rva=hex(entry),reachable_instruction_count=len(states),complete_indirect_access_or_control_flow_proof=False,hardware_execution=False)

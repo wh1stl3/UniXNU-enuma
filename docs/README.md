@@ -1,5 +1,5 @@
 # 文档入口
 
-STATUS为当前唯一状态，HANDOFF接手快照，AGENTS持久规则；WORKLOG/DECISIONS/operations保留历史。固件f6c59ba的step15/step16计数只读探针，五份完整离线资格通过；实测结果与下一步以STATUS及enuma-dsi-counters-device.json为准。R-005 consumed；Boot v3保持；未进入XNU。
+STATUS当前唯一真相，HANDOFF接手快照，AGENTS持久规则，WORKLOG/DECISIONS/operations保留历史。当前固件60f38e9，step17原生状态及step18双窗递增三份完整离线资格通过；实际结果和下一步见STATUS与enuma-dsi-native-device.json。R-005 consumed，Boot v3保持。
 
-每笔前对齐提交推送全部当前文档，再核验身份/备份/恢复；用户已授权直接只读实测并可在场恢复。必要前后截图，实际输出/恢复时录像。源码及资格见firmware/docs/dsi-counters.md、config/dsi-counters-probes.json、reports/enuma-dsi-counters-*.json；参考仓评估见operations/2026-10-24-tlrenhb-reference-evaluation.md。
+用户要求取得有效增量且可在场恢复；每笔前落实提交推送所有当前文档，再即时身份/备份/恢复。必要截图，实际输出/恢复才录像。实现来源见firmware/docs/dsi-native-progress.md，资格见reports/enuma-dsi-native-*.json。

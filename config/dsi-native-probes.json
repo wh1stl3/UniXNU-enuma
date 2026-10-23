@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "firmware_commit": "60f38e9eee70151c09d4fe30bc992ee6835f9b79",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "native-active",
+      "step": 17,
+      "query": 1,
+      "variant": "native-active-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "native-progress",
+      "step": 18,
+      "query": 1,
+      "variant": "native-progress-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "native-no-progress",
+      "step": 18,
+      "query": 2,
+      "variant": "native-no-progress-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-dsi-native-host.json",
+  "maximum_dsi_reads": 26,
+  "wait_calls_max": 2,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "requires_same_interface_two_windows": true,
+  "wrap_allowed": false,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

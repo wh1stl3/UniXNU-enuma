@@ -36,10 +36,12 @@ def main():
   fd=(snap/'SILICIUM_UEFI.fd').read_bytes();assert sha(fd)==b['fd_sha256']==audit['fd_sha256']
   if profile['step']==14:
    assert audit['dsi_timing_code']['static_target_loads']==['0xae6b800','0xae6c000'] and not audit['dsi_timing_code']['static_target_stores']
-  if profile['step'] in (15,16):
-   code=audit['dsi_counter_code'];offsets=(0,0xa8) if profile['step']==15 else (0,0xa8,0xac)
-   assert code['static_possible_target_loads']==sorted(hex(base+off) for base in (0xae6b800,0xae6c000) for off in offsets) and not code['static_target_stores']
-   assert code['wait_100000_call_sites']==(1 if profile['step']==16 else 0)
+  if profile['step'] in (15,16,17,18):
+   code=audit['dsi_counter_code'];offsets={15:(0,0xa8),16:(0,0xa8,0xac),17:(0x26c,),18:(0,0xa8,0xac,0x26c)}[profile['step']]
+   targets=[hex(base+off) for base in (0xae6b800,0xae6c000) for off in offsets]
+   if profile['step']>=17:targets.append('0xae00000')
+   assert code['static_possible_target_loads']==sorted(targets) and not code['static_target_stores']
+   assert code['wait_100000_call_sites']==(1 if profile['step'] in (16,18) else 0)
   image=ROOT/'out/boot-candidate'/(variant+'-boot-v3.img');raw=image.read_bytes();meta=read(image.with_suffix('.json'))
   assert sha(raw)==meta['image_sha256'] and not meta['fixture_only'] and meta.get('hardware_review') is None
   assert raw[:8]==b'ANDROID!' and struct.unpack_from('<I',raw,40)[0]==3

@@ -1,0 +1,10 @@
+{
+  "scope": "actual native step18 PE/disassembly and three negative auditor-input mutations; no firmware execution",
+  "all_passed": true,
+  "recognized_target_loads": 9,
+  "negative_cases": [
+    "wrong-base-table",
+    "MMIO-store",
+    "wrong-wait"
+  ]
+}
