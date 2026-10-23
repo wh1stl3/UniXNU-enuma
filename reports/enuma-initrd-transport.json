@@ -1,0 +1,39 @@
+{
+  "scope": "retained stock headers and historical Android FDT only; not temporary UEFI candidate",
+  "stock_backups": {
+    "boot_a.bin": {
+      "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+      "partition_bytes": 201326592
+    },
+    "vendor_boot_a.bin": {
+      "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+      "partition_bytes": 100663296
+    }
+  },
+  "stock_boot": {
+    "version": 3,
+    "kernel_bytes": 54839312,
+    "generic_ramdisk_bytes": 50122422
+  },
+  "stock_vendor_boot": {
+    "version": 3,
+    "page_bytes": 4096,
+    "vendor_ramdisk_bytes": 2230,
+    "dtb_bytes": 1613832
+  },
+  "android_fdt": {
+    "captured_at": "2026-10-23T15:18:10.084895+08:00",
+    "sha256": "fd2b74dcc6d0022c20e58e8d3b39f061111c722dd03a5704d97bacb70dc674f6",
+    "initrd_start": "0xad031000",
+    "initrd_end": "0xafffe76c",
+    "initrd_bytes": 50124652,
+    "length_mod_512": 364,
+    "delta_from_declared_ramdisk_sum": 0
+  },
+  "whole_initrd_sector_precondition_met_for_historical_android": false,
+  "temporary_candidate_chosen_observed": false,
+  "candidate_fat_offset_known": false,
+  "readable_uefi_memory_span_established": false,
+  "new_device_trials": 0,
+  "conclusion": "Do not infer candidate initrd geometry, FAT offset, ownership or discovery from this Android snapshot"
+}

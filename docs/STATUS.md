@@ -10,6 +10,8 @@
 
 新增64MiB配置专用FAT32（唯一标签/仅reset，无kernel/EFI），官方write_volume加经过FAT双表校验的空闲簇清理后，两次产物逐字节一致、mdir与mcopy回读通过；未打包boot或接入固件publisher，菜单倒计时不是复位保障。新增固定sheng通用builder配方与macOS platform模式，顺序构建真实crypto/pthread/ArmDTPlatform/ArmCpu归档后按既有defconfig链接，尚待实际CI结果。53项Python和六份配方检查通过。见[本轮实现](operations/2026-10-23-discovery-volume-platform-link.md)。
 
+首轮平台CI39926725474/head a801314：通用bootstrap及前三归档步骤通过，第4步ArmDTPlatform因Apple Clang未知warning开关在-Werror下失败，未平台链接。已补只移除该开关的精确补丁，保留其他warning/Werror，原sheng源码不变；隔离副本严格apply/输出hash通过，待重跑。见[首次失败](../reports/enuma-platform-kernel-first-failure.json)。离线重核原boot/vendor_boot备份SHA及保存的Android FDT：历史initrd为50124652B，恰等于generic50122422+vendor2230，mod512=364；不能直接套整段initrd块发布器，更不能推出临时候选FAT偏移/范围。[本机运输证据](../reports/enuma-initrd-transport.json)不含新设备查询。
+
 新增[系统卷/内核/用户态路线](operations/2026-10-23-system-kernel-userland-roadmap.md)及离线审计器，12份固定源码逐字节Git blob比对通过。区分FAT载荷、OS/SystemOS只读窗口和Data；确认本机载荷发现尚未闭合、缺GPT/UUID/完整ADT/prelink，NativeUfs含SM8550参数且当前禁用，原生root载荷检查要求尚未接入的PMGR契约。固定userdata dry-run不做展开后容量比较，不能当容量通过。优先复用通用工具/布局/校验算法，同SM8250固件只作依赖参考，不复制外板参数。未下载大DMG/构建系统卷/写分区，未触发新内存或破坏性操作审批；详见[审计报告](../reports/enuma-system-roadmap-audit.json)。
 
 新增独立EnumaScreen受控GOP Blt后端，复用锁定DarwinBoot字模，可显示阶段、完整64位EFI状态、GOP字段与内存摘要快照。每行一次Blt、显式写门禁、caller持有有界scratch、模式/错误锁存及重入拒绝；不解引用物理帧缓冲。真实Mu头的host ASan/UBSan与AArch64 COFF编译通过，合成预览已检查。**尚未集成固件、未完成全链接、未上屏**；对象有memset依赖，需接入时验证。今晚三候选和82ce8a5源锁不变，bundle复查通过。见[后端与接入条件](operations/2026-10-23-bounded-screen-renderer.md)。

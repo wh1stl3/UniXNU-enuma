@@ -139,3 +139,5 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 2026-10-23系统预研：仅审计既有固定源码与规划FAT/内核/APFS/Data/用户态，未写入新几何、内存数值或启用verified，无新增待批项。以后覆盖userdata或开启持久Data须先整理具体备份/恢复/边界方案；本预研不是破坏性分区授权。见operations/2026-10-23-system-kernel-userland-roadmap.md。
 
 2026-10-23系统主线实施：仅生成本地FAT配置卷并接入待运行的CI平台归档链接，无新内存配置、verified或设备写入，无新增审批项。FAT尚无运输/发布闭环，不自动组成启动候选；10秒菜单动作不是异步复位保护。见operations/2026-10-23-discovery-volume-platform-link.md。
+
+2026-10-23首轮CI编译开关兼容修复及历史initrd审查：仅本仓构建副本精确移除未知warning选项，不改驱动/物理配置或设备；无新增审批项。历史Android整段initrd非512对齐，临时候选实际边界仍未知，保持不发布/不启动。

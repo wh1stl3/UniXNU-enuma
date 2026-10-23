@@ -15,6 +15,8 @@ def sha(path):
 
 def checked_inputs(source, sheng):
     lock = json.loads((ROOT / 'config/kernel-archives.lock.json').read_text())
+    if sha(ROOT / lock['staged_recipe_patch']['path']) != lock['staged_recipe_patch']['sha256']:
+        raise ValueError('Staged recipe patch hash changed')
     for entry in lock['inputs']:
         base = source if entry['source'] == 'UniXNU' else sheng
         actual = subprocess.check_output(['git', '-c', f'safe.directory={base.as_posix()}',
@@ -26,6 +28,17 @@ def checked_inputs(source, sheng):
         if blob != (base / entry['path']).read_bytes():
             raise ValueError('Archive recipe differs from Git blob')
     return lock
+
+
+def stage_recipe(source, sheng, lock):
+    staged = source / 'scripts/enuma-build-arm-driver.py'
+    staged.write_bytes((sheng / 'scripts/build-arm-driver.py').read_bytes())
+    patch = ROOT / lock['staged_recipe_patch']['path']
+    subprocess.run(['git', '-C', str(source), 'apply', '--check', str(patch)], check=True)
+    subprocess.run(['git', '-C', str(source), 'apply', str(patch)], check=True)
+    if sha(staged) != lock['staged_recipe_patch']['output_sha256']:
+        raise ValueError('Staged generic recipe differs from reviewed patch output')
+    return staged
 
 
 def build(source, evidence, env, report, save):
@@ -41,9 +54,9 @@ def build(source, evidence, env, report, save):
     subprocess.run(['git', '-C', str(sheng), 'fetch', '--depth', '1', 'origin', reference['commit']], check=True)
     subprocess.run(['git', '-C', str(sheng), 'checkout', '--detach', 'FETCH_HEAD'], check=True)
     lock = checked_inputs(source, sheng)
-    # Only this unchanged generic recipe is staged. No sheng board/config/addresses.
-    staged = source / 'scripts/enuma-build-arm-driver.py'
-    staged.write_bytes((sheng / 'scripts/build-arm-driver.py').read_bytes())
+    # Only the generic recipe plus the hash-locked compiler compatibility patch.
+    # No sheng board/config/addresses are imported.
+    staged = stage_recipe(source, sheng, lock)
     report['archive_recipe_lock'] = lock
     report['staged_generic_recipe_sha256'] = sha(staged)
     records = ['iokit/DEVELOPMENT/IOPlatformExpert.cpo.json', 'osfmk/DEVELOPMENT/prng_random.o.json']

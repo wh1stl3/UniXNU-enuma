@@ -64,5 +64,11 @@
     "build/libpthread-kernel/libpthread_kernel.a",
     "build/armdt-platform/libArmDTPlatform.a",
     "build/armcpu/libArmCpu.a"
-  ]
+  ],
+  "staged_recipe_patch": {
+    "path": "patches/kernel/0001-apple-clang-driver-warning.patch",
+    "sha256": "012b55ef34052083dd2ee27a9b9ec81a779c6d3619dbbace435ecf9c14f4e009",
+    "output_sha256": "fe7143534150dbe58bd46dbfc87dd6fac2e8e2e1ab8c59a6ba36c9664f9540de",
+    "reason": "Apple Clang 17 rejects -Wno-unnecessary-virtual-specifier under -Werror; keep all supported warnings and -Werror"
+  }
 }

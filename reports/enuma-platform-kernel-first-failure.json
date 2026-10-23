@@ -1,0 +1,50 @@
+{
+  "scope": "actual first platform CI failure; partial source archive builds only",
+  "run_id": 39926725474,
+  "head_sha": "a801314d3cd1c22827d650e660dc155c6f8809ae",
+  "url": "https://github.com/wh1stl3/UniXNU-enuma/actions/runs/39926725474",
+  "status": "failed",
+  "error": "Archive step 4 failed",
+  "bootstrap_build_and_audit_passed": true,
+  "archive_steps": [
+    {
+      "recipe": [
+        "build-corecrypto-14.py"
+      ],
+      "exit_code": 0,
+      "log": "platform-archive-01.log"
+    },
+    {
+      "recipe": [
+        "build-corecrypto-14.py",
+        "--namespace"
+      ],
+      "exit_code": 0,
+      "log": "platform-archive-02.log"
+    },
+    {
+      "recipe": [
+        "build-libpthread-kernel.py"
+      ],
+      "exit_code": 0,
+      "log": "platform-archive-03.log"
+    },
+    {
+      "recipe": [
+        "enuma-build-arm-driver.py",
+        "ArmDTPlatform"
+      ],
+      "exit_code": 1,
+      "log": "platform-archive-04.log"
+    }
+  ],
+  "log_sha256": {
+    "platform-archive-01.log": "d7d092a49007486d63f51d0eba09f8589945c78ce95acc17ed41be184929e80d",
+    "platform-archive-02.log": "7f2ad6e1d55abb196e9c8c08767eff66423a9af353b68ccab2153f36a737cc2d",
+    "platform-archive-03.log": "5a16239f409b90e935f397e80ce2f65e83146f7c3f5a21c02533692a681487ad",
+    "platform-archive-04.log": "74d662aa2f47969d9135c853e527338fecd2161c40fabe740e43864ed35dd833"
+  },
+  "failure": "Apple Clang rejects -Wno-unnecessary-virtual-specifier with -Werror",
+  "platform_kernel_link_performed": false,
+  "new_device_trials": 0
+}

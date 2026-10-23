@@ -24,9 +24,25 @@ enuma现有Include/UniXNU.dsc.inc已有UniXNULib/FdtLib及Probe、UniXNU、UniXN
 
 先在屏幕诊断可用后采集当前候选的实际x0/FDT/chosen与UEFI map，再选运输路径。Android历史chosen仅为对照。若整段是组合initrd，须取得准确受保留的FAT范围和适当发布契约；单纯长度凑整或扫描任意物理内存不作为方案。
 
+### 既有Android范围的本机离线核对
+
+新增scripts/audit_enuma_initrd_transport.py，只读取2026-10-22已备份的boot_a/vendor_boot_a和15:18 UART发现保存的Android FDT；先重算两分区备份SHA与既有FDT SHA。没有ADB调用，也未把原始FDT或启动镜像提交Git。根model为Qualcomm Technologies, Inc. xiaomi enuma，compatible仍是qcom,kona-mtp/qcom,kona/qcom,mtp；不是假定有xiaomi,enuma兼容串。
+
+| 输入 | 结果 |
+| --- | --- |
+| 原厂boot | v3，kernel54839312B，generic ramdisk50122422B |
+| 原厂vendor_boot | v3，page4096，vendor ramdisk2230B，DTB1613832B |
+| 历史Android chosen | initrd长度50124652B，等于generic+vendor声明长度之和，mod512=364 |
+
+这份Android范围不满足固定sheng发布器的整扇区长度前置条件；不能因此宣称临时UEFI候选一定走同一组合分支或肯定发布失败。当前候选真实chosen、FAT偏移、可读/保留范围均未取得；报告明确标为unknown/false。下一步需要候选观测，不截掉2230字节、不取整向外读、不据此填板级地址。[脱敏报告](../../reports/enuma-initrd-transport.json)。
+
+```powershell
+& 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -X utf8 -B scripts/audit_enuma_initrd_transport.py --backup out/device-tests/20261022T201404 --fdt out/uart/20261023T151810/live-fdt.bin
+```
+
 ## 真实归档和平台链接CI
 
-新增config/kernel-archives.lock.json：固定6份配方/许可文件的Git版本及SHA；scripts/ci/platform_archives.py负责校验和顺序执行。ArmDTPlatform/ArmCpu复用sheng a599a1a8的通用scripts/build-arm-driver.py，完整原文件只暂存到本仓out/ci/macos/UniXNU/scripts/enuma-build-arm-driver.py，ROOT指向可写构建树；不复制sheng board、参数、其他专有驱动或上游源码进Git。
+新增config/kernel-archives.lock.json：固定6份配方/许可文件的Git版本及SHA；scripts/ci/platform_archives.py负责校验和顺序执行。ArmDTPlatform/ArmCpu复用sheng a599a1a8的通用scripts/build-arm-driver.py，原文件加下述精确兼容补丁只暂存到本仓out/ci/macos/UniXNU/scripts/enuma-build-arm-driver.py，ROOT指向可写构建树；不复制sheng board、参数、其他专有驱动或上游源码进Git。
 
 执行顺序：
 
@@ -44,3 +60,7 @@ macos-xnu.yml增加独立platform手动模式；preflight/bootstrap原语义保�
 ## 本地验证与执行边界
 
 53项Python测试通过；六份归档配方Git blob/SHA通过；FAT双构建/文件清单/回读通过。固件82ce8a5与晚间三候选不改，R-002仍停。无设备操作，无新增人工待办。macOS运行事实见随后补充或STATUS，不用计划冒充结果。
+
+首轮实际CI39926725474/head a801314：通用bootstrap通过，corecrypto plain/namespace和pthread三步通过，第4步ArmDTPlatform因Apple Clang不支持-Wno-unnecessary-virtual-specifier、配方-Werror而失败。原始日志/结果下载到out/ci-runs/39926725474，脱敏结构报告见reports/enuma-platform-kernel-first-failure.json。
+
+新增patches/kernel/0001-apple-clang-driver-warning.patch仅移除该不支持开关，保留-Werror与其余warnings；lock固定补丁及完整输出SHA，隔离副本严格git apply通过，参考源码未改。不使用-Wno-unknown-warning-option整体屏蔽未知参数。修复后CI需重跑，不能以本地补丁通过代替macOS构建。新增audit_enuma_platform_kernel.py供成功产物按run/head/配方/feature/摘要及锁定NativePrelink解析器独立核验普通ARM64/入口/TCR/平台符号；未取得成功产物前不运行成功审计或造报告。
