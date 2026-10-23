@@ -1,0 +1,82 @@
+{
+  "scope": "completed SimpleFb pre-entry 2/7/2 temporary boot comparison plus separate preboot identity abort",
+  "firmware_commit": "82ce8a53b6146df003414cf712237929348bbc57",
+  "attempts": [
+    {
+      "candidate_id": "simplefb-pre-2s",
+      "image_sha256": "6baf95968292746998d260810596d090b42ed28e991d3157866e93330a093bc4",
+      "runner_exit": 0,
+      "issued_at": "2026-10-23 18:27:42",
+      "boot_issued": true,
+      "phase_at_runner_end": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.065,
+      "boot_complete_seconds": 31.618,
+      "partition_digests_unchanged": true,
+      "video_sha256": "00510bb89195848494eac023bce2558aa4da782cee9f528c377429d8a4c8f7e4",
+      "video_frames": 254,
+      "video_decoded_frames": 254,
+      "camera_wall_seconds": 51.97289340000134
+    },
+    {
+      "candidate_id": "simplefb-pre-7s",
+      "image_sha256": "fea7478b6fe5556c26b3ca592a2c434fb0c881f4f15441685c5de19bc4de977b",
+      "runner_exit": 1,
+      "issued_at": null,
+      "boot_issued": false,
+      "phase_at_runner_end": "fastboot-identity-aborted",
+      "adb_return_seconds": null,
+      "boot_complete_seconds": null,
+      "partition_digests_unchanged": false,
+      "video_sha256": "e42fffd738de773aad45c94a02f20690327c0feef0d947ff92913b0db0b71825",
+      "video_frames": 118,
+      "video_decoded_frames": 118,
+      "camera_wall_seconds": 24.585244600020815
+    },
+    {
+      "candidate_id": "simplefb-pre-7s",
+      "image_sha256": "fea7478b6fe5556c26b3ca592a2c434fb0c881f4f15441685c5de19bc4de977b",
+      "runner_exit": 0,
+      "issued_at": "2026-10-23 18:31:06",
+      "boot_issued": true,
+      "phase_at_runner_end": "recovered-android-boot-complete",
+      "adb_return_seconds": 21.482,
+      "boot_complete_seconds": 34.527,
+      "partition_digests_unchanged": true,
+      "video_sha256": "8428a0a36a403f6005f1a517cda4df5240dc0124ac84f9a77b03c6600ad15a8e",
+      "video_frames": 261,
+      "video_decoded_frames": 261,
+      "camera_wall_seconds": 53.97220920003019
+    },
+    {
+      "candidate_id": "simplefb-pre-2s",
+      "image_sha256": "6baf95968292746998d260810596d090b42ed28e991d3157866e93330a093bc4",
+      "runner_exit": 0,
+      "issued_at": "2026-10-23 18:32:22",
+      "boot_issued": true,
+      "phase_at_runner_end": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.069,
+      "boot_complete_seconds": 32.175,
+      "partition_digests_unchanged": true,
+      "video_sha256": "55c7831e910abb7be3868b3204450cd857153948b334210e0f8b6d29d911fbac",
+      "video_frames": 252,
+      "video_decoded_frames": 252,
+      "camera_wall_seconds": 51.57476509996923
+    }
+  ],
+  "identity_abort_queries": "product/current-slot/unlocked missing/unknown for all five attempts; is-userspace=no on later query",
+  "abort_recovery": "normal fastboot reboot then enuma Android-complete/root/unlock/slot/original hashes; fresh next session passed full identity without weakening guard",
+  "recovered_after_every_actual_boot": true,
+  "flash_erase_slot_changes": false,
+  "new_device_trials": 3,
+  "boot_delay_comparison_complete": true,
+  "adb_deltas_seconds": {
+    "seven_minus_first_two": 5.417,
+    "seven_minus_last_two": 5.413,
+    "two_repeat_difference": 0.004
+  },
+  "simplefb_checkpoint_evidence": "2/7/2 delay response supports full-GUID SimpleFb PE call-before point20 reached; timing inference, not direct execution log",
+  "simplefb_body_or_gop_success_claimed": false,
+  "manual_keys": "user explicitly confirmed no keys during all three actual boots",
+  "phone_recording_required_now": false,
+  "next": "point21 PE entry-return probe; preserve metadata no-Blt and Probe early-return guards"
+}

@@ -4,9 +4,11 @@
 
 ## 当前状态
 
-**晚间第一笔early-control-2s已实测并自行恢复Android。** 用户明确授权启动镜像，先完成唯一enuma/解锁/槽_a/root/Android完成及原boot/vendor_boot摘要与备份/候选检查，再临时fastboot boot。18:24:02 +08发出，约16.134秒恢复ADB、30.613秒Android完成，root/原分区摘要通过，用户确认没有按键、设备自行返回。未flash/erase/改槽。外置Rapoo摄像头录像已保存并完整解码检查；抽查显示黑屏→小米标志→HyperOS→锁屏，未见UEFI诊断文字。只支持该候选可控返回，不证明SimpleFb/GOP或精确入口门命中。未追加其他镜像。
+**晚间SimpleFb完整GUID调用前2/7/2时序已完成，支持point20到达；返回探针正离线构建。** 三笔18:27:42/18:31:06/18:32:22 +08，ADB16.065/21.482/16.069秒，7减两端为5.417/5.413秒，2秒重复差0.004秒。均恢复Android完成/root/原boot与vendor_boot摘要；用户确认三次均无按键。无flash/erase/改槽。外置相机四段（含一次启动前拦截）完整解码通过，抽查无需辨读的UEFI文字，暂无需手机复现。
 
-最新设备核验为本次恢复；233a9d8首次黑屏须人工恢复的历史失败保留。详见[首笔实测](operations/2026-10-23-evening-early-control-result.md)、[脱敏结果](../reports/enuma-evening-early-control.json)。
+中途18:28一笔7秒准备因fastboot产品/槽/解锁五组查询不完整而拦截，未发送镜像。普通reboot恢复Android/root/原摘要后，重新建立会话并完整通过原门禁，才启动实际7秒；未弱化校验，异常根因未定。当前设备为最后2秒恢复核验后的Android。
+
+point20在PE包装器调用前，不是构造器/驱动主体或GOP成功；下一步point21返回探针保持禁绘制和Probe早退，正常Dispatcher完成7秒兜底不能救驱动内部卡死。233a9d8历史首次需人工恢复失败保持。见[整组实测](operations/2026-10-23-simplefb-guid-timing-result.md)、[脱敏结果](../reports/enuma-evening-simplefb-first-pass.json)。此前早期对照16.134/30.613秒自行恢复见原报告。
 
 ## 本轮结果
 
@@ -19,7 +21,7 @@
 
 ## 现有固件与晚间计划
 
-固件82ce8a5/50源锁不变，已有三候选：早期加载前2秒、完整SimpleFb GUID调用前2/7秒；晚上早期→2/7/2四次，末次严格复用同镜像。实际AArch64/官方core还原/30OEM/FD/192B BootShim/raw/v3及源/宏/摘要检查通过，其中early-control已完成一次可控返回实测，目标2/7/2尚未开始。正常Dispatcher完成7秒兜底不是异步看门狗，目标7秒与兜底单次不可区分。
+固件82ce8a5/50源锁不变，已有三候选：早期加载前2秒、完整SimpleFb GUID调用前2/7秒；晚上早期→2/7/2四次，末次严格复用同镜像。实际AArch64/官方core还原/30OEM/FD/192B BootShim/raw/v3及源/宏/摘要检查通过，early-control及目标2/7/2均已完成可控返回实测；目标时序支持调用前门到达。正常Dispatcher完成7秒兜底不是异步看门狗，目标7秒与兜底单次不可区分。
 
 SimpleFb已有配置重试/描述符跨度修复，真实Mu Configure/完整驱动/BootVideo host sanitizer与目标构建通过，未证明首次黑屏根因。默认原生33、无UFS32、SimpleFb30选择保持；metadata Blt禁绘制、Probe早退，现有三候选不会到菜单。EnumaScreen受控GOP Blt文本后端host sanitizer/AArch64对象通过，但无INF/FDF/调用者集成或全链接，memset运行时待核，尚未上屏。见[屏幕后端](operations/2026-10-23-bounded-screen-renderer.md)、[晚间计划](operations/2026-10-23-evening-validation-plan.md)。
 
@@ -37,4 +39,4 @@ FAT载荷、OS/SystemOS只读根镜像、Data分开；NativeUfs含SM8550硬件�
 
 下一轮离线审查donor解压Mach-O与预链接roots/依赖/AMFI入口/slide，并把已成功配方接回正式板级构建；不复制外板常量。实机开始时重新核对身份/备份/原摘要/在场恢复条件，按既有四次顺序逐次检查Android/root/分区摘要；任次无返回停追加先恢复。入口门命中不当作驱动/协议成功。候选实际x0/FDT/UEFI map取得前不接initrd发布；新内存/verified或破坏性分区操作仍按编号审查，无新待批准项。
 
-设备上一里程碑976a57d已推送，固件82ce8a5；本轮补充发布见Git/WORKLOG。参考仓只读，产物/原始设备数据仅out。
+设备上一里程碑1e1ab25已推送，固件82ce8a5；本轮补充发布见Git/WORKLOG。参考仓只读，产物/原始设备数据仅out。
