@@ -1,0 +1,108 @@
+{
+  "scope": "Offline source/DT plan after the one-shot preview; no device or MMIO calls.",
+  "all_passed": true,
+  "source_inputs": [
+    {
+      "local_path": "out/display-activity-sources/sde_hw_ctl.c",
+      "commit": "d066b4b959a95fd4686754ee82a7c6d21466b27c",
+      "url": "https://android.googlesource.com/kernel/msm/+/d066b4b959a95fd4686754ee82a7c6d21466b27c/drivers/gpu/drm/msm/sde/sde_hw_ctl.c?format=TEXT",
+      "sha256": "7f1bd6eb204d06f93d634852e9605eb350e99db290c016cf1e1ef740659c3c61"
+    },
+    {
+      "local_path": "out/display-activity-sources/sde_hw_intf.c",
+      "commit": "d066b4b959a95fd4686754ee82a7c6d21466b27c",
+      "url": "https://android.googlesource.com/kernel/msm/+/d066b4b959a95fd4686754ee82a7c6d21466b27c/drivers/gpu/drm/msm/sde/sde_hw_intf.c?format=TEXT",
+      "sha256": "5b6937847c026539c3d59f83ae168df3114444879c27c50adb8a81733f8cf387"
+    },
+    {
+      "local_path": "out/display-activity-sources/sde_hw_pingpong.c",
+      "commit": "d066b4b959a95fd4686754ee82a7c6d21466b27c",
+      "url": "https://android.googlesource.com/kernel/msm/+/d066b4b959a95fd4686754ee82a7c6d21466b27c/drivers/gpu/drm/msm/sde/sde_hw_pingpong.c?format=TEXT",
+      "sha256": "51c47de7f095186d387821409fb8ac72cb5960c970af2356b5bf8d571ce195f8"
+    },
+    {
+      "local_path": "out/display-activity-sources/sde_encoder_phys_cmd.c",
+      "commit": "d066b4b959a95fd4686754ee82a7c6d21466b27c",
+      "url": "https://android.googlesource.com/kernel/msm/+/d066b4b959a95fd4686754ee82a7c6d21466b27c/drivers/gpu/drm/msm/sde/sde_encoder_phys_cmd.c?format=TEXT",
+      "sha256": "f6eac5382b1a3b87a37a99db72a96b8e4e1269ce735fe6cf5fae332d03cc4f93"
+    },
+    {
+      "local_path": "out/display-activity-sources/sde_encoder_phys_vid.c",
+      "commit": "d066b4b959a95fd4686754ee82a7c6d21466b27c",
+      "url": "https://android.googlesource.com/kernel/msm/+/d066b4b959a95fd4686754ee82a7c6d21466b27c/drivers/gpu/drm/msm/sde/sde_encoder_phys_vid.c?format=TEXT",
+      "sha256": "35bce33d8c47a13bfd02b6a6e5405bb366a4797fe8906b1e307e06f7a33186fa"
+    },
+    {
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Silicon/Qualcomm/QcomPkg/Drivers/SimpleFbDxe/SimpleFbDxe.c",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Silicon/Qualcomm/QcomPkg/Drivers/SimpleFbDxe/SimpleFbDxe.c",
+      "sha256": "9f4f2aa95d8358d78f15000c6750163bae5050b280bff4e88c6f4100d32cc5f5"
+    },
+    {
+      "local_path": "out/reference-audit/edk2-porting/edk2-msm/Platform/Xiaomi/sm8250/elish.dsc",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Xiaomi/sm8250/elish.dsc",
+      "sha256": "a54dca5dcfab109aa1bd7e13ac7cc0e1669c15efa762ffb27655a921bca33469"
+    }
+  ],
+  "saved_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "mdp_node": "/soc/qcom,mdss_mdp@ae00000",
+  "mdp_base": "0xae00000",
+  "dt_length": "0x84208",
+  "existing_r004_mapping_length": "0x85000",
+  "default_panels": [
+    {
+      "display_node": "/soc/qcom,dsi-display-primary",
+      "panel_node": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video",
+      "declared_name": [
+        "xiaomi 42 02 0a video mode dual dsi cphy panel"
+      ],
+      "declared_mode": [
+        "dsi_video_mode"
+      ],
+      "meaning": "saved DT default only; not live panel/bootloader route proof"
+    }
+  ],
+  "dsi_interfaces": [
+    {
+      "block_offset": "0x6b800",
+      "register_addresses": {
+        "timing_engine": "0xae6b800",
+        "count_enable": "0xae6b8a8",
+        "frame_count": "0xae6b8ac",
+        "line_count": "0xae6b8b0"
+      }
+    },
+    {
+      "block_offset": "0x6c000",
+      "register_addresses": {
+        "timing_engine": "0xae6c000",
+        "count_enable": "0xae6c0a8",
+        "frame_count": "0xae6c0ac",
+        "line_count": "0xae6c0b0"
+      }
+    }
+  ],
+  "same_soc_reuse": {
+    "device": "elish / SM8250",
+    "decision": "reuse source separation and metadata/cache review only; its SetMode returns success without programming the display, so copying it does not establish a running panel",
+    "no_board_values_imported": true
+  },
+  "proposed_first_probe": {
+    "scope": "two DSI TIMING_ENGINE_EN read-only values; classify only configured timing enable, not active scanout",
+    "maximum_register_reads": 2,
+    "new_mapping": false,
+    "pixel_access": false,
+    "counter_writes": false,
+    "hardware_executed": false
+  },
+  "subsequent_counter_probe_conditions": [
+    "Confirm timing-enable first",
+    "Observe FRAME_LINE_COUNT_EN without changing it; disabled counters cannot rule out a running interface",
+    "Counter delta requires two bounded samples and explicit wrap/enable checks; a single frame count can be stale",
+    "CTL/layer routing, physical/IOVA translation, panel/backlight and visible output remain separate unknowns"
+  ],
+  "no_new_firmware_candidate": true,
+  "pixel_replay_authorized": false,
+  "xnu_entered": false
+}

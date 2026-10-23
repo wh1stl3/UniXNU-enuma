@@ -1,0 +1,15 @@
+# R-005后续：先区分描述存在与DSI时序使能
+
+R-005单次实验已无按键返回Android/root/原分区摘要，视频未确认白条；白点由用户确认为键盘反光。当前没有恢复故障。不能据此选定“不活动描述”“IOVA”“缓存错误”“面板关闭”中的任一项为根因，不能重放已消耗的像素授权。
+
+本轮继续离线审查固定Qualcomm MSM提交d066b4b959a95fd4686754ee82a7c6d21466b27c的五份SDE实现，以及elish/SM8250的edk2-porting/edk2-msm@e1952621f419f8db60ed28271264e1b5184c571d。源码只缓存out，不复制进设备或固件源码；固定URL、SHA及许可范围见config/display-activity-sources.lock.json。运行 `scripts/audit_display_activity_plan.py` 完成源锁、实际定义、保存的本机FDT、界限及同SoC实现审计，报告reports/enuma-display-activity-plan.json。
+
+Qualcomm sde_hw_intf.c:20/47..49定义TIMING_ENGINE_EN、FRAME_LINE_COUNT_EN、FRAME_COUNT、LINE_COUNT；370..382的状态函数先读取时序使能，仅使能时取得计数。由此可先观察时序是否配置使能；单个非零计数仍可能是历史值，计数未变也可能是计数功能未开启。不能通过写使能位来“辅助验证”。sde_hw_ctl.c还分别提供CTL_INTF_ACTIVE与CTL_TOP路径，版本/feature选择不同，不能在缺少硬件版本证据时任取一套位布局来宣称路由正确。
+
+保存的enuma活动FDT（SHA643aa3ec…34c62）给出MDP base0xae00000/length0x84208，INTF偏移0x6b000/0x6b800/0x6c000/0x6c800，类型dp/dsi/dsi/dp。默认panel节点声明dsi_video_mode，但节点名称与面板模式只属于保存的DT配置，不等于此时物理面板或自定义UEFI内的运行状态。最小下一探针可只读取两个DSI的TIMING_ENGINE_EN，即0xae6b800与0xae6c000，最多两读，均在原R-004的0x85000映射及实际DT有效区内；先用同源step12对照与互补返回分类，不写像素/寄存器、不改映射或内存字段。
+
+两个DSI使能位不等于选中SSPP已接入混合器，也不等于物理地址与IOVA一致或面板/背光已运行。若下一轮需要计数增量，先只读count-enable，再在有界时间内两次采样并处理回绕；未开启计数的分支必须记为无法判定。R-005只有单组短返回，目标EFI_STATUS与地址数值没有独立早期日志，仍不宣称真实像素保存/恢复读回已证明。
+
+同SoC elish的SimpleFbDxe.c中DisplaySetMode直接返回EFI_SUCCESS；其入口按给定宽高/地址填GOP，清整屏并同步缓存，没有在该SetMode中初始化显示管线。可复用职责分离和缓存审查思路，不能用它解决尚未证明的显示供电/路由，也不能移植整屏清零或把1600x2560假设当enuma的实际scanout。此前step11已拒绝固定几何假设，保持该证据不变。
+
+本轮仅完成离线审计与可审查的两读计划，尚未实现/构建新的固件探针、未新增设备动作。下一步按计划集成新的默认只读阶段及主机/AArch64/同源完整构建资格，再落实并推送全部当前文档后实测；新像素范围仍另行明确，不复用consumed授权。iPadOS/XNU未进入，原51MiB heap/512MiB owned/example/verified和所有分区保持原约定。

@@ -172,3 +172,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 01:20:42 · 已推送资格80df13a后临时启动c73eb6e step12，image d656b861…f7b0d5，ADB15.875秒/完成32.281秒；用户明确全程没有按键，Android/root/原槽/解锁与原分区摘要通过。未执行step13；下一笔前先提交推送当前文档。证据reports/enuma-r005-device.json及out/pixel-r005-control-device.log。
 
 2026-10-24 01:22:45 · 文档/对照eeee7da已推送后，连续录像执行c73eb6e R-005 step13唯一一次；image c81def7d…5df534，ADB16.953秒/完成30.312秒，Android/root/原槽/原摘要通过，用户确认全程无按键。245帧全部解码、最大间隔0.219秒，早期15.98..22.78秒逐帧检查未确认白条；用户说明白点为键盘反光。视频SHA3d18a250…c470c。账本consumed阻止重复使用，无恢复硬停；继续离线同SoC显示handoff/活动路由分析。证据reports/enuma-r005-device.json及out/camera-capture/20261024T012224-pixel-preview-r005。
+
+2026-10-24 · 设备实测f99330c及固件结果文档f79e07c已推送。继续离线固定五份Qualcomm SDE源文件、elish/SM8250 SimpleFb与保存enuma FDT，审计通过并形成现有映射内两读DSI时序使能计划；无像素/寄存器/设备动作，无内存/verified变更，尚未生成新固件。证据reports/enuma-display-activity-plan.json及operations/2026-10-24-display-activity-plan.md。
