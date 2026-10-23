@@ -1,0 +1,66 @@
+{
+  "scope": "step2 temporary boot returned; step3 timed out and manually recovered; stop additional device probes",
+  "firmware_commit": "e2868342daee0c196942f1a5569526d3ecb80850",
+  "timezone": "Asia/Shanghai",
+  "tests": [
+    {
+      "step": 2,
+      "variant": "gop-core-handle-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "qualification": {
+        "variant": "gop-core-handle-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+        "step": 2,
+        "selector": 1,
+        "firmware_commit": "e2868342daee0c196942f1a5569526d3ecb80850",
+        "image_sha256": "cde55592a552ccfdbcb45e90579269ecbd14588d8bf1a08a0060181ac132cb57",
+        "fd_sha256": "7d6345e5193545b91e2c3f243f1b48feb98b787fb0796278e8b77028bccbcbca",
+        "all_checks_passed": true,
+        "source_inputs_match_step0": true,
+        "scope": "offline candidate qualification; not hardware result"
+      },
+      "issued_at": "2026-10-23 21:20:06",
+      "boot_returncode": 0,
+      "result_at_end_of_observation": "recovered-android-boot-complete",
+      "evidence_directory": "out/device-tests/20261023T211952-dxe-driver-return",
+      "adb_return_seconds": 16.923,
+      "boot_complete_seconds": 31.178,
+      "no_buttons_confirmed_by_user": true,
+      "android_root_and_original_hashes_passed": true
+    },
+    {
+      "step": 3,
+      "variant": "gop-core-mode-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "qualification": {
+        "variant": "gop-core-mode-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+        "step": 3,
+        "selector": 1,
+        "firmware_commit": "e2868342daee0c196942f1a5569526d3ecb80850",
+        "image_sha256": "f843580e12f08f9b39b007c1427a1ad174c1586eaf6d3e6deace68184bf1a33d",
+        "fd_sha256": "1f7095ff7914d8f67cfa35f100d0dc9b8837cb0291066f2bb8375f4220d659ec",
+        "all_checks_passed": true,
+        "source_inputs_match_step0": true,
+        "scope": "offline candidate qualification; not hardware result"
+      },
+      "issued_at": "2026-10-23 21:24:57",
+      "boot_returncode": 0,
+      "result_at_end_of_observation": "manual-recovery-needed",
+      "evidence_directory": "out/device-tests/20261023T212443-dxe-driver-return",
+      "observation_window_seconds": 75,
+      "automatic_return_failed": true,
+      "manual_recovery_confirmed_by_user": true,
+      "recovery_endpoint": "Android",
+      "recovery_checked_at": "2026-10-23 21:27:29",
+      "android_root_original_slot_unlocked_and_hashes_passed": true
+    }
+  ],
+  "step4_built": false,
+  "step4_started": false,
+  "xnu_entered": false,
+  "partition_writes": false,
+  "fault_boundary": "Mode/Info access and metadata checks added between step2 and step3, plus changed code layout and cleanup/Core path; precise fault unproven",
+  "recovery_video": {
+    "path": "out/camera-capture/20261023T212631/camera-test.avi",
+    "sha256": "77d52560ec2054d11b040bfcc72419ad568ad1a79722bd405a1b80c4fb18916a",
+    "decoded_frames": 601
+  },
+  "next_probe_blocked_pending_fault_isolation": true
+}

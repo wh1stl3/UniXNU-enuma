@@ -1,0 +1,26 @@
+{
+  "scope": "offline actual step3 linked DLL and map; not execution trace",
+  "files": {
+    "SimpleFbDxe.dll": "12642f7e7f2b4df25651d8a8c9de61c5e72052b3867d95dd1049d63cf693ace0",
+    "SimpleFbDxe.map": "cd436d4ccd5b4dfbe91db60e4fbc4565b3e8c7421a0fa6003be6ff172f768683",
+    "SimpleFbDxe.entry-disassembly.txt": "4caa3e0d9e56483edac3dafdcb59a777cb57c6fe0c0be7fb2b6668fe83930501"
+  },
+  "module_entry_rva": "0x1050",
+  "new_mode_pointer_load_rva": "0x1388",
+  "mode_field_reads_begin_rva": "0x1398",
+  "info_pointer_load_rva": "0x13ac",
+  "info_field_reads_begin_rva": "0x13c0",
+  "span_check_rva": "0x13f8",
+  "handle_cleanup_rva": "0x15a8",
+  "warning_encoding_rva": "0x15c0",
+  "query_mode_not_called_in_step3": true,
+  "physical_framebuffer_not_dereferenced_by_audit": true,
+  "precise_hardware_fault": "unknown",
+  "recommended_split": [
+    "before dereferencing Mode: pointer presence/alignment/owned allocation evidence",
+    "Mode header and Info pointer",
+    "Info fields",
+    "span arithmetic",
+    "cleanup and Core status return"
+  ]
+}

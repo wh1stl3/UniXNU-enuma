@@ -92,3 +92,5 @@
 2026-10-23 Asia/Shanghai · 上一实现里程碑595d6a6已推送。按用户要求补齐HANDOFF交接入口，记录两仓固定版本、失败/人工恢复事实、两候选路径与摘要、逐笔验证顺序和执行器未自动处理的停点标志；本次重新计算两镜像SHA均匹配报告。未重跑构建测试、未操作实机，无新增决策或审批项，PENDING-HUMAN仍无按键待办。证据：docs/HANDOFF.md、docs/STATUS.md、reports/enuma-gop-core-split.json。本文档提交号见后续Git。
 
 2026-10-23 Asia/Shanghai · 上一交接090e20a已确认远端main一致，固件e286834一致。本轮新授权与在场确认后重跑bundle审计，顺序临时启动step0/step1；ADB16.906/15.844秒，完成/root/原摘要通过，用户分别确认全程未按键。最后身份/原槽/解锁复核通过，无flash/erase/改槽或源码/内存/verified变化；仅前后截图，无持续录像。旧超时根因未定，单次时序不唯一证明门命中。证据reports/enuma-gop-split-device.json、docs/operations/2026-10-23-gop-split-device.md；本提交号见后续Git。
+
+2026-10-23 Asia/Shanghai · 上一里程碑990d225已推送。本轮按继续至XNU请求完成step2/3全链接与打包审计；step2于21:20:06接受，ADB16.923秒、完成31.178秒，用户确认无按键；step3于21:24:57接受，75秒无返回，停止追加，用户人工恢复后21:27:29核验Android/root/原槽/解锁/原摘要通过。step4未构建/启动；实际链接反汇编保留但根因未定。donor解压摘要匹配固定同版本pin、三组闭包/绑定计划通过，未emit预链接镜像。无内存/verified/flash变化。证据reports/enuma-gop-step23-device.json、reports/enuma-gop-step3-offline-boundary.json、reports/enuma-donor-decompression.json、reports/enuma-donor-closure-audit.json；本提交号见后续Git。

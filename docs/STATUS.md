@@ -1,28 +1,28 @@
 # STATUS
 
-更新：2026-10-23 21:12后（Asia/Shanghai）。当前唯一真相；历史见WORKLOG。
+更新：2026-10-23 21:29后（Asia/Shanghai）。当前唯一真相；历史见WORKLOG。
 
 ## 当前状态
 
-**新GOP拆分step0/step1均临时启动后自行回Android，用户确认两次全程未按键；恢复核验通过。本轮止于step1，尚未进入XNU。**
+**step2自行返回；step3在75秒内未返回，已停止追加测试。用户人工恢复后21:27:29主机核验Android完成/root/原槽/解锁/原分区摘要通过。尚未进入XNU。**
 
-用户本轮明确撤销暂时离线限制，授权重新核验后先step0、受控返回后step1，并确认可在场恢复。step0于21:10:18启动，ADB16.906秒、完成与摘要核验30.438秒；step1于21:11:37启动，ADB15.844秒、完成与摘要核验30.547秒。两次root/原boot_a与vendor_boot_a摘要通过，启动前唯一enuma/解锁/原槽/备份和fastboot身份均通过，最后再次核对身份/完成/槽/解锁。
+用户本轮授权继续直到进入XNU，现场可恢复条件沿用；不是跳过既有无返回停点。step2于21:20:06临时启动，ADB16.923秒、完成与摘要核验31.178秒，用户确认全程未按键。step3于21:24:57启动，75秒无ADB/fastboot，截图黑屏；没有启动step4或互补候选。恢复录像601帧完整解码。下次不能用本次恢复状态替代新门禁。
 
-短时序与无按键恢复支持新Core返回路径及step1枚举/释放整体返回；没有同版本延时对照或数值EFI日志，不能唯一确认目标门命中或每项校验成功。旧250849f的75秒超时及人工恢复事实保留，根因未确定；旧完整查询/互补镜像不重试。
+故障范围缩至step2→step3新增Mode/Info访问与跨度检查及相关路径，不能确定根因或异常PC，也不能排除布局/更早路径/清理/Core返回。旧250849f故障同样未定因。step0/1此前均无按键返回，当前step2与其短时序相近；单次时序不唯一证明选中门命中。
 
-证据：[本轮实测](operations/2026-10-23-gop-split-device.md)、[脱敏报告](../reports/enuma-gop-split-device.json)。无数值GOP快照、真实scanout、像素/菜单或XNU通过证据。
+证据：[本轮实测与离线边界](operations/2026-10-23-gop-step23-device.md)、[实测报告](../reports/enuma-gop-step23-device.json)、[反汇编边界](../reports/enuma-gop-step3-offline-boundary.json)。没有数值GOP快照、真实scanout、像素/菜单或XNU通过证据。
 
 ## 已有实现与验证
 
-固件e286834/54输入锁，core-warning-v2，将非错误warning1/5从SimpleFb传回既有Core门；提供者无新增本地Timer/Reset依赖，七秒正常完成兜底仍同步，不能救卡死。五层累计为安装后控制、枚举/释放、HandleProtocol、Mode、QueryMode。保持禁绘制/Probe早退。
+固件e286834/54输入锁、core-warning-v2不变。step0–3已分别全链接/打包审计，step4仅既有host/对象覆盖，未全链接打包/实测。本轮step2/3实际30OEM/FD/BootShim/v3与归档AutoGen/库清单核对通过，禁绘制/Probe早退、两秒目标门及七秒同步完成兜底保持。
 
-既有137阶段/参数、30实际标记、6Mu传输、7CLI、177Core检查及四份AArch64对象通过。本轮只重跑bundle审计，不重跑或冒充新构建：step0/1源锁、FD、BootShim/v3嵌入FD和摘要全部通过。step2/3/4尚未单独全链接打包/实测。
+实际step3链接DLL表明新增审计依次读取Mode/Info字段和计算跨度，不调用QueryMode，不解引用FrameBufferBase。静态反汇编不是执行轨迹，不称已定位坏指针。
 
 ## 下一步与约束
 
-本次授权两笔完成，不自动追加step2。下一步离线准备step2完整链接/打包/审计；需要强化门命中结论时先做同版本延时对照或同step selector2，不用旧候选。继续实机前重新核对现场与恢复条件，任何无返回停追加并恢复。
+因step3无返回，当前停止追加实机候选，先离线细分Mode指针、Mode头/Info指针、Info字段、跨度和清理/Core返回。不要重试完整step3、step4或旧250849f。继续实机前重新评估隔离方案、现场恢复和身份/备份/原摘要；无返回停追加并恢复。
 
-无绘制不持续录像，本次前后截图配合主机日志和用户无按键确认；当前无人工待办。未flash/erase/改槽，未改内存/example/verified。UART接点与TWRP未验证。
+无绘制不持续录像，恢复/显示变化时录像。当前已恢复、无人工按键待办。未flash/erase/改槽，未改内存/example/verified。UART接点与TWRP未验证。
 
 ## 系统与内核现状
 
@@ -38,3 +38,5 @@ R-002跨Bootloader持久日志失败边界保持，不换地址/扩区/借DFPS�
 EnumaScreen文本后端仅host/AArch64对象通过，尚无INF/FDF/调用者集成，不在当前镜像中。
 
 两仓源码可写，nuwa及其他参考只读；原始设备数据/视频/镜像仅out。固件e286834已推送，设备实现595d6a6已推送；后续文档提交发布状态以Git/WORKLOG为准。
+
+本轮新增donor离线审计：46,415,872字节普通ARM64 Mach-O，摘要与固定同donor pin一致，237模块及三组闭包/绑定计划通过；仅比较参考slide，未采用为板级配置、未emit预链接镜像。scripts/audit_enuma_donor.py可重放；完整ADT/载荷/内存/EBS/入口仍待闭合。

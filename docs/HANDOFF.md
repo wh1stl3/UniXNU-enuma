@@ -1,3 +1,9 @@
+# 最新停点：step3超时，已恢复Android
+
+2026-10-23 21:29后：step2无按键自行返回；step3的75秒观察窗口无返回，用户人工恢复，21:27:29核验Android完成/root/原槽/解锁/原boot及vendor_boot摘要通过。停止追加实机候选，未运行step4，未进入XNU。以[STATUS](STATUS.md)及[本轮报告](operations/2026-10-23-gop-step23-device.md)为准。先离线细分Mode/Info访问与清理/Core返回；旧候选不原样重试。以下记录为历史交接，旧“下一步step2”已被本次取代。
+
+---
+
 # 最新接手入口
 
 2026-10-23 21:12后：用户已授权并完成step0/step1实机，两次无按键自行回Android，root/原分区摘要通过。以[STATUS](STATUS.md)和[本轮实测](operations/2026-10-23-gop-split-device.md)为准；下方为此前离线交接记录，其“均未启动/保持离线/下一轮先step0”已被本轮结果取代。固件版本及候选摘要不变，旧超时根因仍未定。下一步离线准备step2，不自动追加设备测试。

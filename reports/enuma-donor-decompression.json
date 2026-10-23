@@ -1,0 +1,49 @@
+{
+  "scope": "offline donor decompression and pinned ordinary ARM64 parser; no prelink or device execution",
+  "product": "iPad7,1",
+  "build": "21H461",
+  "device_class": "j120ap",
+  "container_sha256": "13b97fa2c5ce97f04408dcc28c41fb6b0d60b9440065197879acf44b2572bf7b",
+  "manifest_sha384_match": true,
+  "im4p_parser_sha256": "ac777f1127aca522f5856a615a9d7f70a049785db053be76f411a2d1c989d5e0",
+  "decoder_path": "D:\\Code\\PortingiOS\\common\\tools\\apfs-fuse-linux\\bin\\lzfse",
+  "decoder_binary_sha256": "f89442c9e68063b115df9fcc6defa96c9f5affedc44fa6751dc4d67d3c18c4d4",
+  "decoder_source_provenance": "existing local tool; source revision not independently established in this run",
+  "fat_sha256": "25d98364738aa496cbff777ee515b6c49f833ffa58a0a3710c1039e52be382a7",
+  "slices": [
+    [
+      16777228,
+      0,
+      28,
+      46415872,
+      0
+    ]
+  ],
+  "macho_sha256": "f18b4df865405f2a287b84977d7aca745e056d656d9fc9df1662970ce2969de7",
+  "macho_bytes": 46415872,
+  "macho_kind": 2,
+  "segment_names": [
+    "__TEXT",
+    "__DATA_CONST",
+    "__TEXT_EXEC",
+    "__KLD",
+    "__LASTDATA_CONST",
+    "__LAST",
+    "__KLDDATA",
+    "__DATA",
+    "__BOOTDATA",
+    "__PRELINK_TEXT",
+    "__PRELINK_INFO",
+    "__PLK_TEXT_EXEC",
+    "__PRELINK_DATA",
+    "__PLK_DATA_CONST",
+    "__PLK_LLVM_COV",
+    "__PLK_LINKEDIT",
+    "__LINKINFO",
+    "__LINKEDIT"
+  ],
+  "native_prelink_commit": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+  "prelink_ready": false,
+  "matches_fixed_sheng_same_donor_pin": true,
+  "reference_commit": "a599a1a8a92093b5077543e071b72130769eb325"
+}
