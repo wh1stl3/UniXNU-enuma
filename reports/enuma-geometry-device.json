@@ -1,0 +1,52 @@
+{
+  "scope": "read-only geometry layering; timing evidence not live scanout proof",
+  "firmware_commit": "ab0cb7943594bcd078a2f0c9474e075bfe0b04fc",
+  "tests": [
+    {
+      "candidate_sha256": "5f303d1d2d4586597a34adc0a98b512a5454f0786d5bcbb5eab7eb47a176822b",
+      "issued_at": "2026-10-23 23:59:30",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.919,
+      "boot_complete_seconds": 31.082,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 10,
+      "variant": "geometry-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "b026f96806723c9a28e540034f3139fb5492892a704ae035985927209cfc3367",
+      "no_buttons_confirmed_by_user": true,
+      "selector": 1
+    },
+    {
+      "candidate_sha256": "2cf0b95911aa7d6b0b066382656304163482f54e133f8c556e9a0fbfd9e1ea4c",
+      "issued_at": "2026-10-24 00:02:48",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 21.196,
+      "boot_complete_seconds": 36.695,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 11,
+      "variant": "geometry-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "1ebfd9e7808df6bfba8a70c9349e76927d342f668a048081b2540612505f5c1c",
+      "no_buttons_confirmed_by_user": true,
+      "selector": 1
+    },
+    {
+      "candidate_sha256": "a1d729570ea8e7e210bfcab9bbb13f20b8268e313754d76279bb98ab56954ce7",
+      "issued_at": "2026-10-24 00:08:19",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 15.866,
+      "boot_complete_seconds": 30.31,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "step": 11,
+      "selector": 2,
+      "no_buttons_confirmed_by_user": true,
+      "variant": "geometry-complement-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "fd_sha256": "d93a1cec8c27ef1ee6653a87b250b8a89292f15ea79103c79f3d38546d1f064f"
+    }
+  ],
+  "interpretation": "Complementary timing supports fixed geometry/span hypothesis rejection; exact mismatch and descriptor numeric values unknown"
+}

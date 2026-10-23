@@ -2,7 +2,7 @@
   "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
   "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "uefi_source_commit": "f15d520f70793c89c8a8f1ca875573fc023026b3",
+  "uefi_source_commit": "ab0cb7943594bcd078a2f0c9474e075bfe0b04fc",
   "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
   "unixnu_qualification": {
     "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
@@ -79,8 +79,8 @@
       "ENUMA_DIAG_SIMPLEFB": "1",
       "ENUMA_DIAG_GUID_ONLY": "1",
       "ENUMA_DIAG_DISPATCH_FALLBACK": "1",
-      "ENUMA_DIAG_GOP_QUERY": "1",
-      "ENUMA_DIAG_GOP_STEP": "10",
+      "ENUMA_DIAG_GOP_QUERY": "2",
+      "ENUMA_DIAG_GOP_STEP": "11",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
@@ -106,8 +106,8 @@
     "UFSDxe"
   ],
   "diagnostic_simplefb_metadata_only": true,
-  "diagnostic_gop_query": 1,
-  "diagnostic_gop_step": 10,
+  "diagnostic_gop_query": 2,
+  "diagnostic_gop_step": 11,
   "diagnostic_gop_reset_owner": "DxeCore",
   "diagnostic_gop_transport": "core-warning-v2",
   "reference_gitlinks": {
@@ -123,7 +123,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "ea1fb90a73dfe0ecf1413e9d7dfdb2c989bafab0b40c9e1b693d6450ffe795bc",
+  "fd_sha256": "d93a1cec8c27ef1ee6653a87b250b8a89292f15ea79103c79f3d38546d1f064f",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -140,7 +140,7 @@
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "firmware/Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "firmware/Resources/Enuma/extensions.json": "e1d7ec11e7e7c4c138f6b0a26bf416a51e0cb5f4f417073086feefeeba4b6336",
+    "firmware/Resources/Enuma/extensions.json": "3784df370d9e801f04600273e8187e685d39a76f93c5e46b994130ef74ec1598",
     "firmware/Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "firmware/Resources/Enuma/migration.json": "839738fe5d99658bff133bbdc6025c5087d9bdfe9e3142200a8411bc4d47e000",
     "firmware/Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
@@ -170,11 +170,11 @@
     "firmware/patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "firmware/diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
     "firmware/diagnostics/EnumaGopAudit.h": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
-    "firmware/patches/simplefb-gop-query.patch": "b6071ec000c41cd755e7fa2b8536ad4798abaa0fec1ce708df3b13864cc92250",
+    "firmware/patches/simplefb-gop-query.patch": "e9ac96af8d8a8a148aa1553208a0eb326d9bdd076e1aad05fd55b13d1523f22e",
     "firmware/diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184",
-    "firmware/Resources/Scripts/build_enuma_firmware.py": "ef05705a3a4295799da9c8903a36eab1bded51efcadc7284e2bb65a0f7f5f151",
+    "firmware/Resources/Scripts/build_enuma_firmware.py": "291834b224d54d65a3e683691c0b42db1c2ea0991adb8cb246880cb5dbef5dc8",
     "firmware/Resources/Scripts/enuma_firmware_preflight.py": "eb9af118480cf90166854337ed76cf850485b6e2f890e592ed7a339fbc39521a",
-    "firmware/diagnostics/EnumaScanoutAudit.h": "cdf6ef74f6309c069fb4ac73f83e5393726f59274cec7021e95fbe3c5b4e7b90",
+    "firmware/diagnostics/EnumaScanoutAudit.h": "ba17b2095905e8377dae40d1898538efd4016c658fa14739567de6eff5302317",
     "firmware/patches/display-mdp-map.patch": "5aa0f4e584349354000c50a181fb7a0aa31c43b1f4128a72bc35469e90fd14b4",
     "firmware/patches/sec-fixed-epoch-banner.patch": "37bbf193ffd4d2cd38a8a782a7fc584becde14bdfe649cc338f13f0f36f08d2f"
   },

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "scope": "R-004 unchanged mapping; matched format control then geometry/span hypothesis",
+  "firmware_commit": "ab0cb7943594bcd078a2f0c9474e075bfe0b04fc",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "id": "same-source-format-control",
+      "step": 10,
+      "variant": "geometry-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "id": "geometry-span-predicate",
+      "step": 11,
+      "variant": "geometry-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "hardware_order": "Control full Android/root/original-digest recovery and no-button confirmation precede step11. Each boot rechecks identity/backups/recovery. Timeout stops additional boots and requires recovery plus same-turn handoff. A controlled predicate rejection is not a hard-stop.",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "geometry_is_hypothesis": true
+}

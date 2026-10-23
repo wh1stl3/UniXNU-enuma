@@ -1,7 +1,7 @@
 {
   "scope": "host fault rejection and AArch64 object; not runtime trace",
   "all_passed": true,
-  "cases": 64,
+  "cases": 84,
   "optimizations": [
     "O1",
     "Oz"
@@ -13,9 +13,10 @@
   "max_reads": 72,
   "address_only_max_reads": 8,
   "packing_max_reads": 24,
+  "geometry_max_reads": 24,
   "mmio_write_path": false,
   "pixel_access": false,
-  "source_sha256": "cdf6ef74f6309c069fb4ac73f83e5393726f59274cec7021e95fbe3c5b4e7b90",
-  "object_sha256": "a72906520ae751a89e4aa9f422e48cbaead0917e03b55a90b79e20ac42825713",
+  "source_sha256": "ba17b2095905e8377dae40d1898538efd4016c658fa14739567de6eff5302317",
+  "object_sha256": "bfb76d89d36604d1c2ca22077006c1bfcb39ae62c97702bd8ac735a490517fb0",
   "runtime": false
 }
