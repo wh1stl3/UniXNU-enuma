@@ -192,3 +192,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 · step16首次完整链接已成功，但线性反汇编审计器未追踪编译器冷分支，资格阶段拒绝打包；未执行设备。修正为PE入口直接分支CFG常量/表数据流并保持间接调用证明范围限制，实际PE确认6个可能目标、一次100000等待和64比较；错误基址/MMIO存储/错误等待三项审计输入负向变异均拒绝。相同FD重新审计打包通过，无固件代码修改或失败实机重试。证据out/counter-progress-build.log、counter-progress-package.log及reports/enuma-dsi-code-auditor-tests.json。
 
 2026-10-24 02:35:38 · 全套文档/资格a1387b2推送后执行f6c59ba counter-control（step14/query1），image 5f75763ae804b976765e2d81655f17e31c3fb9bf142824ae5b4c7b087b42028c；ADB15.875秒/Android完成29.828秒。用户确认全程无按键，独立Android/root/原槽/解锁/boot和vendor_boot原摘要通过；无MMIO/像素/分区写入或恢复故障。证据reports/enuma-dsi-counters-device.json、enuma-dsi-counters-preflight.json及out/counter-control-device.log。下一动作见当前STATUS，继续前先提交推送全部文档。
+
+2026-10-24 02:37:25 · 全套文档/资格e8b91b1推送后执行f6c59ba counter-ready（step15/query1），image 09f5a287791ab2a4b1c6b9e539b66ae28e72116f246fbc5a8aa9c86046d9b327；ADB21.219秒/Android完成36.047秒。用户确认全程无按键，独立Android/root/原槽/解锁/boot和vendor_boot原摘要通过；无MMIO/像素/分区写入或恢复故障。证据reports/enuma-dsi-counters-device.json、enuma-dsi-counters-preflight.json及out/counter-ready-device.log。下一动作见当前STATUS，继续前先提交推送全部文档。
