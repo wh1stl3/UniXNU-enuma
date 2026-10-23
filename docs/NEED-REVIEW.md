@@ -178,7 +178,7 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 
 ## R-004 · 显示MDP窗口的最小设备映射
 
-状态：pending，2026-10-23。当前固定内存表没有覆盖实机DT显示的MDP寄存器区0x0ae00000..0x0ae84207；无覆盖也无交叠，不能假设运行时继承映射仍可读。新scanout探针在设备动作前停止，未执行MMIO或像素读写。
+状态：approved，2026-10-23。用户明确“批准 R-004 最小映射与只读探针（推荐）”。授权仅本节最小范围。原始固定内存表没有覆盖实机DT显示的MDP寄存器区0x0ae00000..0x0ae84207；无覆盖也无交叠，不能假设运行时继承映射仍可读。新scanout探针在设备动作前停止，未执行MMIO或像素读写。
 
 | 候选 | 范围与代价 |
 | --- | --- |
@@ -188,3 +188,5 @@ S-001恢复补充：用户确认按键恢复，主机已核对Android完成1/roo
 推荐A理由：地址/长度来自本机live DT，偏移来自固定SDE来源，静态覆盖/无交叠检查已通过。最小批准范围仅该固件映射及后续有界只读探针；不改RAM/heap/owned-memory/board.toml/example/verified，不新增日志保留区，不flash/erase/改槽，不批准像素或寄存器写入。
 
 可审查补丁patches/proposals/r004-display-mdp-map.patch已git apply --check通过但未应用。检测脚本scripts/audit_display_mmio_coverage.py和reports/enuma-display-mmio-coverage.json可重放。沿R-003“保持地址/大小…新内存字段…单列真实审查范围”边界，批准前不把此补丁接入源锁或镜像。
+
+R-004执行：原始迁移表保持不变，在固件构建staging应用精确一条映射补丁。固件9f50890已推送；像素和寄存器写入仍不在此次批准内。

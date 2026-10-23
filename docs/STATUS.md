@@ -1,28 +1,20 @@
 # STATUS
 
-更新：2026-10-23 22:13（Asia/Shanghai）。尚未写屏或进入XNU。
+更新：2026-10-23 22:40（Asia/Shanghai）。尚未写屏或进入XNU。
 
-## 当前硬停范围
+## 当前状态
 
-新增scanout实机准备在动作前停止：固定UEFI表未覆盖live DT的MDP窗口，不能假设直接MMIO读取可用。R-004等待批准最小页对齐映射0x0ae00000/0x85000；补丁已准备并dry-run通过，未应用。独立覆盖/无交叠审计通过，未新启动镜像或读写MMIO/像素。原已验证元数据与恢复结论仍有效。此停点来自R-003保持地址/大小、出现新内存字段需审查的范围，不是重新申请普通构建/临时boot授权。
+R-004已获用户明确批准并执行最小映射：固件9f50890，staging新增且仅新增MDP 0x0ae00000/0x85000设备区，原迁移表字节保持。58项输入锁，无RAM/heap/owned/example/verified变化。原已测Mode/Info/跨度结论见历史报告。
 
-## 当前实测
+新映射step3对照22:37:26 ADB15.878秒/核验29.626秒；step8只读探针22:39:15 ADB21.187秒/核验37.050秒。两次Android/root/原摘要通过，用户确认无按键自行返回。step8长时序提示未命中成功门，尚无描述匹配或数值GOP/scanout快照。互补selector2构建中，用同读取代码分类结果，不把单次时序当唯一证明。
 
-固件00ddc01，Mode头step6、Info字段step7、完整跨度step3均受控回Android，用户逐笔确认全程未按键；ADB分别15.879/15.871/15.926秒，完整核验31.933/31.101/32.396秒，Android完成/root/原分区摘要通过。此前指针step5及同源/迁移对照亦自行返回。
+首轮fastboot GetVar身份门中止，未发boot；正常reboot后完整恢复核验通过，另存identity-abort，不计为镜像失败或通过。新一轮身份门通过才执行对照，无校验放宽。
 
-当前完整跨度候选image SHA805bfabfa23b0f4e0db8a00bab94a143a61636cfa76292d6148185a8ebfab4fd。原e286834 step3失败镜像未重试，故障PC/根因仍未知，当前成功不证明旧故障已修复。短时序与源码支持检查路径，但缺数值GOP快照和真实scanout证据。
+## 验证与下一步
 
-## 新增实机映射证据
+25 scanout用例O1/Oz+ASan/UBSan、AArch64对象、既有240 GOP回归通过；两份全链接FD/30OEM/BootShim/v3、生成依赖、bundle四负例、workspace与staging唯一映射差异均通过。证据operations/2026-10-23-r004-scanout-device.md、reports/enuma-r004-{device,staged-map,scanout-bundle,identity-abort}.json、enuma-scanout-host.json。
 
-只读Android确认splash为0x9c000000/0x2300000（比UEFI Display Reserved小0x100000）；DRM为1600x2560。live MDP base0xae00000和八管线偏移与固定SDE源码布局一致。真实pitch/像素格式/压缩仍未知，未访问MMIO/像素或新临时boot。下一软件先只读实际管线描述，再门控可恢复亮条；不直接启用整屏日志。证据reports/enuma-live-framebuffer.json和enuma-scanout-source-audit.json。
-
-## 构建与下一步
-
-实际编译实现已迁至uefi-enuma Resources/Scripts/build_enuma_firmware.py，设备同名脚本为版本/摘要校验薄封装；56项源锁。设备仓保留契约、打包、实机、恢复和out输出。两仓相关里程碑已推送。构建/打包/源锁和既有主机检查通过；详情reports/enuma-firmware-build-ownership.json。
-
-下一步重点核对enuma现有framebuffer描述、映射与像素格式，评估复用FrameBufferSerialPortLib直接日志和最小色块路径；完整GOP QueryMode不是所有早期写屏方案的必经条件。不能照搬nuwa地址/驱动参数，原禁绘制在映射/边界闭合前保持。未运行step4，未输出实际像素。
-
-无返回停止追加启动、先恢复，随后按用户要求持续离线分析和新软件。无新内存/example/verified或flash/erase/改槽。证据reports/enuma-gop-mode-device.json、operations/2026-10-23-gop-mode-split.md。
+step8仅检查源描述，最多72次32位读取，无像素访问或寄存器写入。谓词匹配不证明管线活动或颜色顺序；互补分类后进一步离线隔离描述字段。R-004不包含写屏。无返回立即停追加并恢复，之后按用户要求继续离线分析和新软件。未flash/erase/改槽。
 
 ## 系统与内核现状
 

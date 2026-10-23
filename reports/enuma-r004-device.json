@@ -1,0 +1,49 @@
+{
+  "scope": "R-004 mapped control and bounded descriptor trials",
+  "tests": [
+    {
+      "slot": "_a",
+      "candidate_sha256": "214b678e382fa4646f179bb4a281105dd1b4a258348ee0006420f862e1749747",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-23 22:37:26",
+      "boot_returncode": 0,
+      "adb_return_seconds": 15.878,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 29.626,
+      "boot_reason": "bootloader",
+      "step": 3,
+      "firmware_commit": "9f50890d88e34d28ee80ba1e3c7b35bcb2c04b5b",
+      "button_confirmation": "user confirmed no buttons throughout",
+      "automatic_return_confirmed": true,
+      "local_evidence": "out/device-tests/20261023T223712-dxe-driver-return"
+    },
+    {
+      "slot": "_a",
+      "candidate_sha256": "25623e013dd202d76df4bf20e25a607f30ab6e7aa7236302557a603cfd482912",
+      "label": "dxe-driver-return",
+      "phase": "recovered-android-boot-complete",
+      "preflight_boot_completed": true,
+      "partition_writes": false,
+      "fastboot_identity_retry_count": 0,
+      "issued_at": "2026-10-23 22:39:15",
+      "boot_returncode": 0,
+      "adb_return_seconds": 21.187,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "boot_complete_seconds": 37.05,
+      "boot_reason": "bootloader",
+      "step": 8,
+      "selector": 1,
+      "firmware_commit": "9f50890d88e34d28ee80ba1e3c7b35bcb2c04b5b",
+      "button_confirmation": "user confirmed no buttons throughout",
+      "automatic_return_confirmed": true,
+      "local_evidence": "out/device-tests/20261023T223901-dxe-driver-return",
+      "predicate_result": "unconfirmed; slow return suggests fallback only"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "scope": "actual build staging map vs fixed imported table",
+  "approved": "R-004 human approval",
+  "only_change": "one Display MDP device mapping",
+  "base": "0xae00000",
+  "length": "0x85000",
+  "attributes": [
+    "AddDev",
+    "MMAP_IO",
+    "UNCACHEABLE",
+    "MmIO",
+    "NS_DEVICE"
+  ],
+  "source_map_sha256": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+  "staged_map_sha256": "f59cc6a3ff1984e6412df72ae477f940f23be372002ca088d6e4076015d7f49e",
+  "other_regions_identical": true,
+  "runtime": false
+}

@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "scope": "R-004 mapped control and bounded read-only descriptor predicate",
+  "firmware_commit": "9f50890d88e34d28ee80ba1e3c7b35bcb2c04b5b",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "id": "mapped-control",
+      "step": 3,
+      "variant": "r004-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "id": "descriptor-predicate",
+      "step": 8,
+      "variant": "r004-pointer-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "hardware_order": "Verify same-source mapped control return before step8; timeout stops all additional boots, recover then offline isolation.",
+  "pixel_access": false,
+  "mmio_writes": false
+}

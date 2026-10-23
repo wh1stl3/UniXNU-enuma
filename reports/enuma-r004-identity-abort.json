@@ -1,0 +1,14 @@
+{
+  "scope": "pre-boot identity abort; candidate never issued",
+  "phase": "fastboot-identity-aborted",
+  "candidate_issued": false,
+  "failed_fields": [
+    "product",
+    "current-slot",
+    "unlocked"
+  ],
+  "recovery": "normal fastboot reboot to boot-complete Android",
+  "root": true,
+  "original_partition_digests_unchanged": true,
+  "slot_unchanged": true
+}

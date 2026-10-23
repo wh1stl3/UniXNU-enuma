@@ -108,3 +108,5 @@
 2026-10-23 · 只读实机显示发现：确认splash范围、DRM模式、MDP与八管线偏移，固定SDE来源。新增可重放audit_live_framebuffer.py。前序4e72d12已推送；未写屏/MMIO/新boot。
 
 2026-10-23 · 固定表MDP覆盖审计及无交叠检查通过，R-004最小映射提案dry-run通过但未应用；前序9433465已推送。新增scanout设备动作停止待批准，未访问MMIO/像素或新boot。证据reports/enuma-display-mmio-coverage.json、patches/proposals/r004-display-mdp-map.patch。
+
+2026-10-23 · R-004已批准；固件9f50890已推送，设备前序83d0fe1已推送。25 host/对象/240 GOP、两实构建/bundle负例/workspace/staging唯一差异通过；对照与step8无按键返回，后者慢5.309秒，互补构建中。证据operations/2026-10-23-r004-scanout-device.md。
