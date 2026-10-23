@@ -1,8 +1,10 @@
 {
   "R-005": {
-    "status": "pending",
+    "status": "approved",
     "scope": "Proposed 128x8 all-white 500000us pixel transaction, save/restore/verify; no register writes, new map or partitions",
-    "image_sha256": [],
-    "authorization": null
+    "image_sha256": [
+      "c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534"
+    ],
+    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated 批准R005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification."
   }
 }
