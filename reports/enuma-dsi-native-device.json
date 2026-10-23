@@ -37,11 +37,32 @@
       "no_buttons_confirmed_by_user": true,
       "independent_recovery_check": true,
       "recovery_checked_at": "2026-10-24T03:06:23.453697+08:00"
+    },
+    {
+      "candidate_sha256": "cc3a698fcbaa53a6249cd04a7b1150a357743f44beb39768325c58ec30f4d8d1",
+      "issued_at": "2026-10-24 03:08:41",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 22.265,
+      "boot_complete_seconds": 34.344,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "native-no-progress",
+      "step": 18,
+      "query": 2,
+      "fd_sha256": "58d378d37093545ca68e518c2b62271d53307ac8758f7bd854253fdb2a4118da",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T03:09:33.130097+08:00"
     }
   ],
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false,
   "xnu_entered": false,
-  "interpretation": "双窗互补尚未齐备，未取得有效增量证据。"
+  "interpretation": "同源原生状态对照和正/互补时序支持：major6下至少同一活动DSI接口在两个连续窗口各发生1..64的非回绕帧计数递增，采样状态与配置保持。取得双窗有界递增的间接执行证据，非数值寄存器日志、面板可见性或SSPP路由证明。 query1-query2 ADB差-5.296秒包含启动噪声，不能当精确频率或实测100ms。",
+  "two_window_predicate": "supported",
+  "query1_minus_query2_adb_seconds": -5.296,
+  "bounded_two_window_progress_supported": true
 }

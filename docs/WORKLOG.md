@@ -208,3 +208,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-24 · 用户再次明确要求将“基于具体情况、结合公开资料，对故障原因做大胆判断”计入规则。已写入AGENTS持久规则：给出主判断/嫌疑排序/可推翻条件并据此验证，区分推断与已证实事实，不绕过门禁。当前step18/query1已无按键受控返回并独立恢复核验，互补尚未执行。
 
 2026-10-24 03:05:34 · 全套文档/资格3a686b7推送后执行60f38e9 native-progress（step18/query1），image f1fb4d377744ba7aa69162aa7998a18e51c12cb0575d961208219843b58203a3；ADB16.969秒/Android完成32.266秒。用户确认全程无按键，独立Android/root/原槽/解锁/boot和vendor_boot原摘要通过；无MMIO/像素/分区写入或恢复故障。证据reports/enuma-dsi-native-device.json、enuma-dsi-native-preflight.json及out/native-progress-device.log。下一动作见当前STATUS，继续前先提交推送全部文档。
+
+2026-10-24 03:08:41 · 全套文档/资格6cc7639推送后执行60f38e9 native-no-progress（step18/query2），image cc3a698fcbaa53a6249cd04a7b1150a357743f44beb39768325c58ec30f4d8d1；ADB22.265秒/Android完成34.344秒。用户确认全程无按键，独立Android/root/原槽/解锁/boot和vendor_boot原摘要通过；无MMIO/像素/分区写入或恢复故障。证据reports/enuma-dsi-native-device.json、enuma-dsi-native-preflight.json及out/native-no-progress-device.log。下一动作见当前STATUS，继续前先提交推送全部文档。
