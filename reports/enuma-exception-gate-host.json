@@ -1,0 +1,42 @@
+{
+  "scope": "actual global header with host timer/reset adapters; no real exception or firmware execution",
+  "header_sha256": "e43adea43888932a3e690b2cc5c6481ecc4bb3359b9989213a8129b623cde6d6",
+  "cases": [
+    [
+      13,
+      23,
+      2000000
+    ],
+    [
+      13,
+      23,
+      7000000
+    ],
+    [
+      0,
+      23,
+      2000000
+    ],
+    [
+      12,
+      23,
+      2000000
+    ],
+    [
+      13,
+      20,
+      2000000
+    ],
+    [
+      13,
+      13,
+      2000000
+    ]
+  ],
+  "all_passed": true,
+  "driver_attribution": false,
+  "sanitizers": [
+    "address",
+    "undefined"
+  ]
+}

@@ -21,7 +21,9 @@ class PatchSeriesTests(unittest.TestCase):
             names=['MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c',
                    'MdeModulePkg/Core/Dxe/DxeMain.inf',
                    'MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c',
-                   'MdeModulePkg/Core/Dxe/Image/Image.c']
+                   'MdeModulePkg/Core/Dxe/Image/Image.c',
+                   'UefiCpuPkg/Library/CpuExceptionHandlerLib/AArch64/CpuExceptionHandlerLib.c',
+                   'UefiCpuPkg/Library/CpuExceptionHandlerLib/DxeCpuExceptionHandlerLib.inf']
             with tarfile.open(archive) as source:
                 for name in names:
                     member=next(m for m in source.getmembers() if m.name.endswith('/'+name))
@@ -42,8 +44,11 @@ class PatchSeriesTests(unittest.TestCase):
             for point in (13,14,15):
                 self.assertEqual(dispatcher.count(f'EnumaDispatchDetailCheckpoint ({point},'.encode()),1)
             image=once['MdeModulePkg/Core/Dxe/Image/Image.c']
+            self.assertEqual(image.count(b'EnumaImageCanaryTableCheckpoint (ImageHandle,'),1)
             for point in (20,21,22):
                 self.assertEqual(image.count(f'EnumaImageEntryCheckpoint ({point},'.encode()),1)
+            exception=once['UefiCpuPkg/Library/CpuExceptionHandlerLib/AArch64/CpuExceptionHandlerLib.c']
+            self.assertEqual(exception.count(b'EnumaUnhandledExceptionCheckpoint ();'),1)
             apply_patch_series(patches)
             self.assertEqual(once,{n:(stage/n).read_bytes() for n in names})
 

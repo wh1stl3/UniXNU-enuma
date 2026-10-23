@@ -20,12 +20,12 @@ int main(void) {
         unsigned before = resets;
         if (setjmp(stopped) == 0) EnumaDispatchCheckpoint(12);
         assert(resets - before == (ENUMA_DIAG_STAGE == 12 && ordinal == 3));
-        const unsigned points[] = {14, 15, 20, 21, 22, 13};
-        for (unsigned i = 0; i < 6; ++i) {
+        const unsigned points[] = {14, 15, 20, 21, 22, 24, 25, 13};
+        for (unsigned i = 0; i < 8; ++i) {
             unsigned point = points[i];
             EFI_STATUS status = point == 15 ? 0 : TEST_STATUS;
-            const unsigned hook[] = {13, 14, 15, 13, 13, 14, 14, 20, 21, 22};
-            const int required_error[] = {-1, -1, -1, 1, 0, 1, 0, -1, -1, -1};
+            const unsigned hook[] = {13, 14, 15, 13, 13, 14, 14, 20, 21, 22, 23, 24, 25};
+            const int required_error[] = {-1, -1, -1, 1, 0, 1, 0, -1, -1, -1, -1, -1, -1};
             unsigned spec = ENUMA_DIAG_DETAIL_POINT - 13;
             unsigned status_ok = required_error[spec] < 0 || required_error[spec] == (int)EFI_ERROR(status);
             before = resets;
@@ -36,7 +36,21 @@ int main(void) {
                 EnumaImageEntryCheckpoint(point,(EFI_HANDLE)(uintptr_t)2,status);
                 EnumaImageEntryCheckpoint(point,NULL,status);
                 assert(resets==before);
-                if(setjmp(stopped)==0) EnumaImageEntryCheckpoint(point,EnumaStartingImage,status);
+                EFI_CONFIGURATION_TABLE entries[2] = { { {0,0}, NULL },
+                    { {0x40f7080ab898d8dcULL,0x123456789abcdef0ULL}, NULL } };
+                if(point==25) entries[1].VendorGuid.low ^= 1;
+                EFI_SYSTEM_TABLE table = {2,entries};
+                EnumaImageCanaryTableCheckpoint((EFI_HANDLE)(uintptr_t)2,&table);
+                EnumaImageCanaryTableCheckpoint(EnumaStartingImage,NULL);
+                EFI_SYSTEM_TABLE invalid = {4097,entries};
+                EnumaImageCanaryTableCheckpoint(EnumaStartingImage,&invalid);
+                invalid.NumberOfTableEntries=2;invalid.ConfigurationTable=NULL;
+                EnumaImageCanaryTableCheckpoint(EnumaStartingImage,&invalid);
+                assert(resets==before);
+                if(setjmp(stopped)==0) {
+                    if(point>=24) EnumaImageCanaryTableCheckpoint(EnumaStartingImage,&table);
+                    else EnumaImageEntryCheckpoint(point,EnumaStartingImage,status);
+                }
                 EnumaStartingImage=NULL;
                 EnumaImageEntryCheckpoint(point,NULL,status);
                 EnumaStartingFile=NULL;

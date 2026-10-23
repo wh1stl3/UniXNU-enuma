@@ -1,7 +1,7 @@
 {
   "scope": "source migration and official board configuration only; no device execution",
   "firmware_repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "firmware_commit": "0924fbdcfc95979d29af51532a2120ddadb3b655",
+  "firmware_commit": "d3a097231a24ee2c971c6fac8aa8faa9decd43fd",
   "source_device_commit": "1ab7ee8",
   "migrated_files": {
     "LICENSE": {
@@ -106,14 +106,16 @@
     }
   },
   "firmware_extensions": {
-    "diagnostics/EnumaDispatchDetailCheckpoint.h": "4883fcd4c309d32aa6813d7d8a63842b007d07619d7a153af988e0a2f9382663",
-    "patches/dxe-dispatch-details.patch": "b7c0f1dc6e7847349c01b830c07a987649a89c532505c8e104820e786b3a4d95",
+    "diagnostics/EnumaDispatchDetailCheckpoint.h": "7d88cb33d77f5d00343dc3e58fd1421cb23f13b2d606ecacaa67cd7917a2a355",
+    "patches/dxe-dispatch-details.patch": "5fd086e94002b02364ae6f45cf2a88210528b1c6ea0ae71bbdfa7bd3fe084926",
     "patches/dispatch-detail-options.patch": "f0e38b16a5a26730d5de057ead268f30d8f2675a6c66a900c693e1943e8878b3",
-    "Resources/Scripts/enuma_preflight.py": "a6bf19d6826daf1cc952b12bc649927da8e4db566ee2a49d649d7281b6542afb",
+    "Resources/Scripts/enuma_preflight.py": "2eaaf3a3652f796a6e0c3d2bf35547b86590957adfbaece0555d18d99005da4f",
     "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
     "patches/apriori-metronome.patch": "59f37df69981dc61593fedb1e20b382d0881b01d3dfefc05d6fcc1028f85f01f",
     "patches/diagnostic-ufs-selection.patch": "b79be283dc09951a91aa6fc99ec26aea7187f9845080d28445bf6dd50db5a523",
-    "diagnostics/EnumaImageEntryCheckpoint.h": "0a44e20d2f9592fb8dfb9becb225e7038ec0cfb98eb9170843db209ab2f015e1"
+    "diagnostics/EnumaImageEntryCheckpoint.h": "ddbdf7f1dd8ddae5fff68ecf1236ee5576c9f0297942763f94ac5ba08842a96a",
+    "Resources/Enuma/reset.json": "511c4946e2eefa4fd2b2bc0cfedfd4bcd34e5bde30c4010d7ee2ab683e29d52c",
+    "diagnostics/EnumaUnhandledExceptionCheckpoint.h": "e43adea43888932a3e690b2cc5c6481ecc4bb3359b9989213a8129b623cde6d6"
   },
   "new_firmware_table": {
     "config": "enuma",
@@ -171,5 +173,5 @@
     }
   },
   "other_board_tables_unchanged": true,
-  "firmware_input_files_checked": 43
+  "firmware_input_files_checked": 44
 }
