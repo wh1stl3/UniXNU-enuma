@@ -24,11 +24,13 @@
 
 route-control step18/query1：2026-10-24 03:30:35，recovered-android-boot-complete；ADB16.937秒/Android完成31.14秒；用户无按键True，原分区摘要True，独立恢复核验True。
 
+route-associated step19/query1：2026-10-24 03:32:02，recovered-android-boot-complete；ADB16.938秒/Android完成32.422秒；用户无按键True，原分区摘要True，独立恢复核验True。
+
 关联互补尚未齐备，未判定首候选的稳定staging关联。
 
 ## 下一步与恢复边界
 
-先提交推送全部当前文档，再以即时身份/备份/恢复门禁临时启动 route-associated；每笔受控返回和独立恢复/无按键核验后推进。
+先提交推送全部当前文档，再以即时身份/备份/恢复门禁临时启动 route-unproven；每笔受控返回和独立恢复/无按键核验后推进。
 
 用户可在场恢复；必要前后截图与主机日志，实际输出/判读变化/恢复动作时录像。键盘反光不作输出。Android/fastboot恢复已核对，TWRP/UART未验证；超时停追加先恢复并当轮落实交接，恢复核验后继续离线分析和新软件，不原样重试失败镜像。
 
