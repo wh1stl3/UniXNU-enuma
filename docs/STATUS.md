@@ -34,7 +34,8 @@
 | 选项 | 内容 | 代价 |
 | --- | --- | --- |
 | **A（推荐先做）** | 把同样两次读放到 **stage 4**（SEC `PlatformInitialize` 之后，最早可插入点）。stage 4 成功而 stage 10/13 失败 → teardown 随时间发生被证实；stage 4 也挂 → 域在跳转瞬间已关 | 零写入，1 笔实机 |
-| **B** | 在固件里按 Linux 顺序显式上电 MMCX/GDSC/AHB/MDP 时钟后再读 | 需写 dispcc/GDSC/RPMh 寄存器，属新写操作，**必须先走 NEED-REVIEW 拿范围** |
+| **D（优先级高于 B）** | 不排除 OEM `DisplayDxe`（连同 `CPRDxe` 一起放回），让厂商驱动自己完成上电并建立 GOP，探针在其后读 | 不需自写寄存器序列；代价是 DisplayDxe 会绘制并可能污染待观察屏幕，且 enuma 原厂 GOP 成功率未实测 |
+| **B** | 在固件里按 Linux 顺序显式上电 MMCX/GDSC/AHB/MDP 时钟后再读 | 需写 dispcc/GDSC/RPMh 寄存器，属新写操作，**必须先走 NEED-REVIEW 拿范围**；RPMh 在 UEFI 无现成驱动，写错时序会把 GDSC 卡死 |
 | **C** | 放弃在 UEFI 读 MDP，转 UART 或屏上文本 | 无写操作，但拿不到 scanout；屏上文本仍依赖 GOP，需先核实 GOP 是否也需要显示域 |
 
 在 A 出结果之前，不再追加任何读取型显示探针。
