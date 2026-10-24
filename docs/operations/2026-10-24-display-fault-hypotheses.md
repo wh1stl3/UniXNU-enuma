@@ -65,3 +65,7 @@ f0cef6f稳定staging/所选DSI递增支持后，“首候选完全未挂接”�
 单源混合谓词refused，未取得合格的保守配置证据；不能直接认定遮挡或透明。拒绝可能来自其他/未知字段、边框/dim、合法的其他混合模式或继承门控/稳定性，需拆分。 query1-query2 ADB差4.359秒包含启动噪声，不能当精确频率或实测100ms。
 
 保守混合配置未获支持，结合同源step20对照优先分离其他staging/边框、dim及BASE/混合模式，再判断是否需要检查真正遮挡；不把合法的其他alpha模式直接当错误。 R-005 consumed，不重放像素或盲写寄存器。
+
+## 六类拒绝定位实施前主判断
+
+按用户更大胆推进要求，中等置信主判断是ABL遗留混合状态与过严观察器不匹配，先查border bit24和合法alpha模式，暂不把step21拒绝当显示故障。小米固定52a2f18 CTL在无base source时也会设置border位，LM有独立dim层，major6用packed alpha；本机DSI/staging/几何已有支持。step22一次稳定采样六类、正反时间编码交叉验证，拒绝容差外数据。border-only则优先修正观察器假设并查INTF_MUX；dim则查覆盖stage/矩形；alpha则解码实际系数；其他staging则解码字段和层次；继承失败先隔离门控/稳定性。若新证据反对优先假设，按类别调整，不扩大写入授权。固定源与FDT沿enuma-scanout-blend-sources.json。

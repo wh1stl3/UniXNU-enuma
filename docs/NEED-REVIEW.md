@@ -1,6 +1,6 @@
 # NEED-REVIEW
 
-当前门禁按AGENTS及既有批准。ff3db30 step21仅既有R-004映射内读首候选staging/dim/保守混合配置，保留step20关联/几何/所选DSI递增；最多289读/两次既有Stall，无像素/MMIO写入、新内存/映射/verified或破坏分区变更，无新增待批准项。R-005 consumed。逐笔文档提交推送和即时身份/备份/恢复保持，结果见STATUS。
+当前门禁按AGENTS与既有批准。8fd3e62 step22沿原映射<=289只读、2次采样等待及1次<=20秒正反编码等待、总20.2秒，原Core/75秒期限不变。无像素/MMIO/分区写、新内存/映射/verified变更，无新增待批准项，R-005 consumed。每笔文档推送及即时恢复门禁保持。
 
 ## R-001 · 第一阶段 DarwinBoot owned-memory 预算
 

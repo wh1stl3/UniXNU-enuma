@@ -1,48 +1,44 @@
-# 当前进度：首候选单源/无dim混合配置检查
+# 当前进度：混合拒绝原因六类正反取证
 
-2026-10-24 Asia/Shanghai。用户明确继续推进主线，沿在场恢复及摄像头自行旋转规则。沿已有在场恢复及只读直接实测授权推进。
+2026-10-24 Asia/Shanghai。用户“继续 进度决策稍微大胆一点”，沿已有在场恢复、只读直接实测及相机自行旋转要求推进。
 
-## 主判断与证据边界
+## 主判断
 
-保守混合配置未获支持，结合同源step20对照优先分离其他staging/边框、dim及BASE/混合模式，再判断是否需要检查真正遮挡；不把合法的其他alpha模式直接当错误。 R-005 consumed，不重放像素或盲写寄存器。 Boot v3解析仍低优先级。来源与证据强弱见下文及故障假设记录。
+中等置信优先假设：ABL遗留混合状态与保守观察器不匹配（边框位或合法alpha模式），而非整个DSI停摆。接口双窗、staging和1:1几何已获支持，但step21只说明严格模式不成立。优先取得拒绝类别来改变下一项实现；若分类为dim/额外源，则直接转向对应stage/覆盖区域核查；若border-only，则修正观察器假设并查实际输出链路。假设可由本轮结果推翻。
 
-## 新实现及离线资格
+## 实现与资格
 
-固件 ff3db3009da309e7435a063c88247d10ec9f75ae，设备gitlink和67项源锁固定。旧012715b由config/source-history/uefi-012715b.lock.json冻结，step19/20头文件字节不变。同源step20/query1对照及step21/query1正向、query2互补。
+固件 8fd3e62bc5d6af5bdd91670cbebeb9a4ac23b008，68项源锁及设备gitlink固定；旧ff3db30沿config/source-history/uefi-ff3db30.lock.json冻结，step19/20/21头文件和Core marker通道字节不变。同源step20/query1对照，step22/query1正向及query2反向。
 
-step21保留首描述不替换、首关联CTL/LM、major/minor6.0、同一所选活动DSI两窗各非回绕递增1..64、1:1输出包含及描述/配置稳定。新增保守模式要求四个选中CTL_LAYER字只含候选非virtual源，编码stage1..12，无其他/未知/virtual/边框字段。按本机FDT读取11个blend op（0x20..0x110/步长0x18），全部dim bit16清零；BASE编码1无独立alpha寄存器，非BASE要求选中op精确0x100和packed FG255/BG0 alpha0x00ff0000。LM_OP_MODE及全部新增字在每窗后保持。最多289次既有映射内只读和两次Stall(100000)，无像素/MMIO写入、新映射/分配/依赖。固定小米52a2f18 CTL/LM/MDSS/CRTC源码及保存enuma FDT契约已审计。
+step22沿原首描述、首关联CTL/LM、major/minor6.0、1:1几何、同一活动DSI两窗各非回绕递增1..64和稳定性。最多289次原映射内读取。局部只屏蔽staging border bit24来解码，绝不写寄存器；完整原staging字仍参与稳定复查。分类：0严格原模式；1仅border位偏离且其他单源/无dim/BASE或常量opaque条件满足；2其他/未知staging或stage编码；3 dim bit16存在（可能伴border/alpha）；4无额外staging及dim但非BASE alpha/op偏离精确常量模式；5继承门控/等待/采样稳定性失败。2优先于3，3优先于4，1只在无其他偏离时输出。类2不等于实际其他高层，类3不等于实际遮挡，类4不等于透明。
 
-174项O1/Oz+ASan/UBSan、8源×12编码、额外/未知字段、dim/alpha/配置变化、精确289读及AArch64仅gBS通过；真实Mu GOP补丁组合/entry marker、源锁/workspace及5项像素/恢复守卫通过。三份完整链接/回退、30OEM PE/DEPEX、生成依赖、实际FD指令指纹、Boot v3及同源宏差异bundle通过。实际PE指纹不是完整动态MMIO/store/CFG证明；边界由锁定源码和主机故障注入另行审查。
+采样结束后正向等待class×4秒，反向等待(5-class)×4秒；都走原匹配Core2秒路径、原warning marker，反向故意返回FAIL marker不称设备错误。最多2次100000us采样等待+1次<=20000000us编码等待，总20.2秒，原75秒观察期限不变。编码期间不再读MMIO，不能把前段采样稳定扩张为整个等待稳定。编码等待错误不能当正常分类。
 
-限制：这是保守配置模式，非穷尽可见性分类。拒绝可能来自其他/未知/边框staging、dim、合法pixel-alpha/其他模式、状态变化或继承门控，不能直接称遮挡/透明。通过只降低该LM局部配置解释，不证明影子状态已生效、SSPP排除区、scaler/decimator、实际LM→pingpong/DSC/fetch/IOVA/cache或面板可见，更不追认历史R-005结果。
+主机解码要求同源资格、三笔完成/无按键/独立恢复，正反差值最近8秒间距类别残差<=2秒、各自对照预测残差<=2秒、合计增量20秒残差<=3秒，任一不符则unknown，不取最接近类别硬判。不当数值寄存器转储、精确采样频率或可见性证明。
+
+194项O1/Oz+ASan/UBSan覆盖全部六类/正反等待/优先级/稳定性/错误及精确289读；两方向AArch64仅gBS，真实Mu GOP补丁/marker回归、10项解码/像素/恢复守卫、源锁/workspace通过。固定小米52a2f18 CTL/LM/MDSS/CRTC和原enuma FDT源事实沿enuma-scanout-blend-sources.json审计。三份完整链接/回退、30OEM PE/DEPEX、AutoGen/库、实际FD受限指令指纹、Boot v3及同源宏差异bundle通过。PE指纹不是完整动态MMIO/store/CFG证明，边界另由锁定源码和主机用例复核。
 
 | 候选 | step/query | Boot v3 SHA-256 | FD SHA-256 |
 | --- | --- | --- | --- |
-| blend21-control | 20/1 | `c8722cc15e81561b29cd7bf325a5a45f7a5d30a0580c73de5be799cfdc6ed8ec` | `1cba088a92ad664dcbc7b370ecdec3e132982f91f7d3cf9daecc62a7924b02d4` |
-| blend21-single | 21/1 | `0a2b8544c806fdd960d0fdf35a94b94a19055a90bc5e940d5496d3c8467c7c39` | `f07555d7dc5a68b010d1a6cfe4f1539d9c3ae3e6c7cb2be3ca41e183ce635b62` |
-| blend21-unproven | 21/2 | `a2cc5cb6583df89e580f26b53911d875783473e0b74f66554c4cbe62c88d8de0` | `bd71348194da620500feb8256b98e457389bf0a655be0de37b93b5e363781b14` |
-
-query1支持非错误marker、query2支持错误marker；Core匹配延时2秒，未匹配同步兜底7秒。主机时序只作有条件的间接谓词证据，不当寄存器数值/精确100ms或频率证明。
+| reason22-control | 20/1 | `9ded5fa6f8e27878d75face87bd473b207e5124652493272640145aab18c304a` | `dcaed1f3cd1d89bfcc9b1f6c4221b012c5b503e4bfb7e4ecca3d619389c71041` |
+| reason22-forward | 22/1 | `429c3c14ec2ee527a554012140049baad1f1ac67fb84bd925c849ce7df64d97e` | `8b2b2695c0556a1719a7c78c81e4f1cb35fdeccd591617de6673e3a421052cec` |
+| reason22-reverse | 22/2 | `59d748bb55766d9082e529c00993800caf196831067c95bc4def32de5e84ca3c` | `82057cbf7e667260af60b85c378ebc221d44b5e2f88dd3628fa3c501640f7e4c` |
 
 ## 最新实测
 
-blend21-control step20/query1：2026-10-24 15:28:59；recovered-android-boot-complete；ADB 17.141秒 / Android完成 32.688秒；用户无按键 True，独立恢复 True，原分区摘要 True。
+8fd3e62新候选尚未实测。旧ff3db30同源step20获得支持、step21保守模式被正互补拒绝，三笔无按键及独立恢复均通过；历史报告enuma-scanout-blend-device.json，不能当新源码实测。
 
-blend21-single step21/query1：2026-10-24 15:30:40；recovered-android-boot-complete；ADB 21.5秒 / Android完成 35.953秒；用户无按键 True，独立恢复 True，原分区摘要 True。
+正反分类尚未齐备，类别未知。
 
-blend21-unproven step21/query2：2026-10-24 15:32:36；recovered-android-boot-complete；ADB 17.141秒 / Android完成 32.344秒；用户无按键 True，独立恢复 True，原分区摘要 True。
+## 下一步与边界
 
-单源混合谓词refused，未取得合格的保守配置证据；不能直接认定遮挡或透明。拒绝可能来自其他/未知字段、边框/dim、合法的其他混合模式或继承门控/稳定性，需拆分。 query1-query2 ADB差4.359秒包含启动噪声，不能当精确频率或实测100ms。
+全部当前文档提交推送后，以即时身份/备份/恢复门禁临时启动reason22-control；受控返回及独立恢复/无按键确认后继续。
 
-## 下一步与恢复
+用户可在场恢复；相机保留原图、自行旋转判读，必要前后截图，真实输出/判读变化/恢复时录像。键盘反光不当输出。即时enuma身份、Android完成/root/原槽/解锁/匹配备份及boot/vendor_boot原摘要核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停追加、先恢复并当轮写明状态，恢复核验后离线分析新候选、不原样重试失败镜像。
 
-保守混合配置未获支持，结合同源step20对照优先分离其他staging/边框、dim及BASE/混合模式，再判断是否需要检查真正遮挡；不把合法的其他alpha模式直接当错误。 R-005 consumed，不重放像素或盲写寄存器。
+R-005 consumed，不重放像素；无像素/MMIO/分区写入、flash/erase/改槽、新映射/内存大小/基址/verified变更。51MiB heap、512MiB owned、example=true及Boot v3保持。构建/镜像/标识/原日志/备份/相机仅out。仍未可见写屏、未放行DXE/BDS/UniXNU菜单、文本后端未集成、未进入XNU。配置分类不解决真实LM→pingpong/DSC、fetch/IOVA/cache或面板输出证明。
 
-用户可在场恢复，新摄像头保存原图并自行顺时针90度旋转后判读，必要前后截图；实际输出/判读变化/恢复操作时录像。键盘反光不作显示输出。Android/root/原槽/解锁/备份及boot、vendor_boot原摘要即时核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停止追加并优先恢复，当轮落实原因/模式/恢复交接；恢复核验后继续离线修复新候选，不原样重试失败镜像。
-
-R-005 consumed，不重放像素；无分区写入、flash/erase/改槽、新内存/映射/大小/基址或verified变更。51MiB heap、512MiB owned、example=true及Boot v3保持。构建/镜像/原始日志/相机/标识/备份仅out。尚无可见写屏；文本后端未INF/FDF/调用者集成，诊断Core主动返回，DXE/BDS/UniXNU菜单未放行，未进入XNU。
-
-证据：firmware/docs/scanout-blend.md、config/scanout-blend-probes.json、reports/enuma-scanout-blend-{sources,host,bundle,device,preflight}.json（device仅实际产生时存在），operations/2026-10-24-scanout-blend.md及display-fault-hypotheses.md。每笔设备动作前所有当前文档先提交推送，远端发布以Git核验为准。
+证据firmware/docs/scanout-blend-reason.md、config/scanout-blend-reason-probes.json、reports/enuma-scanout-blend-reason-{host,bundle,device,preflight}.json（device仅实际产生时存在）、scripts/decode_scanout_reason.py和operations/2026-10-24-scanout-blend-reason.md；故障假设见display-fault-hypotheses.md。每笔前全部当前文档提交推送，远端状态须实际核验。
 
 ## 系统与内核现状
 

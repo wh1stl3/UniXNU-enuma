@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "firmware_commit": "8fd3e62bc5d6af5bdd91670cbebeb9a4ac23b008",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "reason22-control",
+      "step": 20,
+      "query": 1,
+      "variant": "reason22-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "reason22-forward",
+      "step": 22,
+      "query": 1,
+      "variant": "reason22-forward-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "reason22-reverse",
+      "step": 22,
+      "query": 2,
+      "variant": "reason22-reverse-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-scanout-blend-reason-host.json",
+  "maximum_dsi_reads": 289,
+  "wait_calls_max": 3,
+  "total_wait_microseconds_max": 20200000,
+  "encoding_wait_microseconds_max": 20000000,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

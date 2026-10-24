@@ -15,49 +15,49 @@
   "aarch64_objects": [
     {
       "step": 1,
-      "object_sha256": "ff01aab6d4156239ac52b65280e5262d5be730a5348da05de02321da0dd27cd9",
+      "object_sha256": "4782869bad7498886dfaf417cfc006e58963af770d8d70d5b548f60f1d785107",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 2,
-      "object_sha256": "b0982c999d181fbe420791c6f35de5296a47540ecec60d4ee5d22921d3ae09e5",
+      "object_sha256": "fdaf3f38a4c2b41ef291dbbb9775a1bfea132eb118f6444fb7bb474077b9573e",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 3,
-      "object_sha256": "4ad18df4f01a606e1d1a4118d614f80d4f5427a492cefabb163f195e686a0131",
+      "object_sha256": "92609dbfdde68c8e9acc9fb512f22dd7d6d130a97a00ab05390c4a584475cc5d",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 4,
-      "object_sha256": "6d8934779ee9e62fe9a240034e5100d45c71277b34a0e4064df62b16d1d93e1e",
+      "object_sha256": "76041c93f84340ad4c599f68a641b28fb41dd7266b28860fad90cd4b48c68ffc",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 5,
-      "object_sha256": "ba105b0284fd4bb6ef57cd08d8603f743ec3d67c49d3d1cdb607640e31bda74e",
+      "object_sha256": "4e0f9056f94953ab10e342e850a6b0ad4d2ec24ae0e43aeb2de44251c7bbd81f",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 6,
-      "object_sha256": "2773971931957961c486dc0c500ce07c269ff7d92d40f277add07a232316d592",
+      "object_sha256": "453a60282afe62d75942e8b215d099cdc5265e62b78bf50c33fc98fda88775a2",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]
     },
     {
       "step": 7,
-      "object_sha256": "c22c4816f9523b1beb3d788c8cde89af835ce8e6cf3ed3793871947efd3c6507",
+      "object_sha256": "2cc205d7147be0be918b2553486df7b2293652657b7f2e71fe3feb1d86e69632",
       "undefined_symbols": [
         "gEfiGraphicsOutputProtocolGuid"
       ]

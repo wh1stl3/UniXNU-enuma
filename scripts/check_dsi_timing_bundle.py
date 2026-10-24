@@ -36,7 +36,7 @@ def main():
   fd=(snap/'SILICIUM_UEFI.fd').read_bytes();assert sha(fd)==b['fd_sha256']==audit['fd_sha256']
   if profile['step']==14:
    assert audit['dsi_timing_code']['static_target_loads']==['0xae6b800','0xae6c000'] and not audit['dsi_timing_code']['static_target_stores']
-  if profile['step'] in (19,20,21):
+  if profile['step'] in (19,20,21,22):
    assert all(audit['scanout_route_code']['instruction_markers'].values())
   if profile['step'] in (15,16,17,18):
    code=audit['dsi_counter_code'];offsets={15:(0,0xa8),16:(0,0xa8,0xac),17:(0x26c,),18:(0,0xa8,0xac,0x26c)}[profile['step']]
