@@ -419,6 +419,29 @@ R-010 执行结果（2026-10-25 00:06）：4 笔 3 返回 1 挂（17.000/16.974/
 
 风险：DEPEX 不满足时 DXE Core 不 dispatch（不崩溃）；若被 dispatch 而依赖有缺口，可能中途失败返回错误，最坏表现为挂死需长按恢复。可能建立 GOP 并在屏幕上留下画面——若需要观察"干净的黑屏状态"，本实验会污染该观察基线（但 D-158 已确认数据流在跑，此基线价值有限）。不改内存字段/映射/verified、不写分区、不动 R-005/R-007 账本。
 
+R-014 执行结果（2026-10-25 01:20，D-161）：**两次均挂死，屏幕无画面**。第一次无拍照；第二次带 60 帧连续拍照，frame-000/003/006/008 仍为 Android 桌面，frame-010（约 20 秒）起全黑镜面，直至 frame-059 全程纯黑。`fastboot boot` 返回 0 但 75 秒无自动回归。PE 分析确认 DisplayDxe 自身承担背光（`DisplayBackLightBrightnessLevelControl` 等），且那两个缺失 GUID 只出现在 162 字节 DEPEX、**不在 PE 内**，属编译期依赖声明。设备已恢复核验。
+
+## R-015 · 补两个 stub protocol 使 DisplayDxe 的 DEPEX 满足
+
+状态：**pending，2026-10-25 01:25 提出**，等待用户批准上机。
+
+动机：R-014 证明"保留原厂 DisplayDxe"这一步本身不够——它的 DEPEX 要求 9 个 protocol 全 AND，而 `a966cc4f-ee6c-424d-a762-8ed3b5a4a501` 与 `47861dff-556f-4269-9b28-062ec3ecb30d` 在 149 个 XBL 模块里没有任何提供者，DXE Core 因此不会 dispatch 它。D-161 又确认这两个 GUID **不在 DisplayDxe 的 PE 中**（只存在于 DEPEX），即编译期依赖声明、代码不调用，所以补 stub 是满足 DEPEX 的充分手段。
+
+| 项 | 内容 |
+| --- | --- |
+| 实现 | 一个新 DXE 驱动，仅 `InstallMultipleProtocolInterfaces` 发布这两个 GUID，接口表为全 stub（返回 `EFI_UNSUPPORTED`），**不读取、不写入、不报告任何具体状态** |
+| 组合 | 与 `--diagnostic-without-ufs` 同用（`FD dbca3fcb` 同链路），保持只省略 UFSDxe |
+| 判据 | 连续拍照（`scripts/screen_capture.py --burst`），屏幕出现任何内容 = 成功；仍全黑 = 失败 |
+| 笔数 | 1 笔 |
+
+**必须说清的风险**：
+1. DisplayDxe 被 dispatch 后可能走任何分支，**包括再次挂死**（R-014 已两次挂死，虽那时 DEPEX 未满足、挂死原因未必相同）。
+2. PE 字符串里有 `Charger power status is not okay or at off mode charging, so turn off backlight`。若 stub 让 DisplayDxe 误判电源/充电状态，它可能**主动关闭背光**，结果是"驱动跑起来了但屏幕照样黑"，且无法与"驱动没跑"区分。因此 stub 必须完全被动；若出现这种歧义，下一步需先补一个能区分"DisplayDxe 是否 dispatch"的判据（例如探测 GOP 是否存在），而不是继续猜。
+3. 两个 protocol 的真实身份未知（公开资料与本仓头文件均无），**无法保证 stub 的接口尺寸/语义正确**。若 DisplayDxe 实际调用其中函数指针，可能崩溃；这是本提案最大的不确定性。
+
+边界：临时 boot、不写分区、不改内存字段/映射/verified、不动 R-005/R-007 账本；stub 驱动本身只发布协议、不触碰任何硬件。执行前需已完成构建+审计+打包并提交推送（`require_published` 强制）。
+
+
 
 
 

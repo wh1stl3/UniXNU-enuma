@@ -45,11 +45,13 @@ R-009 执行工具的首版单元测试意外真实驱动设备两次：`run_nex
 
 ## 下一步与继续条件
 
-1. **R-009 已批准并在执行**：候选`out/value-transport/baseline/`（常量0、零读零写、FD 02f8d31d、`f5cf62da`，Boot v3 回环通过），8 笔只记返回/挂死。执行器`scripts/run_hang_baseline.py`一次一笔；挂死后须人工恢复且`reconcile`通过才允许下一笔。零读档与历史读档挂死同量级则整条显示归因链作废、按载体/XBL 重开；8 笔全干净则上界约 25%。
-2. 逐笔门禁：身份、备份、恢复路径核对后临时boot；失败即停不原样重试；每笔后核验Android完成/root/槽位/解锁与双分区摘要。
-3. 驱动内复位不重启；若确需改守卫，必须另立NEED-REVIEW编号。
-4. 常量重复性通过后才考虑最小寄存器读；随后分离描述符、cache Sync、CPU Read和Write，核对实际FDT、CPU映射与SMMU。
-5. FAT publisher/完整ADT/donor预链接可离线准备；复用上游通用实现，再适配SM8250 UFS和用户态。
+1. **显示栈路线已纠正（D-160）**：原厂显示栈完整存在于本机 XBL 的 149 个模块中（`DisplayDxe` + `CPRDxe` + `ClockDxe` + `I2C` + `SPMI` + `PmicDxe` + `DALTLMM` + 40 个 Panel XML）。**不要再自写 GENI I2C / KTZ8866 驱动**——那是 D-142（在裁剪后的本仓上得出的错误结论）的产物。守卫本就允许 `--diagnostic-without-ufs` 只省略 `UFSDxe` 而保留显示驱动。
+2. **R-014 已执行两次，均挂死且屏幕全黑镜面**（D-161，第二次带 60 帧连续拍照）。原厂 DisplayDxe 未产出画面。
+3. **下一项是 R-015（pending，未批准）**：写最小 stub 驱动发布 `a966cc4f-ee6c-424d-a762-8ed3b5a4a501` 与 `47861dff-556f-4269-9b28-062ec3ecb30d`，使 DisplayDxe 的 DEPEX（9 protocol 全 AND）满足。这两个 GUID 不在 DisplayDxe PE 内、只存在于 DEPEX，属编译期声明，stub 理论充分；但 protocol 真实身份未知，且 PE 里有 `Charger power status ... turn off backlight` 分支，stub 必须完全被动。三项风险见 `docs/NEED-REVIEW.md` R-015。
+4. 显示实验**必须带连续拍照**（`scripts/screen_capture.py --burst`），不再用肉眼当唯一证据。
+5. 逐笔门禁：身份、备份、恢复路径核对后临时boot；失败即停不原样重试；每笔后核验Android完成/root/槽位/解锁与双分区摘要。挂死时需用户长按，恢复后跑 `scripts/reconcile_enuma_recovery.py`。
+6. 单笔挂死不构成归因证据——基础挂死率：零读 12.5%（8 笔 1 挂）、裸读 25%（4 笔 1 挂）。
+7. FAT publisher/完整ADT/donor预链接可离线准备；复用上游通用实现，再适配SM8250 UFS和用户态。
 
 ## 源码与边界
 
