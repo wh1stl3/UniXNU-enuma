@@ -100,14 +100,14 @@ def main():
         for line in assembly.splitlines():
             fields=line.split('\t')
             if len(fields)<3:continue
-            op,args=fields[-2].strip(),fields[-1].strip()
-            move=re.fullmatch(r'([wx]\d+), #(-?(?:0x[0-9a-f]+|\d+))(?:, lsl #(\d+))?',args)
+            op,operands=fields[-2].strip(),fields[-1].strip()
+            move=re.fullmatch(r'([wx]\d+), #(-?(?:0x[0-9a-f]+|\d+))(?:, lsl #(\d+))?',operands)
             if op in ('mov','movk') and move:
                 register=move[1][1:];value=int(move[2],0);shift=int(move[3] or 0)
                 if op=='mov':constants[register]=value & (0xffffffff if move[1][0]=='w' else 0xffffffffffffffff)
                 elif register in constants:constants[register]=(constants[register]&~(0xffff<<shift))|((value&0xffff)<<shift)
                 continue
-            access=re.search(r'\[([wx]\d+)(?:, #(-?(?:0x[0-9a-f]+|\d+)))?\]',args)
+            access=re.search(r'\[([wx]\d+)(?:, #(-?(?:0x[0-9a-f]+|\d+)))?\]',operands)
             if access and access[1][1:] in constants:
                 address=constants[access[1][1:]]+int(access[2] or '0',0)
                 if address in wanted:
@@ -115,7 +115,7 @@ def main():
                     elif op.startswith('st'):writes.append(hex(address))
             if op in ('bl','blr'):constants.clear()
             elif op not in ('cmp','tst','ret') and not op.startswith(('b','st')):
-                dest=re.match(r'[wx](\d+)',args)
+                dest=re.match(r'[wx](\d+)',operands)
                 if dest:constants.pop(dest[1],None)
         if reads!=['0xae6b800','0xae6c000'] or writes:
             raise ValueError('packaged DSI code does not match two read-only target accesses: '+repr((reads,writes)))

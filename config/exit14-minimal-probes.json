@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "scope": "R-007 minimal MMIO candidate built from the existing step14 probe: exactly two read-only DSI timing-enable loads, no wait, no write",
+  "reason": "R-006 left the timeout on the post-dispatch display path. The main hypothesis is that the first access to an unpowered MDP/DSI domain hangs the bus, which would be independent of how many registers a probe reads. step14 is the smallest existing read (two loads) and shares stage/GUID/detail with the failed step20 image, so the only variable is probe depth.",
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "transport": "core-warning-v2",
+  "built": {
+    "fd_sha256": "6469cd7471a0d1c7d5e732d6de419d9fe7d1eb0c06ea6340b1f0c8d4229e65d7",
+    "image_sha256": "9609d2358b5b3d930c73fc4d82ad4913dd46e298e141cd7c4d751e99b730fa5b",
+    "image_bytes": 3153920,
+    "provider_pe_sha256": "e65295af957c4ead3bd818d6a09d8be19d2197dbbee6907b77fd0a0820f96920",
+    "static_target_loads": ["0xae6b800", "0xae6c000"],
+    "static_target_stores": []
+  },
+  "profiles": [
+    {
+      "tag": "exit14-minimal",
+      "step": 14,
+      "query": 1,
+      "variant": "exit14-minimal-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata",
+      "build_args": ["--stop-stage", "13", "--stop-delay", "2", "--dispatch-ordinal", "1", "--detail-point", "16", "--dispatch-guid", "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92", "--dispatch-guid-only", "--dispatch-completion-fallback", "--diagnostic-simplefb", "--diagnostic-gop-query", "1", "--diagnostic-gop-step", "14"]
+    }
+  ],
+  "repeats_target": 5,
+  "timing_classes": {
+    "pass_fast_return": "probe returns the pass encoding, checkpoint resets immediately, adb expected around 16-18 s",
+    "fail_fallback_return": "probe returns the fail encoding so the gate does not fire, CoreDispatcher completes, the 7 s completion fallback resets, adb expected several seconds later",
+    "stall": "no return within 75 s, which the fallback explicitly cannot recover"
+  },
+  "discrimination": {
+    "any_stall": "two MMIO loads alone are enough to hang, so the unpowered-domain/bus hypothesis stands and probe depth is irrelevant",
+    "all_return": "touching the DSI window twice is safe across trials; the failure then belongs to deeper offsets or to the longer read sequence, not to first contact"
+  },
+  "hardware_order": "same immediate identity/backup/recovery gate as R-006, one temporary boot per trial",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false,
+  "memory_field_changes": false
+}
