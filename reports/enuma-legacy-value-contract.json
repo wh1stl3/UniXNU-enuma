@@ -1,0 +1,8 @@
+{
+  "scope": "legacy compiler contract before any new build; no device execution",
+  "makefile_sha256": "2e270dd0359010eea585c2e3b4643b2f369bd5eeef1c8d21508cdf7f1a7ac827",
+  "display_delay_define_in_actual_cc_flags": false,
+  "legacy_options_patch_sha256": "9f065dbe55c54ba192c8f088e455f1a9850aeb8fb3f5c6522fc6a49412bd6a87",
+  "legacy_stage_header_sha256": "ea3620889a6e9260984f5e90cf9872143517949f0ccffe7bebeb4018eb6dc948",
+  "conclusion": "historical delay20 display-read branch defaults off; do not decode its timings as register values"
+}

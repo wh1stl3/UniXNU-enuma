@@ -51,9 +51,9 @@ def main():
     for name in ('simplefb-contract.patch','simplefb-gop-query.patch'):
         subprocess.run(['git','apply',str((a.firmware_root/'patches'/name).resolve())],cwd=stage,check=True)
     source=(stage/names[0]).read_text()
-    begin=source.index('#if ENUMA_DIAG_GOP_QUERY\n  // Core owns')
+    begin=source.index('  // Core owns all timing/reset logic.')
     end=source.index('\ncleanup:',begin)
-    snippet=source[begin:end]
+    snippet='#if ENUMA_DIAG_GOP_QUERY\n'+source[begin:end]
     assert not any(name in source for name in ('EnumaStageCheckpoint','MicroSecondDelay','ResetCold'))
     assert (stage/names[1]).read_bytes()==(a.firmware_root/names[1]).read_bytes().replace(b'\r\n',b'\n')
     gate=out/'gate.c'

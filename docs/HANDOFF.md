@@ -1,48 +1,37 @@
-# 当前进度：冷启动未清除挂死，显示窗口访问不可靠
+# 交接：校准诊断通道与显示访问隔离
 
-2026-10-24 Asia/Shanghai。**第二次硬停中**：完全断电冷启动后（关机 → 直接进 bootloader，不经 Android），同一份 `exit14-minimal`（step14，两次只读 `0x0ae6b800`/`0x0ae6c000`）仍然 75 秒无返回。相机快照 `out/camera-capture/20261024T174026/` 全黑。
+2026-10-24 Asia/Shanghai。离线实现已完成，待检查与构建；未启动新候选。
 
-## 待用户执行
+## 设备与证据
 
-长按电源恢复，然后主机核验：enuma 身份、`sys.boot_completed=1`、root、原槽、解锁、匹配备份、`boot_a`/`vendor_boot_a` 原摘要。
+只读恢复核验已独立通过：enuma、Android boot_completed=1、root、原A槽、解锁；boot_a/vendor_boot_a 的设备和本地备份摘要均匹配原账本。证据 reports/enuma-recovery-reconciliation.json 与其 out/device-tests 回链。原21:06失败试验 result.json 保留，current.local.json 通过新核验更新为 recovered-android-boot-complete。此恢复事实不代表显示修复。
 
-## 两次硬停
+## 有效结论
 
-| 次 | 时间 | 坐标 | 结果 |
-| --- | --- | --- | --- |
-| 1 | 17:31:23 | 热（Android `adb reboot bootloader`） | 75 秒无返回 |
-| 2 | 17:38:51 | **冷**（关机后直接进 bootloader） | 75 秒无返回 |
+- 还没有可见 GOP/白条闭环，未进入 XNU 或 iPadOS 用户态。
+- 旧 delay20 的显示取数宏未进入 DxeCore 编译选项，默认值为0；头文件还有未启用分支的 STAT 拼写错误。相关历史时序不得再解释成寄存器值。旧驱动内 vprobe1..7 每次也只取 bit4..7，且主机基线遗漏额外2秒。
+- detail16 在 GOP_QUERY 模式由精确返回 marker 在 CoreStartImage 返回后触发；不是 PE 入口前。不能沿用旧“上下文窗口已经定案”的解释。
+- 像素路径先执行 cache Sync(dc civac)和 CPU Read，再 Write；像素实验不返回不能定位为写指令挂死。数值范围检查不证明 CPU/SMMU 地址等价，也不能证明未上电或缺映射。
+- SimpleFb预读与部分成功有关联，未证明安全或一次性缺页机制。同一旧通道有失败记录，既往自动返回只保留为返回事实。
 
-两笔都带 7 秒 completion fallback，PASS/FAIL 都会回 Android，故无返回只能是挂死。第 2 次 fastboot 身份已核验 `product=enuma`/`current-slot=a`/`unlocked=yes`。
+## 新隔离候选与次序
 
-## 读显示窗口的账本
+新 value transport 使用独立 source/index/shift/code，不复用 step1..7；常量0无额外等待、常量3额外9秒，两者均不读显示MMIO、不做像素/cache访问。先按0/3/0同源校准，漂移>0.75秒或码点残差>0.75秒即拒绝解码；寄存器每码3秒、位移0..28独立选择。构建不等于实机通过。
 
-| 时段 | 碰窗口笔数 | 挂死 |
-| --- | --- | --- |
-| 15:06–16:02 | 7 | 0 |
-| 16:03–17:38 | 5 | 3 |
-| 17:15–17:24（不碰窗口） | 0（5 笔 stage10） | 0 |
+主机工具默认离线校验，--execute每次只启动一笔；源码/文档干净且已推送，所有不可变FD/raw/image/构建/审计摘要绑定后才可运行；失败、模糊或中断冻结整个计划。下层恢复门禁保留。
 
-## 判断
+1. 完成主机/实际AArch64及FD审计、保存每份候选资格。
+2. 文档和来源锁提交推送、即时身份/备份/恢复核验后只测常量对照。首次无按键返回与已知延时响应后才能校准；回Android不能直接证明命中PASS门，需要已知码对照。
+3. 校准通过后再做最小显示寄存器读取；若失败停止追加，恢复并离线隔离。
+4. 之后分离描述符/Sync/CPU Read/Write，检查实际FDT、页表/GCD与SMMU。新像素写仍需具体单次审查。
+5. 复用现有FAT publisher、DarwinBoot、NativePrelink/ADT，再推进SM8250 UFS与用户态；不重写上游通用实现。
 
-主判断（高置信）：16:03 之后该设备对显示窗口的读取变得不可靠，完全断电冷启动不能恢复；读 2 个寄存器即挂。
+## 来源与边界
 
-推论：恢复可靠访问之前，任何"读到什么"的显示结论都不可信（含 23 个 step 的布局/几何/混合判断），继续加深探针没有意义。
+独立固件仓已从c45e52a快进到b63c9bd基线；后续新固件以config/uefi-source.lock.json为准。原Mu_Basecore递归脏状态保留，不使用reset/clean覆盖。UniXNU固定5fdbd5d；远端新HEAD仅作差异待审，不直接切换。
 
-D-128 的"启动序列"假设作为挂死原因已证伪（冷启动同样挂）。
+R-005 consumed；R-007像素单次已消耗，旧同号MMIO提案仅历史记录；R-008 retained-log/warm-reset pending，不启用。新内存字段、映射、verified和破坏性分区仍遵守AGENTS；本阶段不写像素/MMIO/分区、不启用保留日志，512MiB owned/51MiB heap/example=true/Boot v3不变。冻结的旧镜像不重试。
 
-## 恢复后按序
+目标 iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。已有源平台内核最终链接、donor闭包规划；未emit预链接镜像。64MiB配置FAT未接publisher，NativeUfs的SM8550参数未启用，EnumaScreen仅主机/对象检查。TWRP/UART未验证；相机用于有显示输出/恢复动作，保留原图并按实际方向旋转。
 
-1. 断电静置 10 分钟以上再上电，同一镜像单笔。
-2. 离线核实 XBL/ABL 在 fastboot boot 前是否初始化显示域，以及固件读 MDP 的既有假设是否成立。
-3. 仍不能解释时，再评估"读窗口前显式确认域上电"（读 PMIC/GDSC 或写寄存器 → 需 NEED-REVIEW 批准）。
-
-## 边界
-
-R-005 consumed；禁像素/MMIO 写、新映射、内存字段、verified、分区写；51MiB heap、512MiB owned、example=true、Boot v3 保持。TWRP/UART 未验证；无可见日志；未进 XNU。冻结镜像不重试。
-
-证据 `reports/enuma-exit14-device.json`、`out/device-tests/20261024T173123-*`、`out/device-tests/20261024T173851-fastboot-coldstart`、`out/camera-capture/20261024T174026`。
-
-新增工具：`scripts/run_enuma_fastboot_probe.py`（从 fastboot 冷启动坐标起的一次性临时 boot，含身份核验与 75 秒观察；分区摘要需在断电前从 Android 侧核验，bootloader 里读不到）。
-
-接手顺序 AGENTS/STATUS/DECISIONS/NEED-REVIEW。
+接手顺序 AGENTS、STATUS、DECISIONS、NEED-REVIEW；操作细节见 operations/2026-10-24-takeover-calibration.md。不要按旧README或旧HANDOFF重跑失败镜像。当前候选摘要/执行结果以 reports/enuma-value-transport-qualification.json、reports/enuma-value-transport-device.json（若已生成）及 out/value-transport/ 为准。没有对应结果就写未执行。

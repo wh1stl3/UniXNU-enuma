@@ -167,6 +167,11 @@ def main():
         report['scanout_route_code']=dict(provider_pe_sha256=digest(payloads[0]),instruction_markers=markers,
             scope='actual packaged PE fingerprints plus separately locked source/host tests; not complete indirect MMIO/store/control-flow proof',
             complete_mmio_dataflow_proof=False,hardware_execution=False)
+    if build.get('value_probe',{}).get('source','off') != 'off':
+        from audit_value_transport import audit_value_code
+        payloads=pe_payloads.get('SimpleFbDxe',[])
+        if len(payloads)!=1:raise ValueError('value provider PE missing or ambiguous')
+        report['value_transport_code']=audit_value_code(payloads[0],build,ROOT/'out/value-transport-fd-audit')
     args.report.write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: {len(matched)} native PE/DEPEX payloads unchanged; diagnostic omissions={sorted(omitted)}; UniXNU loader modules packaged')
 

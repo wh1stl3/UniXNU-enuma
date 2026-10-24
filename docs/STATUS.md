@@ -1,46 +1,35 @@
-# 当前进度：读显示窗口被定位为 unclocked access，旧结论整体降级
+# 当前状态：已恢复，先校准诊断再定位显示访问
 
-2026-10-24 Asia/Shanghai。设备已正常回到 Android（enuma `d0fd0840`，`boot_completed=1`、root、`_a`、unlocked、`boot_a`/`vendor_boot_a` 摘要与备份一致）。本轮未 boot 任何探针镜像。
+2026-10-24 Asia/Shanghai。离线实现已完成，待检查与构建；未启动新候选。
 
-## 核心结论（2026-10-24 21:00 实测定案）
+## 设备与证据
 
-**一、读显示窗口本身曾经不合法，但已找到稳定规避。**
+只读恢复核验已独立通过：enuma、Android boot_completed=1、root、原A槽、解锁；boot_a/vendor_boot_a 的设备和本地备份摘要均匹配原账本。证据 reports/enuma-recovery-reconciliation.json 与其 out/device-tests 回链。原21:06失败试验 result.json 保留，current.local.json 通过新核验更新为 recovered-android-boot-complete。此恢复事实不代表显示修复。
 
-三点包围把挂死锁定在 `[LoadImage + StartImage]` 区间：stage 10（派发前）成功、stage 11（`CoreDispatcher` 返回后）成功、stage 12（第一个驱动 LoadImage 前）成功、stage 13（SimpleFb StartImage 后）挂死。地址、读法（`*(volatile UINT32*)`）、映射属性（R-004 是 UNCACHEABLE+NS_DEVICE 且读路径实际未使用它）、调度前状态四项逐一排除。
+## 有效结论
 
-在 SimpleFb 的 step 分支**之前**补一次同地址的预热读之后：early14 四笔全成功（17.016/17.033/15.956/15.949），step20 的 250 次完整 scanout 读取三笔全成功（17.004/17.056/18.110）——这两者历史上都会挂死。**自 23 个 step 以来，第一次能稳定执行完整读取。**
+- 还没有可见 GOP/白条闭环，未进入 XNU 或 iPadOS 用户态。
+- 旧 delay20 的显示取数宏未进入 DxeCore 编译选项，默认值为0；头文件还有未启用分支的 STAT 拼写错误。相关历史时序不得再解释成寄存器值。旧驱动内 vprobe1..7 每次也只取 bit4..7，且主机基线遗漏额外2秒。
+- detail16 在 GOP_QUERY 模式由精确返回 marker 在 CoreStartImage 返回后触发；不是 PE 入口前。不能沿用旧“上下文窗口已经定案”的解释。
+- 像素路径先执行 cache Sync(dc civac)和 CPU Read，再 Write；像素实验不返回不能定位为写指令挂死。数值范围检查不证明 CPU/SMMU 地址等价，也不能证明未上电或缺映射。
+- SimpleFb预读与部分成功有关联，未证明安全或一次性缺页机制。同一旧通道有失败记录，既往自动返回只保留为返回事实。
 
-**二、已经能把显示窗口的实际数值传出固件。**
+## 新隔离候选与次序
 
-新建"延时编码"通道：stage 13 先预热 `0x0ae6b800`，再读目标寄存器的 4 个 bit，按每 bit 一档、每档一秒编码进复位延时；主机侧量返回时间即可反解。首笔返回 22.365 秒，较 16 秒基线多 6.06 秒，对应 `0x0ae00000`（MDP version）的低 4 位 = 6。**这是自 23 个 step 以来第一次拿到显示窗口的实际数值**，而且 1 秒档位在主机侧分辨得出来。
+新 value transport 使用独立 source/index/shift/code，不复用 step1..7；常量0无额外等待、常量3额外9秒，两者均不读显示MMIO、不做像素/cache访问。先按0/3/0同源校准，漂移>0.75秒或码点残差>0.75秒即拒绝解码；寄存器每码3秒、位移0..28独立选择。构建不等于实机通过。
 
-**三、读与写是两种失败模式，写仍未解决。**
+主机工具默认离线校验，--execute每次只启动一笔；源码/文档干净且已推送，所有不可变FD/raw/image/构建/审计摘要绑定后才可运行；失败、模糊或中断冻结整个计划。下层恢复门禁保留。
 
-R-007 像素白条实验已执行（用户批准）：gop_step=13 + 像素预览 + 预热读，**挂死，且 220 帧密集摄像全程无白条**（帧 0–26 为 Android 桌面 mean 121.8；帧 27 骤降至 33.1；帧 31 起稳定黑屏 mean 64.0、白像素 2.4% 为反光）。读路径已被预热修复，写路径仍挂。写有严格边界检查（只允许写 `0x9c000000..0x9e300000` 的 DRAM），所以不是写错到 MMIO；step20 同样调用描述符查找且成功，故挂死落在真正的写动作上，嫌疑转向那些 framebuffer 页未映射/不在 GCD（UEFI 的 page fault handler 对这种地址会 fatal）。
+1. 完成主机/实际AArch64及FD审计、保存每份候选资格。
+2. 文档和来源锁提交推送、即时身份/备份/恢复核验后只测常量对照。首次无按键返回与已知延时响应后才能校准；回Android不能直接证明命中PASS门，需要已知码对照。
+3. 校准通过后再做最小显示寄存器读取；若失败停止追加，恢复并离线隔离。
+4. 之后分离描述符/Sync/CPU Read/Write，检查实际FDT、页表/GCD与SMMU。新像素写仍需具体单次审查。
+5. 复用现有FAT publisher、DarwinBoot、NativePrelink/ADT，再推进SM8250 UFS与用户态；不重写上游通用实现。
 
-**四、读 display 寄存器是否安全，取决于在驱动的哪个位置读，与地址本身无关。**
+## 来源与边界
 
-| 读的位置 | 读 `0x0ae00000` | 读 `0x0ae05014` |
-| --- | --- | --- |
-| stage 检查点（PE 入口**之前**） | 成功 | 挂死 |
-| SimpleFb 内、协议安装**之前** | 挂死 | 挂死 |
-| SimpleFb 内、协议安装**之后** | 成功 | 成功 |
+独立固件仓已从c45e52a快进到b63c9bd基线；后续新固件以config/uefi-source.lock.json为准。原Mu_Basecore递归脏状态保留，不使用reset/clean覆盖。UniXNU固定5fdbd5d；远端新HEAD仅作差异待审，不直接切换。
 
-`CreateFrameBufferConfig` 与协议安装之间存在一个让显示窗口不可读的窗口期。取数与探针必须放在协议安装之后（early14 与 step20 验证过的位置）。这也解释了为何"预热读"能救：它把危险窗口之后的读变成了安全窗口之后的读。
+R-005 consumed；R-007像素单次已消耗，旧同号MMIO提案仅历史记录；R-008 retained-log/warm-reset pending，不启用。新内存字段、映射、verified和破坏性分区仍遵守AGENTS；本阶段不写像素/MMIO/分区、不启用保留日志，512MiB owned/51MiB heap/example=true/Boot v3不变。冻结的旧镜像不重试。
 
-## 下一步
-
-
-1. **取数（已备好，待设备恢复）**：取数分支已按上面的安全窗口定稿（`gop_step` 1..7 各读一个地址的 bit 4–7，用 `gBS->Stall` 把值编码进延时，由既有 PASS 门复位）。七档镜像中 **step 1、2 已构建完成，step 3–7 在收尾时随任务终止而未完成**，均未实测。恢复设备后跑 `scripts/run_value_probes.py 1 2 3 4 5 6 7` 即可一次拿到七个寄存器的实际值。
-2. **写路径**：按取数结果决定是补 framebuffer 映射，还是改为写向已确认安全的地址。
-3. **更宽的通道（R-008，待批准）**：用 R-002 保留区 `0x9fff7000` 的 16 字节配合 warm reset 一次带出 128 位，见 NEED-REVIEW。
-
-## 边界
-
-## 边界
-
-R-005 consumed，禁像素/MMIO 写、新映射、内存大小/基址、verified、分区写；51MiB heap、512MiB owned、example=true/Boot v3 保持。TWRP/UART 未验证，尚无可见日志/菜单，文本后端未集成，未进入 XNU。enuma 与 nuwa 同时在线，一律按 `ro.product.device` / fastboot `product` 选定 enuma。冻结镜像（step22 正向、stage23-control 及未执行正互补）不重试。
-
-## 系统与内核现状
-
-目标 enuma/SM8250，iPadOS17.7.11/21H461，iPad7,1/j120ap，XNU10063.141.1/4KiB，UniXNU5fdbd5d。CI39927966148/head250cdf9 已真实链接源平台内核，21417672 字节、SHA b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d；不是 enuma 运行证据，未预链接 donor 或启动。donor 46415872 字节/237 模块和静态闭包计划通过，未 emit 预链接镜像。64MiB 配置 FAT 已生成但未接 publisher/打包启动；NativeUfs 为 SM8550 参数当前禁用；EnumaScreen 仅 host/AArch64 对象。
+目标 iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。已有源平台内核最终链接、donor闭包规划；未emit预链接镜像。64MiB配置FAT未接publisher，NativeUfs的SM8550参数未启用，EnumaScreen仅主机/对象检查。TWRP/UART未验证；相机用于有显示输出/恢复动作，保留原图并按实际方向旋转。

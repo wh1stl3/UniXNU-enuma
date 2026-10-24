@@ -39,6 +39,7 @@ def main():
     assert board['firmware']['preflight'] == ['scripts/enuma_firmware_preflight.py']
     expected = ['patches/dxe-stage-checkpoints.patch','patches/dxe-dispatch-return.patch',
                 'patches/dxe-driver-checkpoints.patch','patches/dxe-dispatch-details.patch',
+                'patches/dispatcher-display-read.patch',
                 'Resources/MuPatches/Gic-Spurious.patch']
     assert board['firmware']['patches'] == expected
     (ROOT/'reports/enuma-firmware-source-migration.json').write_text(json.dumps({
