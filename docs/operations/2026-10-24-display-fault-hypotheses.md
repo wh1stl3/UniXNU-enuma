@@ -77,3 +77,9 @@ f0cef6f稳定staging/所选DSI递增支持后，“首候选完全未挂接”�
 ## 同源对照超时后的根因排序修正
 
 c45e52a step20对照也超时、人工恢复独立通过；与成功8fd3e62 step20的SimpleFb .text/data/pdata/reloc完全一致，79模块77一致。长编码或新blend采样不能单独解释两次失败。中等置信先查恢复后ABL/启动状态、PcdDxe有效内容、打包及是否实际进入DXE/MMIO；当前没有执行位置证据，不定责面板/DSI/alpha。先离线解析差异并准备更早停止定位候选，冻结未执行显示探针。
+
+## 对照有效代码/PCD差异解析完成
+
+成功reason22-control与失败stage23-control的SimpleFbDxe、PcdDxe在仅屏蔽COFF/debug目录时间戳及CodeView GUID/age后均逐字节完全相同，剩余差异0；前述PCD有效数据差异疑点下降。其余模块PE/DEPEX相同，封装FV容器节随子PE调试标识改变，不称整份FD完全相同。Boot头和192字节BootShim也完全一致（布尔及摘要见reports/enuma-step20-control-comparison.json）。原有77模块一致统计指PE/DEPEX；若连容器节一起计，容器和两PE三项不同，不能混用统计。
+
+因此当前中等偏高优先级转向设备恢复后启动状态/ABL交接和实际早期执行位置；不再把step22长等待或新显示代码当唯一原因，也没有有效证据支持PCD逻辑回归。下一项新软件应使用更早Core/驱动停止点，避免显示MMIO和等待，先判定是否进入受控DXE路径。已取消的显示候选保持冻结；该分析不授权原样重试失败镜像。尚未取得新的运行定位或屏幕输出。

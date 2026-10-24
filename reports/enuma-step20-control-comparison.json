@@ -12,6 +12,28 @@
   },
   "defines_equal": true,
   "changed_modules": {
+    "93fd219e729c154c8c4be77f1db2d792": {
+      "reason22-control": {
+        "pe": [],
+        "depex": [],
+        "other_sections": [
+          {
+            "type": 2,
+            "sha256": "f2ef74d0990272456d18f01c9d171113cc298684837c390892891d352912c722"
+          }
+        ]
+      },
+      "stage23-control": {
+        "pe": [],
+        "depex": [],
+        "other_sections": [
+          {
+            "type": 2,
+            "sha256": "56dfa2eee5978cf0581333bcd2597af4f22f2538f3750a4cbbde0caa1dc55bea"
+          }
+        ]
+      }
+    },
     "PcdDxe": {
       "reason22-control": {
         "pe": [
@@ -19,6 +41,20 @@
         ],
         "depex": [
           "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ],
+        "other_sections": [
+          {
+            "type": 25,
+            "sha256": "30c161cdb6d14b205a774916f81a71624cdf753fbf16227261897cc6589465cf"
+          },
+          {
+            "type": 19,
+            "sha256": "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+          },
+          {
+            "type": 21,
+            "sha256": "6a9e59a9c8d0f8c40f5d121087005c7bf881edc17c3d70623be6091971f98324"
+          }
         ]
       },
       "stage23-control": {
@@ -27,6 +63,20 @@
         ],
         "depex": [
           "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ],
+        "other_sections": [
+          {
+            "type": 25,
+            "sha256": "30c161cdb6d14b205a774916f81a71624cdf753fbf16227261897cc6589465cf"
+          },
+          {
+            "type": 19,
+            "sha256": "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+          },
+          {
+            "type": 21,
+            "sha256": "6a9e59a9c8d0f8c40f5d121087005c7bf881edc17c3d70623be6091971f98324"
+          }
         ]
       }
     },
@@ -37,6 +87,16 @@
         ],
         "depex": [
           "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ],
+        "other_sections": [
+          {
+            "type": 19,
+            "sha256": "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+          },
+          {
+            "type": 21,
+            "sha256": "9253ec5c78cde8be5e9a605704ce4d915f90fd5734b16473f2886e696c45cb06"
+          }
         ]
       },
       "stage23-control": {
@@ -45,11 +105,21 @@
         ],
         "depex": [
           "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ],
+        "other_sections": [
+          {
+            "type": 19,
+            "sha256": "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+          },
+          {
+            "type": 21,
+            "sha256": "9253ec5c78cde8be5e9a605704ce4d915f90fd5734b16473f2886e696c45cb06"
+          }
         ]
       }
     }
   },
-  "identical_modules_count": 77,
+  "identical_modules_count": 76,
   "hardware_actions": false,
   "simplefb_section_sha256": {
     "reason22-control": {
@@ -67,5 +137,85 @@
       ".reloc": "1e99905f73cebe5f8b726d748cbc875a26019b663548e224c12118a4a9dfd6b8"
     }
   },
-  "simplefb_text_identical": true
+  "simplefb_text_identical": true,
+  "debug_normalized_pe_comparison": {
+    "SimpleFbDxe": {
+      "profiles": {
+        "reason22-control": {
+          "section_sha256": {
+            ".text": "d0ae9f1a185fcf168ec0033c8fb16fceebcfed94854f15683050b000bba0f6f2",
+            ".rdata": "53ac5501770618accc2206a13eccebdf07010916c53e5e7a2b0cd0cb48c4068e",
+            ".data": "b50ab51d5749313a5c7cd0396c151c21f5445c4adaf50f87914429e7f77b3eaf",
+            ".pdata": "8f35aaff0ac8fdf1dfc73ab09928b98c67528098aff15af0341059b0d4023e34",
+            ".reloc": "1e99905f73cebe5f8b726d748cbc875a26019b663548e224c12118a4a9dfd6b8"
+          },
+          "normalized_sha256": "8d75abe37395e49625e62765541258a2a75841e0396e763d87b7897118717348",
+          "masked_fields": [
+            "COFF timestamp",
+            "debug timestamp",
+            "CodeView GUID/age"
+          ]
+        },
+        "stage23-control": {
+          "section_sha256": {
+            ".text": "d0ae9f1a185fcf168ec0033c8fb16fceebcfed94854f15683050b000bba0f6f2",
+            ".rdata": "89cd0563d6b2559ecf06f2eea6f2b2479ea73ecbb256800e0c0a4f3e11e6cdfd",
+            ".data": "b50ab51d5749313a5c7cd0396c151c21f5445c4adaf50f87914429e7f77b3eaf",
+            ".pdata": "8f35aaff0ac8fdf1dfc73ab09928b98c67528098aff15af0341059b0d4023e34",
+            ".reloc": "1e99905f73cebe5f8b726d748cbc875a26019b663548e224c12118a4a9dfd6b8"
+          },
+          "normalized_sha256": "8d75abe37395e49625e62765541258a2a75841e0396e763d87b7897118717348",
+          "masked_fields": [
+            "COFF timestamp",
+            "debug timestamp",
+            "CodeView GUID/age"
+          ]
+        }
+      },
+      "equal_after_defined_debug_masks": true,
+      "remaining_different_bytes": 0
+    },
+    "PcdDxe": {
+      "profiles": {
+        "reason22-control": {
+          "section_sha256": {
+            ".text": "fe1871762a9866bd6c2ea80af999efe62bf9cd2b33d4edc3a5c30d1fb5bf7cf2",
+            ".rdata": "f3fe60ffdaf7dc82c4a1b7186f9b464744a0b757eda396d69b30db9c61ea6b81",
+            ".data": "43b31d31d9a847a571a3fe478f1207c35c4b707455d73344333dc506066929b2",
+            ".pdata": "38f4c0a684bf288f419c4c7c8264a86088ab152dfd944fa3a1d5bd41c707b9cc",
+            ".reloc": "3fe5fbe0a6fa800bf0ae89cfb4a80144a0e0a03a44b182a2f410bc6cbf3982a2"
+          },
+          "normalized_sha256": "5bdf0f2f4bddbacb8d1a996fd03a3c2623924b1c77d7ffacc4431feb66fda6fd",
+          "masked_fields": [
+            "COFF timestamp",
+            "debug timestamp",
+            "CodeView GUID/age"
+          ]
+        },
+        "stage23-control": {
+          "section_sha256": {
+            ".text": "fe1871762a9866bd6c2ea80af999efe62bf9cd2b33d4edc3a5c30d1fb5bf7cf2",
+            ".rdata": "d21ebcc527d2b6c8754207d4e3ac268aec4d44c7f83bc31c9c8ae7955c5c13e4",
+            ".data": "43b31d31d9a847a571a3fe478f1207c35c4b707455d73344333dc506066929b2",
+            ".pdata": "38f4c0a684bf288f419c4c7c8264a86088ab152dfd944fa3a1d5bd41c707b9cc",
+            ".reloc": "3fe5fbe0a6fa800bf0ae89cfb4a80144a0e0a03a44b182a2f410bc6cbf3982a2"
+          },
+          "normalized_sha256": "5bdf0f2f4bddbacb8d1a996fd03a3c2623924b1c77d7ffacc4431feb66fda6fd",
+          "masked_fields": [
+            "COFF timestamp",
+            "debug timestamp",
+            "CodeView GUID/age"
+          ]
+        }
+      },
+      "equal_after_defined_debug_masks": true,
+      "remaining_different_bytes": 0
+    }
+  },
+  "container_guid": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+  "container_section_difference": "encapsulated FV payload differs; child PE debug identities differ; not proof of whole FD byte identity",
+  "bootshim_bytes_identical": true,
+  "boot_header_bytes_identical": true,
+  "bootshim_sha256": "b4ee9df1e152572dd8de9ce0542725b86f9291f8b1982ebeec13c777f4ad734f",
+  "conclusion": "Both changed executable PEs are byte-identical after masking only standard debug timestamps and CodeView GUID/age. All other modules PE/DEPEX match. No effective PCD/code difference established; runtime boot/ABL state now higher priority. Whole FD container bytes differ and early runtime location remains unknown."
 }
