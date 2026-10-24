@@ -1,24 +1,42 @@
-# 当前进度：step22超时已人工恢复，转离线修复
+# 当前进度：超时恢复后隔离唯一staging条件
 
-2026-10-24 Asia/Shanghai。用户要求更大胆推进，但本轮新证据通道失败，不能把目标当结果。
+2026-10-24 Asia/Shanghai。用户要求更大胆推进，仍以证据决定实现，沿人工恢复后继续离线修复及直接只读实测授权。
 
-## 硬停与恢复事实
+## 上次硬停与当前恢复
 
-8fd3e62同源step20基线16.078秒ADB返回、32.828秒Android完成（精确以报告为准），用户确认全程无按键、独立恢复通过。全套文档31b405d推送后，2026-10-24 16:03:42临时启动step22正向，Boot v3 SHA-256 `429c3c14ec2ee527a554012140049baad1f1ac67fb84bd925c849ce7df64d97e`，FD `8b2b2695c0556a1719a7c78c81e4f1cb35fdeccd591617de6673e3a421052cec`。fastboot boot命令成功仅说明发送/启动请求。约16:04:58到达75秒观察期限，16:05:02确认manual-recovery-needed，无ADB/fastboot自动返回；立即停止追加镜像，step22反向未执行。按AGENTS执行失联/不可控返回规则触发硬停。
+8fd3e62 step22正向2026-10-24 16:03:42临时启动，image429c3c14ec2ee527a554012140049baad1f1ac67fb84bd925c849ce7df64d97e，75秒无ADB/fastboot自动返回；约16:04:58触发硬停，16:05:02确认并停止追加，反向未执行。用户长按恢复Android，16:06:02独立sys.boot_completed=1/root/原槽/解锁/匹配备份及boot、vendor_boot原摘要通过。当前恢复阻塞解除，Android完成；不将该笔写为自动/无按键成功，六类结果unknown。失败正向及未执行反向均冻结不原样重试，历史源锁uefi-8fd3e62.lock.json保留，证据enuma-scanout-blend-reason-device/preflight及operations。0efa313已提交推送恢复交接。
 
-用户按请求长按电源恢复并明确回复已到Android；2026-10-24T16:06:02.205849+08:00独立核验enuma、sys.boot_completed=1、root、原槽、解锁、匹配备份和boot/vendor_boot原摘要通过。实际当前状态为Android完成，人工恢复后已解除恢复阻塞；该笔不能记为自动受控返回或无按键成功。超时及恢复相机保留原图并自行旋转判读，原始日志/标识/备份/图像仅out。
+## 主判断
 
-## 主判断和未执行项
+中等置信先查观察器/ABL遗留配置不匹配，DSI整体停摆和Boot格式低优先级。step22超时的新增长等待/继续blend采样是隔离点，尚无根因定论；先用不新增寄存器地址的唯一staging条件区分额外源，再考虑dim/alpha。
 
-step22六类取证失败，paired_decode=false，类别未知；反向候选已资格但冻结未执行。新增长编码等待（最多20秒）及从早拒绝改为完整采样是首要隔离点，中等置信；不能据超时判定面板、DSI停摆、staging、dim或alpha，更不能把旧step21拒绝升级为遮挡。Boot v3同源基线正常，格式切换低优先级。源码/主机/完整固件审计通过没有覆盖真实设备长等待行为，这一限制已显现。
+## 新隔离候选及审计
 
-## 下一步
+固件 c45e52a24f7c094e5949cc0ed6f7e017e4233b78，69项源锁/gitlink固定。step23从原step20完整算法出发，仅将已读四个staging字复制到局部变量、局部屏蔽已知CTL_MIXER_BORDER_OUT bit24后调用源编码解码：要求只含首候选非virtual源、stage编码1..12。保持第一个描述和第一个关联CTL/LM，不换候选；原完整四字仍每窗复查，border变化也拒绝。旧step19/20/21/22头文件字节保持。
 
-按用户人工恢复后持续工作规则，立即继续离线分析/新软件，不原样重试step22。废弃本轮长编码通道用于继续实测，改回既有两次Stall(100000)及Core2/7秒判据；先独立验证“仅候选非virtual staging，忽略已知border bit24”这一配置条件，将dim/alpha与长等待全部移出新探针。新候选必须完成资格、所有当前文档推送及即时恢复门禁后才可实测。当前没有新待批准项，尚无新的自动返回资格。
+隔离依据：step20先前多次及8fd3e62同源实机通过；新step23不新增任何MMIO地址，不读取LM_OP_MODE/dim/alpha，不调用长编码Stall；最大250读/两次既有Stall(100000)，保留原major/minor6.0、几何、所选活动DSI两窗各非回绕1..64递增及描述/配置稳定，Core仍原2/7秒正互补。这同时移除step22新增长等待与完整blend访问，不能称已确定超时根因。固定小米52a2f18在没有BASE源时可设border，故border本身不等于另一SSPP；源/FDT契约沿enuma-scanout-blend-sources.json。通过只降低额外源字段解释，不证明无dim/alpha、实际物理LM/pingpong/DSC、fetch/IOVA/cache/面板可见。拒绝不等于高层遮挡，需继续解码额外/未知/virtual字段和层次。
 
-R-005 consumed，无像素/MMIO/分区写、新映射/内存大小/基址/verified变更；Boot v3、51MiB heap、512MiB owned、example=true保持。用户可在场恢复，摄像头自行旋转。Android/fastboot恢复已核对，TWRP/UART未验证。仍未可见日志/菜单、文本后端未集成、未进入XNU。
+69项O1/Oz+ASan/UBSan及精确250读、禁止fixture读取blend地址/长等待、AArch64仅gBS通过；真实Mu GOP补丁/marker、5项像素/恢复守卫、源锁/workspace通过。三份完整链接/回退、30OEM PE/DEPEX、AutoGen/库、实际FD受限指令指纹、Boot v3及同源宏差异bundle通过。PE指纹不是完整动态MMIO/store/CFG证明；锁定源码和故障注入另审边界。三份仅step/query宏差异，pixel flag0。
 
-证据reports/enuma-scanout-blend-reason-device.json、enuma-scanout-blend-reason-preflight.json、operations/2026-10-24-scanout-blend-reason.md；源码8fd3e62及资格见原bundle/host。历史step21/step20结果保持，不追溯改写。当前文档本轮提交推送，发布以远端核验为准。
+| 候选 | step/query | Boot v3 SHA-256 | FD SHA-256 |
+| --- | --- | --- | --- |
+| stage23-control | 20/1 | `459961e1675150602631647e6db7760a929bed19f922111dd3bccc606d9f0416` | `7e2ec318f63505bbddaa19c663acd8ae6e2ab50f260338f6667853d384279bf3` |
+| stage23-sole | 23/1 | `4a88e6e6ca8d0f5fbe16ea2de4e48dfc49a3b20bb3a95974eafdbe865878e4ff` | `73a37c143caca27f06d2f4ba48eaa2cc7a1096fd0e7281450cef39245e78b6c3` |
+| stage23-unproven | 23/2 | `c8984dd00ed4f877eb29e5435a2872ebb6a47672f2e8405ca36aac85fc60203b` | `a3ae18bc5d3ce45d0d520b71c152cc2acf64108480d3e94a627485e64b6f6b84` |
+
+## 最新实测
+
+c45e52a尚未新实测。最近设备为step22超时后人工恢复Android，独立完成/root/原槽/解锁/原分区摘要通过；见enuma-scanout-blend-reason-device.json。
+
+本轮互补未齐，唯一staging条件未知。
+
+## 下一步与边界
+
+全部当前文档提交推送后，以即时身份/备份/恢复核验临时启动stage23-control；独立恢复及无按键确认后继续。
+
+用户可在场恢复，主机摄像头原图保留、自行旋转判读，必要前后截图，真实输出/判读变化/恢复时录像。即时身份/Android/root/原槽/解锁/备份与原分区摘要保持；Android/fastboot已核对，TWRP/UART未验证。超时立即停止追加、优先恢复并当轮落实交接；恢复后继续离线新软件，不重试失败镜像。R-005 consumed，无像素/MMIO/分区写入、新映射/内存基址/大小/verified变更；51MiB heap、512MiB owned、example=true和Boot v3保持。原始日志/图像/标识/备份/镜像仅out。仍无可见日志/菜单，文本后端未集成，未进入XNU。
+
+证据firmware/docs/scanout-sole-stage.md、config/scanout-sole-stage-probes.json、reports/enuma-scanout-sole-stage-{host,bundle,device,preflight}.json（device仅实测产生时存在）、operations/2026-10-24-scanout-sole-stage.md及display-fault-hypotheses.md。每笔前全部当前文档提交推送、即时核验后才启动。
 
 ## 系统与内核现状
 

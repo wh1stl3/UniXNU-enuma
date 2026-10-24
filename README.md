@@ -26,4 +26,4 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 
 固件编译实现位于uefi-enuma/Resources/Scripts/build_enuma_firmware.py；本仓同名脚本为校验固定源锁的适配入口。文档职责与历史记录索引见[docs/README.md](docs/README.md)。
 
-2026-10-24当前：step22取证超时已人工恢复并独立核验通过；反向冻结未执行，类别未知。继续离线隔离/新软件，见STATUS。R-005 consumed，尚未可见写屏或进入XNU。
+2026-10-24当前：c45e52a step20/step23隔离唯一staging候选三份审计完成，结果见STATUS。step22超时已人工恢复独立通过、失败正向及反向冻结，R-005 consumed。尚未可见写屏或进入XNU。

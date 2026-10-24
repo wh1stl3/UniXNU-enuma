@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "stage23-control",
+      "step": 20,
+      "query": 1,
+      "variant": "stage23-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "stage23-sole",
+      "step": 23,
+      "query": 1,
+      "variant": "stage23-sole-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "stage23-unproven",
+      "step": 23,
+      "query": 2,
+      "variant": "stage23-unproven-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-scanout-sole-stage-host.json",
+  "maximum_dsi_reads": 250,
+  "wait_calls_max": 2,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

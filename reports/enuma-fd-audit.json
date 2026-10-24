@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "82057cbf7e667260af60b85c378ebc221d44b5e2f88dd3628fa3c501640f7e4c",
+  "fd_sha256": "a3ae18bc5d3ce45d0d520b71c152cc2acf64108480d3e94a627485e64b6f6b84",
   "fd_bytes": 3145728,
   "file_count": 79,
   "matched_oem_modules": [
@@ -165,7 +165,7 @@
   "runtime_protocol_closure": "pending hardware dispatch",
   "hardware_execution": false,
   "scanout_route_code": {
-    "provider_pe_sha256": "b369a79ade122b7f0f8cb9590834924271669c077d2c6d9db1e58972d53da50f",
+    "provider_pe_sha256": "93d7fd61a121ee874ef8fe604dffb121ebdc9b6e86053bffcc9330777a0c0c68",
     "instruction_markers": {
       "ctl_interface_mask_load": true,
       "frame_counter_load": true,
@@ -174,10 +174,7 @@
       "wait_low_half": true,
       "wait_high_half": true,
       "source_output_xy_load": true,
-      "mixer_size_load": true,
-      "encoding_multiplier_low": true,
-      "encoding_multiplier_high": true,
-      "encoding_multiply": true
+      "mixer_size_load": true
     },
     "scope": "actual packaged PE fingerprints plus separately locked source/host tests; not complete indirect MMIO/store/control-flow proof",
     "complete_mmio_dataflow_proof": false,

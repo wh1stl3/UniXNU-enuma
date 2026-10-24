@@ -130,7 +130,7 @@ def main():
         (out/'SimpleFbDxe.disassembly.txt').write_text(assembly)
         code=audit_counter_code(payloads[0],assembly,build['diagnostic_gop_step'])
         code['provider_pe_sha256']=digest(payloads[0]);report['dsi_counter_code']=code
-    if build.get('diagnostic_gop_step') in (19,20,21,22):
+    if build.get('diagnostic_gop_step') in (19,20,21,22,23):
         payloads=pe_payloads.get('SimpleFbDxe',[])
         if len(payloads)!=1:raise ValueError('route provider PE missing or ambiguous')
         out=ROOT/'out/scanout-route-fd-audit';out.mkdir(exist_ok=True)
@@ -146,7 +146,7 @@ def main():
             'bounded_delta_comparison':r'cmp\s+w\d+, #64',
             'wait_low_half':r'mov\s+w0, #34464',
             'wait_high_half':r'movk\s+w0, #1, lsl #16'}.items()}
-        if build['diagnostic_gop_step'] in (20,21,22):
+        if build['diagnostic_gop_step'] in (20,21,22,23):
             markers['source_output_xy_load']=bool(re.search(r'ldr\s+w\d+, \[x\d+, #16\]',assembly))
             markers['mixer_size_load']=bool(re.search(r'ldr\s+w\d+, \[x\d+, #4\]',assembly))
         if build['diagnostic_gop_step']==21:

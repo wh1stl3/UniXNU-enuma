@@ -1,3 +1,3 @@
-# README
+# 文档入口
 
-8fd3e62 step22正向超时后人工恢复，反向冻结未执行，类别未知。恢复核验通过，按STATUS继续离线修复，不原样重试。R-005 consumed。
+c45e52a step20/step23隔离唯一staging候选三份审计完成，结果见STATUS。step22超时已人工恢复独立通过、失败正向及反向冻结，R-005 consumed。 STATUS当前、HANDOFF接手、AGENTS规则，WORKLOG/DECISIONS/operations历史。每笔前文档推送及即时恢复核验。

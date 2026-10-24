@@ -29,5 +29,7 @@
   "encoding_wait_microseconds_max": 20000000,
   "pixel_access": false,
   "mmio_writes": false,
-  "new_mapping": false
+  "new_mapping": false,
+  "source_lock": "source-history/uefi-8fd3e62.lock.json",
+  "runtime_frozen_after_timeout": true
 }
