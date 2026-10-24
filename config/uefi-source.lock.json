@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "cc9751f72115d4404f597d386f9af796df0c45eb",
+  "commit": "e65a71be002a2d5af6bc8e1a632f41d0726469de",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -56,7 +56,7 @@
     "patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
     "diagnostics/EnumaGopAudit.h": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
-    "patches/simplefb-gop-query.patch": "d2e9b0844d8b7bd249995179ff96f918e056029b0f89c4865851617a2cf9ceb7",
+    "patches/simplefb-gop-query.patch": "b0d7e46bfd2ffb56662435fb7dc6f69434afa06d97a5b23377887392c9954b99",
     "docs/gop-query.md": "c5e24e1a9b1681d3d7cf460ad01c2f885caa0f98ac363a8c7195ce838dabe378",
     "diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184",
     "Resources/Scripts/build_enuma_firmware.py": "e0bfada30a92afde30fde2c1cab8b8852aaac6dba7df87514a9e8bdfea06cdca",
