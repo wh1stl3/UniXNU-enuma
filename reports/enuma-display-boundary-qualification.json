@@ -1,0 +1,364 @@
+{
+  "scope": "offline DisplayDxe A candidate qualification; no hardware execution",
+  "archive": "out/display-entry-boundary/pre-entry-aa9ec66",
+  "qualification": {
+    "scope": "offline artifact, compiler and FD qualification; no execution",
+    "detail_point": 15,
+    "target_guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+    "firmware_commit": "aa9ec666abadfeacda608870ecfb4e7179c7ecc3",
+    "compiler_defines": {
+      "ENUMA_DIAG_STAGE": "0xd",
+      "ENUMA_DIAG_DETAIL_POINT": "0xf",
+      "ENUMA_DIAG_DELAY_US": "0x1e8480",
+      "ENUMA_DIAG_DISPATCH_ORDINAL": "0x1",
+      "ENUMA_DIAG_GUID_ENABLED": "0x1",
+      "ENUMA_DIAG_GUID_ONLY": "0x1",
+      "ENUMA_DIAG_GUID_LOW64": "0x4f7906c74138022f",
+      "ENUMA_DIAG_GUID_HIGH64": "0xe7a411b5337e949c",
+      "ENUMA_DIAG_DISPATCH_FALLBACK": "0x1",
+      "ENUMA_DIAG_GOP_QUERY": "0x0"
+    },
+    "core_materialized_constants": {
+      "0x4f7906c74138022f": [
+        "0xf940"
+      ],
+      "0xe7a411b5337e949c": [
+        "0xf960"
+      ],
+      "0x1e8480": [
+        "0xf970"
+      ],
+      "0x6acfc0": [
+        "0x3c9c"
+      ]
+    },
+    "files": {
+      "audit.json": {
+        "sha256": "ceb40ead93c6ad10c4d1ecbee22e91543c87a9288b95fb949d7ca3767b96d630",
+        "bytes": 4357
+      },
+      "build.json": {
+        "sha256": "895f09e3e06ae2ad96b4e3a16db64520e7aaa5b6edc300a83998b755b07e94c6",
+        "bytes": 14415
+      },
+      "candidate.fd": {
+        "sha256": "776437b5a5eaf1939399fabfc4ec599cb9f58a542de29a2a1f66fc500b10f10d",
+        "bytes": 3145728
+      },
+      "candidate.img": {
+        "sha256": "29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4",
+        "bytes": 3153920
+      },
+      "candidate.raw": {
+        "sha256": "2c9ca77319115f9aa2b5ef75363dd78fe4953d19bf656f22c99996ffe5884b7e",
+        "bytes": 3145920
+      },
+      "DxeCore.efi": {
+        "sha256": "537a1f9b972c476f959aeee8a3bdf986a4a45d483c49119714988570ea1c0529",
+        "bytes": 164352
+      },
+      "DxeCore.GNUmakefile": {
+        "sha256": "a7355536846bbe2b491055e492511d5aa0ee857e1b8a67ab1ec6bd7303e8ca87",
+        "bytes": 51455
+      },
+      "package.json": {
+        "sha256": "8969a9ff90b9684393078a21425cf5db6a277c36e8992f8b4f9032501d0bb526",
+        "bytes": 797
+      },
+      "payload.json": {
+        "sha256": "08c21b67d5e3dfb49e56a7730e9a496e2e3f6021b9cbed868b840299520d0d82",
+        "bytes": 443
+      }
+    },
+    "limits": [
+      "constant construction and compiler flags do not prove complete runtime control flow",
+      "no current device identity/recovery checks or hardware authorization evaluation",
+      "completion fallback is not a watchdog; preceding drivers can run hardware writes"
+    ]
+  },
+  "machine_code_review": {
+    "scope": "manual packaged Core review at fixed candidate hash; no execution",
+    "core_sha256": "537a1f9b972c476f959aeee8a3bdf986a4a45d483c49119714988570ea1c0529",
+    "symbols": {
+      "EnumaDispatchDetailCheckpoint": "0xf910",
+      "CoreStartImage": "0xc328",
+      "MicroSecondDelay": "0x17da0",
+      "ResetCold": "0x16f4",
+      "CpuDeadLoop": "0x13b8",
+      "ReadUnaligned64": "0x18e4c"
+    },
+    "checkpoint_body": [
+      {
+        "rva": "0xf910",
+        "mnemonic": "str",
+        "operands": "x19, [sp, #-0x20]!"
+      },
+      {
+        "rva": "0xf914",
+        "mnemonic": "stp",
+        "operands": "x29, x30, [sp, #8]"
+      },
+      {
+        "rva": "0xf918",
+        "mnemonic": "add",
+        "operands": "x29, sp, #8"
+      },
+      {
+        "rva": "0xf91c",
+        "mnemonic": "cmp",
+        "operands": "x0, #0xf"
+      },
+      {
+        "rva": "0xf920",
+        "mnemonic": "b.ne",
+        "operands": "#0xf988"
+      },
+      {
+        "rva": "0xf924",
+        "mnemonic": "mov",
+        "operands": "x19, x1"
+      },
+      {
+        "rva": "0xf928",
+        "mnemonic": "cbz",
+        "operands": "x1, #0xf988"
+      },
+      {
+        "rva": "0xf92c",
+        "mnemonic": "mov",
+        "operands": "x0, x19"
+      },
+      {
+        "rva": "0xf930",
+        "mnemonic": "bl",
+        "operands": "#0x18e4c"
+      },
+      {
+        "rva": "0xf934",
+        "mnemonic": "mov",
+        "operands": "x8, #0x22f"
+      },
+      {
+        "rva": "0xf938",
+        "mnemonic": "movk",
+        "operands": "x8, #0x4138, lsl #16"
+      },
+      {
+        "rva": "0xf93c",
+        "mnemonic": "movk",
+        "operands": "x8, #0x6c7, lsl #32"
+      },
+      {
+        "rva": "0xf940",
+        "mnemonic": "movk",
+        "operands": "x8, #0x4f79, lsl #48"
+      },
+      {
+        "rva": "0xf944",
+        "mnemonic": "cmp",
+        "operands": "x0, x8"
+      },
+      {
+        "rva": "0xf948",
+        "mnemonic": "b.ne",
+        "operands": "#0xf988"
+      },
+      {
+        "rva": "0xf94c",
+        "mnemonic": "add",
+        "operands": "x0, x19, #8"
+      },
+      {
+        "rva": "0xf950",
+        "mnemonic": "bl",
+        "operands": "#0x18e4c"
+      },
+      {
+        "rva": "0xf954",
+        "mnemonic": "mov",
+        "operands": "x8, #0x949c"
+      },
+      {
+        "rva": "0xf958",
+        "mnemonic": "movk",
+        "operands": "x8, #0x337e, lsl #16"
+      },
+      {
+        "rva": "0xf95c",
+        "mnemonic": "movk",
+        "operands": "x8, #0x11b5, lsl #32"
+      },
+      {
+        "rva": "0xf960",
+        "mnemonic": "movk",
+        "operands": "x8, #0xe7a4, lsl #48"
+      },
+      {
+        "rva": "0xf964",
+        "mnemonic": "cmp",
+        "operands": "x0, x8"
+      },
+      {
+        "rva": "0xf968",
+        "mnemonic": "b.ne",
+        "operands": "#0xf988"
+      },
+      {
+        "rva": "0xf96c",
+        "mnemonic": "mov",
+        "operands": "w0, #0x8480"
+      },
+      {
+        "rva": "0xf970",
+        "mnemonic": "movk",
+        "operands": "w0, #0x1e, lsl #16"
+      },
+      {
+        "rva": "0xf974",
+        "mnemonic": "bl",
+        "operands": "#0x17da0"
+      },
+      {
+        "rva": "0xf978",
+        "mnemonic": "bl",
+        "operands": "#0x16f4"
+      },
+      {
+        "rva": "0xf97c",
+        "mnemonic": "ldp",
+        "operands": "x29, x30, [sp, #8]"
+      },
+      {
+        "rva": "0xf980",
+        "mnemonic": "ldr",
+        "operands": "x19, [sp], #0x20"
+      },
+      {
+        "rva": "0xf984",
+        "mnemonic": "b",
+        "operands": "#0x13b8"
+      },
+      {
+        "rva": "0xf988",
+        "mnemonic": "ldp",
+        "operands": "x29, x30, [sp, #8]"
+      },
+      {
+        "rva": "0xf98c",
+        "mnemonic": "ldr",
+        "operands": "x19, [sp], #0x20"
+      },
+      {
+        "rva": "0xf990",
+        "mnemonic": "ret",
+        "operands": ""
+      }
+    ],
+    "callsites": [
+      [
+        {
+          "rva": "0x10460",
+          "mnemonic": "add",
+          "operands": "x2, x2, #0x630"
+        },
+        {
+          "rva": "0x10464",
+          "mnemonic": "bl",
+          "operands": "#0x1310"
+        },
+        {
+          "rva": "0x10468",
+          "mnemonic": "add",
+          "operands": "x22, x20, #0x30"
+        },
+        {
+          "rva": "0x1046c",
+          "mnemonic": "mov",
+          "operands": "w0, #0xf"
+        },
+        {
+          "rva": "0x10470",
+          "mnemonic": "mov",
+          "operands": "x1, x22"
+        },
+        {
+          "rva": "0x10474",
+          "mnemonic": "bl",
+          "operands": "#0xf910"
+        },
+        {
+          "rva": "0x10478",
+          "mnemonic": "ldr",
+          "operands": "x0, [x20, #0x80]"
+        },
+        {
+          "rva": "0x1047c",
+          "mnemonic": "adrp",
+          "operands": "x20, #0x2c000"
+        },
+        {
+          "rva": "0x10480",
+          "mnemonic": "add",
+          "operands": "x20, x20, #0x380"
+        },
+        {
+          "rva": "0x10484",
+          "mnemonic": "mov",
+          "operands": "x1, xzr"
+        },
+        {
+          "rva": "0x10488",
+          "mnemonic": "mov",
+          "operands": "x2, xzr"
+        },
+        {
+          "rva": "0x1048c",
+          "mnemonic": "stp",
+          "operands": "x0, x22, [x20]"
+        },
+        {
+          "rva": "0x10490",
+          "mnemonic": "bl",
+          "operands": "#0xc328"
+        },
+        {
+          "rva": "0x10494",
+          "mnemonic": "str",
+          "operands": "xzr, [sp]"
+        },
+        {
+          "rva": "0x10498",
+          "mnemonic": "str",
+          "operands": "wzr, [sp, #8]"
+        },
+        {
+          "rva": "0x1049c",
+          "mnemonic": "stp",
+          "operands": "xzr, xzr, [x20]"
+        },
+        {
+          "rva": "0x104a0",
+          "mnemonic": "b",
+          "operands": "#0xfd34"
+        },
+        {
+          "rva": "0x104a4",
+          "mnemonic": "ldr",
+          "operands": "x0, [sp, #0x10]"
+        },
+        {
+          "rva": "0x104a8",
+          "mnemonic": "bl",
+          "operands": "#0x835c"
+        }
+      ]
+    ],
+    "limits": [
+      "static code only; preceding drivers, firmware reset and host observation can fail"
+    ]
+  },
+  "hardware_execution": false,
+  "first_preflight_rejection": "old --reference path did not match existing Common/Mu symlink; no source change; rerun with fixed firmware reference",
+  "packaging_host": "Windows Python; WSL cannot resolve the locked D:/ AOSP source path",
+  "clock_note": "make reported clock skew; host and WSL sampled about 20 seconds apart; actual new Core GUID/point/delay code inspected, no generic firmware stability claim"
+}

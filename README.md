@@ -1,14 +1,11 @@
 # UniXNU-enuma
 
-小米平板5 Pro 5G（enuma / SM8250）的 iPadOS17.7.11/21H461 移植工作仓；XNU10063.141.1、4KiB。当前example配置，未进入XNU或iPadOS用户态，未证实可见GOP输出。
+小米平板5 Pro 5G / SM8250-AC的iPadOS17.7.11移植。尚未验收可见GOP、XNU入口或用户态。
 
+当前D-166：已完成本机ABL/原厂DisplayDxe/保存DTB的[交接契约](docs/operations/2026-10-25-handoff-contract.md)与[ABI审计](docs/operations/2026-10-25-native-display-abi.md)，A/detail15正确GUID候选离线构建和资格通过，未上机。接手读[AGENTS](AGENTS.md)、[STATUS](docs/STATUS.md)、[HANDOFF](docs/HANDOFF.md)、[交接词](docs/2026-10-25-handoff-prompt.md)及[审核状态](docs/NEED-REVIEW.md)。
 
-当前路线：[公开资料复审：先审显示交接契约和原厂运行时ABI](docs/operations/2026-10-25-public-source-route-review.md)；[DisplayDxe执行边界定位](docs/operations/2026-10-25-display-entry-isolation-plan.md)保留为有界支线；接手读[AGENTS](AGENTS.md)、[STATUS](docs/STATUS.md)、[HANDOFF](docs/HANDOFF.md)、[D-164/D-163](docs/DECISIONS.md)、[审核状态](docs/NEED-REVIEW.md)和[交接提示词](docs/2026-10-25-handoff-prompt.md)。
+路线维持先审显示交接契约、原厂DisplayDxe有界验证、最小真实初始化为条件后备；不补未知协议stub，不复制其他机型参数。工具与机器报告记录实际输入摘要、编译宏和Core代码。固件固定aa9ec66，源码实现仅在firmware子模块，参考仓只读，所有二进制在out/。
 
-原厂模块支持优先复用，但尚无运行闭包和可见显示证明。R-014两笔无返回尚未定位；APRIORI只保证入队，R-015不按原动机执行。新detail15/detail13候选仅为方案，未构建/上机；本轮文档未提交，实机前须完整资格与发布/恢复门禁。历史0/3/0计划冻结，不解码或原样重试失败镜像。
-
-设备仓负责板级契约、打包、实机恢复和审计；firmware/为固定固件子模块，构建实现不复制回来。所有产物放out/，参考仓只读；原厂PE、备份与设备身份不提交。当前源码锁与gitlink为aa9ec66，实时状态以Git和来源锁核对。
-
-继续复用UniXNU的DarwinBoot、ArmCpu/ArmDTPlatform、NativePrelink/NativeRamBlock及载荷工具；LineageOS/MiCode作为SM8250/enuma硬件依据。未验证GOP可见输出、PE_Video交接或XNU入口；sheng参数和实机结论不继承。
+下一次实机仍需文档提交推送、即时身份/匹配备份/恢复和观测门禁。没有从此次离线审计新增像素、内存、verified或分区批准。
 
 远端：[设备仓](https://github.com/wh1stl3/UniXNU-enuma)、[固件仓](https://github.com/wh1stl3/uefi-enuma)。

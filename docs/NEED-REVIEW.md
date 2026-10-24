@@ -1,3 +1,7 @@
+## D-166当前补充（2026-10-25）
+
+交接契约和原厂ABI离线审计完成，A/detail15新候选已构建、审计和独立归档但未上机。详见STATUS与reports/enuma-display-boundary-qualification.json。当前无需新人工按键，无实时设备状态采集；实机前仍按原规则落实发布和即时门禁。本轮未更改任何批准范围；内存/verified/分区门禁保持，R-015不执行。此前“未构建/文档未提交”只表示历史阶段，发布结果以Git记录为准。
+
 # 当前审查摘要（2026-10-25 01:38）
 
 当前以D-163及operations/2026-10-25-display-entry-isolation-plan.md为准。R-015按原stub动机暂不执行；APRIORI仅保证入队，GUID字节搜索不证明语义无关，错误GUID也不使completion fallback失效。

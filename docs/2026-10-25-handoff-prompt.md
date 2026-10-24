@@ -1,3 +1,11 @@
+# enuma交接提示词：D-166新增二进制证据与A候选
+
+优先执行docs/STATUS.md和docs/HANDOFF.md的D-166当前顺序。已完成两份离线审计：docs/operations/2026-10-25-handoff-contract.md与2026-10-25-native-display-abi.md；工具scripts/audit_display_handoff.py，机器证据reports/enuma-display-handoff-audit.json。A/detail15已经离线构建并归档，见reports/enuma-display-boundary-qualification.json，未上机。先发布文档和完成即时门禁，再判断执行；不直接跳到B或补节点/运行时stub。
+
+新增事实：实际DisplayDxe会消费Kernel Protocol/调度HOB，且缺失时可成功返回而不创建显示线程；本机ABL查splash_region而保存DTB只有cont_splash_region，临时入口树未知。原厂PE存在、返回0或局部DSI活动均不代表可见显示。D-165已保留；75秒无返回还不能排除复位/前置/观测问题。
+
+以下D-164/D-163内容作为路线和判读背景；其中“仅方案未构建”“当前不要commit”“本轮未提交”等阶段表述已由D-166及实际发布记录取代，不能覆盖STATUS。
+
 # enuma移植交接提示词（2026-10-25公开资料路线复审）
 
 ## D-164：公开资料复审后的当前顺序（2026-10-25）

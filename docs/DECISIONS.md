@@ -506,3 +506,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 **⑤ 明确不做的事（承接 Codex 的两条警告，均已接受）**：不因线程缺口就把 `EnableDisplayThread` 改 0（同步路径可能同样依赖锁/事件/TPL/XBL 服务）；不给 `UEFI FD` 改名或添加 `FD Reserved` 区域（该扫描器按机器码模式寻找函数、解析循环直到 RET、无明确长度上限，且原 XBL 指针在 ABL 退出/BootShim 重定位后可能已失效）。任何内存表/映射改动仍走 AGENTS 审批。
 
 **下一步**（与 D-164 一致）：先产出两份离线证据——`handoff-contract`（Boot v3 实际选用的 DTB/DTBO、splash base/size、stride/格式、SMMU、双 DSI、ExitBootServices 生命周期，逐项标注"已知/源码推导/待实测"）与 `native-display-abi`（固定本机 DisplayDxe 摘要与入口，对线程开关字符串做交叉引用，建立协议查找/HOB 查找/Thread/Lock/SetMode 的真实调用图）。在此之前不上机。
+
+2026-10-25 · D-166：完成固定实际R-014/XBL DisplayDxe、ABL LinuxLoader和保存vendor_boot/Android FDT的可复现离线审计。确认真实Kernel Protocol/调度HOB/线程/锁调用，以及缺Kernel可清线程标志并返回0的降级分支；不能以返回0当SetMode成功，也不能以缺Kernel单独解释超时。ABL真实查splash_region，而保存三份完整DTB只有cont_splash_region；实际临时入口/DTBO未知，不直接补节点或判关闭面板。D-165复核保留，其“超时表示派发挂死”等穷尽解释收窄，复位/前置/观测失败仍可能。A正确GUID/detail15候选完成离线构建和机器码/FD/打包资格，未上机；固定aa9ec66、仅省略UFS，不更改固件源码/内存/verified/授权。新增两份专项审计、两个离线工具和机器报告，提交号由后续Git记录。

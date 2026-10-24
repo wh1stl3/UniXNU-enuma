@@ -1,40 +1,35 @@
-# 当前状态：先审显示交接契约，原厂DisplayDxe有界验证
+# 当前状态：D-166二进制审计完成，A候选离线资格通过
 
-## D-164：公开资料复审后的当前顺序（2026-10-25）
+2026-10-25。本轮按D-164/D-165推进，完成真实ABL/原厂DisplayDxe/保存DTB的离线审计，以及A/detail15候选构建、FD/打包/编译参数和Core机器码检查。未访问设备，未执行新临时boot或分区写入。当前结论以D-166为准；D-163证据更正和D-164路线顺序维持。
 
-当前主线改为先离线审计ABL→BootShim→UEFI的continuous-splash交接契约；原厂DisplayDxe保留为有界支线。先输出实际FDT/显示生命周期证据与原厂PE真实调用/ABI清单，再按缺口选择候选，detail15/detail13不再自动排在离线审计之前。详见[公开资料路线复审](operations/2026-10-25-public-source-route-review.md)。
+## 新增证据
 
-新静态发现：enuma配置EnableMultiThreading/EnableDisplayThread=1，但当前GetXblHobAddresses只识别FD Reserved/FD_Reserved，板级内存表无此名称；以该表调用此路径不会恢复scheduler/DTB扩展HOB地址。这不证明实机挂点或DisplayDxe必然使用该ABI；需绑定实际PE/SEC证据。不得直接改名、加内存区、关线程或补stub来冒充修复。
+1. 从R-014实际镜像和原厂XBL分别解出DisplayDxe，PE逐字节相同，SHA256 6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425。真实代码读取EnableDisplayThread，调用Kernel Protocol、scheduler HOB回退、InitLock和ThreadCreate/Resume，线程入口调用SetMode。缺Kernel的明确分支可清线程标志并返回0，因此驱动成功返回不证明模式设置，也不能用缺Kernel单独解释75秒无返回。
+2. 本机ABL的LinuxLoader真实查找/reserved-memory/splash_region；保存的vendor_boot三份完整DTB和历史Android FDT只有cont_splash_region@9c000000（0x02300000）与DFPS（0x00100000），无该目标名称。这是具体交接缺口；实际所选DTB/DTBO和临时入口FDT未知，未证明该分支直接关闭面板。
+3. 当前源码的FD Reserved/FD_Reserved名称缺口仍成立。不能据此断言没有其他Kernel Protocol提供者或直接改内存表/关线程/补stub。enuma尚无EntryArg HOB的板级消费者证据，上游ShengBootMemoryDxe的实现可参考，内存增补不能直接搬用。
 
-同SoC edk2-msm有继承帧缓冲实现，MiCode/LineageOS提供SMMU/split-DSI和KTZ8866依据；这些实现不证明本机scanout有效。暂不重写完整显示栈；若证实仅背光等窄缺口，再复用真实协议实现。D-163四项更正继续有效。此轮仅研究和文档，未构建/访问设备/实测，未提交推送，未扩大授权。
+专项文档：[交接契约](operations/2026-10-25-handoff-contract.md)、[原厂ABI](operations/2026-10-25-native-display-abi.md)。机器证据reports/enuma-display-handoff-audit.json，可复现工具scripts/audit_display_handoff.py。实际输入摘要和摘录已绑定，原始二进制/FDT仅在out/。
 
-2026-10-25 01:38文档复核。本轮仅修改文档与方案，未构建、未启动、未写设备。当前结论以D-163为准，D-162中过强解释已取代；原始观测保留。
+## 新A候选：已离线归档，未上机
 
-## 最近实测与恢复
+- 固件固定aa9ec666abadfeacda608870ecfb4e7179c7ecc3；stage13/detail15，GUID4138022f-06c7-4f79-9c94-7e33b511a4e7，GUID-only、delay2、fallback7、without-ufs、query0/step0/value-off。未改固件源码或OEM PE。
+- 镜像SHA256：29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4；FD：776437b5a5eaf1939399fabfc4ec599cb9f58a542de29a2a1f66fc500b10f10d；raw：2c9ca77319115f9aa2b5ef75363dd78fe4953d19bf656f22c99996ffe5884b7e。
+- 独立归档out/display-entry-boundary/pre-entry-aa9ec66/，含FD/raw/image及相邻报告、实际Core PE/编译参数、资格和机器码摘录。总报告reports/enuma-display-boundary-qualification.json。
+- FD审计32个原厂PE/DEPEX不变，仅省略UFSDxe，无SimpleFb。打包Boot v3、空ramdisk，AOSP官方解包回读一致。实际Core在RVA0x10474调point15门，0x10490才调CoreStartImage；门比较point15和GUID两半，再MicroSecondDelay(2000000)/ResetCold/CpuDeadLoop。fallback不是watchdog，前序驱动仍可能操作硬件。
+- 首次构建因旧reference与现有Common/Mu链接不匹配被预检拒绝；改用固定firmware检出重跑成功，未改参考仓。WSL打包被Windows路径锁拒绝后，换Windows Python通过。make有clock-skew警告，记录约20秒主机/WSL差；已检查实际Core新GUID/point/delay，不能扩张为通用固件稳定性证明。
 
-R-014镜像922972e61b0e4e3d7b7c931b53b76531a2db2a08504c6794263e5ff3f5ab1a75，FD dbca3fcb2f470807f1fdac8b17e47c6eb604f3be49b1563c42df5bfc020615e0。两笔均75秒未自动返回，第二笔60帧间隔采样未见固件画面；不能定位到DisplayDxe或宣布稳定挂死。目录/拍摄相对时间不能冒充精确boot时间。
+## 下一步
 
-最新已有恢复证据reports/enuma-recovery-reconciliation.json、out/device-tests/20261025T012053-recovery-reconciliation.json：Android完成/root/A槽/解锁及双分区设备/备份摘要通过。本轮未重新访问设备，不推断当前实时状态或恢复按键细节。旧失败记录不改，实机前重做即时核验。
+先完成此次文档和工具的提交推送，再按AGENTS对A做即时enuma身份、匹配备份、恢复与观测门禁及有效执行范围核对；未满足不得boot。A仅用于验证是否到达DisplayDxe启动边界，不能证明PE运行/线程/可见显示。根据A的有效阶段证据再决定B或更早定位，不把单次耗时当可靠寄存器通道。
 
-## 四项核心更正
+A到达后优先取得真实入口FDT、Kernel Protocol/scheduler HOB和模式设置条件，按缺口选择显示继承或原厂适配；本轮没有节点修补、内存字段/映射改变、verified、像素/背光写入或新批准。R-015暂停，R-005/R-007旧像素授权不复活；R-008/R-012/R-013/R-014按原始范围核对。
 
-1. 实际FD内DisplayDxe在APRIORI第33项（零基索引32），是排入队列资格，不是实际进入或返回证据；不是“必定已dispatch”。
-2. R-014目标门指向未打包的SimpleFbDxe，但completion fallback=1。CoreDispatcher返回后仍应等待7秒再尝试ResetCold，故75秒无返回不是配错GUID的必然结果。更早阻塞、异常、复位或观测问题仍待区分。
-3. 未知两个GUID完整字节未命中，不能证明没有提供者、代码不调用或初始化语义无关。缺GUID不是已证明的DEPEX调度阻塞；R-015不按原动机执行。
-4. detail13只表明CoreStartImage任意返回，不能输出具体状态；detail15成功、detail13无响应也不能直接判驱动内部挂死。
+## 实机记录与系统里程碑
 
-## 原厂支线候选（离线审计后再决定，未构建、未实测）
+R-014旧镜像922972e6两笔75秒无返回，仍未定位；不能升级为已证明派发挂死，复位失效/前置路径/观测失败仍可能。最新已有恢复证据reports/enuma-recovery-reconciliation.json、out/device-tests/20261025T012053-recovery-reconciliation.json仅证明当时Android完成/root/A槽/解锁及分区摘要通过，本轮实时模式未知。没有新实机硬停。
 
-专项方案：[DisplayDxe执行边界定位](operations/2026-10-25-display-entry-isolation-plan.md)。目标GUID4138022f-06c7-4f79-9c94-7e33b511a4e7；候选A detail15启动调用前，候选B detail13启动调用返回后。保持原厂PE和派发顺序，without-ufs、SIMPLEFB=0、query0、step0、value-source off。先A，依据有效阶段与返回证据再决定B；不硬编码Android返回秒数，不以一次超时定位因果。
+目标仍为iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU5fdbd5d。未验收可见GOP、PE_Video、XNU入口、UFS根或用户态。超时仍停止追加、先恢复并当轮同步文档，不原样重试失败镜像。
 
-如B返回，后续用query0的detail16/17区分错误/非错误并另验GOP；如需细分PE包装器/构造函数/返回机制，再审detail20/21/22。没有新像素、背光、未知协议或寄存器写方案。暂不自写I2C/背光，取得真实接口缺口后再评估，不以原厂PE存在当作全栈可运行证明。
+## 发布状态
 
-## 来源和设备门禁
-
-gitlink/锁/firmware检出aa9ec66已对齐；独立参考检出和Mu递归脏状态不清理。本文修改未提交，设备仓不是干净已发布状态。下一次实机前先完成来源/实际宏/FD/打包资格、适用文档提交推送与即时身份/备份/现场恢复门禁。不能用旧R-014资格报告替代新候选。
-
-R-015暂不执行；其余批准按NEED-REVIEW原记录核对，本文不新批或扩张R-008/R-012/R-013/R-014。原厂DisplayDxe可能写硬件，新边界候选不是整镜像只读。超时停止追加、先恢复核验、当轮更新全部当前文档；不原样重试失败镜像。
-
-## 系统里程碑
-
-目标iPadOS17.7.11/21H461、iPad7,1/j120ap，XNU10063.141.1/4KiB；固定UniXNU5fdbd5d。现有原厂模块/面板资源支持复用方向，DSI计数支持采样期接口活动；未确认端到端显示、GOP可见输出、PE_Video交接或XNU实机入口。原平台内核链接/闭包规划、FAT准备不能当整机启动。
+当前新增工具、证据及D-166文档已落地；提交/远端发布结果以本轮Git记录为准。另一会话已有87c5347/8d38c34的D-165复核保留，不改写其历史；其中过强超时解释由D-166收窄。
