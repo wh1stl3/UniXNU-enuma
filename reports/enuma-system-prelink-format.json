@@ -1,0 +1,15 @@
+{
+  "entry_va": "0xfffffff0073f9488",
+  "entry_segment": "__TEXT_EXEC",
+  "initial_tcr": "0x22a51a251a",
+  "deployment": "iOS 17.0",
+  "tg0_bytes": 4096,
+  "tg1_bytes": 4096,
+  "segment_count": 18,
+  "exported_symbols": 23367,
+  "selected_platform_symbols": {
+    "_armdt_platform_configured": true,
+    "_armcpu_registered": true,
+    "_source_pthread_status": true
+  }
+}

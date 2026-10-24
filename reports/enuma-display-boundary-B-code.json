@@ -1,0 +1,361 @@
+{
+  "core_sha256": "97cde3c232d6e600ace8738b6a2525bf13b9b621af3b17a258e5c152ca102d45",
+  "point": 13,
+  "symbols": {
+    "CoreDispatcher": "0xfc84",
+    "CoreStartImage": "0xc328",
+    "EnumaDispatchDetailCheckpoint": "0xf910",
+    "ReadUnaligned64": "0x18e44",
+    "MicroSecondDelay": "0x17d98",
+    "ResetCold": "0x16f4",
+    "CpuDeadLoop": "0x13b8"
+  },
+  "checkpoint_body": [
+    {
+      "rva": "0xf910",
+      "mnemonic": "str",
+      "operands": "x19, [sp, #-0x20]!"
+    },
+    {
+      "rva": "0xf914",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf918",
+      "mnemonic": "add",
+      "operands": "x29, sp, #8"
+    },
+    {
+      "rva": "0xf91c",
+      "mnemonic": "cmp",
+      "operands": "x0, #0xd"
+    },
+    {
+      "rva": "0xf920",
+      "mnemonic": "b.ne",
+      "operands": "#0xf988"
+    },
+    {
+      "rva": "0xf924",
+      "mnemonic": "mov",
+      "operands": "x19, x1"
+    },
+    {
+      "rva": "0xf928",
+      "mnemonic": "cbz",
+      "operands": "x1, #0xf988"
+    },
+    {
+      "rva": "0xf92c",
+      "mnemonic": "mov",
+      "operands": "x0, x19"
+    },
+    {
+      "rva": "0xf930",
+      "mnemonic": "bl",
+      "operands": "#0x18e44"
+    },
+    {
+      "rva": "0xf934",
+      "mnemonic": "mov",
+      "operands": "x8, #0x22f"
+    },
+    {
+      "rva": "0xf938",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4138, lsl #16"
+    },
+    {
+      "rva": "0xf93c",
+      "mnemonic": "movk",
+      "operands": "x8, #0x6c7, lsl #32"
+    },
+    {
+      "rva": "0xf940",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4f79, lsl #48"
+    },
+    {
+      "rva": "0xf944",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf948",
+      "mnemonic": "b.ne",
+      "operands": "#0xf988"
+    },
+    {
+      "rva": "0xf94c",
+      "mnemonic": "add",
+      "operands": "x0, x19, #8"
+    },
+    {
+      "rva": "0xf950",
+      "mnemonic": "bl",
+      "operands": "#0x18e44"
+    },
+    {
+      "rva": "0xf954",
+      "mnemonic": "mov",
+      "operands": "x8, #0x949c"
+    },
+    {
+      "rva": "0xf958",
+      "mnemonic": "movk",
+      "operands": "x8, #0x337e, lsl #16"
+    },
+    {
+      "rva": "0xf95c",
+      "mnemonic": "movk",
+      "operands": "x8, #0x11b5, lsl #32"
+    },
+    {
+      "rva": "0xf960",
+      "mnemonic": "movk",
+      "operands": "x8, #0xe7a4, lsl #48"
+    },
+    {
+      "rva": "0xf964",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf968",
+      "mnemonic": "b.ne",
+      "operands": "#0xf988"
+    },
+    {
+      "rva": "0xf96c",
+      "mnemonic": "mov",
+      "operands": "w0, #0x8480"
+    },
+    {
+      "rva": "0xf970",
+      "mnemonic": "movk",
+      "operands": "w0, #0x1e, lsl #16"
+    },
+    {
+      "rva": "0xf974",
+      "mnemonic": "bl",
+      "operands": "#0x17d98"
+    },
+    {
+      "rva": "0xf978",
+      "mnemonic": "bl",
+      "operands": "#0x16f4"
+    },
+    {
+      "rva": "0xf97c",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf980",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp], #0x20"
+    },
+    {
+      "rva": "0xf984",
+      "mnemonic": "b",
+      "operands": "#0x13b8"
+    },
+    {
+      "rva": "0xf988",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf98c",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp], #0x20"
+    },
+    {
+      "rva": "0xf990",
+      "mnemonic": "ret",
+      "operands": ""
+    }
+  ],
+  "callsites": [
+    {
+      "checkpoint_call_rva": "0x1048c",
+      "CoreStartImage_calls_before": [
+        "0x1047c"
+      ],
+      "CoreStartImage_calls_after": [],
+      "instructions": [
+        {
+          "rva": "0x1046c",
+          "mnemonic": "add",
+          "operands": "x20, x20, #0x380"
+        },
+        {
+          "rva": "0x10470",
+          "mnemonic": "mov",
+          "operands": "x1, xzr"
+        },
+        {
+          "rva": "0x10474",
+          "mnemonic": "mov",
+          "operands": "x2, xzr"
+        },
+        {
+          "rva": "0x10478",
+          "mnemonic": "stp",
+          "operands": "x0, x22, [x20]"
+        },
+        {
+          "rva": "0x1047c",
+          "mnemonic": "bl",
+          "operands": "#0xc328"
+        },
+        {
+          "rva": "0x10480",
+          "mnemonic": "mov",
+          "operands": "w0, #0xd"
+        },
+        {
+          "rva": "0x10484",
+          "mnemonic": "mov",
+          "operands": "x1, x22"
+        },
+        {
+          "rva": "0x10488",
+          "mnemonic": "stp",
+          "operands": "xzr, xzr, [x20]"
+        },
+        {
+          "rva": "0x1048c",
+          "mnemonic": "bl",
+          "operands": "#0xf910"
+        },
+        {
+          "rva": "0x10490",
+          "mnemonic": "str",
+          "operands": "xzr, [sp]"
+        },
+        {
+          "rva": "0x10494",
+          "mnemonic": "str",
+          "operands": "wzr, [sp, #8]"
+        },
+        {
+          "rva": "0x10498",
+          "mnemonic": "b",
+          "operands": "#0xfd34"
+        },
+        {
+          "rva": "0x1049c",
+          "mnemonic": "ldr",
+          "operands": "x0, [sp, #0x10]"
+        },
+        {
+          "rva": "0x104a0",
+          "mnemonic": "bl",
+          "operands": "#0x835c"
+        },
+        {
+          "rva": "0x104a4",
+          "mnemonic": "adrp",
+          "operands": "x8, #0x2c000"
+        },
+        {
+          "rva": "0x104a8",
+          "mnemonic": "ldr",
+          "operands": "x0, [sp]"
+        },
+        {
+          "rva": "0x104ac",
+          "mnemonic": "strb",
+          "operands": "wzr, [x8, #0x2c2]"
+        },
+        {
+          "rva": "0x104b0",
+          "mnemonic": "add",
+          "operands": "sp, sp, #0x30"
+        },
+        {
+          "rva": "0x104b4",
+          "mnemonic": "ldp",
+          "operands": "x29, x30, [sp, #0x50]"
+        },
+        {
+          "rva": "0x104b8",
+          "mnemonic": "ldp",
+          "operands": "x27, x28, [sp, #0x40]"
+        },
+        {
+          "rva": "0x104bc",
+          "mnemonic": "ldp",
+          "operands": "x25, x26, [sp, #0x30]"
+        },
+        {
+          "rva": "0x104c0",
+          "mnemonic": "ldp",
+          "operands": "x23, x24, [sp, #0x20]"
+        },
+        {
+          "rva": "0x104c4",
+          "mnemonic": "ldp",
+          "operands": "x21, x22, [sp, #0x10]"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "fixed Core/map static checks only; no proof of hardware reaching or returning from the gate",
+    "detail13 is any CoreStartImage return, not an EFI_STATUS value or successful SetMode"
+  ],
+  "scope": "offline archived Core call boundary review",
+  "linker_map_sha256": "fc2721ffa16c4f9650f84037115d81367c973df6549439290a455a782270decc",
+  "A_B_comparison": {
+    "source_pin": "aa9ec666abadfeacda608870ecfb4e7179c7ecc3",
+    "configuration_differences": {
+      "ENUMA_DIAG_DETAIL_POINT": [
+        "15",
+        "13"
+      ]
+    },
+    "PE_count": 72,
+    "changed_PE": {
+      "d6a2cb7f-6a18-4e2f-b43b-9920a733700a": [
+        {
+          "name": "DxeCore",
+          "sha256": "537a1f9b972c476f959aeee8a3bdf986a4a45d483c49119714988570ea1c0529"
+        },
+        {
+          "name": "DxeCore",
+          "sha256": "97cde3c232d6e600ace8738b6a2525bf13b9b621af3b17a258e5c152ca102d45"
+        }
+      ],
+      "80cf7257-87ab-47f9-a3fe-d50b76d89541": [
+        {
+          "name": "PcdDxe",
+          "sha256": "867937e3d810beb6088e201aa478f63fb4f044b3e9712c46a45b1fb03ea0a839"
+        },
+        {
+          "name": "PcdDxe",
+          "sha256": "06e1b7c806f3b68e80e3716edd94c7a49f0441bc2faddc19c005c0032876c574"
+        }
+      ]
+    },
+    "unchanged_PE_count": 70,
+    "debug_guid_only_PE": {
+      "80cf7257-87ab-47f9-a3fe-d50b76d89541": {
+        "allowed_fields": [
+          {
+            "guid_file_offset": "0x6148",
+            "bytes": 16
+          }
+        ],
+        "actual_changed_bytes": 8,
+        "normalized_pe_sha256": "6a452d6458bf7730b81df13d541585c7a129fd2b12afd27f8e1c102c5bcdff17",
+        "scope": "all remaining PE bytes identical, including code, paths and debug age"
+      }
+    },
+    "runtime_PE_change": "d6a2cb7f-6a18-4e2f-b43b-9920a733700a",
+    "bootshim_bytes_identical": 192,
+    "scope": "decoded PE inventory and source/config equality; not a byte identity claim for recompressed FV envelopes"
+  }
+}

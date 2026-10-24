@@ -354,3 +354,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-25 · af913ca已推送且远端一致。用户批准R-016 A单笔；out\device-tests\20261025T020804-recovery-reconciliation.json核验Android/root/A槽/解锁及双分区设备/备份摘要通过。相机原图/旋转图准备通过。主机断开重连守卫四轨迹检查通过，candidate与原厂源码不变；当前等待本轮文档和主机工具发布后执行。
 
 2026-10-25 02:11–02:12 · 实机前b1cf33c已推送。R-016 A镜像29b84e1f…8fa72bd4单笔返回；16.187秒首次ADB、31.312秒结束恢复检查；out\device-tests\20261025T021235-recovery-reconciliation.json独立核验通过。证据out\device-tests\20261025T021107-dxe-driver-return、out\camera-capture\20261025T021104-display-boundary-A、reports/enuma-display-boundary-A-result.json。相机415/415帧解码和50对图像保存通过；无额外boot/分区写入/改槽，无超时或人工恢复请求，R-016 consumed。结果和D-168已同步全部当前文档，发布号由Git后续记录。
+
+2026-10-25 · ada2f3b已推送且A实测证据保持。完成B离线资格及四项Core/元数据破坏负例拒绝，镜像bf6e014d…a03b2e3；未实测。用户随后澄清完整启动链优先，B转备用。prepare_system_prelink.py实际发出54231040字节预链接be83a7ec0c11132c13b9581d8784a1775584bb97ff5c66484bcbb2e7bef0879e，29组件和4K格式复查通过；audit_system_roadmap.py区分真实输出与缺失的完整ADT/FAT/运输/root/错误通道。固定并审查umi源码及测试firmware，config/system-reuse-sources.lock.json和enuma-umi-system-reuse.json落地。无设备动作、内存/verified/分区改动；全部当前文档同步D-169/D-170，新提交号以Git后续记录为准。

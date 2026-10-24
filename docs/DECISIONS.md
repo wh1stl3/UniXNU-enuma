@@ -512,3 +512,7 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-25 · D-167：用户批准上机，登记R-016，仅D-166 A/detail15镜像29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4单笔临时boot。已做即时恢复/备份和相机准备；主机观测补充UTC/monotonic及先断开再重连守卫，四条模拟轨迹通过，无额外设备动作。当前未执行，发布后上机；超时停止追加并恢复，不自动发B。
 
 2026-10-25 · D-168：R-016 A已执行一笔并返回Android；boot命令0.390s、fastboot断开0.953s、首次ADB16.187s、Android完成/root/摘要检查结束31.312s。独立out\device-tests\20261025T021235-recovery-reconciliation.json确认enuma/root/A槽/解锁与匹配备份。相机415/415帧可解码、50对原图/旋转图，无采集错误；观察到的MI/Android标志只作恢复证据。本次可返回性实机通过，单笔时序仅支持而不唯一证明DisplayDxe调用前门命中，不定位R-014内部挂点。R-016 consumed，本轮不重复A、不发B，后续若继续先离线资格B并核对执行范围。无新硬停、人工恢复请求、固件/映射/verified/分区变化。
+
+2026-10-25 · D-169：B/detail13已离线构建、AOSP打包、归档和真实Core/map检查；镜像bf6e014dbda4fc64ea00762034b5107ffd617e5ae24752b708c143bfca03b2e3。A/B配置仅point15→13，70/72 PE逐字节不变；Core运行代码变化，PcdDxe另8字节仅RSDS GUID，明确记录不宣称所有PE仅Core不同。四项破坏输入负例拒绝；未上机。
+
+2026-10-25 · D-170：用户澄清“一次性做到iPadOS 然后分析启动的报错 每次启动解决一些”，主线改为补齐完整链/真实错误/每轮修复一批，减少孤立早停，B降为备用。已复用固定上游实际发出54,231,040字节、29组件实验预链接，ARM64/4K/原始代码保持检查通过但非可boot包。发现并固定同SM8250同donor的UniXNU-umi 3eb7257/测试uefi 48bc412，核到真实ADT/RAM载荷/PMGR/UFS/CPU显示源码；先做ABI/板差迁移，不从零重写或拷其内存/GPT/触控。新物理数值/verified/分区门禁不变，无新增实机；完整方案见operations/2026-10-25-full-boot-mainline.md。

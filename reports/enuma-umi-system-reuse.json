@@ -1,0 +1,89 @@
+{
+  "scope": "same-SoC source applicability evaluation; no enuma hardware success claimed",
+  "source_lock": "config/system-reuse-sources.lock.json",
+  "maintainer_claim": {
+    "source": "https://unixnu.com/devices/umi",
+    "state": "Hello/Setup Assistant, UFS/root and persistent Data reported through attempt 80",
+    "independently_reproduced_on_enuma": false
+  },
+  "matching_observations": {
+    "cpu_affinities": [
+      "0x0",
+      "0x100",
+      "0x200",
+      "0x300",
+      "0x400",
+      "0x500",
+      "0x600",
+      "0x700"
+    ],
+    "umi_cpu_affinities": [
+      "0x0",
+      "0x100",
+      "0x200",
+      "0x300",
+      "0x400",
+      "0x500",
+      "0x600",
+      "0x700"
+    ],
+    "virtual_timer_intid": [
+      27,
+      27
+    ],
+    "GIC_distributor": [
+      "0x17a00000",
+      "0x17a00000"
+    ],
+    "GIC_redistributor": [
+      "0x17a60000",
+      "0x17a60000"
+    ],
+    "PSCI_method": [
+      "smc",
+      "smc"
+    ],
+    "enuma_ufs_nodes": [
+      {
+        "path": "/soc/ufshc@1d84000",
+        "reg_cells": [
+          "0x1d84000",
+          "0x3000",
+          "0x1d90000",
+          "0x8000"
+        ]
+      },
+      {
+        "path": "/soc/ufshc_card@1da4000",
+        "reg_cells": [
+          "0x1da4000",
+          "0x3000"
+        ]
+      }
+    ],
+    "umi_ufs_controller_source_constant": "0x1d84000/0x3000"
+  },
+  "priority_reuse": [
+    "UmiRamPayloadDxe BlockIo/FAT bounds and handoff pattern",
+    "umi_adt.py hardware-versus-product identity and loader input composition",
+    "UmiPlatformPower original PMGR service ABI with explicit unsupported-operation failures",
+    "SM8250 UFS/SMMU takeover, descriptor/root publication and CPU display implementation"
+  ],
+  "not_copied": [
+    "umi boot v1 format",
+    "12GiB DRAM banks or 0x130000000 owned-memory window",
+    "userdata GPT geometry or partition-write procedures",
+    "1080x2340 GOP geometry/pitch",
+    "FTS touchscreen/PMIC GPIO5 rail",
+    "private ABI/provenance, platform seed or recovery memory addresses"
+  ],
+  "integration_gaps": [
+    "umi framework pin differs from modular enuma pin; package ABI/build integration must be reconciled",
+    "tested firmware pin differs from latest cloned firmware HEAD; use explicit tested commit for source selection",
+    "public BUILD documents required private storage ABI, trust/Data seed and firmware import records",
+    "enuma boot v3 combined ramdisk and real entry FDT need own transport validation",
+    "enuma display, UFS power/stream ownership and memory/partition layouts require own evidence"
+  ],
+  "device_actions": false,
+  "existing_pins_modified": false
+}

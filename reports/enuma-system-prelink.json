@@ -1,0 +1,153 @@
+{
+  "scope": "offline actual NativePrelink emission; not a boot image or runtime-qualified kernel",
+  "tool_commit": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+  "tool_sha256": {
+    "native_prelink.py": "5bd80b8c63deec29b747c28253e02308a56d5f8cdb37c9d315e7c8af7012d017",
+    "emit_prelink.py": "4cbd97a7ca231cb56d8d7c6a02d09b86af33b5af3d05dba41edd00e51cd3a36a"
+  },
+  "source_kernel_sha256": "b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d",
+  "donor_sha256": "f18b4df865405f2a287b84977d7aca745e056d656d9fc9df1662970ce2969de7",
+  "roots": [
+    "com.apple.filesystems.apfs",
+    "com.apple.driver.AppleMobileFileIntegrity",
+    "com.apple.security.AppleImage4",
+    "com.apple.kext.CoreTrust",
+    "com.apple.security.sandbox",
+    "com.apple.iokit.IOHIDFamily",
+    "com.apple.iokit.IOSurface",
+    "com.apple.iokit.IOMobileGraphicsFamily",
+    "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib"
+  ],
+  "selected_components": [
+    "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib",
+    "com.apple.driver.AppleARMPlatform",
+    "com.apple.driver.AppleARMWatchdogTimer",
+    "com.apple.driver.AppleAudioClockLibs",
+    "com.apple.driver.AppleEffaceableStorage",
+    "com.apple.driver.AppleIISController",
+    "com.apple.driver.AppleM2ScalerCSCDriver",
+    "com.apple.driver.AppleMobileFileIntegrity",
+    "com.apple.driver.ApplePMGR",
+    "com.apple.driver.IODARTFamily",
+    "com.apple.filesystems.apfs",
+    "com.apple.iokit.CoreAnalyticsFamily",
+    "com.apple.iokit.IOAVFamily",
+    "com.apple.iokit.IOAudio2Family",
+    "com.apple.iokit.IOCECFamily",
+    "com.apple.iokit.IOCryptoAcceleratorFamily",
+    "com.apple.iokit.IOHDCPFamily",
+    "com.apple.iokit.IOHIDFamily",
+    "com.apple.iokit.IOMobileGraphicsFamily",
+    "com.apple.iokit.IOReportFamily",
+    "com.apple.iokit.IOSlowAdaptiveClockingFamily",
+    "com.apple.iokit.IOStorageFamily",
+    "com.apple.iokit.IOSurface",
+    "com.apple.kec.Libm",
+    "com.apple.kec.corecrypto",
+    "com.apple.kext.AppleMatch",
+    "com.apple.kext.CoreTrust",
+    "com.apple.security.AppleImage4",
+    "com.apple.security.sandbox"
+  ],
+  "early_initializer_reference": {
+    "repository": "https://github.com/UniXNU/UniXNU-sheng.git",
+    "commit": "a599a1a8a92093b5077543e071b72130769eb325",
+    "identical_donor": "f18b4df865405f2a287b84977d7aca745e056d656d9fc9df1662970ce2969de7",
+    "original_va": "0xfffffff005ab4ae0"
+  },
+  "virtual_slide_search": [
+    {
+      "slide": "0x0",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __DATA"
+    },
+    {
+      "slide": "-0x200000",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __TEXT_EXEC"
+    },
+    {
+      "slide": "-0x400000",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __TEXT_EXEC"
+    },
+    {
+      "slide": "-0x600000",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __TEXT_EXEC"
+    },
+    {
+      "slide": "-0x800000",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __TEXT_EXEC"
+    },
+    {
+      "slide": "-0xa00000",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __TEXT"
+    },
+    {
+      "slide": "-0xc00000",
+      "binding_plan": "rejected",
+      "reason": "Rebased component collides with native __TEXT"
+    },
+    {
+      "slide": "-0xe00000",
+      "binding_plan": "passed"
+    }
+  ],
+  "selected_virtual_slide": "-0xe00000",
+  "physical_address_selected": false,
+  "board_memory_fields_changed": false,
+  "path": "out\\full-boot\\system-components.experimental.macho",
+  "bytes": 54231040,
+  "sha256": "be83a7ec0c11132c13b9581d8784a1775584bb97ff5c66484bcbb2e7bef0879e",
+  "virtual_min": "0xfffffff00447c000",
+  "virtual_end": "0xfffffff0085b3000",
+  "virtual_span_bytes": 68382720,
+  "original_executable_sha256": {
+    "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib": "8c9a78bbe81e9b2ac3f70eaa80eaff7d8ef92b1261ba6a43b72ddeb74e7c0ffe",
+    "com.apple.driver.AppleARMPlatform": "6af4faa236f7adc0d297d99eae53ce7590bc250b76647619128c62c8165df052",
+    "com.apple.driver.AppleARMWatchdogTimer": "fe9b7ca78df85b0a8292f3e8130e658b53ecb987da76f8e3bae7722f37df5173",
+    "com.apple.driver.AppleAudioClockLibs": "de978de09106b5edfb22a07eb6e5a6d0f28f6f4a0501c52150ab0d8dae6e73cd",
+    "com.apple.driver.AppleEffaceableStorage": "5c57407704dc07825e8c48db8a49d4e8c5400877916f20f99104c3f22c9b7d75",
+    "com.apple.driver.AppleIISController": "a9513a3b9197d6ce1627b7d9838860debfda5278cc6ad0d32ab301666a1a969d",
+    "com.apple.driver.AppleM2ScalerCSCDriver": "6f82831a3134fca5b9a479b7576c9a8bfcacc4dd9e344b70de77859a0fe9f4d0",
+    "com.apple.driver.AppleMobileFileIntegrity": "a1088aaabc259418ed503d08df29b6146470b8c962696c688122a1f60a141db6",
+    "com.apple.driver.ApplePMGR": "2c433279d004803b7ef02948e550ad6b77aa3f84b02a06a357e00fa738310a99",
+    "com.apple.driver.IODARTFamily": "edbad6b23c82ab1a2c15ee4cb04f49db059ee7ba76304bcc940e0e03219d0f68",
+    "com.apple.filesystems.apfs": "3192441dae74abc0d82e9069447194934598c1c63d2dacba0fb8599eef9996d7",
+    "com.apple.iokit.CoreAnalyticsFamily": "d78b58a1c2bcb4f95e04b7b17e7f70e3f802766c33f891e6ff96d347905e9085",
+    "com.apple.iokit.IOAVFamily": "67b14c98432c7f66442061000a61fb24392fd6ca91a221fb30fb693a6b7f24a7",
+    "com.apple.iokit.IOAudio2Family": "9cca009c0d3fd20c2e5fbf5013ee5d8c28db789dedd904bd5f6e2b797da39ea0",
+    "com.apple.iokit.IOCECFamily": "d2d5581e4c0ef0c5924cd9f7316d9ff97132591a59bbd9cfa5f31219ee7a61cc",
+    "com.apple.iokit.IOCryptoAcceleratorFamily": "ea3a832e7aa88a2d7bfeb57736c11075e4ec025c0c93596eb19d918f5d8e20d5",
+    "com.apple.iokit.IOHDCPFamily": "b163969cb98e15b819e4a13dce83a850a566d55ee16e6f2cb7ff1c87d5afd50c",
+    "com.apple.iokit.IOHIDFamily": "7e4c5104814f2e773d5be13d092dec53ee44ba5a61a81264b229780406e86b72",
+    "com.apple.iokit.IOMobileGraphicsFamily": "2e044ee68c1650397e1435234ca6459206262e4c7ed709cb7131c6f664f9bd9b",
+    "com.apple.iokit.IOReportFamily": "2465da11391ec3d57efe3dca172ad4203190dceda88bbc1132de4ef93255a282",
+    "com.apple.iokit.IOSlowAdaptiveClockingFamily": "e99d0157c00969fcf4b59b79c8b9cbfd28f65a1778c4b0733af301b94c912607",
+    "com.apple.iokit.IOStorageFamily": "852b7846a9039c58fde08478416080af38ffcd5b47c08c889b28497f5f5b4061",
+    "com.apple.iokit.IOSurface": "6f30c4fccca429b53281ceb298de8cdd4d4dd67deabbe800d436a9d27e1e9dc9",
+    "com.apple.kec.Libm": "fd77a8fc1d5a23aba7c2bd389f7b0915d70ffc23d53ac33c7f4fce30a960b6c3",
+    "com.apple.kec.corecrypto": "317834f75174c1ef1ae9214fd45293dc7f8c6c1a51bde7f287bac139ac7a74a1",
+    "com.apple.kext.AppleMatch": "26262d55a2b25deaa8d02577a8b74a7b9cb42bade1a9efb06a3ff6ba0f95f4b6",
+    "com.apple.kext.CoreTrust": "10063b23097d34244ded39f3d7991bef6a933f3a2b36bcfa511585031c6d4ec0",
+    "com.apple.security.AppleImage4": "94eee9bff8da89bb6cd12c5c8ba0c3e2ec186783f26a2e14a8c8dba0046c1290",
+    "com.apple.security.sandbox": "2f79896751bf9eb1f78b0a13ffeb50acd0c27acdb19bbdf15908a4f6c13e2788"
+  },
+  "instruction_inventory": {
+    "instruction_relocation_complete": false,
+    "register_dataflow_qualified": false
+  },
+  "early_security_initializers": {
+    "com.apple.driver.AppleMobileFileIntegrity": 18446744005070506720
+  },
+  "limits": [
+    "upstream emitter explicitly leaves runtime_qualified/loadable false",
+    "class/dependency inclusion is not a Qualcomm hardware driver adaptation",
+    "complete ADT, FAT/initrd transport, native root storage, PMGR/security dependencies and error output remain open",
+    "kernel virtual span alone is not proof that the 512MiB entry budget fits complete iPadOS"
+  ],
+  "device_operations": false
+}

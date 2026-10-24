@@ -74,7 +74,7 @@
       "sha256": "c04a84cc6b2856f4eef207527d71f300ae00b8bd14ec8ca0f6f1e3676a90c76b"
     }
   ],
-  "board_sha256": "fe566ae9891cace403060c02fae52c44093b4443596b6771aef0fe3bc2dfa0d0",
+  "board_sha256": "bc627da4ed58ceca661dd1e28b2f5f1b6e6c3d0b283dabd343ec0fd4294d5952",
   "target": {
     "product": "iPad7,1",
     "device_class": "j120ap",
@@ -93,5 +93,35 @@
   "root_volume_uuid": "not measured",
   "system_images_built": false,
   "new_device_trials": 0,
-  "device_writes": 0
+  "device_writes": 0,
+  "experimental_prelink": {
+    "path": "out\\full-boot\\system-components.experimental.macho",
+    "bytes": 54231040,
+    "sha256": "be83a7ec0c11132c13b9581d8784a1775584bb97ff5c66484bcbb2e7bef0879e",
+    "selected_virtual_slide": "-0xe00000",
+    "virtual_span_bytes": 68382720,
+    "instruction_inventory": {
+      "instruction_relocation_complete": false,
+      "register_dataflow_qualified": false
+    },
+    "physical_address_selected": false,
+    "board_memory_fields_changed": false,
+    "component_count": 29
+  },
+  "diagnostic_image": {
+    "path": "out\\boot-candidate\\display-return-aa9ec66-boot-v3.img",
+    "sha256": "bf6e014dbda4fc64ea00762034b5107ffd617e5ae24752b708c143bfca03b2e3",
+    "kernel_bytes": 3145920,
+    "generic_ramdisk_bytes": 0,
+    "meaning": "BootShim/UEFI diagnostic image, not an XNU/iPadOS payload image"
+  },
+  "gap_scope": "prelink_missing means board.kernel.prelink integration; an experimental emitted file can exist separately",
+  "full_boot_ready": false,
+  "next_work_order": [
+    "complete enuma ADT and integrate the real system prelink with source/ABI audits",
+    "compose kernel/ADT/trust/config into the existing upstream FAT payload mechanism",
+    "close actual ABL v3 initrd transport and read-only filesystem discovery without guessed offsets",
+    "provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging",
+    "close native root storage/PMGR/security/Data contracts before claiming iPadOS userspace"
+  ]
 }

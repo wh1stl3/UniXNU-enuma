@@ -1,3 +1,7 @@
+## D-170当前范围
+
+用户澄清完整启动链优先，先完成系统输入/实际报错通道，不把密集绘制或大量早停当目标。本轮B仅离线备用，未申请新B实测、分区、像素或内存批准；新实验prelink虚拟布局不改变board物理数值。后续实际需要增加内存、verified或破坏性操作时按AGENTS提交具体审查，不能复制umi配置。R-016仍consumed，R-015暂停；没有新的设备硬停。当前主线见STATUS。
+
 ## R-016 · A/detail15一次临时启动（consumed，已返回）
 
 用户“批准上机”对应镜像29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4。2026-10-25 02:11执行一笔，16.187秒观察ADB，31.312秒结束恢复检查，独立核验Android/root/A槽/解锁/分区摘要通过。见D-168、STATUS和operations/2026-10-25-display-boundary-A-result.md。

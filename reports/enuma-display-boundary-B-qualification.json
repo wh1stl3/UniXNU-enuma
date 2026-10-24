@@ -1,0 +1,82 @@
+{
+  "scope": "offline B backup candidate; deprioritized by clarified full-chain goal, no device execution",
+  "archive": "out/display-entry-boundary/return-aa9ec66",
+  "qualification": {
+    "scope": "offline artifact, compiler and FD qualification; no execution",
+    "detail_point": 13,
+    "target_guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+    "firmware_commit": "aa9ec666abadfeacda608870ecfb4e7179c7ecc3",
+    "compiler_defines": {
+      "ENUMA_DIAG_STAGE": "0xd",
+      "ENUMA_DIAG_DETAIL_POINT": "0xd",
+      "ENUMA_DIAG_DELAY_US": "0x1e8480",
+      "ENUMA_DIAG_DISPATCH_ORDINAL": "0x1",
+      "ENUMA_DIAG_GUID_ENABLED": "0x1",
+      "ENUMA_DIAG_GUID_ONLY": "0x1",
+      "ENUMA_DIAG_GUID_LOW64": "0x4f7906c74138022f",
+      "ENUMA_DIAG_GUID_HIGH64": "0xe7a411b5337e949c",
+      "ENUMA_DIAG_DISPATCH_FALLBACK": "0x1",
+      "ENUMA_DIAG_GOP_QUERY": "0x0"
+    },
+    "core_materialized_constants": {
+      "0x4f7906c74138022f": [
+        "0xf940"
+      ],
+      "0xe7a411b5337e949c": [
+        "0xf960"
+      ],
+      "0x1e8480": [
+        "0xf970"
+      ],
+      "0x6acfc0": [
+        "0x3c9c"
+      ]
+    },
+    "files": {
+      "audit.json": {
+        "sha256": "47eaf5f983927a2c5984cd19a55e9c0c26bc53b4221d654759bee61c05cddabe",
+        "bytes": 4357
+      },
+      "build.json": {
+        "sha256": "c29b1ceed7e07d8a6a4c4af9361fb5919cded302d956e169c64a7d514387c510",
+        "bytes": 14415
+      },
+      "candidate.fd": {
+        "sha256": "995a962df36d84c34b2ffa742a477baed69b8a6524302babdd58c525a30b53f2",
+        "bytes": 3145728
+      },
+      "candidate.img": {
+        "sha256": "bf6e014dbda4fc64ea00762034b5107ffd617e5ae24752b708c143bfca03b2e3",
+        "bytes": 3153920
+      },
+      "candidate.raw": {
+        "sha256": "98ec9276f8e881c72c0167a33bcb2cecaf6ad4184e936474f6e9afda07817305",
+        "bytes": 3145920
+      },
+      "DxeCore.efi": {
+        "sha256": "97cde3c232d6e600ace8738b6a2525bf13b9b621af3b17a258e5c152ca102d45",
+        "bytes": 164352
+      },
+      "DxeCore.GNUmakefile": {
+        "sha256": "ed080679ee94585cf27ee3b1a6198d4e4cf7b30c625c3d5fc899ba6cedeb2731",
+        "bytes": 51455
+      },
+      "package.json": {
+        "sha256": "9a1f378c6dec322a2806ab0e0c3f8c1f810f31dfa5be789bccb0c2094c3b4045",
+        "bytes": 797
+      },
+      "payload.json": {
+        "sha256": "a74d23e992138cbe672b4bccf75abb8935b7724530ed7c5e876b607af9ed5733",
+        "bytes": 443
+      }
+    },
+    "limits": [
+      "constant construction and compiler flags do not prove complete runtime control flow",
+      "no current device identity/recovery checks or hardware authorization evaluation",
+      "completion fallback is not a watchdog; preceding drivers can run hardware writes"
+    ]
+  },
+  "code_audit": "reports/enuma-display-boundary-B-code.json",
+  "executed": false,
+  "not_authorized_by_R016": true
+}

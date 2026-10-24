@@ -2,6 +2,7 @@
 import hashlib
 import json
 import subprocess
+import struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,6 +75,37 @@ def main():
         'new_device_trials': 0,
         'device_writes': 0,
     }
+    # Distinguish real generated artifacts from board integration and runtime
+    # readiness. A firmware-only diagnostic must not be mistaken for an OS boot.
+    prelink_report = ROOT / 'reports/enuma-system-prelink.json'
+    if prelink_report.exists():
+        prelink = json.loads(prelink_report.read_text())
+        target = ROOT / prelink['path']
+        if hashlib.sha256(target.read_bytes()).hexdigest() != prelink['sha256']:
+            raise ValueError('Experimental prelink artifact changed')
+        report['experimental_prelink'] = {key: prelink[key] for key in
+            ['path', 'bytes', 'sha256', 'selected_virtual_slide', 'virtual_span_bytes',
+             'instruction_inventory', 'physical_address_selected', 'board_memory_fields_changed']}
+        report['experimental_prelink']['component_count'] = len(prelink['selected_components'])
+    image = ROOT / 'out/boot-candidate/display-return-aa9ec66-boot-v3.img'
+    if image.exists():
+        header = image.read_bytes()[:4096]
+        if header[:8] != b'ANDROID!' or struct.unpack_from('<I', header, 40)[0] != 3:
+            raise ValueError('Unexpected retained diagnostic image')
+        report['diagnostic_image'] = {'path': str(image.relative_to(ROOT)),
+            'sha256': hashlib.sha256(image.read_bytes()).hexdigest(),
+            'kernel_bytes': struct.unpack_from('<I', header, 8)[0],
+            'generic_ramdisk_bytes': struct.unpack_from('<I', header, 12)[0],
+            'meaning': 'BootShim/UEFI diagnostic image, not an XNU/iPadOS payload image'}
+    report['gap_scope'] = 'prelink_missing means board.kernel.prelink integration; an experimental emitted file can exist separately'
+    report['full_boot_ready'] = False
+    report['next_work_order'] = [
+        'complete enuma ADT and integrate the real system prelink with source/ABI audits',
+        'compose kernel/ADT/trust/config into the existing upstream FAT payload mechanism',
+        'close actual ABL v3 initrd transport and read-only filesystem discovery without guessed offsets',
+        'provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging',
+        'close native root storage/PMGR/security/Data contracts before claiming iPadOS userspace',
+    ]
     if not all(report['gaps'].values()):
         raise ValueError('Roadmap facts changed; re-audit before publishing')
     destination = ROOT / 'reports/enuma-system-roadmap-audit.json'

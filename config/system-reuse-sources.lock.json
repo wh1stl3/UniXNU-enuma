@@ -1,0 +1,99 @@
+{
+  "scope": "read-only reference evaluation; not a dependency update or execution authorization",
+  "references": [
+    {
+      "repository": "https://github.com/reAAAq/UniXNU-umi.git",
+      "evaluation_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+      "local": "out\\sources\\UniXNU-umi",
+      "checkout_head": "3eb72578597d2ca16471b172d45eddc096a34a04",
+      "files": {
+        "LICENSE": {
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "bytes": 2673
+        },
+        "NOTICE.md": {
+          "sha256": "d04025711cde86528d73ca3486f5693430cdf6ded37819d3943b6e00e643fb37",
+          "bytes": 1190
+        },
+        "source-lock.json": {
+          "sha256": "7708e0abf6471f68da95073c9266bdeb7aa3f3207001c31a5d9c52bea0238587",
+          "bytes": 240
+        },
+        "docs/BUILD.md": {
+          "sha256": "237136c93af1e3768053f8c1c46121d591e6e38ebb4e6a39eecd4f7b35adf2f5",
+          "bytes": 5895
+        },
+        "docs/validation.json": {
+          "sha256": "a411a1cf5cf5a5160e8187a0f38982707693a7636a29576edb8974756fce1bee",
+          "bytes": 3483
+        },
+        "scripts/umi_adt.py": {
+          "sha256": "8d34b7a8191f67570624fad8116da1991ebfcf47d6d06324fb651b1c0d187044",
+          "bytes": 14959
+        },
+        "scripts/make-umi-adt.py": {
+          "sha256": "8f473a5776d2ece7d50453773399bc039ce296bc43e6c8992ca95b1efcf73611",
+          "bytes": 3793
+        },
+        "package/UmiPlatformPower.cpp": {
+          "sha256": "492451e06e36dcae3fbbd47ce3c926daea4411aa6e6804fd88a59d4823c8bf97",
+          "bytes": 9252
+        },
+        "package/UmiUfsProbe.cpp": {
+          "sha256": "d528c3df61f1d86a954e0af2152899a7b9a7a14c6e02ef831b969a6d3faf39a3",
+          "bytes": 6224
+        },
+        "package/UmiNativeUfsHost.inc": {
+          "sha256": "581b3d06cc898bc65676bac22a08bac9a8df86dad7da257130eed2ef2d7f0200",
+          "bytes": 4394
+        },
+        "package/UmiUfsRead.inc": {
+          "sha256": "5092b5e80fa6e699500e28756bfcf93a17df68304bad7459101e09a3b0771042",
+          "bytes": 7551
+        },
+        "package/UmiSmmuTakeover.h": {
+          "sha256": "4b5aff64f6da77cf9567465878007abc19b907ee0b8e9d4aba85d2d5ddc4c5a6",
+          "bytes": 3790
+        },
+        "package/umi-hardware.json": {
+          "sha256": "a44e6fc1c850ba03f4f19ff9a143485dacb1c3119db680f32fd410f7754ef269",
+          "bytes": 2150
+        },
+        "overlay/Platforms/Xiaomi/umiPkg/Drivers/UmiRamPayloadDxe/UmiRamPayload.c": {
+          "sha256": "a3bad9132fcba63d812fd5e67e64f6e423967168a668729e8e7d3ee346d1523d",
+          "bytes": 6919
+        },
+        "bringup/tools/build_umi_prelink.py": {
+          "sha256": "51ac818fadb43b19ab7d36a8190aac38e7da1807f93d3d1d656d360daad3c97a",
+          "bytes": 5952
+        },
+        "bringup/tools/build_umi_data_display.py": {
+          "sha256": "0b8a7e216d961356d04cfa435b6556a73752a02dc90894d201ec963345ed7d17",
+          "bytes": 10026
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/reAAAq/uefi-umi.git",
+      "evaluation_commit": "48bc41218c480519bfd299c22205f44e418df9d0",
+      "local": "out\\sources\\uefi-umi",
+      "checkout_head": "727f6c26347055ab70eac2104e6a4edc80c8d556",
+      "files": {
+        "Platforms/Xiaomi/umiPkg/Drivers/UmiRamPayloadDxe/UmiRamPayload.c": {
+          "sha256": "a3bad9132fcba63d812fd5e67e64f6e423967168a668729e8e7d3ee346d1523d",
+          "bytes": 6919
+        },
+        "Platforms/Xiaomi/umiPkg/umi.dsc": {
+          "sha256": "60dd662b231316be0a4c952edc036cffdcfab8f7ed59b037a1cb2f5c16e99f6d",
+          "bytes": 3980
+        },
+        "Platforms/Xiaomi/umiPkg/Include/APRIORI.inc": {
+          "sha256": "9dcded5fc83109f705b6f48f30dea512ee66842ca7f905245a33ab3149a9d87c",
+          "bytes": 1863
+        }
+      }
+    }
+  ],
+  "framework_pin_of_umi": "7b52e7968c76453cdc18b5aa174fc368d5293b91",
+  "enuma_framework_unchanged": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca"
+}
