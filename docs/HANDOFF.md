@@ -16,7 +16,9 @@
 
 ## 下一步
 
-做无显示 MMIO、无等待的早期停止点候选，全量资格 + 全文档推送后，按既有门禁**重复多笔**：稳定成功 → 锁 MMIO；同样偶发挂死 → 锁复位出口。冻结镜像不重试。断电冷启动不再执行。
+R-006 候选 A 已批准并落地配置：`config/exit-early-probes.json` 的 `exit10-early`（stage 10、`CoreDispatcher()` 之前、无显示 MMIO、无等待），设计与差异见 `operations/2026-10-24-exit-early-candidate.md`。最多 5 笔重复：5 笔全返回 → 锁 MMIO；任一笔挂死 → 锁复位出口。冻结镜像不重试；断电冷启动不再执行。
+
+**构建阻塞**：宿主将 `C:\WINDOWS\system32\wsl.exe` 列入 Command Security 程序黑名单，且 Windows 侧无 clang，构建与 `check_scanout_*` 资格脚本无法在本会话运行。解除后可继续；否则在 WSL 终端代跑 operations 文档中的命令。
 
 ## 边界
 

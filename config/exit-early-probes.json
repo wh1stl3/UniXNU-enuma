@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "scope": "R-006 candidate A: no display MMIO and no wait; stop before CoreDispatcher to separate reset-exit failure from a display MMIO hang",
+  "reason": "D-124 excluded post-recovery device state and step20 code content. The same step20/query1 predicate succeeded three times and timed out once today, so the timeout must be a hang, not a predicate refusal. Two exits remain indistinguishable on the current 1-bit channel: EnumaStageCheckpoint's ResetCold() failing, or SimpleFbDxe hanging on 0x0ae00000..0x0ae84207.",
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "exit10-early",
+      "stage": 10,
+      "delay_seconds": 2,
+      "dispatch_ordinal": 1,
+      "detail_point": 13,
+      "variant": "exit10-early-queue1-stage10-delay2-simplefb-metadata",
+      "build_args": ["--stop-stage", "10", "--stop-delay", "2", "--dispatch-ordinal", "1", "--detail-point", "13", "--diagnostic-simplefb"],
+      "stage_semantics": "EnumaStageCheckpoint(10) sits immediately before CoreDispatcher() in DxeMain.c, so no DXE driver has been dispatched and no display MMIO address has been read",
+      "must_not_contain": ["EnumaScanoutSoleStage", "EnumaScanoutBlend", "EnumaScanoutGeometry", "EnumaScanoutRoute", "EnumaDsiCounters", "EnumaDsiNativeProgress"]
+    }
+  ],
+  "repeats_target": 5,
+  "hardware_order": "Verify immediate enuma identity, Android complete, root, slot, unlock, matching backups and original partition digests; then temporary boot once per trial, at most five trials, each preceded by the same verification",
+  "stop_conditions": [
+    "No observable return: stop all additional boots immediately, recover, and record the actual recovery endpoint",
+    "Identity, backup, source or digest mismatch: do not boot",
+    "A return time alone is not evidence about the display path"
+  ],
+  "discrimination": {
+    "all_five_return": "the reset exit is stable when no display MMIO has been touched; the timeout then belongs to the later dispatch or display path and the next step is MDP power/clock gating versus the R-004 mapping",
+    "any_trial_stalls": "the reset exit fails even with no display MMIO and no wait, so the exit path itself is implicated regardless of image content",
+    "inconclusive": "fewer than five completed trials, or a mismatch between the required identity and digest checks"
+  },
+  "build_constraints": "stage other than 13 forbids --detail-point other than 13, --dispatch-guid, --dispatch-guid-only, --dispatch-completion-fallback and --diagnostic-gop-query; SimpleFbDxe is still packaged but never dispatched because the stop point precedes CoreDispatcher",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false,
+  "memory_field_changes": false
+}

@@ -21,10 +21,12 @@
 
 ## 下一步
 
-实现一份**不含显示 MMIO 读、不含等待**的早期停止点候选，先完成源锁/主机/三份构建/实际 FD/OEM/依赖/Boot v3/bundle 资格与全部当前文档提交推送，再按既有即时身份/备份/恢复门禁**重复多笔**：
+R-006 候选 A 已获批准并落地：`config/exit-early-probes.json` 定义 stage 10（`CoreDispatcher()` 之前、无显示 MMIO、无等待）的 `exit10-early` 候选，设计与相对失败镜像的差异清单见 `operations/2026-10-24-exit-early-candidate.md`。最多 5 笔重复，每笔前同一套身份/备份/原始摘要核验：
 
-- 稳定成功 → 锁定 MMIO 读，转查 MDP 上电/时钟门控与 R-004 映射时序；
-- 同样偶发挂死 → 锁定复位出口，改走 warm reset、BootShim 兜底或不再主动复位。
+- 5 笔全部自动返回 → 锁定 MMIO 读，转查 MDP 上电/时钟门控与 R-004 映射时序；
+- 任一笔挂死 → 锁定复位出口，改走 warm reset、BootShim 兜底或不再主动复位。
+
+**当前阻塞构建**：宿主把 `C:\WINDOWS\system32\wsl.exe` 列入 Command Security 的程序黑名单，本会话无法调用；Windows 侧无 clang，`build_enuma_firmware.py` 与 `check_scanout_*` 主机/AArch64 资格脚本都必须在 WSL 内运行。解除该黑名单后可在本会话内完成构建、打包、审计与实测；否则需在 WSL 终端代跑 operations 文档中的那一条命令。
 
 断电冷启动那一半不再执行：热状态已证明设备干净，冷启动不能提供额外区分力。已冻结镜像（step22 正向、stage23-control 及未执行的正互补）不重试。
 
