@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "c32415c7de036855c88b02a8dfec7ace8e2f89c9eb37fc9d28daf8a4fb442063",
+  "fd_sha256": "72d2b0a9384bdb7ba76b43b9c24bb69f42c8c65f1cf7eed27070df338300a3b2",
   "fd_bytes": 3145728,
   "file_count": 79,
   "matched_oem_modules": [
@@ -163,5 +163,26 @@
   ],
   "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
-  "hardware_execution": false
+  "hardware_execution": false,
+  "value_transport_code": {
+    "profile": {
+      "source": "constant",
+      "constant_code": 3,
+      "register_index": 0,
+      "shift": 0,
+      "extra_base_seconds": 0,
+      "seconds_per_code": 3
+    },
+    "provider_pe_sha256": "2259a900ff09cf19706f70320e26d669c9a69b4cf0248f9d1e40998f0fa5e9fe",
+    "static_display_reads": [],
+    "static_display_stores": [],
+    "compiled_contract": {
+      "compiler_makefile_sha256": "c8c898a367487f3975c9f7cfe2144900b2cac293d702470b6a5c2bfdfa1940a8",
+      "source_sha256": "86f3f3a0355f79425bdb55bb1018e9e88574b7a5e40aadeada302cdfa9106c21",
+      "header_sha256": "9b8280675b1fb1d258ce38ea55117bcd56e05ab15e18d4a87cb09805238a5c6b",
+      "actual_defines_checked": true
+    },
+    "hardware_execution": false,
+    "scope": "packaged PE direct constant-address accesses and locked source/host checks; not full indirect dataflow proof"
+  }
 }

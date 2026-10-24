@@ -91,7 +91,7 @@
       "ENUMA_DIAG_DISPLAY_VALUE_INDEX": "0",
       "ENUMA_DIAG_PIXEL_PREVIEW": "0",
       "ENUMA_VALUE_SOURCE": "1",
-      "ENUMA_VALUE_CODE": "0",
+      "ENUMA_VALUE_CODE": "3",
       "ENUMA_VALUE_INDEX": "0",
       "ENUMA_VALUE_SHIFT": "0"
     }
@@ -120,7 +120,7 @@
   "diagnostic_gop_step": 0,
   "value_probe": {
     "source": "constant",
-    "constant_code": 0,
+    "constant_code": 3,
     "register_index": 0,
     "shift": 0,
     "extra_base_seconds": 0,
@@ -141,7 +141,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "e0a84fdf462db7203157b778c143ebf9636a311bcc00893fb5bba12fb9250f9d",
+  "fd_sha256": "72d2b0a9384bdb7ba76b43b9c24bb69f42c8c65f1cf7eed27070df338300a3b2",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -224,7 +224,7 @@
     "core_checkpoint_sha256": "bb6f9bdb7a4d0dc2206fb595e63ff1718933868f61265dfc89ebf9867c5645b0"
   },
   "value_probe_compiled_contract": {
-    "compiler_makefile_sha256": "513df49e69425648bd74d175a833bb9cc494f8ec3c527554be506ccc86c9b1a8",
+    "compiler_makefile_sha256": "c8c898a367487f3975c9f7cfe2144900b2cac293d702470b6a5c2bfdfa1940a8",
     "source_sha256": "86f3f3a0355f79425bdb55bb1018e9e88574b7a5e40aadeada302cdfa9106c21",
     "header_sha256": "9b8280675b1fb1d258ce38ea55117bcd56e05ab15e18d4a87cb09805238a5c6b",
     "actual_defines_checked": true

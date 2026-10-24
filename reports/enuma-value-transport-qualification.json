@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "seconds_per_code": 3,
+  "trials": [
+    {
+      "id": "zero1",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\zero\\candidate.img",
+      "raw": "out\\value-transport\\zero\\candidate.raw",
+      "build": "out\\value-transport\\zero\\build.json",
+      "audit": "out\\value-transport\\zero\\audit.json",
+      "package": "out\\value-transport\\zero\\package.json",
+      "sha256": {
+        "image": "9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1",
+        "raw": "4817ecda2df202c9ec2b0bbb31f01685a28ffd890fa72dfaf2c1744b78a230e2",
+        "build": "8f4b58de57cc424ec27a9e78396ab1a755b9cc4d3891dbf312f3f7cd8197f566",
+        "audit": "d3671b67b61cda00e961bf21424c624223340afbba57994a0544a36b64fe8c65",
+        "package": "3fec2ef73f9561a8413cc7bb92aff74778f74cf43da47e3c9bef3aa7d051991f"
+      }
+    },
+    {
+      "id": "known3",
+      "role": "constant",
+      "code": 3,
+      "image": "out\\value-transport\\known3\\candidate.img",
+      "raw": "out\\value-transport\\known3\\candidate.raw",
+      "build": "out\\value-transport\\known3\\build.json",
+      "audit": "out\\value-transport\\known3\\audit.json",
+      "package": "out\\value-transport\\known3\\package.json",
+      "sha256": {
+        "image": "357706af66517e7c1d7dac9629f55b1ee57e88b6701bfa4176315a3f4d3ace96",
+        "raw": "34a1e986ad2f23ca5b1a79174cd75184892d2c3548987d62e808f6745941a631",
+        "build": "2af89f46272bef9f6e3929129a267e46480d8d5fc419b6967d16d0e4854c53fe",
+        "audit": "49ea0c025964920156f13b9dab48135393e8f482343d6ddba479f93c973c45b2",
+        "package": "a928f583c602ead33209859a6c56995556ca33479fdee560548869ada8639301"
+      }
+    },
+    {
+      "id": "zero2",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\zero\\candidate.img",
+      "raw": "out\\value-transport\\zero\\candidate.raw",
+      "build": "out\\value-transport\\zero\\build.json",
+      "audit": "out\\value-transport\\zero\\audit.json",
+      "package": "out\\value-transport\\zero\\package.json",
+      "sha256": {
+        "image": "9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1",
+        "raw": "4817ecda2df202c9ec2b0bbb31f01685a28ffd890fa72dfaf2c1744b78a230e2",
+        "build": "8f4b58de57cc424ec27a9e78396ab1a755b9cc4d3891dbf312f3f7cd8197f566",
+        "audit": "d3671b67b61cda00e961bf21424c624223340afbba57994a0544a36b64fe8c65",
+        "package": "3fec2ef73f9561a8413cc7bb92aff74778f74cf43da47e3c9bef3aa7d051991f"
+      }
+    }
+  ]
+}
