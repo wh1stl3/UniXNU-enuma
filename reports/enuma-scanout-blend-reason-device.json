@@ -1,0 +1,29 @@
+{
+  "scope": "same-source geometry baseline and paired six-class sampled blend reason timing; no numeric dump",
+  "firmware_commit": "8fd3e62bc5d6af5bdd91670cbebeb9a4ac23b008",
+  "tests": [
+    {
+      "candidate_sha256": "9ded5fa6f8e27878d75face87bd473b207e5124652493272640145aab18c304a",
+      "issued_at": "2026-10-24 16:02:03",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 16.079,
+      "boot_complete_seconds": 32.829,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "reason22-control",
+      "step": 20,
+      "query": 1,
+      "fd_sha256": "dcaed1f3cd1d89bfcc9b1f6c4221b012c5b503e4bfb7e4ecca3d619389c71041",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T16:02:55.911692+08:00"
+    }
+  ],
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "xnu_entered": false,
+  "interpretation": "六类正反编码尚未齐备，类别未知。"
+}

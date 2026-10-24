@@ -26,13 +26,13 @@ step22沿原首描述、首关联CTL/LM、major/minor6.0、1:1几何、同一活
 
 ## 最新实测
 
-8fd3e62新候选尚未实测。旧ff3db30同源step20获得支持、step21保守模式被正互补拒绝，三笔无按键及独立恢复均通过；历史报告enuma-scanout-blend-device.json，不能当新源码实测。
+reason22-control step20/query1：2026-10-24 16:02:03，recovered-android-boot-complete；ADB 16.079秒/Android完成 32.829秒；用户无按键 True，独立恢复 True，原分区摘要 True。
 
-正反分类尚未齐备，类别未知。
+六类正反编码尚未齐备，类别未知。
 
 ## 下一步与边界
 
-全部当前文档提交推送后，以即时身份/备份/恢复门禁临时启动reason22-control；受控返回及独立恢复/无按键确认后继续。
+全部当前文档提交推送后，以即时身份/备份/恢复门禁临时启动reason22-forward；受控返回及独立恢复/无按键确认后继续。
 
 用户可在场恢复；相机保留原图、自行旋转判读，必要前后截图，真实输出/判读变化/恢复时录像。键盘反光不当输出。即时enuma身份、Android完成/root/原槽/解锁/匹配备份及boot/vendor_boot原摘要核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停追加、先恢复并当轮写明状态，恢复核验后离线分析新候选、不原样重试失败镜像。
 
