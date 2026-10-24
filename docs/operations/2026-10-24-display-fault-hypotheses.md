@@ -69,3 +69,7 @@ f0cef6f稳定staging/所选DSI递增支持后，“首候选完全未挂接”�
 ## 六类拒绝定位实施前主判断
 
 按用户更大胆推进要求，中等置信主判断是ABL遗留混合状态与过严观察器不匹配，先查border bit24和合法alpha模式，暂不把step21拒绝当显示故障。小米固定52a2f18 CTL在无base source时也会设置border位，LM有独立dim层，major6用packed alpha；本机DSI/staging/几何已有支持。step22一次稳定采样六类、正反时间编码交叉验证，拒绝容差外数据。border-only则优先修正观察器假设并查INTF_MUX；dim则查覆盖stage/矩形；alpha则解码实际系数；其他staging则解码字段和层次；继承失败先隔离门控/稳定性。若新证据反对优先假设，按类别调整，不扩大写入授权。固定源与FDT沿enuma-scanout-blend-sources.json。
+
+## step22超时修正
+
+六类时间编码实机超时、人工恢复独立通过，没有分类结果。新增长等待/继续采样是首查隔离点，中等置信，不能宣称面板/混合硬件问题。撤回将长时间编码作为下一轮取证通道的决策，改回两次已验证100ms与单一staging（局部忽略border位）判据。此前过严观察器假设仍待验证，非事实。

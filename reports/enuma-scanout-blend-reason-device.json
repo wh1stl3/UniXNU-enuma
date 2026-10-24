@@ -19,11 +19,36 @@
       "no_buttons_confirmed_by_user": true,
       "independent_recovery_check": true,
       "recovery_checked_at": "2026-10-24T16:02:55.911692+08:00"
+    },
+    {
+      "tag": "reason22-forward",
+      "step": 22,
+      "query": 1,
+      "issued_at": "2026-10-24 16:03:42",
+      "phase": "timeout-manually-recovered-android",
+      "candidate_sha256": "429c3c14ec2ee527a554012140049baad1f1ac67fb84bd925c849ce7df64d97e",
+      "automatic_return_within_75_seconds": false,
+      "no_buttons_confirmed_by_user": null,
+      "manual_recovery": {
+        "at": "2026-10-24T16:06:02.205849+08:00",
+        "user_report": "Recovered to Android after requested long power press",
+        "boot_completed": true,
+        "root": true,
+        "original_slot_matches": true,
+        "unlocked": true,
+        "partition_digests_unchanged": true
+      },
+      "partition_writes": false
     }
   ],
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false,
   "xnu_entered": false,
-  "interpretation": "六类正反编码尚未齐备，类别未知。"
+  "interpretation": "step22正向75秒内无自动返回，用户长按恢复后Android/root/原槽/解锁及原分区摘要独立通过。未取得六类结果，不能推断staging/dim/alpha或面板故障。",
+  "paired_decode": {
+    "accepted": false,
+    "reason": "forward timed out; reverse not executed"
+  },
+  "next_action": "冻结step22正向及未执行反向，不原样重试；恢复核验后继续离线隔离长等待/采样，改回已验证两次100ms的单一staging条件新候选。"
 }
