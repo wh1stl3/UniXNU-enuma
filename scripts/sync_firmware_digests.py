@@ -33,6 +33,9 @@ def digest(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write', action='store_true')
+    parser.add_argument('--device-only', action='store_true',
+                        help='only update the device lock; use after the firmware '
+                             'repository has already committed its own digests')
     args = parser.parse_args()
 
     changed = []
@@ -87,8 +90,9 @@ def main():
     if not args.write:
         print('dry run; pass --write to apply')
         return
-    migration_path.write_text(json.dumps(migration, indent=2) + '\n')
-    extensions_path.write_text(json.dumps(extensions, indent=2) + '\n')
+    if not args.device_only:
+        migration_path.write_text(json.dumps(migration, indent=2) + '\n')
+        extensions_path.write_text(json.dumps(extensions, indent=2) + '\n')
     LOCK.write_text(json.dumps(lock, indent=2) + '\n')
     print('written')
 
