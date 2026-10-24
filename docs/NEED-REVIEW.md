@@ -278,3 +278,15 @@ R-007 执行记录（2026-10-24 17:32 硬停）：exit14-minimal（step14，两�
 风险：写操作触碰 framebuffer，可能显示白条或破坏当前画面（可恢复）；若映射或格式假设错误仍可能挂死需长按。批准前不执行。
 
 2026-10-24 20:25 · R-007 状态更新：**用户已批准**（"批准Review项 继续推进"）。批准范围沿用本项申请：仅 gop_step=13 像素预览一档、仅一帧白条、仅临时 boot 不写分区；沿用身份/备份/恢复门禁、同源对照与连续摄像要求；构建须带显式 `--diagnostic-pixel-preview` 标志，不可绕过。执行后需记录屏幕实际观测（连续摄像）、固件返回状态与原分区摘要核验；若挂死按既有流程人工恢复并核验。
+
+## R-008 · 用保留内存 + warm reset 一次带出整批显示寄存器读数
+
+状态：**pending，等待用户批准**，2026-10-24 21:46 提出。
+
+申请理由：现有取数通道每次实测只能带出 4 bit（一个寄存器的 4 个位），要拼出完整寄存器需要多次启动，实测效率太低。本仓已具备一条现成的、更宽的通道：R-002 批准的 OEM Log Buffer 保留区 `0x9fff7000`（32 KiB，`MEM_RES`，`WRITE_THROUGH_XN`）已有 Android 侧只读回读实现——`diagnostics/enuma_log_reader.c` 是内核模块，校验 8 个页均为 PageReserved 后读该区 16 字节并以 `ENUMA_R002 MARKER=` 打进 dmesg。此前该路径没带出内容，原因是固件用 `ResetCold()` 复位：ARM PSCI 的 cold reset 会重置 DRAM，而 `ResetWarm()` 走 `SYSTEM_RESET2`（reset type 0 = warm），按规范保留 DRAM。已核实 `ArmPsciResetSystemLib` 的 `ResetWarm` 正是这样实现。R-002 的 `--seed-marker` 模式也已有往该区写固定 marker 的先例，说明写入该区属已批准范围内的既有做法。
+
+范围（最小）：固件侧仅写 `0x9fff7000` 起的 16 字节，内容是一批显示寄存器读数（MDP version、各 pipe 的 SDE 基址/大小/pitch/格式等）；复位方式改为 warm reset；不新增内存区域、不改内存大小或基址、不改 verified、不写分区；Android 侧沿用现成的 `enuma_log_reader` 模块与既有 FDT 保留区；沿用身份/备份/恢复门禁与执行后原摘要核验。
+
+需要批准的具体点：① 启用 R-002 的 board 字段（当前默认 `enabled=false`），即允许固件往 `0x9fff7000` 写诊断数据；② 复位方式从 cold 改为 warm 以保留 DRAM。
+
+风险：warm reset 后 XBL 可能自行重置或清零 DRAM，导致读回仍为旧结论（届时退回 R-002 的结论，不构成新风险）；写该区会覆盖 OEM 日志缓冲区的尾部 16 字节（该区每次启动由 SEC 清空，不影响下次启动）；若 warm reset 行为与预期不符，表现为读回不匹配而非数据损坏。批准前不执行。
