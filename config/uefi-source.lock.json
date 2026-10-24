@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "e7ea3c9ca19470c81d2987b867bd477854d16a52",
+  "commit": "364ce129e9d579031a0e535cebc311e837e96552",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -23,7 +23,7 @@
     "Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
     "Resources/Enuma/extensions.json": "afad4406e25bc9a780f167902ec0f32dec8abfa8e4ebe7568d9744898c1448d6",
     "Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
-    "Resources/Enuma/migration.json": "efa6b2e76ed38fc4359f235b3c43d4738d0aff3abc26304ca50a84b7fc266325",
+    "Resources/Enuma/migration.json": "28c851029297b8f01df9a86e9a7a4d28b7d8fb665e57885fbdf3e68d0e25febe",
     "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
     "Resources/Enuma/vendor.json": "9c37197536afc0eeb6deeb708fa8b436692a4c693e2eb3b4653f7108931f8fec",
     "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
