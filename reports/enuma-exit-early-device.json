@@ -1,0 +1,29 @@
+{
+  "scope": "R-006 candidate A device trials: early stop point with no display MMIO and no wait",
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "candidate_sha256": "a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517",
+  "candidate_fd_sha256": "95cd88f9e2c156f65b23ce640cd521231f1f1b96c2d87505460ead3070e4fd51",
+  "stage": 10,
+  "delay_us": 2000000,
+  "repeats_target": 5,
+  "tests": [
+    {
+      "trial": 1,
+      "issued_at": "2026-10-24 17:15:10",
+      "phase": "recovered-android-boot-complete",
+      "automatic_return_within_75_seconds": true,
+      "adb_return_seconds": 17.007,
+      "boot_complete_seconds": 30.223,
+      "boot_reason": "bootloader",
+      "partition_digests_unchanged": true,
+      "note": "hot state, Android had been running since the 16:38 success"
+    }
+  ],
+  "completed_trials": 1,
+  "stalls": 0,
+  "open_question": "stage 10 resets unconditionally, and a run that never resets still reaches Android by continuing the normal boot; the 2 s delay is smaller than the observed boot-time spread, so this trial alone does not prove the checkpoint executed. A delay=7 variant is needed to confirm the checkpoint fires (expect roughly +5 s to adb).",
+  "interpretation": "第一笔自动返回,不能据此断言复位出口稳定,也不能断言stage10 checkpoint已执行。需delay7对照确认执行后再累计稳定性。",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false
+}
