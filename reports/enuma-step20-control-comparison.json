@@ -1,0 +1,71 @@
+{
+  "scope": "offline exact PE/DEPEX comparison of successful and failed same-step20 controls; not runtime localization",
+  "profiles": {
+    "reason22-control": {
+      "fd_sha256": "dcaed1f3cd1d89bfcc9b1f6c4221b012c5b503e4bfb7e4ecca3d619389c71041",
+      "module_count": 79
+    },
+    "stage23-control": {
+      "fd_sha256": "7e2ec318f63505bbddaa19c663acd8ae6e2ab50f260338f6667853d384279bf3",
+      "module_count": 79
+    }
+  },
+  "defines_equal": true,
+  "changed_modules": {
+    "PcdDxe": {
+      "reason22-control": {
+        "pe": [
+          "c0b76835ffe8930adc0219bac3cfd6a670352e89c6ea58df13bc2c266b0e82d7"
+        ],
+        "depex": [
+          "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ]
+      },
+      "stage23-control": {
+        "pe": [
+          "d08ce78859ab8d8d12c6171709e53afd43094d878896389e017fc1e71dabd267"
+        ],
+        "depex": [
+          "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ]
+      }
+    },
+    "SimpleFbDxe": {
+      "reason22-control": {
+        "pe": [
+          "2f5b683e134789c7a446c3ddf0aecda071a265a9f30e2f05877eb8a6065fcb07"
+        ],
+        "depex": [
+          "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ]
+      },
+      "stage23-control": {
+        "pe": [
+          "ffad7b440ec5e512fc226f957ff220195934259c931e3778c712f5ab8726175b"
+        ],
+        "depex": [
+          "0022af439073edb110be200c19f758b076f4c818405aa7254cbe64cf48498a99"
+        ]
+      }
+    }
+  },
+  "identical_modules_count": 77,
+  "hardware_actions": false,
+  "simplefb_section_sha256": {
+    "reason22-control": {
+      ".text": "d0ae9f1a185fcf168ec0033c8fb16fceebcfed94854f15683050b000bba0f6f2",
+      ".rdata": "53ac5501770618accc2206a13eccebdf07010916c53e5e7a2b0cd0cb48c4068e",
+      ".data": "b50ab51d5749313a5c7cd0396c151c21f5445c4adaf50f87914429e7f77b3eaf",
+      ".pdata": "8f35aaff0ac8fdf1dfc73ab09928b98c67528098aff15af0341059b0d4023e34",
+      ".reloc": "1e99905f73cebe5f8b726d748cbc875a26019b663548e224c12118a4a9dfd6b8"
+    },
+    "stage23-control": {
+      ".text": "d0ae9f1a185fcf168ec0033c8fb16fceebcfed94854f15683050b000bba0f6f2",
+      ".rdata": "89cd0563d6b2559ecf06f2eea6f2b2479ea73ecbb256800e0c0a4f3e11e6cdfd",
+      ".data": "b50ab51d5749313a5c7cd0396c151c21f5445c4adaf50f87914429e7f77b3eaf",
+      ".pdata": "8f35aaff0ac8fdf1dfc73ab09928b98c67528098aff15af0341059b0d4023e34",
+      ".reloc": "1e99905f73cebe5f8b726d748cbc875a26019b663548e224c12118a4a9dfd6b8"
+    }
+  },
+  "simplefb_text_identical": true
+}

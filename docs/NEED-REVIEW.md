@@ -1,6 +1,6 @@
 # NEED-REVIEW
 
-当前门禁按AGENTS与既有批准。step22失败正向及未执行反向冻结、人工恢复独立通过。c45e52a step23已移除长等待/新增blend读取，原step20地址内<=250读/两次100ms，仅局部解码sole staging允许border；完整资格/文档推送/即时恢复门禁后直接临时boot，无新增待批准项。R-005 consumed，禁写/内存/verified边界不变。
+当前门禁：step22正向及step23同源对照均超时、人工恢复Android且独立核验通过；所有后续未执行候选冻结。先离线启动状态/PCD/早停定位，不追加显示启动，不原样重试失败镜像。新候选资格/文档推送/即时恢复门禁保持，无新增批准项，R-005 consumed及内存/verified/禁写边界不变。
 
 ## R-001 · 第一阶段 DarwinBoot owned-memory 预算
 

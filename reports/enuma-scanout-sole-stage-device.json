@@ -1,0 +1,33 @@
+{
+  "scope": "same-source step20 control timeout; step23 candidates not executed",
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "tests": [
+    {
+      "tag": "stage23-control",
+      "step": 20,
+      "query": 1,
+      "phase": "timeout-manually-recovered-android",
+      "issued_at": "2026-10-24 16:20:56",
+      "candidate_sha256": "459961e1675150602631647e6db7760a929bed19f922111dd3bccc606d9f0416",
+      "automatic_return_within_75_seconds": false,
+      "manual_recovery": {
+        "at": "2026-10-24T16:23:08.877428+08:00",
+        "user_confirmed_android": true,
+        "boot_completed": true,
+        "root": true,
+        "original_slot_matches": true,
+        "unlocked": true,
+        "partition_digests_unchanged": true
+      }
+    }
+  ],
+  "not_executed": [
+    "stage23-sole",
+    "stage23-unproven"
+  ],
+  "sole_stage_predicate": "unknown",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "interpretation": "同源step20对照也超时，不能将前一笔超时唯一归因step22新增逻辑；成功与失败对照SimpleFb .text完全相同。后续候选未执行。"
+}
