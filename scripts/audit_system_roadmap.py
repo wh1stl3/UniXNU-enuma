@@ -99,11 +99,18 @@ def main():
             'meaning': 'BootShim/UEFI diagnostic image, not an XNU/iPadOS payload image'}
     report['gap_scope'] = 'prelink_missing means board.kernel.prelink integration; an experimental emitted file can exist separately'
     report['full_boot_ready'] = False
+    bundle_report = ROOT / 'reports/enuma-full-payload.json'
+    if bundle_report.exists():
+        bundle = json.loads(bundle_report.read_text())
+        fat = ROOT / 'out/full-boot/payload/payload.img'
+        if hashlib.sha256(fat.read_bytes()).hexdigest() != bundle['payload_sha256']:
+            raise ValueError('experimental FAT bundle changed')
+        report['experimental_fat_payload'] = bundle
+        report['gap_scope'] += '; complete_adt_tool_missing describes board integration, not absence of the offline enuma adapter/ADT/FAT output'
     report['next_work_order'] = [
-        'complete enuma ADT and integrate the real system prelink with source/ABI audits',
-        'compose kernel/ADT/trust/config into the existing upstream FAT payload mechanism',
         'close actual ABL v3 initrd transport and read-only filesystem discovery without guessed offsets',
         'provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging',
+        'integrate offline ADT/FAT composition with board only after runtime memory/identity and loader contracts are reviewed',
         'close native root storage/PMGR/security/Data contracts before claiming iPadOS userspace',
     ]
     if not all(report['gaps'].values()):

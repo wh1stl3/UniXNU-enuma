@@ -1,0 +1,48 @@
+{
+  "scope": "offline ADT composition, no runtime allocation or execution",
+  "bytes": 11024,
+  "sha256": "f8b5e0bc127967f785b464486f1a0ec0fac798592824206fd1ef91e7b0fb7cd2",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "observed_memory_banks": [
+    {
+      "base": 2147483648,
+      "size": 1001390080
+    },
+    {
+      "base": 3221225472,
+      "size": 3221225472
+    },
+    {
+      "base": 6442450944,
+      "size": 4294967296
+    }
+  ],
+  "summary": {
+    "cpu_affinities": [
+      0
+    ],
+    "timebase_hz": 19200000,
+    "gic_distributor": "0x17a00000",
+    "gic_redistributor": "0x17a60000",
+    "gic_redistributor_stride": "0x20000",
+    "dram_base": "0x80000000",
+    "dram_bank_total": "0x1fbb00000",
+    "loader_window_requested": "0x20000000",
+    "random_seed_bytes": 64,
+    "identity_seed_present": false,
+    "nvram_proxy_bytes": 8192,
+    "memory_map_placeholders": {
+      "TrustCache": 16
+    },
+    "root_matching_present": false
+  },
+  "encoder_roundtrip_equal": true,
+  "hardware_tested": false,
+  "memory_policy": "DRAM fields are historical FDT information, not a free or contiguous map; runtime UEFI allocation required",
+  "missing": [
+    "root volume/PMGR/UFS integration",
+    "GOP/error channel",
+    "private platform identity seed",
+    "runtime allocation evidence"
+  ]
+}

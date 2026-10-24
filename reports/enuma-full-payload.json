@@ -1,0 +1,33 @@
+{
+  "scope": "offline real FAT system-input bundle; not a complete boot image",
+  "sources": {
+    "scripts/unixnu/payload.py": "05a79e171be8d0336d0125a556e90a7e0195cef138b195878102d366befb75f0",
+    "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+    "scripts/unixnu/__init__.py": "c6ae444a32411f12494607894581cc27d6bfec49c2f5712fe47a26cece5d1007",
+    "scripts/build-original-system-trust.py": "cd17f451a8bfca33476836a151a97fff44d0f0115108834a39bb3d907736264c"
+  },
+  "payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "payload_bytes": 100663296,
+  "fat_readback": {
+    "kernel.macho": "be83a7ec0c11132c13b9581d8784a1775584bb97ff5c66484bcbb2e7bef0879e",
+    "kernel.macho.trustcache": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7",
+    "Payloads/kernel.macho.adt": "f8b5e0bc127967f785b464486f1a0ec0fac798592824206fd1ef91e7b0fb7cd2",
+    "unixnu.toml": "96066b835a28a685113f8858ca0a6d56f8d494aa7a92249f94e8e2caa92c4f3e"
+  },
+  "trust_original_module_sha256": [
+    "da88460e6e513438d5307e5c526f76497a74754476a24da29f239f0c90120fc2",
+    "d121ba89167e03aafd00fa687c30cd8ebc4ccafd10c1408adb2ba3de12403651"
+  ],
+  "original_modules_modified": false,
+  "hardware_tested": false,
+  "full_boot_ready": false,
+  "board_unchanged": true,
+  "owned_memory_request": 536870912,
+  "missing": [
+    "boot-v3 FDT/initrd transport and SFS discovery",
+    "visible error output",
+    "native UFS/PMGR/root volume and Data",
+    "private platform identity seed"
+  ],
+  "board_sha256": "bc627da4ed58ceca661dd1e28b2f5f1b6e6c3d0b283dabd343ec0fd4294d5952"
+}

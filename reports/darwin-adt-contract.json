@@ -1,5 +1,5 @@
 {
-  "scope": "real source function with host adapters and in-memory synthetic inputs; no UEFI allocation or hardware",
+  "scope": "real DarwinBoot functions consume actual FAT-readback ADT/trust plus synthetic allocator tests; host sanitizer execution only",
   "request_bytes": 536870912,
   "property_path": "/chosen/darwinboot-memory-size",
   "property_value_hex": "0000002000000000",
@@ -8,8 +8,8 @@
     "drivers/DarwinBoot/DarwinBootPkg/Driver/WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb",
     "drivers/DarwinBoot/Test/window-size.c": "3ae08e6100ee2c3a74db057cda4eab822e15e688d60e016fc878e17b09c3ba21"
   },
-  "extracted_function_sha256": "e6f55af23c04977bd3208d1a0850021a688d4d8e114e15425924f28297613434",
-  "harness_sha256": "ec4e2783621bdd124af4c22070f93ae2625beb560afbd105d484d9e751bb0711",
+  "extracted_function_sha256": "80e1bc5e226848bcfb0fa22b85991a9c3ee8a4c9e012cc38fad753aac252a3d9",
+  "harness_sha256": "5fda68503b7387dfbb52f2e432d40b3485629309dd94a9379fa910db9cbe3de0",
   "allocation_functions_sha256": "4fc9e1c118586e975f881af929faeb51f5e84ef3ae1555d0108ac0c5ba363851",
   "allocation_harness_sha256": "6d135298fceec581d1e84cc0eb471fda1fd38395621a22a8853f2a0a14162b80",
   "checks": [
@@ -37,10 +37,12 @@
     {
       "argv": [
         "/mnt/d/Code/UniXNU-enuma/out/darwin-adt-contract/adt-test",
-        "0x20000000"
+        "0x20000000",
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/payload-readback.adt",
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/original-static-system.bundle"
       ],
       "exit_code": 0,
-      "stdout": "PASS: real DarwinBoot AdtNode accepts 512 MiB; rejects 144 truncations, trailing bytes, invalid values, duplicate/misplaced/short properties\n",
+      "stdout": "PASS: actual FAT ADT and original trust bundle accepted by pinned DarwinBoot functions; truncations and malformed trust rejected\nPASS: real DarwinBoot AdtNode accepts 512 MiB; rejects 144 truncations, trailing bytes, invalid values, duplicate/misplaced/short properties\n",
       "stderr": ""
     },
     {
@@ -103,5 +105,9 @@
     }
   ],
   "image_generated": false,
-  "runtime_allocation_observed": false
+  "runtime_allocation_observed": false,
+  "actual_input_sha256": {
+    "payload-readback.adt": "f8b5e0bc127967f785b464486f1a0ec0fac798592824206fd1ef91e7b0fb7cd2",
+    "original-static-system.bundle": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7"
+  }
 }

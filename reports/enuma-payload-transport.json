@@ -1,0 +1,35 @@
+{
+  "scope": "offline saved files and pinned template; synthetic combinations only",
+  "umi_template_sha256": "a3bad9132fcba63d812fd5e67e64f6e423967168a668729e8e7d3ee346d1523d",
+  "vendor_ramdisk_bytes": 2230,
+  "vendor_ramdisk_sha256": "c4d6aa28a09d7097fb527747d0d758b2e9886f38d64445f9431fe2fdac7c1fea",
+  "fat_bytes": 100663296,
+  "fat_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "hypotheses": [
+    {
+      "hypothesis": "raw-vendor-prefix",
+      "not_runtime_observation": true,
+      "prefix_bytes": 2230,
+      "relative_fat_offset_sector_aligned": false,
+      "whole_span_passes_umi_bpb_check": false,
+      "exact_fat_subrange_passes_bpb_check": true
+    },
+    {
+      "hypothesis": "page-padded-vendor-prefix",
+      "not_runtime_observation": true,
+      "prefix_bytes": 4096,
+      "relative_fat_offset_sector_aligned": true,
+      "whole_span_passes_umi_bpb_check": false,
+      "exact_fat_subrange_passes_bpb_check": true
+    }
+  ],
+  "runtime_initrd_layout": "unknown; neither prefix form is selected by this audit",
+  "firmware_changed": false,
+  "hardware_tested": false,
+  "next_requirements": [
+    "actual entry FDT initrd start/end and exact combination rule",
+    "reviewed mapped/reserved lifetime before dereferencing FDT or initrd",
+    "derive exact FAT subrange, reject ambiguity/overflow/overlap; never scan arbitrary RAM",
+    "reuse read-only BlockIO and require SFS binding plus file identity evidence"
+  ]
+}
