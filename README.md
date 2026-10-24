@@ -4,7 +4,7 @@
 
 先读 [AGENTS.md](AGENTS.md)、[当前状态](docs/STATUS.md)、[决策](docs/DECISIONS.md)、[待审查事项](docs/NEED-REVIEW.md)。仓库和交接纪律继承 UniXNU-nuwa，板级参数与 iPhone donor 不继承。
 
-设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表 iPadOS 已可启动。实机已覆盖SimpleFb安装返回、分层GOP元数据和只读MDP地址/格式探针；固定几何假设被受控拒绝，实际描述只读探针已受控返回，R-005单次像素实验已返回但未确认白条，后续DSI时序使能只读探针已实现并完成构建资格。尚未确认可见写屏或进入XNU，精确步骤及限制以STATUS为准。
+设备仓通过 UniXNU 的 `-D` 接口接入。所有输出须显式指向本仓 `out/`；参考树只读。当前为 example 配置，不代表 iPadOS 已可启动。实机已覆盖SimpleFb安装返回、分层GOP元数据和只读MDP地址/格式探针；固定几何假设被受控拒绝，实际描述只读探针已受控返回，R-005单次像素实验已返回但未确认白条，后续DSI时序使能只读探针已实现并完成构建资格。**注意：上述探针读到的值现在都受"显示窗口可能未被上电"的污染，不能当作显示事实**（见文末 2026-10-24 结论）。尚未确认可见写屏或进入XNU，精确步骤及限制以STATUS为准。
 
 目录：`config/` 路线和来源锁；`configs/` 内核候选配置；`drivers/EnumaPlatform/` 板级支持代码；`firmware/` 固定提交的独立 UEFI 仓子模块；`scripts/` 审计和主机检查；`reports/` 可复现证据；`docs/` 五件套与操作记录。
 
@@ -26,4 +26,4 @@ R-001 已批准并配置 512 MiB；[内存交接报告](docs/operations/2026-10-
 
 固件编译实现位于uefi-enuma/Resources/Scripts/build_enuma_firmware.py；本仓同名脚本为校验固定源锁的适配入口。文档职责与历史记录索引见[docs/README.md](docs/README.md)。
 
-2026-10-24当前：同源step20对照超时已人工恢复独立通过，未执行显示候选冻结；离线转启动状态/PCD/早停定位。R-005 consumed，见STATUS。
+2026-10-24当前：**读显示窗口已定位为 unclocked access**——停在 fastboot 时屏幕有 FASTBOOT 字样（显示域为开），而 `fastboot boot` 后固件读 `0x0ae6b800` 即挂总线；Qualcomm 官方 bus-hang 示例、XBL 在 EnterFastbootExit 关闭显示的 BSP 记录、SM8250 dispcc 属 MMCX 电源域三者吻合，且 simplefb 变体恰好排除了唯一会上电的 OEM DisplayDxe。据此**23 个 step 的 scanout 结论证据等级降为未知**，须在正确上电后重做。候选 D（保留 OEM 显示栈）已证伪：三门对照（成功/失败/任意返回）返回时间无差异，DisplayDxe 的 DEpex 要求 8 个 protocol 全 AND 而 33 个 OEM 驱动中无 MDSS/MDP/DSI，驱动从未被派发。UART 因无硬件支持判定不具备条件，改以 Linux dmesg 作为上电序列来源。R-005 consumed，详见 STATUS 与 [读窗口根因报告](docs/operations/2026-10-24-display-window-root-cause.md)。
