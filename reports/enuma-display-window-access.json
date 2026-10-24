@@ -1,0 +1,39 @@
+{
+  "scope": "R-008/A: when does the display window become unreachable, measured inside the stage checkpoint",
+  "question": "is the display domain already down when XBL hands over, or is it turned off later by our own dispatch",
+  "method": "two read-only loads of 0x0ae6b800 and 0x0ae6c000 placed inside the EnumaStageCheckpoint branch, which the delay-control experiment proved executes and honours the configured delay",
+  "trials": [
+    {
+      "id": "A",
+      "reads": ["0x0ae6b800", "0x0ae6c000"],
+      "image_sha256": "802b191638a551be8fa074adb53563298bfee3795da566b27fe018e724b747a4",
+      "issued_at": "2026-10-24 19:20:36",
+      "result": "automatic return",
+      "adb_return_seconds": 16.975,
+      "boot_complete_seconds": 32.049,
+      "partition_digests_unchanged": true
+    },
+    {
+      "id": "B",
+      "reads": ["0xdeadbeef"],
+      "purpose": "execution proof: an unmapped address must hang if the read really runs",
+      "issued_at": "2026-10-24 19:26:55",
+      "result": "stall, no return within 75 s",
+      "device_test": "out/device-tests/20261024T192655-dxe-driver-return",
+      "camera_snapshot": "out/camera-capture/20261024T192848/camera-snapshot.jpg"
+    }
+  ],
+  "conclusion": "B hanging proves the read really executes, so A returning cleanly proves the display window was still reachable at that point. The domain is therefore NOT already down at handover: it is turned off later, during our own dispatch.",
+  "replaces": "the earlier working hypothesis that XBL tears the display down on EnterFastbootExit and leaves the domain down. The bus-hang mechanism itself still holds (reading a window whose clocks are off hangs the bus, as the Qualcomm bus-hang example shows), but the cause of the clocks being off is now internal to this firmware.",
+  "consequences": [
+    "no OEM protocol providers need to be added and no MMCX or RPMh sequence has to be written: the domain is already up when we take over",
+    "the fix direction becomes either reading the window before dispatch, or identifying which driver in the dispatch turns the clocks off",
+    "the 23 earlier steps read the window during or after dispatch, so their values were taken while the clocks were being removed; their evidence grade stays unknown, and the mechanism behind that is now explained rather than mysterious",
+    "the historical intermittent successes are consistent with a read that happened to land before the teardown"
+  ],
+  "next": "bisect with the same pair of loads at stage 11, which sits right after CoreDispatcher returns: a clean stage 10 plus a stalled stage 11 localises the teardown to the dispatch itself",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "interpretation": "A与B两笔对照闭合:死地址挂死证明读确实执行,故A的正常返回证明显示窗口在stage10仍可访问;teardown发生在本固件派发期间而非XBL跳转瞬间。推翻了此前'XBL关闭显示'的解释,但保留unclocked access致挂的机制。不需要补驱动或自写上电序列,方向改为在派发前读取或定位关闭者。"
+}
