@@ -9,22 +9,39 @@ from reconcile_enuma_recovery import atomic_json
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def capture(name):
+def capture(name, image=None):
     if name not in ('zero','known3','mdp-low'):
         raise ValueError('unsupported bounded candidate name')
+    if image is None:
+        raise ValueError('the packaged image of this candidate must be given')
     target=ROOT/'out/value-transport'/name
     target.mkdir(parents=True,exist_ok=True)
+    source=Path(image)
+    if not source.is_absolute():
+        source=ROOT/source
+    source=source.resolve()
+    if not source.is_relative_to((ROOT/'out').resolve()):
+        raise ValueError('candidate image outside out/')
     files={'build':'reports/enuma-firmware-build.json','audit':'reports/enuma-fd-audit.json',
-           'raw':'out/boot-candidate/enuma-uefi.raw','payload':'reports/enuma-boot-payload.json'}
+           'raw':'out/boot-candidate/enuma-uefi.raw',
+           'payload':str(source.with_suffix('.json').relative_to(ROOT))}
     build=json.loads((ROOT/files['build']).read_text())
     audit=json.loads((ROOT/files['audit']).read_text())
     if not build['complete'] or build['fd_sha256']!=audit['fd_sha256']:
         raise ValueError('build/audit mismatch')
+    # The archived qualification must describe this candidate. Without this
+    # check a capture taken after a later build silently keeps the wrong
+    # firmware, raw and value profile.
+    expected_code={'zero':0,'known3':3,'mdp-low':0}[name]
+    profile=build.get('value_probe') or {}
+    if profile.get('constant_code')!=expected_code or profile.get('source') not in ('constant','register'):
+        raise ValueError('archived build does not describe this candidate: '+str(profile))
     for key,relative in files.items():
-        dest=target/({'raw':'candidate.raw'}.get(key,key+'.json'))
+        dest=target/({'raw':'candidate.raw','payload':'package.json'}.get(key,key+'.json'))
         if dest.exists():raise ValueError('refuse to overwrite archived qualification: '+str(dest))
         shutil.copyfile(ROOT/relative,dest)
     shutil.copyfile(ROOT/build['fd'],target/'candidate.fd')
+    shutil.copyfile(source,target/'candidate.img')
     return target
 
 
@@ -56,8 +73,9 @@ def assemble():
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--capture',choices=('zero','known3','mdp-low'))
+    p.add_argument('--image',type=Path,help='the packaged boot image of this candidate')
     args=p.parse_args()
-    if args.capture:print(capture(args.capture))
+    if args.capture:print(capture(args.capture,args.image))
     else:assemble()
 
 
