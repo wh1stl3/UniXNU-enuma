@@ -1,0 +1,49 @@
+{
+  "scope": "public sources and one local observation that together explain why reading the display window stalls",
+  "compiled_at": "2026-10-24 17:45 +08:00",
+  "local_observation": {
+    "what": "operator entered the bootloader normally (adb reboot bootloader) with no probe image involved",
+    "observed": "the panel shows the orange FASTBOOT wordmark, i.e. the display pipeline is initialised and running while the bootloader is in fastboot mode",
+    "evidence": "out/camera-capture/20261024T174400/camera-snapshot.jpg",
+    "significance": "the display domain is powered in fastboot mode, so an unpowered domain is not the state while sitting in fastboot; it must change after the transition out of fastboot"
+  },
+  "sources": [
+    {
+      "id": "S-QUALCOMM-BUSHANG",
+      "title": "Register read/write tracing with dynamic debug and pstore, and the Qualcomm bus-hang demonstration module",
+      "url": "https://patchwork.kernel.org/cover/10593159",
+      "quote": "This does an unclocked access and will reset db410c",
+      "detail": "a debugfs module deliberately reads an MDP register without enabling its clock; the result is a bus hang that resets the board",
+      "bearing": "confirms that an unclocked read of MDP registers is not a benign returning-error operation on Qualcomm platforms; it hangs or resets"
+    },
+    {
+      "id": "S-BSP-EXPERIENCE",
+      "title": "Qualcomm boot chain BSP notes on XBL/ABL display handover",
+      "url": "http://www.hqwc.cn/a/1896845.html",
+      "quote": "追到XBL的Display驱动,发现它在EnterFastbootExit时把Display关闭并释放了framebuffer,但没有重新初始化到待boot状态。简单说,是ABL与XBL对“fastboot退出后显示资源如何移交”这个生命周期没有对齐",
+      "detail": "the XBL display driver tears the display down on EnterFastbootExit and releases the framebuffer without restoring a boot-ready state; the root cause named is that ABL and XBL disagree about who owns display resources across the fastboot exit",
+      "bearing": "matches this device exactly: display runs in fastboot, and a fastboot boot hands control to our firmware after that teardown"
+    },
+    {
+      "id": "S-SM8250-MMCX",
+      "title": "clk: qcom: use power-domain for sm8250's clock controllers",
+      "url": "https://lore.kernel.org/linux-arm-msm/20210718104901.454843-3-dmitry.baryshkov@linaro.org/T/",
+      "quote": "On SM8250 both the display and video clock controllers are powered up by the MMCX power domain",
+      "detail": "dispcc lives in the MMCX power domain; Linux enables it through runtime PM and GDSC before touching MDSS registers, and disp_cc_mdss_ahb_clk gates register access",
+      "bearing": "names the exact resource that must be on before any MDP read, and shows the kernel does this explicitly while the firmware does not"
+    }
+  ],
+  "conclusion": "the firmware reads MDP/DSI registers without enabling the MMCX power domain, dispcc or the MDSS AHB/MDP clocks, in an execution context that begins right after XBL tears the display down. Under those conditions the read is an unclocked access, and on this platform that hangs the bus rather than returning an error.",
+  "explains": [
+    "why two register reads are enough to stall, removing probe depth as a factor",
+    "why OMITTING DisplayDxe matters: the metadata-only SimpleFb variant removes the only driver in the image that could have initialised display",
+    "why a full power cycle does not help: the teardown happens on every fastboot exit, after the power cycle",
+    "why the historical S-001/250849f/S-002/S-003 cases never traced to a code defect"
+  ],
+  "does_not_yet_explain": "the seven clean MMIO-reading trials between 15:06 and 16:02. Possible timing windows in which the read lands before the teardown completes, or bootloader paths that skip EnterFastbootExit, are not established and must not be treated as fact.",
+  "implications": {
+    "reading_results_before_any_fix": "invalid as display evidence, because the access itself is not guaranteed to be a legal one",
+    "required_fix": "enable MMCX/dispcc/MDSS clocks from the firmware before any MDP access, or stop reading MDP altogether",
+    "cheapest_next_experiment": "read the same two words at stage 4 (earliest SEC point after PlatformInitialize) to see whether the teardown is time-dependent; success there and failure at stage 10/13 would bound the window"
+  }
+}
