@@ -20,6 +20,15 @@
       "metric": "adb_return_seconds",
       "seconds": 25.503,
       "evidence": "out\\device-tests\\20261024T225044-dxe-driver-return"
+    },
+    {
+      "id": "zero2",
+      "role": "constant",
+      "code": 0,
+      "outcome": "failed",
+      "image_sha256": "9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1",
+      "runner_returncode": 2,
+      "phase": "manual-recovery-needed"
     }
   ]
 }
