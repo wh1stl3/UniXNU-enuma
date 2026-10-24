@@ -1,0 +1,20 @@
+{
+  "plan_sha256": "610288d4cd626db1c401800bba97bb3c72aaa183ec04f2109fe76875e2cbd397",
+  "trials": [
+    {
+      "id": "baseline1",
+      "role": "constant",
+      "code": 0,
+      "image_sha256": "1ec5f7951b8fab661a42d5d4cb2fbfdcd51fa48a67543fa18ae5419b3a1a5878",
+      "outcome": "hung",
+      "runner_returncode": 2,
+      "evidence": "out\\device-tests\\20261025T004052-dxe-driver-return"
+    }
+  ],
+  "summary": {
+    "issued": 1,
+    "returned": 0,
+    "hung": 1,
+    "hung_rate": 1.0
+  }
+}
