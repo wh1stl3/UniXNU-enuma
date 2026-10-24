@@ -10,6 +10,16 @@
       "metric": "adb_return_seconds",
       "seconds": 16.991,
       "evidence": "out\\device-tests\\20261024T224938-dxe-driver-return"
+    },
+    {
+      "id": "known3",
+      "role": "constant",
+      "code": 3,
+      "outcome": "returned",
+      "image_sha256": "357706af66517e7c1d7dac9629f55b1ee57e88b6701bfa4176315a3f4d3ace96",
+      "metric": "adb_return_seconds",
+      "seconds": 25.503,
+      "evidence": "out\\device-tests\\20261024T225044-dxe-driver-return"
     }
   ]
 }
