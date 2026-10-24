@@ -39,7 +39,7 @@ class HangBaselineTests(unittest.TestCase):
     def test_rejects_mixed_roles(self):
         candidate = plan(count=2, role='raw')
         candidate['trials'][1]['role'] = 'constant'
-        with self.assertRaisesRegex(ValueError, 'one constant-0 or one raw'):
+        with self.assertRaisesRegex(ValueError, 'one constant-0'):
             baseline.check_baseline(candidate)
 
     def test_rejects_mixed_candidates(self):

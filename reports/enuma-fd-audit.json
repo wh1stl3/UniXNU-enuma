@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "e9c2181716a486de0cb7552bbae43fa469c95a6bf398f45a3836ffc03d20a89c",
+  "fd_sha256": "3f4b06b83e422aa73443bc0aad9448ac8d37e8f9d42d2981adcda907dfc739f0",
   "fd_bytes": 3145728,
   "file_count": 79,
   "matched_oem_modules": [
@@ -164,27 +164,39 @@
   "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
   "hardware_execution": false,
-  "value_transport_code": {
-    "profile": {
-      "source": "raw",
-      "constant_code": 0,
-      "register_index": 1,
-      "shift": 0,
-      "extra_base_seconds": 0,
-      "seconds_per_code": 3
-    },
-    "provider_pe_sha256": "532d8a285a96519b66f0d4c2f9c44a6ba12773dfb4aae351d671e8f2bc7eaad3",
-    "static_display_reads": [
-      "0xae05014"
+  "dsi_counter_code": {
+    "scope": "Restricted constant/table dataflow on the actual packaged AArch64 PE.\n\nThis checks recognizable MMIO sites and the wait argument, not all control flow\nor every possible indirect access. Runtime read bounds come from source+tests.\n",
+    "static_possible_target_loads": [
+      "0xae00000",
+      "0xae6b800",
+      "0xae6b8a8",
+      "0xae6b8ac",
+      "0xae6ba6c",
+      "0xae6c000",
+      "0xae6c0a8",
+      "0xae6c0ac",
+      "0xae6c26c"
     ],
-    "static_display_stores": [],
-    "compiled_contract": {
-      "compiler_makefile_sha256": "a02cccafb432d415d2529dd62db552c6ccc90014e1a991a40516bb02f03ca608",
-      "source_sha256": "57222a5d1e91323eb8e7a073f5ca29db460b8c27bd9e9fe96c52d767ea090c6f",
-      "header_sha256": "5d25e723abbe44bb9743186441680461a17553341e6882a1b4b9812e679b1f5f",
-      "actual_defines_checked": true
-    },
+    "static_target_stores": [],
+    "recognized_mmio_sites": [
+      "1300: 1f 01 40 b9  \tldr\twzr, [x8]",
+      "1304: 33 01 40 b9  \tldr\tw19, [x9]",
+      "133c: 6c 6d 42 b9  \tldr\tw12, [x11, #620]",
+      "1340: 6d 01 40 b9  \tldr\tw13, [x11]",
+      "1350: 6b a9 40 b9  \tldr\tw11, [x11, #168]",
+      "1524: 4a ad 40 b9  \tldr\tw10, [x10, #172]",
+      "1598: 8b ad 40 b9  \tldr\tw11, [x12, #172]",
+      "159c: 8e 6d 42 b9  \tldr\tw14, [x12, #620]",
+      "15a0: 8d 01 40 b9  \tldr\tw13, [x12]",
+      "15a4: 8c a9 40 b9  \tldr\tw12, [x12, #168]",
+      "1600: 08 01 40 b9  \tldr\tw8, [x8]"
+    ],
+    "wait_100000_call_sites": 1,
+    "delta_64_comparison": true,
+    "entry_rva": "0x1050",
+    "reachable_instruction_count": 371,
+    "complete_indirect_access_or_control_flow_proof": false,
     "hardware_execution": false,
-    "scope": "packaged PE direct constant-address accesses and locked source/host checks; not full indirect dataflow proof"
+    "provider_pe_sha256": "0d5dae42f2db92e343b47450914a0ea3d0ee8e8f804236ab42cc856271d9f8c0"
   }
 }

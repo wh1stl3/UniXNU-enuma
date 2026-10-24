@@ -81,18 +81,18 @@
       "ENUMA_DIAG_GUID_ONLY": "1",
       "ENUMA_DIAG_DISPATCH_FALLBACK": "1",
       "ENUMA_DIAG_GOP_QUERY": "1",
-      "ENUMA_DIAG_GOP_STEP": "0",
+      "ENUMA_DIAG_GOP_STEP": "18",
       "ENUMA_PLATFORM_CONFIG": "enumaPkg/Include/PlatformConfig.inc",
       "ENUMA_VENDOR_DSC": "EnumaInputs/Vendor.dsc.inc",
       "ENUMA_VENDOR_DXE": "EnumaInputs/Vendor.fdf.inc",
       "ENUMA_VENDOR_APRIORI": "EnumaInputs/Vendor.apriori.inc",
       "ENUMA_VENDOR_RAW": "EnumaInputs/Vendor.raw.fdf.inc",
       "ENUMA_DIAG_DELAY_FROM_DISPLAY": "0",
-      "ENUMA_DIAG_DISPLAY_VALUE_INDEX": "0",
+      "ENUMA_DIAG_DISPLAY_VALUE_INDEX": "2",
       "ENUMA_DIAG_PIXEL_PREVIEW": "0",
-      "ENUMA_VALUE_SOURCE": "3",
+      "ENUMA_VALUE_SOURCE": "0",
       "ENUMA_VALUE_CODE": "0",
-      "ENUMA_VALUE_INDEX": "1",
+      "ENUMA_VALUE_INDEX": "0",
       "ENUMA_VALUE_SHIFT": "0"
     }
   },
@@ -117,11 +117,11 @@
   "diagnostic_pixel_preview": false,
   "hardware_review_required": null,
   "diagnostic_gop_query": 1,
-  "diagnostic_gop_step": 0,
+  "diagnostic_gop_step": 18,
   "value_probe": {
-    "source": "raw",
+    "source": "off",
     "constant_code": 0,
-    "register_index": 1,
+    "register_index": 0,
     "shift": 0,
     "extra_base_seconds": 0,
     "seconds_per_code": 3
@@ -141,7 +141,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "e9c2181716a486de0cb7552bbae43fa469c95a6bf398f45a3836ffc03d20a89c",
+  "fd_sha256": "3f4b06b83e422aa73443bc0aad9448ac8d37e8f9d42d2981adcda907dfc739f0",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -222,11 +222,5 @@
     "autogen_sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
     "static_library_list_sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
     "core_checkpoint_sha256": "bb6f9bdb7a4d0dc2206fb595e63ff1718933868f61265dfc89ebf9867c5645b0"
-  },
-  "value_probe_compiled_contract": {
-    "compiler_makefile_sha256": "a02cccafb432d415d2529dd62db552c6ccc90014e1a991a40516bb02f03ca608",
-    "source_sha256": "57222a5d1e91323eb8e7a073f5ca29db460b8c27bd9e9fe96c52d767ea090c6f",
-    "header_sha256": "5d25e723abbe44bb9743186441680461a17553341e6882a1b4b9812e679b1f5f",
-    "actual_defines_checked": true
   }
 }

@@ -80,26 +80,51 @@ def validate_plan(plan, root):
         expected={'source':trial['role'],'constant_code':trial.get('code',0),
                   'register_index':trial.get('index',0),'shift':trial.get('shift',0),
                   'extra_base_seconds':0,'seconds_per_code':3}
-        if value!=expected or trial['role'] not in ('constant','register','raw'):
+        if value!=expected or trial['role'] not in ('constant','register','raw','off'):
             raise ValueError('value profile does not match trial')
         defines=build['firmware_configuration']['defines']
-        wanted={'ENUMA_VALUE_SOURCE':{'constant':'1','register':'2','raw':'3'}[trial['role']],
+        wanted={'ENUMA_VALUE_SOURCE':{'constant':'1','register':'2','raw':'3','off':'0'}[trial['role']],
                 'ENUMA_VALUE_CODE':str(expected['constant_code']),'ENUMA_VALUE_INDEX':str(expected['register_index']),
-                'ENUMA_VALUE_SHIFT':str(expected['shift']),'ENUMA_DIAG_GOP_STEP':'0','ENUMA_DIAG_GOP_QUERY':'1',
+                'ENUMA_VALUE_SHIFT':str(expected['shift']),
                 'ENUMA_DIAG_STAGE':'13','ENUMA_DIAG_DETAIL_POINT':'16','ENUMA_DIAG_DELAY_US':'2000000',
                 'ENUMA_DIAG_DELAY_FROM_DISPLAY':'0','ENUMA_DIAG_SIMPLEFB':'1','ENUMA_DIAG_GUID_ONLY':'1',
                 'ENUMA_DIAG_DISPATCH_FALLBACK':'1','ENUMA_DIAG_PIXEL_PREVIEW':'0'}
+        if trial['role']=='off':
+            # A gated historical probe carries its verdict in the PASS/FAIL return
+            # timing, so it owns its step number instead of the transport's step 0.
+            wanted['ENUMA_DIAG_GOP_QUERY']='1'
+            if not str(defines.get('ENUMA_DIAG_GOP_STEP','')).isdigit() or not 1<=int(defines['ENUMA_DIAG_GOP_STEP'])<=23:
+                raise ValueError('gated probe step out of range: '+str(defines.get('ENUMA_DIAG_GOP_STEP')))
+        else:
+            wanted['ENUMA_DIAG_GOP_STEP']='0'
+            wanted['ENUMA_DIAG_GOP_QUERY']='1'
         for name,want in wanted.items():
             if defines.get(name)!=want:
                 raise ValueError('unexpected compiled define: '+name)
+        # A gated historical probe is audited by its own code report, not by the
+        # value transport. Step 18 is the only gated probe currently allowed to
+        # run this way, so its exact read set is pinned here: two DSI controller
+        # bases plus version/active/timing/enable/frame, and no stores.
+        step18_loads={'0xae00000','0xae6b800','0xae6b8a8','0xae6b8ac','0xae6ba6c',
+                      '0xae6c000','0xae6c0a8','0xae6c0ac','0xae6c26c'}
+        gated=trial['role']=='off'
+        if gated:
+            counter=audit.get('dsi_counter_code') or {}
+            if set(counter.get('static_possible_target_loads') or [])!=step18_loads:
+                raise ValueError('gated probe read set is not the pinned step18 set')
+            if counter.get('static_target_stores'):
+                raise ValueError('gated probe contains display stores')
+            if str(build.get('diagnostic_gop_step'))!='18':
+                raise ValueError('gated probe is not step18')
         if (build.get('diagnostic_dispatch_guid')!='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92' or
             build.get('diagnostic_pixel_preview') is not False or not build.get('core_patch_reversion_checked') or
-            audit.get('value_transport_code',{}).get('profile')!=value):
+            (audit.get('value_transport_code',{}).get('profile')!=value if not gated else False)):
             raise ValueError('missing code/dispatch/patch-reversion qualification')
-        compiled=build.get('value_probe_compiled_contract',{})
-        if (compiled.get('header_sha256')!=source_lock['file_sha256']['diagnostics/EnumaValueProbe.h'] or
-            audit['value_transport_code'].get('compiled_contract')!=compiled):
-            raise ValueError('compiled helper or code audit differs from locked source')
+        if not gated:
+            compiled=build.get('value_probe_compiled_contract',{})
+            if (compiled.get('header_sha256')!=source_lock['file_sha256']['diagnostics/EnumaValueProbe.h'] or
+                audit['value_transport_code'].get('compiled_contract')!=compiled):
+                raise ValueError('compiled helper or code audit differs from locked source')
 
 
 def require_published(root):

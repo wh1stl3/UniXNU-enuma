@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "seconds_per_code": 3,
+  "trials": [
+    {
+      "id": "baseline1",
+      "role": "off",
+      "code": 0,
+      "index": 0,
+      "shift": 0,
+      "image": "out\\value-transport\\alive\\candidate.img",
+      "raw": "out\\value-transport\\alive\\candidate.raw",
+      "build": "out\\value-transport\\alive\\build.json",
+      "audit": "out\\value-transport\\alive\\audit.json",
+      "package": "out\\value-transport\\alive\\package.json",
+      "sha256": {
+        "image": "8df9616fc7378b37586fc673f737411c96a3434c0a9c37098dcbe332787c0621",
+        "raw": "25276f9baf664c8dad44a61902884cc23a5e34608f219a83cf341c072848ea9a",
+        "build": "5feb8c2846f82503c66fc9270a7be7b92e4d75ca439cc813dc0777336c9910f4",
+        "audit": "81b3a5801cfd26de03b1d93726d52bcac09c8af065981efababd2b11fb9e4443",
+        "package": "0c34573dc8fecf71871c51472b19dcdb0b482c97079ab8ba17ee13dc1bf7df67"
+      }
+    }
+  ]
+}

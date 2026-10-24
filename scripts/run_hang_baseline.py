@@ -29,10 +29,12 @@ def check_baseline(plan):
     if not trials:
         raise ValueError('empty baseline plan')
     # One profile, repeated. constant-0 measures the floor with no display
-    # access at all; raw measures a single unprimed target read. Mixing them, or
-    # mixing candidates, would wipe out the denominator.
-    if len({t.get('role') for t in trials}) != 1 or trials[0].get('role') not in ('constant', 'raw'):
-        raise ValueError('baseline plan must repeat one constant-0 or one raw read profile')
+    # access; raw measures a single unprimed target read; off is a historical
+    # boolean gate (for example the DSI frame-progress step) whose verdict is
+    # carried by the PASS/FAIL return timing rather than by a value. Mixing them,
+    # or mixing candidates, would wipe out the denominator.
+    if len({t.get('role') for t in trials}) != 1 or trials[0].get('role') not in ('constant', 'raw', 'off'):
+        raise ValueError('baseline plan must repeat one constant-0, one raw read, or one gated probe profile')
     if any(t.get('code', 0) != 0 for t in trials):
         raise ValueError('baseline plan must not encode a constant code')
     if len({t['id'] for t in trials}) != len(trials):
