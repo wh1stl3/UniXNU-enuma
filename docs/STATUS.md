@@ -26,13 +26,13 @@ query1支持非错误marker、query2支持错误marker；Core匹配延时2秒，
 
 ## 最新实测
 
-ff3db30新候选尚未实测。此前012715b三笔无按键及独立恢复通过，支持配置1:1矩形包含，见reports/enuma-scanout-geometry-device.json，不能冒充新源码结果。
+blend21-control step20/query1：2026-10-24 15:28:59；recovered-android-boot-complete；ADB 17.141秒 / Android完成 32.688秒；用户无按键 True，独立恢复 True，原分区摘要 True。
 
-本轮互补尚未齐备，未判定新混合配置模式。
+单源混合互补尚未齐备，未判定保守配置模式。
 
 ## 下一步与恢复
 
-全部当前文档提交推送后，按即时身份/备份/恢复门禁临时boot blend21-control；受控返回、独立恢复及无按键确认后继续。
+全部当前文档提交推送后，按即时身份/备份/恢复门禁临时boot blend21-single；受控返回、独立恢复及无按键确认后继续。
 
 用户可在场恢复，新摄像头保存原图并自行顺时针90度旋转后判读，必要前后截图；实际输出/判读变化/恢复操作时录像。键盘反光不作显示输出。Android/root/原槽/解锁/备份及boot、vendor_boot原摘要即时核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停止追加并优先恢复，当轮落实原因/模式/恢复交接；恢复核验后继续离线修复新候选，不原样重试失败镜像。
 
