@@ -1,9 +1,10 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "168283a4d707bf3dd2311652e86abd59d88edc4d1277593264d58ebf9de3a705",
+  "fd_sha256": "dbca3fcb2f470807f1fdac8b17e47c6eb604f3be49b1563c42df5bfc020615e0",
   "fd_bytes": 3145728,
-  "file_count": 79,
+  "file_count": 80,
   "matched_oem_modules": [
+    "CPRDxe",
     "ChipInfo",
     "CipherDxe",
     "ClockDxe",
@@ -11,6 +12,7 @@
     "DALSys",
     "DALTLMM",
     "DDRInfoDxe",
+    "DisplayDxe",
     "EnvDxe",
     "GpiDxe",
     "HALIOMMU",
@@ -45,6 +47,7 @@
     "BootGraphicsResourceTableDxe",
     "BootLogo.bmp",
     "BootManagerMenuApp",
+    "CPRDxe",
     "CapsuleRuntimeDxe",
     "ChipInfo",
     "CipherDxe",
@@ -58,6 +61,7 @@
     "DarwinBoot",
     "DevicePathDxe",
     "DiskIoDxe",
+    "DisplayDxe",
     "DxeCore",
     "EmbeddedMonotonicCounter",
     "EnglishDxe",
@@ -100,7 +104,6 @@
     "SecurityStubDxe",
     "SetupBrowser",
     "ShmBridgeDxe",
-    "SimpleFbDxe",
     "SmBiosTableDxe",
     "SmbiosDxe",
     "SmemDxe",
@@ -117,8 +120,6 @@
     "ufpdevicefw"
   ],
   "diagnostic_omitted_oem_modules": [
-    "CPRDxe",
-    "DisplayDxe",
     "UFSDxe"
   ],
   "apriori_guids": [
@@ -154,7 +155,8 @@
     "7db0793a-4402-4be1-906e-d0fabad2707e",
     "7a32bd23-f735-4f57-aa1a-447d2fe3be0d",
     "04de8591-d2b3-4077-bbbe-b12070094eb6",
-    "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+    "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+    "1b52138d-3fa3-4e50-b958-20887353f809",
     "569ea0de-b557-4043-84cf-01103fe516e5",
     "3adf8dda-1850-44c5-8c63-bb991849bc6f",
     "5f0937cd-73f9-445e-b320-bb6fd5d3cbde",
@@ -163,29 +165,5 @@
   ],
   "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
-  "hardware_execution": false,
-  "value_transport_code": {
-    "profile": {
-      "source": "register",
-      "constant_code": 0,
-      "register_index": 1,
-      "shift": 28,
-      "extra_base_seconds": 0,
-      "seconds_per_code": 3
-    },
-    "provider_pe_sha256": "092490222902d892d21c3eb787704b6bcbd99cf2cbdfb069f846a65b5ae4a0ca",
-    "static_display_reads": [
-      "0xae6b800",
-      "0xae05014"
-    ],
-    "static_display_stores": [],
-    "compiled_contract": {
-      "compiler_makefile_sha256": "677f694af32eb876d01e6ad845968adba9381a5c5830cfb2d773ef202a4f6a56",
-      "source_sha256": "57222a5d1e91323eb8e7a073f5ca29db460b8c27bd9e9fe96c52d767ea090c6f",
-      "header_sha256": "5d25e723abbe44bb9743186441680461a17553341e6882a1b4b9812e679b1f5f",
-      "actual_defines_checked": true
-    },
-    "hardware_execution": false,
-    "scope": "packaged PE direct constant-address accesses and locked source/host checks; not full indirect dataflow proof"
-  }
+  "hardware_execution": false
 }

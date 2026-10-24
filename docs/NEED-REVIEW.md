@@ -398,6 +398,28 @@ R-010 执行结果（2026-10-25 00:06）：4 笔 3 返回 1 挂（17.000/16.974/
 
 不批准的后果：R-008 只能停在“固件写 + warm reset”的一半，读回无法做；批量传值这条提速路线作废，后续仍按单笔 4 bit 摸索，每笔仍可能需人工恢复。
 
+## R-014 · 让原厂 DisplayDxe + CPRDxe 运行（候选 D 首次执行）
+
+状态：**pending，2026-10-25 01:00 提出**，等待用户批准上机。
+
+背景：D-160 纠正了 D-142 的错误结论——原厂显示栈完整存在于本机 XBL 的 149 个模块中（`DisplayDxe` 315392 字节 + `CPRDxe` + `ClockDxe` + `I2C` + `SPMI` + `PmicDxe` + `DALTLMM` + 40 个 Panel XML，含本机 `Panel_K81_42_02_0a_dualdsi_cphy_lcd_vid.xml`）。守卫本就允许 `--diagnostic-without-ufs` 只省略 UFSDxe 而保留它们，因此**不需要写任何新驱动**。
+
+**为什么必须单独批准**：此前的实测全部是只读（R-004 窗口内读寄存器），而原厂 `DisplayDxe` 一旦被 dispatch，会**自行写入** MDP/DSI/PMIC/背光/时钟等一大批寄存器，性质与 R-012"只写 KTZ8866 使能与亮度"完全不同，也超出 R-004 的只读范围。因此不因 R-012 或用户的"继续"自动覆盖，需明确批准。
+
+| 项 | 内容 |
+| --- | --- |
+| 候选 | FD `dbca3fcb`、镜像 `922972e6`、`ENUMA_DIAG_SIMPLEFB=0` + `ENUMA_DIAG_DISABLE_UFS=1`，诊断省略集 `['UFSDxe']`，审计 32 个匹配含 `CPRDxe`/`DisplayDxe`，Boot v3 回环通过 |
+| 方式 | 临时 `fastboot boot`，不写任何分区 |
+| 观察 | **摄像头看屏幕**：出现 boot logo / 白条 / 任何内容 = 原厂显示栈成功；仍全黑 = 未成功 |
+| 伴随返回时间 | 仅作参考，不作为判据（此构建无取数通道，`VALUE_SOURCE=0`/`GOP_STEP=0`） |
+
+**两种结果的判读与后续**：
+- **有内容** → 显示栈问题解决，后续转向 GOP 输出适配（XNU 的 `NativeMobileDisplay` 要的是 `PE_Video`，需要从 GOP 转出），R-008 批量诊断可延后甚至不再需要。
+- **仍全黑** → 需区分：DisplayDxe 的 DEPEX 是否被 dispatch。D-160 已实测其 DEPEX 为 9 个 protocol 全 AND，其中 2 个（`a966cc4f-ee6c-424d-a762-8ed3b5a4a501`、`47861dff-556f-4269-9b28-062ec3ecb30d`）在 149 个模块里无任何引用者；若因此未 dispatch，下一步是补这 2 个 protocol 的提供者，而不是自写 I2C。
+
+风险：DEPEX 不满足时 DXE Core 不 dispatch（不崩溃）；若被 dispatch 而依赖有缺口，可能中途失败返回错误，最坏表现为挂死需长按恢复。可能建立 GOP 并在屏幕上留下画面——若需要观察"干净的黑屏状态"，本实验会污染该观察基线（但 D-158 已确认数据流在跑，此基线价值有限）。不改内存字段/映射/verified、不写分区、不动 R-005/R-007 账本。
+
+
 
 
 
