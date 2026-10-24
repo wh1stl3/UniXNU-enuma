@@ -70,12 +70,21 @@
       "metric": "adb_return_seconds",
       "seconds": 15.947,
       "evidence": "out\\device-tests\\20261024T234655-dxe-driver-return"
+    },
+    {
+      "id": "baseline8",
+      "role": "constant",
+      "code": 0,
+      "image_sha256": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+      "outcome": "hung",
+      "runner_returncode": 2,
+      "evidence": "out\\device-tests\\20261024T234756-dxe-driver-return"
     }
   ],
   "summary": {
-    "issued": 7,
+    "issued": 8,
     "returned": 7,
-    "hung": 0,
-    "hung_rate": 0.0
+    "hung": 1,
+    "hung_rate": 0.125
   }
 }
