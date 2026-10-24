@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "scope": "R-008/A: two read-only loads of the display window before any DXE driver is dispatched",
+  "firmware_commit": "beaae2c6780127a2882213d9b9c354587429d7b2",
+  "fd_sha256": "0939d2e7a833f3f38be252f8401d57636dfd763bef15f392d29cb779c096a471",
+  "image_sha256": "802b191638a551be8fa074adb53563298bfee3795da566b27fe018e724b747a4",
+  "image_bytes": 3153920,
+  "code_location": "firmware/diagnostics/EnumaStageCheckpoint.h, inside the runtime branch if (Stage == 10), before MicroSecondDelay",
+  "reads": ["0x0ae6b800 (DSI0 INTF_TIMING_ENGINE_EN)", "0x0ae6c000 (DSI1)"],
+  "why_this_location": "the delay-control experiment proved this branch executes and honours ENUMA_DIAG_DELAY_US, so placing the reads in that same branch avoids depending on a macro reaching a particular translation unit",
+  "mapping": "the R-004 device mapping for 0x0ae00000..0x0ae85 000 is installed by the time the DXE dispatcher runs, so a stall cannot be blamed on an unmapped address",
+  "build": "build_enuma_firmware.py --stop-stage 10 --stop-delay 2 --dispatch-ordinal 1 --detail-point 13 --diagnostic-simplefb; audit and Boot v3 roundtrip pass",
+  "discrimination": {
+    "stall": "the window was already unreachable before any of our drivers ran, so the teardown belongs to XBL/ABL or to an earlier phase; B would have to start from RPMh and D1 becomes the only sensible route",
+    "clean_return": "the window was still reachable at this point, so the teardown happens later inside our own dispatch; B can then be much smaller (enable AHB/MDP clocks without touching RPMh)"
+  },
+  "repeat_rule": "one trial first; a stall requires manual long-press recovery and stops further candidates",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false,
+  "memory_field_changes": false,
+  "partition_writes": false
+}
