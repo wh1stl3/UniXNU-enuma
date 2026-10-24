@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "seconds_per_code": 3,
+  "trials": [
+    {
+      "id": "baseline1",
+      "role": "register",
+      "code": 0,
+      "index": 1,
+      "shift": 28,
+      "image": "out\\value-transport\\srcaddr\\candidate.img",
+      "raw": "out\\value-transport\\srcaddr\\candidate.raw",
+      "build": "out\\value-transport\\srcaddr\\build.json",
+      "audit": "out\\value-transport\\srcaddr\\audit.json",
+      "package": "out\\value-transport\\srcaddr\\package.json",
+      "sha256": {
+        "image": "1ec5f7951b8fab661a42d5d4cb2fbfdcd51fa48a67543fa18ae5419b3a1a5878",
+        "raw": "1ca8fc20a91a491b64bbb47b015ac13980ca332210524b8fa9042a829e97fcc8",
+        "build": "9ad7d7720f463883cb305268b5daf3aafea9eaa8b97fa8189c66760550c2cd66",
+        "audit": "d43320460743cdd5f4d1a77498fa3a7fde4388128906bfc2af2335eb3921b3c9",
+        "package": "ef84130ec4f577c3410e15b50456d96968cef0bc837a09688f746e58ca306441"
+      }
+    }
+  ]
+}

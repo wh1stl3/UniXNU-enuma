@@ -33,10 +33,13 @@ def check_baseline(plan):
     # boolean gate (for example the DSI frame-progress step) whose verdict is
     # carried by the PASS/FAIL return timing rather than by a value. Mixing them,
     # or mixing candidates, would wipe out the denominator.
-    if len({t.get('role') for t in trials}) != 1 or trials[0].get('role') not in ('constant', 'raw', 'off'):
-        raise ValueError('baseline plan must repeat one constant-0, one raw read, or one gated probe profile')
+    if len({t.get('role') for t in trials}) != 1 or trials[0].get('role') not in ('constant', 'raw', 'register', 'off'):
+        raise ValueError('baseline plan must repeat one constant-0, one raw read, one primed register read, or one gated probe profile')
     if any(t.get('code', 0) != 0 for t in trials):
         raise ValueError('baseline plan must not encode a constant code')
+    # A register arm repeats the same index/shift; the returned time is the data.
+    if len({(t.get('index', 0), t.get('shift', 0)) for t in trials}) != 1:
+        raise ValueError('baseline plan must repeat one register index and shift')
     if len({t['id'] for t in trials}) != len(trials):
         raise ValueError('duplicate trial IDs')
     # One candidate, repeated. A baseline that mixed images would have no

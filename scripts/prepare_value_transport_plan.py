@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def capture(name, image=None):
-    if name not in ('zero','known3','mdp-low','baseline','raw','alive','alivefail'):
+    if name not in ('zero','known3','mdp-low','baseline','raw','alive','alivefail','srcaddr'):
         raise ValueError('unsupported bounded candidate name')
     if image is None:
         raise ValueError('the packaged image of this candidate must be given')
@@ -36,7 +36,8 @@ def capture(name, image=None):
     expected_source, expected_code = {
         'zero': ('constant', 0), 'known3': ('constant', 3), 'mdp-low': ('register', 0),
         'baseline': ('constant', 0), 'raw': ('raw', 0),
-        'alive': ('off', 0), 'alivefail': ('off', 0)}[name]
+        'alive': ('off', 0), 'alivefail': ('off', 0),
+        'srcaddr': ('register', 0)}[name]
     profile=build.get('value_probe') or {}
     if profile.get('constant_code')!=expected_code or profile.get('source')!=expected_source:
         raise ValueError('archived build does not describe this candidate: '+str(profile))
@@ -113,7 +114,7 @@ def assemble_baseline(name, count):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--capture',choices=('zero','known3','mdp-low','baseline','raw','alive','alivefail'))
+    p.add_argument('--capture',choices=('zero','known3','mdp-low','baseline','raw','alive','alivefail','srcaddr'))
     p.add_argument('--image',type=Path,help='the packaged boot image of this candidate')
     p.add_argument('--baseline',metavar='NAME',help='assemble a repeat plan for one archived candidate')
     p.add_argument('--baseline-trials',type=int,default=8)
