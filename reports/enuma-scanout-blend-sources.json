@@ -1,0 +1,55 @@
+{
+  "scope": "Pin conservative blend facts and saved enuma blend offsets; no device access.",
+  "all_passed": true,
+  "source_commit": "52a2f180865f8368828985d6384130acd093fa93",
+  "sources": [
+    {
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_lm.c",
+      "sha256": "4e9cec8f99af86c29000b274b7a8958daa4edae85fae85eda3034b8d1086a08f",
+      "license": "GPL-2.0-only reference; no implementation imported"
+    },
+    {
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_mdss.h",
+      "sha256": "af5db81647446aef51a854a3afa3f61383fd5361fbcf6ff06d2067a927a78daa",
+      "license": "GPL-2.0-only reference; no implementation imported"
+    },
+    {
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_crtc.c",
+      "sha256": "7e83811c2da73d754aa4d8c3bf454635a323161c36805e870772d936a27fa469",
+      "license": "GPL-2.0-only reference; no implementation imported"
+    },
+    {
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_ctl.c",
+      "sha256": "e6cf2778c4137fe6236b9080deb53a09067fd2d53d0e8ab2317630c9ec7ea553",
+      "license": "GPL-2.0-only reference; no implementation imported"
+    }
+  ],
+  "saved_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "blend_offsets": [
+    "0x20",
+    "0x38",
+    "0x50",
+    "0x68",
+    "0x80",
+    "0x98",
+    "0xb0",
+    "0xc8",
+    "0xe0",
+    "0xf8",
+    "0x110"
+  ],
+  "maximum_encoded_stage": 12,
+  "dim_bit": 16,
+  "packed_opaque_alpha": "0x00ff0000",
+  "opaque_blend_op": "0x100",
+  "maximum_mmio_reads": 289,
+  "maximum_wait_calls": 2,
+  "mmio_writes": false,
+  "pixel_access": false,
+  "new_mapping": false,
+  "limitations": [
+    "conservative sole source/no dim/base-or-constant-opaque pattern, not exhaustive visibility classifier",
+    "refusal does not prove occlusion or transparency",
+    "shadow state, physical route, exclusions, fetch/IOVA/cache and panel remain unproven"
+  ]
+}

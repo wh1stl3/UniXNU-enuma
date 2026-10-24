@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "firmware_commit": "ff3db3009da309e7435a063c88247d10ec9f75ae",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "blend21-control",
+      "step": 20,
+      "query": 1,
+      "variant": "blend21-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "blend21-single",
+      "step": 21,
+      "query": 1,
+      "variant": "blend21-single-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "blend21-unproven",
+      "step": 21,
+      "query": 2,
+      "variant": "blend21-unproven-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-scanout-blend-host.json",
+  "maximum_dsi_reads": 289,
+  "wait_calls_max": 2,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

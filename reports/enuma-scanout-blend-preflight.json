@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-24T15:28:18.358998+08:00",
+  "scope": "read-only current enuma and backup preflight; no reboot or boot issued",
+  "identity": "enuma",
+  "boot_completed": true,
+  "root": true,
+  "unlocked": true,
+  "original_slot_matches": true,
+  "partitions": [
+    {
+      "partition": "boot_a",
+      "matches_backup": true
+    },
+    {
+      "partition": "vendor_boot_a",
+      "matches_backup": true
+    }
+  ],
+  "onsite_recovery": "user confirmed in takeover chat",
+  "camera": "necessary before/after USB snapshots; video for actual output or recovery",
+  "twrp_verified": false,
+  "candidate_sha256": "b2964a650722ca57184188210fb5f272eed91e038dec9296c0a5b131c0e5c50d"
+}

@@ -55,3 +55,7 @@ f0cef6f稳定staging/所选DSI递增支持后，“首候选完全未挂接”�
 同源step19对照和step20正/互补时序支持：保留首候选稳定staging及所选活动DSI两窗递增条件，首候选源/输出宽高相同、至少128x8、整个输出矩形位于关联LM配置范围内，输出大小/位置/LM大小每窗保持。仅配置几何，不证明scaler/decimator模式、排除区、alpha/遮挡、LM实际输出、fetch或可见路由。 query1-query2 ADB差-5.39秒包含启动噪声，不能当精确频率或实测100ms。
 
 稳定配置几何获得支持，降低简单源/输出尺寸不匹配和矩形越界嫌疑；下一步首查alpha/遮挡及LM→pingpong/DSC实际连接，与fetch/地址可见性并列中等优先。若取得可见的候选像素/fetch对应证据则可推翻该主判断；再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。
+
+## 混合配置检查实施前排序
+
+012715b互补支持源/输出尺寸一致、完整输出矩形位于关联LM内，简单几何不匹配嫌疑下降。首候选完全未挂接、接口停摆也已有相反证据。当前中等置信主判断：局部其他staging/dim/alpha配置及LM实际输出连接、fetch/地址可见性仍需区分；先以ff3db30 step21保守模式取得增量。固定小米LM dim bit16表明没有其他SSPP不等于没有遮挡；major6使用packed常量alpha。若step21通过，应下调该LM局部其他staging/dim/常量透明解释，把实际LM→pingpong/DSC和fetch/地址可见性列首查；若拒绝，先分离未知/边框、dim、合法其他blend模式，不能直接判实际遮挡。真实候选取数/像素到达物理输出的证据可以推翻该方向。来源与11项FDT偏移见reports/enuma-scanout-blend-sources.json。
