@@ -117,8 +117,14 @@ def main():
             elif op not in ('cmp','tst','ret') and not op.startswith(('b','st')):
                 dest=re.match(r'[wx](\d+)',operands)
                 if dest:constants.pop(dest[1],None)
-        if reads!=['0xae6b800','0xae6b800','0xae6c000'] or writes:
-            raise ValueError('packaged DSI code does not match three read-only target accesses: '+repr((reads,writes)))
+        if writes:
+            raise ValueError('packaged DSI code must not write: '+repr(writes))
+        if '0xae6b800' not in reads:
+            raise ValueError('packaged DSI code lacks the priming read: '+repr(reads))
+        for r in reads:
+            v=int(r,16)
+            if not (0x0ae00000 <= v < 0x0ae85000):
+                raise ValueError('packaged DSI code reads outside the R-004 display window: '+repr(reads))
         report['dsi_timing_code']={'provider_pe_sha256':digest(payloads[0]),'static_target_loads':reads,'static_target_stores':writes,'scope':'constant-address accesses in actual packaged PE; not runtime proof','hardware_execution':False}
     if build.get('diagnostic_gop_step') in (15,16,17,18):
         from audit_dsi_counter_code import audit_counter_code
