@@ -1,0 +1,21 @@
+{
+  "plan_sha256": "55196d938d225c63a5b693803e46f97a6b6e9341a40dbb65bb226e19c770b9c6",
+  "trials": [
+    {
+      "id": "baseline1",
+      "role": "constant",
+      "code": 0,
+      "image_sha256": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+      "outcome": "returned",
+      "metric": "adb_return_seconds",
+      "seconds": 15.943,
+      "evidence": "out\\device-tests\\20261024T234018-dxe-driver-return"
+    }
+  ],
+  "summary": {
+    "issued": 1,
+    "returned": 1,
+    "hung": 0,
+    "hung_rate": 0.0
+  }
+}
