@@ -1,0 +1,51 @@
+{
+  "scope": "warm-state repeat of a previously successful step20 control image, to separate device state from image content",
+  "hypothesis_tested": "the two 75s timeouts on 2026-10-24 were caused by residual device state after manual recovery",
+  "hypothesis_result": "rejected",
+  "warm_state_definition": "device had been running Android since the 16:23:08 manual recovery for about 14 minutes, with no power cycle; the failed stage23-control run at 16:20:56 started about 14 minutes after the 16:06:02 recovery, so the two preconditions are equivalent",
+  "tests": [
+    {
+      "tag": "geometry20-control-repeat",
+      "step": 20,
+      "query": 1,
+      "phase": "recovered-android-boot-complete",
+      "issued_at": "2026-10-24 16:38:36",
+      "candidate_sha256": "20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd",
+      "candidate_firmware_commit": "012715b070a583ae636a3a33419ea3843ad7f2ad",
+      "first_run": "2026-10-24 15:06:43, adb 18.188s, success",
+      "automatic_return_within_75_seconds": true,
+      "adb_return_seconds": 16.962,
+      "boot_complete_seconds": 31.221,
+      "boot_reason": "bootloader",
+      "partition_digests_unchanged": true
+    }
+  ],
+  "step20_query1_ledger": [
+    {"image": "20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd", "firmware": "012715b", "at": "2026-10-24 15:06:43", "result": "success"},
+    {"image": "20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd", "firmware": "012715b", "at": "2026-10-24 16:38:36", "result": "success"},
+    {"image": "9ded5fa6f8e27878d75face87bd473b207e5124652493272640145aab18c304a", "firmware": "8fd3e62", "at": "2026-10-24 16:02:03", "result": "success"},
+    {"image": "459961e1675150602631647e6db7760a929bed19f922111dd3bccc606d9f0416", "firmware": "c45e52a", "at": "2026-10-24 16:20:56", "result": "timeout-manually-recovered"}
+  ],
+  "excluded_causes": [
+    "device residual state after manual recovery (this test)",
+    "display probe algorithm content (three successes on the same step20/query1 predicate)",
+    "CONFIGURED delay and wait bounds (the same image succeeded twice, and no new wait exists in step20)"
+  ],
+  "remaining_candidates": [
+    {
+      "candidate": "reset exit failure",
+      "detail": "EnumaStageCheckpoint calls MicroSecondDelay then ResetCold (PSCI SYSTEM_RESET) then CpuDeadLoop; if PSCI neither returns nor resets, the image never returns and the screen stays dark with no USB enumeration",
+      "confidence": "medium-high"
+    },
+    {
+      "candidate": "display MMIO read hang inside SimpleFbDxe",
+      "detail": "the probe reads 0x0ae00000..0x0ae84207; an unmapped or unpowered MDP window would raise an unhandled exception or stall before StartImage returns, so no status is ever reported",
+      "confidence": "medium"
+    }
+  ],
+  "discriminating_test": "a candidate that performs no display MMIO read and no wait, stopped at an earlier Core point, repeated over several trials to measure the failure rate; if it never stalls the MMIO read is implicated, if it stalls at a similar rate the exit path is implicated",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "interpretation": "同源step20/query1共4笔实机,3成功1超时;热状态重跑曾成功镜像成功,故超时不能归因恢复后残留状态,也不能归因step20代码路径。超时与镜像内容相关性下降,偶发出口失败成为主嫌疑,但尚无可采集日志能区分复位出口与MMIO读挂死。"
+}

@@ -1,41 +1,31 @@
-# 当前进度：同源step20对照超时已恢复，转启动状态隔离
+# 当前进度：热状态重跑成功，超时转为偶发出口嫌疑
 
-2026-10-24 Asia/Shanghai。用户要求更大胆推进；新证据已推翻“仅step22长等待/新增blend逻辑导致超时”的单一解释，当前不追加显示探针。
+2026-10-24 Asia/Shanghai。用户要求做断电冷启动区分实验；热状态一半已执行并排除"恢复后残留状态"，断电一半不再必要。
 
-## 两次硬停与已核验恢复
+## 本轮已做
 
-8fd3e62 step22正向16:03:42启动，75秒无自动ADB/fastboot返回，立即停追加；用户长按恢复，16:06:02 Android完成/root/原槽/解锁/匹配备份及原boot/vendor_boot摘要独立通过，0efa313推送。反向未执行、冻结，六类未知。
+2026-10-24 16:38:36 临时 boot `geometry20-control`（`20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd`，firmware 012715b），前置与两次失败同构（16:23:08 恢复 → 离线约 14 分钟 → 临时 boot，未断电）。成功：`adb_return_seconds` 16.962、`boot_complete_seconds` 31.221、`boot_reason=bootloader`、分区摘要未变。enuma `d0fd0840` 与 nuwa `fe5ed56e` 同时在线，按 `ro.product.device` 精确选中 enuma。
 
-恢复后按持续工作规则完成隔离新软件c45e52a：step23从step20仅加局部staging解码，允许border，不新增MMIO地址、不读dim/alpha/LM模式、不长等待；最大250读/两次100ms。69项sanitizer用例/AArch64及完整三份构建/实际FD/OEM/依赖/Boot v3审计通过，86adc68文档推送后2026-10-24 16:20:56启动同源step20对照（尚未执行step23）。Boot v3 SHA-256 `459961e1675150602631647e6db7760a929bed19f922111dd3bccc606d9f0416`，FD `7e2ec318f63505bbddaa19c663acd8ae6e2ab50f260338f6667853d384279bf3`。约16:22:12观察期限内仍无返回，16:22:16确认manual-recovery-needed，再次停止追加；stage23正/互补均未执行、冻结。
+同一条 step20/query1 今天 4 笔：15:06:43 成功、16:02:03 成功、16:20:56 超时、16:38:36 成功。
 
-用户再次长按恢复并明确确认Android；2026-10-24T16:23:08.877428+08:00独立enuma、sys.boot_completed=1、root、原槽、解锁、匹配备份及原分区摘要通过。当前实际Android完成、恢复阻塞解除；不能称两笔自动返回或无按键成功。硬停来源AGENTS失联/无法受控返回规则，每次均优先恢复，当前交接本轮落实。无分区写入，原始日志/备份/标识/相机只存out，摄像头自行旋转判读。
+## 判断
 
-## 已完成离线分析与更新主判断
+已排除：恢复后设备残留状态、step20 显示代码路径、新增等待。超时必为挂死——DxeCore 只在 StartImage 返回后按 status 选门，query 1/2 各自只认一种编码，两者都没出现说明没返回预期 status。
 
-成功reason22-control与失败stage23-control宏完全一致，均79模块；77个PE/DEPEX完全相同，仅PcdDxe和SimpleFbDxe二进制差异。SimpleFb的.text、.data、.pdata、.reloc逐节SHA完全相同，仅.rdata不同。详见reports/enuma-step20-control-comparison.json。因此新显示算法代码差异的解释进一步下降；.rdata差异是否纯元数据及PcdDxe差异仍需解析，不能现在称完全相同固件。前次step22超时不应唯一归因长等待，结论已修正。
+剩余两出口：①`EnumaStageCheckpoint` 的 `ResetCold()`（PSCI）既不返回也不复位，停在 `CpuDeadLoop()`，与两张全黑快照吻合（中高）；②SimpleFb 内 `0x0ae00000..0x0ae84207` MMIO 读触发未处理异常（中）。现有 1 bit 通道无法区分。
 
-中等置信首查：恢复后启动链/ABL遗留状态差异、跨构建PCD/元数据/打包状态及早期执行位置。现无早期日志或返回marker，不能证明执行到了SimpleFb/MMIO，面板/DSI/staging/alpha皆不能据超时定责。Boot v3格式此前同源基线多次正常，整体切换v1仍低优先级。
+## 下一步
 
-## 对照有效代码/PCD差异解析完成
+做无显示 MMIO、无等待的早期停止点候选，全量资格 + 全文档推送后，按既有门禁**重复多笔**：稳定成功 → 锁 MMIO；同样偶发挂死 → 锁复位出口。冻结镜像不重试。断电冷启动不再执行。
 
-成功reason22-control与失败stage23-control的SimpleFbDxe、PcdDxe在仅屏蔽COFF/debug目录时间戳及CodeView GUID/age后均逐字节完全相同，剩余差异0；前述PCD有效数据差异疑点下降。其余模块PE/DEPEX相同，封装FV容器节随子PE调试标识改变，不称整份FD完全相同。Boot头和192字节BootShim也完全一致（布尔及摘要见reports/enuma-step20-control-comparison.json）。原有77模块一致统计指PE/DEPEX；若连容器节一起计，容器和两PE三项不同，不能混用统计。
+## 边界
 
-因此当前中等偏高优先级转向设备恢复后启动状态/ABL交接和实际早期执行位置；不再把step22长等待或新显示代码当唯一原因，也没有有效证据支持PCD逻辑回归。下一项新软件应使用更早Core/驱动停止点，避免显示MMIO和等待，先判定是否进入受控DXE路径。已取消的显示候选保持冻结；该分析不授权原样重试失败镜像。尚未取得新的运行定位或屏幕输出。
+R-005 consumed；禁像素/MMIO/分区写、新映射/内存字段/verified 变更；51MiB heap、512MiB owned、example=true、Boot v3 保持。TWRP/UART 未验证；无可见日志，文本后端未接 INF/FDF；未进 XNU。当前无人工待办，Android 已完成且各摘要核验通过。
 
-## 下一步（离线继续）
-
-冻结step22失败正向及未执行反向、stage23失败对照及未执行正互补，不重试。两个差异PE已确认仅标准调试标识变化，Boot头/BootShim字节相同；据此准备具有更早停止点、无显示MMIO/等待的新启动定位软件，先资格和全文档推送，再即时身份/恢复门禁后才可实测。用户人工恢复后继续离线规则有效；本次不以恢复后盲加显示探针作为推进。当前无新增批准项或人工待办，未宣称新自动返回资格。
-
-R-005 consumed，禁像素/MMIO/分区写、新映射/内存大小/基址/verified变更；51MiB heap、512MiB owned、example=true/Boot v3保持。TWRP/UART未验证。尚无可见日志/菜单，文本后端未集成，未进入XNU。
-
-证据enuma-scanout-sole-stage-device/preflight、enuma-step20-control-comparison及operations/2026-10-24-scanout-sole-stage.md；新源码c45e52a资格沿bundle/host，超时不能冒充运行通过。当前文档推送状态以实际Git远端核验为准。
+证据 `reports/enuma-restart-control.json`、`out/device-tests/20261024T163822-dxe-driver-return/`、`operations/2026-10-24-restart-control.md`。
 
 ## 系统与内核现状
 
-目标enuma/SM8250，iPadOS17.7.11/21H461，iPad7,1/j120ap，XNU10063.141.1/4KiB，UniXNU5fdbd5d。CI39927966148/head250cdf9已真实链接源平台内核，21417672字节、SHA b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d；不是enuma运行证据，未预链接donor或启动。donor46415872字节/237模块和静态闭包计划通过，未emit预链接镜像。
+目标 enuma/SM8250，iPadOS17.7.11/21H461，iPad7,1/j120ap，XNU10063.141.1/4KiB，UniXNU5fdbd5d。CI39927966148/head250cdf9 已真实链接源平台内核（21417672 字节，SHA b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d），非 enuma 运行证据，未预链接 donor 或启动。donor 46415872 字节/237 模块与静态闭包计划通过，未 emit 预链接镜像。64MiB 配置 FAT 已生成但未接 publisher/打包启动；NativeUfs 为 SM8550 参数当前禁用；EnumaScreen 仅 host/AArch64 对象。
 
-64MiB配置FAT已生成，仅发现/reset配置，尚未接publisher/打包启动；完整ADT/载荷输送/内存/EBS/入口仍待闭合。NativeUfs为SM8550参数，当前禁用；未创建系统卷或写userdata。EnumaScreen文本后端仅host/AArch64对象，未INF/FDF/调用者集成。
-
-详见operations/2026-10-23-system-kernel-userland-roadmap.md、2026-10-23-discovery-volume-platform-link.md。历史资料不替代当前实测和授权。
-
-接手顺序AGENTS/STATUS/DECISIONS/NEED-REVIEW。
+接手顺序 AGENTS/STATUS/DECISIONS/NEED-REVIEW。
