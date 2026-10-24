@@ -1,9 +1,10 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "6469cd7471a0d1c7d5e732d6de419d9fe7d1eb0c06ea6340b1f0c8d4229e65d7",
+  "fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4",
   "fd_bytes": 3145728,
-  "file_count": 79,
+  "file_count": 81,
   "matched_oem_modules": [
+    "CPRDxe",
     "ChipInfo",
     "CipherDxe",
     "ClockDxe",
@@ -11,6 +12,7 @@
     "DALSys",
     "DALTLMM",
     "DDRInfoDxe",
+    "DisplayDxe",
     "EnvDxe",
     "GpiDxe",
     "HALIOMMU",
@@ -32,6 +34,7 @@
     "ShmBridgeDxe",
     "SmemDxe",
     "TzDxe",
+    "UFSDxe",
     "ULogDxe",
     "VcsDxe"
   ],
@@ -45,6 +48,7 @@
     "BootGraphicsResourceTableDxe",
     "BootLogo.bmp",
     "BootManagerMenuApp",
+    "CPRDxe",
     "CapsuleRuntimeDxe",
     "ChipInfo",
     "CipherDxe",
@@ -58,6 +62,7 @@
     "DarwinBoot",
     "DevicePathDxe",
     "DiskIoDxe",
+    "DisplayDxe",
     "DxeCore",
     "EmbeddedMonotonicCounter",
     "EnglishDxe",
@@ -100,13 +105,13 @@
     "SecurityStubDxe",
     "SetupBrowser",
     "ShmBridgeDxe",
-    "SimpleFbDxe",
     "SmBiosTableDxe",
     "SmbiosDxe",
     "SmemDxe",
     "StatusCodeHandlerRuntimeDxe",
     "TzDxe",
     "UFPLoader",
+    "UFSDxe",
     "ULogDxe",
     "UniXNU",
     "UniXNUDxe",
@@ -116,11 +121,7 @@
     "fc510ee7-ffdc-11d4-bd41-0080c73c8881",
     "ufpdevicefw"
   ],
-  "diagnostic_omitted_oem_modules": [
-    "CPRDxe",
-    "DisplayDxe",
-    "UFSDxe"
-  ],
+  "diagnostic_omitted_oem_modules": [],
   "apriori_guids": [
     "d6a2cb7f-6a18-4e2f-b43b-9920a733700a",
     "80cf7257-87ab-47f9-a3fe-d50b76d89541",
@@ -150,11 +151,13 @@
     "8681cc5a-0df6-441e-b4b8-e915c538f067",
     "3ae17db7-3cc5-4b89-9304-9549211057ef",
     "5776232e-082d-4b75-9a0e-fe1d13f7a5d9",
+    "0d35cd8e-97ea-4f9a-96af-0f0d89f76567",
     "6925fad3-e243-4b69-ad61-3f978c8abc60",
     "7db0793a-4402-4be1-906e-d0fabad2707e",
     "7a32bd23-f735-4f57-aa1a-447d2fe3be0d",
     "04de8591-d2b3-4077-bbbe-b12070094eb6",
-    "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+    "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+    "1b52138d-3fa3-4e50-b958-20887353f809",
     "569ea0de-b557-4043-84cf-01103fe516e5",
     "3adf8dda-1850-44c5-8c63-bb991849bc6f",
     "5f0937cd-73f9-445e-b320-bb6fd5d3cbde",
@@ -163,15 +166,5 @@
   ],
   "probe_boot_target_guid": "aef8c196-230e-4e19-a306-d62e21e3d780",
   "runtime_protocol_closure": "pending hardware dispatch",
-  "hardware_execution": false,
-  "dsi_timing_code": {
-    "provider_pe_sha256": "e65295af957c4ead3bd818d6a09d8be19d2197dbbee6907b77fd0a0820f96920",
-    "static_target_loads": [
-      "0xae6b800",
-      "0xae6c000"
-    ],
-    "static_target_stores": [],
-    "scope": "constant-address accesses in actual packaged PE; not runtime proof",
-    "hardware_execution": false
-  }
+  "hardware_execution": false
 }

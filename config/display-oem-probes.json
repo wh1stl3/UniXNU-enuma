@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "scope": "R-008 candidate D: keep the OEM display stack so the vendor driver powers the display, then measure whether it actually initialises",
+  "reason": "D-130/D-131: the diagnostic simplefb variant deliberately omits CPRDxe/DisplayDxe/UFSDxe, so nothing in the image ever powers the display domain, and every MDP read is an unclocked access. nuwa never hits this because it always ships the vendor DisplayDxe. Candidate D puts the vendor stack back and asks the narrowest question first: does DisplayDxe return success on this device at all?",
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "transport": "core-warning-v2",
+  "built": {
+    "fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4",
+    "image_sha256": "c93802790305558f0b7dd267794bafd87d1f740bd4b6a7824de2f19a40f56bf6",
+    "image_bytes": 3153920,
+    "build_report": "enuma-oemdisplay-build.json",
+    "oem_payloads": 33,
+    "diagnostic_omissions": []
+  },
+  "profiles": [
+    {
+      "tag": "oemdisplay-success",
+      "stage": 13,
+      "delay_seconds": 2,
+      "dispatch_ordinal": 1,
+      "detail_point": 17,
+      "dispatch_guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+      "variant": "oemdisplay-success-queue1-stage13-delay2-point17-guid4138022f",
+      "gate": "DisplayDxe CoreStartImage returned EFI_SUCCESS within a matching GUID"
+    }
+  ],
+  "oem_modules_retained": ["CPRDxe", "DisplayDxe", "UFSDxe"],
+  "simplefb": false,
+  "timing_classes": {
+    "fast_return": "DisplayDxe StartImage returned success, gate fires, 2 s delay then PSCI reset; adb expected around 16-18 s",
+    "slow_return": "DisplayDxe returned an error so the gate does not fire, dispatch continues to the end of CoreDispatcher, the 7 s completion fallback resets; adb expected several seconds later",
+    "stall": "DisplayDxe or an earlier OEM driver hangs; no return within 75 s"
+  },
+  "discrimination": {
+    "fast_return": "the vendor display stack runs and reports success on enuma; the display domain is then powered, so later MDP reads become legal and screen text becomes possible",
+    "slow_return": "the vendor stack runs but fails; its own error path is the next thing to read, and reading MDP stays illegal",
+    "stall": "the vendor stack itself hangs on this device; candidate D is out and the choice falls back to B (power the domain from firmware) or C1 (UART)"
+  },
+  "risk_note": "DisplayDxe normally draws through GOP, so the panel may change during this trial; that is expected and is not treated as a probe result. A stall here would need a manual power key recovery like the earlier ones.",
+  "hardware_order": "immediate identity/backup/recovery gate, one temporary boot",
+  "pixel_access": "by the vendor driver only, not by this project's code",
+  "mmio_writes": "by the vendor driver only, not by this project's code",
+  "new_mapping": false,
+  "memory_field_changes": false
+}
