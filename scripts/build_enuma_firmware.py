@@ -4,6 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'firmware'
@@ -41,4 +42,10 @@ def apply_patch_series(patches):
 
 
 if __name__ == '__main__':
+    # The preflight expects the staged Mu tree with every diagnostic patch
+    # reversed. A build that stopped between the apply and the reversion, or a
+    # patch that was removed after it had been applied, leaves the tree in a
+    # state the preflight rejects, so restore it before building.
+    subprocess.run([sys.executable, str(ROOT / 'scripts/restore_mu_baseline.py'),
+                    '--device-root', str(ROOT)], cwd=ROOT, check=True)
     _backend().main(device_root=ROOT)
