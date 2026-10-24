@@ -1,25 +1,28 @@
-# 交接：D-167 / R-016批准A单笔上机，实机前门禁准备
+# 交接：D-168，A单笔已返回并完成恢复核验
 
-用户于本轮明确“批准上机”。最小执行范围为D-166已归档A/detail15镜像29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4的一次临时fastboot boot；不包含B/detail13、重复同一镜像、节点修补、线程开关/内存映射变化、像素/背光写入或分区操作。原厂前序驱动可能写硬件，不能称整镜像只读。
+2026-10-25 02:11–02:12（北京时间）完成R-016批准的A/detail15一次临时启动。16.187秒观察到ADB，31.312秒结束Android完成/root/分区检查；随后独立核验Android完成、root、A槽、解锁及boot_a/vendor_boot_a设备/备份摘要一致。没有新超时或人工恢复请求；R-016已消耗，本轮不追加B、不重复A。
 
-## 已完成的即时检查
+## 实际结果与证据
 
-- out\device-tests\20261025T020804-recovery-reconciliation.json：enuma唯一在线，Android完成/root/A槽/解锁；boot_a/vendor_boot_a设备与匹配备份摘要一致。本轮尚未发出新临时启动。
-- A不可变归档全部摘要复核通过；固件固定aa9ec66，原源码/候选未改。D-166构建、FD和Core机器码证据保持，详见reports/enuma-display-boundary-qualification.json。
-- 相机0/DSHOW可用，已观察out/camera-capture/20261025T020928-display-boundary-A/before-rotated.jpg中的Android桌面；原图保留。执行将连续录像、逐帧记录时间、每秒保存原图及顺时针90度图。按键画面不确定时不推断。
-- 主机runner新增issued_at_utc/monotonic及boot命令返回时间；fastboot返回必须先观察断开再重连，残留枚举不再触发“返回”判断。四条无设备状态轨迹测试通过。
-- 新capture_display_boundary_trial.py默认仅相机检查；--execute仅接受此精确A摘要，核对已发布源码/归档，建立一次性账本后调用现有身份/备份守卫。图像采集失败不杀恢复观察器，不发额外启动。
+- 镜像：29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4；固件aa9ec66；实机前文档/工具b1cf33c已推送。Core point15/2秒目标门位于DisplayDxe CoreStartImage前，completion fallback7秒非watchdog。
+- 发出时间2026-10-24T18:11:21.751570+00:00，boot命令0.390秒返回，0.953秒观察fastboot断开，直接于16.187秒观察ADB，没有观察到回fastboot或执行后续fastboot reboot。
+- 单笔out\device-tests\20261025T021107-dxe-driver-return/result.json及reports/enuma-display-boundary-device.json；独立恢复核验out\device-tests\20261025T021235-recovery-reconciliation.json和reports/enuma-recovery-reconciliation.json。旧结果不覆盖。
+- 录像415/415帧可解码，50对原图/旋转图，无相机错误。观察到Android桌面→小米/Android启动画面→Android桌面。画面不能算UEFI/原厂显示驱动成功，也不推断不可见按键。
 
-## 单笔执行及停止规则
+专项实测记录：[A单笔结果](operations/2026-10-25-display-boundary-A-result.md)，机器汇总reports/enuma-display-boundary-A-result.json。
 
-本轮只A。启动前发布本页、HANDOFF、审批、人工与来源记录；核对仓库干净和origin/main一致后执行。runner再次做即时身份/备份/fastboot身份核验。不改槽、不flash/erase，若自动回fastboot则核验身份后正常reboot Android并校验分区。
+## 结论强度
 
-观察期限维持runner既有75秒窗口（在fastboot boot命令成功返回后开始），实际全程以issued_monotonic及命令返回偏移记录。若超时停止追加，优先既有恢复；必要时请求在场长按并继续录像。失败结果不覆盖，恢复后独立核验并当轮更新全部文档；不原样重试，不自动发B。
+本次可返回性和恢复核验通过。结合正确GUID、Core机器码位置及16.187秒返回时序，工作判断更支持到达DisplayDxe启动调用前；只有单笔，没有唯一门标记，不宣称已独立证明目标门命中。仍可能有完成兜底/其他复位及Android耗时差异，不能定位R-014旧超时在驱动内部。
 
-A即使自动返回，也只记录返回和边界支持程度；2秒目标门/7秒fallback的主机时间叠加bootloader与Android开销，不能仅凭一笔耗时宣布命中。无完整早期日志时按已允许的有界临时探针规则判读，不把黑屏/fastboot发送成功当运行证据。
+未证明DisplayDxe PE入口、EFI_SUCCESS、SetMode、可见GOP、PE_Video、XNU入口或用户态。D-166 ABI/ABL-DTB名称缺口与D-164路线维持，见[交接契约](operations/2026-10-25-handoff-contract.md)和[原厂ABI](operations/2026-10-25-native-display-abi.md)。
 
-## 技术背景与后续
+## 下一步与边界
 
-D-166真实PE审计确认线程/锁/Kernel Protocol与调度HOB调用，缺失时有成功返回但不建显示线程的路径；ABL查splash_region，保存DTB只有cont_splash_region。实际入口FDT、运行时闭包、GOP可见输出、PE_Video和XNU入口仍未知。见两份2026-10-25专项审计。
+若继续，先离线构建并独立资格同源B/detail13；本轮不发B，R-016只批准且已消耗A一次。B用以观察CoreStartImage返回，后续状态/GOP各自验收。没有理由重试A、补未知协议stub、直接改线程/内存/DTB或复活旧像素批准。
 
-新实机结果尚未产生；D-167当前为批准及门禁阶段。D-166提交af913ca已推送；本轮授权、主机观测和最新核验将另提交推送后再执行。既有参考仓/递归修改保留，R-015及旧像素授权不复活。
+R-015暂停；内存字段/映射、verified、像素/背光及破坏性分区仍按原门禁，不因本次返回扩张。任何后续实机仍需文档发布与即时身份/备份/恢复核验；超时停止追加并恢复。当前无人为待办。
+
+本轮结果与当前文档正在提交发布，发布结果以Git/远端摘要为准；实机前门禁已由b1cf33c满足。本轮没有改固件源码/候选、分区或槽位。目标iPadOS17.7.11/21H461、XNU10063.141.1/4KiB、UniXNU5fdbd5d维持。
+
+接手先读AGENTS、STATUS、DECISIONS D-168、NEED-REVIEW R-016及A结果，禁止按旧“尚未执行”记录再次启动A。

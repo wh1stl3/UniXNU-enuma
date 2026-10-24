@@ -1,8 +1,10 @@
-## R-016 · A/detail15单笔临时启动（本轮approved）
+## R-016 · A/detail15一次临时启动（consumed，已返回）
 
-来源：用户明确“批准上机”；承接D-166候选，精确镜像SHA256 29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4。仅一次临时fastboot boot，在DisplayDxe CoreStartImage调用前设置point15/2秒门，带7秒dispatcher完成fallback；不批准B或原样重试。候选、资格与判读见STATUS、D-166/D-167。
+用户“批准上机”对应镜像29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4。2026-10-25 02:11执行一笔，16.187秒观察ADB，31.312秒结束恢复检查，独立核验Android/root/A槽/解锁/分区摘要通过。见D-168、STATUS和operations/2026-10-25-display-boundary-A-result.md。
 
-即时Android/root/A槽/解锁/设备及备份摘要和相机已核对；全部文档及主机观测修订提交推送、干净/远端检查后执行。75秒无返回停止追加并恢复；有界临时探针例外、既有在场恢复条件维持。未知时不宣称门命中，不扩大像素/内存/verified/分区批准。
+范围已消耗，不重复A、不自动发B；此次无超时或人工恢复请求。仅可确认返回和恢复，不以时序唯一认定门命中或显示驱动成功。内存/verified/像素/分区等旧门禁保持，R-015不执行。
+
+以下D-166及更早段落为历史阶段，当前状态以本节和STATUS为准。
 
 ## D-166当前补充（2026-10-25）
 

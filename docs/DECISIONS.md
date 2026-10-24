@@ -510,3 +510,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-25 · D-166：完成固定实际R-014/XBL DisplayDxe、ABL LinuxLoader和保存vendor_boot/Android FDT的可复现离线审计。确认真实Kernel Protocol/调度HOB/线程/锁调用，以及缺Kernel可清线程标志并返回0的降级分支；不能以返回0当SetMode成功，也不能以缺Kernel单独解释超时。ABL真实查splash_region，而保存三份完整DTB只有cont_splash_region；实际临时入口/DTBO未知，不直接补节点或判关闭面板。D-165复核保留，其“超时表示派发挂死”等穷尽解释收窄，复位/前置/观测失败仍可能。A正确GUID/detail15候选完成离线构建和机器码/FD/打包资格，未上机；固定aa9ec66、仅省略UFS，不更改固件源码/内存/verified/授权。新增两份专项审计、两个离线工具和机器报告，提交号由后续Git记录。
 
 2026-10-25 · D-167：用户批准上机，登记R-016，仅D-166 A/detail15镜像29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4单笔临时boot。已做即时恢复/备份和相机准备；主机观测补充UTC/monotonic及先断开再重连守卫，四条模拟轨迹通过，无额外设备动作。当前未执行，发布后上机；超时停止追加并恢复，不自动发B。
+
+2026-10-25 · D-168：R-016 A已执行一笔并返回Android；boot命令0.390s、fastboot断开0.953s、首次ADB16.187s、Android完成/root/摘要检查结束31.312s。独立out\device-tests\20261025T021235-recovery-reconciliation.json确认enuma/root/A槽/解锁与匹配备份。相机415/415帧可解码、50对原图/旋转图，无采集错误；观察到的MI/Android标志只作恢复证据。本次可返回性实机通过，单笔时序仅支持而不唯一证明DisplayDxe调用前门命中，不定位R-014内部挂点。R-016 consumed，本轮不重复A、不发B，后续若继续先离线资格B并核对执行范围。无新硬停、人工恢复请求、固件/映射/verified/分区变化。

@@ -1,0 +1,18 @@
+{
+  "status": "returned",
+  "image_sha256": "29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4",
+  "started_at_utc": "2026-10-24T18:11:05.789215+00:00",
+  "camera_directory": "out\\camera-capture\\20261025T021104-display-boundary-A",
+  "device_boot_command_issued": true,
+  "runner_exit": 0,
+  "phase": "recovered-android-boot-complete",
+  "candidate_state_matches": true,
+  "evidence": "out\\device-tests\\20261025T021107-dxe-driver-return",
+  "issued_at_utc": "2026-10-24T18:11:21.751570+00:00",
+  "issued_monotonic": 104832.453,
+  "boot_command_return_seconds": 0.39,
+  "fastboot_disconnect_observed_seconds": 0.953,
+  "adb_return_seconds": 16.187,
+  "boot_complete_seconds": 31.312,
+  "partition_digests_unchanged": true
+}

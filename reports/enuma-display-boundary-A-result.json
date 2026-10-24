@@ -1,0 +1,75 @@
+{
+  "scope": "single R-016 A/detail15 temporary boot; actual return/recovery observed, checkpoint attribution is inference",
+  "approval": "user explicitly approved device testing; scoped to A once in D-167/R-016",
+  "approval_status": "consumed",
+  "pretrial_commit": "b1cf33c",
+  "firmware_commit": "aa9ec666abadfeacda608870ecfb4e7179c7ecc3",
+  "trial": {
+    "status": "returned",
+    "image_sha256": "29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4",
+    "started_at_utc": "2026-10-24T18:11:05.789215+00:00",
+    "camera_directory": "out\\camera-capture\\20261025T021104-display-boundary-A",
+    "device_boot_command_issued": true,
+    "runner_exit": 0,
+    "phase": "recovered-android-boot-complete",
+    "candidate_state_matches": true,
+    "evidence": "out\\device-tests\\20261025T021107-dxe-driver-return",
+    "issued_at_utc": "2026-10-24T18:11:21.751570+00:00",
+    "issued_monotonic": 104832.453,
+    "boot_command_return_seconds": 0.39,
+    "fastboot_disconnect_observed_seconds": 0.953,
+    "adb_return_seconds": 16.187,
+    "boot_complete_seconds": 31.312,
+    "partition_digests_unchanged": true
+  },
+  "camera": {
+    "directory": "out\\camera-capture\\20261025T021104-display-boundary-A",
+    "video_sha256": "89872124f096d1e8646dcd3784d9a5f6a7170e54b1a5696296999dcc620f3cd6",
+    "written_frames": 415,
+    "decoded_frames": 415,
+    "frame_samples": 50,
+    "started_at_utc": "2026-10-24T18:11:04.827147+00:00",
+    "runner_started_at_utc": "2026-10-24T18:11:05.798209+00:00",
+    "finished_at_utc": "2026-10-24T18:11:56.519992+00:00",
+    "rotation": "90 degrees clockwise; raw preserved",
+    "reviewed_stills": [
+      "before-rotated.jpg",
+      "frame-031-rotated.jpg",
+      "frame-049-rotated.jpg"
+    ],
+    "still_observation": "Android desktop before, Xiaomi/Android boot screen during return, Android desktop after",
+    "limits": [
+      "sampled stills do not exclude transient firmware content",
+      "encoded video header fps is not a wall-clock timing source; use recorded timestamps",
+      "no independent claim about unseen physical button actions"
+    ]
+  },
+  "posttrial_reconciliation": "out\\device-tests\\20261025T021235-recovery-reconciliation.json",
+  "posttrial_checks": {
+    "device": "enuma",
+    "boot_completed": "1",
+    "slot": "_a",
+    "flash_locked": "0",
+    "root_available": true
+  },
+  "partitions": [
+    {
+      "partition": "boot_a",
+      "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+      "device_and_backup_match": true
+    },
+    {
+      "partition": "vendor_boot_a",
+      "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+      "device_and_backup_match": true
+    }
+  ],
+  "supported": "this exact A image returned to Android and passed recovery/backup checks in this trial",
+  "working_inference": "return timing is consistent with the 2-second pre-StartImage gate; reaching it is supported, not uniquely proven",
+  "unproven": [
+    "target gate versus completion fallback or another reset cause",
+    "DisplayDxe PE entry, successful mode setting or visible UEFI output",
+    "root cause of earlier R-014 timeouts, XNU entry or userland"
+  ],
+  "next": "no additional boot in this approval; prepare B/detail13 offline if continuing, then qualify and evaluate execution scope"
+}
