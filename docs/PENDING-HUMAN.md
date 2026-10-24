@@ -1,9 +1,5 @@
 # PENDING-HUMAN
 
-2026-10-25 01:25：设备已恢复并核验通过（enuma / `boot_completed=1` / root / `_a` / unlocked=0 / 双分区摘要一致）。**本轮无待执行项。**
+2026-10-25 01:38文档复核：最新恢复记录已通过Android完成/root/A槽/boot.flash.locked=0（解锁）和设备/备份双分区摘要检查。证据out/device-tests/20261025T012053-recovery-reconciliation.json。本轮未重新操作设备，无新按键待办；不能把记录当作未来动作前的即时状态。
 
-交接提示词已落地：`docs/2026-10-25-handoff-prompt.md`（自包含，可直接粘贴给新会话）。
-
-待用户决定的下一项是 **R-015**：写一个只发布两个 GUID 的 stub 驱动，让原厂 `DisplayDxe` 的 DEPEX 得以满足。提案与三项风险（可能再次挂死、可能因充电状态误判而主动关背光、protocol 真实身份未知故 stub 语义无保证）已写在 `docs/NEED-REVIEW.md`，批准后再上机。
-
-在此之前：不追加任何镜像、不启动任何候选。
+R-015原stub提案暂不执行，不再请用户批准原动机。下一步为detail15/detail13两个新候选的离线资格与授权范围核对，尚未构建/上机。若未来要现场恢复，按当时条件确认；本文不新增在场或设备批准。

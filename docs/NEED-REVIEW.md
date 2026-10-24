@@ -1,8 +1,10 @@
-# 当前审查摘要（2026-10-24 23:04之后）
+# 当前审查摘要（2026-10-25 01:38）
 
-zero2超时后本轮已独立核验恢复；旧0/3/0校准失败、计划冻结，不因恢复重试同一失败镜像。当前继续条件为新隔离方案的明确证据目标、干净固定源码、完整构建/FD/打包资格及全部文档提交推送，不是追加原zero候选统计。
+当前以D-163及operations/2026-10-25-display-entry-isolation-plan.md为准。R-015按原stub动机暂不执行；APRIORI仅保证入队，GUID字节搜索不证明语义无关，错误GUID也不使completion fallback失效。
 
-R-005 consumed；R-007像素单次consumed，历史同号只读提案不扩张像素授权。R-008保留日志/warm reset仍pending，未启用；DRAM保留和厂商支持未实测。新增像素/MMIO写、内存字段/映射、verified及破坏性分区仍按AGENTS审查。本轮没有新的批准项或设备动作。firmware三份在途代码未提交，不能作为已审候选；驱动内复位只是待审设计，不保证能唯一定位故障。
+detail15/detail13仅为两个待资格的新候选，未构建/上机。本轮文档修改不新增或扩张任何硬件批准；R-008/R-012/R-013/R-014按各原始批准记录核对具体范围，不能把旧审批标题或本文作为新增授权。新候选可能运行原厂硬件写路径，不归类为整镜像只读。
+
+源码/实际编译参数/FD/打包与摘要资格、适用文档提交推送及即时恢复门禁完成后，才能按有效授权执行。本文未提交，不满足发布门禁；本轮无设备动作。
 
 以下为保留的历史申请和执行记录；旧pending表述不覆盖本页当前摘要。
 
@@ -421,16 +423,12 @@ R-010 执行结果（2026-10-25 00:06）：4 笔 3 返回 1 挂（17.000/16.974/
 
 R-014 执行结果（2026-10-25 01:20，D-161）：**两次均挂死，屏幕无画面**。第一次无拍照；第二次带 60 帧连续拍照，frame-000/003/006/008 仍为 Android 桌面，frame-010（约 20 秒）起全黑镜面，直至 frame-059 全程纯黑。`fastboot boot` 返回 0 但 75 秒无自动回归。PE 分析确认 DisplayDxe 自身承担背光（`DisplayBackLightBrightnessLevelControl` 等），且那两个缺失 GUID 只出现在 162 字节 DEPEX、**不在 PE 内**，属编译期依赖声明。设备已恢复核验。
 
-## R-015 · 补两个 stub protocol 使 DisplayDxe 的 DEPEX 满足
+## R-015 · 原stub提案暂停（D-163进一步更正）
 
-状态：**动机已被 D-162 推翻，暂不执行（2026-10-25 01:35）**。
+状态：按原动机暂不执行，未获得新的stub实机批准。
 
-**原提案（保留备查）**：写一个只发布 `a966cc4f-ee6c-424d-a762-8ed3b5a4a501` 与 `47861dff-556f-4269-9b28-062ec3ecb30d` 的最小 stub 驱动，与 `--diagnostic-without-ufs` 组合，使 DisplayDxe 的 DEPEX 满足。
+原提案是发布两个未知GUID使DEPEX满足。实测FD中的DisplayDxe位于APRIORI第33项（零基索引32），DEPEX不控制其排队，因此不以此作为补stub理由。仅保证排队，实际到达、加载、PE入口和返回均未验证。
 
-**为何推翻（源码与镜像双向证据）**：
+完整GUID字节未命中既不能证明无提供者，也不能证明代码不调用或相关初始化无关。未知ABI不定义所谓“全返回EFI_UNSUPPORTED”的接口表。R-014配错目标门，但completion fallback已开启，无返回原因仍未定案。
 
-1. DisplayDxe 位于 APRIORI 第 32 项（共 39 项）。`firmware/Mu_Basecore/MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c` 1426-1438 显示 APRIORI 驱动被直接置 `Dependent = FALSE; Scheduled = TRUE;` 并入 `mScheduledQueue`，调试输出原文 `RESULT = TRUE (Apriori)`——**DEPEX 被完全绕过**。"补 stub 满足 DEPEX"这个前提不存在。
-2. 这 2 个 GUID 既不在 DisplayDxe 的 PE 内（代码不调用），其 DEPEX 又被 APRIORI 判 TRUE。**两条独立证据都说明它们与本次现象无关**，所以补 stub 不仅错、而且无必要。
-3. review 另指出：GUID 字节搜索不能证明无提供者，也不能证明空实现足够；若驱动把该协议当"初始化完成"信号，发布假信号反而会让它跳过真正的初始化。此点接受。
-
-**替代方向（见 D-162）**：先证明执行到哪里——以 DisplayDxe GUID `4138022f-06c7-4f79-9c94-7e33b511a4e7` 为目标，制作"StartImage 前（detail15）"与"StartImage 返回后（detail13）"两个候选，保持原厂 PE 不变；现场连续取证保留。定位后再决定查更早驱动、PE 构造函数、真实协议调用还是面板初始化。
+下一步使用DisplayDxe自身GUID的detail15/detail13边界定位，保持原厂PE不变，按专项方案独立资格。此为方案而非新批准；不修改DEPEX、发布stub、扩大内存/映射或写分区。

@@ -1,66 +1,56 @@
-# enuma UEFI 显示栈 — 交接提示词（2026-10-25 01:40）
+# enuma移植交接提示词（2026-10-25公开资料路线复审）
 
-> 给下一次会话的自包含提示词。原文可直接粘贴使用。
+## D-164：公开资料复审后的当前顺序（2026-10-25）
 
----
+当前主线改为先离线审计ABL→BootShim→UEFI的continuous-splash交接契约；原厂DisplayDxe保留为有界支线。先输出实际FDT/显示生命周期证据与原厂PE真实调用/ABI清单，再按缺口选择候选，detail15/detail13不再自动排在离线审计之前。详见[公开资料路线复审](operations/2026-10-25-public-source-route-review.md)。
 
-## 你在做什么
+新静态发现：enuma配置EnableMultiThreading/EnableDisplayThread=1，但当前GetXblHobAddresses只识别FD Reserved/FD_Reserved，板级内存表无此名称；以该表调用此路径不会恢复scheduler/DTB扩展HOB地址。这不证明实机挂点或DisplayDxe必然使用该ABI；需绑定实际PE/SEC证据。不得直接改名、加内存区、关线程或补stub来冒充修复。
 
-设备 **enuma**（小米平板 5，SM8250/kona，1600×2560 双 DSI CPHY LCD）上运行 UniXNU/XNU。工作区 `D:\Code\UniXNU-enuma`（设备仓）+ 子模块 `firmware`（UEFI 源码，remote `wh1stl3/uefi-enuma`）。**目标：让 UEFI 阶段点亮面板，使 XNU 的 `NativeMobileDisplay` 能拿到 `PE_Video`。**
+同SoC edk2-msm有继承帧缓冲实现，MiCode/LineageOS提供SMMU/split-DSI和KTZ8866依据；这些实现不证明本机scanout有效。暂不重写完整显示栈；若证实仅背光等窄缺口，再复用真实协议实现。D-163四项更正继续有效。此轮仅研究和文档，未构建/访问设备/实测，未提交推送，未扩大授权。
 
-## 必读（按顺序）
+接手enuma（小米平板5 Pro 5G / SM8250）运行iPadOS17.7.11/21H461的移植。设备仓D:/Code/UniXNU-enuma，固件实现仅在固定firmware子模块；D:/Code/uefi-enuma是独立检出。nuwa和PortingiOS等参考只读。
 
-1. `D:\Code\UniXNU-enuma\AGENTS.md` — 项目硬约束，先读完再动手
-2. `docs/STATUS.md` — 当前状态
-3. `docs/DECISIONS.md` — 全史决策。**重点 D-131、D-142（结论已错，被 D-160 推翻）、D-155、D-156、D-159、D-160、D-161、D-162**
-4. `docs/operations/2026-10-25-backlight-and-batch-transport.md` — 背光与批量传值规格
-5. `docs/NEED-REVIEW.md` — 各 R 编号提案与状态
+## 必读
 
-## 已确立的事实（不要重新发现）
+1. AGENTS.md全文。
+2. docs/STATUS.md、docs/HANDOFF.md。
+3. docs/DECISIONS.md，先读D-164路线调整；D-163对D-162的证据更正继续有效，旧观测保留但不继承过强解释。
+4. docs/operations/2026-10-25-public-source-route-review.md（当前顺序），再读display-entry-isolation-plan.md（原厂支线工具）。
+5. docs/NEED-REVIEW.md；背光/批量传值旧说明中的已过期方案不作为当前指令。
 
-- **原厂显示栈完整存在于本机 XBL**：`out/device/xbl_a.bin`（FV 在 `0x888b0`）共 **149 个模块**，含 `DisplayDxe`（315392 字节）、`CPRDxe`、`ClockDxe`、`I2C`、`SPMI`、`PmicDxe`、`DALTLMM`，以及 **40 个 Panel XML**（含本机 `Panel_K81_42_02_0a_dualdsi_cphy_lcd_vid.xml`）。枚举脚本：`scripts/investigate_xbl_display.py`
-- **本仓 `QcomPkg` 的裁剪是某位移植者的选择，不是硬件事实。** 判断"能不能复用"必须查原始固件里有什么，不是查当前仓库里留了什么——D-142 正是在这里出错，把路线带偏到从零重写
-- 守卫（`scripts/firmware_audit_policy.py`）本就允许 `--diagnostic-without-ufs` 只省略 `UFSDxe` 而**合法保留** `DisplayDxe`/`CPRDxe`
-- DisplayDxe **自身负责背光**（PE 字符串实证）：`DisplayBackLightBrightnessLevelControl`、`EFI_DisplayPanelPowerControl`、`Charger power status is not okay or at off mode charging, so turn off backlight`、`EnableDisplayThread`
-- **APRIORI 绕过 DEPEX（D-162，源码实证）**：`firmware/Mu_Basecore/MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c` 1426–1438 中，APRIORI 列表内的驱动被直接置 `Dependent = FALSE; Scheduled = TRUE;` 并入 `mScheduledQueue`，调试输出 `RESULT = TRUE (Apriori)`。DisplayDxe 位于 **APRIORI 第 32 项（共 39 项）**，因此**它一定会被 dispatch，与 DEPEX 无关**
-- **那两个 GUID（`a966cc4f-ee6c-424d-a762-8ed3b5a4a501`、`47861dff-556f-4269-9b28-062ec3ecb30d`）与现象无关**：它们不在 DisplayDxe 的 PE 内（代码不调用），其 DEPEX 又被 APRIORI 判 TRUE。两条独立证据同一结论。**不要再补 stub**
-- **R-014 的挂死没有归因**：`--dispatch-guid` 用的 `dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92` 在 `scripts/audit_enuma_fd.py` 中即命名为 `simple_guid`，是 **SimpleFbDxe 的 GUID**；而 `--diagnostic-without-ufs` 构建 `ENUMA_DIAG_SIMPLEFB=0`，镜像里没有 SimpleFbDxe → 返回门指向不存在的驱动，`--dispatch-guid-only` 永不命中，75 秒无返回是必然。**不能据此说"DisplayDxe 挂死"或"稳定挂死"**
-- **挂死率基线**：零读档 12.5%（8 笔 1 挂，合并 17 笔 3 挂 ≈ 17.6%），裸读 25%（4 笔 1 挂）。**任何单笔挂死都不构成归因证据**（D-155/D-156）
-- DSI 扫描仍在跑（16.981 秒 PASS 门，D-158），所以"屏幕不亮"不是因为没有数据流
-- **摄像头取证可用**：`scripts/screen_capture.py`（Osmo UVC，1280×720，支持 `--probe`/`--single`/`--burst`）。模型能直接读图片，显示实验**必须带连续拍照**
+## 已核对的事实与边界
+
+- 本机XBL可枚举149个模块，包括DisplayDxe（315392字节）、CPRDxe、ClockDxe、I2C、SPMI、PmicDxe、DALTLMM和40份面板XML。发现这些组件支持优先复用，不等于完整运行依赖闭包已经成立。PE字符串表明包含背光/面板控制路径，不证明已执行或可用。
+- 实测R-014镜像SHA256：922972e61b0e4e3d7b7c931b53b76531a2db2a08504c6794263e5ff3f5ab1a75；内含FD：dbca3fcb2f470807f1fdac8b17e47c6eb604f3be49b1563c42df5bfc020615e0。
+- 对该FD直接解析：DisplayDxe在APRIORI第33项，零基索引32。APRIORI与Mu源码会将其排入Scheduled队列，忽略DEPEX；不保证到达、加载成功、PE入口执行或返回。
+- 未知GUID a966cc4f-ee6c-424d-a762-8ed3b5a4a501 与47861dff-556f-4269-9b28-062ec3ecb30d没有已证明的DEPEX阻塞作用。PE完整字节搜索不足以证明无提供者、代码不调用或与初始化无关；不发布假协议，R-015暂不执行。
+- R-014返回门误指向未打包的SimpleFbDxe GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92，因此目标门不命中。但completion fallback已开启：CoreDispatcher正常返回后仍应等待7秒再尝试复位。75秒无返回不是GUID配错的必然结果；fallback不是watchdog。
+- 两笔R-014均75秒无自动返回，第二笔有60帧间隔采样，后续采样未见画面。这不能定位DisplayDxe、证明稳定挂死、排除瞬态画面或确认背光电路状态。
+- DSI存活样本仅支持采样期接口活动，不证明完整MDP→双DSI→面板链路正常。小样本12.5%/25%等是样本比例，不是固定独立故障概率，也不支持把每次失败视为正常损耗。
 
 ## 当前状态
 
-R-014（保留原厂 `DisplayDxe`，`FD dbca3fcb` / 镜像 `922972e6`）执行两次，均 75 秒无自动回归，第二次带 60 帧拍照：frame-008 仍是 Android 桌面，frame-010（约 20 秒）起全黑镜面，至 frame-059 全程纯黑。**但这些观测不能定位到 DisplayDxe**（原因见上）。设备已恢复并核验。gitlink 已修正为 `aa9ec66`，两仓 HEAD 与远端一致。
+最新记录的恢复已核验：Android完成/root/A槽/解锁、设备及备份双分区摘要匹配。证据reports/enuma-recovery-reconciliation.json及out/device-tests/20261025T012053-recovery-reconciliation.json；本次文档修改未重新操作设备。旧失败账本保留。
 
-## 下一步（采纳 review 方案，未上机）
+源码锁、设备仓gitlink和firmware检出已对齐aa9ec66；实机前仍实时复核。本文修改后设备仓有文档差异，尚未提交，不能声称工作区干净已发布。原厂GOP/可见画面闭环和XNU入口均未验证。
 
-**先证明执行到哪里，再决定查什么。** 以 DisplayDxe GUID `4138022f-06c7-4f79-9c94-7e33b511a4e7` 为目标，复用现有 Core 检查点制作两个候选：
+## 原厂支线候选（完成D-164离线审计后再决定，未构建、未实测）
 
-- **detail15**：StartImage **前**（证明队列轮到它、即将调用）
-- **detail13**：StartImage **返回后**（证明它执行完并返回了什么）
+若离线审计后仍需定位执行边界，使用DisplayDxe完整GUID：4138022f-06c7-4f79-9c94-7e33b511a4e7。当前优先任务是顶部D-164规定的交接契约和真实ABI审计。
 
-保持原厂 PE 不变；判据用连续拍照 + 返回时间。若 detail15 命中而 detail13 不命中 → 挂在 DisplayDxe 内部，再查更早驱动、PE 构造函数、真实协议调用或面板初始化。若 detail15 都不命中 → 问题在派发阶段，查 APRIORI/FV/更早驱动。
+1. 候选A：detail15，CoreStartImage调用前。支持已到启动边界，不证明PE入口。
+2. A的边界与返回通道得到支持后，再考虑候选B：detail13，CoreStartImage任意返回后。只证明已返回，不报告EFI_STATUS或GOP成功。
+3. 若A有响应、B无返回，只能在同源/可重复/观测有效前提下收窄到启动调用及返回区间。后续可用detail20/21/22分开PE入口、构造函数和Exit/LongJump；不能直接归因驱动内部。
+4. 如B返回，再用query0的detail16/17区分错误/非错误，另验GOP。若只见7秒fallback，先检查目标发现/加载/过滤；若无返回，先恢复和离线隔离，不做单笔因果判定。
 
-## 明确不要做的事
+保持原厂PE、派发顺序及模块集合不变；使用without-ufs，SIMPLEFB=0、query0、step0、value-source off，不增加驱动内复位库。完整构建参数、资格和判读表见专项方案。
 
-- **不要再补 stub protocol**（R-015 动机已被 D-162 推翻，且无必要）
-- **不要自写 GENI I2C / KTZ8866 驱动**——原厂栈已内含背光控制，那是 D-142 错误结论的产物
-- **不要把 R-014 的挂死归因于 DisplayDxe**——返回门指向的是 SimpleFbDxe，那个镜像里没有它
-- 不要用单笔挂死做归因；先有基础率再谈对比
-- 不要在没有连续拍照的情况下做显示实验
-- 不要主动 `git commit`（仅在被明确要求时）；提交后注意同步 firmware 子模块指针
-- 不要试图放宽 AGENTS.md 的硬约束，特别是：每次 boot 前自动备份 `boot_a`/`vendor_boot_a` 并逐字节核对、探针只读+摘要验证、`ENUMA_DIAG_SIMPLEFB=1` 必须同时省略 CPR/Display/UFS 三者
-- 不要在未核验设备恢复状态时就追加镜像
+## 执行纪律
 
-## 设备与工具状态
+- 本轮用户仅要求修改文档和方案，没有批准新硬件动作。R-014及后续候选授权按原记录核对，本文不扩张范围。
+- 先完成源码/编译宏/FD/打包/摘要绑定；适用文档按AGENTS要求提交推送后，才可执行新候选。当前不要主动commit或boot。
+- 每笔即时身份/备份/恢复条件检查；原厂驱动可能写硬件，不能因Core探针本身只观察就称整个候选只读。
+- 相机取证与返回/阶段证据配合，保存时间戳与原图并按实际方向旋转。超时停止追加、恢复核验并当轮同步文档，不原样重试失败镜像。
+- 不新增像素/MMIO写、内存字段/映射、verified或分区操作；新需要按AGENTS和当前批准边界审查。Mock测试，避免单元测试意外操作设备。
 
-- enuma 已恢复并核验（Android / root / `_a` / unlocked / 双分区摘要一致）
-- 挂死时需**用户长按电源**，恢复后跑 `python scripts/reconcile_enuma_recovery.py` 做只读核验
-- 两仓 HEAD 与远端一致（`require_published` 会强制检查，工作树脏则拒绝执行）
-- 计划/执行工具：`scripts/prepare_value_transport_plan.py`、`scripts/run_hang_baseline.py`（逐笔执行+门禁）、`scripts/run_enuma_entry_probe.py`（底层 runner，`--label` 白名单写死 12 个值，只影响归档名不影响行为）
-- `scripts/investigate_xbl_display.py` — 枚举 XBL 全部模块并解析 DisplayDxe 的 DEPEX
-
-## 一句话现状
-
-原厂显示栈找回来了、背光确认由它自己管、那两个"缺失 protocol"被证明无关；**当前真正未知的是"DisplayDxe 被 dispatch 之后执行到哪里"**，下一步是用 detail15/detail13 两个候选把这一点定位出来。
+本次核心纠偏：APRIORI只保证入队；错误GUID不解释completion fallback失效；detail13不是状态数值通道；未知协议无字节命中不等于无语义。先定位再适配。

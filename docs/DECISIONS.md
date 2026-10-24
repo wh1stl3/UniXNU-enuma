@@ -488,3 +488,21 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 **修正后的正确图景**：DisplayDxe **已被 dispatch**（APRIORI 强制），那 2 个 protocol 无关；真正未知的是"dispatch 之后发生了什么"——可能运行到某处失败、可能挂在内部某个 `LocateProtocol`/硬件访问上，也可能根本没被执行到（APRIORI 只保证入队，不保证 StartImage 成功）。**在没有定位证据前，不得把 R-014 的挂死归因于 DisplayDxe，也不得把任何归因写在结论里。**
 
 **下一步采纳 review 方案**（先证明执行到哪里，再决定查什么）：复用现有 Core 检查点，以 DisplayDxe GUID `4138022f-06c7-4f79-9c94-7e33b511a4e7` 为目标，制作"StartImage 前（detail15）"与"StartImage 返回后（detail13）"两个候选，**保持原厂 PE 不变**；现场连续取证继续保留。在此之前**暂不执行 stub**。
+
+2026-10-25 01:38 · D-163：进一步更正D-162，保留其APRIORI绕过DEPEX及退回stub方案的有效部分，其余过强推断superseded。直接解析R-014镜像922972e6内FD dbca3fcb，DisplayDxe为APRIORI第33项（零基32）；仅保证入队，不能证明已dispatch/进入PE。R-014目标GUID不存在，但completion fallback=1，CoreDispatcher正常返回后仍应等待7秒复位，故“75秒无返回是必然”错误。GUID字节未命中不证明代码不调用或初始化无关。detail13只证明CoreStartImage返回，不输出状态；A detail15有响应而B detail13无响应不能直接定位驱动内部。后续按新专项方案，用目标GUID和实际编译/FD/时间证据细分启动区间。本轮仅修正文档，无构建、设备动作或新批准；不主动提交。
+
+2026-10-25 · D-164：结合固定MiCode设备树/内核、LineageOS内核、edk2-msm及UniXNU公开资料，主线调整为先审ABL→BootShim→UEFI continuous-splash契约，原厂DisplayDxe作为有界支线，最小真实初始化为条件后备。新静态缺口：线程开关为1，而enuma内存表无GetXblHobAddresses所需FD Reserved/FD_Reserved名称，该路径不能恢复scheduler/DTB扩展地址；不等于已定位实机根因，不直接添加内存区/改名/关闭线程。先做FDT/显示生命周期与原厂PE真实调用图，再选最有区分力候选。D-163证据更正及所有设备门禁维持。本轮仅研究/文档，无新设备动作或批准，未提交。来源与可推翻条件见operations/2026-10-25-public-source-route-review.md。
+
+2026-10-25 02:10 · D-165：逐条核实 Codex 本轮复审的静态发现与它对我的一处纠正，**全部成立，并据此采纳其优先级调整**。核实均在本地源码完成，未构建、未上机。
+
+**① 线程开关与 HOB 名称缺口（Codex 发现，已核实）**：`Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c` 第 29/34 行，`EnableMultiThreading` 与 `EnableDisplayThread` **均为 `0x1ULL`**；`Silicon/Qualcomm/QcomPkg/Library/PlatformPeiLib/XblProtocols.c` 第 113/114 行只调 `LocateMemoryRegionByName ("FD Reserved")` 与 `("FD_Reserved")`；而 `Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c` 的内存表只有 `Sched Heap`(0x9bc00000)、`Display Reserved`(0x9c000000/0x2400000)、`UEFI FD`(0x9fc00000)，**没有上述两个名称**（`Sched Heap`/`UEFI FD` 不是同名替代）。`PlatformPeiLib/PlatformPei.c` 中 `SchedulerInterfaceAddr`/`DtbExtensionAddr` 初始化为 0 后交给 `GetXblHobAddresses`，再进 `BuildXblHobs`。结论：**以当前内存表走该路径，scheduler 与 DTB 扩展地址不会被恢复**。这是确定的源码路径缺口，**不等于已定位实机根因**。
+
+**② 线程 ABI 不可 stub（已核实）**：`QcomPkg/Include/Protocol/EFIKernelInterface.h` 第 445/446/622 行分别有 `THREAD_CREATE ThreadCreate`、`THREAD_RESUME ThreadResume`、`INIT_LOCK InitLock`。真实 ABI，接受 Codex 的判断：**不能用一个成功返回的 stub 替代**。
+
+**③ 我 D-162 的一处过强推断被 Codex 纠正，已核实为其正确**：我在 D-162 写"返回门指向不存在的驱动，75 秒无返回是必然"。实际 `diagnostics/EnumaDispatchCompletionCheckpoint.h` 原文为 `// If a target is absent/skipped or LoadImage fails, do not enter BDS.` / `// Cannot recover a hung driver, exception loop or dispatcher deadlock.`，随后 `MicroSecondDelay (7000000); ResetCold ();`。即**目标缺失时同样会 7 秒后冷复位**，故 75 秒无返回**不是必然**，它表示派发过程中发生了挂死/异常循环/派发器死锁；但该注释同时说明它**无法区分**挂在哪，因此**仍然不能归因于 DisplayDxe**。D-162 中"75 秒无返回是必然"一句 supersede 为此表述。
+
+**④ 采纳 D-164 的优先级调整**（Codex 提出）：主线改为先审 `ABL→BootShim→SEC/DXE→ExitBootServices→XNU` 的 continuous-splash 继承契约；原厂 DisplayDxe 降为**有界支线**（保留 detail15/detail13 作为定位工具，但须先完成离线审计）；完整显示栈重写仅作**条件后备**。三条公开依据中，与本地证据直接相关的是 UniXNU sheng 记录的"stock ABL 在没有 splash region 时关闭面板"——这为本机"boot 后 16–20 秒屏幕熄灭"提供了一个**待验证**的解释方向，但 sheng 是 SM8550，其地址/大小/节点策略不可复制，须先追踪本机 ABL 实际收到与修改的 FDT。
+
+**⑤ 明确不做的事（承接 Codex 的两条警告，均已接受）**：不因线程缺口就把 `EnableDisplayThread` 改 0（同步路径可能同样依赖锁/事件/TPL/XBL 服务）；不给 `UEFI FD` 改名或添加 `FD Reserved` 区域（该扫描器按机器码模式寻找函数、解析循环直到 RET、无明确长度上限，且原 XBL 指针在 ABL 退出/BootShim 重定位后可能已失效）。任何内存表/映射改动仍走 AGENTS 审批。
+
+**下一步**（与 D-164 一致）：先产出两份离线证据——`handoff-contract`（Boot v3 实际选用的 DTB/DTBO、splash base/size、stride/格式、SMMU、双 DSI、ExitBootServices 生命周期，逐项标注"已知/源码推导/待实测"）与 `native-display-abi`（固定本机 DisplayDxe 摘要与入口，对线程开关字符串做交叉引用，建立协议查找/HOB 查找/Thread/Lock/SetMode 的真实调用图）。在此之前不上机。

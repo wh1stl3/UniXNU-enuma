@@ -1,64 +1,43 @@
-# 交接：zero2 超时已恢复，隔离方案已审并撤回，下一步建挂死率基线
+# 交接：按D-164先完成显示契约和原厂ABI离线审计
 
-2026-10-24 23:45之后，Asia/Shanghai。本轮只读核验、离线构建与文档对账；未启动新候选，未写设备分区。
+## D-164：公开资料复审后的当前顺序（2026-10-25）
 
-## 当前设备与恢复
+当前主线改为先离线审计ABL→BootShim→UEFI的continuous-splash交接契约；原厂DisplayDxe保留为有界支线。先输出实际FDT/显示生命周期证据与原厂PE真实调用/ABI清单，再按缺口选择候选，detail15/detail13不再自动排在离线审计之前。详见[公开资料路线复审](operations/2026-10-25-public-source-route-review.md)。
 
-enuma已恢复Android，主机独立核验boot_completed=1、root、原A槽、解锁，以及boot_a/vendor_boot_a设备和本地备份摘要匹配。证据 reports/enuma-recovery-reconciliation.json，原始证据 out/device-tests/20261024T230449-recovery-reconciliation.json。恢复的具体人工动作/发生时刻未独立记录，不推断。失败试验result.json未改，current.local.json更新为recovered-android-boot-complete。
+新静态发现：enuma配置EnableMultiThreading/EnableDisplayThread=1，但当前GetXblHobAddresses只识别FD Reserved/FD_Reserved，板级内存表无此名称；以该表调用此路径不会恢复scheduler/DTB扩展HOB地址。这不证明实机挂点或DisplayDxe必然使用该ABI；需绑定实际PE/SEC证据。不得直接改名、加内存区、关线程或补stub来冒充修复。
 
-本轮接手再次只读核验：`d0fd0840`=enuma、`boot_completed=1`、`_a`、`flash.locked=0`；同时在线 `fe5ed56e` 是 nuwa（只读参考，不是目标）。无需再次要求恢复按键；恢复不代表固件问题已解决。value transport计划仍冻结，不清空失败账本、不原样重试失败镜像。
+同SoC edk2-msm有继承帧缓冲实现，MiCode/LineageOS提供SMMU/split-DSI和KTZ8866依据；这些实现不证明本机scanout有效。暂不重写完整显示栈；若证实仅背光等窄缺口，再复用真实协议实现。D-163四项更正继续有效。此轮仅研究和文档，未构建/访问设备/实测，未提交推送，未扩大授权。
 
-## 最近实测及硬停
+2026-10-25 01:38文档复核。本轮仅修改文档与方案，未构建、未启动、未写设备。当前结论以D-163为准，D-162中过强解释已取代；原始观测保留。
 
-| 试验 | 实际发出时间 | ADB返回时间 | 结果 |
-| --- | --- | --- | --- |
-| zero1，常量0 | 22:49:52 | 16.991秒 | 自动回Android，root/分区核验通过 |
-| known3，常量3 | 22:50:59 | 25.503秒 | 自动回Android，root/分区核验通过 |
-| zero2，常量0 | 22:52:12 | 75秒观察期无自动返回 | runner退出2，停止追加，计划冻结 |
+## 最近实测与恢复
 
-zero2镜像与zero1相同：SHA256 `9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1`，FD `bfb3d6a6…`。known3镜像 `357706af…`，FD `72d2b0a9…`。两份已归档产物本轮复核完整。失败账本reports/enuma-value-transport-device.json保留。
+R-014镜像922972e61b0e4e3d7b7c931b53b76531a2db2a08504c6794263e5ff3f5ab1a75，FD dbca3fcb2f470807f1fdac8b17e47c6eb604f3be49b1563c42df5bfc020615e0。两笔均75秒未自动返回，第二笔60帧间隔采样未见固件画面；不能定位到DisplayDxe或宣布稳定挂死。目录/拍摄相对时间不能冒充精确boot时间。
 
-## 可支持的结论与未知项
+最新已有恢复证据reports/enuma-recovery-reconciliation.json、out/device-tests/20261025T012053-recovery-reconciliation.json：Android完成/root/A槽/解锁及双分区设备/备份摘要通过。本轮未重新访问设备，不推断当前实时状态或恢复按键细节。旧失败记录不改，实机前重做即时核验。
 
-前两笔差8.512秒、残差0.488秒，在0.75秒容差内：这是符合预期的延时响应证据，不能称通道已校准或可靠。第三笔零码未返回，0/3/0校准失败，禁止解码寄存器。
+## 四项核心更正
 
-**本轮推进**：常量helper在`Code==0`时直接`return EFI_SUCCESS`，不调Read、不调Wait、不写寄存器；zero1/zero2同镜像同码。故"什么都不做"的代码一次返回一次挂死，挂死**不必**与显示访问相关；剩余嫌疑还包括fastboot临时boot载体、XBL对临时镜像的处理、连接/供电时序差异。75秒无返回仍未定位到某条指令。
+1. 实际FD内DisplayDxe在APRIORI第33项（零基索引32），是排入队列资格，不是实际进入或返回证据；不是“必定已dispatch”。
+2. R-014目标门指向未打包的SimpleFbDxe，但completion fallback=1。CoreDispatcher返回后仍应等待7秒再尝试ResetCold，故75秒无返回不是配错GUID的必然结果。更早阻塞、异常、复位或观测问题仍待区分。
+3. 未知两个GUID完整字节未命中，不能证明没有提供者、代码不调用或初始化语义无关。缺GUID不是已证明的DEPEX调度阻塞；R-015不按原动机执行。
+4. detail13只表明CoreStartImage任意返回，不能输出具体状态；detail15成功、detail13无响应也不能直接判驱动内部挂死。
 
-**方法论缺口**：R-006自算15%挂死率下"5笔全干净"先验仅44%，"0读5笔干净 vs 2读首笔挂"由5+1笔构成，基线未知时不构成证据。unclocked access主判断与23个step的证据降级均建立在该对照上，保留为历史观测。
+## 原厂支线候选（离线审计后再决定，未构建、未实测）
 
-旧delay20宏未进入编译参数；GOP_QUERY/detail16在CoreStartImage返回后匹配marker；像素函数先Sync/CPU Read再Write。旧硬件因果解释已由D-146/D-149/D-152取代。
+专项方案：[DisplayDxe执行边界定位](operations/2026-10-25-display-entry-isolation-plan.md)。目标GUID4138022f-06c7-4f79-9c94-7e33b511a4e7；候选A detail15启动调用前，候选B detail13启动调用返回后。保持原厂PE和派发顺序，without-ufs、SIMPLEFB=0、query0、step0、value-source off。先A，依据有效阶段与返回证据再决定B；不硬编码Android返回秒数，不以一次超时定位因果。
 
-## 在途代码处置
+如B返回，后续用query0的detail16/17区分错误/非错误并另验GOP；如需细分PE包装器/构造函数/返回机制，再审detail20/21/22。没有新像素、背光、未知协议或寄存器写方案。暂不自写I2C/背光，取得真实接口缺口后再评估，不以原厂PE存在当作全栈可运行证明。
 
-三份在途改动已处置完毕，firmware/工作树干净：
+## 来源和设备门禁
 
-- 驱动内复位隔离（`--value-reset in-driver`）：提交e5f1ab5后**经构建实测撤回**（d00c416）。WSL构建在`build_enuma_firmware.py:258`断言失败，该处三条守卫刻意禁止ResetSystemLib进入SimpleFbDxe，且enuma平台dsc无该库绑定。审查结论维持守卫。
-- Windows alternates换行修复：保留（96d354a），WSL下等价。
-- Windows原生构建仍不可用（`symlink_to`需特权，`WinError 1920`未修）；**构建一律在`wsl.exe`+Python 3.10.12下进行**。
-- **构建不可复现**：同参数重建FD `02f8d31d` ≠ 已资格 `bfb3d6a6`。资格只能绑定已归档镜像，不能靠重建取得。
+gitlink/锁/firmware检出aa9ec66已对齐；独立参考检出和Mu递归脏状态不清理。本文修改未提交，设备仓不是干净已发布状态。下一次实机前先完成来源/实际宏/FD/打包资格、适用文档提交推送与即时身份/备份/现场恢复门禁。不能用旧R-014资格报告替代新候选。
 
-## 测试事故（D-154，已闭环）
+R-015暂不执行；其余批准按NEED-REVIEW原记录核对，本文不新批或扩张R-008/R-012/R-013/R-014。原厂DisplayDxe可能写硬件，新边界候选不是整镜像只读。超时停止追加、先恢复核验、当轮更新全部当前文档；不原样重试失败镜像。
 
-R-009 执行工具的首版单元测试意外真实驱动设备两次：`run_next(..., invoke=subprocess.run)`默认参数在导入时绑定，`patch.object(baseline,'subprocess')`触及不到，且同时 patch 掉了`require_published`。23:31:35 与 23:32:22 各 boot 一次 baseline 候选：第一笔 16.031 秒正常返回、双分区摘要未变；第二笔 75 秒无返回，用户长按恢复，23:40 只读核验通过。
+## 系统里程碑
 
-修复：`invoke` 改调用时解析；测试显式传`invoke=Mock()`；顺带修掉`run_value_probes.py:run_one`与`reconcile_enuma_recovery.py:reconcile`的同类缺陷。91 个测试通过。**这两笔不计入 R-009 ledger**，仅作观察值：零读档 2 笔 1 挂，与 zero 组同形。
+目标iPadOS17.7.11/21H461、iPad7,1/j120ap，XNU10063.141.1/4KiB；固定UniXNU5fdbd5d。现有原厂模块/面板资源支持复用方向，DSI计数支持采样期接口活动；未确认端到端显示、GOP可见输出、PE_Video交接或XNU实机入口。原平台内核链接/闭包规划、FAT准备不能当整机启动。
 
-## 下一步与继续条件
 
-1. **显示栈路线已纠正（D-160）**：原厂显示栈完整存在于本机 XBL 的 149 个模块中（`DisplayDxe` + `CPRDxe` + `ClockDxe` + `I2C` + `SPMI` + `PmicDxe` + `DALTLMM` + 40 个 Panel XML）。**不要再自写 GENI I2C / KTZ8866 驱动**——那是 D-142（在裁剪后的本仓上得出的错误结论）的产物。守卫本就允许 `--diagnostic-without-ufs` 只省略 `UFSDxe` 而保留显示驱动。
-2. **R-014 已执行两次，均挂死且屏幕全黑镜面**（D-161，第二次带 60 帧连续拍照）。原厂 DisplayDxe 未产出画面。
-3. **下一项是 R-015（pending，未批准）**：写最小 stub 驱动发布 `a966cc4f-ee6c-424d-a762-8ed3b5a4a501` 与 `47861dff-556f-4269-9b28-062ec3ecb30d`，使 DisplayDxe 的 DEPEX（9 protocol 全 AND）满足。这两个 GUID 不在 DisplayDxe PE 内、只存在于 DEPEX，属编译期声明，stub 理论充分；但 protocol 真实身份未知，且 PE 里有 `Charger power status ... turn off backlight` 分支，stub 必须完全被动。三项风险见 `docs/NEED-REVIEW.md` R-015。
-4. 显示实验**必须带连续拍照**（`scripts/screen_capture.py --burst`），不再用肉眼当唯一证据。
-5. 逐笔门禁：身份、备份、恢复路径核对后临时boot；失败即停不原样重试；每笔后核验Android完成/root/槽位/解锁与双分区摘要。挂死时需用户长按，恢复后跑 `scripts/reconcile_enuma_recovery.py`。
-6. 单笔挂死不构成归因证据——基础挂死率：零读 12.5%（8 笔 1 挂）、裸读 25%（4 笔 1 挂）。
-7. FAT publisher/完整ADT/donor预链接可离线准备；复用上游通用实现，再适配SM8250 UFS和用户态。
-
-## 源码与边界
-
-独立固件仓HEAD `d00c416`，设备锁`config/uefi-source.lock.json`已重固定，firmware工作树干净；Mu_Basecore原有递归脏状态保留，不用reset/clean覆盖。设备仓既有提交b54bb2b已推送。UniXNU固定5fdbd5d。
-
-R-005/R-007像素单次均consumed；R-008保留日志/warm reset pending未启用。不批准新像素/MMIO写、内存字段/映射、verified或破坏性分区操作；撤回动作未放宽任何守卫。512MiB owned、51MiB heap、example=true、Boot v3不变。用户确认可在场恢复，每笔仍核对当时条件。
-
-目标iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。无可见GOP/白条闭环、未进XNU或iPadOS。TWRP/UART未验证。
-
-接手顺序AGENTS、STATUS、DECISIONS、NEED-REVIEW；专项记录operations/2026-10-24-takeover-calibration.md。不得从历史D-148或旧提交正文提取更强的"机制成立/挂点已定位"结论，当前以D-152/D-153为准。
+接手先读AGENTS、STATUS、DECISIONS D-163、NEED-REVIEW，再读docs/2026-10-25-handoff-prompt.md。不要从旧记录提取“75秒无返回必然”“两个协议完全无关”“已进入驱动”的确定结论。
