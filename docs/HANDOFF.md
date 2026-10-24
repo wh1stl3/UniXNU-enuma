@@ -1,12 +1,12 @@
-# 交接：zero2超时已恢复，旧计划冻结，在途隔离代码未资格
+# 交接：zero2 超时已恢复，隔离方案已审并撤回，下一步建挂死率基线
 
-2026-10-24 23:04之后，Asia/Shanghai。本轮只读核验与文档对账；未构建或启动新候选，未写设备分区。
+2026-10-24 23:45之后，Asia/Shanghai。本轮只读核验、离线构建与文档对账；未启动新候选，未写设备分区。
 
 ## 当前设备与恢复
 
-enuma已恢复Android，主机独立核验boot_completed=1、root、原A槽、解锁，以及boot_a/vendor_boot_a设备和本地备份摘要匹配。证据 reports/enuma-recovery-reconciliation.json，原始证据 out/device-tests/20261024T230449-recovery-reconciliation.json。恢复的具体人工动作/发生时刻未独立记录，不推断。失败试验result.json未改，current.local.json通过新恢复证据更新为recovered-android-boot-complete。
+enuma已恢复Android，主机独立核验boot_completed=1、root、原A槽、解锁，以及boot_a/vendor_boot_a设备和本地备份摘要匹配。证据 reports/enuma-recovery-reconciliation.json，原始证据 out/device-tests/20261024T230449-recovery-reconciliation.json。恢复的具体人工动作/发生时刻未独立记录，不推断。失败试验result.json未改，current.local.json更新为recovered-android-boot-complete。
 
-因此无需再次要求恢复按键；恢复不代表固件问题已解决。现有value transport计划仍冻结，不因恢复清空失败账本或原样重试失败镜像。
+本轮接手再次只读核验：`d0fd0840`=enuma、`boot_completed=1`、`_a`、`flash.locked=0`；同时在线 `fe5ed56e` 是 nuwa（只读参考，不是目标）。无需再次要求恢复按键；恢复不代表固件问题已解决。value transport计划仍冻结，不清空失败账本、不原样重试失败镜像。
 
 ## 最近实测及硬停
 
@@ -16,35 +16,41 @@ enuma已恢复Android，主机独立核验boot_completed=1、root、原A槽、�
 | known3，常量3 | 22:50:59 | 25.503秒 | 自动回Android，root/分区核验通过 |
 | zero2，常量0 | 22:52:12 | 75秒观察期无自动返回 | runner退出2，停止追加，计划冻结 |
 
-时间来自各result.json的issued_at；目录时间22:49:38/22:50:44/22:51:58是准备时间，不当作boot发出时间。zero2观察期限结束约22:53:27；没有单独事件时间戳，不把估算当精确硬停时刻。规则来源AGENTS“硬停当轮必须落实交接”及“接手后的通道校准与证据更正”。既往未及时对齐的当前文档，本轮补齐。
-
-最后候选zero2与zero1镜像相同：SHA256 9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1；FD bfb3d6a6018498ea1b94368b1d8a394983234b32d84368fdf0df49f41d1c1551。known3镜像357706af66517e7c1d7dac9629f55b1ee57e88b6701bfa4176315a3f4d3ace96；FD72d2b0a9384bdb7ba76b43b9c24bb69f42c8c65f1cf7eed27070df338300a3b2。构建固定固件74598dfa2b223716450de044caf937c4a30e51f5；精确资格见reports/enuma-value-transport-qualification.json和out/value-transport/。失败账本reports/enuma-value-transport-device.json保留。
+zero2镜像与zero1相同：SHA256 `9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1`，FD `bfb3d6a6…`。known3镜像 `357706af…`，FD `72d2b0a9…`。两份已归档产物本轮复核完整。失败账本reports/enuma-value-transport-device.json保留。
 
 ## 可支持的结论与未知项
 
-前两笔差8.512秒，对预期9秒残差0.488秒，符合0.75秒容差：这是符合预期的延时响应证据，不能称完整通道已校准或可靠。第三笔零码未返回，完整0/3/0校准失败，禁止解码寄存器。未执行任何新寄存器模式、像素实验或XNU启动。
+前两笔差8.512秒、残差0.488秒，在0.75秒容差内：这是符合预期的延时响应证据，不能称通道已校准或可靠。第三笔零码未返回，0/3/0校准失败，禁止解码寄存器。
 
-常量helper没有显示MMIO/像素/cache访问，说明显示读取不是发生超时的必要条件；不证明整份固件没有其他设备访问。75秒无返回没有定位到某条指令，公共启动、驱动执行/返回、异常或复位出口均待隔离。历史stage成功不等于持续安全，三类嫌疑不构成互斥穷尽分类。一次成功一次失败也不能判定“首次成功后必挂”或bootloader残留。
+**本轮推进**：常量helper在`Code==0`时直接`return EFI_SUCCESS`，不调Read、不调Wait、不写寄存器；zero1/zero2同镜像同码。故"什么都不做"的代码一次返回一次挂死，挂死**不必**与显示访问相关；剩余嫌疑还包括fastboot临时boot载体、XBL对临时镜像的处理、连接/供电时序差异。75秒无返回仍未定位到某条指令。
 
-旧delay20宏未进入编译参数，历史时序不能作为寄存器值；GOP_QUERY/detail16在CoreStartImage返回后匹配marker。像素函数先Sync/CPU Read再Write，像素超时不能认定store失败。旧硬件因果解释已由D-146/D-149取代，历史原始记录保留。
+**方法论缺口**：R-006自算15%挂死率下"5笔全干净"先验仅44%，"0读5笔干净 vs 2读首笔挂"由5+1笔构成，基线未知时不构成证据。unclocked access主判断与23个step的证据降级均建立在该对照上，保留为历史观测。
 
-## 源码与发布边界
+旧delay20宏未进入编译参数；GOP_QUERY/detail16在CoreStartImage返回后匹配marker；像素函数先Sync/CPU Read再Write。旧硬件因果解释已由D-146/D-149/D-152取代。
 
-设备仓最新既有提交b54bb2b已推送；本轮文档提交号以Git后续记录为准。设备仓gitlink及锁、独立固件仓HEAD仍为74598df。firmware/有三份未提交在途改动：Resources/Scripts/build_enuma_firmware.py、patches/dispatch-detail-options.patch、patches/simplefb-gop-query.patch。本轮不改写、不提交这些代码，不声称它们已构建/审计/发布；设备源码校验必须拒绝此脏状态。独立固件仓Mu_Basecore原有递归脏状态也保留。新实机前必须先明确代码所有权、审查、锁定干净来源并完整重新资格，不能沿用旧候选报告。
+## 在途代码处置
+
+三份在途改动已处置完毕，firmware/工作树干净：
+
+- 驱动内复位隔离（`--value-reset in-driver`）：提交e5f1ab5后**经构建实测撤回**（d00c416）。WSL构建在`build_enuma_firmware.py:258`断言失败，该处三条守卫刻意禁止ResetSystemLib进入SimpleFbDxe，且enuma平台dsc无该库绑定。审查结论维持守卫。
+- Windows alternates换行修复：保留（96d354a），WSL下等价。
+- Windows原生构建仍不可用（`symlink_to`需特权，`WinError 1920`未修）；**构建一律在`wsl.exe`+Python 3.10.12下进行**。
+- **构建不可复现**：同参数重建FD `02f8d31d` ≠ 已资格 `bfb3d6a6`。资格只能绑定已归档镜像，不能靠重建取得。
 
 ## 下一步与继续条件
 
-1. 保留冻结计划及原失败镜像，不以统计失败率为由原样重试。先离线审查在途隔离方案，设计有区分力的新检查点/异常或复位证据。
-2. 驱动内复位只能作为待审候选：新增库依赖/constructor会改变上下文，应先审副作用和编译/FD，不把内外两版本差异直接当唯一因果。更早检查点也需同源资格与自己的复位可靠性证据。
-3. 每个新候选完成主机/实际编译宏/FD/打包审计、精确摘要绑定，当前文档提交推送，确认现场恢复及即时身份/备份条件后，才能执行单笔。超时停止追加，恢复后继续离线分析。
-4. 常量重复校准通过后才考虑最小寄存器读；随后分离描述符、cache Sync、CPU Read和Write，并核对实际FDT、CPU映射与SMMU。
-5. FAT publisher/完整ADT/donor预链接可离线准备；继续复用上游通用实现，再适配SM8250 UFS和用户态。
+1. **先建挂死率基线，不改任何固件**：用已资格zero镜像（`out/value-transport/zero/candidate.img`，`9b3c1df3…`）重复至8笔，只记"返回/挂死"，不解码不校准。零读档若与历史读档挂死同量级，则以显示为因的归因链作废、按载体/XBL重开；若8笔全干净，只能把上界压到约25%。
+2. 逐笔门禁：身份、备份、恢复路径核对后临时boot；失败即停不原样重试；每笔后核验Android完成/root/槽位/解锁与双分区摘要。
+3. 驱动内复位不重启；若确需改守卫，必须另立NEED-REVIEW编号。
+4. 常量重复性通过后才考虑最小寄存器读；随后分离描述符、cache Sync、CPU Read和Write，核对实际FDT、CPU映射与SMMU。
+5. FAT publisher/完整ADT/donor预链接可离线准备；复用上游通用实现，再适配SM8250 UFS和用户态。
 
-## 审查与系统里程碑
+## 源码与边界
 
-R-005/R-007像素单次均consumed；R-008保留日志/warm reset pending，未启用。本轮不批准新像素/MMIO写、内存字段/映射、verified或破坏性分区操作。512MiB owned、51MiB heap、example=true、Boot v3不变。用户此前确认本轮可在场恢复，具体新设备动作前仍核对当时条件。
+独立固件仓HEAD `d00c416`，设备锁`config/uefi-source.lock.json`已重固定，firmware工作树干净；Mu_Basecore原有递归脏状态保留，不用reset/clean覆盖。设备仓既有提交b54bb2b已推送。UniXNU固定5fdbd5d。
 
-目标iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU固定5fdbd5d。已有源平台内核最终链接与donor闭包规划，未emit预链接镜像；64MiB配置FAT未接publisher，SM8550 NativeUfs参数未启用。无可见GOP/白条闭环、未进XNU或iPadOS。TWRP/UART未验证。
+R-005/R-007像素单次均consumed；R-008保留日志/warm reset pending未启用。不批准新像素/MMIO写、内存字段/映射、verified或破坏性分区操作；撤回动作未放宽任何守卫。512MiB owned、51MiB heap、example=true、Boot v3不变。用户确认可在场恢复，每笔仍核对当时条件。
 
+目标iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。无可见GOP/白条闭环、未进XNU或iPadOS。TWRP/UART未验证。
 
-接手顺序AGENTS、STATUS、DECISIONS、NEED-REVIEW；专项记录operations/2026-10-24-takeover-calibration.md。不得从历史D-148或旧提交正文提取更强的“机制成立/挂点已定位”结论，当前以D-149为准。
+接手顺序AGENTS、STATUS、DECISIONS、NEED-REVIEW；专项记录operations/2026-10-24-takeover-calibration.md。不得从历史D-148或旧提交正文提取更强的"机制成立/挂点已定位"结论，当前以D-152/D-153为准。
