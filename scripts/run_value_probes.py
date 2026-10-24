@@ -91,8 +91,10 @@ def validate_plan(plan, root):
                 'ENUMA_DIAG_DISPATCH_FALLBACK':'1','ENUMA_DIAG_PIXEL_PREVIEW':'0'}
         if trial['role']=='off':
             # A gated historical probe carries its verdict in the PASS/FAIL return
-            # timing, so it owns its step number instead of the transport's step 0.
-            wanted['ENUMA_DIAG_GOP_QUERY']='1'
+            # timing, so it owns its step number and gate polarity instead of the
+            # transport's step 0 / pass-only selector.
+            if str(defines.get('ENUMA_DIAG_GOP_QUERY')) not in ('1','2'):
+                raise ValueError('gated probe gate selector must be 1 or 2')
             if not str(defines.get('ENUMA_DIAG_GOP_STEP','')).isdigit() or not 1<=int(defines['ENUMA_DIAG_GOP_STEP'])<=23:
                 raise ValueError('gated probe step out of range: '+str(defines.get('ENUMA_DIAG_GOP_STEP')))
         else:
