@@ -4,6 +4,12 @@
   "reason": "D-124 excluded post-recovery device state and step20 code content. The same step20/query1 predicate succeeded three times and timed out once today, so the timeout must be a hang, not a predicate refusal. Two exits remain indistinguishable on the current 1-bit channel: EnumaStageCheckpoint's ResetCold() failing, or SimpleFbDxe hanging on 0x0ae00000..0x0ae84207.",
   "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
   "transport": "core-warning-v2",
+  "built": {
+    "fd_sha256": "95cd88f9e2c156f65b23ce640cd521231f1f1b96c2d87505460ead3070e4fd51",
+    "image_sha256": "a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517",
+    "image_bytes": 3153920,
+    "build_report": "enuma-exit-early-build.json"
+  },
   "profiles": [
     {
       "tag": "exit10-early",

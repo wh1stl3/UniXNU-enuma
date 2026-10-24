@@ -26,7 +26,7 @@ R-006 候选 A 已获批准并落地：`config/exit-early-probes.json` 定义 st
 - 5 笔全部自动返回 → 锁定 MMIO 读，转查 MDP 上电/时钟门控与 R-004 映射时序；
 - 任一笔挂死 → 锁定复位出口，改走 warm reset、BootShim 兜底或不再主动复位。
 
-**当前阻塞构建**：宿主把 `C:\WINDOWS\system32\wsl.exe` 列入 Command Security 的程序黑名单，本会话无法调用；Windows 侧无 clang，`build_enuma_firmware.py` 与 `check_scanout_*` 主机/AArch64 资格脚本都必须在 WSL 内运行。解除该黑名单后可在本会话内完成构建、打包、审计与实测；否则需在 WSL 终端代跑 operations 文档中的那一条命令。
+**候选已构建（2026-10-24 17:12）**：`ENUMA_DIAG_STAGE=10`，FD `95cd88f9e2c156f65b23ce640cd521231f1f1b96c2d87505460ead3070e4fd51`，Boot v3 镜像 `a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517`（3153920 字节）。构建/FD 审计/Boot v3 回环三项通过，30 个 OEM PE/DEPEX 未变，省略 CPRDxe/DisplayDxe/UFSDxe 与失败笔一致。尚未实机。构建期修复了三处环境问题（缺 tomli、固件仓三个子模块未初始化、staging 的 `Common/Mu` 仍指向 nuwa 参考树的旧链接），均不影响固件内容。
 
 断电冷启动那一半不再执行：热状态已证明设备干净，冷启动不能提供额外区分力。已冻结镜像（step22 正向、stage23-control 及未执行的正互补）不重试。
 

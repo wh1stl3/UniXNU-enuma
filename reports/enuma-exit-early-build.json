@@ -1,0 +1,37 @@
+{
+  "scope": "R-006 candidate A build: early stop point with no display MMIO and no wait",
+  "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
+  "firmware_source_changed": false,
+  "build_command": "build_enuma_firmware.py --stop-stage 10 --stop-delay 2 --dispatch-ordinal 1 --detail-point 13 --diagnostic-simplefb --jobs 8",
+  "defines": {
+    "ENUMA_DIAG_STAGE": "10",
+    "ENUMA_DIAG_DELAY_US": "2000000",
+    "ENUMA_DIAG_DISPATCH_ORDINAL": "1",
+    "ENUMA_DIAG_DETAIL_POINT": "13",
+    "ENUMA_DIAG_SIMPLEFB": "1",
+    "ENUMA_DIAG_GOP_QUERY": "0",
+    "ENUMA_DIAG_GOP_STEP": "0",
+    "ENUMA_DIAG_GUID_ONLY": "0",
+    "ENUMA_DIAG_DISPATCH_FALLBACK": "0"
+  },
+  "fd_sha256": "95cd88f9e2c156f65b23ce640cd521231f1f1b96c2d87505460ead3070e4fd51",
+  "image_sha256": "a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517",
+  "image_bytes": 3153920,
+  "kernel_bytes": 3145920,
+  "shim_bytes": 192,
+  "checks": [
+    {"check": "official backend and patch reversion", "result": "pass"},
+    {"check": "30 native PE/DEPEX payloads unchanged; omissions CPRDxe/DisplayDxe/UFSDxe", "result": "pass"},
+    {"check": "192-byte BootShim plus audited 3 MiB FD", "result": "pass"},
+    {"check": "boot v3 roundtrip", "result": "pass"}
+  ],
+  "why_no_display_mmio": "EnumaStageCheckpoint(10) is invoked immediately before CoreDispatcher() in DxeMain.c, so no DXE driver has been dispatched when the reset fires; SimpleFbDxe is packaged but never executed, and 0x0ae00000..0x0ae84207 is never read",
+  "not_the_same_source_as_step20": "detail point 13, no dispatch GUID, no completion fallback and no GOP query are forced by the backend's stage!=13 mutual exclusion; all of those paths are only reachable after stage 13",
+  "qualification_gap": "the ASan/AArch64 counter-object checks apply to the scanout probe headers, which are not executed here; no new firmware code was added, so no new host qualification was required beyond the build and FD audit",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false,
+  "partition_writes": false,
+  "hardware_ready": false,
+  "interpretation": "候选已构建并通过既有构建/FD/Boot v3审计,尚未实机。stage10保证不读取任何显示MMIO,因此本笔只检验MicroSecondDelay加ResetCold出口是否可用。"
+}
