@@ -1,3 +1,9 @@
+# D-167当前：R-016批准A单笔上机，尚未执行
+
+用户明确“批准上机”。仅镜像29b84e1f…8fa72bd4的一次A/detail15临时boot，先读STATUS和NEED-REVIEW R-016。即时Android/备份/相机检查通过，主机新增断开后重连判定与精确时间戳；全部文档/源码发布后运行scripts/capture_display_boundary_trial.py --execute。不得自动发B或重复A。超时停止追加，恢复并更新当前文档。
+
+以下为D-166及更早背景；当前批准和实时状态以STATUS为准。
+
 # enuma交接提示词：D-166新增二进制证据与A候选
 
 优先执行docs/STATUS.md和docs/HANDOFF.md的D-166当前顺序。已完成两份离线审计：docs/operations/2026-10-25-handoff-contract.md与2026-10-25-native-display-abi.md；工具scripts/audit_display_handoff.py，机器证据reports/enuma-display-handoff-audit.json。A/detail15已经离线构建并归档，见reports/enuma-display-boundary-qualification.json，未上机。先发布文档和完成即时门禁，再判断执行；不直接跳到B或补节点/运行时stub。

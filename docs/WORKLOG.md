@@ -350,3 +350,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-25 · 公开资料路线复审落地：固定MiCode 52a2f18/设备树43b11af、LineageOS 6b34d24、edk2-msm e195262及社区设备树0d41d4d；核对SimpleFb继承行为、splash SMMU生命周期、双DSI C-PHY、KTZ8866板级接线和Android blob适用边界。发现当前源码scheduler/DTB扩展HOB恢复的区域名称缺口，未冒充二进制或实机证据。D-164更新STATUS/HANDOFF/交接词/README及支线方案；新增operations/2026-10-25-public-source-route-review.md。未构建/访问设备/实测，无源码与内存字段变更，文档未提交推送。
 
 2026-10-25 · D-166推进：scripts/audit_display_handoff.py绑定原始XBL/ABL/R-014/vendor_boot/FDT，真实PE和调用审计通过，篡改调用指令/截断PE/截断FDT负例均拒绝。两份专项审计落地。A构建首次reference预检拒绝，改固定firmware检出后通过；Windows AOSP打包/回读通过，scripts/qualify_display_boundary.py核对实际Core宏/常量及产物所有权，另审point15调用先于CoreStartImage、延时/复位出口。镜像29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4，FD776437b5a5eaf1939399fabfc4ec599cb9f58a542de29a2a1f66fc500b10f10d，证据out/display-entry-boundary/pre-entry-aa9ec66及reports/enuma-display-boundary-qualification.json。无新设备动作/硬停/批准；原参考和递归脏状态保留。
+
+2026-10-25 · af913ca已推送且远端一致。用户批准R-016 A单笔；out\device-tests\20261025T020804-recovery-reconciliation.json核验Android/root/A槽/解锁及双分区设备/备份摘要通过。相机原图/旋转图准备通过。主机断开重连守卫四轨迹检查通过，candidate与原厂源码不变；当前等待本轮文档和主机工具发布后执行。

@@ -5,6 +5,7 @@ one Android enuma, checks image/backup digests, and records only redacted data.
 If reset returns to fastboot, rechecks identity and normally reboots Android.
 """
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 import shlex
@@ -41,6 +42,11 @@ def fastboot_value_matches(result, variable, expected):
         if separator and key == variable:
             values.append(value.strip())
     return result.returncode == 0 and 'FAILED' not in output and values == [expected]
+
+
+def observe_fastboot_return(present, disconnected):
+    """A residual enumeration after `boot` is not a reset-return event."""
+    return (not present or disconnected), (present and disconnected)
 
 
 def main():
@@ -122,17 +128,27 @@ def main():
         time.sleep(1)
     else: raise ValueError('selected enuma absent in fastboot')
     fastboot_identity()
-    state['phase']='temporary-boot-issued';state['issued_at']=time.strftime('%Y-%m-%d %H:%M:%S');save()
     before=time.monotonic()
+    state['phase']='temporary-boot-issued';state['issued_at']=time.strftime('%Y-%m-%d %H:%M:%S')
+    state['issued_at_utc']=datetime.now(timezone.utc).isoformat()
+    state['issued_monotonic']=before;save()
     r=invoke(FASTBOOT,['-s',serial,'boot',str(image)],30)
     state['boot_returncode']=r.returncode;state['boot_output']=(r.stdout+r.stderr).decode(errors='replace')
+    state['boot_command_return_seconds']=round(time.monotonic()-before,3)
+    state['boot_command_returned_at_utc']=datetime.now(timezone.utc).isoformat()
     (out/'fastboot-boot.txt').write_text(state['boot_output']);state['phase']='observing-reset-return';save()
     print('Temporary boot command returned '+str(r.returncode),flush=True)
     if r.returncode: raise ValueError('boot command failed; recover normally from fastboot')
     rebooted_fastboot=False
+    disconnected=False
     deadline=time.monotonic()+75
     while time.monotonic()<deadline:
-        if not rebooted_fastboot and any(l.split() and l.split()[0]==serial for l in invoke(FASTBOOT,['devices']).stdout.decode().splitlines()):
+        present=any(l.split() and l.split()[0]==serial for l in invoke(FASTBOOT,['devices']).stdout.decode().splitlines())
+        was_disconnected=disconnected
+        disconnected,returned=observe_fastboot_return(present,disconnected)
+        if disconnected and not was_disconnected:
+            state['fastboot_disconnect_observed_seconds']=round(time.monotonic()-before,3);save()
+        if not rebooted_fastboot and returned:
             state['fastboot_return_seconds']=round(time.monotonic()-before,3);fastboot_identity()
             r=invoke(FASTBOOT,['-s',serial,'reboot'])
             if r.returncode: raise ValueError('normal recovery reboot failed')

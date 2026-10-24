@@ -20,8 +20,8 @@
       "device_and_backup_match": true
     }
   ],
-  "prior_phase": "manual-recovery-needed",
-  "prior_state_sha256": "7930b8b2a238b6606e4a64a494f30ffa9d7dd22861f99f55d38ecf4c9eee4566",
+  "prior_phase": "recovered-android-boot-complete",
+  "prior_state_sha256": "4f32151e0f626e3eb554bb3575c54e5aed3a7a9ee85c605375949d99a48599f2",
   "failed_trial_preserved": true,
-  "evidence": "out\\device-tests\\20261025T012053-recovery-reconciliation.json"
+  "evidence": "out\\device-tests\\20261025T020804-recovery-reconciliation.json"
 }

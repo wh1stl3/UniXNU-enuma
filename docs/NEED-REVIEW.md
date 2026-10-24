@@ -1,3 +1,9 @@
+## R-016 · A/detail15单笔临时启动（本轮approved）
+
+来源：用户明确“批准上机”；承接D-166候选，精确镜像SHA256 29b84e1fac13caa3780f85ef1d1a21e90b6bf061553adfbd277b1c0c8fa72bd4。仅一次临时fastboot boot，在DisplayDxe CoreStartImage调用前设置point15/2秒门，带7秒dispatcher完成fallback；不批准B或原样重试。候选、资格与判读见STATUS、D-166/D-167。
+
+即时Android/root/A槽/解锁/设备及备份摘要和相机已核对；全部文档及主机观测修订提交推送、干净/远端检查后执行。75秒无返回停止追加并恢复；有界临时探针例外、既有在场恢复条件维持。未知时不宣称门命中，不扩大像素/内存/verified/分区批准。
+
 ## D-166当前补充（2026-10-25）
 
 交接契约和原厂ABI离线审计完成，A/detail15新候选已构建、审计和独立归档但未上机。详见STATUS与reports/enuma-display-boundary-qualification.json。当前无需新人工按键，无实时设备状态采集；实机前仍按原规则落实发布和即时门禁。本轮未更改任何批准范围；内存/verified/分区门禁保持，R-015不执行。此前“未构建/文档未提交”只表示历史阶段，发布结果以Git记录为准。
