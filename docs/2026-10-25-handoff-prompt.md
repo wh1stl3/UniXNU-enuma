@@ -4,7 +4,7 @@
 
 当前主线改为先离线审计ABL→BootShim→UEFI的continuous-splash交接契约；原厂DisplayDxe保留为有界支线。先输出实际FDT/显示生命周期证据与原厂PE真实调用/ABI清单，再按缺口选择候选，detail15/detail13不再自动排在离线审计之前。详见[公开资料路线复审](operations/2026-10-25-public-source-route-review.md)。
 
-新静态发现：enuma配置EnableMultiThreading/EnableDisplayThread=1，但当前GetXblHobAddresses只识别FD Reserved/FD_Reserved，板级内存表无此名称；以该表调用此路径不会恢复scheduler/DTB扩展HOB地址。这不证明实机挂点或DisplayDxe必然使用该ABI；需绑定实际PE/SEC证据。不得直接改名、加内存区、关线程或补stub来冒充修复。
+新静态发现（Codex 提出，D-165 已逐条本地核实）：enuma配置EnableMultiThreading/EnableDisplayThread=1（`ConfigurationMapLib.c` 29/34），但当前GetXblHobAddresses只识别FD Reserved/FD_Reserved（`XblProtocols.c` 113/114），板级内存表无此名称（只有Sched Heap/Display Reserved/UEFI FD，见`MemoryMapLib.c` 14/15/19）；以该表调用此路径不会恢复scheduler/DTB扩展HOB地址。`EFIKernelInterface.h` 445/446/622 有真实ThreadCreate/ThreadResume/InitLock，**不可stub替代**。这不证明实机挂点或DisplayDxe必然使用该ABI；需绑定实际PE/SEC证据。不得直接改名、加内存区、关线程或补stub来冒充修复。
 
 同SoC edk2-msm有继承帧缓冲实现，MiCode/LineageOS提供SMMU/split-DSI和KTZ8866依据；这些实现不证明本机scanout有效。暂不重写完整显示栈；若证实仅背光等窄缺口，再复用真实协议实现。D-163四项更正继续有效。此轮仅研究和文档，未构建/访问设备/实测，未提交推送，未扩大授权。
 
