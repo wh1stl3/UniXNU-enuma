@@ -39,6 +39,12 @@ def audit_value_code(payload, build, out):
         addresses=[0xae00000,0xae05014,0xae07014,0xae09014,0xae0b014,0xae25014,0xae27014]
         if sorted(reads)!=sorted([hex(0xae6b800),hex(addresses[profile['register_index']])]):
             raise ValueError('register calibration target loads differ: '+repr(reads))
+    if profile['source']=='raw':
+        # The raw transport is the priming-free twin of register: exactly one
+        # target load, and the priming address must not appear at all.
+        addresses=[0xae00000,0xae05014,0xae07014,0xae09014,0xae0b014,0xae25014,0xae27014]
+        if reads!=[hex(addresses[profile['register_index']])]:
+            raise ValueError('raw calibration must be one target load with no priming: '+repr(reads))
     compiled=build.get('value_probe_compiled_contract',{})
     if not compiled.get('actual_defines_checked'):
         raise ValueError('actual value compiler defines were not checked')

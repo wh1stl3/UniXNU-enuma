@@ -28,8 +28,13 @@ def check_baseline(plan):
     trials = plan['trials']
     if not trials:
         raise ValueError('empty baseline plan')
-    if any(t.get('role') != 'constant' or t.get('code') != 0 for t in trials):
-        raise ValueError('baseline plan must be constant code 0 only')
+    # One profile, repeated. constant-0 measures the floor with no display
+    # access at all; raw measures a single unprimed target read. Mixing them, or
+    # mixing candidates, would wipe out the denominator.
+    if len({t.get('role') for t in trials}) != 1 or trials[0].get('role') not in ('constant', 'raw'):
+        raise ValueError('baseline plan must repeat one constant-0 or one raw read profile')
+    if any(t.get('code', 0) != 0 for t in trials):
+        raise ValueError('baseline plan must not encode a constant code')
     if len({t['id'] for t in trials}) != len(trials):
         raise ValueError('duplicate trial IDs')
     # One candidate, repeated. A baseline that mixed images would have no

@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "02f8d31dfa520a03fe9c7384bee62e67e265871afe461b309050327d7be3ba76",
+  "fd_sha256": "e9c2181716a486de0cb7552bbae43fa469c95a6bf398f45a3836ffc03d20a89c",
   "fd_bytes": 3145728,
   "file_count": 79,
   "matched_oem_modules": [
@@ -166,20 +166,22 @@
   "hardware_execution": false,
   "value_transport_code": {
     "profile": {
-      "source": "constant",
+      "source": "raw",
       "constant_code": 0,
-      "register_index": 0,
+      "register_index": 1,
       "shift": 0,
       "extra_base_seconds": 0,
       "seconds_per_code": 3
     },
-    "provider_pe_sha256": "35086d16cf6ea7f4cc49b948748c3e88ead9e22a53f72f51eefc1d0e074a3c64",
-    "static_display_reads": [],
+    "provider_pe_sha256": "532d8a285a96519b66f0d4c2f9c44a6ba12773dfb4aae351d671e8f2bc7eaad3",
+    "static_display_reads": [
+      "0xae05014"
+    ],
     "static_display_stores": [],
     "compiled_contract": {
-      "compiler_makefile_sha256": "513df49e69425648bd74d175a833bb9cc494f8ec3c527554be506ccc86c9b1a8",
-      "source_sha256": "86f3f3a0355f79425bdb55bb1018e9e88574b7a5e40aadeada302cdfa9106c21",
-      "header_sha256": "9b8280675b1fb1d258ce38ea55117bcd56e05ab15e18d4a87cb09805238a5c6b",
+      "compiler_makefile_sha256": "a02cccafb432d415d2529dd62db552c6ccc90014e1a991a40516bb02f03ca608",
+      "source_sha256": "57222a5d1e91323eb8e7a073f5ca29db460b8c27bd9e9fe96c52d767ea090c6f",
+      "header_sha256": "5d25e723abbe44bb9743186441680461a17553341e6882a1b4b9812e679b1f5f",
       "actual_defines_checked": true
     },
     "hardware_execution": false,

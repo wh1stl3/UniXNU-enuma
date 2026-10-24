@@ -80,10 +80,10 @@ def validate_plan(plan, root):
         expected={'source':trial['role'],'constant_code':trial.get('code',0),
                   'register_index':trial.get('index',0),'shift':trial.get('shift',0),
                   'extra_base_seconds':0,'seconds_per_code':3}
-        if value!=expected or trial['role'] not in ('constant','register'):
+        if value!=expected or trial['role'] not in ('constant','register','raw'):
             raise ValueError('value profile does not match trial')
         defines=build['firmware_configuration']['defines']
-        wanted={'ENUMA_VALUE_SOURCE':str(1 if trial['role']=='constant' else 2),
+        wanted={'ENUMA_VALUE_SOURCE':{'constant':'1','register':'2','raw':'3'}[trial['role']],
                 'ENUMA_VALUE_CODE':str(expected['constant_code']),'ENUMA_VALUE_INDEX':str(expected['register_index']),
                 'ENUMA_VALUE_SHIFT':str(expected['shift']),'ENUMA_DIAG_GOP_STEP':'0','ENUMA_DIAG_GOP_QUERY':'1',
                 'ENUMA_DIAG_STAGE':'13','ENUMA_DIAG_DETAIL_POINT':'16','ENUMA_DIAG_DELAY_US':'2000000',

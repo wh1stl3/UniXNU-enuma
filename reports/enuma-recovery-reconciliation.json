@@ -20,8 +20,8 @@
       "device_and_backup_match": true
     }
   ],
-  "prior_phase": "observing-reset-return",
-  "prior_state_sha256": "a8fed12dfe05c0ba034f1350fed2698d1fa089a5ebdd286f6be4359f3b8d6b94",
+  "prior_phase": "manual-recovery-needed",
+  "prior_state_sha256": "5140e5046a8d19d5f78b26e82de95a0317789a99cec57b30a5b40c46c6ed5623",
   "failed_trial_preserved": true,
-  "evidence": "out\\device-tests\\20261024T233826-recovery-reconciliation.json"
+  "evidence": "out\\device-tests\\20261024T235301-recovery-reconciliation.json"
 }

@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def capture(name, image=None):
-    if name not in ('zero','known3','mdp-low','baseline'):
+    if name not in ('zero','known3','mdp-low','baseline','raw'):
         raise ValueError('unsupported bounded candidate name')
     if image is None:
         raise ValueError('the packaged image of this candidate must be given')
@@ -29,12 +29,15 @@ def capture(name, image=None):
     audit=json.loads((ROOT/files['audit']).read_text())
     if not build['complete'] or build['fd_sha256']!=audit['fd_sha256']:
         raise ValueError('build/audit mismatch')
-    # The archived qualification must describe this candidate. Without this
-    # check a capture taken after a later build silently keeps the wrong
-    # firmware, raw and value profile.
-    expected_code={'zero':0,'known3':3,'mdp-low':0,'baseline':0}[name]
+    # The archived qualification must describe this candidate, both in the
+    # constant code and in the exact transport source. Without this check a
+    # capture taken after a later build silently keeps the wrong firmware, raw
+    # and value profile.
+    expected_source, expected_code = {
+        'zero': ('constant', 0), 'known3': ('constant', 3), 'mdp-low': ('register', 0),
+        'baseline': ('constant', 0), 'raw': ('raw', 0)}[name]
     profile=build.get('value_probe') or {}
-    if profile.get('constant_code')!=expected_code or profile.get('source') not in ('constant','register'):
+    if profile.get('constant_code')!=expected_code or profile.get('source')!=expected_source:
         raise ValueError('archived build does not describe this candidate: '+str(profile))
     for key,relative in files.items():
         dest=target/({'raw':'candidate.raw','payload':'package.json'}.get(key,key+'.json'))
@@ -87,7 +90,13 @@ def assemble_baseline(name, count):
         if not (ROOT/relative).is_file():
             raise ValueError('candidate is not fully archived: '+relative)
     sha = {key: hashlib.sha256((ROOT/relative).read_bytes()).hexdigest() for key, relative in paths.items()}
-    trials = [dict(id=f'baseline{i+1}', role='constant', code=0, **paths, sha256=sha) for i in range(count)]
+    # Take the role from the archived build, not from the candidate name, so a
+    # plan can never claim constant behaviour for a read candidate.
+    profile = json.loads((ROOT/paths['build']).read_text())['value_probe']
+    role = profile['source']
+    fields = {'id': None, 'role': role, 'code': profile['constant_code'],
+              'index': profile['register_index'], 'shift': profile['shift']}
+    trials = [dict(fields, id=f'baseline{i+1}', **paths, sha256=sha) for i in range(count)]
     plan = {'schema': 1, 'seconds_per_code': 3, 'trials': trials}
     from run_value_probes import validate_plan
     from run_hang_baseline import check_baseline
@@ -98,12 +107,12 @@ def assemble_baseline(name, count):
         raise ValueError('refuse to change an existing baseline plan')
     atomic_json(output, plan)
     atomic_json(ROOT/f'reports/enuma-hang-baseline-{name}.json', plan)
-    print(f'PASS: {count} identical zero-read trials bound to {sha["image"][:16]}')
+    print(f'PASS: {count} identical {role} trials bound to {sha["image"][:16]}')
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--capture',choices=('zero','known3','mdp-low','baseline'))
+    p.add_argument('--capture',choices=('zero','known3','mdp-low','baseline','raw'))
     p.add_argument('--image',type=Path,help='the packaged boot image of this candidate')
     p.add_argument('--baseline',metavar='NAME',help='assemble a repeat plan for one archived candidate')
     p.add_argument('--baseline-trials',type=int,default=8)

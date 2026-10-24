@@ -14,9 +14,9 @@ sys.path.insert(0, str(ROOT/'scripts'))
 import run_hang_baseline as baseline
 
 
-def plan(count=3, code=0, image_sha='same'):
+def plan(count=3, code=0, image_sha='same', role='constant'):
     def trial(index):
-        return dict(id=f'baseline{index+1}', role='constant', code=code,
+        return dict(id=f'baseline{index+1}', role=role, code=code,
                     image='out/value-transport/baseline/candidate.img',
                     raw='out/value-transport/baseline/candidate.raw',
                     build='out/value-transport/baseline/build.json',
@@ -27,11 +27,20 @@ def plan(count=3, code=0, image_sha='same'):
 
 
 class HangBaselineTests(unittest.TestCase):
-    def test_rejects_non_zero_code(self):
-        # R-009 is a zero-read measurement; a coded transport would reintroduce
-        # the very timing the baseline is meant to be independent of.
-        with self.assertRaisesRegex(ValueError, 'constant code 0'):
+    def test_rejects_encoded_constant(self):
+        # A coded constant would reintroduce the timing the baseline measures.
+        with self.assertRaisesRegex(ValueError, 'encode a constant'):
             baseline.check_baseline(plan(code=3))
+
+    def test_accepts_one_repeated_raw_read(self):
+        # The read-side arm of the comparison: same plan shape, one unprimed read.
+        baseline.check_baseline(plan(role='raw'))
+
+    def test_rejects_mixed_roles(self):
+        candidate = plan(count=2, role='raw')
+        candidate['trials'][1]['role'] = 'constant'
+        with self.assertRaisesRegex(ValueError, 'one constant-0 or one raw'):
+            baseline.check_baseline(candidate)
 
     def test_rejects_mixed_candidates(self):
         candidate = plan(count=2)
