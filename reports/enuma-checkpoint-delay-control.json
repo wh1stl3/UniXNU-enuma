@@ -1,0 +1,20 @@
+{
+  "scope": "control experiment: is the reset actually produced by EnumaStageCheckpoint, or by a BDS timeout",
+  "question": "the stage-10 reads inserted via patches never appear in the compiled objects, which raised the possibility that ENUMA_DIAG_STAGE is 0 in those modules and that every 'clean return' is really a fixed BDS timeout rather than a checkpoint reset",
+  "method": "same image except ENUMA_DIAG_DELAY_US, four trials each side, return time measured to adb",
+  "delay2": {"image_sha256": "a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517", "adb_seconds": [15.918, 16.986, 16.988, 17.007], "mean": 16.725, "range": 1.089},
+  "delay7": {"image_sha256": "667b0ce0128d61e336fb1b758dffa6412bc0ffe8c7de059d5a72e6cf39e89053", "adb_seconds": [21.259, 21.277, 21.284, 21.293], "mean": 21.278, "range": 0.034},
+  "delta_seconds": {"mean": 4.553, "nominal": 5.0},
+  "conclusion": "the reset is produced by EnumaStageCheckpoint and ENUMA_DIAG_DELAY_US is honoured; a fixed BDS timeout could not shift by 4.55 s in lock step with the configured delay, and the 0.034 s spread across four delay7 trials rules out coincidence",
+  "consequences": [
+    "ENUMA_DIAG_STAGE is non-zero in the DxeCore compile units, so the earlier hypothesis that the macro is 0 there is wrong",
+    "the R-006 conclusion (0 MMIO reads clean vs 2 reads stalled) keeps its force, because the resets it relied on really were checkpoint resets",
+    "the timing-based gates used across the 23 steps remain methodologically valid",
+    "the missing reads in DxeMain.obj and Dispatcher.obj must have a different cause: either those objects were not rebuilt from the patched source, or the inserted block sits in a region the compiler discards"
+  ],
+  "next": "decide whether the object files are stale by introducing a deliberate compile error in the same translation unit; a successful build would prove the unit is not being recompiled",
+  "hardware": "4 temporary boots, all returned automatically, partitions unchanged",
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false
+}
