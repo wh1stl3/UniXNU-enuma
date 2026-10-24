@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "firmware_commit": "012715b070a583ae636a3a33419ea3843ad7f2ad",
+  "transport": "core-warning-v2",
+  "profiles": [
+    {
+      "tag": "geometry20-control",
+      "step": 19,
+      "query": 1,
+      "variant": "geometry20-control-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "geometry20-contained",
+      "step": 20,
+      "query": 1,
+      "variant": "geometry20-contained-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    },
+    {
+      "tag": "geometry20-unproven",
+      "step": 20,
+      "query": 2,
+      "variant": "geometry20-unproven-queue1-stage13-delay2-point16-guiddcfd1e6d-simplefb-metadata"
+    }
+  ],
+  "host_report": "enuma-scanout-geometry-host.json",
+  "maximum_dsi_reads": 250,
+  "wait_calls_max": 2,
+  "wait_microseconds": 100000,
+  "maximum_frame_delta": 64,
+  "pixel_access": false,
+  "mmio_writes": false,
+  "new_mapping": false
+}

@@ -45,3 +45,7 @@ configuration: refused (query1-query2 ADB 5.297秒)；progress: refused (query1-
 同源step18对照和step19正/互补时序支持：major/minor6.0下首个合法描述的非virtual SSPP在某CTL/LM中staged，CTL选择的同一活动DSI两窗各递增1..64；描述/选中staging/接口掩码/时序配置保持。仅稳定配置关联和所选接口推进，不证明LM实际输出、fetch成功或物理/可见路由。 query1-query2 ADB差-4.297秒包含启动噪声，不能当精确频率或实测100ms。
 
 稳定挂接关联获得支持，降低“首候选完全未挂接”嫌疑，下一步优先核对LM实际输出/pingpong/DSC、混合裁剪和fetch/地址可见性，再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。
+
+## 几何检查实施前排序
+
+f0cef6f稳定staging/所选DSI递增支持后，“首候选完全未挂接”和“整个接口停摆”嫌疑降低。中等置信工作假设转向混合裁剪/遮挡、LM实际输出/pingpong/DSC连接，以及fetch/地址可见性。先用012715b step20区分源/输出尺寸不匹配和关联LM矩形越界；这是只读配置检查，实际像素/fetch与后段关系仍需证据。如果几何通过则降低简单缩放/越界解释，不能据此排除遮挡或scaler模式。若取得该候选像素实际被取数且到达面板的证据，应进一步下调这些假设；Boot v3仍无必要切换。固定小米52a2f18 sde_hw_sspp.c和sde_hw_lm.c及原enuma FDT契约见reports/enuma-scanout-geometry-sources.json。

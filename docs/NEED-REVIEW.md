@@ -1,6 +1,6 @@
 # NEED-REVIEW
 
-当前门禁按AGENTS及既有批准。用户继续指令下f0cef6f step19仅既有R-004映射内读候选staging和所选DSI双窗，最多241读/两次既有Stall，无MMIO/像素/新内存/映射/verified/破坏分区变更，无新增待批准项。R-005 consumed。每笔前文档提交推送与即时身份/备份/恢复保持；实际结果见STATUS。
+当前门禁按AGENTS及既有批准。012715b step20仅既有R-004映射内读首候选SSPP/LM输出几何，保留step19所选DSI递增；最多250读/两次既有Stall，无像素/MMIO写入、新内存/映射/verified或破坏分区变更，无新增待批准项。R-005 consumed。逐笔文档提交推送和即时身份/备份/恢复保持，结果见STATUS。
 
 ## R-001 · 第一阶段 DarwinBoot owned-memory 预算
 

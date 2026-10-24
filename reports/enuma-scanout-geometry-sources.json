@@ -1,0 +1,35 @@
+{
+  "scope": "Pinned Xiaomi geometry packing and exact saved enuma LM offsets; no device access.",
+  "all_passed": true,
+  "source_commit": "52a2f180865f8368828985d6384130acd093fa93",
+  "lm_url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_lm.c",
+  "lm_sha256": "4e9cec8f99af86c29000b274b7a8958daa4edae85fae85eda3034b8d1086a08f",
+  "sspp_source": {
+    "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+    "commit": "52a2f180865f8368828985d6384130acd093fa93",
+    "path": "techpack/display/msm/sde/sde_hw_sspp.c",
+    "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_sspp.c",
+    "sha256": "b981480d1e1008fc9c7fe6722eb7e140db143d067db9374dbe1f56a254359040",
+    "license": "GPL-2.0-only; cached reference, no code imported"
+  },
+  "saved_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "mixer_offsets": [
+    "0x45000",
+    "0x46000",
+    "0x47000",
+    "0x48000",
+    "0x49000",
+    "0x4a000"
+  ],
+  "mixer_size": "0x320",
+  "mmio_reads_max": 250,
+  "wait_calls_max": 2,
+  "mmio_writes": false,
+  "pixel_access": false,
+  "new_mapping": false,
+  "limitations": [
+    "configured 1:1 rectangle containment only",
+    "no scaler/decimator, exclusion, alpha or occlusion proof",
+    "no physical LM/pingpong/DSC/fetch/visible-output proof"
+  ]
+}

@@ -29,5 +29,6 @@
   "maximum_frame_delta": 64,
   "pixel_access": false,
   "mmio_writes": false,
-  "new_mapping": false
+  "new_mapping": false,
+  "source_lock": "source-history/uefi-f0cef6f.lock.json"
 }
