@@ -36,3 +36,9 @@ FAT publisher/完整ADT/donor预链接可独立离线准备；实际XNU入口、
 - DMA/IOMMU：https://github.com/LineageOS/android_kernel_xiaomi_sm8250/blob/6b34d24765327d746074c8e53b5ad0d24a51acc7/drivers/gpu/drm/msm/msm_gem.c
 - 社区elish/enuma设备树0d41d4d2，仍有elish专用配置，不能当本机完整事实：https://github.com/xiaomi-enuma-dev/android_device_xiaomi_elish_enuma/tree/0d41d4d29ae7329a454c6bb4e4b8c66331177249
 - MiCode原有enuma DTS/kernel锁43b11af4/52a2f18维持。专有firmware/XML按本机来源锁；Android ELF HAL不可直接用作Darwin驱动。仅公开实现缺失接口再逆向PE/ELF，不补空协议冒充实现。
+
+## 23:04之后的实测/恢复对账（取代早期实施计划中的已过期状态）
+
+实际构建/FD/打包资格已完成，两档固件74598df；zero1/known3分别16.991/25.503秒返回，zero2在22:52:12发出后75秒无自动返回。8.512秒差值仅初步支持延时响应；校准失败，计划冻结，不做寄存器解码。最新独立恢复证据out/device-tests/20261024T230449-recovery-reconciliation.json及reports/enuma-recovery-reconciliation.json确认Android完成/root/A槽/解锁及设备/备份双分区摘要一致。失败记录不改，实际人工动作和时间未知。
+
+Review发现原STATUS/HANDOFF与人工待办未同步硬停、D-148/b54bb2b把初步支持和挂点推断说得过强；本轮D-149更正并对齐全部入口。不能称公共路径已安全或zero2定位到驱动返回；驱动内复位新增依赖有混杂因素。禁止原样重试失败候选，先完成新隔离设计及其来源资格。三份在途firmware改动保留且未资格，不纳入本次文档提交。本轮无新构建/设备启动。

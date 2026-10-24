@@ -6,9 +6,9 @@
 
 源码：设备仓维护设备契约、打包、实机恢复与审计；firmware/是独立uefi-enuma固定提交子模块，构建实现仅在固件仓维护。所有中间产物进out/，上游和nuwa参考只读。来源固定在config/sources.lock.json及config/uefi-source.lock.json。
 
-当前Android/root/原A槽/解锁及boot/vendor_boot与备份匹配；恢复证据见reports/enuma-recovery-reconciliation.json。新实机动作前落实文档并提交推送；失败停止追加，恢复核验后继续离线分析，不原样重试失败镜像。
+2026-10-24 23:04之后已独立核验zero2超时后的Android/root/原A槽/解锁及boot/vendor_boot与备份匹配；恢复证据见reports/enuma-recovery-reconciliation.json。新实机动作前落实文档并提交推送；失败停止追加，恢复核验后继续离线分析，不原样重试失败镜像。
 
-新工具 scripts/run_value_probes.py --plan <qualification.json> --trial <id> 默认只做离线校验；--execute只允许单笔，不自动打包，不覆盖产物，不继续失败计划。先用无显示MMIO的0/3/0常量校准，之后才允许解码独立index/shift寄存器样本。精确参数与资格以当前状态和计划为准。
+新工具 scripts/run_value_probes.py --plan <qualification.json> --trial <id> 默认只做离线校验；--execute只允许单笔，不自动打包，不覆盖产物，不继续失败计划。首轮无显示MMIO的0/3/0已执行，第三笔zero2超时导致校准失败，原计划冻结；不得解码或原样重试失败镜像。下一步先审新隔离方案，已有延时响应只是初步支持。firmware存在三份未提交在途代码，不属于已资格74598df。精确参数与资格以当前状态和计划为准。
 
 复用UniXNU的DarwinBoot、ArmCpu/ArmDTPlatform、NativePrelink/NativeRamBlock及载荷工具；LineageOS/MiCode提供SM8250/enuma的显示、SMMU、UFS与触控事实。sheng的SM8550参数与实机结果不继承；Android HAL不能直接加载进iPadOS。
 

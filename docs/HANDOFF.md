@@ -1,37 +1,50 @@
-# 交接：校准诊断通道与显示访问隔离
+# 交接：zero2超时已恢复，旧计划冻结，在途隔离代码未资格
 
-2026-10-24 Asia/Shanghai。离线实现已完成，待检查与构建；未启动新候选。
+2026-10-24 23:04之后，Asia/Shanghai。本轮只读核验与文档对账；未构建或启动新候选，未写设备分区。
 
-## 设备与证据
+## 当前设备与恢复
 
-只读恢复核验已独立通过：enuma、Android boot_completed=1、root、原A槽、解锁；boot_a/vendor_boot_a 的设备和本地备份摘要均匹配原账本。证据 reports/enuma-recovery-reconciliation.json 与其 out/device-tests 回链。原21:06失败试验 result.json 保留，current.local.json 通过新核验更新为 recovered-android-boot-complete。此恢复事实不代表显示修复。
+enuma已恢复Android，主机独立核验boot_completed=1、root、原A槽、解锁，以及boot_a/vendor_boot_a设备和本地备份摘要匹配。证据 reports/enuma-recovery-reconciliation.json，原始证据 out/device-tests/20261024T230449-recovery-reconciliation.json。恢复的具体人工动作/发生时刻未独立记录，不推断。失败试验result.json未改，current.local.json通过新恢复证据更新为recovered-android-boot-complete。
 
-## 有效结论
+因此无需再次要求恢复按键；恢复不代表固件问题已解决。现有value transport计划仍冻结，不因恢复清空失败账本或原样重试失败镜像。
 
-- 还没有可见 GOP/白条闭环，未进入 XNU 或 iPadOS 用户态。
-- 旧 delay20 的显示取数宏未进入 DxeCore 编译选项，默认值为0；头文件还有未启用分支的 STAT 拼写错误。相关历史时序不得再解释成寄存器值。旧驱动内 vprobe1..7 每次也只取 bit4..7，且主机基线遗漏额外2秒。
-- detail16 在 GOP_QUERY 模式由精确返回 marker 在 CoreStartImage 返回后触发；不是 PE 入口前。不能沿用旧“上下文窗口已经定案”的解释。
-- 像素路径先执行 cache Sync(dc civac)和 CPU Read，再 Write；像素实验不返回不能定位为写指令挂死。数值范围检查不证明 CPU/SMMU 地址等价，也不能证明未上电或缺映射。
-- SimpleFb预读与部分成功有关联，未证明安全或一次性缺页机制。同一旧通道有失败记录，既往自动返回只保留为返回事实。
+## 最近实测及硬停
 
-## 新隔离候选与次序
+| 试验 | 实际发出时间 | ADB返回时间 | 结果 |
+| --- | --- | --- | --- |
+| zero1，常量0 | 22:49:52 | 16.991秒 | 自动回Android，root/分区核验通过 |
+| known3，常量3 | 22:50:59 | 25.503秒 | 自动回Android，root/分区核验通过 |
+| zero2，常量0 | 22:52:12 | 75秒观察期无自动返回 | runner退出2，停止追加，计划冻结 |
 
-新 value transport 使用独立 source/index/shift/code，不复用 step1..7；常量0无额外等待、常量3额外9秒，两者均不读显示MMIO、不做像素/cache访问。先按0/3/0同源校准，漂移>0.75秒或码点残差>0.75秒即拒绝解码；寄存器每码3秒、位移0..28独立选择。构建不等于实机通过。
+时间来自各result.json的issued_at；目录时间22:49:38/22:50:44/22:51:58是准备时间，不当作boot发出时间。zero2观察期限结束约22:53:27；没有单独事件时间戳，不把估算当精确硬停时刻。规则来源AGENTS“硬停当轮必须落实交接”及“接手后的通道校准与证据更正”。既往未及时对齐的当前文档，本轮补齐。
 
-主机工具默认离线校验，--execute每次只启动一笔；源码/文档干净且已推送，所有不可变FD/raw/image/构建/审计摘要绑定后才可运行；失败、模糊或中断冻结整个计划。下层恢复门禁保留。
+最后候选zero2与zero1镜像相同：SHA256 9b3c1df33c2fc5f0612cc0b669434607cf85547bed75c36c897603dee82a9ce1；FD bfb3d6a6018498ea1b94368b1d8a394983234b32d84368fdf0df49f41d1c1551。known3镜像357706af66517e7c1d7dac9629f55b1ee57e88b6701bfa4176315a3f4d3ace96；FD72d2b0a9384bdb7ba76b43b9c24bb69f42c8c65f1cf7eed27070df338300a3b2。构建固定固件74598dfa2b223716450de044caf937c4a30e51f5；精确资格见reports/enuma-value-transport-qualification.json和out/value-transport/。失败账本reports/enuma-value-transport-device.json保留。
 
-1. 完成主机/实际AArch64及FD审计、保存每份候选资格。
-2. 文档和来源锁提交推送、即时身份/备份/恢复核验后只测常量对照。首次无按键返回与已知延时响应后才能校准；回Android不能直接证明命中PASS门，需要已知码对照。
-3. 校准通过后再做最小显示寄存器读取；若失败停止追加，恢复并离线隔离。
-4. 之后分离描述符/Sync/CPU Read/Write，检查实际FDT、页表/GCD与SMMU。新像素写仍需具体单次审查。
-5. 复用现有FAT publisher、DarwinBoot、NativePrelink/ADT，再推进SM8250 UFS与用户态；不重写上游通用实现。
+## 可支持的结论与未知项
 
-## 来源与边界
+前两笔差8.512秒，对预期9秒残差0.488秒，符合0.75秒容差：这是符合预期的延时响应证据，不能称完整通道已校准或可靠。第三笔零码未返回，完整0/3/0校准失败，禁止解码寄存器。未执行任何新寄存器模式、像素实验或XNU启动。
 
-独立固件仓已从c45e52a快进到b63c9bd基线；后续新固件以config/uefi-source.lock.json为准。原Mu_Basecore递归脏状态保留，不使用reset/clean覆盖。UniXNU固定5fdbd5d；远端新HEAD仅作差异待审，不直接切换。
+常量helper没有显示MMIO/像素/cache访问，说明显示读取不是发生超时的必要条件；不证明整份固件没有其他设备访问。75秒无返回没有定位到某条指令，公共启动、驱动执行/返回、异常或复位出口均待隔离。历史stage成功不等于持续安全，三类嫌疑不构成互斥穷尽分类。一次成功一次失败也不能判定“首次成功后必挂”或bootloader残留。
 
-R-005 consumed；R-007像素单次已消耗，旧同号MMIO提案仅历史记录；R-008 retained-log/warm-reset pending，不启用。新内存字段、映射、verified和破坏性分区仍遵守AGENTS；本阶段不写像素/MMIO/分区、不启用保留日志，512MiB owned/51MiB heap/example=true/Boot v3不变。冻结的旧镜像不重试。
+旧delay20宏未进入编译参数，历史时序不能作为寄存器值；GOP_QUERY/detail16在CoreStartImage返回后匹配marker。像素函数先Sync/CPU Read再Write，像素超时不能认定store失败。旧硬件因果解释已由D-146/D-149取代，历史原始记录保留。
 
-目标 iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB。已有源平台内核最终链接、donor闭包规划；未emit预链接镜像。64MiB配置FAT未接publisher，NativeUfs的SM8550参数未启用，EnumaScreen仅主机/对象检查。TWRP/UART未验证；相机用于有显示输出/恢复动作，保留原图并按实际方向旋转。
+## 源码与发布边界
 
-接手顺序 AGENTS、STATUS、DECISIONS、NEED-REVIEW；操作细节见 operations/2026-10-24-takeover-calibration.md。不要按旧README或旧HANDOFF重跑失败镜像。当前候选摘要/执行结果以 reports/enuma-value-transport-qualification.json、reports/enuma-value-transport-device.json（若已生成）及 out/value-transport/ 为准。没有对应结果就写未执行。
+设备仓最新既有提交b54bb2b已推送；本轮文档提交号以Git后续记录为准。设备仓gitlink及锁、独立固件仓HEAD仍为74598df。firmware/有三份未提交在途改动：Resources/Scripts/build_enuma_firmware.py、patches/dispatch-detail-options.patch、patches/simplefb-gop-query.patch。本轮不改写、不提交这些代码，不声称它们已构建/审计/发布；设备源码校验必须拒绝此脏状态。独立固件仓Mu_Basecore原有递归脏状态也保留。新实机前必须先明确代码所有权、审查、锁定干净来源并完整重新资格，不能沿用旧候选报告。
+
+## 下一步与继续条件
+
+1. 保留冻结计划及原失败镜像，不以统计失败率为由原样重试。先离线审查在途隔离方案，设计有区分力的新检查点/异常或复位证据。
+2. 驱动内复位只能作为待审候选：新增库依赖/constructor会改变上下文，应先审副作用和编译/FD，不把内外两版本差异直接当唯一因果。更早检查点也需同源资格与自己的复位可靠性证据。
+3. 每个新候选完成主机/实际编译宏/FD/打包审计、精确摘要绑定，当前文档提交推送，确认现场恢复及即时身份/备份条件后，才能执行单笔。超时停止追加，恢复后继续离线分析。
+4. 常量重复校准通过后才考虑最小寄存器读；随后分离描述符、cache Sync、CPU Read和Write，并核对实际FDT、CPU映射与SMMU。
+5. FAT publisher/完整ADT/donor预链接可离线准备；继续复用上游通用实现，再适配SM8250 UFS和用户态。
+
+## 审查与系统里程碑
+
+R-005/R-007像素单次均consumed；R-008保留日志/warm reset pending，未启用。本轮不批准新像素/MMIO写、内存字段/映射、verified或破坏性分区操作。512MiB owned、51MiB heap、example=true、Boot v3不变。用户此前确认本轮可在场恢复，具体新设备动作前仍核对当时条件。
+
+目标iPadOS17.7.11/21H461、iPad7,1/j120ap、XNU10063.141.1/4KiB，UniXNU固定5fdbd5d。已有源平台内核最终链接与donor闭包规划，未emit预链接镜像；64MiB配置FAT未接publisher，SM8550 NativeUfs参数未启用。无可见GOP/白条闭环、未进XNU或iPadOS。TWRP/UART未验证。
+
+
+接手顺序AGENTS、STATUS、DECISIONS、NEED-REVIEW；专项记录operations/2026-10-24-takeover-calibration.md。不得从历史D-148或旧提交正文提取更强的“机制成立/挂点已定位”结论，当前以D-149为准。
