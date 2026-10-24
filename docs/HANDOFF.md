@@ -4,7 +4,7 @@
 
 ## 主判断与证据边界
 
-此前实测支持首候选staging关联、所选DSI双窗递增和1:1矩形包含，降低完全未挂接、接口停摆和简单尺寸越界嫌疑。本轮优先核对局部其他staging源、dim/color-fill和保守alpha配置。中等置信工作假设：若这些配置也通过，主查应转向LM实际输出链路及fetch/地址可见性；Boot v3解析仍低优先级。它们是可推翻假设，不能把配置状态当真实fetch或面板输出。
+保守混合配置未获支持，结合同源step20对照优先分离其他staging/边框、dim及BASE/混合模式，再判断是否需要检查真正遮挡；不把合法的其他alpha模式直接当错误。 R-005 consumed，不重放像素或盲写寄存器。 Boot v3解析仍低优先级。来源与证据强弱见下文及故障假设记录。
 
 ## 新实现及离线资格
 
@@ -30,11 +30,13 @@ blend21-control step20/query1：2026-10-24 15:28:59；recovered-android-boot-com
 
 blend21-single step21/query1：2026-10-24 15:30:40；recovered-android-boot-complete；ADB 21.5秒 / Android完成 35.953秒；用户无按键 True，独立恢复 True，原分区摘要 True。
 
-单源混合互补尚未齐备，未判定保守配置模式。
+blend21-unproven step21/query2：2026-10-24 15:32:36；recovered-android-boot-complete；ADB 17.141秒 / Android完成 32.344秒；用户无按键 True，独立恢复 True，原分区摘要 True。
+
+单源混合谓词refused，未取得合格的保守配置证据；不能直接认定遮挡或透明。拒绝可能来自其他/未知字段、边框/dim、合法的其他混合模式或继承门控/稳定性，需拆分。 query1-query2 ADB差4.359秒包含启动噪声，不能当精确频率或实测100ms。
 
 ## 下一步与恢复
 
-全部当前文档提交推送后，按即时身份/备份/恢复门禁临时boot blend21-unproven；受控返回、独立恢复及无按键确认后继续。
+保守混合配置未获支持，结合同源step20对照优先分离其他staging/边框、dim及BASE/混合模式，再判断是否需要检查真正遮挡；不把合法的其他alpha模式直接当错误。 R-005 consumed，不重放像素或盲写寄存器。
 
 用户可在场恢复，新摄像头保存原图并自行顺时针90度旋转后判读，必要前后截图；实际输出/判读变化/恢复操作时录像。键盘反光不作显示输出。Android/root/原槽/解锁/备份及boot、vendor_boot原摘要即时核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停止追加并优先恢复，当轮落实原因/模式/恢复交接；恢复核验后继续离线修复新候选，不原样重试失败镜像。
 

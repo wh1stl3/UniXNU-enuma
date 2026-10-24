@@ -37,11 +37,33 @@
       "no_buttons_confirmed_by_user": true,
       "independent_recovery_check": true,
       "recovery_checked_at": "2026-10-24T15:31:36.544497+08:00"
+    },
+    {
+      "candidate_sha256": "a2cc5cb6583df89e580f26b53911d875783473e0b74f66554c4cbe62c88d8de0",
+      "issued_at": "2026-10-24 15:32:36",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 17.141,
+      "boot_complete_seconds": 32.344,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "blend21-unproven",
+      "step": 21,
+      "query": 2,
+      "fd_sha256": "bd71348194da620500feb8256b98e457389bf0a655be0de37b93b5e363781b14",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T15:33:28.189294+08:00"
     }
   ],
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false,
   "xnu_entered": false,
-  "interpretation": "单源混合互补尚未齐备，未判定保守配置模式。"
+  "interpretation": "单源混合谓词refused，未取得合格的保守配置证据；不能直接认定遮挡或透明。拒绝可能来自其他/未知字段、边框/dim、合法的其他混合模式或继承门控/稳定性，需拆分。 query1-query2 ADB差4.359秒包含启动噪声，不能当精确频率或实测100ms。",
+  "blend_predicate": "refused",
+  "query1_minus_query2_adb_seconds": 4.359,
+  "conservative_single_blend_supported": false,
+  "next_action": "保守混合配置未获支持，结合同源step20对照优先分离其他staging/边框、dim及BASE/混合模式，再判断是否需要检查真正遮挡；不把合法的其他alpha模式直接当错误。 R-005 consumed，不重放像素或盲写寄存器。"
 }
