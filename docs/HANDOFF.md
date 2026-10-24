@@ -1,37 +1,38 @@
-# 当前进度：热状态重跑成功，超时转为偶发出口嫌疑
+# 当前进度：step14 两次读即挂死，硬停待人工恢复
 
-2026-10-24 Asia/Shanghai。用户要求做断电冷启动区分实验；热状态一半已执行并排除"恢复后残留状态"，断电一半不再必要。
+2026-10-24 Asia/Shanghai。**硬停中**：17:31:23 临时 boot `exit14-minimal`（step14，仅两次只读 `0x0ae6b800`/`0x0ae6c000`，无等待无写），75 秒无 ADB/fastboot 返回，17:32:38 停止追加。相机快照 `out/camera-capture/20261024T173305/` 全黑。
 
-## 本轮已做
+## 待用户执行
 
-2026-10-24 16:38:36 临时 boot `geometry20-control`（`20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd`，firmware 012715b），前置与两次失败同构（16:23:08 恢复 → 离线约 14 分钟 → 临时 boot，未断电）。成功：`adb_return_seconds` 16.962、`boot_complete_seconds` 31.221、`boot_reason=bootloader`、分区摘要未变。enuma `d0fd0840` 与 nuwa `fe5ed56e` 同时在线，按 `ro.product.device` 精确选中 enuma。
+长按电源回 Android 或 fastboot，然后由主机独立核验：enuma 身份、`sys.boot_completed=1`、root、原槽、解锁、匹配备份、`boot_a`/`vendor_boot_a` 原摘要。
 
-同一条 step20/query1 今天 4 笔：15:06:43 成功、16:02:03 成功、16:20:56 超时、16:38:36 成功。
+## 本轮对照（同一台设备、同一小时）
+
+| 候选 | 探针深度 | 笔数 | 挂死 |
+| --- | --- | --- | --- |
+| exit10-early（stage10 派发前复位） | 0 次 MMIO 读 | 5 | 0 |
+| exit14-minimal（step14） | 2 次 MMIO 读 | 1 | 1 |
+| step20 完整只读（今日） | 250 次读 | 4 | 1（最后成功 16:38:36） |
+
+exit10-early 五笔 adb 15.918–17.007，delay7 正对照 21.277 证明 checkpoint 执行且复位生效。
 
 ## 判断
 
-已排除：恢复后设备残留状态、step20 显示代码路径、新增等待。超时必为挂死——DxeCore 只在 StartImage 返回后按 status 选门，query 1/2 各自只认一种编码，两者都没出现说明没返回预期 status。
+主判断（高置信）：挂死点在第一次触碰显示窗口 `0x0ae00000..0x0ae84207`，与读多少寄存器无关。exit14-minimal 带 7 秒 completion fallback，PASS 或 FAIL 都会回 Android，只有真挂住才 75 秒无返回。
 
-剩余两出口：①`EnumaStageCheckpoint` 的 `ResetCold()`（PSCI）既不返回也不复位，停在 `CpuDeadLoop()`，与两张全黑快照吻合（中高）；②SimpleFb 内 `0x0ae00000..0x0ae84207` MMIO 读触发未处理异常（中）。现有 1 bit 通道无法区分。
+状态假设（中高）：窗口可访问性随启动序列变化。16:38 同窗口读 250 次成功，之后五笔 stage10 在显示驱动前复位，17:31 同窗口读 2 次即挂。机制可能是早期复位让 XBL/ABL 认为显示已初始化，下次启动跳过，UEFI 读落在未上电域上挂住总线。可解释 S-001/250849f/S-002/S-003 反复出现。
 
-## R-006 候选 A 已执行完（2026-10-24 17:24）
+## 恢复后第一步
 
-`exit10-early`（stage 10、`CoreDispatcher()` 之前、无显示 MMIO、无等待）5 笔全部自动返回，0 挂死。delay2 四笔 adb 15.918/16.986/16.988/17.007，delay7 正对照 21.277；延时 +5 秒带来 adb +4.270 秒，证明 checkpoint 确实执行并复位。
+**完全断电冷启动**（不是复位），再跑同一份 `exit14-minimal` 一次：
 
-统计限制：15% 单笔挂死率下 5 笔全干净的先验概率 44%，所以**不能**据此排除早期出口偶发挂死，只排除了高失败率。
-
-## 下一步
-
-按"5 笔全返回"方向，超时推向派发之后的显示路径。主判断：两笔超时与历史 S-001/250849f/S-002/S-003 都在 SimpleFbDxe 触碰 `0x0ae00000..0x0ae84207` 之后，MDP 域未上电时首次访问可能挂住 AHB。据此做**只读 `0x0ae00000` 一个 VERSION 字**的最小 MMIO 候选：有多笔中出现挂死则 MMIO 坐实，全干净则问题在更深偏移。冻结镜像不重试；断电冷启动不再执行。
+- 干净返回 → 启动序列假设成立，转查 XBL/ABL 显示初始化与 UEFI 早期复位的交互；
+- 同点位挂死 → 假设回落，问题回到镜像侧需重新分解。
 
 ## 边界
 
-R-005 consumed；禁像素/MMIO/分区写、新映射/内存字段/verified 变更；51MiB heap、512MiB owned、example=true、Boot v3 保持。TWRP/UART 未验证；无可见日志，文本后端未接 INF/FDF；未进 XNU。当前无人工待办，Android 已完成且各摘要核验通过。
+R-005 consumed；禁像素/MMIO 写、新映射、内存字段、verified、分区写；51MiB heap、512MiB owned、example=true、Boot v3 保持。TWRP/UART 未验证；无可见日志；未进 XNU。冻结镜像不重试。
 
-证据 `reports/enuma-restart-control.json`、`out/device-tests/20261024T163822-dxe-driver-return/`、`operations/2026-10-24-restart-control.md`。
-
-## 系统与内核现状
-
-目标 enuma/SM8250，iPadOS17.7.11/21H461，iPad7,1/j120ap，XNU10063.141.1/4KiB，UniXNU5fdbd5d。CI39927966148/head250cdf9 已真实链接源平台内核（21417672 字节，SHA b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d），非 enuma 运行证据，未预链接 donor 或启动。donor 46415872 字节/237 模块与静态闭包计划通过，未 emit 预链接镜像。64MiB 配置 FAT 已生成但未接 publisher/打包启动；NativeUfs 为 SM8550 参数当前禁用；EnumaScreen 仅 host/AArch64 对象。
+证据 `reports/enuma-exit14-device.json`、`reports/enuma-exit-early-device.json`、`out/device-tests/20261024T173123-dxe-driver-return/`。
 
 接手顺序 AGENTS/STATUS/DECISIONS/NEED-REVIEW。

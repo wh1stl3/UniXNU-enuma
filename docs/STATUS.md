@@ -1,61 +1,47 @@
-# 当前进度：热状态重跑成功，超时转为偶发出口嫌疑
+# 当前进度：step14 两次读即挂死，硬停待人工恢复
 
-2026-10-24 Asia/Shanghai。用户要求做断电冷启动区分实验；实验的"热状态"一半已执行并**排除**了"人工恢复后残留状态"假设，原计划的断电一半因此不再必要。当前不追加显示探针。
+2026-10-24 Asia/Shanghai。**当前为硬停状态**：设备 17:31:23 临时 boot `exit14-minimal` 后 75 秒无 ADB/fastboot 返回，17:32:38 判定超时，已停止追加任何镜像，等待用户长按电源恢复。相机快照 `out/camera-capture/20261024T173305/camera-snapshot.jpg` 为全黑+反光，与 16:03、16:20 两次超时现场一致。
 
-## 本轮实测与结论
+## 硬停记录
 
-2026-10-24 16:38:36 临时 boot `geometry20-control`（`20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd`，firmware 012715b，15:06:43 曾成功），前置条件与两次失败同构：16:23:08 恢复核验通过 → 离线约 14 分钟 → 临时 boot，全程未断电。结果 `adb_return_seconds` 16.962、`boot_complete_seconds` 31.221、`boot_reason=bootloader`、分区摘要未变。
+- 触发时间与原因：2026-10-24 17:32:38，AGENTS"执行中无法返回即停止追加镜像/写入、优先恢复"。
+- 最后候选及摘要：`exit14-minimal`（step14，仅两次只读 `0x0ae6b800`/`0x0ae6c000`，无等待、无写），镜像 `9609d2358b5b3d930c73fc4d82ad4913dd46e298e141cd7c4d751e99b730fa5b`，FD `6469cd7471a0d1c7d5e732d6de419d9fe7d1eb0c06ea6340b1f0c8d4229e65d7`。
+- 实际设备状态：未知（黑屏、无 ADB、无 fastboot 枚举），未确认 Android。
+- 未执行项：该候选的第 2–5 笔、任何新镜像。
+- 待执行恢复动作：用户长按电源回 Android/fastboot，然后独立核验 enuma 身份、`sys.boot_completed=1`、root、原槽、解锁、匹配备份及 `boot_a`/`vendor_boot_a` 原摘要。
+- 继续条件：恢复核验通过后，先做**断电冷启动**（完全断电再上电，不是复位），再跑同一份 step14 镜像一次。
 
-**成功，故超时不能归因恢复后残留状态。** 同一条 step20/query1 谓词今天 4 笔实机为：`20f079b4` 15:06:43 成功、`9ded5fa6` 16:02:03 成功、`459961e1` 16:20:56 超时、`20f079b4` 16:38:36 成功。三份不同源码、三次成功、一次超时，超时与镜像内容的相关性进一步下降。
+## 本轮关键结果（同一台设备、同一小时）
 
-## 已排除与剩余嫌疑
-
-已排除：人工恢复后设备残留状态（本轮）；step20 显示代码路径（同谓词三次成功）；新增等待/长编码（step20 不含且同镜像两次成功）。
-
-超时只能是挂死而非谓词拒绝：`EnumaDispatchDetailCheckpoint` 仅在 StartImage **返回**后按 status 选门，query 1/2 各自只命中"通过/拒绝"两种编码；两者都没出现，说明 SimpleFb 没返回预期 status。剩余两个出口：
-
-1. **复位出口失效**（中高）——`EnumaStageCheckpoint` 走 `MicroSecondDelay` → `ResetCold()`（PSCI SYSTEM_RESET）→ `CpuDeadLoop()`；PSCI 既不返回也不复位时永久停住，与两张全黑相机快照吻合。
-2. **SimpleFb 内显示 MMIO 读挂死**（中）——探针读 `0x0ae00000..0x0ae84207`，MDP 未上电/映射失效时可能触发未处理异常。
-
-两者在现有 1 bit 通道下原理上不可区分。今天 10 笔里 2 笔超时，历史 S-001/250849f/S-002/S-003 同现象共六次以上，从未定位。
-
-## R-006 候选 A 执行结果（2026-10-24 17:15–17:24）
-
-`exit10-early`（stage 10、`CoreDispatcher()` 之前、无显示 MMIO、无等待）5 笔全部自动返回，0 次挂死：
-
-| 笔 | 变体 | adb 返回 | Android 完成 |
+| 候选 | 探针深度 | 笔数 | 挂死 |
 | --- | --- | --- | --- |
-| 1 | delay2 | 17.007 | 30.223 |
-| 2 | delay7（正对照） | 21.277 | 35.603 |
-| 3 | delay2 | 15.918 | 30.984 |
-| 4 | delay2 | 16.988 | 33.343 |
-| 5 | delay2 | 16.986 | 31.112 |
+| `exit10-early`（stage10，派发前复位） | **0 次 MMIO 读** | 5 | **0** |
+| `exit14-minimal`（step14） | **2 次 MMIO 读** | 1 | **1** |
+| step20 完整只读（今日） | 250 次读 | 4 | 1（最后一次成功 16:38:36） |
 
-**正对照成立**：延时从 2 秒加到 7 秒后，adb 返回 +4.270 秒、Android 完成 +5.380 秒，说明 `EnumaStageCheckpoint(10)` 确实执行、`ResetCold()` 确实复位。这一条必须先立住，否则"5 笔都回到 Android"无法与"根本没复位、继续正常启动"区分。
+`exit10-early` 五笔 adb 15.918–17.007（极差 1.089 秒），delay7 正对照 21.277 证明 checkpoint 确实执行并复位。`exit14-minimal` 第一笔即挂。
 
-delay2 四笔 adb 极差 1.089 秒，时序高度稳定。
+## 判断
 
-**统计限制（必须如实记）**：若单笔挂死率按 15% 估计，5 笔全干净的先验概率为 0.85⁵ = 44%，因此本批**不能**排除早期出口也有偶发挂死，只能排除很高的单笔失败率。要以约 90% 信心排除 15%，需约 15 笔全干净（0.85¹⁵ = 8.7%）。
+**主判断（高置信）：挂死点在第一次触碰显示窗口（`0x0ae00000..0x0ae84207`），与探针读多少寄存器无关。** 依据是"0 读 5 笔全干净、2 读第 1 笔即挂"这一组对照；`exit14-minimal` 带 7 秒 completion fallback，探针返回 PASS 或 FAIL 都会回到 Android，只有真正挂住才可能 75 秒无返回。
 
-## 下一步：R-007 最小 MMIO 候选（已构建，待实测）
+**状态假设（中高）：显示窗口的可访问性随启动序列变化，而不随镜像变化。** 16:38 同一窗口读 250 次成功，之后五笔 stage10 在显示驱动执行前就复位，17:31 同一窗口读 2 次即挂。可解释的机制是：早期复位让 XBL/ABL 认为显示已完成初始化，下一次启动跳过该初始化，UEFI 的读落在未上电/无时钟的域上，挂住总线。这也解释了历史 S-001/250849f/S-002/S-003 反复出现却查不到代码原因。
 
-按"5 笔全返回"的方向，超时被推向派发之后的显示路径。主判断（中高置信）：两笔超时与历史上 S-001/250849f/S-002/S-003 都发生在 SimpleFbDxe 开始触碰 `0x0ae00000..0x0ae84207` 之后，MDP/DSI 域未上电时首次访问可能挂住总线，这与"黑屏 + 无 USB + 只能长按"吻合，且与探针读多少寄存器无关。
+**已排除**：探针代码内容（0 读 5 笔干净）、读深度（2 读即挂）、人工恢复后残留（本轮 stage10 五笔干净）、长等待（本候选无等待）。
 
-不用新写 step，直接用现成的 **step 14**（`EnumaDsiTimingEnabled`）：只有两次只读加载 `0x0ae6b800`、`0x0ae6c000`，不读 VERSION/CTL/LM、不等待、不写。它与失败笔 stage13/GUID/detail16/fallback 完全同构，唯一变量是探针深度。
+## 下一步
 
-已构建：FD `6469cd7471a0d1c7d5e732d6de419d9fe7d1eb0c06ea6340b1f0c8d4229e65d7`，Boot v3 `9609d2358b5b3d930c73fc4d82ad4913dd46e298e141cd7c4d751e99b730fa5b`。打包 PE 静态反汇编确认只有这两次目标读、零目标写（`reports/enuma-fd-audit.json` 的 `dsi_timing_code`）。
+1. 用户恢复并核验通过。
+2. **完全断电冷启动**后跑同一份 `exit14-minimal` 一次：干净返回 → 启动序列假设成立，转查 XBL/ABL 显示初始化与 UEFI 早期复位的交互；同样点位挂死 → 假设回落，问题在镜像侧需重新分解。
+3. 若假设成立，后续所有显示探针都必须先建立"冷启动前置"纪律，或在读 MDP 前显式确认域上电（需新映射/时钟读取，届时按 NEED-REVIEW 申请）。
 
-三种结果可用时间分开：PASS 立即复位（adb 约 16–18 秒）；FAIL 走 7 秒 completion fallback（adb 明显更晚）；挂死则 75 秒无返回（fallback 明确不能救挂死）。计划 5 笔：任一笔挂死 → "接触 MMIO 即挂"坐实；全数返回 → 失败属于更深偏移或更长读序列，而非首次接触。
-
-**顺带修复工具 bug**：`scripts/audit_enuma_fd.py` 的 step14 分支用 `args` 做局部变量，污染 argparse 的 `args`，导致写报告时 `AttributeError`。已改名为 `operands`，审计语义不变。
-
-断电冷启动那一半不再执行：热状态已证明设备干净。已冻结镜像（step22 正向、stage23-control 及未执行的正互补）不重试。
+冻结镜像（step22 正向、stage23-control 及未执行正互补）不重试。
 
 ## 边界
 
 R-005 consumed，禁像素/MMIO/分区写、新映射/内存大小/基址/verified 变更；51MiB heap、512MiB owned、example=true/Boot v3 保持。TWRP/UART 未验证，尚无可见日志/菜单，文本后端未集成，未进入 XNU。enuma 与 nuwa 同时在线，一律按 `ro.product.device` 选定 enuma。
 
-证据 `reports/enuma-restart-control.json`、`out/device-tests/20261024T163822-dxe-driver-return/`、`operations/2026-10-24-restart-control.md`、`enuma-step20-control-comparison.json`。
+证据 `reports/enuma-exit-early-device.json`、`reports/enuma-exit14-device.json`、`out/device-tests/20261024T173123-dxe-driver-return/`、`out/camera-capture/20261024T173305/`。
 
 ## 系统与内核现状
 
