@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "seconds_per_code": 3,
+  "trials": [
+    {
+      "id": "baseline1",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline2",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline3",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline4",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline5",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline6",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline7",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    },
+    {
+      "id": "baseline8",
+      "role": "constant",
+      "code": 0,
+      "image": "out\\value-transport\\baseline\\candidate.img",
+      "raw": "out\\value-transport\\baseline\\candidate.raw",
+      "build": "out\\value-transport\\baseline\\build.json",
+      "audit": "out\\value-transport\\baseline\\audit.json",
+      "package": "out\\value-transport\\baseline\\package.json",
+      "sha256": {
+        "image": "f5cf62da0b583bc6eb3b377e61495df63281f1cfddb0fb58c8e6574edef4a700",
+        "raw": "e2cabf4e47445db134c682b174dcb10d8dd8a86c8311044ea7a8c831eb0f2b7a",
+        "build": "041a67b22df4c909b273dc012af128d88f6f1f523888c7a40ef52bd1defdfb65",
+        "audit": "cdf8f4b2b1ad10f2acceb2bd4d9a8e9f6f746b7230ed70ce15bcacca0d3deb74",
+        "package": "8fcce4c67b3f5e3a7894069d9842b87a6a24f717e16ba7b913bed9a22b26b919"
+      }
+    }
+  ]
+}

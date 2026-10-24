@@ -112,7 +112,11 @@ def require_published(root):
             raise ValueError('source/docs HEAD has not been published')
 
 
-def run_one(root,plan,trial_id,ledger_path,execute=False,invoke=subprocess.run):
+def run_one(root,plan,trial_id,ledger_path,execute=False,invoke=None):
+    # Resolve at call time. A default of subprocess.run binds at import, so
+    # patching this module's subprocess attribute cannot stub the device runner
+    # and a unit test would silently issue real boots.
+    if invoke is None:invoke=subprocess.run
     validate_plan(plan,root)
     matches=[r for r in plan['trials'] if r['id']==trial_id]
     if len(matches)!=1: raise ValueError('unknown trial ID')

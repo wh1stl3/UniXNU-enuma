@@ -21,7 +21,12 @@ def atomic_json(path, value):
     temp.replace(path)
 
 
-def reconcile(root=ROOT, invoke=subprocess.run):
+def reconcile(root=ROOT, invoke=None):
+    # Resolve at call time. A default of subprocess.run binds at import, so
+    # patching this module's subprocess attribute cannot stub the device
+    # commands and a unit test would silently drive the real adb.
+    if invoke is None:
+        invoke = subprocess.run
     state_path = root / 'out/device-tests/current.local.json'
     original_bytes = state_path.read_bytes()
     state = json.loads(original_bytes)

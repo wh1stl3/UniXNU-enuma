@@ -42,13 +42,21 @@ enuma已恢复Android，主机独立核验boot_completed=1、root、原A槽、�
 
 **构建不可复现**：同参数重建FD为02f8d31d，与已资格bfb3d6a6不同。故"资格"只能绑定到已归档镜像（`out/value-transport/zero/candidate.img`，sha256 9b3c1df3…），不能靠重建复得；本轮未把重建产物用于任何实测。
 
+## 测试事故（D-154，已闭环）
+
+实现R-009执行工具时，单元测试意外真实驱动设备两次（`run_next(..., invoke=subprocess.run)`的默认参数在导入时绑定，`patch.object(baseline,'subprocess')`触及不到，且同时patch掉了`require_published`）：23:31:35与23:32:22各临时boot一次baseline候选（f5cf62da0b58…）。第一笔16.031秒正常回Android、双分区摘要未变；第二笔75秒无返回，用户长按恢复，23:40主机只读核验通过。
+
+已处置：`invoke`改为调用时解析（`None→subprocess.run`）；测试一律显式传`invoke=Mock()`；测试文件顶部写入警告与原因；同类默认参数缺陷一并修掉`run_value_probes.py:run_one`与`reconcile_enuma_recovery.py:reconcile`。新增8个基线测试，全套91个测试通过（原`test_hang_baseline`由94秒真实执行变为0.026秒）。
+
+**这三笔不计入R-009正式ledger**。单独观察值：零读常量档2笔1挂，与zero组（zero1成、zero2挂）同形。
+
 ## 显示初始化规格（本轮新增，只读）
 
 设备常态就是Android（Linux），`su -c dmesg` 即可取得规格，不需要先boot一台droidian/postmarketOS。已取得：面板`xiaomi 42 02 0a video mode dual dsi cphy panel`，`mi,panel-id=0x4b383100420200`（K81+42 02 0a，与仓内`Panel_K81_42_02_0a_dualdsi_cphy_lcd_vid.xml`完全对应）；时序`hactive=1600/vactive=2560`，60/120fps动态；面板命令量级`cmds(117)`/`cmds(115)`；电源`mdss_core_gdsc: supplied by pm8150a_s4_level`，DSI PHY无独立GDSC（dummy regulator）；时钟`disp_cc-kona af00000`、DSI PLL 0/1为7nm、`sde_rsc af20000`；地址dsi_phy `ae94400/ae96400`、dsi_ctrl `ae94000/ae96000`。未取到`/sys/kernel/debug/pm_genpd`与`/sys/kernel/debug/dri/0`（debugfs未暴露）。这些是自写显示序列的**规格输入**，不是设备执行授权。固件`Drivers/`仅5个模块、无任何显示组件，点亮屏幕必须自写MDP+DSI+panel序列，这一点不变。
 
 ## 下一步与继续条件
 
-1. **先建挂死率基线（不改任何固件）**：用已资格zero镜像（`out/value-transport/zero/candidate.img`，sha256 9b3c1df3…）重复至8笔，只记录"返回/挂死"，不解码、不校准、不进寄存器模式。零读档若与历史"读档挂死"同量级，则以显示为因的整条归因链作废，按载体/XBL方向重开；若8笔全干净，只能把上界压到约25%，届时再议笔数。
+1. **R-009 已批准，正式统计进行中（不改任何固件）**：已资格新候选`out/value-transport/baseline/`（常量0、零读零写、FD 02f8d31d、Boot v3回环通过、`f5cf62da`），8笔只记"返回/挂死"，不解码、不校准、不进寄存器模式。执行器`scripts/run_hang_baseline.py`一次只发一笔；挂死后须人工恢复且`reconcile`核验通过才允许下一笔。零读档若与历史"读档挂死"同量级，则以显示为因的整条归因链作废，按载体/XBL方向重开；若8笔全干净，只能把上界压到约25%。
 2. 逐笔按既有门禁：身份、备份、恢复路径核对后临时boot；失败即停、不原样重试；每笔后核验Android完成/root/槽位/解锁与双分区摘要。
 3. 驱动内复位的判断保持本轮审查结论，不重启；若确需改守卫，必须走NEED-REVIEW另立编号，不能顺带放宽。
 4. 常量重复性通过后才考虑最小寄存器读；随后分离描述符、cache Sync、CPU Read和Write，并核对实际FDT、CPU映射与SMMU。

@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def capture(name, image=None):
-    if name not in ('zero','known3','mdp-low'):
+    if name not in ('zero','known3','mdp-low','baseline'):
         raise ValueError('unsupported bounded candidate name')
     if image is None:
         raise ValueError('the packaged image of this candidate must be given')
@@ -32,7 +32,7 @@ def capture(name, image=None):
     # The archived qualification must describe this candidate. Without this
     # check a capture taken after a later build silently keeps the wrong
     # firmware, raw and value profile.
-    expected_code={'zero':0,'known3':3,'mdp-low':0}[name]
+    expected_code={'zero':0,'known3':3,'mdp-low':0,'baseline':0}[name]
     profile=build.get('value_probe') or {}
     if profile.get('constant_code')!=expected_code or profile.get('source') not in ('constant','register'):
         raise ValueError('archived build does not describe this candidate: '+str(profile))
@@ -75,12 +75,41 @@ def assemble():
     print('PASS: immutable source/FD/raw/image/compiler qualifications; '+str(len(trials))+' planned trials')
 
 
+def assemble_baseline(name, count):
+    """R-009: one archived zero-read candidate repeated count times."""
+    if not 1 <= count <= 16:
+        raise ValueError('baseline trial count out of range')
+    base = ROOT/'out/value-transport'/name
+    paths = {key: str((base/file).relative_to(ROOT)) for key, file in {
+        'image': 'candidate.img', 'raw': 'candidate.raw', 'build': 'build.json',
+        'audit': 'audit.json', 'package': 'package.json'}.items()}
+    for relative in paths.values():
+        if not (ROOT/relative).is_file():
+            raise ValueError('candidate is not fully archived: '+relative)
+    sha = {key: hashlib.sha256((ROOT/relative).read_bytes()).hexdigest() for key, relative in paths.items()}
+    trials = [dict(id=f'baseline{i+1}', role='constant', code=0, **paths, sha256=sha) for i in range(count)]
+    plan = {'schema': 1, 'seconds_per_code': 3, 'trials': trials}
+    from run_value_probes import validate_plan
+    from run_hang_baseline import check_baseline
+    validate_plan(plan, ROOT)
+    check_baseline(plan)
+    output = ROOT/'out/value-transport'/f'{name}-baseline-plan.json'
+    if output.exists() and json.loads(output.read_text()) != plan:
+        raise ValueError('refuse to change an existing baseline plan')
+    atomic_json(output, plan)
+    atomic_json(ROOT/f'reports/enuma-hang-baseline-{name}.json', plan)
+    print(f'PASS: {count} identical zero-read trials bound to {sha["image"][:16]}')
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--capture',choices=('zero','known3','mdp-low'))
+    p.add_argument('--capture',choices=('zero','known3','mdp-low','baseline'))
     p.add_argument('--image',type=Path,help='the packaged boot image of this candidate')
+    p.add_argument('--baseline',metavar='NAME',help='assemble a repeat plan for one archived candidate')
+    p.add_argument('--baseline-trials',type=int,default=8)
     args=p.parse_args()
     if args.capture:print(capture(args.capture,args.image))
+    elif args.baseline:assemble_baseline(args.baseline,args.baseline_trials)
     else:assemble()
 
 

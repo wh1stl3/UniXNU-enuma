@@ -37,9 +37,15 @@ zero2镜像与zero1相同：SHA256 `9b3c1df33c2fc5f0612cc0b669434607cf85547bed75
 - Windows原生构建仍不可用（`symlink_to`需特权，`WinError 1920`未修）；**构建一律在`wsl.exe`+Python 3.10.12下进行**。
 - **构建不可复现**：同参数重建FD `02f8d31d` ≠ 已资格 `bfb3d6a6`。资格只能绑定已归档镜像，不能靠重建取得。
 
+## 测试事故（D-154，已闭环）
+
+R-009 执行工具的首版单元测试意外真实驱动设备两次：`run_next(..., invoke=subprocess.run)`默认参数在导入时绑定，`patch.object(baseline,'subprocess')`触及不到，且同时 patch 掉了`require_published`。23:31:35 与 23:32:22 各 boot 一次 baseline 候选：第一笔 16.031 秒正常返回、双分区摘要未变；第二笔 75 秒无返回，用户长按恢复，23:40 只读核验通过。
+
+修复：`invoke` 改调用时解析；测试显式传`invoke=Mock()`；顺带修掉`run_value_probes.py:run_one`与`reconcile_enuma_recovery.py:reconcile`的同类缺陷。91 个测试通过。**这两笔不计入 R-009 ledger**，仅作观察值：零读档 2 笔 1 挂，与 zero 组同形。
+
 ## 下一步与继续条件
 
-1. **先建挂死率基线，不改任何固件**：用已资格zero镜像（`out/value-transport/zero/candidate.img`，`9b3c1df3…`）重复至8笔，只记"返回/挂死"，不解码不校准。零读档若与历史读档挂死同量级，则以显示为因的归因链作废、按载体/XBL重开；若8笔全干净，只能把上界压到约25%。
+1. **R-009 已批准并在执行**：候选`out/value-transport/baseline/`（常量0、零读零写、FD 02f8d31d、`f5cf62da`，Boot v3 回环通过），8 笔只记返回/挂死。执行器`scripts/run_hang_baseline.py`一次一笔；挂死后须人工恢复且`reconcile`通过才允许下一笔。零读档与历史读档挂死同量级则整条显示归因链作废、按载体/XBL 重开；8 笔全干净则上界约 25%。
 2. 逐笔门禁：身份、备份、恢复路径核对后临时boot；失败即停不原样重试；每笔后核验Android完成/root/槽位/解锁与双分区摘要。
 3. 驱动内复位不重启；若确需改守卫，必须另立NEED-REVIEW编号。
 4. 常量重复性通过后才考虑最小寄存器读；随后分离描述符、cache Sync、CPU Read和Write，核对实际FDT、CPU映射与SMMU。
