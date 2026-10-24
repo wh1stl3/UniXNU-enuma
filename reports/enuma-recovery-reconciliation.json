@@ -21,7 +21,7 @@
     }
   ],
   "prior_phase": "manual-recovery-needed",
-  "prior_state_sha256": "8206e6ab1435e759b0fbc814ed5136601b6916270332f2a3ff32b7d650dbc846",
+  "prior_state_sha256": "e0aac5ba0ef5917826ca603a280490a44ae21910bebdd0fe32c652354e687b7a",
   "failed_trial_preserved": true,
-  "evidence": "out\\device-tests\\20261025T003453-recovery-reconciliation.json"
+  "evidence": "out\\device-tests\\20261025T010529-recovery-reconciliation.json"
 }
