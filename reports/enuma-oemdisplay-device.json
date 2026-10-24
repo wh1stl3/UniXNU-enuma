@@ -1,0 +1,41 @@
+{
+  "scope": "R-008 candidate D first trial: full OEM stack retained, gate on DisplayDxe StartImage success",
+  "candidate_sha256": "c93802790305558f0b7dd267794bafd87d1f740bd4b6a7824de2f19a40f56bf6",
+  "candidate_fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4",
+  "oem_payloads": 33,
+  "diagnostic_omissions": [],
+  "tests": [
+    {
+      "trial": 1,
+      "gate": "detail 17 (DisplayDxe StartImage success) + GUID 4138022f-06c7-4f79-9c94-7e33b511a4e7",
+      "issued_at": "2026-10-24 17:56:08",
+      "phase": "recovered-android-boot-complete",
+      "automatic_return_within_75_seconds": true,
+      "adb_return_seconds": 31.924,
+      "boot_complete_seconds": 45.334,
+      "boot_reason": "bootloader",
+      "partition_digests_unchanged": true,
+      "device_test": "out/device-tests/20261024T17575*-dxe-driver-return"
+    }
+  ],
+  "key_finding_no_stall": "with all 33 OEM drivers in the image the firmware still completed and reset on its own. Nothing in the vendor stack hangs on enuma, so candidate D does not repeat the earlier bus-hang failure mode.",
+  "screen_observation": {
+    "series": "out/camera-capture/20261024T175536-series (14 frames, 3 s apart)",
+    "before_boot": "frames 0-6 mean grey about 130, the Android launcher is visible",
+    "from_fastboot_onward": "frames 7-13 mean grey about 56 and the panel reads as a mirror, i.e. backlight off",
+    "contrast": "entering fastboot manually at 17:44 showed an orange FASTBOOT wordmark; during this trial's fastboot window and throughout the firmware run nothing was drawn",
+    "meaning": "DisplayDxe did not light the panel in this trial"
+  },
+  "timing_reading": {
+    "simplefb_baseline_adb_seconds": 16.7,
+    "this_trial_adb_seconds": 31.9,
+    "extra_seconds": 15.2,
+    "hypothesis": "roughly 8 s of extra dispatch cost for 33 OEM drivers plus the 7 s completion fallback, which fits a DisplayDxe that returned an error rather than the success gate firing (success would have reset 2 s after DisplayDxe)",
+    "status": "estimate only; 33 drivers versus a handful makes the extra dispatch cost unknown, so this does not decide the case"
+  },
+  "discriminating_test": "run the same profile with detail point 16 (DisplayDxe StartImage failure). If the two gates differ in return time in the predicted direction, the vendor driver's status is settled: fast on 16 means it returns an error, slow on 16 means it returns success and the 17 run was the fast path.",
+  "pixel_access": "vendor driver only",
+  "mmio_writes": "vendor driver only",
+  "partition_writes": false,
+  "interpretation": "原厂33驱动栈在enuma上能跑完并自动返回,不再出现挂死;但显示未被点亮,DisplayDxe大概率返回错误(时间估算支持但未定)。下一步用detail16失败门对照判定其返回状态。"
+}
