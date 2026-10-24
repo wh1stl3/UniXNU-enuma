@@ -49,3 +49,9 @@ configuration: refused (query1-query2 ADB 5.297秒)；progress: refused (query1-
 ## 几何检查实施前排序
 
 f0cef6f稳定staging/所选DSI递增支持后，“首候选完全未挂接”和“整个接口停摆”嫌疑降低。中等置信工作假设转向混合裁剪/遮挡、LM实际输出/pingpong/DSC连接，以及fetch/地址可见性。先用012715b step20区分源/输出尺寸不匹配和关联LM矩形越界；这是只读配置检查，实际像素/fetch与后段关系仍需证据。如果几何通过则降低简单缩放/越界解释，不能据此排除遮挡或scaler模式。若取得该候选像素实际被取数且到达面板的证据，应进一步下调这些假设；Boot v3仍无必要切换。固定小米52a2f18 sde_hw_sspp.c和sde_hw_lm.c及原enuma FDT契约见reports/enuma-scanout-geometry-sources.json。
+
+## 候选输出矩形配置几何实测更新
+
+同源step19对照和step20正/互补时序支持：保留首候选稳定staging及所选活动DSI两窗递增条件，首候选源/输出宽高相同、至少128x8、整个输出矩形位于关联LM配置范围内，输出大小/位置/LM大小每窗保持。仅配置几何，不证明scaler/decimator模式、排除区、alpha/遮挡、LM实际输出、fetch或可见路由。 query1-query2 ADB差-5.39秒包含启动噪声，不能当精确频率或实测100ms。
+
+稳定配置几何获得支持，降低简单源/输出尺寸不匹配和矩形越界嫌疑；下一步首查alpha/遮挡及LM→pingpong/DSC实际连接，与fetch/地址可见性并列中等优先。若取得可见的候选像素/fetch对应证据则可推翻该主判断；再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。

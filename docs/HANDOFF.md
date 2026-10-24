@@ -28,11 +28,13 @@ geometry20-control step19/query1：2026-10-24 15:06:43；recovered-android-boot-
 
 geometry20-contained step20/query1：2026-10-24 15:08:19；recovered-android-boot-complete；ADB 17.141秒 / Android完成 29.609秒；用户无按键 True，独立恢复 True，原分区摘要 True。
 
-几何互补尚未齐备，未判定首候选的配置输出矩形包含关系。
+geometry20-unproven step20/query2：2026-10-24 15:10:01；recovered-android-boot-complete；ADB 22.531秒 / Android完成 37.015秒；用户无按键 True，独立恢复 True，原分区摘要 True。
+
+同源step19对照和step20正/互补时序支持：保留首候选稳定staging及所选活动DSI两窗递增条件，首候选源/输出宽高相同、至少128x8、整个输出矩形位于关联LM配置范围内，输出大小/位置/LM大小每窗保持。仅配置几何，不证明scaler/decimator模式、排除区、alpha/遮挡、LM实际输出、fetch或可见路由。 query1-query2 ADB差-5.39秒包含启动噪声，不能当精确频率或实测100ms。
 
 ## 下一步与恢复
 
-全部当前文档提交推送后，按即时身份/备份/恢复门禁临时boot geometry20-unproven；受控返回、独立恢复及无按键确认后继续。
+稳定配置几何获得支持，降低简单源/输出尺寸不匹配和矩形越界嫌疑；下一步首查alpha/遮挡及LM→pingpong/DSC实际连接，与fetch/地址可见性并列中等优先。若取得可见的候选像素/fetch对应证据则可推翻该主判断；再查面板后段。 R-005 consumed，不重放像素或盲写寄存器。
 
 用户可在场恢复，新摄像头保存原图并自行顺时针90度旋转后判读，必要前后截图；实际输出/判读变化/恢复操作时录像。键盘反光不作显示输出。Android/root/原槽/解锁/备份及boot、vendor_boot原摘要即时核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停止追加并优先恢复，当轮落实原因/模式/恢复交接；恢复核验后继续离线修复新候选，不原样重试失败镜像。
 
