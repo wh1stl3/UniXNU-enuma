@@ -42,6 +42,11 @@ def capture(name, image=None):
         shutil.copyfile(ROOT/relative,dest)
     shutil.copyfile(ROOT/build['fd'],target/'candidate.fd')
     shutil.copyfile(source,target/'candidate.img')
+    # The probe runner verifies the image against the report next to it.
+    report=source.with_suffix('.json')
+    if not report.exists():
+        raise ValueError('packaging report missing next to the image')
+    shutil.copyfile(report,target/'candidate.json')
     return target
 
 
