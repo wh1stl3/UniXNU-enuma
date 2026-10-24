@@ -71,7 +71,7 @@
       "ENUMA_DIAG_STAGE": "13",
       "ENUMA_DIAG_DELAY_US": "2000000",
       "ENUMA_DIAG_DISPATCH_ORDINAL": "1",
-      "ENUMA_DIAG_DETAIL_POINT": "17",
+      "ENUMA_DIAG_DETAIL_POINT": "13",
       "ENUMA_DIAG_GUID_ENABLED": "1",
       "ENUMA_DIAG_GUID_LOW64": "0x4f7906c74138022fULL",
       "ENUMA_DIAG_GUID_HIGH64": "0xe7a411b5337e949cULL",
@@ -96,7 +96,7 @@
     "uefi-source.tar.gz": "7118851d4e46f6f3336c82bcad4ee5820cb7a2079103e075c9961e3f1c3a3a27",
     "mu-basecore.tar.gz": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826"
   },
-  "diagnostic_detail_point": 17,
+  "diagnostic_detail_point": 13,
   "diagnostic_dispatch_guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
   "diagnostic_dispatch_guid_only": true,
   "diagnostic_dispatch_completion_fallback": true,
@@ -122,7 +122,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4",
+  "fd_sha256": "2b6701656749da6043952c1bcc67443bfb6fb58a9cd88a10ddf66a32edfdd8d0",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",

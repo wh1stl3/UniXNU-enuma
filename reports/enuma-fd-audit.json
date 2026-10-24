@@ -1,6 +1,6 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4",
+  "fd_sha256": "2b6701656749da6043952c1bcc67443bfb6fb58a9cd88a10ddf66a32edfdd8d0",
   "fd_bytes": 3145728,
   "file_count": 81,
   "matched_oem_modules": [

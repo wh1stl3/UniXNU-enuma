@@ -1,41 +1,36 @@
 {
-  "scope": "R-008 candidate D first trial: full OEM stack retained, gate on DisplayDxe StartImage success",
-  "candidate_sha256": "c93802790305558f0b7dd267794bafd87d1f740bd4b6a7824de2f19a40f56bf6",
-  "candidate_fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4",
+  "scope": "R-008 candidate D: full OEM stack retained; three gates prove DisplayDxe is never dispatched",
+  "candidate_family": {
+    "detail17_success_gate": {"image_sha256": "c93802790305558f0b7dd267794bafd87d1f740bd4b6a7824de2f19a40f56bf6", "fd_sha256": "a2b591735a3dbe17cde5afae14da1791372aa2b7f4df09397b8bc6f800c41fd4"},
+    "detail16_failure_gate": {"image_sha256": "610c1082418ef735c2af8c794049f1be0f66d5df5d5b6b2cb7886ce7e3ddab29", "fd_sha256": "e0568ca851677a6792f5498760e734648dc899f099b389d9cfde0547e741255c"},
+    "detail13_any_return_gate": {"image_sha256": "c0572975b96fc12480aaedb59b9ae156e8e09145c8c93c406d9e4198431c12a0", "fd_sha256": "2b6701656749da6043952c1bcc67443bfb6fb58a9cd88a10ddf66a32edfdd8d0"}
+  },
   "oem_payloads": 33,
   "diagnostic_omissions": [],
   "tests": [
-    {
-      "trial": 1,
-      "gate": "detail 17 (DisplayDxe StartImage success) + GUID 4138022f-06c7-4f79-9c94-7e33b511a4e7",
-      "issued_at": "2026-10-24 17:56:08",
-      "phase": "recovered-android-boot-complete",
-      "automatic_return_within_75_seconds": true,
-      "adb_return_seconds": 31.924,
-      "boot_complete_seconds": 45.334,
-      "boot_reason": "bootloader",
-      "partition_digests_unchanged": true,
-      "device_test": "out/device-tests/20261024T17575*-dxe-driver-return"
-    }
+    {"trial": 1, "gate": "detail17 DisplayDxe success", "issued_at": "2026-10-24 17:56:08", "adb_return_seconds": 31.924, "boot_complete_seconds": 45.334, "phase": "recovered-android-boot-complete"},
+    {"trial": 2, "gate": "detail16 DisplayDxe failure", "issued_at": "2026-10-24 18:01:38", "adb_return_seconds": 30.878, "boot_complete_seconds": 45.759, "phase": "recovered-android-boot-complete"},
+    {"trial": 3, "gate": "detail13 any StartImage return", "issued_at": "2026-10-24 18:06:19", "adb_return_seconds": 33.052, "boot_complete_seconds": 45.637, "phase": "recovered-android-boot-complete"}
   ],
-  "key_finding_no_stall": "with all 33 OEM drivers in the image the firmware still completed and reset on its own. Nothing in the vendor stack hangs on enuma, so candidate D does not repeat the earlier bus-hang failure mode.",
-  "screen_observation": {
-    "series": "out/camera-capture/20261024T175536-series (14 frames, 3 s apart)",
-    "before_boot": "frames 0-6 mean grey about 130, the Android launcher is visible",
-    "from_fastboot_onward": "frames 7-13 mean grey about 56 and the panel reads as a mirror, i.e. backlight off",
-    "contrast": "entering fastboot manually at 17:44 showed an orange FASTBOOT wordmark; during this trial's fastboot window and throughout the firmware run nothing was drawn",
-    "meaning": "DisplayDxe did not light the panel in this trial"
+  "reasoning": {
+    "no_gate_fired": "a fired gate resets 2 s after DisplayDxe returns; a missed gate waits for the end of CoreDispatcher and then the 7 s completion fallback. The three return times (31.9 / 30.9 / 33.1 s) are indistinguishable from each other, so none of the three gates fired",
+    "detail13_matters_most": "detail 13 fires on any StartImage return regardless of status, so a missing hit there cannot be explained by DisplayDxe failing; it means CoreStartImage was never reached for this GUID at all",
+    "conclusion": "DisplayDxe is never dispatched on this device"
   },
-  "timing_reading": {
-    "simplefb_baseline_adb_seconds": 16.7,
-    "this_trial_adb_seconds": 31.9,
-    "extra_seconds": 15.2,
-    "hypothesis": "roughly 8 s of extra dispatch cost for 33 OEM drivers plus the 7 s completion fallback, which fits a DisplayDxe that returned an error rather than the success gate firing (success would have reset 2 s after DisplayDxe)",
-    "status": "estimate only; 33 drivers versus a handful makes the extra dispatch cost unknown, so this does not decide the case"
+  "why_not_dispatched": {
+    "depex": "the vendor DisplayDxe.depex is eight protocol GUIDs ANDed together, ending with one END: 157a5c45-21b2-43c5-ba7c-822fee5fe599, b0760469-970c-487a-a4b5-28db7b45cef1, 5bef7c41-a560-435b-835b-3c3ebf2bd151, c1bff82d-6c92-48fb-8355-c7fb4218a4ea, a966cc4f-ee6c-424d-a762-8ed3b5a4a501, 47861dff-556f-4269-9b28-062ec3ecb30d, ad9aec18-7bf0-4809-9e96-3012309f3df7, b27ae8b1-3e10-4d07-ab5c-eb9a6dc6fa8f",
+    "identified_so_far": "157a5c45 is the Qualcomm EFI_PLATFORMINFO protocol (PlatformInfoDxeDriver is present); b0760469 appears in QcomPkg.dec; the remaining six are not defined anywhere in the bundled source and presumably come from OEM protocol installers",
+    "supply_gap": "the 33 bundled OEM drivers are CPR, ChipInfo, Cipher, Clock, CmdDb, DALSys, DALTLMM, DDRInfo, Display, Env, Gpi, HALIOMMU, HWIO, Hash, I2C, Mac, Npa, Pdc, PlatformInfo, Pmic, PwrUtils, ResetRuntime, Rng, Rpmh, SPI, SPMI, Scm, ShmBridge, Smem, Tz, UFS, ULog, Vcs. There is no MDSS, MDP, DSI or panel driver among them, so the protocols a display stack would normally publish are absent",
+    "status": "strong inference, not yet proven by enumerating installed protocol handles"
   },
-  "discriminating_test": "run the same profile with detail point 16 (DisplayDxe StartImage failure). If the two gates differ in return time in the predicted direction, the vendor driver's status is settled: fast on 16 means it returns an error, slow on 16 means it returns success and the 17 run was the fast path.",
-  "pixel_access": "vendor driver only",
-  "mmio_writes": "vendor driver only",
+  "what_this_means": "candidate D cannot work by simply keeping DisplayDxe: the driver is dead weight in this firmware because its dependency set is never satisfied. Keeping the OEM binaries without the OEM protocol providers changes nothing, which is why the panel stayed dark and why all three gates missed.",
+  "next_options": [
+    "D1: extract and bundle the missing protocol providers (MDSS/MDP/DSI class) from this device's XBL, then re-test the same three gates",
+    "B: power MMCX/dispcc/MDSS from firmware directly, no OEM dependency",
+    "C1: UART observation channel, no display access at all"
+  ],
+  "pixel_access": "vendor driver only, and it never ran",
+  "mmio_writes": "vendor driver only, and it never ran",
   "partition_writes": false,
-  "interpretation": "原厂33驱动栈在enuma上能跑完并自动返回,不再出现挂死;但显示未被点亮,DisplayDxe大概率返回错误(时间估算支持但未定)。下一步用detail16失败门对照判定其返回状态。"
+  "interpretation": "三门(成功/失败/任意返回)返回时间无差异,均未命中,证明DisplayDxe从未被CoreStartImage;其DEpex要求8个protocol全AND,而33个OEM驱动中无MDSS/MDP/DSI类硬件驱动,依赖无法满足。故候选D不能靠'保留DisplayDxe'实现上电,须补齐protocol提供者(D1)或改走B/C1。"
 }
