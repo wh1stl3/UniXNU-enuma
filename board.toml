@@ -52,6 +52,7 @@ packages = [
 patches = [
   "patches/dxe-stage-checkpoints.patch", "patches/dxe-dispatch-return.patch",
   "patches/dxe-driver-checkpoints.patch", "patches/dxe-dispatch-details.patch",
+  "patches/dxe-display-read.patch",
   "Resources/MuPatches/Gic-Spurious.patch",
 ]
 
