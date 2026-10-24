@@ -1,6 +1,6 @@
-# 当前状态：原厂显示栈已定位但未产出画面；阻塞在 stub protocol（R-015 未批准）
+# 当前状态：R-015 动机被推翻（APRIORI 绕过 DEPEX）；下一步用 detail15/detail13 定位 DisplayDxe
 
-2026-10-25 01:25，Asia/Shanghai。R-014（保留原厂 `DisplayDxe`）执行两次均挂死且屏幕全黑镜面（有连续拍照为证）。设备已恢复并核验。**显示栈的正确路线已从"自写 I2C"改回"补 2 个 stub protocol 让原厂 DisplayDxe 的 DEPEX 满足"**，见 D-160/D-161 与交接提示词 `docs/2026-10-25-handoff-prompt.md`。
+2026-10-25 01:40，Asia/Shanghai。Codex review 经本机源码核实后推翻了 D-160/D-161 的核心诊断链（见 D-162）：**APRIORI 中的驱动直接进 Scheduled 队列、DEPEX 判 TRUE**（`Dispatcher.c` 1426–1438），DisplayDxe 在 APRIORI 第 32 项，故它一定被 dispatch，那两个"缺失 protocol"与现象无关，**R-015 补 stub 既错且无必要**。R-014 的返回门指向 SimpleFbDxe（该镜像未编入），故其挂死**无归因**。gitlink 已修正为 `aa9ec66`，两仓一致。设备已恢复核验。交接提示词：`docs/2026-10-25-handoff-prompt.md`。
 
 ## 当前设备与恢复
 

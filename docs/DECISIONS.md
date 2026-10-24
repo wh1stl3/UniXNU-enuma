@@ -474,3 +474,17 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 
 2026-10-25 01:20 · D-161：R-014 首次执行——**屏幕在 16–20 秒内熄灭并保持全黑镜面，原厂显示栈没有产出任何画面**；同时 PE 分析给出下一个可执行方向。**执行与证据**：用户批准 R-014 后，用 `vt-oemdisplay.img`（FD dbca3fcb、`SIMPLEFB=0`+`DISABLE_UFS=1`、只省略 UFSDxe）临时 boot，**首次带连续拍照**（`scripts/screen_capture.py`，Osmo UVC 摄像头 1280×720，60 帧 @2 秒 = 120 秒）。结果：`fastboot boot` 返回 0，75 秒无自动回归 → `manual-recovery-needed`，与第一次 R-014 相同（**两次同配置均挂死，非偶发**）。**逐帧判读**：frame-000/003/006/008 仍是 Android 桌面；frame-010（约 20 秒）已是**全黑镜面**（可见房间倒影、无任何画面）；frame-012 至 frame-059 全程纯黑镜面。即屏幕在 **16–20 秒**之间熄灭，此后 100 秒无任何内容。**结论**：原厂 DisplayDxe 未产出画面（既非 boot logo 也非白屏），"保留原厂栈即可点屏"这一步未成立；两次同配置挂死说明该镜像会稳定挂起，不能当作可用显示方案。**PE 分析的关键发现**（`out/firmware-vendor/Binaries/enuma/DisplayDxe/DisplayDxe.efi`，315392 字节）：①字符串显示 DisplayDxe 自身承担背光与面板电源——`EFI_DisplayPanelPowerControl() failed to turn on/off display`、`DisplayBackLightBrightnessLevelControl`、`Charger power status is not okay or at off mode charging, so turn off backlight`，并有 `EnableDisplayThread`（对应 uefiplat.cfg 的 `EnableDisplayThread=0x1`）。②**那两个缺失 GUID 在整个 DisplayDxe PE 里一次都没出现**，只存在于 162 字节的 DEPEX 中——说明它们是**编译期依赖声明**（.inf 的 [Depex]/PROTOCOLES 消费），PE 代码并不调用，因此**补 stub 提供者即可让 DEPEX 满足**，不需要实现真实功能。③但 `Charger power status ... turn off backlight` 这条路径提示：stub 若让 DisplayDxe 误判电源状态，可能反而关背光，故 stub 必须保守（不干预任何状态）并逐项验证。**下一步**：写一个只发布这两个 GUID 的最小 stub 驱动（空接口、不干预状态），与 `--diagnostic-without-ufs` 组合使 DEPEX 满足；判据仍用连续拍照。**设备状态**：因本笔挂起待恢复。证据 out/screen-probe/oemdisplay-r1/（60 帧）、out/device-tests/20261025T011238-dxe-driver-return。
 
+
+2026-10-25 01:35 · D-162：**Codex review 推翻 D-160/D-161 的核心诊断链，R-015 动机不成立且无必要**。review 指出三点，均已在本机核实：
+
+**① DisplayDxe 在 APRIORI 第 32 项（共 39 项），缺 GUID 不会阻止派发。** 源码实证（`firmware/Mu_Basecore/MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c` 1426–1438）：APRIORI 中的驱动被直接置 `Dependent = FALSE; Scheduled = TRUE;` 并入 `mScheduledQueue`，调试输出原文 `RESULT = TRUE (Apriori)`——**DEPEX 被完全绕过**。故 D-161 中"DEPEX 缺 2 个 protocol → DXE Core 不 dispatch → 屏幕无画面"这条推理链**第一环即错**。
+
+**② 把 ① 与 PE 分析合起来，结论比 review 更彻底：那 2 个缺失 GUID 对 DisplayDxe 根本不重要。** 它们既不在 DisplayDxe 的 PE 内（代码不 `LocateProtocol`），其 DEPEX 又被 APRIORI 判定为 TRUE。两条独立的证据都指向同一结论——**这 2 个 protocol 与本次现象无关**。因此 R-015"补 stub 使 DEPEX 满足"不仅是动机错误，而且**没有必要**。review 同时指出：GUID 字节搜索只能证明"没有模块以完整 GUID 字面量引用它"，不能证明无提供者、更不能证明空实现足够；若驱动把该协议当"初始化完成"信号，发布假信号反而会让它跳过真正的初始化。此点接受。
+
+**③ R-014 的观测没有定位到 DisplayDxe。** `--dispatch-guid` 用的 `dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92` 在 `scripts/audit_enuma_fd.py` 中即命名为 `simple_guid`，是 **SimpleFbDxe 的 GUID**；而 `--diagnostic-without-ufs` 构建 `ENUMA_DIAG_SIMPLEFB=0`，**镜像里根本没有 SimpleFbDxe**。所以返回门指向一个不存在的驱动：`--dispatch-guid-only` 永不命中，75 秒无返回是必然，**不能据此判定"DisplayDxe 挂死"或"稳定挂死"**。D-161 中"两次同配置均挂死，非偶发"这句话**越过了证据**，收回。
+
+**④ 来源与状态文档确有冲突（已修）**：设备仓 gitlink 停在 `d00c416`，而锁文件、固件检出与远端均为 `aa9ec66`，工作区显示 `M firmware`。已提交 `Bump the firmware submodule pointer to aa9ec66` 修正，"两仓固定且干净"此前不成立。
+
+**修正后的正确图景**：DisplayDxe **已被 dispatch**（APRIORI 强制），那 2 个 protocol 无关；真正未知的是"dispatch 之后发生了什么"——可能运行到某处失败、可能挂在内部某个 `LocateProtocol`/硬件访问上，也可能根本没被执行到（APRIORI 只保证入队，不保证 StartImage 成功）。**在没有定位证据前，不得把 R-014 的挂死归因于 DisplayDxe，也不得把任何归因写在结论里。**
+
+**下一步采纳 review 方案**（先证明执行到哪里，再决定查什么）：复用现有 Core 检查点，以 DisplayDxe GUID `4138022f-06c7-4f79-9c94-7e33b511a4e7` 为目标，制作"StartImage 前（detail15）"与"StartImage 返回后（detail13）"两个候选，**保持原厂 PE 不变**；现场连续取证继续保留。在此之前**暂不执行 stub**。

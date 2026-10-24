@@ -423,27 +423,14 @@ R-014 执行结果（2026-10-25 01:20，D-161）：**两次均挂死，屏幕无
 
 ## R-015 · 补两个 stub protocol 使 DisplayDxe 的 DEPEX 满足
 
-状态：**pending，2026-10-25 01:25 提出**，等待用户批准上机。
+状态：**动机已被 D-162 推翻，暂不执行（2026-10-25 01:35）**。
 
-动机：R-014 证明"保留原厂 DisplayDxe"这一步本身不够——它的 DEPEX 要求 9 个 protocol 全 AND，而 `a966cc4f-ee6c-424d-a762-8ed3b5a4a501` 与 `47861dff-556f-4269-9b28-062ec3ecb30d` 在 149 个 XBL 模块里没有任何提供者，DXE Core 因此不会 dispatch 它。D-161 又确认这两个 GUID **不在 DisplayDxe 的 PE 中**（只存在于 DEPEX），即编译期依赖声明、代码不调用，所以补 stub 是满足 DEPEX 的充分手段。
+**原提案（保留备查）**：写一个只发布 `a966cc4f-ee6c-424d-a762-8ed3b5a4a501` 与 `47861dff-556f-4269-9b28-062ec3ecb30d` 的最小 stub 驱动，与 `--diagnostic-without-ufs` 组合，使 DisplayDxe 的 DEPEX 满足。
 
-| 项 | 内容 |
-| --- | --- |
-| 实现 | 一个新 DXE 驱动，仅 `InstallMultipleProtocolInterfaces` 发布这两个 GUID，接口表为全 stub（返回 `EFI_UNSUPPORTED`），**不读取、不写入、不报告任何具体状态** |
-| 组合 | 与 `--diagnostic-without-ufs` 同用（`FD dbca3fcb` 同链路），保持只省略 UFSDxe |
-| 判据 | 连续拍照（`scripts/screen_capture.py --burst`），屏幕出现任何内容 = 成功；仍全黑 = 失败 |
-| 笔数 | 1 笔 |
+**为何推翻（源码与镜像双向证据）**：
 
-**必须说清的风险**：
-1. DisplayDxe 被 dispatch 后可能走任何分支，**包括再次挂死**（R-014 已两次挂死，虽那时 DEPEX 未满足、挂死原因未必相同）。
-2. PE 字符串里有 `Charger power status is not okay or at off mode charging, so turn off backlight`。若 stub 让 DisplayDxe 误判电源/充电状态，它可能**主动关闭背光**，结果是"驱动跑起来了但屏幕照样黑"，且无法与"驱动没跑"区分。因此 stub 必须完全被动；若出现这种歧义，下一步需先补一个能区分"DisplayDxe 是否 dispatch"的判据（例如探测 GOP 是否存在），而不是继续猜。
-3. 两个 protocol 的真实身份未知（公开资料与本仓头文件均无），**无法保证 stub 的接口尺寸/语义正确**。若 DisplayDxe 实际调用其中函数指针，可能崩溃；这是本提案最大的不确定性。
+1. DisplayDxe 位于 APRIORI 第 32 项（共 39 项）。`firmware/Mu_Basecore/MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c` 1426-1438 显示 APRIORI 驱动被直接置 `Dependent = FALSE; Scheduled = TRUE;` 并入 `mScheduledQueue`，调试输出原文 `RESULT = TRUE (Apriori)`——**DEPEX 被完全绕过**。"补 stub 满足 DEPEX"这个前提不存在。
+2. 这 2 个 GUID 既不在 DisplayDxe 的 PE 内（代码不调用），其 DEPEX 又被 APRIORI 判 TRUE。**两条独立证据都说明它们与本次现象无关**，所以补 stub 不仅错、而且无必要。
+3. review 另指出：GUID 字节搜索不能证明无提供者，也不能证明空实现足够；若驱动把该协议当"初始化完成"信号，发布假信号反而会让它跳过真正的初始化。此点接受。
 
-边界：临时 boot、不写分区、不改内存字段/映射/verified、不动 R-005/R-007 账本；stub 驱动本身只发布协议、不触碰任何硬件。执行前需已完成构建+审计+打包并提交推送（`require_published` 强制）。
-
-
-
-
-
-
-
+**替代方向（见 D-162）**：先证明执行到哪里——以 DisplayDxe GUID `4138022f-06c7-4f79-9c94-7e33b511a4e7` 为目标，制作"StartImage 前（detail15）"与"StartImage 返回后（detail13）"两个候选，保持原厂 PE 不变；现场连续取证保留。定位后再决定查更早驱动、PE 构造函数、真实协议调用还是面板初始化。
