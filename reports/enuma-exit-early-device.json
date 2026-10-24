@@ -16,30 +16,11 @@
     }
   },
   "tests": [
-    {
-      "trial": 1,
-      "variant": "delay2",
-      "issued_at": "2026-10-24 17:15:10",
-      "phase": "recovered-android-boot-complete",
-      "automatic_return_within_75_seconds": true,
-      "adb_return_seconds": 17.007,
-      "boot_complete_seconds": 30.223,
-      "boot_reason": "bootloader",
-      "partition_digests_unchanged": true,
-      "device_test": "out/device-tests/20261024T171456-dxe-driver-return"
-    },
-    {
-      "trial": 2,
-      "variant": "delay7",
-      "purpose": "positive control: prove EnumaStageCheckpoint(10) actually fires",
-      "issued_at": "2026-10-24 17:20:49",
-      "phase": "recovered-android-boot-complete",
-      "automatic_return_within_75_seconds": true,
-      "adb_return_seconds": 21.277,
-      "boot_complete_seconds": 35.603,
-      "boot_reason": "bootloader",
-      "partition_digests_unchanged": true
-    }
+    {"trial": 1, "variant": "delay2", "issued_at": "2026-10-24 17:15:10", "phase": "recovered-android-boot-complete", "automatic_return_within_75_seconds": true, "adb_return_seconds": 17.007, "boot_complete_seconds": 30.223, "boot_reason": "bootloader", "partition_digests_unchanged": true, "device_test": "out/device-tests/20261024T171456-dxe-driver-return"},
+    {"trial": 2, "variant": "delay7", "purpose": "positive control: prove EnumaStageCheckpoint(10) actually fires", "issued_at": "2026-10-24 17:20:49", "phase": "recovered-android-boot-complete", "automatic_return_within_75_seconds": true, "adb_return_seconds": 21.277, "boot_complete_seconds": 35.603, "boot_reason": "bootloader", "partition_digests_unchanged": true},
+    {"trial": 3, "variant": "delay2", "issued_at": "2026-10-24 17:22:12", "phase": "recovered-android-boot-complete", "automatic_return_within_75_seconds": true, "adb_return_seconds": 15.918, "boot_complete_seconds": 30.984, "boot_reason": "bootloader", "partition_digests_unchanged": true},
+    {"trial": 4, "variant": "delay2", "issued_at": "2026-10-24 17:23:14", "phase": "recovered-android-boot-complete", "automatic_return_within_75_seconds": true, "adb_return_seconds": 16.988, "boot_complete_seconds": 33.343, "boot_reason": "bootloader", "partition_digests_unchanged": true},
+    {"trial": 5, "variant": "delay2", "issued_at": "2026-10-24 17:24:08", "phase": "recovered-android-boot-complete", "automatic_return_within_75_seconds": true, "adb_return_seconds": 16.986, "boot_complete_seconds": 31.112, "boot_reason": "bootloader", "partition_digests_unchanged": true}
   ],
   "checkpoint_execution_control": {
     "delay_delta_seconds": 5.0,
@@ -48,9 +29,12 @@
     "conclusion": "the extra 5 s of MicroSecondDelay appears almost fully in the return time, so EnumaStageCheckpoint(10) executed and ResetCold() did reset the SoC",
     "residual": "the 0.73 s shortfall against the nominal 5 s is within Android boot-time spread and is not treated as a separate effect"
   },
-  "completed_trials": 2,
+  "completed_trials": 5,
   "stalls": 0,
-  "interpretation": "stage10路径已确认执行,2笔均自动返回,无显示MMIO且无等待。仍需累计到5笔才谈稳定性;目前2/2成功不构成偶发率的上界证据。",
+  "delay2_adb_spread_seconds": {"min": 15.918, "max": 17.007, "range": 1.089, "mean": 16.725},
+  "statistical_limit": "with an assumed 15% per-run stall rate, five clean trials have a 44% chance of showing no stall at all, so this batch does not exclude the early exit from being stall-prone; it only bounds a high per-run rate. Reaching ~90% exclusion of a 15% rate needs about fifteen clean trials (0.85^15 = 8.7%).",
+  "r006_reading": "all five returned, so the branch 'reset exit is stable when no display MMIO has been touched' is favoured, and the timeout is pushed to the later dispatch/display path. This is a directional conclusion, not a quantified one.",
+  "main_hypothesis": "the two timeouts and the historical S-001/250849f/S-002/S-003 cases all sit after SimpleFbDxe starts touching 0x0ae00000..0x0ae84207; a powered-down MDP domain can hang the AHB path on first access, which would look exactly like a permanent dark screen with no USB enumeration and would be independent of how many registers the probe reads",
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false

@@ -14,11 +14,15 @@
 
 剩余两出口：①`EnumaStageCheckpoint` 的 `ResetCold()`（PSCI）既不返回也不复位，停在 `CpuDeadLoop()`，与两张全黑快照吻合（中高）；②SimpleFb 内 `0x0ae00000..0x0ae84207` MMIO 读触发未处理异常（中）。现有 1 bit 通道无法区分。
 
+## R-006 候选 A 已执行完（2026-10-24 17:24）
+
+`exit10-early`（stage 10、`CoreDispatcher()` 之前、无显示 MMIO、无等待）5 笔全部自动返回，0 挂死。delay2 四笔 adb 15.918/16.986/16.988/17.007，delay7 正对照 21.277；延时 +5 秒带来 adb +4.270 秒，证明 checkpoint 确实执行并复位。
+
+统计限制：15% 单笔挂死率下 5 笔全干净的先验概率 44%，所以**不能**据此排除早期出口偶发挂死，只排除了高失败率。
+
 ## 下一步
 
-R-006 候选 A 已批准并落地配置：`config/exit-early-probes.json` 的 `exit10-early`（stage 10、`CoreDispatcher()` 之前、无显示 MMIO、无等待），设计与差异见 `operations/2026-10-24-exit-early-candidate.md`。最多 5 笔重复：5 笔全返回 → 锁 MMIO；任一笔挂死 → 锁复位出口。冻结镜像不重试；断电冷启动不再执行。
-
-**候选已构建（2026-10-24 17:12）**：`ENUMA_DIAG_STAGE=10`，FD `95cd88f9…`，Boot v3 `a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517`，构建/FD 审计/Boot v3 回环通过，尚未实机。构建期修复三处环境问题：WSL 缺 tomli、固件仓三个子模块未初始化、staging 的 `Common/Mu` 仍指向 nuwa 参考树旧链接（已在 WSL 内删除，preflight 重建指向 `firmware/Common/Mu`）。三者都不改变固件内容，但重新出现时按同一路径处理。
+按"5 笔全返回"方向，超时推向派发之后的显示路径。主判断：两笔超时与历史 S-001/250849f/S-002/S-003 都在 SimpleFbDxe 触碰 `0x0ae00000..0x0ae84207` 之后，MDP 域未上电时首次访问可能挂住 AHB。据此做**只读 `0x0ae00000` 一个 VERSION 字**的最小 MMIO 候选：有多笔中出现挂死则 MMIO 坐实，全干净则问题在更深偏移。冻结镜像不重试；断电冷启动不再执行。
 
 ## 边界
 

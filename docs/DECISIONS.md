@@ -401,3 +401,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-24 · D-124：热状态重跑曾成功的geometry20-control（`20f079b4…`）在未断电、恢复后约14分钟的同构前置下自动返回（adb 16.962秒/完成31.221秒），排除"人工恢复后设备残留状态"；同一条step20/query1谓词今日为3成功1超时。超时必为挂死——DxeCore仅在StartImage返回后按status选门，query1/query2各自编码都未出现。只剩ResetCold/PSCI出口失效（中高）与SimpleFb MMIO读挂死（中）两候选，现1 bit通道不可区分。取消断电冷启动那一半；下一步以无显示MMIO、无等待的早期停止点候选重复多笔区分，不追加显示探针，不重试冻结镜像。
 
 2026-10-24 · D-125：R-006候选A落地为exit10-early，`ENUMA_DIAG_STAGE=10`（`CoreDispatcher()`之前）——该点尚未派发任何DXE驱动，SimpleFbDxe虽打包但永不执行，`0x0ae00000..0x0ae84207`一次不读，故本笔只检验`MicroSecondDelay`加`ResetCold()`出口。固件源码不变（仍c45e52a）。因backend对stage!=13的互斥，detail point退化到13且去掉GUID/完成兜底/GOP查询，但这些路径全部在stage13之后才可达，不构成运行期变量——不称其为step20同源对照。构建/FD审计/Boot v3回环通过，30个OEM PE/DEPEX不变。doc/环境修复（tomli、固件仓子模块、staging旧symlink指向nuwa）不改变固件内容。
+
+2026-10-24 · D-126：R-006候选A执行完毕，exit10-early（stage10、无显示MMIO、无等待）5笔全部自动返回、0挂死；delay2四笔adb 15.918–17.007（极差1.089秒），delay7正对照21.277，延时+5秒对应adb+4.270秒，先把"checkpoint确实执行并复位"立住，否则"回到Android"与"根本没复位继续启动"不可区分。统计限制：15%单笔挂死率下5笔全干净先验概率44%，本批只排除高失败率，不排除早期出口偶发挂死。据此超时推向派发之后的显示路径，主判断为MDP域未上电时首次访问挂AHB（可解释历史S-001/250849f/S-002/S-003同现象且与读取寄存器数无关），下一步做只读1个VERSION字的最小MMIO候选。
