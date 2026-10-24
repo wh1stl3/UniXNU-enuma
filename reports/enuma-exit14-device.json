@@ -1,5 +1,5 @@
 {
-  "scope": "R-007 minimal MMIO candidate (two read-only loads) stalled on the first trial",
+  "scope": "R-007 minimal MMIO candidate: two stalls in a row, and a full power cycle did not clear the second",
   "firmware_commit": "c45e52a24f7c094e5949cc0ed6f7e017e4233b78",
   "candidate_sha256": "9609d2358b5b3d930c73fc4d82ad4913dd46e298e141cd7c4d751e99b730fa5b",
   "candidate_fd_sha256": "6469cd7471a0d1c7d5e732d6de419d9fe7d1eb0c06ea6340b1f0c8d4229e65d7",
@@ -7,29 +7,44 @@
   "tests": [
     {
       "trial": 1,
+      "coordinate": "warm: adb reboot bootloader from a running Android",
       "issued_at": "2026-10-24 17:31:23",
       "phase": "manual-recovery-needed",
       "automatic_return_within_75_seconds": false,
-      "boot_returncode": 0,
       "device_test": "out/device-tests/20261024T173123-dxe-driver-return",
       "camera_snapshot": "out/camera-capture/20261024T173305/camera-snapshot.jpg",
-      "camera_observed": "screen uniformly dark with only reflections, matching the two earlier timeout captures"
+      "camera_observed": "screen uniformly dark with reflections only"
+    },
+    {
+      "trial": 2,
+      "coordinate": "cold start: Android powered off, operator booted straight into the bootloader, no Android boot in between",
+      "issued_at": "2026-10-24 17:38:51",
+      "phase": "manual-recovery-needed",
+      "automatic_return_within_75_seconds": false,
+      "fastboot_identity": {"product": ["enuma"], "current-slot": ["a"], "unlocked": ["yes"]},
+      "device_test": "out/device-tests/20261024T173851-fastboot-coldstart",
+      "camera_snapshot": "out/camera-capture/20261024T174026/camera-snapshot.jpg",
+      "camera_observed": "screen uniformly dark with reflections only"
     }
   ],
+  "stalls": 2,
   "completed_trials": 0,
-  "stalls": 1,
-  "why_this_is_a_stall_and_not_a_refusal": "this profile carries the 7 s completion fallback, so a probe returning either the pass or the fail encoding still reaches Android; only a hang inside the read leaves no return at all",
-  "previous_batch_comparison": {
-    "stage10_no_mmio": {"trials": 5, "stalls": 0, "adb_range_seconds": [15.918, 17.007]},
-    "step14_two_mmio_loads": {"trials": 1, "stalls": 1},
-    "step20_full_readonly": {"today": {"successes": 3, "stalls": 1}, "last_success": "2026-10-24 16:38:36 geometry20-control"}
-  },
-  "main_hypothesis": "the stall sits on the first access to the display window, not on probe depth. Five clean stage-10 runs that never touch 0x0ae00000..0x0ae84207 is the contrast case, and a two-load probe failing on its first attempt removes 'too many reads' as an explanation.",
-  "state_hypothesis": "display-domain reachability varies with the boot sequence rather than with the image. geometry20-control read the same window successfully at 16:38, then five stage-10 runs reset before any display driver executed, and at 17:31 the same window stalled. A plausible mechanism is that the early reset leaves XBL/ABL believing display is already initialised, so the next boot skips that initialisation and the UEFI read lands on an unclocked domain.",
-  "discriminating_test": "power-cycle the device completely (not a reset), then immediately run the same step14 image once; a clean return supports the boot-sequence hypothesis, a stall at the same point would put it back on the image side",
+  "hypothesis_tested": "D-128 boot-sequence hypothesis: an early reset makes XBL/ABL believe display is already initialised, so the next boot skips it and the UEFI read lands on an unpowered domain",
+  "hypothesis_result": "rejected as the cause of the stall; a true power cycle that never boots Android still stalls at the same two-load probe",
+  "display_window_read_ledger_2026_10_24": [
+    {"window_seconds": "15:06-16:02", "candidates": ["geometry20-control x2", "route x2", "blend x3", "reason22-control"], "mmio_reading_trials": 7, "stalls": 0},
+    {"window_seconds": "16:03-17:38", "candidates": ["step22 forward", "stage23-control", "geometry20-control", "step14 x2"], "mmio_reading_trials": 5, "stalls": 3},
+    {"window_seconds": "17:15-17:24", "candidates": ["exit10-early"], "mmio_reading_trials": 0, "stalls": 0, "note": "5 trials, resets before any DXE driver is dispatched"}
+  ],
+  "main_judgement": "after 16:03 the display window became unreliable to read (1 clean, 3 stalled), a full power cycle does not restore it, and two loads are enough to hang. Until access is reliable again nothing inferred from reading that window can be trusted, so adding further probes has no value.",
+  "what_would_refute_it": "a third trial that returns cleanly without any change in procedure would show the failures are still sporadic rather than a persistent state",
+  "candidates_next": [
+    "leave the device powered off for well over ten minutes, then repeat the same single-load probe once",
+    "verify offline whether XBL/ABL actually initialises the display domain before a fastboot boot, and what the firmware may assume",
+    "stop read-based probing and build a reliable observation channel; note the on-screen text backend still depends on GOP, which itself may need the same window"
+  ],
   "pixel_access": false,
   "mmio_writes": false,
   "partition_writes": false,
-  "hard_stop": "timeout observed for a candidate that no longer contains a long wait or a deep read sequence; no further image was issued",
-  "interpretation": "只读两次即挂,读深度不再是解释;第一次触碰显示窗口即挂死,与stage10五笔全干净的对照强烈。当前为硬停,需人工恢复;恢复后先断电冷启动再跑同一镜像以判定启动序列假设。"
+  "interpretation": "第二次硬停。冷启动未清除挂死,D-128启动序列假设被证伪。16:03前后对照从7连成功变成1成功3挂,且2次读即挂,说明当前设备状态下显示窗口访问本身不可靠;在恢复可靠访问前,任何基于读该窗口的显示结论都不可信。"
 }
