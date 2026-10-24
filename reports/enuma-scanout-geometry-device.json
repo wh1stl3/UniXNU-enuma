@@ -1,0 +1,29 @@
+{
+  "scope": "same-source staged-progress control and first-source configured geometry containment; no numeric dump",
+  "firmware_commit": "012715b070a583ae636a3a33419ea3843ad7f2ad",
+  "tests": [
+    {
+      "candidate_sha256": "20f079b4682e0365f2a3e7a1c1707829446c49d0738857458d89dc13d4ddaefd",
+      "issued_at": "2026-10-24 15:06:43",
+      "phase": "recovered-android-boot-complete",
+      "adb_return_seconds": 18.188,
+      "boot_complete_seconds": 32.984,
+      "recovery_boot_completed": true,
+      "partition_digests_unchanged": true,
+      "partition_writes": false,
+      "boot_returncode": 0,
+      "tag": "geometry20-control",
+      "step": 19,
+      "query": 1,
+      "fd_sha256": "80ba35f62b86a9cf94f7784fb3930e0a57f9848bd4c1ab8bfc511d2746ce93c2",
+      "no_buttons_confirmed_by_user": true,
+      "independent_recovery_check": true,
+      "recovery_checked_at": "2026-10-24T15:07:36.053743+08:00"
+    }
+  ],
+  "pixel_access": false,
+  "mmio_writes": false,
+  "partition_writes": false,
+  "xnu_entered": false,
+  "interpretation": "几何互补尚未齐备，未判定首候选的配置输出矩形包含关系。"
+}

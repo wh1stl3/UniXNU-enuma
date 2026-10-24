@@ -24,13 +24,13 @@ query1支持非错误marker、query2支持错误marker；Core匹配延时2秒，
 
 ## 最新实测
 
-012715b 新候选尚未实测。此前 f0cef6f 三笔无按键受控返回支持首候选稳定staging及所选DSI双窗递增，见reports/enuma-scanout-route-device.json，不能冒充新源码结果。
+geometry20-control step19/query1：2026-10-24 15:06:43；recovered-android-boot-complete；ADB 18.188秒 / Android完成 32.984秒；用户无按键 True，独立恢复 True，原分区摘要 True。
 
-本轮互补尚未齐备，未判定新几何谓词。
+几何互补尚未齐备，未判定首候选的配置输出矩形包含关系。
 
 ## 下一步与恢复
 
-全部当前文档提交推送后，按即时身份/备份/恢复门禁临时boot geometry20-control；受控返回、独立恢复及无按键确认后继续。
+全部当前文档提交推送后，按即时身份/备份/恢复门禁临时boot geometry20-contained；受控返回、独立恢复及无按键确认后继续。
 
 用户可在场恢复，新摄像头保存原图并自行顺时针90度旋转后判读，必要前后截图；实际输出/判读变化/恢复操作时录像。键盘反光不作显示输出。Android/root/原槽/解锁/备份及boot、vendor_boot原摘要即时核验；Android/fastboot已核对，TWRP/UART未验证。超时立即停止追加并优先恢复，当轮落实原因/模式/恢复交接；恢复核验后继续离线修复新候选，不原样重试失败镜像。
 
