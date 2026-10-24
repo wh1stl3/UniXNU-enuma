@@ -1,7 +1,7 @@
 # PENDING-HUMAN
 
-2026-10-24 17:31:23 起硬停：`exit14-minimal` 临时 boot 后 75 秒无 ADB/fastboot，屏幕全黑。
+2026-10-24 17:36 恢复已完成并核验通过（enuma、boot_completed=1、root、`_a`、unlocked、两个分区摘要与备份一致）。硬停解除。
 
-待办（仅差本人按键）：长按电源回 Android 或 fastboot。恢复后由主机独立核验 enuma 身份、`sys.boot_completed=1`、root、原槽、解锁、匹配备份、`boot_a`/`vendor_boot_a` 原摘要。
+待办（仅差本人按键）：按 D-128 做**完全断电冷启动**——在 Android 里关机（真正断电，不是重启），等 5–10 秒，然后按住**电源+音量下**直接进 fastboot（不经过 Android），告知主机后由主机核验 fastboot 身份并临时 boot `exit14-minimal` 一次。
 
-恢复核验通过后，下一步是**完全断电冷启动**（不是复位）再跑同一份镜像一次，用于判定 D-128 的启动序列假设。
+目的：判定"显示窗口可访问性随启动序列变化、早期复位使 XBL 跳过显示初始化"的假设。干净返回 → 假设成立；同点位挂死 → 假设回落。
