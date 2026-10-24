@@ -1,0 +1,17 @@
+{
+  "baseline_seconds": 16.7,
+  "probes": [
+    {
+      "index": 1,
+      "result": "unknown"
+    },
+    {
+      "index": 2,
+      "result": "unknown"
+    },
+    {
+      "index": 3,
+      "result": "unknown"
+    }
+  ]
+}
