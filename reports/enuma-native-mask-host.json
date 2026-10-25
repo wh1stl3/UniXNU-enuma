@@ -1,0 +1,49 @@
+{
+  "scope": "real header/selector with sanitized host callbacks; no device execution",
+  "result": "PASS: 504 actual terminal hook/status/GUID cases; 53 mask/error selector cases; max22s cold delay",
+  "command": [
+    "clang",
+    "-std=c11",
+    "-O1",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=address,undefined",
+    "-fno-pie",
+    "-no-pie",
+    "-I/mnt/d/Code/UniXNU-enuma/out/native-mask-terminal",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+    "-DENUMA_DIAG_STAGE=13",
+    "-DENUMA_DIAG_DETAIL_POINT=16",
+    "-DENUMA_DIAG_DELAY_US=2000000",
+    "-DENUMA_DIAG_DISPATCH_ORDINAL=3",
+    "-DENUMA_DIAG_GUID_ENABLED=1",
+    "-DENUMA_DIAG_GUID_ONLY=1",
+    "-DENUMA_DIAG_GOP_QUERY=1",
+    "-DENUMA_VIDEO_TERMINAL=1",
+    "-DENUMA_DIAG_DISPATCH_FALLBACK=0",
+    "-DENUMA_NATIVE_MASK_FIELD=1",
+    "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
+    "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
+    "-DDETAIL_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
+    "/mnt/d/Code/UniXNU-enuma/tests/native_mask_terminal.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/native-mask-terminal/test"
+  ],
+  "invalid_selectors_rejected": [
+    "ENUMA_NATIVE_MASK_FIELD",
+    "ENUMA_VIDEO_TERMINAL",
+    "ENUMA_DIAG_GOP_QUERY",
+    "ENUMA_DIAG_GUID_ONLY",
+    "ENUMA_DIAG_DISPATCH_FALLBACK"
+  ],
+  "source_sha256": {
+    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "86cfeb92e570fc6689c17bb56b3faa4baf6211626904b813dc87f26c35dc63e9",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "f0582c2828a4d936c059dc2e15b443f585dad70aac6608f67b750783fa5faf97",
+    "tests/native_mask_terminal.c": "e9db3bf20da198526912fc5eee7dfcccb0768efa7e63173c448937f8428f3941",
+    "scripts/check_native_mask_terminal.py": "8d9e3c0641ea33ce513bed4e7e667464ebaa9389ef8a5bc6dcd24da74233b569"
+  },
+  "maximum_terminal_delay_us": 22000000,
+  "display_mmio": false,
+  "pixel_access": false
+}

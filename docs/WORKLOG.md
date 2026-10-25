@@ -841,3 +841,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-229，启动时钟常量校准通过，继续显示隔离
 
 2026-10-25T22:19:40+08:00。80290f4已推送S-019/020模糊结果与受控恢复。新固件ed1d894eb3b8dc611d37e3cb5e7ec21583ccede5，同INF常量1/5且cold Core可执行段不变，host Linux启动原点采集/资格及精确图已绑定。S-021/S-022均受控返回且consumed；仅校准通过：{"scope": "indirect calibration of known2/7 second same-Core constants, not display/GOP evidence", "calibration_passed": true, "negative_minus_positive_origin_interval_seconds": [4.956999999994878, 5.096000000019558], "predeclared_acceptance_interval_seconds": [4, 6], "individual_uncertainty_seconds": [0.07000000000698492, 0.06900000001769513], "adb_delta": 5.343999999999998, "android_complete_delta": 4.3289999999999935, "both_new_boot_ids": true, "both_independent_recoveries": true, "old_S019_S020_reclassified": false, "limitation": "Controlled known-delay difference calibrates this host/boot-clock path only; no unique instruction-path or display proof. Hardware state can still change across boots."}。后续仍用全新资格/精确图和当前文档/即时设备相机门禁，不重试旧图。无显示读写/新映射/verified/分区变化，原始影音仅本地。
+
+
+## D-230，S-023 独立显示掩码资格完成，准备单笔实测
+
+2026-10-25T22:36:02+08:00。前里程碑c1698ec已发布校准通过，固件2bb165fa0dd882da1f79b9919435f00f3a4e36d8已推送。本候选尚未发出，源/资格/文档发布及即时身份、备份、恢复与摄像门禁后直接单笔临时boot。资格与上机图摘要见reports/enuma-native-mask-qualification.json。原R-004最多26读/two100ms，无新写入；五码cold最大22秒，预定窗口不得后调。

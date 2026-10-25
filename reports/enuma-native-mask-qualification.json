@@ -1,0 +1,184 @@
+{
+  "trial_kind": "native-display-mask",
+  "native_query": 1,
+  "native_control": false,
+  "boot_clock_capture": true,
+  "review_required": false,
+  "scope": "independent two-bit native mask with distinct collection-error code; read only; no GOP admission",
+  "firmware_commit": "2bb165fa0dd882da1f79b9919435f00f3a4e36d8",
+  "archive": "out/inherited-gop/qualified-native-mask-2bb165f-field1",
+  "files": {
+    "image.img": {
+      "sha256": "21f07fd2df74d0e049a1fe2a677542a49c68a5315b263de2346acf19961b8396",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "b531d779bbcd53bc8d2fa68d985cddd6d3f51b35d341f8862969972ac53431fa",
+      "bytes": 807
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "1f622a9ac973aa91dba5fc78981b3037f56a365793e7143556217995aed71937",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "c136604817c6677fa6a0a3d85734ef99a09750ce97e754a3f0dc190d2c4cfe5e",
+      "bytes": 3145920
+    },
+    "SimpleFbDxe.efi": {
+      "sha256": "f15d6805faa48855db6ff4ec63a605330e0fb427e085da7ae9feaebc18c2be3c",
+      "bytes": 13312
+    },
+    "provider.GNUmakefile": {
+      "sha256": "4cfee2d5f08484d67b42002087b22194a68f5fd2faaade236b89bb14a3337346",
+      "bytes": 22864
+    },
+    "entry.c": {
+      "sha256": "8954e29a47f43bea9b7f85ee7b98ec9ce83ae0da7145329a58976203cf6a81f8",
+      "bytes": 3192
+    },
+    "DxeCore.efi": {
+      "sha256": "0d3c9f5b162baf032163d5fc247101c9637b9f4dd83b6928539e99e907f26594",
+      "bytes": 164352
+    },
+    "core.map": {
+      "sha256": "18cc266d743850d534cdfae0e26287a2ac48d32f2241912859d919ecb4f44b01",
+      "bytes": 238898
+    },
+    "NativeMaskResult.h": {
+      "sha256": "f0582c2828a4d936c059dc2e15b443f585dad70aac6608f67b750783fa5faf97",
+      "bytes": 707
+    },
+    "core.GNUmakefile": {
+      "sha256": "aba48e2da309ee38c9f7d428387f868100472a47108a7161becf92994eab7eb5",
+      "bytes": 51892
+    },
+    "EnumaDispatchDetailCheckpoint.h": {
+      "sha256": "86cfeb92e570fc6689c17bb56b3faa4baf6211626904b813dc87f26c35dc63e9",
+      "bytes": 4762
+    },
+    "VideoResult.h": {
+      "sha256": "b9c9375fad42acd8dd470bd2208e70ccbf17f22a2233f62e8dab30cceec324a7",
+      "bytes": 2286
+    },
+    "Evidence.c": {
+      "sha256": "bff3961f4c0b3c010358701dff15c370901498115559e2ad342ace1f9a93de69",
+      "bytes": 5046
+    },
+    "Evidence.h": {
+      "sha256": "6a4b1fce8c0bc2a4c6cbae532edef9d7d7930253ba732a32b4f2812ff670c177",
+      "bytes": 1997
+    },
+    "firmware-build.json": {
+      "sha256": "4e0e8dacd0763a97fee1a23e12008f1f410aaa576d94eb721095a3a777b2b4d1",
+      "bytes": 21115
+    },
+    "fd-audit.json": {
+      "sha256": "cd2e26ea798a11213426a94a8e4d805db815e30482a301dfcefb338e1a125e5c",
+      "bytes": 4326
+    },
+    "host-tests.json": {
+      "sha256": "63d6038de31357712a8e18290e502e8c843520be135816820bf62fca95427aa2",
+      "bytes": 1988
+    },
+    "provider.map": {
+      "sha256": "c5ba029a671a5790b531624ccd387571252897c26d722cae6489e2bfe3d5c32d",
+      "bytes": 10809
+    },
+    "provider.AutoGen.c": {
+      "sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
+      "bytes": 10603
+    },
+    "provider.libraries.txt": {
+      "sha256": "29ee3f717f425de924df6108fd807e9202ca640d8b4980f47aa8383a52e1defc",
+      "bytes": 2700
+    },
+    "NativeObserve.c": {
+      "sha256": "6fdafa2d9833fe44926efe692ea3e6db1bc68f345828b61ffcdbdcca52ed51fc",
+      "bytes": 1990
+    },
+    "NativeObserve.h": {
+      "sha256": "0b3bed21b26eaeefc66b8ac174057713795c0910cb875c21c74e1fc016ae0b07",
+      "bytes": 1070
+    },
+    "SimpleFbDxe.disassembly.txt": {
+      "sha256": "c00e0653b36eda2cec2c27cdbc342c484dfafc9734d650960afc5aa1f6785a3f",
+      "bytes": 32404
+    },
+    "DxeCore.disassembly.txt": {
+      "sha256": "409ee5cd7535b71a4be41904b26a7d2b126a22b83ba05209c92b949d86b81e2c",
+      "bytes": 702682
+    }
+  },
+  "image": "out/inherited-gop/qualified-native-mask-2bb165f-field1/image.img",
+  "image_sha256": "21f07fd2df74d0e049a1fe2a677542a49c68a5315b263de2346acf19961b8396",
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "maximum_reads": 26,
+  "maximum_wait_calls": 2,
+  "maximum_mmio_offset": "0x6c26c",
+  "pixel_access": false,
+  "gop_published": false,
+  "map_record_in_actual_fd": true,
+  "packaged_provider_equal": true,
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "c136604817c6677fa6a0a3d85734ef99a09750ce97e754a3f0dc190d2c4cfe5e",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "terminal_return": {
+    "code_delays_seconds": [
+      2,
+      7,
+      12,
+      17,
+      22
+    ],
+    "completion_fallback": false
+  },
+  "result_interpretation": "warning1..4 encode mask0..3, warning5 collection failure. Indirect boot-origin decoding only; ambiguous or failed recovery stops additional trials.",
+  "native_mask_field": 1,
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      0.2
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        13.547999999998137
+      ],
+      [
+        16.25199999997858,
+        18.547999999998137
+      ],
+      [
+        21.25199999997858,
+        23.547999999998137
+      ],
+      [
+        26.25199999997858,
+        28.547999999998137
+      ],
+      [
+        31.25199999997858,
+        33.54799999999814
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof."
+  },
+  "calibration_sha256": "48eaaaea519da34dd0eb52186807e9e8b7fa1180dc70d5ff1685f70a8814dacb"
+}

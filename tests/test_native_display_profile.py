@@ -12,6 +12,23 @@ sys.path.insert(0,str(ROOT/'scripts'))
 import run_system_transport_trial as runner
 
 class NativeProfileTests(unittest.TestCase):
+    def test_native_mask_scope_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp).resolve();archive=root/'out/archive';archive.mkdir(parents=True)
+            report=root/'reports/mask.json';report.parent.mkdir()
+            q=dict(trial_kind='native-display-mask',archive='out/archive',native_mask_field=1,
+                   native_query=1,native_control=False,boot_clock_capture=True,
+                   maximum_reads=26,maximum_wait_calls=2,maximum_mmio_offset='0x6c26c',
+                   pixel_access=False,gop_published=False,
+                   terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False})
+            for key,bad in [('native_query',True),('native_control',True),('boot_clock_capture',False),
+                            ('maximum_reads',27),('maximum_wait_calls',3),('pixel_access',True),
+                            ('native_mask_field',True),('native_mask_field',6),
+                            ('terminal_return',{'code_delays_seconds':[2,7,12,17,27],'completion_fallback':False})]:
+                with self.subTest(key=key),patch.object(runner,'ROOT',root):
+                    changed={**q,key:bad};report.write_text(json.dumps(changed));(archive/'qualification.json').write_text(json.dumps(changed))
+                    with self.assertRaises(ValueError):runner.qualification(False,report)
+
     def test_mixed_profiles_rejected_before_staging(self):
         base=[sys.executable,'-B',str(ROOT/'firmware/Resources/Scripts/build_enuma_firmware.py'),
               '--device-root',str(ROOT),'--unixnu',str(ROOT/'out/sources/UniXNU'),

@@ -79,6 +79,29 @@ def qualification(published=False, report=None):
                       x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
             if q.get('review_required') is not False or review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
                 raise ValueError('native actual PE code review missing or mismatched')
+    if q.get('trial_kind')=='native-display-mask':
+        from native_mask_decode import make_plan
+        frozen=(ROOT/q['archive']/'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
+            raise ValueError('native mask differs from frozen qualification')
+        expected={'native_query':1,'native_control':False,'boot_clock_capture':True,
+                  'maximum_reads':26,'maximum_wait_calls':2,'maximum_mmio_offset':'0x6c26c',
+                  'pixel_access':False,'gop_published':False,
+                  'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
+        if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
+            raise ValueError('native mask scope invalid')
+        if type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,6):
+            raise ValueError('invalid native mask field')
+        calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
+        if q.get('decode_plan')!=make_plan(ROOT) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
+            raise ValueError('fixed boot clock calibration/plan differs')
+        if published:
+            review=json.loads((ROOT/'reports/enuma-native-mask-code.json').read_text())
+            if (q.get('review_required') is not False or review.get('review_required') is not False or
+                review.get('firmware_commit')!=q['firmware_commit'] or review.get('image_sha256')!=q['image_sha256'] or
+                review.get('provider_sha256')!=q['files']['SimpleFbDxe.efi']['sha256'] or
+                review.get('core_sha256')!=q['files']['DxeCore.efi']['sha256']):
+                raise ValueError('actual mask/Core code review missing or mismatched')
     if 'detail_point' in q:
         frozen_manifest = (ROOT / q['archive'] / 'qualification.json').resolve()
         if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:
