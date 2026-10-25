@@ -23,7 +23,7 @@ def main():
     valid = code_review(core, map_text, point)
     pe = pefile.PE(data=core)
     calls = valid['callsites'][0]
-    start_address = (calls['entry_call_rva'] if point == 20 else
+    start_address = (calls['entry_call_rva'] if point in (20, 21) else
                      (calls['CoreStartImage_calls_before'] if point == 13 else calls['CoreStartImage_calls_after'])[0])
     no_start = bytearray(core)
     offset = pe.get_offset_from_rva(int(start_address, 16))
@@ -43,7 +43,7 @@ def main():
             print('PASS rejection: ' + name)
         else:
             raise AssertionError('Accepted corrupted boundary input: ' + name)
-    if point == 20:
+    if point in (20, 21):
         for label, instruction in [
                 ('removed null-handle gate', next(i for i in valid['checkpoint_body'] if i['mnemonic'] == 'cbz')),
                 ('removed scheduled-handle comparison', next(i for i in valid['checkpoint_body'] if i['mnemonic'] == 'cmp' and i['operands'] == 'x8, x1'))]:

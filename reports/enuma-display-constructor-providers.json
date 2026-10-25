@@ -1,0 +1,35 @@
+{
+  "scope": "static constructor provider correspondence; no runtime presence or ABI success claim",
+  "source_sha256": {
+    "out/firmware-build/Mu_Basecore/MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c": "baa2b6c6c201afaa06d044ea1f15f26c48f2133821d347a0d42f54e4aed231ba",
+    "firmware/Silicon/Qualcomm/QcomPkg/Library/PlatformPeiLib/PlatformPei.c": "6e13139a9e2812a896178ee059fb1e5e70970a5baf40ee5339079be8e5a95525",
+    "firmware/Silicon/Qualcomm/QcomPkg/Include/Protocol/EFIKernelInterface.h": "e499b097f6ae4163860fa60a3fb3cdce8ab2862679c8e72096c8acce3eab887f",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3"
+  },
+  "standard_tables": {
+    "DXE_services": {
+      "guid": "05ad34ba-6f02-4214-952e-4da0398e2bb9",
+      "consumer": "DisplayDxe constructor0x59f8",
+      "provider": "CoreInstallConfigurationTable gEfiDxeServicesTableGuid before dispatch"
+    },
+    "HOB_list": {
+      "guid": "7739f24c-93d7-11d4-9a3a-0090273fc14d",
+      "consumer": "DisplayDxe constructor0x5d70 -> 0x5ce0",
+      "provider": "CoreInstallConfigurationTable gEfiHobListGuid before dispatch"
+    }
+  },
+  "kernel_interface": {
+    "consumer_constructor": "0x612c",
+    "protocol_guid": "b5062be7-170b-4a32-be21-689262ff4399",
+    "protocol_slot": "gBS+0x140 LocateProtocol",
+    "fallback": "0x61f4 HOB GUID8ec2bd8d-56d7-49ef-8796-631778f8ebf8 payload+0x18",
+    "source_provider": "BuildXblHobs publishes scheduler pointer only when discovery succeeded",
+    "runtime_pointer_and_full_ABI": "unobserved; not automatically safe to manufacture or reuse",
+    "source_map_lookup_gap": "Current enuma map has neither FD Reserved nor FD_Reserved; normal GetXblHobAddresses source path returns without scheduler discovery. Other OEM protocol providers remain unexcluded."
+  },
+  "next": "Check actual direct PE return versus Exit/LongJump/handle-connect before attributing constructor failure",
+  "no_stub_or_constant_canary": true,
+  "limits": [
+    "Scheduler source gap is not proof of no OEM protocol provider or the runtime hang. Constructor0x612c tolerates a null fallback; main later disables thread path if unavailable. No foreign address should be copied to fill the map."
+  ]
+}

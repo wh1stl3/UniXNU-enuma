@@ -1,0 +1,25 @@
+{
+  "scope": "offline actual Core mutation checks and prior21/20/15/13 contracts",
+  "cases": [
+    {
+      "archive": "pe-return-boundary-cb9e568",
+      "exit": 0,
+      "output": "PASS rejection: removed StartImage call\nPASS rejection: corrupt GUID immediate\nPASS rejection: wrong checkpoint point\nPASS rejection: removed null-handle gate\nPASS rejection: removed scheduled-handle comparison\nPASS rejection: altered specialized nanosecond delay\n"
+    },
+    {
+      "archive": "pe-entry-boundary-cb9e568",
+      "exit": 0,
+      "output": "PASS rejection: removed StartImage call\nPASS rejection: corrupt GUID immediate\nPASS rejection: wrong checkpoint point\nPASS rejection: removed null-handle gate\nPASS rejection: removed scheduled-handle comparison\nPASS rejection: altered specialized nanosecond delay\n"
+    },
+    {
+      "archive": "precall-boundary-cb9e568",
+      "exit": 0,
+      "output": "PASS rejection: removed StartImage call\nPASS rejection: corrupt GUID immediate\nPASS rejection: wrong checkpoint point\nPASS rejection: altered specialized nanosecond delay\n"
+    },
+    {
+      "archive": "return-boundary-cb9e568",
+      "exit": 0,
+      "output": "PASS rejection: removed StartImage call\nPASS rejection: corrupt GUID immediate\nPASS rejection: wrong checkpoint point\nPASS rejection: altered specialized nanosecond delay\n"
+    }
+  ]
+}

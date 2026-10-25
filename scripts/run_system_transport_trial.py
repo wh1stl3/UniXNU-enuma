@@ -32,7 +32,7 @@ def qualification(published=False, report=None):
         if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:
             raise ValueError('boundary report differs from frozen qualification manifest')
         fat = json.loads((ROOT / 'reports/enuma-full-payload.json').read_text())
-        if (q['detail_point'] not in (13, 15, 20) or q['target_guid'] != '4138022f-06c7-4f79-9c94-7e33b511a4e7'
+        if (q['detail_point'] not in (13, 15, 20, 21) or q['target_guid'] != '4138022f-06c7-4f79-9c94-7e33b511a4e7'
                 or q.get('completion_fallback_enabled') is not False or q.get('ram_payload_sha256') != fat['payload_sha256']):
             raise ValueError('boundary mode requires exact DisplayDxe pre-call/entry/return, full FAT and no fallback')
     pin = json.loads((ROOT / 'config/uefi-source.lock.json').read_text())
