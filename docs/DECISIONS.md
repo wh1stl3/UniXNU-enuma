@@ -526,3 +526,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-25 · D-174：0fb21cc发布后S-001单笔于14:12:13发出，2.625秒命令返回0、5.110秒fastboot断开，命令后75秒无Android/fastboot返回，执行端标manual-recovery-needed并停止追加。相机450/450帧可解码，抽样黑屏，无可判读报告，13项均未观察，不认定DisplayDxe/UEFI/XNU阶段。候选consumed，不重试；请求既有长按恢复、独立核验后自动离线分析。当前恢复未确认，按AGENTS同轮落实所有停点文件。
 
 2026-10-25 · D-175：用户报告Android返回，14:15:38独立核验enuma/完成/root/A槽/解锁/原boot与vendor_boot摘要一致，解除D-174恢复待办并按用户规则继续离线隔离。450主录像帧、194对截图和739恢复录像帧保留，无13项可判读报告；不以黑屏定因。优先核同SoC umi禁用显示线程策略与本机真实cfg消费者，最小新候选仍保留完整FAT，不重试S-001。
+
+2026-10-25 · D-176：恢复后继续完成实际DisplayDxe配置slot0x18/shim HOB/生产provider链审计，固定umi tested48bc412配置Blob；只改EnableDisplayThread1→0。真实配置/helper host ASan/UBSan、语义单值delta、实际SEC TE值0与旧1破坏负例及完整构建/PE/AOSP资格通过，firmwarecb9e568，新镜像5e07e65e…77413327。无内存字段/verified/分区变化，不声称已同步初始化或修复根因；计划发布后S-002新SHA单笔，不重复S-001。

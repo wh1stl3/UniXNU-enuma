@@ -1,7 +1,9 @@
-# enuma交接：D-175，S-001已恢复，继续离线隔离
+# enuma交接：D-176，S-001已恢复，S-002单变量新候选已资格
 
-先读AGENTS、STATUS、D-174/D-175与S-001专项。S-001 d2ab5ef8…7e1db75已单笔超时并consumed，禁止重试。用户报告Android返回后，14:15:38独立完成/root/A槽/解锁/原boot和vendor_boot摘要核验通过；恢复已确认，不要重复询问按键或批准。
+先读AGENTS/STATUS/D-176与operations/2026-10-25-display-thread-off.md。S-001 d2ab5ef8…7e1db75已单笔超时并consumed，14:15:38人工恢复后独立Android/root/A槽/解锁/原boot与vendor_boot摘要通过；不要重问或重试。
 
-450/450主录像帧、194对截图未见可判读13项报告；739/739恢复录像帧保留。不能把黑屏定案为DisplayDxe/UEFI/XNU阶段。按用户持久规则自动继续离线分析和新软件：优先核同SoC umi测试固件禁显示线程策略与本机配置shim/实际PE消费者ABI，做最小可归因候选，保留完整FAT/13项，不造成功stub。新运输FDT/CRC故障仍未排除。
+恢复后已按持久规则继续新软件：只改EnableDisplayThread1→0，固定同SM8250 umi测试策略，实际OEM slot0x18/shim HOB/生产provider链和主机正负例已核。实际FD SEC TE值0及改回1负例通过，完整构建/PE/AOSP真实FAT资格保持。配置0只是绕过线程创建，不等于同步显示初始化，旧代码缺Kernel时本也可能清零，所以不是已定根因。
 
-源码当前firmware9459426/UniXNU5fdbd5d，执行前0fb21cc与超时cf2ae7d已推送。用户已授权上机无需逐笔批准；新候选先资格/当前文档推送及即时设备/备份/采集/恢复门禁。board/plan内存字段、512MiB、verified/分区规则保持；无当前人工待办，旧R-016 consumed/B备用/R-002失败/R-015暂停不复活。后续实际以STATUS与Git/消耗账本为准。
+firmwarecb9e568已推送，UniXNU仍5fdbd5d；新镜像103817216字节，SHA256 5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327，归档out/full-boot/transport/qualified-cb9e568。S-002执行前发布本轮文档，然后按用户“上机无需批准”直接由相机wrapper单笔临时boot完整输入/13项；先核当前状态和consumed，别重复发。
+
+75秒观察非自动返回保证，异常停止追加并恢复/独立核验后继续离线。当前无人工待办，board/plan内存字段/512MiB/verified/分区规则保持，R-016 consumed/B备用/R-002失败/R-015暂停不复活。以STATUS与Git/实际执行账本为准，任何结果同轮落实文档推送。

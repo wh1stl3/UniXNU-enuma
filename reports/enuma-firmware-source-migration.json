@@ -1,7 +1,7 @@
 {
   "scope": "source migration and official board configuration only; no device execution",
   "firmware_repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "firmware_commit": "945942685770eb7200ac2a6551cd3ee5aa554b61",
+  "firmware_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
   "source_device_commit": "1ab7ee8",
   "migrated_files": {
     "LICENSE": {
@@ -82,7 +82,7 @@
     },
     "Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": {
       "destination": "Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c",
-      "sha256": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e"
+      "sha256": "057c15d9c87a3b25a9639b51faca11c5305508d20aaf8e11970b0e19d6aa8cd5"
     },
     "Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": {
       "destination": "Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf",
@@ -150,7 +150,8 @@
     "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/TransportBounds.h": "4cb024f0734b94c10409f2ef6952ae931bca85a6246896a51514a71e080adcca",
     "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/TransportReport.h": "0b25f6998ffb306ac495c6d88125a8cca1adeaa731fe9624bafa4016360fbd75",
     "Resources/Scripts/enuma_payload_contract.py": "11bce88f0f7b99dee9aec449dfb650bd0b7d5fa181795c8b799337557ec13f1d",
-    "docs/ram-payload-v3.md": "0474d0231aa441426e6a98de46cc9bf8fa5de4c361b334e6dd0beab78b906095"
+    "docs/ram-payload-v3.md": "0474d0231aa441426e6a98de46cc9bf8fa5de4c361b334e6dd0beab78b906095",
+    "docs/display-thread-policy.md": "f13db7ab983c2cdb66a1cfb6db196fe5391e5c57c0a984ee1ed5c343cf70d2a7"
   },
   "new_firmware_table": {
     "config": "enuma",
@@ -214,5 +215,5 @@
     }
   },
   "other_board_tables_unchanged": true,
-  "firmware_input_files_checked": 78
+  "firmware_input_files_checked": 79
 }

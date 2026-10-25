@@ -1,0 +1,11 @@
+{
+  "scope": "actual packed SEC TE configuration, static only",
+  "firmware_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
+  "fd_sha256": "43f18cd3e9355ea802822831060f2437d7d694750a1a6f897e5c4299cb357808",
+  "sec_guid": "9affb503-e643-4141-8b90-17e8588b1d35",
+  "te_sha256": "3f7435a028b4c47827110cf5bb18a744d90c27b06f09cfa36c6e89202b349984",
+  "entry_file_offset": "0xd740",
+  "value": 0,
+  "mutation_to_old_value_rejected": true,
+  "hardware_tested": false
+}

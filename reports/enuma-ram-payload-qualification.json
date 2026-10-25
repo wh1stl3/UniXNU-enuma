@@ -1,12 +1,12 @@
 {
   "scope": "offline actual PE/compiler/boot packaging qualification, no device execution",
-  "firmware_commit": "945942685770eb7200ac2a6551cd3ee5aa554b61",
-  "fd_sha256": "cb24c8f14dd19fba1e759301efbb8003d433cccd243f5a0fb087e6641a27dc09",
+  "firmware_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
+  "fd_sha256": "43f18cd3e9355ea802822831060f2437d7d694750a1a6f897e5c4299cb357808",
   "modules": {
     "EnumaRamPayloadDxe": {
       "bytes": 20992,
       "sha256": "5517d8f792c4e3ad0fa4bad5abccd8c77d08b805ecc4bbf327cca24ae5922729",
-      "compiler_sha256": "78c6f49b21fb542c9c397b52bdccb44011453dc2e6c29c881dd67de5e8dc9208",
+      "compiler_sha256": "c5192f3992bffcc186f8a20783a0179114acb05f82fff864abdb545772d4b804",
       "flags": {
         "ENUMA_RAM_PAYLOAD": "1",
         "ENUMA_DIAG_STAGE": "0",
@@ -57,13 +57,13 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "8144fbf59947ac4712c3a1e03966d8f74b37b69d404b6eb53b756e7268d98f7a",
+    "kernel_sha256": "6f9042567260ba00b6387bdbe633f4279a39596410b8153536bf67e7a9210c84",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
-  "image_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
+  "image_sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327",
   "image_bytes": 103817216,
-  "image": "out/full-boot/transport/enuma-system-transport-visible-v3.img",
-  "archive": "out/full-boot/transport/qualified-9459426",
+  "image": "out/full-boot/transport/enuma-display-thread-off-v3.img",
+  "archive": "out/full-boot/transport/qualified-cb9e568",
   "files": {
     "EnumaRamPayloadDxe.efi": {
       "bytes": 20992,
@@ -75,7 +75,7 @@
     },
     "EnumaRamPayloadDxe.GNUmakefile": {
       "bytes": 23748,
-      "sha256": "78c6f49b21fb542c9c397b52bdccb44011453dc2e6c29c881dd67de5e8dc9208"
+      "sha256": "c5192f3992bffcc186f8a20783a0179114acb05f82fff864abdb545772d4b804"
     },
     "EnumaProbe.efi": {
       "bytes": 102400,
@@ -107,19 +107,19 @@
     },
     "SILICIUM_UEFI.fd": {
       "bytes": 3145728,
-      "sha256": "cb24c8f14dd19fba1e759301efbb8003d433cccd243f5a0fb087e6641a27dc09"
+      "sha256": "43f18cd3e9355ea802822831060f2437d7d694750a1a6f897e5c4299cb357808"
     },
     "enuma-uefi.raw": {
       "bytes": 3145920,
-      "sha256": "8144fbf59947ac4712c3a1e03966d8f74b37b69d404b6eb53b756e7268d98f7a"
+      "sha256": "6f9042567260ba00b6387bdbe633f4279a39596410b8153536bf67e7a9210c84"
     },
     "enuma-system-transport-v3.img": {
       "bytes": 103817216,
-      "sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75"
+      "sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327"
     },
     "firmware-build.json": {
       "bytes": 15129,
-      "sha256": "a4e280f79050c3b289608aa30bf63c2b7b2c0cf70c6966600dae2b49b5f80114"
+      "sha256": "06daf037983ccb44e46f9eaa56437c651abc7033d223961d5c21322f93ba8af9"
     },
     "payload-contract.json": {
       "bytes": 1404,

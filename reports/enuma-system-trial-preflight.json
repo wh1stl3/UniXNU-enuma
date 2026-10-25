@@ -1,6 +1,6 @@
 {
   "scope": "offline pre-device evidence; no boot issued",
-  "candidate_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
+  "candidate_sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327",
   "tested_payload_tail_equals_staged": true,
   "staged_extra_guard": "existing preflight SimpleFb safety return; ENUMA_DIAG_SIMPLEFB=0 checked in actual compiler flags",
   "camera_evidence": "out/camera-capture/20261025T140659-system-transport/observation.json",
@@ -8,5 +8,8 @@
   "trial_count_planned": 1,
   "observation": "camera plus exact-target USB/Android recovery; no time-derived stage inference",
   "recovery": "previously demonstrated long-press Android return; immediate identity/backup recheck in guarded runner",
-  "partition_operations": "temporary boot only; no flash/erase/slot change"
+  "partition_operations": "temporary boot only; no flash/erase/slot change",
+  "trial_id": "S-002",
+  "isolation": "only EnableDisplayThread 1->0; actual SEC TE/consumer/provider evidence",
+  "prior_recovery": "out/device-tests/20261025T141538-recovery-reconciliation.json"
 }

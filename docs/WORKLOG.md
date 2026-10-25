@@ -366,3 +366,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-25 14:12:13 · 执行前0fb21cc已推送。S-001镜像d2ab5ef8…7e1db75单笔boot，命令2.625秒返回0、断开5.110秒；75秒无返回，runner退出2，停止追加并consumed。450/450帧可解码，未观察可判读报告。证据out/device-tests/20261025T141158-system-transport、out/camera-capture/20261025T141155-system-transport及enuma-system-transport-result.json。已请求长按恢复并启动恢复录像；当前ADB/fastboot未枚举，恢复核验待完成，所有当前文档同步D-174。无flash/erase/改槽。
 
 2026-10-25 14:15:38 · cf2ae7d超时停点已推送。用户回复已回Android后独立reconcile通过，证据out/device-tests/20261025T141538-recovery-reconciliation.json；恢复739/739帧解码，主录像450/450帧及194截图网格复核未见报告。S-001失败记录保留，current.local.json指向恢复完成；同步D-175全部当前状态/人工/审查文档，继续离线配置ABI隔离，不追加boot或重试失败镜像。
+
+2026-10-25 · 6b1e390恢复文档已推送。D-176核本机DisplayDxe实际字符串/slot0x18/zero分支和shim HOB GUID，固定umi测试配置；新固件cb9e568只变EnableDisplayThread1→0并已推送。主机实际provider ABI测试、实际FD SEC TE配置0和旧值负例、32个OEM PE/DEPEX/新实际PE及AOSP往返通过；5e07e65e…77413327归档qualified-cb9e568。记录clock-skew警告及实际产物证据。此条为S-002执行前，未追加boot，新状态/交接/审查同步。

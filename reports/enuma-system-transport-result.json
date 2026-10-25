@@ -14,10 +14,6 @@
   "camera_evidence": "out/camera-capture/20261025T141155-system-transport",
   "camera_frames": 450,
   "camera_decoded_frames": 450,
-  "target_online": {
-    "adb": false,
-    "fastboot": false
-  },
   "report_stages_observed": [],
   "no_stage_inference_from_timing": true,
   "recovery": {
@@ -53,5 +49,9 @@
     "written_frames": 739,
     "decoded_frames": 739
   },
-  "candidate_consumed": true
+  "candidate_consumed": true,
+  "target_online_at_timeout": {
+    "adb": false,
+    "fastboot": false
+  }
 }

@@ -151,8 +151,8 @@
     "board_sha256": "bc627da4ed58ceca661dd1e28b2f5f1b6e6c3d0b283dabd343ec0fd4294d5952"
   },
   "experimental_ram_transport": {
-    "firmware_commit": "945942685770eb7200ac2a6551cd3ee5aa554b61",
-    "image_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
+    "firmware_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
+    "image_sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327",
     "image_bytes": 103817216,
     "batch_stages": 13,
     "scope": "actual compiled and packaged driver, offline qualified; runtime FDT/SFS not observed"

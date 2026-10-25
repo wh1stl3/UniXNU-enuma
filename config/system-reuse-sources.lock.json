@@ -90,6 +90,10 @@
         "Platforms/Xiaomi/umiPkg/Include/APRIORI.inc": {
           "sha256": "9dcded5fc83109f705b6f48f30dea512ee66842ca7f905245a33ab3149a9d87c",
           "bytes": 1863
+        },
+        "Platforms/Xiaomi/umiPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": {
+          "sha256": "d0a41c12aa7779fcc3c16f90f627aa83e3e54e8da2e5d263ed850c8779fbf142",
+          "bytes": 1435
         }
       }
     }

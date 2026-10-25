@@ -2,7 +2,7 @@
   "scope": "firmware-only invocation of the official backend; no device boot or enuma kernel",
   "complete": true,
   "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
-  "uefi_source_commit": "945942685770eb7200ac2a6551cd3ee5aa554b61",
+  "uefi_source_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
   "official_backend_sha256": "5b1125c76a933f9256a20780e94060e35534ee96c726e3f01876234df802a336",
   "unixnu_qualification": {
     "base": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
@@ -140,7 +140,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "cb24c8f14dd19fba1e759301efbb8003d433cccd243f5a0fb087e6641a27dc09",
+  "fd_sha256": "43f18cd3e9355ea802822831060f2437d7d694750a1a6f897e5c4299cb357808",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",
@@ -149,7 +149,7 @@
     "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "af94bea69b78c6cdf84afbaac233045a5b5dfb18c5424e91c71143940b7c1bab",
     "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": "eb2e265dab9a94cdb27a828ea035d345771410076ec7218924b4c6ad189bd983",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "59c112ce58bb1469ff7ab5f24f34e3bdc47bb8728469c711b26b678c0dfcd17e",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": "057c15d9c87a3b25a9639b51faca11c5305508d20aaf8e11970b0e19d6aa8cd5",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf": "df54486d9fadee158dbbd3048370ebebdd8900202daeb47ccd8199951e6d7004",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": "19e9594c2eb18c511d942aa9121beed12f060d1c6c52070ff63c893c2266b4a4",
@@ -157,9 +157,9 @@
     "firmware/Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "firmware/Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "firmware/Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "firmware/Resources/Enuma/extensions.json": "273fe42b72cec29f8b36c4e3dee47aa8b8c7803e7034c0a24f078902b72035b0",
+    "firmware/Resources/Enuma/extensions.json": "e181c526f7ba87333c9c23a2fe3e3b85a957019d38355863eed60959cedce2a4",
     "firmware/Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
-    "firmware/Resources/Enuma/migration.json": "384a63b2bfad6602646a22307281262904a579b3ed2060ba2cf16c485792cc71",
+    "firmware/Resources/Enuma/migration.json": "4f5277c80b3691c2010a91d059c42f543230ebec11166ff603d63b0042ebc1cd",
     "firmware/Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
     "firmware/Resources/Enuma/vendor.json": "9c37197536afc0eeb6deeb708fa8b436692a4c693e2eb3b4653f7108931f8fec",
     "firmware/Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",

@@ -1,0 +1,11 @@
+{
+  "scope": "semantic configuration delta only; no runtime assertion",
+  "baseline_commit": "945942685770eb7200ac2a6551cd3ee5aa554b61",
+  "changed_values": {
+    "EnableDisplayThread": [
+      1,
+      0
+    ]
+  },
+  "other_config_values_unchanged": true
+}
