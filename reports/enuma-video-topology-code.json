@@ -1,0 +1,91 @@
+{
+  "scope": "actual archived providers and reviewed symmetric Core executable comparison; no hardware success inference",
+  "queries": [
+    {
+      "query": 1,
+      "core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "provider_sha256": "352d9c9aa74aa9629de19b930aac672cd71855c2e140722b1c9cd609d2334605",
+      "selector_rva": "0x279c",
+      "selector": [
+        {
+          "rva": "0x279c",
+          "mnemonic": "cmp",
+          "operands": "w8, #0xd"
+        },
+        {
+          "rva": "0x27a0",
+          "mnemonic": "mov",
+          "operands": "w8, #5"
+        },
+        {
+          "rva": "0x27a4",
+          "mnemonic": "csinc",
+          "operands": "x0, x8, xzr, ne"
+        }
+      ],
+      "core_executable_equal_reviewed_S010": true
+    },
+    {
+      "query": 2,
+      "core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "provider_sha256": "816c9a96e8345c442512fe1c6d46cc54c922bcbf8b0983fcf758e312f4ced86a",
+      "selector_rva": "0x279c",
+      "selector": [
+        {
+          "rva": "0x279c",
+          "mnemonic": "cmp",
+          "operands": "w8, #0xd"
+        },
+        {
+          "rva": "0x27a0",
+          "mnemonic": "mov",
+          "operands": "w8, #5"
+        },
+        {
+          "rva": "0x27a4",
+          "mnemonic": "csinc",
+          "operands": "x0, x8, xzr, eq"
+        }
+      ],
+      "core_executable_equal_reviewed_S010": true
+    }
+  ],
+  "provider_instruction_changes": [
+    {
+      "rva": "0x112c",
+      "positive": [
+        "mov",
+        "w0, #5"
+      ],
+      "negative": [
+        "mov",
+        "w0, #1"
+      ]
+    },
+    {
+      "rva": "0x1188",
+      "positive": [
+        "mov",
+        "w0, #5"
+      ],
+      "negative": [
+        "mov",
+        "w0, #1"
+      ]
+    },
+    {
+      "rva": "0x27a4",
+      "positive": [
+        "csinc",
+        "x0, x8, xzr, ne"
+      ],
+      "negative": [
+        "csinc",
+        "x0, x8, xzr, eq"
+      ]
+    }
+  ],
+  "core_reference": "out/inherited-gop/qualified-terminal-1a4b204-q1/DxeCore.efi",
+  "source_predicates_unchanged": true,
+  "physical_gop_tested": false
+}

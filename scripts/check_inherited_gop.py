@@ -31,6 +31,10 @@ def main():
     for source in [backend,blt,topo,evidence,video]:
         checks.append(run([*common,'-I'+str(core/'MdePkg/Include/AArch64'),'-target','aarch64-none-elf','-ffreestanding','-O2','-c',source,'-o',out/(source.stem+'.o')]))
         checks.append(run(['llvm-nm','--undefined-only',out/(source.stem+'.o')]))
+    wrapper=out/'video-result-freestanding.c'
+    wrapper.write_text('#include "VideoResult.h"\nENUMA_U32 Select(ENUMA_U32 S,ENUMA_U32 R,ENUMA_U32 Q) { return EnumaVideoResult(S,R,Q); }\n')
+    checks.append(run([*common,'-I'+str(core/'MdePkg/Include/AArch64'),'-target','aarch64-none-elf','-ffreestanding','-O2','-c',wrapper,'-o',out/'VideoResult.o']))
+    checks.append(run(['llvm-nm','--undefined-only',out/'VideoResult.o']))
     report=dict(scope='actual GOP callbacks and actual pinned Mu FrameBufferBltLib on synthetic host RAM; modeled allocation/TPL/BaseLib primitives',
       checks=checks,sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [backend,blt,topo,decode,capture,evidence,video,selector,ROOT/'tests/inherited_gop.c',ROOT/'tests/inherited_topology.c',ROOT/'tests/inherited_evidence.c',ROOT/'tests/inherited_video_result.c']},
       hardware_tested=False,physical_framebuffer_access=False,protocol_published=False,

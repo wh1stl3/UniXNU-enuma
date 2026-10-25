@@ -9,6 +9,8 @@ def analyze(positive,negative):
     for row,query in [(positive,1),(negative,2)]:
         if row.get('topology_status_query')!=query or row.get('consumed') is not True or row.get('automatic_android_return') is not True:
             raise ValueError('require issued, recovered complementary status queries')
+        if row.get('boot_returncode')!=0 or row.get('timing',{}).get('fastboot_return_seconds') is not None:
+            raise ValueError('boot command failure or intervening fastboot reboot invalidates timing comparison')
         checks=row.get('recovery',{}).get('checks',{})
         if checks!={'device':'enuma','boot_completed':'1','slot':'_a','flash_locked':'0','root_available':True}:
             raise ValueError('independent recovery gate missing')

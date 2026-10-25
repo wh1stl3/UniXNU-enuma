@@ -8,7 +8,7 @@ from analyze_video_topology_pair import analyze
 
 class TopologyPairTests(unittest.TestCase):
     def pair(self):
-        p=dict(topology_status_query=1,consumed=True,automatic_android_return=True,firmware_commit='a'*40,image_sha256='b'*64,
+        p=dict(topology_status_query=1,consumed=True,automatic_android_return=True,boot_returncode=0,firmware_commit='a'*40,image_sha256='b'*64,
                timing=dict(adb_return_seconds=21,boot_complete_seconds=35),recovery=dict(
                checks=dict(device='enuma',boot_completed='1',slot='_a',flash_locked='0',root_available=True),
                partitions=[dict(partition=n,device_and_backup_match=True) for n in ['boot_a','vendor_boot_a']]))
@@ -34,4 +34,6 @@ class TopologyPairTests(unittest.TestCase):
         p,n=self.pair();n['recovery']['checks']['root_available']=False
         with self.assertRaises(ValueError):analyze(p,n)
         p,n=self.pair();n['recovery']['partitions']=[]
+        with self.assertRaises(ValueError):analyze(p,n)
+        p,n=self.pair();n['timing']['fastboot_return_seconds']=10
         with self.assertRaises(ValueError):analyze(p,n)

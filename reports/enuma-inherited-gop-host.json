@@ -339,6 +339,44 @@
       "exit_code": 0,
       "stdout": "                 U EnumaSelectVideoRoute\n",
       "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/video-result-freestanding.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/VideoResult.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/VideoResult.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
     }
   ],
   "sources": {

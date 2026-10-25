@@ -1,0 +1,91 @@
+{
+  "trial_kind": "inherited-video-audit",
+  "scope": "first returned status equals Topology13 (query1) or its exact complement (query2); marker1 means diagnostic match only, never GOP/predicate success",
+  "topology_status_query": 2,
+  "topology_status_value": 13,
+  "firmware_commit": "8710ebd93da7b19bb7ffd0e388f6925399231153",
+  "archive": "out/inherited-gop/qualified-topology-8710ebd-q2",
+  "files": {
+    "image.img": {
+      "sha256": "4454dfaa0b00d08d277e921641b51b250850906236770d6514f97cca51f54389",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "7c8717b67ad7a54deea01f40a725fc33ef4c0673d1b8460e41ae218032c2eefb",
+      "bytes": 807
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "d82cf752f0d6e7d6831a49878b05cb100c2dbbca76a0d75c30986013d22dd57c",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "297d00daa38f5e241129026b6bc75f51f002d4363f7f58d5d7edf1425f6f4baf",
+      "bytes": 3145920
+    },
+    "SimpleFbDxe.efi": {
+      "sha256": "816c9a96e8345c442512fe1c6d46cc54c922bcbf8b0983fcf758e312f4ced86a",
+      "bytes": 18432
+    },
+    "provider.GNUmakefile": {
+      "sha256": "ed7806ace38ea14fc84413586b73e80e2fc8ceb9955cde062661564eae07a0ec",
+      "bytes": 22505
+    },
+    "entry.c": {
+      "sha256": "7dfe4aac36599a44c8cebe80264ab3e7ae6ef148588f19c23c6fa16ba6d60440",
+      "bytes": 2572
+    },
+    "DxeCore.efi": {
+      "sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "bytes": 164352
+    },
+    "core.GNUmakefile": {
+      "sha256": "a4258bf93ba4a6ca139c8f0f788b45d1e95af2e279da1da9e7e0b693496e01e3",
+      "bytes": 51533
+    },
+    "EnumaDispatchDetailCheckpoint.h": {
+      "sha256": "3a6e0cf398b1a3a7486f5768d0990c85865659e164f4340905a4d873f9968c0c",
+      "bytes": 4184
+    },
+    "VideoResult.h": {
+      "sha256": "f52d2b0cfd000b4f3a6d4aae4c6351478b86ef6663c7de7a539d7906fa191129",
+      "bytes": 834
+    },
+    "firmware-build.json": {
+      "sha256": "862bdc1b2a87f159bf4563084acdb33cff553c511e860da3b9c17b469cdd9b87",
+      "bytes": 19023
+    },
+    "fd-audit.json": {
+      "sha256": "2d4b5419c58eeefb111004191c049ceff81baa06a964a6ea5d19c0848d2750eb",
+      "bytes": 4326
+    },
+    "host-tests.json": {
+      "sha256": "86ee920aa3a78745763aa5e6c4c0d3295b4d923a3310700595b0438b452bc081",
+      "bytes": 15819
+    }
+  },
+  "image": "out/inherited-gop/qualified-topology-8710ebd-q2/image.img",
+  "image_sha256": "4454dfaa0b00d08d277e921641b51b250850906236770d6514f97cca51f54389",
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "maximum_reads": 330,
+  "maximum_wait_calls": 2,
+  "maximum_mmio_offset": "0x6c26c",
+  "pixel_access": false,
+  "gop_published": false,
+  "map_record_in_actual_fd": true,
+  "packaged_provider_equal": true,
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "297d00daa38f5e241129026b6bc75f51f002d4363f7f58d5d7edf1425f6f4baf",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "terminal_return": {
+    "pass": 2,
+    "fail": 7,
+    "completion_fallback": false
+  },
+  "result_interpretation": "query1: Topology13=>2s, all other valid statuses=>7s; query2: reverse. Metadata/PCD rejection maps Arguments11. Invalid status or success with wrong requirements emits no marker. Paired timing only supports classification; timeout/ambiguous pair stays unknown."
+}
