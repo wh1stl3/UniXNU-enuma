@@ -11,7 +11,10 @@ GEOMETRY_CATEGORIES={'1':'not-classified-as-stable-geometry-rejection','2':'stab
 
 GLOBAL_OUTPUT_CATEGORIES={'1':'collection-or-contract-rejected','2':'runtime-or-stability-rejected','3':'exact-global-coordinate-contract-rejected','4':'source-capture-or-layout-rejected','5':'stable-global-coordinate-structure-blend-address-and-downstream-unproven'}
 
-def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,structure=False,structure_detail=False,global_output=False):
+GLOBAL_DETAIL_CATEGORIES={'1':'not-classified-as-source-decode-rejection','2':'source-geometry-or-coverage-rejected','3':'source-format-or-encoding-rejected','4':'source-address-or-layout-consistency-rejected','5':'source-security-or-other-decode-rejected'}
+
+def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,structure=False,structure_detail=False,global_output=False,global_detail=False):
+    if type(global_detail) is not bool or (global_detail and not global_output): raise ValueError('invalid global source detail scope')
     if type(global_output) is not bool or (global_output and (not structure or structure_detail)): raise ValueError('invalid global output scope')
     if type(structure_detail) is not bool or (structure_detail and not structure): raise ValueError('invalid structural geometry scope')
     if type(structure) is not bool or (structure and (detail or staging or layout or blend)): raise ValueError('invalid structure scope')
@@ -22,4 +25,4 @@ def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,struct
     result=decode_clock(clock,plan)
     if result['stop_additional_trials']: return result
     code=result['warning_code']
-    return dict(conclusion='route-category-inferred',category=(GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if structure_detail else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)[str(code)],warning_code=code,stop_additional_trials=False,direct_register_log=False)
+    return dict(conclusion='route-category-inferred',category=(GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if structure_detail else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)[str(code)],warning_code=code,stop_additional_trials=False,direct_register_log=False)

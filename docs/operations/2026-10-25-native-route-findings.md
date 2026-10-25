@@ -154,3 +154,18 @@ offset in a logical origin on a copy. Raw stability and all original source
 decode predicates remain. Code3 refutes this exact model; code4 moves the
 blocker into source decode; code5 is a stable logical structure only, retaining
 blend/address/physical topology requirements. No pixel or hardware writes.
+
+
+## S-037 broad source return; S-038 unchanged-sampler status question
+
+S-037 valid source-capture-or-layout-rejected, origin27.444..27.524,
+Android52.562s, independent identity and device/backup digests pass; consumed.
+The exact global-coordinate rejection code did not appear, but code4 also
+covers source capture failures; do not equate it with one decoder status.
+Main suspicion is source format/alpha versus the exact RGBX predicate, then
+address/common-layout consistency; source geometry/coverage can refute this.
+New global-detail changes only the selector: require actual NativeDecode
+reason19 and zero output requirements before grouping the returned status.
+Other phases and success map to unclassified1. Code5 is rejection. Native5,
+raw stability, exact coordinate copy and decoder remain byte-source identical.
+The19680 selector matrix and nine camera-free native Python tests pass.

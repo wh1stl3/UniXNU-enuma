@@ -316,3 +316,41 @@ staging/layout/blend/mask/query0 are bound to both actual compile files.
 Sanitizer330 failures/two waits/raw XY changes,768 mixer/128 source-output
 mutations and old sampler rejection support review. Stable logical coordinate
 view retains blend/address/downstream obligations and is not visible output.
+
+## S-038 actual source decode status, sourcef0c6a5d
+
+Archive qualified-native-global-detail-f0c6a5d; disassembly digest
+2d50093b75da8d741512b59416fad348358dd4562d97b6acd829c73cb5204694.
+Image5a78637b05c05551b29962f2c949843febf9b20befa83d72a93867a9205132f3;
+FD987b5bca3f76e8937be17773de578e99d14fc3c476cd935db7c12db526f6a739.
+Core whole bytes equal S-037. Archived Evidence/Topology/Decode/VideoCapture C
+and Evidence/Topology/InheritedScanout headers are byte identical to S-037.
+Compared full provider:82 normalized operand groups plus all unmatched branch
+destinations manually reviewed. Normalization is navigation, not proof.
+
+Changes are return register allocation, inline source selector, shifted labels
+and0x60 inserted read-only status table. Metadata still checks R-004 before
+revision reads; capture order/preconditions,330 cap/two100ms waits, raw stable
+configuration/frame windows, exact global coordinate model, copied right XY,
+geometry/source format/stride/secure/address/coverage checks retain semantics.
+All changed branches from capture/wait/stability/coordinate phases go to
+unclassified1; source decoder reasons remain19 at20b8. Code and data still
+perform no pixel access, MMIO stores, new mappings or GOP publication.
+
+Selector1b34..1ba4 first requires reason19 and zero requirements. Status4/9
+returns2;5 returns3;7/8 returns4. Remaining bounded status2..13 looks up
+rdata4068: actual reachable2/3/6/10/12/13 entries5,11 entry1; other entries
+are unreachable after explicit earlier tests. Out-of-range returns1. Success
+complete reason12/requirements22 returns1, never a decode rejection.
+Verified actual12xUINT64 table, not just source. Old rdata prefix4000..4068
+unchanged; following literal data shifts0x60. All remaining differences are
+debug directory RVA/file offset, CodeView hash, and ARM64 unwind function
+length/epilogue start adjusted by24 instructions, matching added code.
+
+Read helper2e64 retains count<330/aligned offset<=6c26c before sole load2eac
+at0xae00000; revision count cap and all capture read arguments unchanged.
+Full FAT/RAM_PAYLOAD1/STRUCTURE1/GLOBAL_OUTPUT1/GLOBAL_DETAIL1, other detail
+profiles0, are checked in both actual generated compilation files and FD.
+19680 actual-header selector combinations and nine native Python cases pass.
+Code2..5 identifies a source decoder rejection after the fixed Native5 prior
+stages; it provides neither numeric register values nor physical display proof.

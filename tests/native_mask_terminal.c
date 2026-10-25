@@ -109,6 +109,17 @@ int main(void) {
     unsigned expected=(s==13&&!r&&w>=36&&w<=39)?w-34:1;
     assert(EnumaNativeGeometryResult(s,r,w)==expected);
   }
+  for(unsigned s=0;s<=14;s++)for(unsigned w=0;w<=40;w++)for(unsigned r=0;r<32;r++) {
+    unsigned expected=1;
+    if(!r&&w==19) {
+      if(s==4||s==9)expected=2;
+      else if(s==5)expected=3;
+      else if(s==7||s==8)expected=4;
+      else if(s==2||s==3||s==6||s==10||s==12||s==13)expected=5;
+    }
+    assert(EnumaNativeGlobalDetailResult(s,r,w)==expected);
+  }
+  printf("PASS: 19680 global source decode selector cases; ");
   printf("PASS: 19680 geometry selector cases; ");
   printf("PASS: 17280 structural selector cases; ");
   printf("PASS: 17280 blend selector cases; ");
