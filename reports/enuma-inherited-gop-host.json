@@ -1,0 +1,289 @@
+{
+  "scope": "actual GOP callbacks and actual pinned Mu FrameBufferBltLib on synthetic host RAM; modeled allocation/TPL/BaseLib primitives",
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/X64",
+        "-O1",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c",
+        "/mnt/d/Code/UniXNU-enuma/tests/inherited_gop.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/gop"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/gop"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: real Mu GOP Blt, 24 channel permutations, 4 operations, clear, bounds, stale ownership and allocation cleanup\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/X64",
+        "-O1",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c",
+        "/mnt/d/Code/UniXNU-enuma/tests/inherited_topology.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/topology"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/topology"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: reversed mixer identities, explicit right flag, dual tile decode, 12 topology rejects and 144 callback failures; downstream/CPU proof remains required\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/X64",
+        "-O1",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c",
+        "/mnt/d/Code/UniXNU-enuma/tests/inherited_evidence.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/evidence"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/evidence"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: 3 same-boot samples, both DSI counters, 969 read failure injections, 2 wait failures, route mutation and right-link stall rejected; address/downstream requirements retained\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/InheritedGop.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/InheritedGop.o"
+      ],
+      "exit_code": 0,
+      "stdout": "                 U AllocateCopyPool\n                 U AllocatePool\n                 U AllocateZeroPool\n                 U FrameBufferBlt\n                 U FrameBufferBltConfigure\n                 U FreePool\n                 U gBS\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/FrameBufferBltLib.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/FrameBufferBltLib.o"
+      ],
+      "exit_code": 0,
+      "stdout": "                 U CopyMem\n                 U HighBitSet32\n                 U SetMem\n                 U SetMem32\n                 U SetMem64\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Topology.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Topology.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Evidence.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Evidence.o"
+      ],
+      "exit_code": 0,
+      "stdout": "                 U EnumaCaptureInherited\n                 U EnumaCaptureRoutedMixers\n                 U EnumaDecodeInherited\n                 U EnumaResolveMixerOrigins\n",
+      "stderr": ""
+    }
+  ],
+  "sources": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c": "1b3dc06d5e638d01c666bdb6e5f0226288a4044bb0da3a9243697d7dec1b9307",
+    "firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c": "3c4ef872faa7e042bcd2199a225c28ae50afe6768363734210f73645e683fb53",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "87db91ffbb0517b0b300254718784a8620ecfba0a5f6b73ff10b9bb269f3d893",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "3bfe404c5eadbcedcd7a1c06c5561e61bde09a8253b9fab9c178f20b0cff3ae2",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c": "1d61cd69efe4d4c284babc12e48ccd298ef5e3c51a0a6e570dee035c90ec62ec",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "6d4e7564c6728e6677cf65ffe79b3b99b2c1d3816b93a4629da4774f00cd5067",
+    "tests/inherited_gop.c": "609dd979a3f05eefd9f159cf1dc41d0f462815ed8f56bed3004e6a8d1c95061c",
+    "tests/inherited_topology.c": "9b282f4468a65f39d11d54f4ef58b50e7de311ad58c093f1baccc9c45a32d258",
+    "tests/inherited_evidence.c": "25c497949ea51b9fccb81b0131383300094379e4be66c93b5c1a156dcaf1707c"
+  },
+  "hardware_tested": false,
+  "physical_framebuffer_access": false,
+  "protocol_published": false,
+  "unresolved": [
+    "same-boot PP/DSC/DSI downstream association",
+    "CPU/SMMU address relationship and uncached mapping",
+    "live stable activity/refresh/blend qualification"
+  ]
+}

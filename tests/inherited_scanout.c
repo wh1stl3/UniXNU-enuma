@@ -45,6 +45,7 @@ int main(void) {
   setup(); S.Ctls[0].IntfActive=1; check(EnumaInheritedRoute);
   setup(); S.Ctls[0].Layers[0][0]=0; check(EnumaInheritedRoute);
   setup(); S.Ctls[0].Layers[0][3]=1; check(EnumaInheritedVirtualRect);
+  setup(); S.Ctls[0].Layers[0][0]=5; S.Ctls[0].Layers[0][1]=1; check(EnumaInheritedRoute); // stage13, not stage5
   setup(); S.Pipes[0].Secure=1; check(EnumaInheritedSecure);
   setup(); S.Pipes[0].Multirect=1; check(EnumaInheritedVirtualRect);
   setup(); S.Pipes[0].OpMode=1; check(EnumaInheritedFormat);

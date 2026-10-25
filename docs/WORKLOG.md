@@ -568,3 +568,9 @@ umi仍是同SM8250/同donor系统、UFS/root/Data的首要参考，审查HEAD未
 没有board/bringup-plan内存字段、verified、flash/erase/改槽变化，R-002/R-015/像素硬边界保持。仍无13项运输/GOP/XNU/iPadOS实机通过，PMGR/UFS/root/Data未闭合。本阶段离线完成不等于最终目标完成。
 
 2026-10-25 · 固件0080640新增纯组件、e6d1867严格回调状态修复均已推送；本机视频/双链路来源与Android DRM只读核对、28场景/267故障位置和负错误回调测试通过。设备源码锁/gitlink同步，尚无新GOP镜像或上机。
+
+
+2026-10-25 D-195：真实Mu GOP后端主机及QEMU执行通过（完整链接8d85d39；RAM-only，不安装协议）。firmware bddc5d8实现、8d85d39修正摘要/LF，784a59d接只读入口。29解码/267采集故障、24通道Blt、144 LM故障、1257采样故障和20项固件单测通过。新enuma boot未执行，继续收紧活动LM采集后资格。证据reports/enuma-inherited-gop-*.json，原始媒体本地。
+
+
+2026-10-25T17:04:20+08:00 D-196：最终898ae25只读双链路入口完成构建/实际FD、PE、编译宏、R-004映射、完整FAT/BootShim boot-v3与不可变资格。镜像f8f14e3b1ec0b5a097d938b55ed85123e913d16392e42cd3f981419e333a4dc8，尚未执行。原活动LM读取511e6cf、计数原生前置898ae25；最终969故障位置/20固件单测通过，QEMU8d85d39 RAM后端通过。当前Android/root/原槽/备份/原分区复核及相机通过，发布后按现有授权S-008单笔，75秒失败停止追加，影音本地。

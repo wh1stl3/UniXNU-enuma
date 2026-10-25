@@ -1,13 +1,15 @@
-# 当前状态：D-194，继承扫描输出解码适配已实现，GOP尚未恢复
+# 当前状态：D-196，S-008只读双链路候选已资格，文档发布后执行
 
-用户要求优先恢复真实GOP/可见错误通道。本轮已实现固件InheritedScanoutLib（源e6d1867（组件首笔0080640）），仅纯解码和回调采集，未接入DSC/FDF、未发布GOP、未构建新FD/boot或上机。旧S-007 consumed，最近完整Android/root/A槽/解锁/原分区与备份摘要核验为16:06:22。当前无人工或审批待办，原始影音本地。
+更新时间2026-10-25T17:04:20+08:00。用户授权条件满足直接上机，原始影音本地。固件源898ae255e95cb53733250b26b647bb59757f86aa已推送，根仓source lock/gitlink同步。当前S-008尚未发出；旧S-001..007均consumed，不重试。当前Android完成/root/A槽/解锁和原boot_a/vendor_boot_a及本地备份摘要刚经独立复核通过（reports/enuma-recovery-reconciliation.json）；相机1920x1080可用，旋转后已核屏幕。
 
-已明确关键板差：enuma保存FDT的默认K81双CPHY为video模式、每链路800x2560；本机只读Android DRM记录1600x2560视频模式，不是当前UEFI扫描输出证明。cas命令模式/CTL_START策略不直接采用。新解码器使用显式宽高/splash边界/mode及每pipe局部→全局原点，未知原点拒绝，支持分块完整覆盖与严格格式/范围检查。成功仍保留活动性、混合/遮挡、CPU地址关系、刷新、拓扑五项要求，不允许清标志换协议。
+真实InheritedGopLib后端已实现并通过主机ASan/UBSan、AArch64编译、实际UEFI链接及QEMU RAM自测。QEMU固定源8d85d39、EFI cc320e24…dadbd93，输出ENUMA_GOP_SELFTEST PASS RAM ONLY；不安装协议、不访问物理显示，不是enuma GOP通过。主机实际复用Mu FrameBufferBltLib，24通道排列、四类Blt、清屏/guard/溢出/分配失败/归属失效通过。29纯解码场景、267原采集故障、144全LM离线适配器故障和最终969运行采样故障位置通过，20项固件单测通过。
 
-生产代码28个ASan/UBSan解码场景、267个回调失败位置通过；freestanding AArch64对象无外部未定义符号。Capture最多267回调、最大偏移0x73830，无direct MMIO/pixel指针及任何硬件写入。测试是合成快照，不是实机寄存器、完整UEFI链接或GOP通过。来源、SHA、许可均固定，未复制cas平台内存/面板/物理Blt/刷新逻辑。firmware源e6d1867（组件首笔0080640）已推送，源锁/gitlink同步，原board/plan未改。
+S-008是完整96MiB FAT输入的只读取证，不发布GOP、不调用像素后端。固定新入口代替metadata SimpleFb正文，原INF/GUID/Core-warning路径保留；OEM CPR/Display/UFS按明示诊断模式省略。实际PE与staging/source/编译宏相同，实际FD含精确R-004映射表记录。先核活动video CTL/两路计数使能，再读两个选中LM；闲置LM混合不读。三个同次快照、两窗100ms、最多969读、最大偏移0x73830；要求两路无回绕进展、布局/staging/blend稳定、完整覆盖。按LM right bit判角色，不按编号猜。
 
-下一步接真实GOP后端及同次UEFI快照/双链路原点判定：复用FrameBufferBltLib，核活动和稳定路由、混合、splash访问与视频刷新条件，再生成可审查完整载荷候选；不得发布假成功GOP或重复失败旧镜像。R-004映射仍为staging精确补丁，未来实际FD必须重新审核，原迁移表缺MDP不能当新映像已具备映射。当前尚无可直接填入OriginMask的实机拓扑记录，且五项运行条件仍未闭合。
+候选镜像SHA256：f8f14e3b1ec0b5a097d938b55ed85123e913d16392e42cd3f981419e333a4dc8，103817216字节；FD：fe052cda49df0113c92d883479ad0841fcb1bc1191a4727083a20f59bbf7b9b3；BootShim+FD：870d793c6f52aed371311dff2a1a4c80081259effb495bd62f86ee97bfb0a8b1；FAT：49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773。不可变归档out/inherited-gop/qualified-video-898ae25-q1，资格reports/enuma-inherited-video-qualification.json；离线runner检查通过。中间构建不用于上机，898ae25最终重新构建已通过staged-source相等性。
 
-详见operations/2026-10-25-inherited-gop-offline.md、reports/enuma-inherited-scanout-host.json、enuma-inherited-scanout-inputs.json。本轮只做Android身份/DRM只读查询，没有新boot/像素/MMIO/分区写入。D-193官网复审主线保持：真实GOP/可见错误优先，OEM深层早停转备用，通用RAM驱动/QR与schema2迁移分开评估。构建基线尚无0080640对应新完整镜像，既有cb9e568实测归档仅历史且均consumed。
+本次文档提交推送后，重新即时核身份/备份/恢复并按已有授权单笔临时fastboot boot。PASS warning选2秒Core gate，拒绝可能7秒dispatcher fallback；单笔时序只是支持，不唯一证明命中或具体值。75秒主机超时立即consumed、停止追加并优先既有长按恢复；不是固件保证自动返回。恢复后核Android/root/原槽/解锁/原分区摘要，自动离线分析，不重试同图。
 
-没有board/bringup-plan内存字段、verified、flash/erase/改槽变化，R-002/R-015/像素硬边界保持。仍无13项运输/GOP/XNU/iPadOS实机通过，PMGR/UFS/root/Data未闭合。本阶段离线完成不等于最终目标完成。
+物理GOP尚未恢复：新采样成功仍保留ADDRESS/TOPOLOGY，CPU/SMMU地址关系、UC缓存政策和LM→PP/DSC→INTF下游关联未闭合；原Display Reserved仍WT，不能清标记发布协议。无board/bringup-plan内存字段、verified、flash/erase/改槽变更。当前无新人工或审批待办；原始影音只out/本地，不上传Git/Release/CI。
+
+详见operations/2026-10-25-inherited-gop-backend.md、enuma-inherited-gop-host/qemu/policy与video-qualification报告。框架pin5fdbd5d及完整系统输入保持；13项运输/GOP/XNU/iPadOS实机可见结果仍未闭合，PMGR/UFS/root/Data仍开放。

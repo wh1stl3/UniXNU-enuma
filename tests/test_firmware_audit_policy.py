@@ -8,6 +8,19 @@ from firmware_audit_policy import omitted_oem_modules
 
 
 class FirmwareAuditPolicyTests(unittest.TestCase):
+    def test_video_audit_requires_read_only_profile_not_metadata_or_pixels(self):
+        value=self.fixture()
+        value.update(inherited_video_audit_read_only=True,diagnostic_simplefb_metadata_only=False,
+                     diagnostic_gop_step=0,diagnostic_gop_query=1,value_probe={'source':'off'},
+                     gop_backend_selftest_ram_only=False,diagnostic_omitted_oem_modules=['CPRDxe','DisplayDxe','UFSDxe'])
+        value['firmware_configuration']['defines'].update(ENUMA_DIAG_SIMPLEFB='1',ENUMA_DIAG_PIXEL_PREVIEW='0')
+        self.assertEqual(omitted_oem_modules(value,'a'*64),frozenset(value['diagnostic_omitted_oem_modules']))
+        for key,bad in [('diagnostic_simplefb_metadata_only',True),('diagnostic_pixel_preview',True),
+                        ('diagnostic_gop_step',13),('diagnostic_gop_query',0),('value_probe',{'source':'raw'}),
+                        ('inherited_video_audit_read_only','1'),('gop_backend_selftest_ram_only',True)]:
+            candidate=copy.deepcopy(value);candidate[key]=bad
+            with self.subTest(key=key),self.assertRaises(ValueError): omitted_oem_modules(candidate,'a'*64)
+
     def fixture(self):
         return {'complete':True,'fd_sha256':'a'*64,'diagnostic_omitted_oem_modules':['UFSDxe'],
                 'firmware_configuration':{'defines':{'ENUMA_DIAG_DISABLE_UFS':'1'}}}

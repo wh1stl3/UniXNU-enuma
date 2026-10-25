@@ -27,6 +27,12 @@ def qualification(published=False, report=None):
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
+    if q.get('trial_kind')=='inherited-video-audit':
+        frozen=(ROOT/q['archive']/'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
+            raise ValueError('video audit differs from frozen qualification')
+        if q.get('pixel_access') is not False or q.get('gop_published') is not False or q.get('maximum_reads')!=969:
+            raise ValueError('unsupported video audit scope')
     if 'detail_point' in q:
         frozen_manifest = (ROOT / q['archive'] / 'qualification.json').resolve()
         if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:

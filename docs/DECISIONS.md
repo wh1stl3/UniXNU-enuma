@@ -726,3 +726,13 @@ umi仍是同SM8250/同donor系统、UFS/root/Data的首要参考，审查HEAD未
 详见operations/2026-10-25-inherited-gop-offline.md、reports/enuma-inherited-scanout-host.json、enuma-inherited-scanout-inputs.json。本轮只做Android身份/DRM只读查询，没有新boot/像素/MMIO/分区写入。D-193官网复审主线保持：真实GOP/可见错误优先，OEM深层早停转备用，通用RAM驱动/QR与schema2迁移分开评估。构建基线尚无0080640对应新完整镜像，既有cb9e568实测归档仅历史且均consumed。
 
 没有board/bringup-plan内存字段、verified、flash/erase/改槽变化，R-002/R-015/像素硬边界保持。仍无13项运输/GOP/XNU/iPadOS实机通过，PMGR/UFS/root/Data未闭合。本阶段离线完成不等于最终目标完成。
+
+
+## D-195：真实GOP后端先完成UEFI/QEMU，再采同次板级证据
+
+来源：用户本轮指令、UEFI GOP契约及固定小米52a2f18 LM/CTL实现。复用Mu FrameBufferBltLib，不复制cas物理写入/CTL_START；按LM right bit推局部原点。三个快照/两路计数只清配置/活动/刷新要求，ADDRESS/TOPOLOGY保留。原WT映射不满足当前UC后端契约；用新只读候选补证。旧R-005/value计划及S-007不复活。8d85d39 UEFI RAM自测QEMU通过，不是enuma/GOP成功。当前先避免闲置LM混合读取，资格和全部文档发布后沿已有授权单笔。
+
+
+## D-196：先单笔同次双链路只读资格，不发布未证实GOP
+
+活动CTL限定两个LM，969读/两次100ms；先原生counter-enable3/timing/active再读混合，避免默认读取闲置LM。真实后端已QEMU执行，CPU/SMMU/缓存和下游关联仍未知。S-008完整FAT只读取证与旧消耗计划分离；实际产物绑定、全部文档推送和即时恢复条件后直接单笔，不再次审批。2/7秒时序只作支持，超时优先恢复、同图不重试。

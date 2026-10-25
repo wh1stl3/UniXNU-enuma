@@ -1,0 +1,121 @@
+{
+  "scope": "pinned manufacturer register facts and saved board inputs; not a fresh UEFI register snapshot",
+  "sources": [
+    {
+      "path": "techpack/display/msm/sde/sde_hw_top.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_top.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/inherited-gop/routing-sources/sde_hw_top.c",
+      "sha256": "a6e62f8f1eee54db4189eb3dc3f7108ddde2d6ac7b8a2393d773fdce368a9fe3",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_hw_pingpong.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_pingpong.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/inherited-gop/routing-sources/sde_hw_pingpong.c",
+      "sha256": "38680d8be360d8914909309e525326f1496cb5787b9fb9cdd85e01f4aeb59337",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_hw_dsc.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_dsc.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/inherited-gop/routing-sources/sde_hw_dsc.c",
+      "sha256": "a75a18176d4467abec31ccffcd7b0a3e981c9409a80a5f38980ae0ba0c486689",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "drivers/iommu/arm-smmu.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/drivers/iommu/arm-smmu.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/inherited-gop/routing-sources/arm-smmu.c",
+      "sha256": "b8f50e4f22fc30911c63b7b6a5f1149ece3989c722436b90b244eef083360063",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "drivers/iommu/arm-smmu-regs.h",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/drivers/iommu/arm-smmu-regs.h",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/inherited-gop/routing-sources/arm-smmu-regs.h",
+      "sha256": "12808741f28e5eef3b5894745ff7934137a05461ebaaa01e6e37e8a67e53fff8",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_hw_top.h",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_top.h",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/inherited-gop/routing-sources/sde_hw_top.h",
+      "sha256": "2f1b27399274226b8be7489ac3da9888831fc4816250605db3c2e304c89f2c32",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_hw_lm.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_lm.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/display-native-sources/sde_hw_lm.c",
+      "sha256": "4e9cec8f99af86c29000b274b7a8958daa4edae85fae85eda3034b8d1086a08f",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_crtc.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_crtc.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/display-native-sources/sde_crtc.c",
+      "sha256": "7e83811c2da73d754aa4d8c3bf454635a323161c36805e870772d936a27fa469",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_hw_catalog.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_catalog.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "local_path": "out/display-native-sources/sde_hw_catalog.c",
+      "sha256": "8d108cc673708f0ba629b86e0231686ecbd3437d1757c4144a60ad3a8bfc34de",
+      "license": "GPL source reference only; not imported"
+    }
+  ],
+  "saved_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "lm_origin_rule": "LM_OP_MODE bit31 chooses right mixer; numeric LM order is not panel order",
+  "mixer_offsets": [
+    282624,
+    286720,
+    290816,
+    294912,
+    299008,
+    303104
+  ],
+  "mixer_pair_mask": [
+    2,
+    1,
+    4,
+    3,
+    6,
+    5
+  ],
+  "source_split_supported_by_soc": true,
+  "nonsecure_display_iommu": {
+    "provider": "/soc/apps-smmu@15000000",
+    "args": [
+      2080,
+      1026
+    ],
+    "provider_reg": [
+      352321536,
+      1048576,
+      353902592,
+      32
+    ]
+  },
+  "original_display_memory_record": "{\"Display Reserved\", 0x9c000000ULL, 0x2400000ULL, AddMem, MEM_RES, SYS_MEM_CAP, Reserv, WRITE_THROUGH_XN},",
+  "original_memory_source_sha256": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+  "physical_gop_admitted": false,
+  "gop_protocol_published": false,
+  "device_boot_issued": false,
+  "unresolved": [
+    "fresh stable UEFI dual-link snapshot",
+    "LM/PP/DSC/INTF downstream association",
+    "display SMMU stream translation or bypass",
+    "CPU identity mapping and cache policy compatible with backend"
+  ],
+  "next": "Qualify a bounded read-only same-boot audit before physical pixel access; do not clear address/topology requirements to publish GOP"
+}
