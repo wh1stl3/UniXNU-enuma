@@ -178,3 +178,4 @@ D-219执行账本：S-016同范围map-only/cold已自动回Android并独立核�
 
 
 D-220：用户继续推进最小console头部只读隔离S-017；同B0000000/2MiB、stage10三读+0/4/8及cold，无console写或warm。完整资格/当前文档发布/即时恢复与相机门禁后直接单笔；不重试consumed图，不扩大旧writer范围，影音仅本地。
+`nD-220执行账本：S-017头部三读/cold于20:48:03单次发出并自动回Android，独立完成/root/A槽/解锁/双分区备份摘要通过。S-017/R-017-READ consumed，S-001..017不重试；头部读数未输出，不称写入或留存成功，后续先隔离无console访问的warm路径。原始影音仅本地。

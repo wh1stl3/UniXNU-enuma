@@ -47,7 +47,7 @@
     "execution_record": "reports/enuma-ramoops-S-016-result.json"
   },
   "R-017-READ": {
-    "status": "approved",
+    "status": "consumed",
     "image_sha256": [
       "0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a"
     ],
@@ -67,6 +67,6 @@
     },
     "authorization": "User continued the documented minimum-header-read isolation after explicit direct boot authorization; same approved extent, no writes/warm/pmsg expansion.",
     "qualification": "reports/enuma-ramoops-header-read-qualification.json",
-    "execution_record": null
+    "execution_record": "reports/enuma-ramoops-S-017-result.json"
   }
 }

@@ -1,0 +1,68 @@
+{
+  "trial": "S-017",
+  "consumed": true,
+  "firmware_commit": "89e6491626ed0edbc48dc7fb41a6902e8ce7eb4c",
+  "image_sha256": "0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a",
+  "issued_at": "2026-10-25 20:48:03",
+  "boot_returncode": 0,
+  "boot_command_seconds": 2.625,
+  "fastboot_disconnect_seconds": 5.094,
+  "adb_return_seconds": 20.047,
+  "boot_complete_seconds": 35.969,
+  "automatic_android_return": true,
+  "host_fastboot_recovery_reboot": false,
+  "scope": {
+    "base": "0xB0000000",
+    "size": "0x200000",
+    "marker_bytes": 0,
+    "stage": 10,
+    "delay_seconds": 2,
+    "reset": "cold",
+    "pmsg_access": false,
+    "header_read_offsets": [
+      0,
+      4,
+      8
+    ]
+  },
+  "independent_recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "3ecea3dfe5457d2456b81f58b8b2f99f6a68f24eebb2a7a64366f443358fbbc8",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T204851-recovery-reconciliation.json"
+  },
+  "camera": {
+    "directory": "out/camera-capture/20261025T204746-system-transport",
+    "frames": 253,
+    "decoded_frames": 253,
+    "video_sha256": "9c1e8b60e295f15ffd1faf0d71cf5868499af9c5de10f72f369a193c1fbf8a97",
+    "desktop_visually_inspected": true,
+    "raw_media_local_only": true,
+    "audio": false
+  },
+  "conclusion": "Actual three-load header path plus cold return is supported by controlled Android return; no direct header values, writes or retention proven",
+  "suspects": "Physical header reads alone less likely to explain S-015; writer stores/header publication versus warm reset still unseparated; cross-boot variation remains",
+  "next": "isolate warm reset with same map and no console accesses before considering any new write candidate",
+  "verified_flags_changed": false
+}
