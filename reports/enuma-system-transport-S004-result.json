@@ -1,0 +1,59 @@
+{
+  "slot": "_a",
+  "candidate_sha256": "a21682ca083acf6bb6cb5e6c8ef021d7172c308a44855b12f82cf6237aa3c42e",
+  "label": "dxe-driver-return",
+  "phase": "recovered-android-boot-complete",
+  "preflight_boot_completed": true,
+  "partition_writes": false,
+  "fastboot_identity_retry_count": 0,
+  "issued_at": "2026-10-25 15:30:15",
+  "issued_at_utc": "2026-10-25T07:30:15.629565+00:00",
+  "issued_monotonic": 152766.343,
+  "boot_returncode": 0,
+  "boot_output": "Sending 'boot.img' (101384 KB)                     OKAY [  2.329s]\r\nBooting                                            OKAY [  0.259s]\r\nFinished. Total time: 2.611s\r\n",
+  "boot_command_return_seconds": 2.641,
+  "boot_command_returned_at_utc": "2026-10-25T07:30:18.269144+00:00",
+  "fastboot_disconnect_observed_seconds": 5.11,
+  "adb_return_seconds": 21.172,
+  "recovery_boot_completed": true,
+  "partition_digests_unchanged": true,
+  "boot_complete_seconds": 36.672,
+  "boot_reason": "bootloader",
+  "recovery_reconciliation": "out\\device-tests\\20261025T153136-recovery-reconciliation.json",
+  "trial": "S-004",
+  "candidate_consumed": true,
+  "report_stages_observed": [],
+  "evidence": "out/device-tests/20261025T153001-dxe-driver-return",
+  "camera_evidence": "out/camera-capture/20261025T152958-system-transport",
+  "camera_frames": 258,
+  "camera_decoded_frames": 258,
+  "independent_recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "b4be26001fd0a13caf5fe8358c94683d6e876c5fa79bfd2f91108a68fa545620",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T153136-recovery-reconciliation.json"
+  },
+  "interpretation": "Automatic Android return supports pre-call reachability relative to S-003; timing alone is not unique proof of checkpoint hit",
+  "timeline_review": "Sampled frames show Android/fastboot/black/MI/HyperOS/Android; no manual recovery was requested or observed in sampled frames"
+}
