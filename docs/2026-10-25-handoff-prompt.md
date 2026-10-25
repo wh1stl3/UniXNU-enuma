@@ -1,8 +1,6 @@
-# 当前状态：D-276，S-045 原生显示管线合并审计资格完成，准备实测
+# 当前状态：D-277，S-045 原生显示管线合并审计结果与交接
 
-S-045首次发图前fastboot身份门禁拒绝，镜像未发出、未consumed，无硬件运行结果。选定目标fastboot reboot后Android完成，独立root/A槽/解锁及设备与本地备份两分区摘要通过；本轮无相机。按D-233允许重新进入一次fastboot并完整重做product/slot/unlocked门禁，不能忽略FAILED正文；若再次失败不继续重入。候选315f5daa及资格/源码不变，不是重试已发图。证据reports/enuma-native-route-S-045-preissue.json。
-
-2026-10-26T03:53:33+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
+2026-10-26T04:03:32+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "roi-128x8-reads-and-one-dsb-completed-at-el1", "warning_code": 4, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-045-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
 
 ## 已证实与主判断
 
@@ -44,6 +42,8 @@ S-044有效返回single-dsb-sy-and-aligned-cpu-read-completed-no-data-export，o
 
 当前128x8区域只读=True：同一完整描述/整段WT/Frame范围门后，第一字复用单DSB前置，另外1023字只读取Frame原点128列x8行，按真实stride跳过padding；ARM回调逐项核对期望行列地址/对齐/Splash与1024上限。没有保存/导出内容、像素写或新增cache操作。复用已有唯一CurrentEL的值，不新增MRS：code1前置/上下文/转换/恒等拒绝、2Normal策略变化、3混合/契约/屏障/读取拒绝且部分计数未知、4全部1024字与DSB在EL1完成、5同样在EL2完成。仅4/5才是完成，并揭示执行级别；EL1最终stage2仍未知，任何结果不称SMMU/写入/alpha/可见输出通过。主机所有1024失败点、三个stride、行列/次数/前置/EL1EL2通过，第六ARM对象一DSB/一CurrentEL，11项Python含无相机ROI精确上限/矩形门禁通过。
 
+S-045首次发图前身份查询拒绝，镜像未发出；按D-233选定目标reboot恢复并独立核验后，一次重入完整门禁通过，随后首次发图。有效返回roi-128x8-reads-and-one-dsb-completed-at-el1，origin27.462..27.522秒、Android49.172秒，独立身份/分区/备份摘要通过，现已consumed。支持128x8全部1024字与一个DSB在EL1完成；最终stage2/设备SMMU和写入/可见输出未证明。preissue报告的未消耗仅描述首次拒绝事件，后续发图见result报告。下一步完成可审查的最小保存/图案/恢复事务离线资格；R-005单次像素批准已consumed，当前只读推进不扩张像素写范围。
+
 当前native_border_view=True。独立native border路径在解析副本仅清bit24，原始字保留并逐样本比较；原Native2其余严格源/混合器/布局条件不变；结构模式Native3另保留混合未验证要求。原严格和原native采样API不变，staging模式仍只分类。独立border路径全部64组合保留原始快照、330读失败、border中途变化/未知位/混合器/等待/帧稳定性拒绝通过。
 
 新独立native sampler采用固定小米52a2f18 v1 STATUS bit0门控FRAME，允许Timing零和Enable低位非3，但保留完整Timing/Enable字相等、双路三样本活动、两个100ms窗口各非回绕递增1..64。复用现有六CTL、所选两源SSPP、两LM混合配置和布局解码，采集前置首次拒绝立即返回；Native4把纯RAM布局判据放到安全采集与稳定性之后，不读取未满足路由前置的管线。旧严格GOP路径与固定基线逐回调一致，不因本审计自动放宽GOP。
@@ -62,7 +62,7 @@ ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330
 
 ## 恢复、硬停与下一步
 
-最近独立恢复out\device-tests\20261026T035200-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
+最近独立恢复out\device-tests\20261026T040135-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
 
 D-233：镜像发出前fastboot查询异常不作整轮硬停；恢复核验后允许重新进入一次fastboot，完整product/slot/unlocked门禁仍须通过。不重复已发图，不忽略FAILED正文。真实75秒无识别恢复、恢复失败、所选观测通道失效/时基失败（无相机试验不要求图像）或新时间码模糊，停止追加并当轮落实交接；有效负分类继续分析。
 

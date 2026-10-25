@@ -51,6 +51,9 @@
   },
   "reentry_rule": "D-233",
   "maximum_reentries": 1,
-  "reentry_attempted": false,
-  "hardware_result": null
+  "reentry_attempted": true,
+  "hardware_result": null,
+  "subsequent_image_issued": true,
+  "subsequent_result": "reports/enuma-native-route-S-045-result.json",
+  "event_scope": "First preissue abort only; its boot_issued/consumed=false do not describe the later successful issue."
 }
