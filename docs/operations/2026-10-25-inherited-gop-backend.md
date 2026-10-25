@@ -38,3 +38,10 @@ sampler最终源898ae25：三个同次快照，每窗100ms；上限969回调读�
 ## D-196执行前资格（2026-10-25T17:04:20+08:00）
 
 最终固件898ae255e95cb53733250b26b647bb59757f86aa。新镜像f8f14e3b1ec0b5a097d938b55ed85123e913d16392e42cd3f981419e333a4dc8；FD fe052cda49df0113c92d883479ad0841fcb1bc1191a4727083a20f59bbf7b9b3。归档out/inherited-gop/qualified-video-898ae25-q1，完整FAT49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773。实际30个保留OEM PE/DEPEX未改，CPR/Display/UFS明示省略，SimpleFb同GUID仅只读新代码。源/编译宏/PE、R-004记录、boot-v3/FAT roundtrip和离线runner通过。S-008尚未发出，当前文档发布后即时门禁再单笔。
+
+
+## D-197实测与恢复
+
+S-008于17:05:25发出，命令2.641s返回0、断开5.109s；75秒观察无自动返回，停止追加、consumed，S-008未解码，不重试。用户长按恢复Android，17:08:12独立完成/root/A槽/解锁/原boot_a/vendor_boot_a及备份摘要通过。451主/740恢复帧解码一致，全部原始影音仅本地，未采音。末帧强反光暗屏，无可读固件文本；不据此定位寄存器或断言入口命中。
+
+实际SimpleFb AutoGen只有BaseDebugLibSerialPortConstructor、UefiBootServicesTableLibConstructor，实际库为BaseSerialPortLibNull，无PSCI/reset构造器。现中等置信度主判断是先分清入口/返回通道与正文访存；正文包含内存表查询及SSPP/CTL/PP/选中LM取数，未活动银行读为候选而非结论。下一步新的同INF/GUID/完整输入常量PASS正文，对照禁MMIO/查表/协议，实际PE指令资格后再按发布/即时恢复门禁单笔。若它失败，转构造器/Core/前驱路径；若它可控返回，进一步收缩读取，不扩读或写像素。

@@ -1,0 +1,62 @@
+{
+  "scope": "S-008 read-only inherited video audit actual temporary boot result; original failed result preserved",
+  "trial": "S-008",
+  "firmware_commit": "898ae255e95cb53733250b26b647bb59757f86aa",
+  "image_sha256": "f8f14e3b1ec0b5a097d938b55ed85123e913d16392e42cd3f981419e333a4dc8",
+  "issued_at": "2026-10-25 17:05:25",
+  "issued_at_utc": "2026-10-25T09:05:25.152360+00:00",
+  "boot_returncode": 0,
+  "boot_command_return_seconds": 2.641,
+  "fastboot_disconnect_observed_seconds": 5.109,
+  "automatic_return_observed": false,
+  "host_observation_seconds": 75,
+  "trial_phase": "manual-recovery-needed",
+  "current_phase": "recovered-android-boot-complete",
+  "consumed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "ae6cc07306684a6f33e1e0180c0a75ad889e5afef4f0b9ecae6732a6ec553c09",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T170813-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 451,
+    "decoded_frames": 451,
+    "local_video": "out/camera-capture/20261025T170507-system-transport/system-transport.avi",
+    "video_sha256": "c29925363152e9838084e4f5c701d70628781da31a2c2bf030de1669315dd977",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "evidence": "out\\device-tests\\20261025T170511-system-transport\\result.json",
+  "conclusion": "No interpretable marker/GOP result; cannot locate failure at a register or claim sampler entry. Recovery independently verified; no retry.",
+  "next": "Offline same-entry no-MMIO/no-map-lookup constant marker control before further sampling; do not consume old frozen value/pixel plans",
+  "recovery_camera": {
+    "local_video": "out/camera-capture/20261025T170705/camera-test.avi",
+    "frames": 740,
+    "decoded_frames": 740,
+    "sha256": "72a29d1409ddd7b5880c23fdaa323e20188e016d11cfc5d1bf57842b1ce42257",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  }
+}
