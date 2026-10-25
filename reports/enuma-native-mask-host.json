@@ -73,7 +73,7 @@
     "route:ENUMA_DIAG_GUID_ONLY"
   ],
   "source_sha256": {
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "ec695b4086134b614f58102083eb94efb44d74bf9e7dce7af2737a4b71273a3c",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "0745a911ddc23324758d02475b1623406a5710387ffcf36c056bc0acc735c593",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeRouteResult.h": "6acad77a8720cd96583bde6fe1fbb374212904b6b15d1272f83be4bb969051a8",
     "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "63ab286705d8bfc270ba88c14185dfd1a2f81508672eadda07e7673f3033b783",

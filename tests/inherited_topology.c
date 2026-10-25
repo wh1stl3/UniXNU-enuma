@@ -128,6 +128,26 @@ int main(void) {
     assert((result==EnumaGeometryOther)==!EnumaResolveMixerGeometry(&S,&T,&L,&O,0));
     assert(!memcmp(&before,&T,sizeof(T))&&!memcmp(&raw,&S,sizeof(S)));
   }
+  setup();S.Pipes[1].OutXy=800;
+  ENUMA_INHERITED_SNAPSHOT global=S,view,expected=S;ENUMA_MIXER_SNAPSHOT mixers=T;expected.Pipes[1].OutXy=0;
+  assert(!EnumaNormalizeGlobalMixerOutput(&S,&T,&L,&view)&&!memcmp(&view,&expected,sizeof(view))&&!memcmp(&S,&global,sizeof(S))&&!memcmp(&T,&mixers,sizeof(T)));
+  for(unsigned field=0;field<24;field++)for(unsigned bit=0;bit<32;bit++) {
+    S=global;T=mixers;unsigned *v=field==0?&T.Mixers[0].Mode:field==1?&T.Mixers[0].Size:field<13?&T.Mixers[0].Blend[field-2]:&T.Mixers[0].Alpha[field-13];*v^=1u<<bit;
+    memset(&view,0xa5,sizeof(view));ENUMA_INHERITED_SNAPSHOT before=view;ENUMA_MIXER_SNAPSHOT raw=T;
+    unsigned status=EnumaNormalizeGlobalMixerOutput(&S,&T,&L,&view);
+    assert((status==0)==!(field==1||(field==0&&bit==31)));
+    if(status)assert(!memcmp(&view,&before,sizeof(view)));
+    assert(!memcmp(&S,&global,sizeof(S))&&!memcmp(&T,&raw,sizeof(T)));
+  }
+  for(unsigned pipe=0;pipe<2;pipe++)for(unsigned field=0;field<2;field++)for(unsigned bit=0;bit<32;bit++) {
+    S=global;T=mixers;unsigned *v=field?&S.Pipes[pipe].OutSize:&S.Pipes[pipe].OutXy;*v^=1u<<bit;
+    memset(&view,0xa5,sizeof(view));ENUMA_INHERITED_SNAPSHOT before=view,raw=S;
+    assert(EnumaNormalizeGlobalMixerOutput(&S,&T,&L,&view)==EnumaInheritedTopology&&!memcmp(&view,&before,sizeof(view))&&!memcmp(&S,&raw,sizeof(S)));
+  }
+  setup();assert(EnumaNormalizeGlobalMixerOutput(&S,&T,&L,&view)==EnumaInheritedTopology); // all-local is not this hypothesis
+  S=global;S.Ctls[2].Layers[4][0]|=1u<<25;assert(EnumaNormalizeGlobalMixerOutput(&S,&mixers,&L,&view)==EnumaInheritedTopology);
+  assert(EnumaNormalizeGlobalMixerOutput(0,&T,&L,&view)==EnumaInheritedArguments);
+  puts("PASS: exact global coordinate view,768 mixer mutations,128 output XY/size mutations, all-local and unknown route rejection, immutable raw snapshots");
   puts("PASS: four geometry explanation classes and768 bit mutations agree with geometry resolver, immutable inputs");
   puts("PASS: structural mixer768 bit mutations retain geometry/side rejection and raw inputs");
   puts("PASS: all11 selected blend stages by11 dim locations, operation/alpha cases and immutable snapshots");

@@ -272,3 +272,47 @@ ASan/UBSan330 failed reads/two waits/raw mutation and frame failure priority,
 768 classifier/resolver perturbations and19680 geometry selector cases pass.
 Code2..5 implies stable captured configuration/two moving windows, never a
 numeric register dump, physical panel route or visual composition proof.
+
+## S-037 exact global-output view, sourceb37e2cc
+
+Archive qualified-native-global-output-b37e2cc-v2; disassembly digest
+dcf9a11f9397eeb333a32f52b3d7ff960423bc155aaac998a2c6549effb1c2b4.
+Image2d860389875dc054be30dc5c04575f903a85b1ab509cd6c0c196ab0483b4e51a;
+FDd0fb82f054ac31f06f6b3b7483b5045f0e4c26daaca784372125be63599561ca.
+Core bytes unchanged. Staged/RowCovered/Normalize/Select/Stage old S-036
+2840..2cdc match new2598..2a34 exactly after internal branch relocation
+-0x2a8. Equal2dd8..2e00 was separately reviewed. The first archive attempt
+stopped before qualification because Evidence.h host-test binding was stale;
+terminal tests were rerun and only this v2 complete archive is qualified.
+
+Reviewed entire entry1050..2524, geometry helper2a34..2dd4, selector2e04..2e78
+and Read2e7c..2ed4. Metadata1130..1198 binds R-004 MDP/Splash. Three sample
+loop1220, two100000us waits122c..1270, count cap1274..1288 before revision1290
+and STATUS1314 before FRAME1328 preserve bounds. Safe CTL1388..140c,
+staging1438..1504, selected SSPP1510..15b4 and mixer1748..17f8 capture gates
+remain. Raw source/mixer words are saved15e0/182c. Configuration1844..19a8
+compares all source/mixer/CTL staging words; interface19bc..1a2c checks both
+active, full Timing/Enable equality and nonwrapping frame delta1..64. Only
+three successful iterations reach sample0 geometry analysis1ab4.
+
+Exact global model1ae4..1ce4 checks revision/video/nonzero panel, strict route,
+six mixers/eight source bounds, each source OutSize==LM Size, full panel
+height/nonzero widths, unique bit31 left/right, total width, left OutXy0 and
+right OutXy==left width (no Y bits). Any mismatch returns topology at1b28.
+Copy1ce8..1d04 is ordinary stack RAM; only right Pipe.OutXy is cleared1d28.
+Geometry2a34 is called1d2c before exposing the view, and again1d64 on the
+analysis copy. It retains full route/owner/local-fill/size/sides/total checks.
+No raw snapshot, blend/alpha, source address, format or stride is changed.
+
+Decoder1d6c..24e4 retains secure/multirect/RGBX0x236ff/opmode/unpack,
+geometry/stride/address containment/shared base-pattern and coverage checks.
+Complete24e8..251c writes requirements22 before evidence copy. Selector2e04
+admits code5 only status0/reason12/requirements22; native pipeline reasons
+14..19 map to8, with topology3 versus other decode4. Read2e7c checks aligned
+offset<=0x6c26c/count<330 before sole MMIO load2ec4 at0xae00000.
+Stack0x2330 plus bounded existing helpers, no new map/GOP/pixel/MMIO store.
+RAM_PAYLOAD1/ROUTE1/STRUCTURE1/GLOBAL_OUTPUT1 and STRUCTURE_DETAIL/old detail/
+staging/layout/blend/mask/query0 are bound to both actual compile files.
+Sanitizer330 failures/two waits/raw XY changes,768 mixer/128 source-output
+mutations and old sampler rejection support review. Stable logical coordinate
+view retains blend/address/downstream obligations and is not visible output.

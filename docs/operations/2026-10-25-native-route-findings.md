@@ -134,3 +134,23 @@ additional register kinds. Code2..5 additionally requires both interfaces to
 advance in two bounded windows while full source/mixer/staging words remain
 stable. Code1 provides no such implication. Blend and CPU/downstream remain
 unproven. Maximum330 reads/two100ms/R-004 mapping unchanged.
+
+
+## S-036 raw stability plus source output rejection; global-coordinate hypothesis
+
+Valid stable-source-local-output-rejected, origin22.476..22.543; Android45.078s,
+independent root/slot/unlock/partition and backup digests pass; consumed. This
+supports three raw snapshots stable and both interfaces advancing1..64 across
+two100ms windows in this observation. It localizes the first pure geometry
+failure to nonzero OutXy or output size mismatch, without numeric values.
+
+Main hypothesis (moderate): the right source uses whole-panel coordinates.
+Pinned Xiaomi52a2f180865f8368828985d6384130acd093fa93
+[sde_hw_sspp.c](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_sspp.c)
+613..651 writes configured destination x/y/width/height to OUT registers; this
+does not prove the handed-off coordinates. Native5 tests the exact left0/right
+left-width/full-size contract using saved words, then expresses that right
+offset in a logical origin on a copy. Raw stability and all original source
+decode predicates remain. Code3 refutes this exact model; code4 moves the
+blocker into source decode; code5 is a stable logical structure only, retaining
+blend/address/physical topology requirements. No pixel or hardware writes.

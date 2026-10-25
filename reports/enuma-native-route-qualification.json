@@ -4,37 +4,37 @@
   "native_control": false,
   "boot_clock_capture": true,
   "review_required": false,
-  "scope": "Capture three raw snapshots and verify stability before pure structural geometry classification; no blend or GOP qualification",
-  "firmware_commit": "7ea366fb39927afbaa20735a54322e9b81b676db",
-  "archive": "out/inherited-gop/qualified-native-geometry-7ea366f",
+  "scope": "Raw stable exact global-coordinate logical view then geometry and source decode; blend/physical routing unproven",
+  "firmware_commit": "b37e2ccb94fa4f8ea37fbc79137121764ec9e454",
+  "archive": "out/inherited-gop/qualified-native-global-output-b37e2cc-v2",
   "files": {
     "image.img": {
-      "sha256": "b6193cc5d757f3cfe9a9dbbc3761ce15dd279018038208e34e50d433533eb9b8",
+      "sha256": "2d860389875dc054be30dc5c04575f903a85b1ab509cd6c0c196ab0483b4e51a",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "e06998c492f83bcb60e9432acd8c1749216927e204acb2a9b312723df7c0705b",
+      "sha256": "9721a52603dc6ac6ff87e3cc3e531fc36c235cc7880ad84b7afcff4901bae53e",
       "bytes": 807
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "fbe01654c0b1f51f1a15552f828fab609e67e14c4d48252ec4c761165277c030",
+      "sha256": "d0fb82f054ac31f06f6b3b7483b5045f0e4c26daaca784372125be63599561ca",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "3eca55472612aee5847d7eaab6b271c9872cb9164fc79017814fc50ea7ccc33e",
+      "sha256": "26334683353d590f6de0469361f993b9846810857aeea0456ead1235f921d88a",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "6918991df2177c6ba3810d30f75493498e381e2d7dc36982a6ae68f06df15242",
+      "sha256": "4e8fb017ca89441d8ead5848490100437087043e69474f8b66f80bda09c5378e",
       "bytes": 19456
     },
     "provider.GNUmakefile": {
-      "sha256": "0863e7386a9baa584114bce9490aacce9dc416e587756d91fac3e1e5e1b11b3a",
-      "bytes": 23234
+      "sha256": "56162a46e71812e028ff1ff2daf50a30e5e18d796e2f54207263e8b2d5d2c799",
+      "bytes": 23271
     },
     "entry.c": {
-      "sha256": "7a83b8fb595889e4269a37cc829113112f32a89d2dcf678efa23a363c9b8755e",
-      "bytes": 6770
+      "sha256": "44921078151843efd44260c5f6d716f89e99ab995cf1cf70b549382df7164081",
+      "bytes": 7261
     },
     "DxeCore.efi": {
       "sha256": "a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f",
@@ -49,8 +49,8 @@
       "bytes": 1268
     },
     "core.GNUmakefile": {
-      "sha256": "ceda696620bdd3d88021ba4661ca4878c40bbd616ca31da04a423eb2f8f723da",
-      "bytes": 52114
+      "sha256": "bb4c0fc4cc3058286355a3ea8c69c06e46e00fb4e2d005dc77219ddceb342fe2",
+      "bytes": 52151
     },
     "EnumaDispatchDetailCheckpoint.h": {
       "sha256": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
@@ -61,28 +61,28 @@
       "bytes": 2286
     },
     "Evidence.c": {
-      "sha256": "b8a2d470f8d9f3ddf181f77751c13bbec8d7c9df285e7c345d499401c428d876",
-      "bytes": 8834
+      "sha256": "3d9fc1633cbffa86c884498e8716eeee6dcaaa071a38af0c9e010c18bae58216",
+      "bytes": 9311
     },
     "Evidence.h": {
-      "sha256": "ec695b4086134b614f58102083eb94efb44d74bf9e7dce7af2737a4b71273a3c",
-      "bytes": 4059
+      "sha256": "0745a911ddc23324758d02475b1623406a5710387ffcf36c056bc0acc735c593",
+      "bytes": 4289
     },
     "firmware-build.json": {
-      "sha256": "ba031414359b8edb1adfc379f2b40949b723769d65b7290e6a2ba861b9d3b1a6",
-      "bytes": 21799
+      "sha256": "09ca8b03d078a46e520134c6a94cc863363a5abb15780be1c886d62b5ad633ac",
+      "bytes": 21885
     },
     "fd-audit.json": {
-      "sha256": "3f1eb3111180b888a8cac65fbb3d680bb40824f0d5513450ff7565c07455821c",
+      "sha256": "f259a974e55c16da6d1197f2e34d9fef022e045782a4c65d0fdc21129c9b409e",
       "bytes": 4326
     },
     "host-tests.json": {
-      "sha256": "0b5b889ed7745048622e55dd82a19d609d6faa8e1b8220b3e246bc3251051365",
-      "bytes": 22869
+      "sha256": "dcd13162e2003100fbcfa28c204804f73c0bcfe3c24a943ab5b55a868389c9f5",
+      "bytes": 23296
     },
     "provider.map": {
-      "sha256": "eadd7d656b99d531e5c4f700a83622f92d9bee71e235a3bc7e082d538bf57d7d",
-      "bytes": 14337
+      "sha256": "b6141765bdfbaf375561e4815376a01c407f4e5ebedc9014473a113c6a64d623",
+      "bytes": 15256
     },
     "provider.AutoGen.c": {
       "sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
@@ -101,7 +101,7 @@
       "bytes": 1070
     },
     "mask-host-tests.json": {
-      "sha256": "393fdf97841227be0e3dcbddbc61dcefba8755046ba5c3a416aee7c5509d9beb",
+      "sha256": "3380065a59aaeb5507e877f4e6ccdf6013d691af4af6a278833429b12c87143c",
       "bytes": 4262
     },
     "NativeRouteResult.h": {
@@ -113,12 +113,12 @@
       "bytes": 3599
     },
     "Topology.c": {
-      "sha256": "a8b305fb4687525da006e2ccc09a7d2b4d94064687cf595b6e2465f42881e68a",
-      "bytes": 12144
+      "sha256": "6c76376a3fe5efdfc468025dc1f3a3da781bf65c5abc24808ef121ce3e3496ce",
+      "bytes": 13710
     },
     "Topology.h": {
-      "sha256": "1902dd8bbf85f9a0fdd050d46bc03d8fa28806146c95eb7e2a4e76716fcf82b0",
-      "bytes": 2398
+      "sha256": "243c29fbbf1a12aa20c2f56f45ad3af426b29980c62d4d24463dc0ff4b0a94d6",
+      "bytes": 2562
     },
     "Decode.c": {
       "sha256": "dde2a43b870a368c3ecc7cdbcc07947ba2ba3abb3f18efee58d2bfac27a1734c",
@@ -129,16 +129,16 @@
       "bytes": 2709
     },
     "SimpleFbDxe.disassembly.txt": {
-      "sha256": "4c2458e3bf6bc87d568b71f209fc4c2ecd6466f47d58eabf578f74bf739b087f",
-      "bytes": 67707
+      "sha256": "f6992f6b3682146a5f7060b8e249b47198824fef2dfb3b4699460f39f79587fb",
+      "bytes": 66567
     },
     "DxeCore.disassembly.txt": {
       "sha256": "409ee5cd7535b71a4be41904b26a7d2b126a22b83ba05209c92b949d86b81e2c",
       "bytes": 702682
     }
   },
-  "image": "out/inherited-gop/qualified-native-geometry-7ea366f/image.img",
-  "image_sha256": "b6193cc5d757f3cfe9a9dbbc3761ce15dd279018038208e34e50d433533eb9b8",
+  "image": "out/inherited-gop/qualified-native-global-output-b37e2cc-v2/image.img",
+  "image_sha256": "2d860389875dc054be30dc5c04575f903a85b1ab509cd6c0c196ab0483b4e51a",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
   "maximum_reads": 330,
   "maximum_wait_calls": 2,
@@ -153,7 +153,7 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "3eca55472612aee5847d7eaab6b271c9872cb9164fc79017814fc50ea7ccc33e",
+    "kernel_sha256": "26334683353d590f6de0469361f993b9846810857aeea0456ead1235f921d88a",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
   "terminal_return": {
@@ -166,7 +166,7 @@
     ],
     "completion_fallback": false
   },
-  "result_interpretation": "Code2..5 requires raw stable snapshots and both nonwrapping frame windows before geometry rejection. Code5 means combined width rejection; code1 unclassified includes collection/runtime/decode/success. No numeric values or visual proof.",
+  "result_interpretation": "Exact left0/right-left-width XY and full matching sizes only, local copy converts right XY to explicit logical origin; raw words preserved. Code5 retains BLEND|ADDRESS|TOPOLOGY22; no physical display/GOP/pixel proof.",
   "native_border_view": true,
   "native_route_audit": true,
   "native_route_detail": false,
@@ -174,7 +174,8 @@
   "native_route_layout": false,
   "native_route_blend": false,
   "native_route_structure": true,
-  "native_route_structure_detail": true,
+  "native_route_structure_detail": false,
+  "native_route_global_output": true,
   "decode_plan": {
     "baseline_envelope_seconds": [
       10.25199999997858,
@@ -217,10 +218,10 @@
   },
   "calibration_sha256": "48eaaaea519da34dd0eb52186807e9e8b7fa1180dc70d5ff1685f70a8814dacb",
   "result_categories": {
-    "1": "not-classified-as-stable-geometry-rejection",
-    "2": "stable-mixer-size-rejected",
-    "3": "stable-source-local-output-rejected",
-    "4": "stable-left-right-assignment-rejected",
-    "5": "stable-combined-mixer-width-rejected"
+    "1": "collection-or-contract-rejected",
+    "2": "runtime-or-stability-rejected",
+    "3": "exact-global-coordinate-contract-rejected",
+    "4": "source-capture-or-layout-rejected",
+    "5": "stable-global-coordinate-structure-blend-address-and-downstream-unproven"
   }
 }

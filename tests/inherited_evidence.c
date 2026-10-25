@@ -5,7 +5,7 @@
 #include "Evidence.h"
 ENUMA_U32 EnumaNativeBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *,ENUMA_U32 *);
 ENUMA_U32 EnumaSampleVideoBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *);
-typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,BadGeometry,ChangeBlend,NonBase,BlendFault,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
+typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,GlobalXy,ChangeGlobal,BadGeometry,ChangeBlend,NonBase,BlendFault,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
 static int allowed(unsigned O) {
   static const unsigned Fields[11]={0,8,12,16,20,36,48,52,56,0x170,0x70};
   if(!O) { return 1; }
@@ -58,6 +58,7 @@ static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
     if(O==B+48) { *V=0x236ff; }
     if(O==B+52) { *V=0x03020001; }
   }
+  if(M->GlobalXy&&O==0x7010) { *V=800+(M->ChangeGlobal&&M->Window?4:0); }
   if(M->BadGeometry==1&&O==0x45004) { *V^=1u<<16; }
   if(M->BadGeometry==2&&O==0x5010) { *V=1; }
   if(M->BadGeometry==3&&O==0x45000) { *V&=~(1u<<31); }
@@ -187,6 +188,28 @@ int main(void) {
   assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableConfig&&!memcmp(&E,&Before,sizeof(E)));
   M=(MODEL){.BadGeometry=2,.StallRight=1};E=Before;
   assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableFrame&&!memcmp(&E,&Before,sizeof(E)));
+  M=(MODEL){.GlobalXy=1,.NonBase=1,.BlendFault=3,.NoTiming=1,.BadCounter=1};
+  assert(!EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)&&M.Reads==330&&M.Window==2&&Why==EnumaVideoReasonComplete);
+  assert(E.Frame.Requirements==22&&E.Frame.Base==0x10100000&&E.Samples[0].Scanout.Pipes[1].OutXy==800&&E.Samples[2].Scanout.Pipes[1].OutXy==800&&E.Limits.OriginX[1]==800);
+  M=(MODEL){.GlobalXy=1};E=Before;
+  assert(EnumaSampleNativeStructureDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&M.Reads==110&&!M.Window&&!memcmp(&E,&Before,sizeof(E)));
+  M=(MODEL){.GlobalXy=1};E=Before;
+  assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&M.Reads==330&&M.Window==2&&Why==EnumaVideoReasonGeometrySourceLocal&&!memcmp(&E,&Before,sizeof(E)));
+  for(unsigned f=1;f<=330;f++) {
+    M=(MODEL){.GlobalXy=1,.Fail=f};E=Before;
+    assert(EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedBounds&&M.Reads==f&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  for(unsigned w=1;w<=2;w++) {
+    M=(MODEL){.GlobalXy=1,.FailWait=w};E=Before;
+    assert(EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  M=(MODEL){.GlobalXy=1,.ChangeGlobal=1};E=Before;
+  assert(EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableConfig&&!memcmp(&E,&Before,sizeof(E)));
+  for(unsigned f=1;f<=4;f++) {
+    M=(MODEL){.GlobalXy=1,.BadGeometry=f};E=Before;
+    assert(EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&M.Reads==330&&M.Window==2&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  puts("PASS: independent exact global-coordinate sampler retains raw XY and requirements22;330 failures/two waits/raw XY change/invalid geometry rejection, old APIs still reject");
   puts("PASS: geometry classifier after330 reads/two waits;330 collection failures, waits, raw mutation and stalled frame take priority over geometry");
   puts("PASS: structural sampler330 failures, two waits, raw blend mutation and stalled frame rejection; requirements22 retained");
   puts("PASS: four actual sampler blend categories, same110 first-sample reads, no wait, output unchanged");

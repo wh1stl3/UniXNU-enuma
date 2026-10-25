@@ -1,6 +1,6 @@
-# 当前状态：D-258，S-036 原生显示管线合并审计结果与交接
+# 当前状态：D-259，S-037 原生显示管线合并审计资格完成，准备实测
 
-2026-10-26T01:19:44+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "stable-source-local-output-rejected", "warning_code": 3, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-036-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
+2026-10-26T01:29:02+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
 
 ## 已证实与主判断
 
@@ -14,7 +14,9 @@ S-033进一步定位到mixer-dim-or-blend-rejected，17.400..17.467秒，Android
 
 S-034结果selected-blend-operation-rejected，origin27.238..27.321秒、Android49.094秒；独立摘要和相机通过，已consumed。此前一次fastboot预查询失败未发图，按D-233恢复核验重入后通过。当前结构审计=True：独立Native3只回答几何/源布局/原始快照稳定性，跳过纯解析中的blend/dim/processing合格判断，保留BLEND|ADDRESS|TOPOLOGY=22，绝不清除混合要求或发布GOP。原strict/Native1/Native2不变。新选择器code5仅为稳定结构，其他选择器拒绝requirements22。实际330读/两等待边界、原始blend变化与帧停滞拒绝、768混合字扰动几何与左右门保留、17280结构码义组合通过。
 
-S-035无相机实测route-or-geometry-rejected，origin22.268..22.343秒、Android44.125秒，独立身份/分区摘要通过，已consumed。几何拒绝先于源解码和三样本完成，不能宣称当次稳定。当前结构几何细分=True：Native4先完成安全选择下的330读/两次100ms及原始配置/双窗帧稳定，再做纯RAM几何分类；code2混合器尺寸、code3源局部输出、code4左右分配、code5合计宽度拒绝，code1其他/采集/不稳定/解码/成功未分类。code2..5才支持同次三份原始配置稳定与两路双窗推进；仍不提供数值或物理显示证明。768字段扰动分类/解析器一致、330失败点/两等待/配置变化/帧停滞优先拒绝和19680码义组合通过。
+S-035无相机实测route-or-geometry-rejected，origin22.268..22.343秒、Android44.125秒，独立身份/分区摘要通过，已consumed。几何拒绝先于源解码和三样本完成，不能宣称当次稳定。当前结构几何细分=False：Native4先完成安全选择下的330读/两次100ms及原始配置/双窗帧稳定，再做纯RAM几何分类；code2混合器尺寸、code3源局部输出、code4左右分配、code5合计宽度拒绝，code1其他/采集/不稳定/解码/成功未分类。code2..5才支持同次三份原始配置稳定与两路双窗推进；仍不提供数值或物理显示证明。768字段扰动分类/解析器一致、330失败点/两等待/配置变化/帧停滞优先拒绝和19680码义组合通过。
+
+S-036有效返回stable-source-local-output-rejected，origin22.476..22.543秒、Android45.078秒，独立身份/摘要通过，已consumed。此次支持同次三份原始配置稳定与双路双窗帧推进；首个纯几何拒绝为源OutXy或OutSize，不能推断两者哪个数值不符。当前精确整屏坐标视图=True：Native5先验证原始稳定，再要求左0/右X等于左LM宽且Y0、源尺寸各匹配LM、左右唯一/总宽匹配；仅RAM副本把右坐标表示为local0+明确逻辑origin，再执行原几何和完整格式/安全/stride/地址包含/共同base/覆盖检查。保留BLEND|ADDRESS|TOPOLOGY22，不声明物理路由或GOP。768混合字/128源输出字扰动、330失败/两等待/原始XY变化、旧API仍拒绝及9项native Python测试通过。此模式code3精确坐标契约拒绝、code4源解码拒绝、code5仅稳定逻辑结构。
 
 当前native_border_view=True。独立native border路径在解析副本仅清bit24，原始字保留并逐样本比较；原Native2其余严格源/混合器/布局条件不变；结构模式Native3另保留混合未验证要求。原严格和原native采样API不变，staging模式仍只分类。独立border路径全部64组合保留原始快照、330读失败、border中途变化/未知位/混合器/等待/帧稳定性拒绝通过。
 
@@ -22,13 +24,13 @@ S-035无相机实测route-or-geometry-rejected，origin22.268..22.343秒、Andro
 
 ## 当前候选与验证
 
-固件7ea366fb39927afbaa20735a54322e9b81b676db已推送。原R-004 MDP0xae00000/0x85000，最多330次读取、两次100ms，最高偏移0x6c26c；Splash0x9c000000/0x2400000不变。无像素/MMIO写、新映射、board/verified或分区操作，不发布GOP，不继承consumed像素批准。原完整采样成功保留ADDRESS|TOPOLOGY；结构模式成功保留BLEND|ADDRESS|TOPOLOGY=22要求。
+固件b37e2ccb94fa4f8ea37fbc79137121764ec9e454已推送。原R-004 MDP0xae00000/0x85000，最多330次读取、两次100ms，最高偏移0x6c26c；Splash0x9c000000/0x2400000不变。无像素/MMIO写、新映射、board/verified或分区操作，不发布GOP，不继承consumed像素批准。原完整采样成功保留ADDRESS|TOPOLOGY；结构模式成功保留BLEND|ADDRESS|TOPOLOGY=22要求。
 
-选择器native_route_detail=False、native_route_staging=False；五码分类{"1": "not-classified-as-stable-geometry-rejection", "2": "stable-mixer-size-rejected", "3": "stable-source-local-output-rejected", "4": "stable-left-right-assignment-rejected", "5": "stable-combined-mixer-width-rejected"}。码义以本候选归档为准：staging模式code2仅支持局部清除已知border后恰好两条不同单源路由、无其他未知字段，code3源数量/编码、code4其他字段、code5混合器数量/重复源，code1其他结果。staging模式code5不是成功；不继续后级采样，不修改原快照。完整SimpleFb GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92返回点13/detail16接受warning1..5，cold延时2/7/12/17/22秒后deadloop，无dispatcher fallback。
+选择器native_route_detail=False、native_route_staging=False；五码分类{"1": "collection-or-contract-rejected", "2": "runtime-or-stability-rejected", "3": "exact-global-coordinate-contract-rejected", "4": "source-capture-or-layout-rejected", "5": "stable-global-coordinate-structure-blend-address-and-downstream-unproven"}。码义以本候选归档为准：staging模式code2仅支持局部清除已知border后恰好两条不同单源路由、无其他未知字段，code3源数量/编码、code4其他字段、code5混合器数量/重复源，code1其他结果。staging模式code5不是成功；不继续后级采样，不修改原快照。完整SimpleFb GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92返回点13/detail16接受warning1..5，cold延时2/7/12/17/22秒后deadloop，无dispatcher fallback。
 
 ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330读失败和两等待失败、活动门控/配置/帧稳定性通过；对fafb8a3 native基线逐330边界比较调用顺序/状态/输出一致，三个拓扑位置fixture通过；staging64个border组合/768单比特扰动/快照不变及负例、12480staging结果映射通过；真实头文件7200普通和10080细分类映射、504入口/GUID/状态案例通过。主机测试只证明模型与边界，不替代实机。实际构建源码/宏、PE、FD R-004表、完整96MiB FAT与Boot v3已冻结审查。
 
-镜像SHA256 b6193cc5d757f3cfe9a9dbbc3761ce15dd279018038208e34e50d433533eb9b8；FD fbe01654c0b1f51f1a15552f828fab609e67e14c4d48252ec4c761165277c030；归档out/inherited-gop/qualified-native-geometry-7ea366f。资格reports/enuma-native-route-qualification.json、代码审计reports/enuma-native-route-code.json；详细审查docs/operations/2026-10-25-native-route-code-audit.md。
+镜像SHA256 2d860389875dc054be30dc5c04575f903a85b1ab509cd6c0c196ab0483b4e51a；FD d0fb82f054ac31f06f6b3b7483b5045f0e4c26daaca784372125be63599561ca；归档out/inherited-gop/qualified-native-global-output-b37e2cc-v2。资格reports/enuma-native-route-qualification.json、代码审计reports/enuma-native-route-code.json；详细审查docs/operations/2026-10-25-native-route-code-audit.md。
 
 固定S-021/S-022校准计划{"baseline_envelope_seconds": [10.25199999997858, 10.347999999998137], "tolerance_seconds": 1, "sampler_seconds": [0, 0.2], "code_windows_after_issue": [[11.25199999997858, 13.547999999998137], [16.25199999997858, 18.547999999998137], [21.25199999997858, 23.547999999998137], [26.25199999997858, 28.547999999998137], [31.25199999997858, 33.54799999999814]], "source_trials": ["S-021", "S-022"], "full_interval_containment": true, "uncertainty_limit_seconds": 0.25, "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof."}。整个boot-origin区间须唯一窗口包含，三样本新boot-id且交集宽<=0.25秒；不按观测调整容差。时间码仍是间接分类，不是直接寄存器值、物理路由或可见显示证明。
 
