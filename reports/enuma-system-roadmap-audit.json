@@ -162,7 +162,7 @@
     "ram_payload_bytes": 100663296,
     "detail_point": 13,
     "completion_fallback_enabled": false,
-    "scope": "offline necessary isolation candidate; not a third device trial"
+    "scope": "static qualification only; actual execution and recovery are recorded separately below"
   },
   "device_activity_scope": "new_device_trials/device_writes describe this offline auditor only; actual trial results are separate",
   "actual_trial_results": {
@@ -170,13 +170,48 @@
       "phase": "recovered-android-boot-complete",
       "candidate_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
       "candidate_consumed": true,
-      "report_stages_observed": []
+      "report_stages_observed": [],
+      "independent_recovery": null
     },
     "enuma-system-transport-S002-result.json": {
       "phase": "recovered-android-boot-complete",
       "candidate_sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327",
       "candidate_consumed": true,
-      "report_stages_observed": []
+      "report_stages_observed": [],
+      "independent_recovery": null
+    },
+    "enuma-system-transport-S003-result.json": {
+      "phase": "manual-recovery-needed",
+      "candidate_sha256": "d716e159d6852b398d1b8a999b17852c4affd8318123cbd61e8afe27047f8304",
+      "candidate_consumed": true,
+      "report_stages_observed": [],
+      "independent_recovery": {
+        "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+        "time_zone": "Asia/Shanghai",
+        "checks": {
+          "device": "enuma",
+          "boot_completed": "1",
+          "slot": "_a",
+          "flash_locked": "0",
+          "root_available": true
+        },
+        "partitions": [
+          {
+            "partition": "boot_a",
+            "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+            "device_and_backup_match": true
+          },
+          {
+            "partition": "vendor_boot_a",
+            "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+            "device_and_backup_match": true
+          }
+        ],
+        "prior_phase": "manual-recovery-needed",
+        "prior_state_sha256": "99921be611942eefe48d201746e7004a2a0dfdea737d24a6759d0034bc100132",
+        "failed_trial_preserved": true,
+        "evidence": "out\\device-tests\\20261025T152433-recovery-reconciliation.json"
+      }
     }
   },
   "next_work_order": [

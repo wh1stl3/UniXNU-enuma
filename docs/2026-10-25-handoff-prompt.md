@@ -1,9 +1,13 @@
-# 当前状态：D-181，S-003已恢复核验，继续完整输入调用前隔离
+# 当前状态：D-182，S-003已恢复，完整输入调用前候选资格就绪
 
-S-003在2026-10-25 15:21:51发出，fastboot返回0/2.640秒、5.109秒断开，75秒无自动返回；d716e159…47f8304已consumed，不重试。453/453帧录像可解码，已查画面黑屏，无阶段报告。用户长按恢复后，15:24:33独立核验enuma Android完成/root/A槽/解锁/原boot_a与vendor_boot_a及本地备份摘要一致，恢复停点解除。首次核验在Android启动收尾时未满足条件，未误报通过；后续完整核验通过才解除。
+S-003完整输入返回边界在15:21:51发出，2.640秒命令返回/5.109秒断开，75秒无自动返回，453/453主录像帧可解码，无可读阶段报告。用户恢复后15:24:33独立核验Android完成/root/A槽/解锁/原boot_a与vendor_boot_a及备份摘要通过，742/742恢复录像可解码且末帧Android桌面。三份已执行失败镜像均consumed，禁止重试；当前无人工或审批待办。
 
-完整FAT/精确DisplayDxe返回门/fallback0并未带来受控返回；不能据此证明DisplayDxe曾到达或内部挂死。当前主判断是调用前可达性尚未闭合，优先区分更早交接/派发问题与调用内部阻塞，而非继续盲调显示策略。源APRIORI把DisplayDxe放在OEM列表中，RAM载荷驱动不在该APRIORI列表；在UEFI实际调度行为核定前不把RAM驱动当作其必然前置。
+新point15调用前候选已构建资格：a21682ca083acf6bb6cb5e6c8ef021d7172c308a44855b12f82cf6237aa3c42e，103817216字节；out/full-boot/transport/enuma-display-precall-full-input-v3.img；FD10abab47280f13c78082e94a77a0a7bae398b23302274a57b6bbda50747599ba；冻结归档precall-boundary-cb9e568。源码仍firmwarecb9e568/UniXNU5fdbd5d，完整96MiB FAT不变，display-thread0，精确DisplayDxe GUID-only/fallback0。配对比较确认相对S-003构建配置仅detail13→15，PE清单差异按审核器核定，非整FD字节只有一处变化。
 
-按恢复后自动离线规则，正在构建同源cb9e568/同完整96MiB FAT/display-thread0的point15候选：门在目标CoreStartImage调用前，禁completion fallback，仅detail13→15。构建/打包/实际Core资格未完成，不得上机；本轮此后尚无新boot。旧小载荷R-016 A仅历史，不替代新完整输入资格。新候选若受控返回也不能以耗时唯一证明门命中；若超时，更早路径/复位异常仍竞争。
+32原厂PE/DEPEX、AOSP打包往返、实际Core/map在CoreStartImage调用前的GUID/point/2秒延时/复位路径、SEC TE配置0及篡改负例通过。wrapper绑定冻结清单并接受13/15，修改清单point/GUID策略不能混用归档，四个清单负例通过。所有检查仅离线，不声称门已执行。该候选未消耗；文档推送后沿用户现有无需逐笔批准授权，按即时设备/备份/相机/恢复守卫直接执行一笔。
 
-失败原始记录保留于out/device-tests/20261025T152136-dxe-driver-return，主录像out/camera-capture/20261025T152134-system-transport，恢复录像out/camera-capture/20261025T152332，独立恢复out/device-tests/20261025T152433-recovery-reconciliation.json，公开结果reports/enuma-system-transport-S003-result.json。S-001/S-002均已恢复且consumed。当前无人工或批准待办；无需重复询问恢复或逐笔批准。没有flash/erase/改槽、内存字段或verified变化；原硬边界保持。root/PMGR/UFS/Data/GOP/XNU/iPadOS实机未闭合。
+主判断：当前既不能确认DisplayDxe到达，也不能定位其内部挂死。新门区分调用前可达性与StartImage内/后续问题；返回只能提供支持，时间/USB不能唯一证明门命中，超时也不证明阶段。若新门返回而S-003不返回，优先沿真实CoreStartImage/映像保护/入口/原厂依赖排查；若也超时，提升更早交接/派发或复位路径问题优先级。异常停止追加，先恢复核验，再自动离线修复。
+
+实际S-003 FD的APRIORI已解码：含DisplayDxe，不含RAM载荷驱动。结合固定Core调度源码和UEFI PI强顺序规则，降低RAM驱动作为DisplayDxe前置执行者的嫌疑；不排除载荷体积/布局的更早影响，不宣称实机任何驱动执行。证据enuma-full-input-dispatch-order.json，公开资料https://uefi.org/specs/PI/1.8/V2_DXE_Dispatcher.html。
+
+详细方案operations/2026-10-25-full-input-precall-boundary.md。S-003结果和独立恢复保持在enuma-system-transport-S003-result.json，原失败result.json未重写。无flash/erase/改槽、内存字段或verified变化；R-001/R-002/R-015及像素旧限制保持。PMGR/UFS/root/Data/GOP/XNU/iPadOS尚无闭合实机证据。

@@ -127,15 +127,17 @@ def main():
         report['full_input_return_boundary'] = {
             'image_sha256': boundary['image_sha256'], 'ram_payload_bytes': boundary['ram_payload_bytes'],
             'detail_point': boundary['detail_point'], 'completion_fallback_enabled': boundary['completion_fallback_enabled'],
-            'scope': 'offline necessary isolation candidate; not a third device trial'}
+            'scope': 'static qualification only; actual execution and recovery are recorded separately below'}
     report['device_activity_scope'] = 'new_device_trials/device_writes describe this offline auditor only; actual trial results are separate'
     report['actual_trial_results'] = {}
-    for name in ['enuma-system-transport-result.json', 'enuma-system-transport-S002-result.json']:
+    for name in ['enuma-system-transport-result.json', 'enuma-system-transport-S002-result.json',
+                 'enuma-system-transport-S003-result.json']:
         result_path = ROOT / 'reports' / name
         if result_path.exists():
             trial = json.loads(result_path.read_text())
             report['actual_trial_results'][name] = {k: trial.get(k) for k in
-                ['phase', 'candidate_sha256', 'candidate_consumed', 'report_stages_observed']}
+                ['phase', 'candidate_sha256', 'candidate_consumed', 'report_stages_observed',
+                 'independent_recovery']}
     report['next_work_order'] = [
         'provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging',
         'observe the 13-stage transport batch in one controlled full-input trial once error output and recovery gates are met',

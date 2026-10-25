@@ -1,0 +1,30 @@
+{
+  "scope": "offline wrapper negative checks; no device access",
+  "checks": [
+    {
+      "field": "detail_point",
+      "value": 14,
+      "rejected": true,
+      "reason": "boundary report differs from frozen qualification manifest"
+    },
+    {
+      "field": "detail_point",
+      "value": 13,
+      "rejected": true,
+      "reason": "boundary report differs from frozen qualification manifest"
+    },
+    {
+      "field": "completion_fallback_enabled",
+      "value": true,
+      "rejected": true,
+      "reason": "boundary report differs from frozen qualification manifest"
+    },
+    {
+      "field": "ram_payload_sha256",
+      "value": "0000000000000000000000000000000000000000000000000000000000000000",
+      "rejected": true,
+      "reason": "boundary report differs from frozen qualification manifest"
+    }
+  ],
+  "core_fault_injection": "StartImage/GUID/point/nanosecond four mutation rejection run passed"
+}

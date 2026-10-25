@@ -1,7 +1,7 @@
 {
   "scope": "actual packed SEC TE configuration, static only",
   "firmware_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
-  "fd_sha256": "50bba978359f56b9d1c55bcb83fc5d545879127f4feaf82da2d15e734a2bc815",
+  "fd_sha256": "10abab47280f13c78082e94a77a0a7bae398b23302274a57b6bbda50747599ba",
   "sec_guid": "9affb503-e643-4141-8b90-17e8588b1d35",
   "te_sha256": "3f7435a028b4c47827110cf5bb18a744d90c27b06f09cfa36c6e89202b349984",
   "entry_file_offset": "0xd740",

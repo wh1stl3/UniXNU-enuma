@@ -28,10 +28,13 @@ def qualification(published=False, report=None):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
     if 'detail_point' in q:
+        frozen_manifest = (ROOT / q['archive'] / 'qualification.json').resolve()
+        if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:
+            raise ValueError('boundary report differs from frozen qualification manifest')
         fat = json.loads((ROOT / 'reports/enuma-full-payload.json').read_text())
-        if (q['detail_point'] != 13 or q['target_guid'] != '4138022f-06c7-4f79-9c94-7e33b511a4e7'
+        if (q['detail_point'] not in (13, 15) or q['target_guid'] != '4138022f-06c7-4f79-9c94-7e33b511a4e7'
                 or q.get('completion_fallback_enabled') is not False or q.get('ram_payload_sha256') != fat['payload_sha256']):
-            raise ValueError('boundary mode requires exact DisplayDxe return, full FAT and no fallback')
+            raise ValueError('boundary mode requires exact DisplayDxe pre-call/return, full FAT and no fallback')
     pin = json.loads((ROOT / 'config/uefi-source.lock.json').read_text())
     if q['firmware_commit'] != pin['commit']:
         raise ValueError('qualification differs from current firmware pin')
@@ -63,7 +66,7 @@ def main():
     mode = p.add_mutually_exclusive_group()
     mode.add_argument('--camera-check', action='store_true')
     mode.add_argument('--execute', action='store_true')
-    p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback boundary qualification; defaults to full-chain report')
+    p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback pre-call or return qualification; defaults to full-chain report')
     a = p.parse_args()
     if not a.camera_check:
         q, image = qualification(a.execute, a.qualification)

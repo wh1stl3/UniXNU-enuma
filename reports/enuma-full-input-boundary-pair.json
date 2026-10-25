@@ -1,0 +1,49 @@
+{
+  "source_pin": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
+  "configuration_differences": {
+    "ENUMA_DIAG_DETAIL_POINT": [
+      "15",
+      "13"
+    ]
+  },
+  "PE_count": 73,
+  "changed_PE": {
+    "d6a2cb7f-6a18-4e2f-b43b-9920a733700a": [
+      {
+        "name": "DxeCore",
+        "sha256": "68eef30e92155f59e58f29b08c5b2d6fc425e4170ef1458befe48eed785f4da5"
+      },
+      {
+        "name": "DxeCore",
+        "sha256": "17f706f4af6a568ea4a8807d0f83be144c6637e714a62c9133278bb8f323fa0f"
+      }
+    ],
+    "80cf7257-87ab-47f9-a3fe-d50b76d89541": [
+      {
+        "name": "PcdDxe",
+        "sha256": "867937e3d810beb6088e201aa478f63fb4f044b3e9712c46a45b1fb03ea0a839"
+      },
+      {
+        "name": "PcdDxe",
+        "sha256": "64a4747c1c31a44e9b28452f59c323aef7ec666a9b89456629e7ce4915705467"
+      }
+    ]
+  },
+  "unchanged_PE_count": 71,
+  "debug_guid_only_PE": {
+    "80cf7257-87ab-47f9-a3fe-d50b76d89541": {
+      "allowed_fields": [
+        {
+          "guid_file_offset": "0x6148",
+          "bytes": 16
+        }
+      ],
+      "actual_changed_bytes": 8,
+      "normalized_pe_sha256": "6a452d6458bf7730b81df13d541585c7a129fd2b12afd27f8e1c102c5bcdff17",
+      "scope": "all remaining PE bytes identical, including code, paths and debug age"
+    }
+  },
+  "runtime_PE_change": "d6a2cb7f-6a18-4e2f-b43b-9920a733700a",
+  "bootshim_bytes_identical": 192,
+  "scope": "decoded PE inventory and source/config equality; not a byte identity claim for recompressed FV envelopes"
+}
