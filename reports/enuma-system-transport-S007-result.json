@@ -22,5 +22,33 @@
   "camera_evidence": "out/camera-capture/20261025T160337-system-transport",
   "camera_frames": 453,
   "camera_decoded_frames": 453,
-  "interpretation": "point22 timeout; successful direct Exit merge not supported, PE nonreturn, invalid Exit, exception or reset failure still competing; recovery pending"
+  "interpretation": "point22 timeout; successful direct Exit merge not supported, PE nonreturn, invalid Exit, exception or reset failure still competing; recovery pending",
+  "user_reported_recovery": "Android",
+  "independent_recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "8a6d40785d2b1e59cf067262e14ccc2cf7d84c454555e5597325121776b3496d",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T160622-recovery-reconciliation.json"
+  }
 }
