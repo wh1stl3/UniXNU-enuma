@@ -5,39 +5,39 @@
   "boot_clock_capture": true,
   "review_required": false,
   "scope": "independent two-bit native mask with distinct collection-error code; read only; no GOP admission",
-  "firmware_commit": "2bb165fa0dd882da1f79b9919435f00f3a4e36d8",
-  "archive": "out/inherited-gop/qualified-native-mask-2bb165f-field5",
+  "firmware_commit": "9600b1900d4b175cedb4158c1b53cd6b21d3044c",
+  "archive": "out/inherited-gop/qualified-native-mask-9600b19-field6",
   "files": {
     "image.img": {
-      "sha256": "5f68293c3d69719cf96e14282dff55582cedc37e5131b93d6965809a583de12f",
+      "sha256": "1ff66e2cb4fb8e9c820f43506d555031adf1bf332a232b574d02140cb77f6845",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "eda903218e79f4325b21ee61ed88ff2f30bde21245bb0df3ddde64ac5527a2db",
+      "sha256": "116100fae0ea0efe5a254fa6b64b9f099e34b13952876b7c2deee1840db655d8",
       "bytes": 807
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "a1d22697ea740bca80f73ddb07fe29ce1b23a0a115a7c680e03d03ef77d5f088",
+      "sha256": "ed501fd19eb65a52ec875c126b79646869fecbe6d3da25fc541cffb09c3f5601",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "c3c192d443145a02c6085ac6282393dc6659acb2f59c97631a435058ebe4843a",
+      "sha256": "8990b0e8e373539194b074c31aa126723dba69b2543dfb0876cd7b1789603429",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "3a4bc4b836e1373bd6674f992b57323fe8b4b8d9fede8f465cc01e2699d5aeb4",
+      "sha256": "b18e9b9c5879a36d26b8c4c027aa46c9e306b9aabcafa89ee9fcec1506b898b5",
       "bytes": 13312
     },
     "provider.GNUmakefile": {
-      "sha256": "e4bb8640baed9b202286ef26dfba8348bbabb239ab55b41cc5d0a5ea27c269da",
+      "sha256": "1a2acfae98b51e07f3443f7629867b5bdd13e562907065a647260c2b783a4761",
       "bytes": 22864
     },
     "entry.c": {
-      "sha256": "8954e29a47f43bea9b7f85ee7b98ec9ce83ae0da7145329a58976203cf6a81f8",
+      "sha256": "774b09793a064ca37c3f5de5ba154aebdad7ed7cd467d7f16397d3402064a7f4",
       "bytes": 3192
     },
     "DxeCore.efi": {
-      "sha256": "0d3c9f5b162baf032163d5fc247101c9637b9f4dd83b6928539e99e907f26594",
+      "sha256": "bc94ca3c967d7104d3800888724a4827534f72175c479f2a8c34557df6d57c21",
       "bytes": 164352
     },
     "core.map": {
@@ -45,15 +45,15 @@
       "bytes": 238898
     },
     "NativeMaskResult.h": {
-      "sha256": "f0582c2828a4d936c059dc2e15b443f585dad70aac6608f67b750783fa5faf97",
-      "bytes": 707
+      "sha256": "05df09a07050b7dee4dd4f98929253f450fbe4547e4888bdc748dc1e78ebd67b",
+      "bytes": 935
     },
     "core.GNUmakefile": {
-      "sha256": "851812c984d56acc099d5daf06315e46c7c81192c1b75f1b4e6d49faaf95f25e",
+      "sha256": "12a349d65cc026df09d7e7920cd86046fc03700047e02fcabd5df1cb6a7a4865",
       "bytes": 51892
     },
     "EnumaDispatchDetailCheckpoint.h": {
-      "sha256": "86cfeb92e570fc6689c17bb56b3faa4baf6211626904b813dc87f26c35dc63e9",
+      "sha256": "203bb325dd43d41e4cb1d7ceb0c2667382ef51191f6f1c8711b7cec909f01f28",
       "bytes": 4762
     },
     "VideoResult.h": {
@@ -69,11 +69,11 @@
       "bytes": 1997
     },
     "firmware-build.json": {
-      "sha256": "e6b9e344438dcb7afd119c65dbbf1d2a10f523567d191bc7444ecb0108c3b914",
+      "sha256": "5dcb037593e74784778cb545ff82261bfec0c109d7f88f001448ab29ff50d93d",
       "bytes": 21115
     },
     "fd-audit.json": {
-      "sha256": "8537db5f4469678590f66d87f36c3f3fe074c7c798cdb80e0a53cfa1373369f9",
+      "sha256": "d0823b3d66b4e1dd53a38adaccab53204198c09bcfd68e7a77a2798e122f5fd7",
       "bytes": 4326
     },
     "host-tests.json": {
@@ -81,7 +81,7 @@
       "bytes": 1988
     },
     "provider.map": {
-      "sha256": "c5ba029a671a5790b531624ccd387571252897c26d722cae6489e2bfe3d5c32d",
+      "sha256": "1b3bcab4d1ddffb2fb1f95d3cd59a2285028fe848f179131c89769e868f76979",
       "bytes": 10809
     },
     "provider.AutoGen.c": {
@@ -100,17 +100,21 @@
       "sha256": "0b3bed21b26eaeefc66b8ac174057713795c0910cb875c21c74e1fc016ae0b07",
       "bytes": 1070
     },
+    "mask-host-tests.json": {
+      "sha256": "15a5ceacc2e31251b7a092fc8660b93568b093a6c5c6cef307741d030f2c0d35",
+      "bytes": 2054
+    },
     "SimpleFbDxe.disassembly.txt": {
-      "sha256": "3cf58f57ecf726ba3c31fa8bddc0c3d154f4a215ada29bd04efecd81a90db211",
-      "bytes": 32404
+      "sha256": "a5fc3583a64e950e88aa5e2adbb2756e7cbdaa2700d2ecf81dfada63d51c9675",
+      "bytes": 32248
     },
     "DxeCore.disassembly.txt": {
       "sha256": "409ee5cd7535b71a4be41904b26a7d2b126a22b83ba05209c92b949d86b81e2c",
       "bytes": 702682
     }
   },
-  "image": "out/inherited-gop/qualified-native-mask-2bb165f-field5/image.img",
-  "image_sha256": "5f68293c3d69719cf96e14282dff55582cedc37e5131b93d6965809a583de12f",
+  "image": "out/inherited-gop/qualified-native-mask-9600b19-field6/image.img",
+  "image_sha256": "1ff66e2cb4fb8e9c820f43506d555031adf1bf332a232b574d02140cb77f6845",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
   "maximum_reads": 26,
   "maximum_wait_calls": 2,
@@ -125,7 +129,7 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "c3c192d443145a02c6085ac6282393dc6659acb2f59c97631a435058ebe4843a",
+    "kernel_sha256": "8990b0e8e373539194b074c31aa126723dba69b2543dfb0876cd7b1789603429",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
   "terminal_return": {
@@ -139,7 +143,8 @@
     "completion_fallback": false
   },
   "result_interpretation": "warning1..4 encode mask0..3, warning5 collection failure. Indirect boot-origin decoding only; ambiguous or failed recovery stops additional trials.",
-  "native_mask_field": 5,
+  "native_mask_field": 6,
+  "native_mask_meaning": "ActiveThroughout AND TimingStableNonzero AND EnableStable AND Moving within same observation",
   "decode_plan": {
     "baseline_envelope_seconds": [
       10.25199999997858,

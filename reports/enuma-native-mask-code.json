@@ -1,11 +1,11 @@
 {
   "scope": "actual packaged native-mask provider and new bounded exact-GUID Core terminal; manual disassembly review bound by digest",
-  "firmware_commit": "2bb165fa0dd882da1f79b9919435f00f3a4e36d8",
-  "native_mask_field": 5,
-  "image_sha256": "5f68293c3d69719cf96e14282dff55582cedc37e5131b93d6965809a583de12f",
-  "provider_sha256": "3a4bc4b836e1373bd6674f992b57323fe8b4b8d9fede8f465cc01e2699d5aeb4",
-  "core_sha256": "0d3c9f5b162baf032163d5fc247101c9637b9f4dd83b6928539e99e907f26594",
-  "combined_disassembly_sha256": "2754c8b673d331aaab680202170a4561c0a325814ee15bfca74ebc9f8639419c",
+  "firmware_commit": "9600b1900d4b175cedb4158c1b53cd6b21d3044c",
+  "native_mask_field": 6,
+  "image_sha256": "1ff66e2cb4fb8e9c820f43506d555031adf1bf332a232b574d02140cb77f6845",
+  "provider_sha256": "b18e9b9c5879a36d26b8c4c027aa46c9e306b9aabcafa89ee9fcec1506b898b5",
+  "core_sha256": "bc94ca3c967d7104d3800888724a4827534f72175c479f2a8c34557df6d57c21",
+  "combined_disassembly_sha256": "5822c1c77fca73484b64c6b308fa9cb954c48032f41edd405d62636927528439",
   "review_required": false,
   "hardware_success": false
 }

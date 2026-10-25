@@ -18,3 +18,13 @@ Real-header ASan/UBSan covers504 hook/status/GUID cases,53 mask/error selector c
 ## S-025 field5 comparison
 
 `qualified-native-mask-2bb165f-field5` retains the same Core PE. Full provider disassembly differs from field1 only at RVA14d4: offset0xda0 becomes0xdb0, selecting ExactEnable3Mask at observation offset0x80. Full reviewed disassembly digest `2754c8b673d331aaab680202170a4561c0a325814ee15bfca74ebc9f8639419c`; collection and all other instructions are unchanged. A zero result means neither interface satisfied low-two-bits==3 across all samples, not that the full Enable register was observed to equal0.
+
+## S-026 field6 combined observation
+
+Source9600b19, archive `qualified-native-mask-9600b19-field6`. Core executable sections are byte-identical to reviewed S-023; the whole PE hash differs, so only executable equivalence is asserted. Provider is not a one-instruction variant: its changed entry1050..1544 was independently reviewed.
+
+Metadata1110..118c remains exact. Initial/final revision count guards11ac..11e8 and1468..14a0 reject at count26 or mismatch. Sample loop1218 and wait1224..1274 retain three samples/two100000us stalls. Reads12d8/12fc/1320 fetch Timing/Enable/STATUS; bit0 branch1338 gates FRAME1370. Independent mask updates and frame1..64 checks1388..143c remain bounded; next interface/sample1440..1464. Read helper15b8..163c enforces the same count/offset allowlist and has no MMIO store.
+
+After complete observation copy14a4..14cc, loads14d4/14e4/14f4/1504 select the four masks at0xda0/da4/da8/dac. Each must be<=3; otherwise1510 returns5. AND chain1534..153c and add1 at1540 generate warning1..4. ExactEnable3 at0xdb0 is not part of this conjunction. Failure branches reach1510 without using partial masks. No new read/wait/call/GOP/pixel path.
+
+The helper tail shifts by0x30. Byte comparison differs only at helper offset0x54 (BL to the unchanged CpuPause1038) and0xadc (ADRP encoding crosses a code page but still targets3000); remaining helper bytes equal the original tail. Full reviewed disassembly digest `5822c1c77fca73484b64c6b308fa9cb954c48032f41edd405d62636927528439`. Actual-header tests now cover504 terminal,53 individual and521 combined/error selector cases. Old field2 was built and archived offline only, not issued or consumed.

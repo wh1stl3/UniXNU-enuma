@@ -37,7 +37,19 @@ int main(void) {
   }
   assert(EnumaNativeMaskResult(EnumaInheritedOk,0,1)==5);
   assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,0)==5);
-  assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,6)==5);
-  printf("PASS: %u actual terminal hook/status/GUID cases; 53 mask/error selector cases; max22s cold delay\n",cases);
+  assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,7)==5);
+  for(unsigned a=0;a<4;a++)for(unsigned b=0;b<4;b++)for(unsigned c=0;c<4;c++)for(unsigned d=0;d<4;d++) {
+    o.ActiveThroughoutMask=a;o.TimingStableMask=b;o.EnableStableMask=c;o.MovingMask=d;
+    o.ExactEnable3Mask=0; // exact-enable3 remains unrelated to this conjunction.
+    assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,6)==(a&b&c&d)+1);
+    assert(EnumaNativeMaskResult(EnumaInheritedBounds,&o,6)==5);
+  }
+  for(unsigned i=0;i<4;i++)for(unsigned bad=0;bad<2;bad++) {
+    for(unsigned j=0;j<4;j++)*m[j]=3;
+    *m[i]=bad?UINT32_MAX:4;
+    assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,6)==5);
+  }
+  assert(EnumaNativeMaskResult(EnumaInheritedOk,0,6)==5);
+  printf("PASS: %u actual terminal hook/status/GUID cases; 53 individual and 521 combined mask/error selector cases; max22s cold delay\n",cases);
   return 0;
 }

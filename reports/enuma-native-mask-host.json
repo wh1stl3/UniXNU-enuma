@@ -1,6 +1,6 @@
 {
   "scope": "real header/selector with sanitized host callbacks; no device execution",
-  "result": "PASS: 504 actual terminal hook/status/GUID cases; 53 mask/error selector cases; max22s cold delay",
+  "result": "PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined mask/error selector cases; max22s cold delay",
   "command": [
     "clang",
     "-std=c11",
@@ -22,7 +22,7 @@
     "-DENUMA_DIAG_GOP_QUERY=1",
     "-DENUMA_VIDEO_TERMINAL=1",
     "-DENUMA_DIAG_DISPATCH_FALLBACK=0",
-    "-DENUMA_NATIVE_MASK_FIELD=1",
+    "-DENUMA_NATIVE_MASK_FIELD=6",
     "-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL",
     "-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL",
     "-DDETAIL_HEADER=\"/mnt/d/Code/UniXNU-enuma/firmware/diagnostics/EnumaDispatchDetailCheckpoint.h\"",
@@ -38,10 +38,10 @@
     "ENUMA_DIAG_DISPATCH_FALLBACK"
   ],
   "source_sha256": {
-    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "86cfeb92e570fc6689c17bb56b3faa4baf6211626904b813dc87f26c35dc63e9",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "f0582c2828a4d936c059dc2e15b443f585dad70aac6608f67b750783fa5faf97",
-    "tests/native_mask_terminal.c": "e9db3bf20da198526912fc5eee7dfcccb0768efa7e63173c448937f8428f3941",
-    "scripts/check_native_mask_terminal.py": "8d9e3c0641ea33ce513bed4e7e667464ebaa9389ef8a5bc6dcd24da74233b569"
+    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "203bb325dd43d41e4cb1d7ceb0c2667382ef51191f6f1c8711b7cec909f01f28",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "05df09a07050b7dee4dd4f98929253f450fbe4547e4888bdc748dc1e78ebd67b",
+    "tests/native_mask_terminal.c": "37262d1513002c0f7510dce37e84ec6e6e4a23d2b72a819796032810c1cb758d",
+    "scripts/check_native_mask_terminal.py": "ba7c36a294c29654957738c6bfe0dd62810e1a4ace18b530446b4eca0ce966ec"
   },
   "maximum_terminal_delay_us": 22000000,
   "display_mmio": false,
