@@ -1,0 +1,89 @@
+{
+  "scope": "read-only ledger reconciliation; no device action, source pin or authorization change",
+  "fixed_framework": "16e592abee8a550dec8154ed1f38b5ebc4f16213",
+  "verified_primary_sources": [
+    "docs/porting/log-capture.md",
+    "package/UniXNUPkg/Driver/AdvancedLogDxe/AdvancedLogDxe.c",
+    "scripts/debug_terminal.py"
+  ],
+  "routes": [
+    {
+      "route": "OEM DisplayDxe/CPRDxe",
+      "state": "executed-no-usable-output",
+      "evidence": [
+        "docs/NEED-REVIEW.md R-014",
+        "docs/DECISIONS.md D-161/D-163",
+        "docs/operations/2026-10-25-display-thread-off.md"
+      ],
+      "fact": "R-014 twice no automatic return; the continuously captured attempt showed no visible firmware output. Later thread0 S-002 also timed out. Actual APRIORI bypasses DEPEX; missing GUIDs do not establish the cause."
+    },
+    {
+      "route": "Framebuffer white-bar",
+      "state": "executed-no-confirmed-output-consumed",
+      "evidence": [
+        "reports/enuma-r005-device.json",
+        "docs/WORKLOG.md R-007",
+        "docs/DECISIONS.md D-146"
+      ],
+      "fact": "R-005 controlled return without confirmed white bar; R-007 timeout without bar. Read/cache operations precede stores, so timeout does not locate the store."
+    },
+    {
+      "route": "KTZ8866 independent backlight",
+      "state": "identity-and-authorization-only-not-qualified-write",
+      "evidence": [
+        "docs/NEED-REVIEW.md R-012",
+        "docs/operations/2026-10-25-backlight-and-batch-transport.md",
+        "docs/DECISIONS.md D-160"
+      ],
+      "fact": "R-012 already approved; no qualified UEFI I2C transfer or backlight-write result found. OEM I2C PE exists; missing headers do not prove a controller driver must be rewritten."
+    },
+    {
+      "route": "Retained RAM cold bootloader path",
+      "state": "executed-marker-not-preserved",
+      "evidence": [
+        "reports/enuma-log-seed-after-bootloader-01.json"
+      ],
+      "fact": "Reserved pages and normal ABI/reader loads succeeded; after bootloader roundtrip matches_seed_marker=false. Does not prove warm-reset variant works or fails."
+    },
+    {
+      "route": "Retained RAM warm reset",
+      "state": "proposed-not-end-to-end-qualified",
+      "evidence": [
+        "docs/NEED-REVIEW.md R-008/R-013",
+        "docs/operations/2026-10-25-backlight-and-batch-transport.md"
+      ],
+      "fact": "R-008 write/warm scope approved, but retained/readable Android handoff and actual warm survival unproven. Existing boot_a-write proposal R-013 remains pending; no silent partition action."
+    },
+    {
+      "route": "UART",
+      "state": "read-only-config-discovery-not-connected",
+      "evidence": [
+        "reports/enuma-uart-discovery.json",
+        "docs/operations/2026-10-23-uart-or-screen.md"
+      ],
+      "fact": "Debug UART node disabled, actual firmware used SerialPortNull; physical testpoints/levels/wiring/early producer not verified."
+    },
+    {
+      "route": "USB CDC terminal",
+      "state": "source-review-only-no-enuma-backend",
+      "evidence": [
+        "docs/operations/2026-10-25-latest-porting-route-review.md",
+        "scripts/debug_terminal.py"
+      ],
+      "fact": "Host terminal exists, but requires a matching device backend and its initialized runtime stage; no enuma early UEFI USB log demonstrated."
+    },
+    {
+      "route": "AdvancedLogger QR",
+      "state": "source-review-only-display-dependent",
+      "evidence": [
+        "docs/operations/2026-10-25-latest-porting-route-review.md",
+        "docs/porting/log-capture.md",
+        "package/UniXNUPkg/Driver/AdvancedLogDxe/AdvancedLogDxe.c"
+      ],
+      "fact": "Reusable exporter requires producer/protocol plus menu/display/input; no physical enuma QR output demonstrated."
+    }
+  ],
+  "assessment": "No alternate already-qualified early full-text channel was found. Keep inherited scanout as software primary; evaluate OEM I2C ABI/read qualification as an independent backlight branch. UART is the strongest display-independent early-log route if physical connection can be established. Do not repeat consumed OEM/pixel/cold-RAM tests.",
+  "current_device": "last independently verified Android after S-014; no additional device commands during route review",
+  "raw_media_local_only": true
+}
