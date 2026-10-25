@@ -1,6 +1,6 @@
-# 当前状态：D-267，S-041 原生显示管线合并审计资格完成，准备实测
+# 当前状态：D-268，S-041 原生显示管线合并审计结果与交接
 
-2026-10-26T02:27:37+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
+2026-10-26T02:31:01+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "first-non-wt-attribute-other-encoding", "warning_code": 5, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-041-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
 
 ## 已证实与主判断
 
@@ -26,6 +26,8 @@ S-039有效返回stable-8888-logical-structure-alpha-blend-address-and-downstrea
 
 当前CPU属性细分=True：保持S-040查询/停止点不变，只细分原code4的最后PAR属性；code2=44 normalNC、3=ff normalWB、4=00/04/08/0c Device、5=其他非WT，code1未分类（含其他失败/全WT）。不改变缓存配置、不清任何义务、不声称其余页/写查询已执行。ARM允许PAR报告实际实施后的属性；A77文档有WT降NC规则，故S-040不是页表错误证明，主假设转为正常NC报告，执行核身份未证实。源码/实际库清单的控制台审计与菜单验收矩阵已独立落地。
 
+S-041有效返回first-non-wt-attribute-other-encoding，origin32.469..32.529秒、Android53.922秒，独立身份/设备及备份摘要通过，已consumed。排除该次首个失配PAR的精确44、ff和00/04/08/0c；正常NC精确44假设未获支持，不等于所有Normal/WB策略被排除，因为分配/Transient提示有不同编码。下一步只分类缓存策略，继续保留首结果/未执行边界。
+
 当前native_border_view=True。独立native border路径在解析副本仅清bit24，原始字保留并逐样本比较；原Native2其余严格源/混合器/布局条件不变；结构模式Native3另保留混合未验证要求。原严格和原native采样API不变，staging模式仍只分类。独立border路径全部64组合保留原始快照、330读失败、border中途变化/未知位/混合器/等待/帧稳定性拒绝通过。
 
 新独立native sampler采用固定小米52a2f18 v1 STATUS bit0门控FRAME，允许Timing零和Enable低位非3，但保留完整Timing/Enable字相等、双路三样本活动、两个100ms窗口各非回绕递增1..64。复用现有六CTL、所选两源SSPP、两LM混合配置和布局解码，采集前置首次拒绝立即返回；Native4把纯RAM布局判据放到安全采集与稳定性之后，不读取未满足路由前置的管线。旧严格GOP路径与固定基线逐回调一致，不因本审计自动放宽GOP。
@@ -44,7 +46,7 @@ ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330
 
 ## 恢复、硬停与下一步
 
-最近独立恢复out\device-tests\20261026T021914-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
+最近独立恢复out\device-tests\20261026T022944-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
 
 D-233：镜像发出前fastboot查询异常不作整轮硬停；恢复核验后允许重新进入一次fastboot，完整product/slot/unlocked门禁仍须通过。不重复已发图，不忽略FAILED正文。真实75秒无识别恢复、恢复失败、所选观测通道失效/时基失败（无相机试验不要求图像）或新时间码模糊，停止追加并当轮落实交接；有效负分类继续分析。
 
