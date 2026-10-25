@@ -1,6 +1,6 @@
-# 当前状态：D-228，S-021已受控返回，准备S-022七秒常量
+# 当前状态：D-229，启动时钟常量校准通过，继续显示隔离
 
-2026-10-25T22:16:21+08:00。用户本轮要求“继续推进 触发硬停再停”。S-021已单次发出、受控回Android并独立恢复核验，已consumed；S-022尚未发出。当前时钟界限：{"method": "host request interval minus quantized Linux uptime; 3-sample intersection", "boot_id_sha256": "9107737f47587883261dd4e628610a32b0ce06c886dd3804452cf7fc34b44505", "origin_monotonic_lower": 177088.955, "origin_monotonic_upper": 177089.025, "uncertainty_seconds": 0.07000000000698492, "calibrated_firmware_delay": false, "origin_after_issue_lower": 12.25199999997858, "origin_after_issue_upper": 12.321999999985565}。没有新增像素/MMIO写、映射、board/verified/分区操作。原始视频/图像只留本地out，不录音/上传。
+2026-10-25T22:19:40+08:00。用户本轮要求“继续推进 触发硬停再停”。S-021/S-022均受控返回且consumed；仅校准通过：{"scope": "indirect calibration of known2/7 second same-Core constants, not display/GOP evidence", "calibration_passed": true, "negative_minus_positive_origin_interval_seconds": [4.956999999994878, 5.096000000019558], "predeclared_acceptance_interval_seconds": [4, 6], "individual_uncertainty_seconds": [0.07000000000698492, 0.06900000001769513], "adb_delta": 5.343999999999998, "android_complete_delta": 4.3289999999999935, "both_new_boot_ids": true, "both_independent_recoveries": true, "old_S019_S020_reclassified": false, "limitation": "Controlled known-delay difference calibrates this host/boot-clock path only; no unique instruction-path or display proof. Hardware state can still change across boots."}。后续仍用全新资格/精确图和当前文档/即时设备相机门禁，不重试旧图。没有新增像素/MMIO写、映射、board/verified/分区操作。原始视频/图像只留本地out，不录音/上传。
 
 S-019/S-020已双双自动返回Android并独立核验。ADB差-4.281秒支持补集方向，但Android完成差-1.359秒未进预设[-7,-3]窗口，正式结果保持ambiguous；旧对冻结且两图consumed，不换阈值或追认寄存器状态。两笔没有发生75秒超时/恢复失败，不能虚构为设备硬停。80290f4已发布该真实结果。
 
@@ -14,4 +14,4 @@ S-021图afe1e310bd07d2b1cd74275f9a9b2fe66e945fb956aee4cce3b80d529c457c43，FDee6
 
 预先固定校准：S-022原点区间减S-021区间，整个差区间必须落在[4,6]秒，且两笔新boot/恢复与摄像均通过，才认为该时基能辨别已知5秒差；任何失败/模糊校准冻结该新计划并停止追加设备动作。即便通过仍只支持时基、非唯一UEFI路径证明；显示谓词须另行新候选，不复用S-019/020或放宽GOP。ADB与Android完成原时序仍完整记录，不为新方法篡改旧判据。
 
-执行前源/两仓发布和全部当前文档对齐；即时唯一enuma身份、A槽/解锁、匹配本地boot_a/vendor_boot_a备份与设备摘要、既有受控/人工恢复路径和相机门禁保持。最近恢复证据out\device-tests\20261025T221621-recovery-reconciliation.json，Android完成/root/A槽/解锁及两分区设备与备份摘要通过；相机桌面已确认。75秒无识别返回仍停止追加，主机期限不冒称固件返回保证。真实GOP、小图案/阶段字、CPU/SMMU扫描源关系、I2C背光及XNU/iPadOS仍未实机闭合。
+执行前源/两仓发布和全部当前文档对齐；即时唯一enuma身份、A槽/解锁、匹配本地boot_a/vendor_boot_a备份与设备摘要、既有受控/人工恢复路径和相机门禁保持。最近恢复证据out\device-tests\20261025T221940-recovery-reconciliation.json，Android完成/root/A槽/解锁及两分区设备与备份摘要通过；相机桌面已确认。75秒无识别返回仍停止追加，主机期限不冒称固件返回保证。真实GOP、小图案/阶段字、CPU/SMMU扫描源关系、I2C背光及XNU/iPadOS仍未实机闭合。

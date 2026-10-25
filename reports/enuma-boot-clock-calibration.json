@@ -1,0 +1,22 @@
+{
+  "scope": "indirect calibration of known2/7 second same-Core constants, not display/GOP evidence",
+  "calibration_passed": true,
+  "negative_minus_positive_origin_interval_seconds": [
+    4.956999999994878,
+    5.096000000019558
+  ],
+  "predeclared_acceptance_interval_seconds": [
+    4,
+    6
+  ],
+  "individual_uncertainty_seconds": [
+    0.07000000000698492,
+    0.06900000001769513
+  ],
+  "adb_delta": 5.343999999999998,
+  "android_complete_delta": 4.3289999999999935,
+  "both_new_boot_ids": true,
+  "both_independent_recoveries": true,
+  "old_S019_S020_reclassified": false,
+  "limitation": "Controlled known-delay difference calibrates this host/boot-clock path only; no unique instruction-path or display proof. Hardware state can still change across boots."
+}
