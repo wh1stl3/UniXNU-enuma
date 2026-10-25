@@ -1,0 +1,121 @@
+{
+  "scope": "fixed-source peer comparison; no firmware changes, physical access, boots or module loads",
+  "repositories": 9,
+  "files_checked": 40,
+  "sha256_and_git_blob_match": true,
+  "facts": [
+    {
+      "id": "enuma_log_is_pipa_reference",
+      "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/Library/RamoopsLogLib/RamoopsLogLib.c",
+      "matched_line_numbers": {
+        "TODO(enuma)": 1,
+        "VERBATIM COPY": 1,
+        "PrepareWarmFastboot": 265,
+        "PON_KPDPWR_S2_CTL": 73,
+        "SCM_HALT_PMIC_ARB": 91
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "enuma_reset_still_unported",
+      "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/enuma.dsc",
+      "matched_line_numbers": {
+        "TODO(enuma): umi also provides": 171,
+        "UmiResetSystemLib": 172,
+        "needs its own": 174
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "elish_unixnu_not_hardware_closure",
+      "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/README.md",
+      "matched_line_numbers": {
+        "不能直接构建出可烧写产物": 7,
+        "build-elish-uefi.sh": 99
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "elish_common_psci_binding",
+      "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Silicon/Qualcomm/QcomPkg/QcomCommonDsc.inc",
+      "matched_line_numbers": {
+        "ArmSmcPsciResetSystemLib": 236,
+        "FrameBufferSerialPortLib": 261,
+        "QcomGeniSerialPortLib": 259
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "elish_upstream_psci_warm_not_board_fix",
+      "url": "https://github.com/tianocore/edk2/blob/e7aac7fc137e247edad22f7ee53b9a1fba227397/ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.c",
+      "matched_line_numbers": {
+        "ARM_SMC_ID_PSCI_FEATURES": 57,
+        "ARM_SMC_ID_PSCI_SYSTEM_RESET2_AARCH64": 54,
+        "ResetCold ();": 67
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "elish_linux_layout_differs",
+      "url": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi",
+      "matched_line_numbers": {
+        "ramoops@b0000000": 148,
+        "record-size = <0x1000>": 151,
+        "console-size = <0x200000>": 152,
+        "ecc-size = <16>": 153
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "umi_board_reset_reference",
+      "url": "https://github.com/reAAAq/UniXNU-umi/blob/3eb72578597d2ca16471b172d45eddc096a34a04/overlay/Platforms/Xiaomi/umiPkg/Library/UmiResetSystemLib/UmiResetSystem.c",
+      "matched_line_numbers": {
+        "PSCI SYSTEM_RESET hung": 5,
+        "SaveAndDisableInterrupts": 102,
+        "WriteVerify": 69,
+        "BoardReset (1)": 195,
+        "0x82000902": 163
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "pipa_reader_early_copy",
+      "url": "https://github.com/xVanTuring/UniXNU-pipa/blob/c28476ea5d3c66fb634152ea7cd0f5ddc7a63233/package/linux-log/init.c",
+      "matched_line_numbers": {
+        "PSTORE": 18,
+        "LOG.BIN": 5,
+        "read only": 6,
+        "qcom,force-warm-reboot": 7
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    },
+    {
+      "id": "pipa_reader_temp_boot_and_board_dtb",
+      "url": "https://github.com/xVanTuring/UniXNU-pipa/blob/c28476ea5d3c66fb634152ea7cd0f5ddc7a63233/package/linux-log/build-log-reader.py",
+      "matched_line_numbers": {
+        "qcom,force-warm-reboot": 9,
+        "--cold": 9,
+        "header v2": 3
+      },
+      "evidence_level": "source fact / peer claim; not independent enuma execution"
+    }
+  ],
+  "enuma_hardware_baseline": {
+    "last_trial": "S-018",
+    "hard_stop": true,
+    "recovered_android": true,
+    "firmware_pin_unchanged": true
+  },
+  "conclusion": "Board PMIC PON/SPMI/PS_HOLD reset + early temporary Linux reader is a concrete alternate chain; peer enuma/elish do not establish a solved enuma PSCI_RESET2 retention case",
+  "next_priority": [
+    "offline audit enuma-native PMIC/SCM/restart DT and match peer board-reset assumptions",
+    "separate minimal fresh write with already-returned cold path from persistence",
+    "qualify an enuma-owned early reader before any new persistent-log experiment"
+  ],
+  "not_authorized_by_reference": [
+    "pipa/umi SPMI constants or long-power-button reconfiguration",
+    "4MiB mapping/pmsg expansion",
+    "flash/slot/verified changes"
+  ],
+  "raw_media_local_only": true
+}

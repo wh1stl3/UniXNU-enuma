@@ -1,3 +1,9 @@
+# D-222 当前：公开仓离线研究完成，无新增执行待审
+
+本轮未实施PMIC/SCM/长按行为或日志reader迁移；详细候选条件见operations/2026-10-25-enuma-elish-reset-reference-review.md。其他机型代码不授权enuma硬件操作，后续新增PMIC控制需先形成精确方案并沿原专项流程；当前不开始实验，不重试S-001..018。D-221硬停后Android已独立恢复，文档边界保持。
+
+以下为历史审查和执行账本。
+
 # D-221 当前：S-018无console访问warm对照，无新增待审
 
 超时硬停后Android已独立恢复；按用户要求停在此处。同已批准范围，仅隔离warm请求，console/pmsg/分区/verified不写；若超时停止追加、恢复核验并完成交接后停。

@@ -1,15 +1,15 @@
-# 当前状态：D-221，S-018超时硬停；Android已恢复，本轮停止
+# 当前状态：D-222，完成enuma/elish公开仓离线研究；设备硬停后状态保持
 
-2026-10-25T21:03:20+08:00。用户要求“继续推进 触发硬停再停”。S-018于2026-10-25 20:57:13单次临时boot，命令返回0/2.641秒、5.110秒观察到断开，75秒内未回Android/fastboot，触发停止追加镜像的硬停。runner未记录超时精确墙钟；按发出时间推算期限约20:58:28，不把推算当实际检测时刻。已停止所有后续boot/写入，仅处理恢复取证和交接。用户报告恢复Android，21:01:29独立完成/root/A槽/解锁及boot_a/vendor_boot_a设备与本地备份摘要均通过。当前Android正常，无人工按键或审批待办；按最新要求停在此处，不再构建/执行下一候选。
+2026-10-25T21:17:35+08:00。D-221硬停后，用户新要求“参考一下同机型的其他人的仓库和WIFI版型号elish的仓库 看看他们怎么解决这个问题”。本轮仅按该请求查公开源码、固定版本/摘要、做对照和文档；没有新设备命令、读取物理RAM、加载模块、构建候选、映射/写入或上机。最后已知设备状态仍为21:01:29独立核验通过的Android完成/root/A槽/解锁及设备/本地备份双分区摘要一致；未为研究重复该恢复核验。
 
-最后候选：固件`5cfcd4cc68c0c37ffb322322efc256760d9389e3`；镜像`6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5`；FD`fb8a9ae93a279e6ad8f181c277eb620483d5cd5b8f1cd4c41bf4b7af19f9908f`。只在探针构建保留同已批准B0000000/2MiB映射，stage10延时2秒后ResetWarm，返回则deadloop；不读写console/pmsg、不使用nonce、不写分区/改槽/显示寄存器或verified。完整FAT/Boot v3、实际Core/参数/描述符与反汇编审计在执行前完成并以4ca93ca提交推送；资格reports/enuma-ramoops-warm-control-qualification.json、代码reports/enuma-ramoops-warm-control-code.json、归档out/ramoops-audit/S-018-qualified。默认profile仍无新增映射，SerialPort仍Null。
+新结论：未发现受审enuma/elish仓库已解决本机PSCI warm留存的实机证据。同型Tlrenhb/uefi-enuma内有pipa复制的RamoopsLogLib，具体路线为SPMI/PON warm配置、重启原因、SCM/PS_HOLD，而非通用PSCI reset2；文件明确TODO(enuma)，DSC对板级reset/serial仍待移植，设备reader脚本仍TODO。hpadmx/UniXNU-elish处于准备阶段；edk2-msm elish可走FramebufferSerialPort或GENI UART，但common仍绑定通用PSCI reset2/cold回退，并非已核实的warm留存修复。
 
-硬停规则来源：AGENTS的75秒有界临时探针/失败后停止追加并先恢复，以及用户本轮“触发硬停再停”。S-018/R-017-WARM已consumed，S-001..018及旧失败图不重试。a3870d3已先推送恢复待核验停点；本里程碑补齐实际恢复和最终交接。原始失败记录`out/device-tests/20261025T205659-system-transport/result.json`保持manual-recovery-needed，不改写为自动通过。独立恢复证据`out\device-tests\20261025T210129-recovery-reconciliation.json`；脱敏结果reports/enuma-ramoops-S-018-result.json。
+最值得借鉴的是完整板级复位＋早期reader链：umi的UmiResetSystemLib源码记录PSCI复位曾挂死，改为核验PON/SPMI/SCM后PS_HOLD复位；pipa提供独立临时Linux，在Android用户态之前复制pstore并以只读USB磁盘导出。对方报告不是enuma通过。pipa默认还会改电源键复位类型、reader写pmsg测试标记并使用其自身DT/boot格式；这些均不能直接移植或视作现有授权。elish Linux的record4096/ECC16配置也不等于本机record0/ECC0/console与pmsg对半布局。
 
-相机关键节点：out/camera-capture/20261025T205656-system-transport，1090/1090帧解码通过；早段黑屏，frame-0468目视Android重启logo，说明录像延长覆盖到恢复启动。恢复后out/camera-capture/20261025T210129-system-transport补拍桌面已确认。没有明确核对按键动作，不猜测其时间。原始视频/图像只留本地out，无录音/上传；公开仅文字、状态和摘要。
+建议后续排序：先离线核对enuma原生PON代际、SPMI版本/EE/APID、PS_HOLD/IMEM和SCM约定，再以已返回cold门隔离新的最小writer，同时准备去掉pmsg测试写入的enuma早期reader；最后才评估板级warm留存。新PMIC控制、长按行为或范围扩大须按现有规则形成具体实施审查；本轮只研究，不提出未构建方案的执行批准，不开始硬件实验。仍无ramoops留存/GOP/XNU/iPadOS实机闭合。
 
-主判断（中等置信）：S-016同映射/原cold与S-017头三读/cold均约20秒回ADB、35–36秒完成；S-018无console访问、仅改warm请求仍未受控返回，因此warm请求链是当前优先嫌疑。它包含PSCI_FEATURES、返回值分支、SYSTEM_RESET2或cold回退及其前置日志，实际执行到哪一步未知；不能声称一定执行reset2、DRAM保留、warm不被硬件支持或S-015必然同一根因。更早路径/跨启动变化仍可混淆，header写入仍未验证安全。
+研究固定9仓40文件，SHA256及Git blob双校验和9组源码事实检查通过。源锁config/enuma-elish-reset-sources.lock.json；复现scripts/audit_enuma_peer_reset_routes.py；报告reports/enuma-elish-reset-route-review.json；详细来源与边界docs/operations/2026-10-25-enuma-elish-reset-reference-review.md。没有更改固件pin、board.toml/bringup-plan或verified；固件仍5cfcd4cc68c0c37ffb322322efc256760d9389e3，默认映射和Null后端保持。
 
-有效历史：S-015 writer+warm也超时并人工恢复，未取得有效nonce；65字节cat缺文件诊断不是console日志，collector已修复。S-016 map-only/cold自动返回，ADB20.063秒/完成35.406秒。S-017三次头部load/cold自动返回，ADB20.047秒/完成35.969秒，253帧及独立恢复通过；没有导出头数值，不称写权限/留存通过。真实GOP、13项RAM运输、XNU/iPadOS/PMGR/UFS仍未实机闭合。
+最后实机：S-018于20:57:13单次发出6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，命令0/2.641秒、断开5.110秒、75秒无返回触发硬停；用户恢复，独立证据out/device-tests/20261025T210129-recovery-reconciliation.json，原失败记录保持。录像1090/1090帧、末段Android重启logo及补拍桌面已目视，按键动作未明确核对。结果reports/enuma-ramoops-S-018-result.json。S-016映射/cold、S-017三读/cold均自动返回，使warm链成为首嫌，但FEATURES/reset2/回退执行点未定位，writer安全未证明。S-001..018及旧失败图consumed，不重试。
 
-继续条件与下一步：用户恢复推进后，先离线审查warm功能查询/SMC参数及回退路径，优先以已返回的cold门隔离一个新的最小写入候选；不是复活S-015/018或扩大console范围。候选尚未实现/构建/资格/上机。后续仍需新精确源码/实际PE/宏/描述符/完整载荷审计、全部当前文档提交推送及即时身份/备份/相机/恢复门禁；新内存范围/verified/破坏性分区仍按原专项规则。当前本轮工作已停。
+当前无人工恢复按键或执行审批待办；硬件实验仍停在D-221后的边界。本轮研究与文档提交推送后完成答复。所有原始影音仅本地out，无录音/上传；本轮无新增影音。82430d4是前一恢复交接已推送里程碑，本轮新增仅离线研究。

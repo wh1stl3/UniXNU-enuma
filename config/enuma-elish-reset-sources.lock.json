@@ -1,0 +1,400 @@
+{
+  "schema": 1,
+  "scope": "fixed peer source audit only; no device actions or firmware pin change",
+  "references": [
+    {
+      "repository": "https://github.com/Tlrenhb/uefi-enuma",
+      "commit": "70ba7ba3367d1083822fbe3cb86177ec3d7224c2",
+      "branch": "main",
+      "tree_truncated": false,
+      "submodules": [],
+      "files": {
+        "Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": {
+          "sha256": "10b7ab57ec69e56e8995cc24bb685692a829692bf10f606983e7f4b257de1679",
+          "git_blob": "6377c63d5df56711bc3fce72208361da15c3daa8",
+          "bytes": 7455,
+          "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c",
+          "cache_file": "out/peer-reset-review/blobs/6377c63d5df56711bc3fce72208361da15c3daa8"
+        },
+        "Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf": {
+          "sha256": "8faf44907c4e6e77f894db7ad4ee557e0219b30591355adc0b9463a5d2722283",
+          "git_blob": "0dd166f3d88ba067fe91e2389b99996bb55be5a6",
+          "bytes": 603,
+          "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.inf",
+          "cache_file": "out/peer-reset-review/blobs/0dd166f3d88ba067fe91e2389b99996bb55be5a6"
+        },
+        "Platforms/Xiaomi/enumaPkg/Library/RamoopsLogLib/RamoopsLogLib.c": {
+          "sha256": "7700920f889c2580c64067e41dc1c63b261ecd992b2a9474621d816e77f49467",
+          "git_blob": "8ac6223eba2f85c10b43f8f7d39f9a4ddfa767bb",
+          "bytes": 13144,
+          "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/Library/RamoopsLogLib/RamoopsLogLib.c",
+          "cache_file": "out/peer-reset-review/blobs/8ac6223eba2f85c10b43f8f7d39f9a4ddfa767bb"
+        },
+        "Platforms/Xiaomi/enumaPkg/Library/RamoopsLogLib/RamoopsLogLib.inf": {
+          "sha256": "b4a07c9135df48d11ab84127ae5c2c2f5b873e0a06ee9834e08b2ac847032d10",
+          "git_blob": "6f6fd89a11e6bd56730d71d517a4a2718824acf2",
+          "bytes": 618,
+          "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/Library/RamoopsLogLib/RamoopsLogLib.inf",
+          "cache_file": "out/peer-reset-review/blobs/6f6fd89a11e6bd56730d71d517a4a2718824acf2"
+        },
+        "Platforms/Xiaomi/enumaPkg/enuma.dsc": {
+          "sha256": "6afac744ca6312fd6cca13f88a3ff8260124f35b547125ca692862b6305519a4",
+          "git_blob": "b87ae6d699dd2b187386e12c36a6ad77218d114d",
+          "bytes": 10912,
+          "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/Platforms/Xiaomi/enumaPkg/enuma.dsc",
+          "cache_file": "out/peer-reset-review/blobs/b87ae6d699dd2b187386e12c36a6ad77218d114d"
+        },
+        "README.md": {
+          "sha256": "ec6d48fa3beb9cbe060b07ee6562e503964f28774e3402ab1019cbb6a87819d1",
+          "git_blob": "4f164830a142441ca978cb342c1fc5b7c7f60d2a",
+          "bytes": 8487,
+          "url": "https://github.com/Tlrenhb/uefi-enuma/blob/70ba7ba3367d1083822fbe3cb86177ec3d7224c2/README.md",
+          "cache_file": "out/peer-reset-review/blobs/4f164830a142441ca978cb342c1fc5b7c7f60d2a"
+        }
+      },
+      "cache": "out/peer-reset-review/Tlrenhb__uefi-enuma",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/Tlrenhb/UniXNU-enuma",
+      "commit": "606a99279bb8fc59207fe653585004bc0efb6cd0",
+      "branch": "main",
+      "tree_truncated": false,
+      "submodules": [],
+      "files": {
+        "README.md": {
+          "sha256": "5eb85173203f5f12aedf290e48e6baeb6049dc734f728d6a0ee0d07d44a30eeb",
+          "git_blob": "cf0432e2589b9ad575d291def7c862cc3e2349c7",
+          "bytes": 20598,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/README.md",
+          "cache_file": "out/peer-reset-review/blobs/cf0432e2589b9ad575d291def7c862cc3e2349c7"
+        },
+        "board.toml": {
+          "sha256": "f18019a02c0e2723f9be53303e4426ea5f4c9d8677ae55614131ab928359244d",
+          "git_blob": "4c4f6bfd53fd33d8a853bb38f7949ca804eab715",
+          "bytes": 22402,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/board.toml",
+          "cache_file": "out/peer-reset-review/blobs/4c4f6bfd53fd33d8a853bb38f7949ca804eab715"
+        },
+        "measurements.md": {
+          "sha256": "bd71767621ce3303a08104402138e8594f9b47264c2c21a6bfdf164ca8f14cba",
+          "git_blob": "9d568cc6676a5f633b6c878611115b2017aa885f",
+          "bytes": 2142,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/measurements.md",
+          "cache_file": "out/peer-reset-review/blobs/9d568cc6676a5f633b6c878611115b2017aa885f"
+        },
+        "package/README.md": {
+          "sha256": "2a910ec1cd3a2bfe1d5a15008130068f918dd603283790f28f3fbcb3398ba94b",
+          "git_blob": "774b9b33214ea8df9646d8944747a7b26992789c",
+          "bytes": 1018,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/package/README.md",
+          "cache_file": "out/peer-reset-review/blobs/774b9b33214ea8df9646d8944747a7b26992789c"
+        },
+        "provenance.md": {
+          "sha256": "b7c660f3e3909e97fc43dbbc25a36030be4cb3e50d45a2f9c035be35fd8328a9",
+          "git_blob": "4f07bc783989079fb8f58f91e01336ce26274dff",
+          "bytes": 4627,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/provenance.md",
+          "cache_file": "out/peer-reset-review/blobs/4f07bc783989079fb8f58f91e01336ce26274dff"
+        },
+        "scripts/README.md": {
+          "sha256": "bb150361b6f2b6dee13b291653f4fa7ec2ed6fff947bc9d900a9154796c3399b",
+          "git_blob": "6e70b07f94f08f40bbbc3869db8a5675f422a220",
+          "bytes": 2473,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/scripts/README.md",
+          "cache_file": "out/peer-reset-review/blobs/6e70b07f94f08f40bbbc3869db8a5675f422a220"
+        },
+        "scripts/build-enuma-uefi.sh": {
+          "sha256": "181c700ec1baee3e5b4daa79491c10a19da44cdc89a784ddc32c93217f031d94",
+          "git_blob": "5692212c2ebe428b56211d16a19e5884b083a3f4",
+          "bytes": 2602,
+          "url": "https://github.com/Tlrenhb/UniXNU-enuma/blob/606a99279bb8fc59207fe653585004bc0efb6cd0/scripts/build-enuma-uefi.sh",
+          "cache_file": "out/peer-reset-review/blobs/5692212c2ebe428b56211d16a19e5884b083a3f4"
+        }
+      },
+      "cache": "out/peer-reset-review/Tlrenhb__UniXNU-enuma",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/hpadmx/UniXNU-elish",
+      "commit": "a357eae98a0da0796c8efec8519825367da1e3e7",
+      "branch": "master",
+      "tree_truncated": false,
+      "submodules": [],
+      "files": {
+        "PROVENANCE.md": {
+          "sha256": "d8ef97c10debed0bf746fffcd2f5bb7a09a78cbc890faa59bbeab926fc33f994",
+          "git_blob": "da2377fb3b131738558454f830302d5cece2983e",
+          "bytes": 1400,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/PROVENANCE.md",
+          "cache_file": "out/peer-reset-review/blobs/da2377fb3b131738558454f830302d5cece2983e"
+        },
+        "README.md": {
+          "sha256": "8b60fa50b0f6007c72101e050cb3b62931d219288b0ea7e643f50d9f4fa78100",
+          "git_blob": "172b9225ae7fa27f93826973400de74845896999",
+          "bytes": 20598,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/README.md",
+          "cache_file": "out/peer-reset-review/blobs/172b9225ae7fa27f93826973400de74845896999"
+        },
+        "board.toml": {
+          "sha256": "15a548f30d8038c9255dd3437a95c561cef1bd4e32ad93115f1753887704399b",
+          "git_blob": "f31814cc33ccd99812b654de2a074700c5593bd6",
+          "bytes": 22602,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/board.toml",
+          "cache_file": "out/peer-reset-review/blobs/f31814cc33ccd99812b654de2a074700c5593bd6"
+        },
+        "measurements.md": {
+          "sha256": "8f7935e71650646ddf24c9e013994aba37005e5ed4de0cc578498e70119038c6",
+          "git_blob": "006f33098035d2adcf0322d271154f000f26dc25",
+          "bytes": 2142,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/measurements.md",
+          "cache_file": "out/peer-reset-review/blobs/006f33098035d2adcf0322d271154f000f26dc25"
+        },
+        "package/README.md": {
+          "sha256": "820658e5a4e733488244ec68c4787d6f3b9e281198f6da596e204b4204b55445",
+          "git_blob": "25b1a757d9ee92e5b21ac12ec3023f27c75457b5",
+          "bytes": 1018,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/package/README.md",
+          "cache_file": "out/peer-reset-review/blobs/25b1a757d9ee92e5b21ac12ec3023f27c75457b5"
+        },
+        "provenance.md": {
+          "sha256": "dfa01a0ceddbadb56d1c70c39449245a1051e83613fdca53515eb30781d5a6bc",
+          "git_blob": "fcebcec4e623ca31fc19ead1f0ee7a75287e39b2",
+          "bytes": 4627,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/provenance.md",
+          "cache_file": "out/peer-reset-review/blobs/fcebcec4e623ca31fc19ead1f0ee7a75287e39b2"
+        },
+        "scripts/README.md": {
+          "sha256": "7eb3f9ecdbcd4a99f4042c7a166feaf72b674c5c23e9e5a1721c9e2d750c8c4a",
+          "git_blob": "9c607ccb318b3de04cc1215851370dd1a352d86b",
+          "bytes": 2473,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/scripts/README.md",
+          "cache_file": "out/peer-reset-review/blobs/9c607ccb318b3de04cc1215851370dd1a352d86b"
+        },
+        "scripts/build-elish-uefi.sh": {
+          "sha256": "761da19f8b95921b190bca449d1fca3c170531c0d53202f134d13e864f580596",
+          "git_blob": "5ff96e147c431256c80b45867e2b1384b89a7a20",
+          "bytes": 2602,
+          "url": "https://github.com/hpadmx/UniXNU-elish/blob/a357eae98a0da0796c8efec8519825367da1e3e7/scripts/build-elish-uefi.sh",
+          "cache_file": "out/peer-reset-review/blobs/5ff96e147c431256c80b45867e2b1384b89a7a20"
+        }
+      },
+      "cache": "out/peer-reset-review/hpadmx__UniXNU-elish",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/edk2-porting/edk2-msm",
+      "commit": "e1952621f419f8db60ed28271264e1b5184c571d",
+      "branch": "master",
+      "tree_truncated": false,
+      "submodules": [
+        {
+          "path": "Common/edk2",
+          "commit": "e7aac7fc137e247edad22f7ee53b9a1fba227397"
+        },
+        {
+          "path": "Common/edk2-platforms",
+          "commit": "982212662c71b6c734b7578526071d6b78da3bcc"
+        },
+        {
+          "path": "GPLDrivers/Library/SimpleInit",
+          "commit": "29e062805776db5ab7a61d07ef040d43aed71161"
+        },
+        {
+          "path": "Platform/EFI_Binaries",
+          "commit": "d097b8a8bf3641e5e0c8b36ef1ac9d7cc1a0bd94"
+        },
+        {
+          "path": "tools/Installer",
+          "commit": "79968774636af5ce259c66928716eacdc9c1b815"
+        }
+      ],
+      "files": {
+        "Platform/Xiaomi/sm8250/elish.dsc": {
+          "sha256": "a54dca5dcfab109aa1bd7e13ac7cc0e1669c15efa762ffb27655a921bca33469",
+          "git_blob": "29ac362d207a7a51d7ef49509baa0110bf2aed4c",
+          "bytes": 1072,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Xiaomi/sm8250/elish.dsc",
+          "cache_file": "out/peer-reset-review/blobs/29ac362d207a7a51d7ef49509baa0110bf2aed4c"
+        },
+        ".gitmodules": {
+          "sha256": "ed2beb5578c5c64616df748439b953b3540e488bf5ae66b2ee8acb5684177b65",
+          "git_blob": "6121668ed2c7f9dbd926f2f6e62b8110b077ba3f",
+          "bytes": 701,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/.gitmodules",
+          "cache_file": "out/peer-reset-review/blobs/6121668ed2c7f9dbd926f2f6e62b8110b077ba3f"
+        },
+        "Platform/Qualcomm/sm8250/sm8250.dsc": {
+          "sha256": "0523a5100f8c43b434aedf872506646a39dc9fe1b55256317524f95067c8f992",
+          "git_blob": "aa11657d7c0b146833b09c6ee862aec023c20888",
+          "bytes": 2719,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Qualcomm/sm8250/sm8250.dsc",
+          "cache_file": "out/peer-reset-review/blobs/aa11657d7c0b146833b09c6ee862aec023c20888"
+        },
+        "Silicon/Qualcomm/QcomPkg/QcomCommonDsc.inc": {
+          "sha256": "1e07d4b4694ef41a76e00bc7abdd6a892dea48c1e8453b83ba27b54ba9cac329",
+          "git_blob": "fcf51873488b1870358f78974aa61a003f79bb7c",
+          "bytes": 27365,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Silicon/Qualcomm/QcomPkg/QcomCommonDsc.inc",
+          "cache_file": "out/peer-reset-review/blobs/fcf51873488b1870358f78974aa61a003f79bb7c"
+        },
+        "Platform/Xiaomi/sm8250/Library/elish/PlatformMemoryMapLib/PlatformMemoryMapLib.c": {
+          "sha256": "0954dc91a97e35c830fd556164dc73a3119960a7a2511aed607c8c866c8eca72",
+          "git_blob": "66b640270b8fe06c45e8833b36356a9ec786eba6",
+          "bytes": 5056,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Platform/Xiaomi/sm8250/Library/elish/PlatformMemoryMapLib/PlatformMemoryMapLib.c",
+          "cache_file": "out/peer-reset-review/blobs/66b640270b8fe06c45e8833b36356a9ec786eba6"
+        },
+        "Silicon/Qualcomm/QcomPkg/Library/FrameBufferSerialPortLib/FrameBufferSerialPortLib.c": {
+          "sha256": "15ab6b1d88841a58e312aa00597d92a5320b6b84f477c47043203ef31470e43f",
+          "git_blob": "4039b75d79fe738b97d9dffd870668b5dda07ffe",
+          "bytes": 8690,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Silicon/Qualcomm/QcomPkg/Library/FrameBufferSerialPortLib/FrameBufferSerialPortLib.c",
+          "cache_file": "out/peer-reset-review/blobs/4039b75d79fe738b97d9dffd870668b5dda07ffe"
+        },
+        "Silicon/Qualcomm/QcomPkg/Library/QcomGeniSerialPortLib/QcomGeniSerialPortLib.c": {
+          "sha256": "d88aa5eb17ed83fc3198f25f059e808b007091530c102dd44f614e8673681707",
+          "git_blob": "9ac2fc4a4e978f6f4bca0924a3b70cd3b8719146",
+          "bytes": 4607,
+          "url": "https://github.com/edk2-porting/edk2-msm/blob/e1952621f419f8db60ed28271264e1b5184c571d/Silicon/Qualcomm/QcomPkg/Library/QcomGeniSerialPortLib/QcomGeniSerialPortLib.c",
+          "cache_file": "out/peer-reset-review/blobs/9ac2fc4a4e978f6f4bca0924a3b70cd3b8719146"
+        }
+      },
+      "cache": "out/peer-reset-review/edk2-porting__edk2-msm",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/tianocore/edk2",
+      "commit": "e7aac7fc137e247edad22f7ee53b9a1fba227397",
+      "files": {
+        "ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.c": {
+          "sha256": "af1619960f8cf4130fdafe5fea10526b4afc294b7cdbe1509fcd6fe34e4b3e87",
+          "git_blob": "dc7b9fd01951f94cbd36773884b875b887d63a56",
+          "bytes": 4132,
+          "url": "https://github.com/tianocore/edk2/blob/e7aac7fc137e247edad22f7ee53b9a1fba227397/ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.c",
+          "cache_file": "out/peer-reset-review/blobs/dc7b9fd01951f94cbd36773884b875b887d63a56"
+        },
+        "ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf": {
+          "sha256": "e61a3a6812a0672cd959da5d12a2e339955504969eddb204e0649aba15187cdc",
+          "git_blob": "c17b28cfac7965a0e86b16753106466e07e187d5",
+          "bytes": 702,
+          "url": "https://github.com/tianocore/edk2/blob/e7aac7fc137e247edad22f7ee53b9a1fba227397/ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf",
+          "cache_file": "out/peer-reset-review/blobs/c17b28cfac7965a0e86b16753106466e07e187d5"
+        }
+      },
+      "cache": "out/peer-reset-review/tianocore__edk2",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/torvalds/linux",
+      "commit": "adc218676eef25575469234709c2d87185ca223a",
+      "files": {
+        "arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi": {
+          "sha256": "5578e510d16e9506b639f6da972804e9a96bdda12acecbbddc84f32a5778028f",
+          "git_blob": "3596dd328c31d6f0430fed343c7e2307147d21f3",
+          "bytes": 16752,
+          "url": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi",
+          "cache_file": "out/peer-reset-review/blobs/3596dd328c31d6f0430fed343c7e2307147d21f3"
+        }
+      },
+      "cache": "out/peer-reset-review/torvalds__linux",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/xVanTuring/uefi-pipa",
+      "commit": "1f6a1520f84c699a6f748e7b0b0ee72b79c7997b",
+      "files": {
+        "Platforms/Xiaomi/pipaPkg/Library/RamoopsLogLib/RamoopsLogLib.c": {
+          "sha256": "334b9ae6f526b1d5333bd322f2182dfd035dd3da084373bf7d000594e6eaeae2",
+          "git_blob": "87c7bfd2f2ff58d1b993b8dba5a49cadd59482cd",
+          "bytes": 12611,
+          "url": "https://github.com/xVanTuring/uefi-pipa/blob/1f6a1520f84c699a6f748e7b0b0ee72b79c7997b/Platforms/Xiaomi/pipaPkg/Library/RamoopsLogLib/RamoopsLogLib.c",
+          "cache_file": "out/peer-reset-review/blobs/87c7bfd2f2ff58d1b993b8dba5a49cadd59482cd"
+        },
+        "Platforms/Xiaomi/pipaPkg/Library/MemoryMapLib/MemoryMapLib.c": {
+          "sha256": "9b83bcc9dcac5049bf304a8763433201c744fb598aefdb0a0810b4ef1d7bddba",
+          "git_blob": "7e659b97a33339b9853b1fa12af14c73145f8b76",
+          "bytes": 5983,
+          "url": "https://github.com/xVanTuring/uefi-pipa/blob/1f6a1520f84c699a6f748e7b0b0ee72b79c7997b/Platforms/Xiaomi/pipaPkg/Library/MemoryMapLib/MemoryMapLib.c",
+          "cache_file": "out/peer-reset-review/blobs/7e659b97a33339b9853b1fa12af14c73145f8b76"
+        }
+      },
+      "cache": "out/peer-reset-review/xVanTuring__uefi-pipa",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/xVanTuring/UniXNU-pipa",
+      "commit": "c28476ea5d3c66fb634152ea7cd0f5ddc7a63233",
+      "files": {
+        "README.md": {
+          "sha256": "446be6868901884d56269a638621831174d11606da16f4cdc65a1a8e63d50de2",
+          "git_blob": "fb2b46c9ca8282b0597b5969a54b06e96f72348d",
+          "bytes": 23788,
+          "url": "https://github.com/xVanTuring/UniXNU-pipa/blob/c28476ea5d3c66fb634152ea7cd0f5ddc7a63233/README.md",
+          "cache_file": "out/peer-reset-review/blobs/fb2b46c9ca8282b0597b5969a54b06e96f72348d"
+        },
+        "package/linux-log/build-log-reader.py": {
+          "sha256": "182233b57b7f6e660d2d2ce84d2dbd1a4d1f7d8cdc0b9879ab1cd0183766df93",
+          "git_blob": "011577e18cebcb0899c6baec22b01f33a66b1562",
+          "bytes": 11108,
+          "url": "https://github.com/xVanTuring/UniXNU-pipa/blob/c28476ea5d3c66fb634152ea7cd0f5ddc7a63233/package/linux-log/build-log-reader.py",
+          "cache_file": "out/peer-reset-review/blobs/011577e18cebcb0899c6baec22b01f33a66b1562"
+        },
+        "package/linux-log/init.c": {
+          "sha256": "1b3e7a78f166185a6ef47754e010eb87d333a7710f5a47c63a62f8d1d114612e",
+          "git_blob": "a6039632558329566bfbc8c841543451254bf6d3",
+          "bytes": 14944,
+          "url": "https://github.com/xVanTuring/UniXNU-pipa/blob/c28476ea5d3c66fb634152ea7cd0f5ddc7a63233/package/linux-log/init.c",
+          "cache_file": "out/peer-reset-review/blobs/a6039632558329566bfbc8c841543451254bf6d3"
+        },
+        "scripts/read-pipa-log.py": {
+          "sha256": "3766af4cfbec2e8f95f76fb86326ce71d49cd5bc734990c913b181cd0ebc7b08",
+          "git_blob": "b80b52e7e963a6e26de96b62e2ffd25e789116ac",
+          "bytes": 4793,
+          "url": "https://github.com/xVanTuring/UniXNU-pipa/blob/c28476ea5d3c66fb634152ea7cd0f5ddc7a63233/scripts/read-pipa-log.py",
+          "cache_file": "out/peer-reset-review/blobs/b80b52e7e963a6e26de96b62e2ffd25e789116ac"
+        }
+      },
+      "cache": "out/peer-reset-review/xVanTuring__UniXNU-pipa",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    },
+    {
+      "repository": "https://github.com/reAAAq/UniXNU-umi",
+      "commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+      "files": {
+        "overlay/Platforms/Xiaomi/umiPkg/Library/UmiResetSystemLib/UmiResetSystem.c": {
+          "sha256": "415ea318996d3e34b8838a85a61eb0df6eda2c4386b099453fdcfe880480ec37",
+          "git_blob": "7b216ad84b60f8ed4293ddc39b674f643c91959b",
+          "bytes": 7291,
+          "url": "https://github.com/reAAAq/UniXNU-umi/blob/3eb72578597d2ca16471b172d45eddc096a34a04/overlay/Platforms/Xiaomi/umiPkg/Library/UmiResetSystemLib/UmiResetSystem.c",
+          "cache_file": "out/peer-reset-review/blobs/7b216ad84b60f8ed4293ddc39b674f643c91959b"
+        },
+        "overlay/Platforms/Xiaomi/umiPkg/Library/UmiSpmiLib/UmiSpmi.c": {
+          "sha256": "9d890ee6770c39486ef387198c0ab913ef0959de3075c8c5fefe63bd277454bf",
+          "git_blob": "31b100c2db90e3099545d2bf0c88c0a59eed6aa6",
+          "bytes": 2660,
+          "url": "https://github.com/reAAAq/UniXNU-umi/blob/3eb72578597d2ca16471b172d45eddc096a34a04/overlay/Platforms/Xiaomi/umiPkg/Library/UmiSpmiLib/UmiSpmi.c",
+          "cache_file": "out/peer-reset-review/blobs/31b100c2db90e3099545d2bf0c88c0a59eed6aa6"
+        },
+        "docs/validation.json": {
+          "sha256": "a411a1cf5cf5a5160e8187a0f38982707693a7636a29576edb8974756fce1bee",
+          "git_blob": "c43786b54de75d0262072768ecb350f13ea123c1",
+          "bytes": 3483,
+          "url": "https://github.com/reAAAq/UniXNU-umi/blob/3eb72578597d2ca16471b172d45eddc096a34a04/docs/validation.json",
+          "cache_file": "out/peer-reset-review/blobs/c43786b54de75d0262072768ecb350f13ea123c1"
+        }
+      },
+      "cache": "out/peer-reset-review/reAAAq__UniXNU-umi",
+      "scope": "reference only; not imported, executed, or a new build dependency",
+      "license_note": "See file SPDX and upstream license before reuse; this review imports no implementation"
+    }
+  ]
+}
