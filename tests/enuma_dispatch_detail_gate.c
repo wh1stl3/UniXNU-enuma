@@ -4,8 +4,12 @@
 #include <stdint.h>
 #include <string.h>
 static unsigned resets, delays;
+static uint64_t last_delay;
+#ifndef ENUMA_VIDEO_TERMINAL
+#define ENUMA_VIDEO_TERMINAL 0
+#endif
 static jmp_buf stopped;
-void MicroSecondDelay(uint64_t us) { assert(us == ENUMA_DIAG_DELAY_US); ++delays; }
+void MicroSecondDelay(uint64_t us) { assert(us == ENUMA_DIAG_DELAY_US || (ENUMA_VIDEO_TERMINAL && us==7000000)); last_delay=us; ++delays; }
 void ResetCold(void) { ++resets; }
 void CpuDeadLoop(void) { longjmp(stopped, 1); }
 #include DETAIL_HEADER
@@ -56,10 +60,12 @@ int main(void) {
                 EnumaStartingFile=NULL;
             } else if (setjmp(stopped) == 0) EnumaDispatchDetailCheckpoint(point, guid, status);
             unsigned marker_ok = ENUMA_DIAG_DETAIL_POINT == 16 && point == 13 &&
-                status == (ENUMA_DIAG_GOP_QUERY==1 ? ENUMA_GOP_RESULT_PASS : ENUMA_GOP_RESULT_FAIL);
+                (ENUMA_VIDEO_TERMINAL ? (status==ENUMA_GOP_RESULT_PASS || status==ENUMA_GOP_RESULT_FAIL) :
+                status == (ENUMA_DIAG_GOP_QUERY==1 ? ENUMA_GOP_RESULT_PASS : ENUMA_GOP_RESULT_FAIL));
             assert(resets - before == (ENUMA_DIAG_STAGE == 13 && (ENUMA_DIAG_GUID_ONLY || ordinal == 3) &&
                    (ENUMA_DIAG_GOP_QUERY ? marker_ok : (point == hook[spec] && status_ok)) &&
                    guid_ok && (point<20 || guid!=NULL)));
+            if(ENUMA_VIDEO_TERMINAL&&resets!=before) { assert(last_delay==(status==ENUMA_GOP_RESULT_FAIL?7000000:2000000)); }
         }
     }
     assert(delays == resets);

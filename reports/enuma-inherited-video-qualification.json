@@ -1,56 +1,68 @@
 {
   "trial_kind": "inherited-video-audit",
   "scope": "qualified bounded read-only three-sample dual-link configuration/counter predicate; not GOP/physical route proof",
-  "firmware_commit": "898ae255e95cb53733250b26b647bb59757f86aa",
-  "archive": "out/inherited-gop/qualified-video-898ae25-q1",
+  "firmware_commit": "1a4b20487aa6ac0fbb2973bf508aea1851b61192",
+  "archive": "out/inherited-gop/qualified-terminal-1a4b204-q1",
   "files": {
     "image.img": {
-      "sha256": "f8f14e3b1ec0b5a097d938b55ed85123e913d16392e42cd3f981419e333a4dc8",
+      "sha256": "24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "26a55fcd30a38325ee583782d6a6a9564bb9d624eb0b358c5a58cb6cebdb13fa",
+      "sha256": "a02f1b12df6454753f937831c398f08756d98929d8ef99499e24ecd0c184a900",
       "bytes": 807
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "fe052cda49df0113c92d883479ad0841fcb1bc1191a4727083a20f59bbf7b9b3",
+      "sha256": "490fe01ebda7bf8091b3944a54135fb439f73c8c0f05d8ac609e7cdd19b9ba9e",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "870d793c6f52aed371311dff2a1a4c80081259effb495bd62f86ee97bfb0a8b1",
+      "sha256": "5decdf8e81d62b084e0f04a8016c805d20c1e23d7448811d0f0115af16b83439",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "855fefb1cb3a3ee8d19f0979461ff1e075918d158ffbd1cb9d66e68c2c43e176",
+      "sha256": "511a3b30920a2fc60790286e1da51f23628eaf305f87889c2fc8698ab77476da",
       "bytes": 18432
     },
     "provider.GNUmakefile": {
-      "sha256": "70045f2cd36724f02d88b21fc6a2274a95f989942412543cc1468c9b012cbf44",
-      "bytes": 22449
+      "sha256": "8433113c08da551409f6de56d0a8689f342395254afe4b6d4a2d66689ebee7be",
+      "bytes": 22474
     },
     "entry.c": {
-      "sha256": "d13cd4eca5c850f6da3fea1f52e09406fd93878b53cd6141c8102657c1bec0b4",
-      "bytes": 2123
+      "sha256": "ae3a1e1076b3b2972007056f86eac754f2a1b232a5005aa410ba548af9a82809",
+      "bytes": 2128
+    },
+    "DxeCore.efi": {
+      "sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "bytes": 164352
+    },
+    "core.GNUmakefile": {
+      "sha256": "57f4eac9316bebfaaf8aaa8151fee6b56503843f784774879118a672eee338d2",
+      "bytes": 51502
+    },
+    "EnumaDispatchDetailCheckpoint.h": {
+      "sha256": "3a6e0cf398b1a3a7486f5768d0990c85865659e164f4340905a4d873f9968c0c",
+      "bytes": 4184
     },
     "firmware-build.json": {
-      "sha256": "7cd410262a30b8d7cdd6651091fb6209f714ad9f88bf78ce2d398f4b6a88cfe7",
-      "bytes": 18356
+      "sha256": "6f3d2bdbd118ccaa1419c8c24d5bb56d1ee0bacab3735663dce995fa34bac437",
+      "bytes": 18791
     },
     "fd-audit.json": {
-      "sha256": "acf17fdb5124c9e28efbf4d861a6332f1d81b2f8f70929ee5e1f86922c523aae",
+      "sha256": "ccee8a0127bc13325e1efbc667ba30211409354e61235bc6ec49e52e14eced88",
       "bytes": 4326
     },
     "host-tests.json": {
-      "sha256": "74799f9e187c0a243577a518a11e4df4180346d8f7b899e95e547cd5c0dbc89b",
-      "bytes": 11651
+      "sha256": "2825dfc9600b5138e1644bfd794301ba96c8589efb498e72aa453fbe7623f678",
+      "bytes": 13166
     }
   },
-  "image": "out/inherited-gop/qualified-video-898ae25-q1/image.img",
-  "image_sha256": "f8f14e3b1ec0b5a097d938b55ed85123e913d16392e42cd3f981419e333a4dc8",
+  "image": "out/inherited-gop/qualified-terminal-1a4b204-q1/image.img",
+  "image_sha256": "24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
-  "maximum_reads": 969,
+  "maximum_reads": 330,
   "maximum_wait_calls": 2,
-  "maximum_mmio_offset": "0x73830",
+  "maximum_mmio_offset": "0x6c26c",
   "pixel_access": false,
   "gop_published": false,
   "map_record_in_actual_fd": true,
@@ -61,8 +73,13 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "870d793c6f52aed371311dff2a1a4c80081259effb495bd62f86ee97bfb0a8b1",
+    "kernel_sha256": "5decdf8e81d62b084e0f04a8016c805d20c1e23d7448811d0f0115af16b83439",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
-  "result_interpretation": "Exact pass warning selects2s core gate; refusal may reach7s dispatcher fallback. Timing alone is not unique execution proof. 75s host timeout freezes the trial; recover first."
+  "terminal_return": {
+    "pass": 2,
+    "fail": 7,
+    "completion_fallback": false
+  },
+  "result_interpretation": "PASS1 and FAIL5 terminate at same exact Core driver-return hook,2/7s. Timing supports classification, not unique execution proof. Timeout means no recognized terminal report; recover first."
 }

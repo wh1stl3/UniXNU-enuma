@@ -1,0 +1,240 @@
+{
+  "scope": "actual archived terminal Core disassembly; source/host tests and compiler flags separately bound",
+  "Core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+  "entry_rva": "0xf90c",
+  "symbols": {
+    "MicroSecondDelay": "0x1b7d4",
+    "ResetCold": "0x16f4"
+  },
+  "instructions": [
+    {
+      "rva": "0xf90c",
+      "mnemonic": "stp",
+      "operands": "x19, x20, [sp, #-0x20]!"
+    },
+    {
+      "rva": "0xf910",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #0x10]"
+    },
+    {
+      "rva": "0xf914",
+      "mnemonic": "add",
+      "operands": "x29, sp, #0x10"
+    },
+    {
+      "rva": "0xf918",
+      "mnemonic": "cbz",
+      "operands": "x1, #0xf9ac"
+    },
+    {
+      "rva": "0xf91c",
+      "mnemonic": "and",
+      "operands": "x8, x2, #0xfffffffffffffffb"
+    },
+    {
+      "rva": "0xf920",
+      "mnemonic": "cmp",
+      "operands": "x0, #0xd"
+    },
+    {
+      "rva": "0xf924",
+      "mnemonic": "mov",
+      "operands": "x19, x2"
+    },
+    {
+      "rva": "0xf928",
+      "mnemonic": "ccmp",
+      "operands": "x8, #1, #0, eq"
+    },
+    {
+      "rva": "0xf92c",
+      "mnemonic": "b.ne",
+      "operands": "#0xf9ac"
+    },
+    {
+      "rva": "0xf930",
+      "mnemonic": "mov",
+      "operands": "x0, x1"
+    },
+    {
+      "rva": "0xf934",
+      "mnemonic": "mov",
+      "operands": "x20, x1"
+    },
+    {
+      "rva": "0xf938",
+      "mnemonic": "bl",
+      "operands": "#0x18d4c"
+    },
+    {
+      "rva": "0xf93c",
+      "mnemonic": "mov",
+      "operands": "x8, #0x1e6d"
+    },
+    {
+      "rva": "0xf940",
+      "mnemonic": "movk",
+      "operands": "x8, #0xdcfd, lsl #16"
+    },
+    {
+      "rva": "0xf944",
+      "mnemonic": "movk",
+      "operands": "x8, #0x788d, lsl #32"
+    },
+    {
+      "rva": "0xf948",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4ffc, lsl #48"
+    },
+    {
+      "rva": "0xf94c",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf950",
+      "mnemonic": "b.ne",
+      "operands": "#0xf9ac"
+    },
+    {
+      "rva": "0xf954",
+      "mnemonic": "add",
+      "operands": "x0, x20, #8"
+    },
+    {
+      "rva": "0xf958",
+      "mnemonic": "bl",
+      "operands": "#0x18d4c"
+    },
+    {
+      "rva": "0xf95c",
+      "mnemonic": "mov",
+      "operands": "x8, #0x1b8e"
+    },
+    {
+      "rva": "0xf960",
+      "mnemonic": "movk",
+      "operands": "x8, #0x2fca, lsl #16"
+    },
+    {
+      "rva": "0xf964",
+      "mnemonic": "movk",
+      "operands": "x8, #0x6575, lsl #32"
+    },
+    {
+      "rva": "0xf968",
+      "mnemonic": "movk",
+      "operands": "x8, #0x921a, lsl #48"
+    },
+    {
+      "rva": "0xf96c",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf970",
+      "mnemonic": "b.ne",
+      "operands": "#0xf9ac"
+    },
+    {
+      "rva": "0xf974",
+      "mnemonic": "cmp",
+      "operands": "x19, #5"
+    },
+    {
+      "rva": "0xf978",
+      "mnemonic": "b.ne",
+      "operands": "#0xf990"
+    },
+    {
+      "rva": "0xf97c",
+      "mnemonic": "mov",
+      "operands": "w0, #0xcfc0"
+    },
+    {
+      "rva": "0xf980",
+      "mnemonic": "movk",
+      "operands": "w0, #0x6a, lsl #16"
+    },
+    {
+      "rva": "0xf984",
+      "mnemonic": "bl",
+      "operands": "#0x1b7d4"
+    },
+    {
+      "rva": "0xf988",
+      "mnemonic": "bl",
+      "operands": "#0x16f4"
+    },
+    {
+      "rva": "0xf98c",
+      "mnemonic": "bl",
+      "operands": "#0x13b8"
+    },
+    {
+      "rva": "0xf990",
+      "mnemonic": "mov",
+      "operands": "w0, #0x8480"
+    },
+    {
+      "rva": "0xf994",
+      "mnemonic": "movk",
+      "operands": "w0, #0x1e, lsl #16"
+    },
+    {
+      "rva": "0xf998",
+      "mnemonic": "bl",
+      "operands": "#0x1b7d4"
+    },
+    {
+      "rva": "0xf99c",
+      "mnemonic": "bl",
+      "operands": "#0x16f4"
+    },
+    {
+      "rva": "0xf9a0",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #0x10]"
+    },
+    {
+      "rva": "0xf9a4",
+      "mnemonic": "ldp",
+      "operands": "x19, x20, [sp], #0x20"
+    },
+    {
+      "rva": "0xf9a8",
+      "mnemonic": "b",
+      "operands": "#0x13b8"
+    },
+    {
+      "rva": "0xf9ac",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #0x10]"
+    },
+    {
+      "rva": "0xf9b0",
+      "mnemonic": "ldp",
+      "operands": "x19, x20, [sp], #0x20"
+    },
+    {
+      "rva": "0xf9b4",
+      "mnemonic": "ret",
+      "operands": ""
+    }
+  ],
+  "hardware_executed": false,
+  "review": {
+    "hook": 13,
+    "accepted_statuses": [
+      1,
+      5
+    ],
+    "full_GUID": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+    "pass_delay_us": 2000000,
+    "fail_delay_us": 7000000,
+    "fail_branch_before_dispatch_continuation": true,
+    "reset_and_deadloop_both_paths": true,
+    "interpretation": "actual function0xf90c..0xf9b8 checks hook/status/full GUID before both timer/reset paths; hardware return not yet observed"
+  }
+}

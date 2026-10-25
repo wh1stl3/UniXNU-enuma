@@ -32,6 +32,8 @@ def qualification(published=False, report=None):
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
             raise ValueError('video audit differs from frozen qualification')
         expected=0 if q['trial_kind']=='inherited-video-entry-control' else 330
+        if q.get('terminal_return')!={'pass':2,'fail':7,'completion_fallback':False}:
+            raise ValueError('video trials require symmetric terminal return; old dispatcher-fallback profiles are consumed/historical')
         if q.get('pixel_access') is not False or q.get('gop_published') is not False or q.get('maximum_reads')!=expected:
             raise ValueError('unsupported video audit scope')
         if expected==0 and q.get('control_actual_code',{}).get('review_required') is not False:

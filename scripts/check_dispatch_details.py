@@ -51,8 +51,10 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
               for guid in (0,1,2,3) for query in (1,2)]
     cases += [(13,17,status,1,0,1,query) for status in (1,5) for query in (1,2)]
     cases += [(13,16,2,1,0,1,query) for query in (1,2)]
+    cases = [(*case,0) for case in cases]
+    cases += [(13,16,status,1,guid,1,1,1) for status in (0,1,2,5,0x8000000000000001) for guid in (0,1,2,3)]
     records=[]
-    for index,(stage,point,status,enabled,guid,guid_only,query) in enumerate(cases):
+    for index,(stage,point,status,enabled,guid,guid_only,query,terminal) in enumerate(cases):
         command=['clang','-std=c11','-O1','-Wall','-Wextra','-Werror',
           '-fsanitize=address,undefined','-fno-pie','-no-pie','-I'+str(out),
           '-DENUMA_DIAG_STAGE='+str(stage),'-DENUMA_DIAG_DETAIL_POINT='+str(point),
@@ -60,6 +62,7 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
           '-DENUMA_DIAG_GUID_ENABLED='+str(enabled),
           '-DENUMA_DIAG_GUID_ONLY='+str(guid_only),
           '-DENUMA_DIAG_GOP_QUERY='+str(query),
+          '-DENUMA_VIDEO_TERMINAL='+str(terminal),'-DENUMA_DIAG_DISPATCH_FALLBACK=0',
           '-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL',
           '-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL',
           '-DTEST_GUID_CASE='+str(guid),'-DTEST_STATUS='+hex(status)+'ULL',
@@ -102,6 +105,7 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p) { uint64_t v; memcpy(&
         'source_header_sha256':hashlib.sha256(header.read_bytes()).hexdigest(),
         'image_bridge_sha256':hashlib.sha256(header.with_name('EnumaImageEntryCheckpoint.h').read_bytes()).hexdigest(),
         'cases':len(cases),'checks':records,'invalid_detail_rejected':True,
+        'video_terminal_cases':20,'video_terminal_contract':'PASS1 and FAIL5 stop at same GUID-filtered return, delay2/7; unexpected statuses/hooks/NULL or mismatched GUID do not reset',
         'guid_only_checks':'all four actual ordinals; exact full GUID, both mismatching halves and NULL; status and nested handle checks retained',
         'invalid_guid_only_rejected':invalid_selectors,
         'completion_header_sha256':hashlib.sha256(completion.read_bytes()).hexdigest(),

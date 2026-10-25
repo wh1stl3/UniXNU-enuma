@@ -748,6 +748,16 @@ umi仍是同SM8250/同donor系统、UFS/root/Data的首要参考，审查HEAD未
 新c7c29bb保持Core/配置/AutoGen/库/完整输入；实际72PE比较限制仅正文运行时代码变化，Pcd差异精确RSDS GUID。实际入口0x1050..10dc正常路径无调用/硬件读取，保存UEFI表并返回1；非空断言支路保留，不能把它当硬件无条件返回保证。新反汇编完整覆盖text及填充，digest绑定，未审查控制报告runner拒绝。符合当前文档发布与即时恢复门禁后单笔，不继承旧value或S-008消费资格。
 
 
-## D-199：以实测因果对照和厂商电源/拓扑事实修正路线
+## D-199：以实测因果对照和厂商电源/拓扑事实修正路线（归因强度由D-200取代，范围/拓扑/alpha修复保留）
 
 S-009常量正文自动返回且实际Core/构造器/输入不变，S-008正文访存升为首嫌；未读帧缓冲，WT/alpha/GOP Blt不解释本轮超时。厂商普通dump先runtime-power引用，video不需要命令字段；删除无关银行，运行上限969→330并标明观察掩码。默认panel2/0/2明确双LM/零压缩/双接口，优先无DSC继承；两独立SSPP是假定软件范围，待有依据扩展。Mu填色不写opaque alpha，先拒绝source-alpha开启格式。新源全FD/实机资格另做，不把主机通过当硬件通过，也不为掩盖采集问题改缓存或写clock。
+
+
+## D-200：先修同点双结果终止，撤回过强正文定位；摘取适用AGENTS
+
+Core明确只拦旧query1 PASS，FAIL继续dispatcher，completion fallback不是watchdog。S-009与S-008返回处理并不对称，不能据此确证正文挂点。新terminal只认同一完整GUID返回点的1/5，2/7秒终止，不走后续dispatcher且禁completion fallback；不识别的结果仍未知。197真实头文件场景通过，实际新Core/镜像还需资格。用户授权摘取Downloads附件适用条目，根AGENTS增加简明沟通、证据/假设/反证、逆向交付和对照流检查；不替换既有门禁、不导入通用授权或其他场景模板。
+
+
+## D-201：实际同点双结果Core产物资格后再验证video-only
+
+新Core实际函数0xf90c..f9b8已核hook13、状态1/5和完整GUID，然后FAIL7秒/PASS2秒直接复位。两级宏和实际FD/Core/provider、完整输入和归档绑定；旧非对称profile被新qualifier/runner拒绝。197头文件及22固件单测、当前恢复采集门禁通过，当前文档发布后S-010一笔。分类仍限时序支持；超时只表示没有识别的terminal报告，不直接称寄存器挂点。

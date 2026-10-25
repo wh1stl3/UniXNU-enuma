@@ -50,6 +50,7 @@
     "raw_media_local_only": true,
     "audio_recorded": false
   },
-  "conclusion": "Supports constant entry/Core return path; S-008 body access is primary moderate-confidence suspect, not proof of exact marker or register failure.",
-  "next": "Offline routed video-only sampler: no command/unused-PP or unselected-pipe reads; retain address/downstream requirements"
+  "conclusion": "S-009 supports the positive entry/return path. S-008 refusal-plus-later-dispatch failure remains a concrete confounder; exact register attribution is unsupported.",
+  "next": "Qualify symmetric same-return-point PASS2s/FAIL7s handling with no completion fallback before another video trial",
+  "interpretation_revision": "D-200: old query1 only terminated PASS; FAIL could continue dispatcher and hang later. The pair does not isolate an S-008 body hang."
 }

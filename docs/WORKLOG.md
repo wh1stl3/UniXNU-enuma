@@ -583,3 +583,9 @@ umi仍是同SM8250/同donor系统、UFS/root/Data的首要参考，审查HEAD未
 
 
 2026-10-25T17:50:01+08:00 D-199：S-00917:21:50发出，ADB21.156s/完成35.219s自动回Android，独立身份/root/槽/解锁/原分区与备份通过，252帧仅本地。与S-008同Core/构造器/输入的正文对照支持采集正文首嫌；结合厂商dump取电源引用、默认拓扑2/0/2及Mu RGB-only填色，固件d61b6ef修复为330读video-only并拒绝source-alpha格式。主机330故障注入、30解码、21固件单测通过；新全FD构建中，尚无S-010资格/执行。来源、置信度和反证落实judgment文档；旧图consumed。
+
+
+2026-10-25T18:09:25+08:00 D-200：复核Core发现S-008 FAIL5会继续dispatcher，而S-009 PASS1提前终止，故先前正文因果解释过强。已更正当前judgment/S009派生解释，原试验结果不改。固件1a4b204新增同点PASS2秒/FAIL7秒terminal并禁completion fallback，197头文件场景/22固件单测通过，当前全构建中，无S-010。用户明确授权摘取附件AGENTS适用条目，已合并沟通/证据/逆向交付，不扩大设备或其他授权；原始附件SHA与取舍已记录。
+
+
+2026-10-25T18:16:36+08:00 D-201：1a4b204新terminal全构建和资格完成，S-010镜像24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386，归档out/inherited-gop/qualified-terminal-1a4b204-q1。实际Core0xf90c..f9b8在hook13/1或5/完整GUID后，两条分支直接2/7秒复位，未回dispatcher。Core/provider宏TERMINAL1/FALLBACK0/实际PE、R-004、完整FAT/BootShim和immutable manifest通过，197头文件/22固件单测通过，当前Android/备份/相机复核通过。附件适用AGENTS已合并，发布后单笔，尚未执行；无原始影音上传。

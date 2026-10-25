@@ -10,6 +10,9 @@ def omitted_oem_modules(build, fd_sha256):
     video=build.get('inherited_video_audit_read_only',False)
     control=build.get('inherited_video_entry_control',False)
     if type(control) is not bool or (control and not video): raise ValueError('unsupported video entry control')
+    terminal=build.get('inherited_video_terminal',False)
+    if type(terminal) is not bool or (terminal and (not video or build.get('diagnostic_dispatch_completion_fallback') is not False or build.get('diagnostic_gop_query')!=1)):
+        raise ValueError('unsupported video terminal profile')
     if type(video) is not bool: raise ValueError('unsupported video audit declaration')
     if video and (simple!='1' or pixel or build.get('diagnostic_gop_step')!=0 or
                   build.get('diagnostic_gop_query') not in (1,2) or build.get('value_probe',{}).get('source')!='off' or

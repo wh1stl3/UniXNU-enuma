@@ -24,8 +24,9 @@ def main():
     build=json.loads((ROOT/'reports/enuma-firmware-build.json').read_text()); pin=json.loads((ROOT/'config/uefi-source.lock.json').read_text())
     required={'complete':True,'inherited_video_audit_read_only':True,'gop_backend_selftest_ram_only':False,
       'inherited_video_entry_control':a.control,
+      'inherited_video_terminal':True,
       'diagnostic_stop_stage':13,'diagnostic_detail_point':16,'diagnostic_dispatch_guid':GUID,
-      'diagnostic_dispatch_guid_only':True,'diagnostic_dispatch_completion_fallback':True,
+      'diagnostic_dispatch_guid_only':True,'diagnostic_dispatch_completion_fallback':False,
       'diagnostic_delay_seconds':2,'diagnostic_gop_query':1,'diagnostic_gop_step':0,
       'diagnostic_pixel_preview':False,'diagnostic_simplefb_metadata_only':False,
       'diagnostic_omitted_oem_modules':['CPRDxe','DisplayDxe','UFSDxe']}
@@ -41,8 +42,14 @@ def main():
     pe=output/'OUTPUT/SimpleFbDxe.efi'; packaged=[m for m in modules if m['name']=='SimpleFbDxe']
     if len(packaged)!=1 or hashlib.sha256(packaged[0]['data']).hexdigest()!=sha(pe): raise ValueError('actual PE not packaged')
     make=(output/'GNUmakefile').read_text(); defs=build['firmware_configuration']['defines']
-    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE']:
+    core_folder=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain'
+    core_make=(core_folder/'GNUmakefile').read_text()
+    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_VIDEO_TERMINAL']:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',make))!={defs[k]}: raise ValueError('actual provider flags mismatch: '+k)
+        if set(re.findall(r'-D'+k+r'=([^\s]+)',core_make))!={defs[k]}: raise ValueError('actual Core flags mismatch: '+k)
+    core_pe=core_folder/'OUTPUT/DxeCore.efi'
+    actual_core=[m for m in modules if m['guid']=='d6a2cb7f-6a18-4e2f-b43b-9920a733700a']
+    if len(actual_core)!=1 or hashlib.sha256(actual_core[0]['data']).hexdigest()!=sha(core_pe): raise ValueError('terminal Core PE not the one packaged')
     staged=ROOT/'out/firmware-build/uefi/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe'
     entry=ROOT/'firmware/diagnostics'/('EnumaInheritedVideoEntryControl.c' if a.control else 'EnumaInheritedVideoAudit.c')
     if (staged/'SimpleFb.c').read_bytes()!=entry.read_bytes() or build['inherited_video_compiled_contract']['entry_source_sha256']!=sha(entry): raise ValueError('entry source not bound')
@@ -54,6 +61,8 @@ def main():
     archive.mkdir(parents=True)
     source_files={'image.img':image,'image.json':image.with_suffix('.json'),'SILICIUM_UEFI.fd':fd,'enuma-uefi.raw':raw,
       'SimpleFbDxe.efi':pe,'provider.GNUmakefile':output/'GNUmakefile','entry.c':entry,
+      'DxeCore.efi':core_pe,'core.GNUmakefile':core_folder/'GNUmakefile',
+      'EnumaDispatchDetailCheckpoint.h':ROOT/'firmware/diagnostics/EnumaDispatchDetailCheckpoint.h',
       'firmware-build.json':ROOT/'reports/enuma-firmware-build.json','fd-audit.json':ROOT/'reports/enuma-fd-audit.json',
       'host-tests.json':ROOT/'reports/enuma-inherited-gop-host.json'}
     files={}
@@ -63,7 +72,8 @@ def main():
       image=(archive/'image.img').relative_to(ROOT).as_posix(),image_sha256=sha(image),ram_payload_sha256=sha(fat),
       maximum_reads=0 if a.control else 330,maximum_wait_calls=0 if a.control else 2,maximum_mmio_offset=None if a.control else '0x6c26c',pixel_access=False,gop_published=False,
       map_record_in_actual_fd=True,packaged_provider_equal=True,package=package,
-      result_interpretation='Exact pass warning selects2s core gate; refusal may reach7s dispatcher fallback. Timing alone is not unique execution proof. 75s host timeout freezes the trial; recover first.')
+      terminal_return={'pass':2,'fail':7,'completion_fallback':False},
+      result_interpretation='PASS1 and FAIL5 terminate at same exact Core driver-return hook,2/7s. Timing supports classification, not unique execution proof. Timeout means no recognized terminal report; recover first.')
     if a.control:
         import pefile,capstone
         blob=pe.read_bytes(); parsed=pefile.PE(data=blob); md=capstone.Cs(capstone.CS_ARCH_ARM64,capstone.CS_MODE_LITTLE_ENDIAN); md.skipdata=True

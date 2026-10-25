@@ -57,3 +57,13 @@ S-008于17:05:25发出，命令2.641s返回0、断开5.109s；75秒观察无自�
 ## D-199：S-009实测与按资料修复
 
 S-00917:21:50发出，命令2.641s、断开5.110s、ADB21.156s、完成35.219s，自动回Android，独立完成/root/A槽/解锁/原分区和备份一致，252帧只留本地，无音频。S-008正文访问为首嫌，具体寄存器未确定。固定厂商dump电源前置、默认拓扑2/0/2与alpha差异促成d61b6ef：仅video选中路径、330读/最大0x6c26c、未读scope显式、source-alpha格式拒绝。主机30解码/330故障及21固件单测通过，新完整FD/实机资格正在重做，尚未S-010。详见单独judgment文档的证据、置信度与可推翻观测。
+
+
+## D-200：归因修正与对称返回
+
+D-199的正文首嫌强度下调。旧query1仅PASS1触发返回点2秒终止；FAIL5继续dispatcher，completion7秒仅在dispatcher返回后执行。故S-008也可能已拒绝而后续驱动挂住。新1a4b204可选terminal在同一完整GUID返回点识别PASS1/FAIL5并2/7秒终止，禁止completion fallback，未知状态/hook/GUID不认。197头文件场景（含20 terminal组合）及22固件单测通过，实际新全构建/产物资格尚待完成，未S-010；旧d61非对称FD不投入新试验。当前judgment与S009派生解释已同步更正，原始实测保留。
+
+
+## D-201执行前资格（2026-10-25T18:16:36+08:00）
+
+新terminal FD 490fe01ebda7bf8091b3944a54135fb439f73c8c0f05d8ac609e7cdd19b9ba9e，镜像24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386，归档out/inherited-gop/qualified-terminal-1a4b204-q1。实际Core0xf90c..f9b8的AND~4/compare1精确识别1和5，hook13及两半GUID之后，分别MicroSecondDelay2m/7m、ResetCold和CpuDeadLoop，FAIL无dispatcher继续路径。实际Core/provider宏均TERMINAL1/FALLBACK0、PE均在实际FD，R-004/BootShim/完整FAT/immutable资格通过。197主机场景/22固件单测和当前Android备份相机通过；文档发布后S-010单笔，当前未发出。
