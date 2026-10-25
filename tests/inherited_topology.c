@@ -147,6 +147,23 @@ int main(void) {
   setup();assert(EnumaNormalizeGlobalMixerOutput(&S,&T,&L,&view)==EnumaInheritedTopology); // all-local is not this hypothesis
   S=global;S.Ctls[2].Layers[4][0]|=1u<<25;assert(EnumaNormalizeGlobalMixerOutput(&S,&mixers,&L,&view)==EnumaInheritedTopology);
   assert(EnumaNormalizeGlobalMixerOutput(0,&T,&L,&view)==EnumaInheritedArguments);
+  for(unsigned mask=0;mask<4;mask++) {
+    setup();for(unsigned p=0;p<2;p++)S.Pipes[p].Format=(mask&(1u<<p))?0x237ff:0x236ff;
+    ENUMA_INHERITED_SNAPSHOT raw=S,before;memset(&view,0xa5,sizeof(view));before=view;
+    unsigned status=EnumaNormalize8888AlphaView(&S,&view);
+    assert((status==0)==(mask!=0));
+    if(status)assert(!memcmp(&view,&before,sizeof(view)));
+    else { raw.Pipes[0].Format=raw.Pipes[1].Format=0x236ff;assert(!memcmp(&view,&raw,sizeof(view))); }
+  }
+  for(unsigned p=0;p<2;p++)for(unsigned bit=0;bit<32;bit++) {
+    setup();S.Pipes[0].Format=S.Pipes[1].Format=0x237ff;S.Pipes[p].Format^=1u<<bit;
+    ENUMA_INHERITED_SNAPSHOT raw=S,before;memset(&view,0xa5,sizeof(view));before=view;
+    unsigned status=EnumaNormalize8888AlphaView(&S,&view);
+    assert((status==0)==(bit==8));if(status)assert(!memcmp(&view,&before,sizeof(view)));
+    assert(!memcmp(&S,&raw,sizeof(S)));
+  }
+  assert(EnumaNormalize8888AlphaView(0,&view)==EnumaInheritedArguments);
+  puts("PASS: alpha view64 selected-format bit mutations, exact236ff/237ff set with at least one alpha bit, no input mutation");
   puts("PASS: exact global coordinate view,768 mixer mutations,128 output XY/size mutations, all-local and unknown route rejection, immutable raw snapshots");
   puts("PASS: four geometry explanation classes and768 bit mutations agree with geometry resolver, immutable inputs");
   puts("PASS: structural mixer768 bit mutations retain geometry/side rejection and raw inputs");

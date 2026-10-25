@@ -5,7 +5,7 @@
 #include "Evidence.h"
 ENUMA_U32 EnumaNativeBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *,ENUMA_U32 *);
 ENUMA_U32 EnumaSampleVideoBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *);
-typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,GlobalXy,ChangeGlobal,BadGeometry,ChangeBlend,NonBase,BlendFault,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
+typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,AlphaMask,ChangeAlpha,BadEncoding,GlobalXy,ChangeGlobal,BadGeometry,ChangeBlend,NonBase,BlendFault,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
 static int allowed(unsigned O) {
   static const unsigned Fields[11]={0,8,12,16,20,36,48,52,56,0x170,0x70};
   if(!O) { return 1; }
@@ -55,8 +55,9 @@ static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
     if(O==B||O==B+12) { *V=(2560u<<16)|800; }
     if(O==B+20) { *V=0x10100000+P*3200+(M->Changed&&M->Window?4:0); }
     if(O==B+36) { *V=6400; }
-    if(O==B+48) { *V=0x236ff; }
-    if(O==B+52) { *V=0x03020001; }
+    if(O==B+48) { *V=((M->AlphaMask>>P)&1)?0x237ff:0x236ff;if(M->ChangeAlpha&&M->Window&&!P)*V^=1u<<8;if(M->BadEncoding==3)*V|=1u<<30; }
+    if(O==B+56&&M->BadEncoding==1) { *V=1; }
+    if(O==B+52) { *V=M->BadEncoding==2?0:0x03020001; }
   }
   if(M->GlobalXy&&O==0x7010) { *V=800+(M->ChangeGlobal&&M->Window?4:0); }
   if(M->BadGeometry==1&&O==0x45004) { *V^=1u<<16; }
@@ -209,6 +210,30 @@ int main(void) {
     M=(MODEL){.GlobalXy=1,.BadGeometry=f};E=Before;
     assert(EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&M.Reads==330&&M.Window==2&&!memcmp(&E,&Before,sizeof(E)));
   }
+  for(unsigned mask=1;mask<4;mask++) {
+    M=(MODEL){.GlobalXy=1,.AlphaMask=mask,.NonBase=1,.BlendFault=3};
+    assert(!EnumaSampleNativeAlphaViewDetailed(read_reg,wait_window,&M,&L,&E,&Why)&&M.Reads==330&&M.Window==2&&E.Frame.Requirements==22&&E.Frame.Base==0x10100000&&E.Frame.ReservedMask==0xff000000);
+    for(unsigned p=0;p<2;p++)assert(E.Samples[0].Scanout.Pipes[p].Format==((mask&(1u<<p))?0x237ff:0x236ff));
+    M=(MODEL){.GlobalXy=1,.AlphaMask=mask};E=Before;
+    assert(EnumaSampleNativeGlobalOutputDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedFormat&&Why==EnumaVideoReasonNativeDecode&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  for(unsigned f=1;f<=330;f++) {
+    M=(MODEL){.GlobalXy=1,.AlphaMask=3,.Fail=f};E=Before;
+    assert(EnumaSampleNativeAlphaViewDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedBounds&&M.Reads==f&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  for(unsigned w=1;w<=2;w++) {
+    M=(MODEL){.GlobalXy=1,.AlphaMask=3,.FailWait=w};E=Before;
+    assert(EnumaSampleNativeAlphaViewDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  M=(MODEL){.GlobalXy=1,.AlphaMask=3,.ChangeAlpha=1};E=Before;
+  assert(EnumaSampleNativeAlphaViewDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableConfig&&!memcmp(&E,&Before,sizeof(E)));
+  M=(MODEL){.GlobalXy=1};E=Before;assert(EnumaSampleNativeAlphaViewDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&!memcmp(&E,&Before,sizeof(E)));
+  for(unsigned f=1;f<=3;f++) {
+    M=(MODEL){.GlobalXy=1,.AlphaMask=3,.BadEncoding=f};E=Before;
+    unsigned status=EnumaSampleNativeAlphaViewDetailed(read_reg,wait_window,&M,&L,&E,&Why);
+    assert(status==(f==3?EnumaInheritedTopology:EnumaInheritedFormat)&&M.Reads==330&&M.Window==2&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  puts("PASS: exact RGBX/RGBA logical view all three alpha masks, raw words/requirements22 preserved;330 failures/two waits/alpha change and encoding/unknown/no-alpha rejection; old Native5 remains strict");
   puts("PASS: independent exact global-coordinate sampler retains raw XY and requirements22;330 failures/two waits/raw XY change/invalid geometry rejection, old APIs still reject");
   puts("PASS: geometry classifier after330 reads/two waits;330 collection failures, waits, raw mutation and stalled frame take priority over geometry");
   puts("PASS: structural sampler330 failures, two waits, raw blend mutation and stalled frame rejection; requirements22 retained");

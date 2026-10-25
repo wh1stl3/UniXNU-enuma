@@ -169,3 +169,24 @@ reason19 and zero output requirements before grouping the returned status.
 Other phases and success map to unclassified1. Code5 is rejection. Native5,
 raw stability, exact coordinate copy and decoder remain byte-source identical.
 The19680 selector matrix and nine camera-free native Python tests pass.
+
+
+## S-038 actual Format rejection; exact alpha-enable hypothesis
+
+S-038 valid source-format-or-encoding-rejected, origin22.400..22.520,
+Android44.610s, independent identity/partition and backup digests pass;
+consumed. Its selector requires actual NativeDecode reason19/zero output,
+therefore this observation reached decode after raw stable samples, exact
+global coordinate and geometry checks. Format status still includes exact
+format word, opmode and unpack failures; it is not a numeric register dump.
+
+Main hypothesis is the enabled alpha variant of the otherwise expected8888
+format. Pinned Xiaomi52a2f180865f8368828985d6384130acd093fa93
+[sde_hw_sspp.c](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_sspp.c)
+315..322 defines source component widths and bit8 SRCC3_EN. Native6 tests only
+236ff/237ff with at least one alpha-enabled source, clearing bit8 solely in
+the logical channel view while preserving raw stability. It retains every
+other decode check and requires alpha_semantics_unproven=true/requirements22.
+Code3 refutes this exact coordinate/format hypothesis; code4 leaves another
+decode condition; code5 is logical structure only. Alpha-safe pixel writes,
+blend, CPU/SMMU and physical routing still require their own proof.

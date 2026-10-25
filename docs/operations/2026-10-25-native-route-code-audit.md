@@ -354,3 +354,53 @@ profiles0, are checked in both actual generated compilation files and FD.
 19680 actual-header selector combinations and nine native Python cases pass.
 Code2..5 identifies a source decoder rejection after the fixed Native5 prior
 stages; it provides neither numeric register values nor physical display proof.
+
+## S-039 exact8888 alpha-enable logical view, source2999229
+
+Archive qualified-native-alpha-view-2999229; combined disassembly digest
+36e8757c87b71d76b30d953d0d9091fa825b55390534902f61d14ea4adeedac4.
+Image0f7aa39634e081bca27ac713145d08db729e78cb3f6dd51e624aca355bb53fde;
+FD11cd7f2def0681ab4494c97f67ea7530e02ab21fff052097aad7e3d34cd6e2ca.
+Core bytes unchanged. Compared S-037 general global-view provider to this
+provider:190 operand-change groups (including padding) and unmatched branch
+targets reviewed; expanded alpha/decoder groups separately to avoid truncated
+diff navigation. Stack offsets/register allocations shift with the extra copy;
+capture/stability and old decode predicates preserve semantics.
+
+Every post-entry helper old2528..3de8 matches new262c..3eec exactly after
+internal code targets/ADR relocate0x104. This includes metadata helpers,
+Staged/RowCovered/Normalize/Select/Stage/Geometry/Equal/general selector/Read
+and memory helpers. Decode.c and VideoCapture.c source bytes are identical to
+S-037. R-004 metadata gates, three iterations/two100000us calls, safe CTL/
+selected SSPP/LM capture and raw full-word stability/1..64 frame deltas remain
+before pure analysis. Revision1290 and Read2f80 preserve330 count cap and
+aligned offset<=6c26c before sole helper load2fc8 at0xae00000.
+
+Exact global-coordinate copy1cf4..1d6c still validates source sizes, side bits,
+total width and exact left0/right-left-width XY before clearing copied right
+XY; geometry2b38 must pass before view exposure. New alpha view1d70..1e78
+requires revision6000 and strict selected route again. Eight-source loop1de4
+uses selected PipeMask and Format offset1c+44*P only. Constants are full words
+236ff and237ff:236ff skips; only237ff sets Changed and writes236ff to the
+stack copy1e0c. Every other word rejects1b38, and Changed0 rejects1e48.
+No raw snapshot, source address/stride/unpack/opmode/security word is changed.
+
+After copying the successful view, geometry runs again1e94. Source decode
+1e9c..25e8 retains route/virtual/geometry/secure/multirect/RGBX/unpack/opmode,
+64-bit contained address/common base-stride-pattern and full coverage checks.
+In particular22c0 compares canonical236ff,22d0 retains opmode rejection and
+22ec..2318 validates all four unpack components. New scalar register choices
+preserve pitch/address arithmetic232c..238c and coverage23d4..2498.
+Complete25ec writes requirements22 before evidence copy. General selector
+2f08 requires complete reason12/requirements22 for code5; no alpha opacity
+or physical composition proof is removed. Old strict/GOP paths are unchanged.
+
+Main stack0x2390 plus bounded helpers (normalizer max0x470) remains ordinary
+RAM; no new mappings, GOP publication, pixels or MMIO stores. Actual full
+RAM_PAYLOAD1/ROUTE1/STRUCTURE1/GLOBAL_OUTPUT1/ALPHA_VIEW1 and global-detail/
+structure-detail/old detail/layout/blend/staging/mask/query0 are bound to both
+compile files and packaged PE/FD. Qualification requires explicit
+alpha_semantics_unproven=true;10 Python tests reject its removal/type changes.
+Sanitizer three alpha masks/64 format mutations/330 failures/two waits/raw
+alpha change/opmode-unpack-unknown rejection and old Native5 strict rejection
+support this review. ReservedMask describes storage only, not GOP write alpha.
