@@ -1,0 +1,36 @@
+{
+  "scope": "actual extracted BDS payload/report tail with host GOP/boot-service adapters; no framebuffer/device execution",
+  "source_sha256": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/full-boot/report-flow",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe",
+        "/mnt/d/Code/UniXNU-enuma/tests/payload_report_flow.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/report-flow/report-flow-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/report-flow/report-flow-test"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: missing/version/file/missing-stage faults flush and clean before return; success flushes and continues after two seconds; 13 rows fit\n",
+      "stderr": ""
+    }
+  ],
+  "hardware_tested": false
+}

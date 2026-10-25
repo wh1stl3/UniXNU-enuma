@@ -19,6 +19,7 @@ def sha(blob): return hashlib.sha256(blob).hexdigest()
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--tool-path', type=Path)
+    p.add_argument('--image', type=Path, default=ROOT / 'out/full-boot/transport/enuma-system-transport-v3.img')
     a = p.parse_args()
     if a.tool_path: sys.path.insert(0, str(a.tool_path.resolve()))
     import capstone
@@ -85,7 +86,9 @@ def main():
     instructions = [(i.mnemonic, i.op_str) for i in md.disasm(driver_pe.get_data(start, end - start), start)]
     if instructions != [('mov', 'x0, #8'), ('movk', 'x0, #0x8000, lsl #48'), ('ret', '')]:
         raise ValueError('actual RamWrite does not return EFI_WRITE_PROTECTED')
-    image = ROOT / 'out/full-boot/transport/enuma-system-transport-v3.img'
+    image = a.image.resolve()
+    if not image.is_relative_to((ROOT / 'out').resolve()):
+        raise ValueError('candidate must stay inside out/')
     kernel = ROOT / 'out/boot-candidate/enuma-uefi.raw'
     fat = ROOT / 'out/full-boot/payload/payload.img'
     packaging = verify(image.read_bytes(), kernel.read_bytes(), fat.read_bytes())
@@ -108,6 +111,7 @@ def main():
                   firmware_commit=pin['commit'], fd_sha256=sha(fd), modules=modules,
                   ram_write_instructions=instructions, constant_arrays_match=True,
                   packaging=packaging, image_sha256=sha(image.read_bytes()), image_bytes=image.stat().st_size,
+                  image=image.relative_to(ROOT).as_posix(),
                   archive=archive.relative_to(ROOT).as_posix(), files=manifest,
                   hardware_tested=False, runtime_fdt_sfs_observed=False,
                   full_boot_ready=False, new_memory_mapping=False)

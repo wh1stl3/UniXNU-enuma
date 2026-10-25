@@ -1,27 +1,13 @@
-# 当前状态：D-172，boot v3运输已实现并离线资格，13项同次报告
+# 当前状态：D-173，S-001整链单笔已准备，执行前发布
 
-用户要求推进boot v3 payload运输，并补充“尽量一次验证多个验证点”。本轮新增可选只读RAM BlockIO、同次13项报告，完成完整UEFI构建、实际FD/PE资格和包含真实96MiB FAT的boot v3打包。没有实机动作，不宣称运行时运输或SFS通过。
+用户明确“继续 上机无需批准”，本轮已授权条件满足后直接临时boot，无需再问。修复报告错误路径，完成新候选完整构建/实际PE/打包资格；相机已恢复，当前尚未发出启动命令。将先发布本轮全部文档和runner，再执行一笔完整输入试启动。
 
-## 已交付
+firmware固定945942685770eb7200ac2a6551cd3ee5aa554b61并已推送；FD cb24c8f14dd19fba1e759301efbb8003d433cccd243f5a0fb087e6641a27dc09。103817216字节镜像out/full-boot/transport/enuma-system-transport-visible-v3.img，SHA256 d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75；独立资格归档qualified-9459426。旧698b7c1只保留历史，未上机。
 
-firmware固定698b7c17dbbd80993070a45e2aa5ae15d330b63b并已推送。实际FD SHA256 5a031cd8b39c84a23a3ffd847400adbe5c85944f5fde59e307f7c4c9c1e13f68；新镜像out/full-boot/transport/enuma-system-transport-v3.img，103817216字节，SHA256 194fa0f2bf51236ba7d1ed2f741ea1597104c8278197a0485b039b8e100f8b9e。资格归档out/full-boot/transport/qualified-698b7c1，含实际PE/map/编译命令、FD/raw/image和清单，拒绝覆盖。
+报告缺失/版本/文件/阶段失败统一先释放Map并flush再返回，13项放同屏行0..12，保留2秒后继续真实启动链。ASan/UBSan生产尾部故障注入、完整UEFI、32个保留OEM PE/DEPEX及实际PE/编译宏/常量/写保护代码、AOSP真实96MiB FAT往返通过。2秒是拍屏间隔，不是复位/阶段编码。runtime FDT/SFS、GOP可见输出、XNU/Hello仍未实证。
 
-复用固定umi的真实只读BlockIO/FDT模式，使用enuma已有Kernel映射/保留区，不新增物理映射；源锁保留版权/许可。运行时必须检查x0 HOB、FDT完整范围、initrd精确长度与不重叠、vendor前缀、BPB和完整FAT CRC，再发布只读块设备。CRC是传输损坏检查，不是认证。
+本轮只读复核确认Android完成/root/A槽/解锁与boot_a/vendor_boot_a设备和备份摘要一致。摄像头最初不可用，未发设备动作；用户连接后14:06:59采集恢复，1920x1080 OsmoAction5pro画面原图/旋转图可见Android。采集阻断已解除。新runner默认离线，执行前检查两仓已发布、资格与未消耗候选，先开相机再由原runner即时核设备并临时boot；75秒命令后观察，240秒总相机上限，无自动返回保证。超时/采集失联停止追加并优先恢复，按既有长按电源路径核Android/root/原摘要；恢复后自动继续离线分析，不原样重试。
 
-本机实际ABL PE指令已核：v3先复制vendor、按原始size推进目的地址，再复制generic，没有页补齐。源/字节/负例证据enuma-abl-v3-concat.json；实际临时入口FDT仍未观察，不能省略运行时检查。vendor前缀长度由锁定备份生成而非手填猜值，FAT起点非sector对齐由byte CopyMem处理。
+专项operations/2026-10-25-system-transport-trial.md，证据enuma-payload-report-flow.json、enuma-system-trial-preflight.json、enuma-system-trial-camera.json和新资格报告。计划同一候选检查13项；缺乏实际文本时只记未观察，USB/时间不替代日志。当前无按键动作待办，没有未解决硬停。
 
-同一候选记录MAP/FDT/INITRD/PREFIX/BPB/FAT CRC/BLOCKIO/CONNECT/SFS/KERNEL/ADT/TRUST/CONFIG共13项。前置失败停止依赖读取，未执行保留NOT_READY；SFS/文件在BDS检查，payload模式移除旧60秒暂停。实际编译宏、PE数组、write-protected返回机器码及FD内字节均核对；ASan/UBSan首尾非对齐读取、越界/溢出/重叠/错误介质/损坏/写保护检查通过。32个保留OEM PE/DEPEX未变，仅省略UFSDxe。AOSP打包/解包回读真实ramdisk一致。
-
-## 当前缺口和下一步
-
-13项报告只在同次Boot Services生命周期内，Print/DiagDraw的enuma可见文本尚未实证，完整UEFI→XNU错误通道仍缺。下一步优先闭合可观察/可恢复条件，再用同一候选一笔读取多个结果；本轮未安排新boot。不要把构建成功、报告协议存在或时序当作每项实机成功。
-
-D-171的完整结构ADT/96MiB FAT保持，D-170实验prelink保持runtime/loadable限制；root UUID、平台种子、PMGR/UFS/root/Data仍缺，没有进入XNU/Hello/桌面。运输候选不是完整可运行iPadOS镜像。
-
-专项operations/2026-10-25-boot-v3-payload-transport.md，机器报告enuma-ram-payload-host/contract/qualification、enuma-abl-v3-concat、enuma-firmware-build、enuma-fd-audit与源迁移报告。UniXNU仍5fdbd5d。firmware/子模块为权威；standalone D:/Code/uefi-enuma旧检出和原有Mu脏状态未动，不要混用。
-
-## 实机与边界
-
-本轮无设备动作、新硬停或人工待办；设备实时状态未知。最后实机是02:11 A/detail15的Android/root/A槽/解锁/分区摘要恢复核验，当时通过，不升级为当前状态。R-016 consumed，不重试A；B离线备用、R-015暂停、R-002失败跨复位日志不复活。可恢复临时启动及实机前文档/身份/备份/观察门禁保持。
-
-board仍example=true，未修改board/bringup-plan内存字段，R-001入口请求仍512MiB；未新增verified、像素或分区操作。固件01ffaec/336760b/698b7c1记录实现、换行和补丁上下文修复；设备仓上轮adfb63f已推送，本轮发布以同轮Git记录和远端核验为准。
+UniXNU仍5fdbd5d，board仍example=true，512MiB请求和board/plan内存字段未改，无新增verified/flash/erase/改槽/像素探针；R-016 consumed、B备用、R-002失败/R-015暂停保持。本轮之前1f9088c已推送；新执行前发布号以Git和远端核验为准，S-001执行后同轮更新结果与恢复状态。

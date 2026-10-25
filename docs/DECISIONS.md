@@ -520,3 +520,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-25 · D-171：复用固定umi编码器和当前UniXNU payload.build实际生成完整结构ADT与96MiB FAT，原始系统trust两模块保持，FAT回读及真实DarwinBoot解析器ASan/UBSan正负例通过；不等于实机启动。三段DRAM仅作历史信息，board内存字段/512MiB请求/verified不变。stock vendor ramdisk2230字节，两种前缀组合均不满足umi whole-initrd FAT契约，下一步核实际v3范围/映射、适配有界只读SFS与错误输出，不猜偏移或搬umi窗口。本轮无设备动作/硬停，详见operations/2026-10-25-full-adt-fat.md。
 
 2026-10-25 · D-172：用户推进boot v3运输并要求尽量一次验证多个点。复用umi只读BlockIO/FDT模式和本机既有Kernel映射，实际ABL PE确认原长vendor推进后接generic；runtime仍须范围/前缀/BPB/完整FAT检查。新增13项同次报告，SFS/文件延后BDS，失败停依赖项，payload模式移除60秒暂停。firmware698b7c1完整构建及实际PE/编译宏/常量/写保护机器码资格、AOSP真实96MiB FAT打包往返通过，镜像194fa0f2…00f8b9e；host ASan/UBSan正负例通过。CRC只作传输损坏检查。未上机，输出可见性/FDT/SFS、PMGR/UFS/root/Data仍未闭合；无新映射/内存字段/verified/分区或硬停。详见operations/2026-10-25-boot-v3-payload-transport.md。
+
+2026-10-25 · D-173：用户明确上机无需批准，满足资格/发布/身份/备份/采集/恢复后直接单笔临时boot。9459426修复payload失败绕过cache flush/Map清理，13行同屏并展示2秒再继续；主机生产尾部故障注入及完整构建/实际PE/AOSP资格通过，新镜像d2ab5ef8…7e1db75。初始相机未枚举而未发设备动作，用户连接后14:06:59采集恢复。S-001发布后由新相机wrapper执行一笔，75秒观察/240秒总上限不构成自动返回保证；异常停止追加、恢复核验后继续离线，无内存字段/verified/分区扩张。

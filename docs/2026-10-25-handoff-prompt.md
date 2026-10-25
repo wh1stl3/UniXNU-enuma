@@ -1,13 +1,9 @@
-# enuma交接提示词：boot v3运输候选已完成离线资格（D-172）
+# enuma交接：D-173，S-001完整输入单笔试启动
 
-继续enuma/SM8250的iPadOS17.7.11/21H461移植。用户希望尽可能完整链启动、读取实际错误、每轮修复一批，并尽量同一启动验证多个点。先读AGENTS、STATUS、D-170至D-172及operations/2026-10-25-boot-v3-payload-transport.md。
+目标enuma/SM8250运行iPadOS17.7.11。用户要求完整链、实际报错、同次多点，本轮明确“上机无需批准”。先读AGENTS/STATUS/D-173和operations/2026-10-25-system-transport-trial.md，再核S-001是否已执行，禁止重复消耗镜像。
 
-已有：54MiB实验prelink、完整结构ADT、真实96MiB FAT；新增EnumaRamPayloadDxe复用固定umi只读BlockIO，适配本机boot v3原长vendor+generic拼接。实际ABL PE指令已确认原长推进，无页对齐。运行时仍严格核x0 FDT、现有映射、起止/长度/不重叠、前缀/BPB/完整FAT CRC，再发布块设备；不扫描、不猜第二偏移、不新增映射。CRC是传输损坏检查，不作认证。
+新firmware9459426已推送，修复报告失败路径缺flush；13项同屏、2秒拍屏后继续，无定时复位。完整构建/ASan故障注入/实际PE和AOSP真实96MiB FAT往返资格通过。镜像103817216字节，SHA256 d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75，归档out/full-boot/transport/qualified-9459426。报告只能读实际文本，不按时间/USB认阶段。
 
-firmware pin698b7c17dbbd80993070a45e2aa5ae15d330b63b，已推送。完整UEFI实际构建通过；32个保留OEM PE/DEPEX不变，仅省略UFSDxe。boot-v3镜像103817216字节，SHA256 194fa0f2bf51236ba7d1ed2f741ea1597104c8278197a0485b039b8e100f8b9e，资格归档out/full-boot/transport/qualified-698b7c1。实际编译宏、FD内新PE、常量数组/写保护机器码及AOSP往返核对通过。host ASan/UBSan范围/非对齐首尾/溢出/损坏/写入拒绝通过。不要重复已有内核CI/预链接或另写FAT/BlockIO。
+当前执行前：Android/root/A槽/解锁/boot与vendor_boot备份摘要复核通过；OsmoAction5pro已恢复并采集。run_system_transport_trial.py默认离线，--execute要求两仓clean且已推送、资格/候选绑定，先相机后复用原guarded runner即时核验并一笔临时boot。75秒命令后观察，240秒总相机上限；超时停止追加，先既有长按恢复与独立核验，再自动离线分析。并无自动返回保证。当前文档发布后执行；以STATUS/当前状态文件及consumed记录查真实进展。
 
-同一候选记录13项：MAP/FDT/INITRD/PREFIX/BPB/FAT CRC/BLOCKIO/CONNECT/SFS/KERNEL/ADT/TRUST/CONFIG；前置失败停止依赖项，未执行NOT_READY。SFS/文件放在BDS，旧60秒暂停在payload模式移除。报告只同次有效，Print/DiagDraw可见输出在enuma尚未实证。
-
-下一步先闭合可观察错误和恢复条件，再让一笔受控完整输入启动读取这批结果。本轮没有实机，不把构建或报告协议当运行通过；PMGR/UFS/root/Data/UUID/平台种子仍缺，prelink runtime/loadable限制保持，未进XNU/Hello。源门禁不能因多验证点放宽。
-
-UniXNU仍5fdbd5d，board仍example=true；无board/plan内存字段变更、R-001仍512MiB，无新增verified或分区操作。firmware/为权威，standalone D:/Code/uefi-enuma旧74598df和已有Mu脏状态保留。参考仓只读，二进制只在out/。A/R-016 consumed、B备用、R-015暂停、R-002失败不复活，实机前全部文档发布及即时身份/备份/日志恢复门禁保持。发布状态以Git与远端核验为准。
+不再申请逐笔上机批准；内存字段/verified/破坏性分区和恢复门禁保持。UniXNU5fdbd5d、board example=true、512MiB请求未变，无flash/erase/改槽。R-016已消耗，旧B备用/R-002失败/R-015暂停不复活。root/PMGR/UFS/Data/种子及实际GOP/XNU/Hello仍未闭合，不重复已有prelink/ADT/FAT建设。参考仓只读，二进制仅out/。任何失败须当轮更新全部交接和恢复记录。

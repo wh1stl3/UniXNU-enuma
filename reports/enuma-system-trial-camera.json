@@ -1,0 +1,11 @@
+{
+  "scope": "host camera preflight; device action only with --execute",
+  "started_utc": "2026-10-25T06:06:59.566204+00:00",
+  "camera_ready": true,
+  "device_runner_started": false,
+  "boot_issued": false,
+  "width": 1920,
+  "height": 1080,
+  "rotation": "90 clockwise; inspect actual orientation",
+  "opencv": "5.0.0"
+}
