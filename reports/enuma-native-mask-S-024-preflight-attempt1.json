@@ -1,0 +1,148 @@
+{
+  "scope": "S-024 attempt1 pre-issue identity gate, not firmware execution or firmware timeout",
+  "trial": "S-024",
+  "attempt": 1,
+  "phase": "fastboot-identity-aborted",
+  "gate_time": "2026-10-25T22:44:23+08:00",
+  "firmware_commit": "2bb165fa0dd882da1f79b9919435f00f3a4e36d8",
+  "image_sha256": "a50f11765285ca1b9a7cd1ac6d41b1648767cc0c2170036a41ee8141e0e84dc4",
+  "issued": false,
+  "consumed": false,
+  "identity_failed_fields": [
+    "product",
+    "current-slot",
+    "unlocked"
+  ],
+  "queries": [
+    {
+      "attempt": 0,
+      "variable": "product",
+      "returncode": 0,
+      "output": "product: enuma\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 0,
+      "variable": "current-slot",
+      "returncode": 0,
+      "output": "getvar:current-slot                                FAILED (remote: 'unknown command')\r\nFinished. Total time: 0.000s\r\n"
+    },
+    {
+      "attempt": 0,
+      "variable": "unlocked",
+      "returncode": 0,
+      "output": "getvar:unlocked                                    FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 1,
+      "variable": "product",
+      "returncode": 0,
+      "output": "getvar:product                                     FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 1,
+      "variable": "current-slot",
+      "returncode": 0,
+      "output": "getvar:current-slot                                FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 1,
+      "variable": "unlocked",
+      "returncode": 0,
+      "output": "getvar:unlocked                                    FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 2,
+      "variable": "product",
+      "returncode": 0,
+      "output": "getvar:product                                     FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 2,
+      "variable": "current-slot",
+      "returncode": 0,
+      "output": "getvar:current-slot                                FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 2,
+      "variable": "unlocked",
+      "returncode": 0,
+      "output": "getvar:unlocked                                    FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 3,
+      "variable": "product",
+      "returncode": 0,
+      "output": "getvar:product                                     FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 3,
+      "variable": "current-slot",
+      "returncode": 0,
+      "output": "getvar:current-slot                                FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 3,
+      "variable": "unlocked",
+      "returncode": 0,
+      "output": "getvar:unlocked                                    FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 4,
+      "variable": "product",
+      "returncode": 0,
+      "output": "getvar:product                                     FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 4,
+      "variable": "current-slot",
+      "returncode": 0,
+      "output": "getvar:current-slot                                FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 4,
+      "variable": "unlocked",
+      "returncode": 0,
+      "output": "getvar:unlocked                                    FAILED (remote: 'GetVar Variable Not found')\r\nFinished. Total time: 0.009s\r\n"
+    }
+  ],
+  "recovery_action": "same previously selected target fastboot reboot; returned OKAY; no flash/erase/slot change",
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "fastboot-identity-aborted",
+    "prior_state_sha256": "da26012d5974f7e79e803fd7b2c79e075e9d8ce1a91beb689ccbe975e6461b86",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T224737-recovery-reconciliation.json"
+  },
+  "camera": {
+    "video": "out/camera-capture/20261025T224400-system-transport/system-transport.avi",
+    "video_sha256": "4ebfb505b815e1810733b87d4ea36792a63d617f7d53b84b2a6b55e048a1996e",
+    "frames": 1009,
+    "decoded_frames": 1009,
+    "boot_issued": false,
+    "runner_exit": 1
+  },
+  "camera_desktop_confirmed": true,
+  "raw_media_local_only": true,
+  "user_steering": "This pre-issue fastboot query failure does not require whole-turn hard stop; re-enter fastboot once and continue under entry rules.",
+  "next": "one fresh adb reboot bootloader after verified Android; retain all product/slot/unlocked checks, then issue still-unconsumed S-024 only on success"
+}
