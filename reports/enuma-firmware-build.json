@@ -9,7 +9,7 @@
   "inherited_video_terminal": true,
   "native_observe_query": 1,
   "native_observe_control": false,
-  "native_mask_field": 1,
+  "native_mask_field": 4,
   "inherited_video_topology_query": 0,
   "inherited_video_reason_target": 0,
   "inherited_video_reason_query": 0,
@@ -110,7 +110,7 @@
       "ENUMA_RAMOOPS_NONCE_2": "0U",
       "ENUMA_RAMOOPS_NONCE_3": "0U",
       "ENUMA_GOP_SELFTEST": "0",
-      "ENUMA_NATIVE_MASK_FIELD": "1",
+      "ENUMA_NATIVE_MASK_FIELD": "4",
       "ENUMA_NATIVE_CONTROL": "0",
       "ENUMA_NATIVE_OBSERVE_QUERY": "1",
       "ENUMA_VIDEO_TERMINAL": "1",
@@ -172,7 +172,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "1f622a9ac973aa91dba5fc78981b3037f56a365793e7143556217995aed71937",
+  "fd_sha256": "e98eb9bad37f8ad59db3cb33c5d9c4276811bb7f7f17e9c2d58c5104bfbb218f",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",

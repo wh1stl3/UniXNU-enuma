@@ -10,3 +10,7 @@ Source `2bb165fa0dd882da1f79b9919435f00f3a4e36d8`; archive `out/inherited-gop/qu
 - ResetCold16f4..171c passes PSCI SYSTEM_RESET0x84000009 through ArmCallSmc1d990 (SMC at1d9c0). MicroSecondDelay1b7d8..1b854 splits into1-second nanosecond waits; NanoSecondDelay1b738..1b7d4 uses the existing counter loop. This is cold reset, not warm/reset2. The whole Core is newly built and differs from S-010; no whole-Core byte-equivalence claim.
 
 Real-header ASan/UBSan covers504 hook/status/GUID cases,53 mask/error selector cases; prior dispatch-detail suite passed. This audit establishes the packaged implementation and finite requested delays, not execution, timer availability, guaranteed recovery, or visible display. Fixed boot-origin windows and75-second host observation remain separate gates.
+
+## S-024 field4 comparison
+
+`qualified-native-mask-2bb165f-field4` has identical Core PE SHA256 `0d3c9f5b162baf032163d5fc247101c9637b9f4dd83b6928539e99e907f26594`. The full provider executable disassembly differs at exactly RVA14d4: `ldr w9,[x9,#0xda0]` becomes `ldr w9,[x9,#0xdac]`, selecting MovingMask at observation offset0x7c instead of ActiveThroughoutMask at0x70. Every sampling, metadata, bounds, wait and return-code instruction remains identical. Full disassembly digest `948335f72f21276f090a1a6c06699b6aa950715918410faa920131f9163795ee` was reviewed; no inference from build flags alone.
