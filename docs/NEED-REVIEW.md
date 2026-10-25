@@ -1,3 +1,9 @@
+# D-276，S-045 原生显示管线合并审计资格完成，准备实测，无新增范围审批
+
+沿已授权R-004只读与有界cold终止。新的像素写入、地址/内存/verified和破坏性分区范围未获本次扩张。
+
+以下为历史账本。
+
 # D-275，S-045 原生显示管线合并审计资格完成，准备实测，无新增范围审批
 
 沿已授权R-004只读与有界cold终止。新的像素写入、地址/内存/verified和破坏性分区范围未获本次扩张。
@@ -1026,3 +1032,6 @@ R-014 执行结果（2026-10-25 01:20，D-161）：**两次均挂死，屏幕无
 
 
 2026-10-26 00:48：S-034首次预启动五组product/current-slot/unlocked查询均未通过，镜像未发出、未consumed。选定目标fastboot reboot正常返回Android；独立身份/root/A槽/解锁和两分区/备份摘要通过，相机384帧全部可解码，末帧桌面已人工查看。D-233允许重新进入一次fastboot并完整重做门禁；不是重试已发镜像。原始影音仅本地out/camera-capture/20261026T004622-system-transport。
+
+
+D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像未发出、未consumed，无硬件运行结果。选定目标fastboot reboot后Android完成，独立root/A槽/解锁及设备与本地备份两分区摘要通过；本轮无相机。按D-233允许重新进入一次fastboot并完整重做product/slot/unlocked门禁，不能忽略FAILED正文；若再次失败不继续重入。候选315f5daa及资格/源码不变，不是重试已发图。证据reports/enuma-native-route-S-045-preissue.json。

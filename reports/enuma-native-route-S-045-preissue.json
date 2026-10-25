@@ -1,0 +1,56 @@
+{
+  "scope": "preissue fastboot identity abort, recovered; no image issued",
+  "trial": "S-045",
+  "firmware_commit": "431f0a819e6b9705aebb24e4f6dae0603a7aeaad",
+  "image_sha256": "315f5daa39f5b8a7b1e65edd030243eb179ea88a78713b27c39f3b08a8760f1e",
+  "boot_issued": false,
+  "consumed": false,
+  "identity_failed_fields": [
+    "product",
+    "current-slot",
+    "unlocked"
+  ],
+  "observation": {
+    "scope": "qualified read-only native route; ADB/fastboot and calibrated boot clock",
+    "image_sha256": "315f5daa39f5b8a7b1e65edd030243eb179ea88a78713b27c39f3b08a8760f1e",
+    "camera_used": false,
+    "media_recorded": false,
+    "started_utc": "2026-10-25T19:45:59.563150+00:00",
+    "device_runner_started": true,
+    "boot_issued": false,
+    "runner_log": "out/system-transport/20261026T034559/runner.log",
+    "runner_exit": 1,
+    "error": "guarded runner failed; reconcile actual device state before further trial"
+  },
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "fastboot-identity-aborted",
+    "prior_state_sha256": "d4b1601e789e296c1a1dddf80ac3acf889505a47006a4e4d2105d5f98a95769b",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261026T035200-recovery-reconciliation.json"
+  },
+  "reentry_rule": "D-233",
+  "maximum_reentries": 1,
+  "reentry_attempted": false,
+  "hardware_result": null
+}
