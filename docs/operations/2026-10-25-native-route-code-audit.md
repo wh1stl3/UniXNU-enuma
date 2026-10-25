@@ -231,3 +231,44 @@ candidate. ASan/UBSan330 failures/two waits/raw blend mutation/stalled frame,
 Actual RAM_PAYLOAD1/STRUCTURE1/ROUTE1 and DETAIL/STAGING/LAYOUT/BLEND/MASK/QUERY0
 are checked in both generated compilation files and the full packaged image.
 No GOP publication, pixel access, MMIO store, new mapping or composition claim.
+
+## S-036 stability-first geometry detail, source7ea366f
+
+Archive qualified-native-geometry-7ea366f; combined disassembly digest
+2672dcc9f19ecd6fe67d9d3c8dbbcee8d5f6f2760f24850fccdadf65c4bd7a61.
+Image b6193cc5d757f3cfe9a9dbbc3761ce15dd279018038208e34e50d433533eb9b8;
+FD fbe01654c0b1f51f1a15552f828fab609e67e14c4d48252ec4c761165277c030.
+Core whole bytes match S-035. Staged/RowCovered/Normalize/Select/Stage/Equal
+instructions26d8..2ba0 in S-035 match this provider2840..2d08 exactly after
+the0x168 relocation of internal branch targets; no operand differences.
+
+Manually reviewed entry1050..27cc. Exact R-004 metadata1124..1190, three
+sample loop11fc, two100000us waits1208..124c and STATUS-before-FRAME12f0..130c
+retain bounds. CTL1364..13e8, staging1414..14ec, selected SSPP14f8..159c and
+selected mixer1734..17e4 preserve capture preconditions and register kinds.
+Raw snapshots saved15c8/1818, then configuration1830..1994 compares complete
+scope/revision/pipes/mixer0x240 bytes/CTL top-active-staging;19a8..1a18 checks
+both interfaces active, full Timing/Enable equality and frame deltas1..64.
+Only after all three iterations does1a90 normalize sample0 and run geometry.
+Any collection/wait/raw change/frame failure returns before classification.
+
+Geometry1ab8..1e38 retains source/stage/owner/height/width/bit31/local fill/
+total width checks. On rejection1e3c..1e78 strict-selects again and classifier
+1ec8..2010 reads only retained sample0 words: six mixer/eight source loops,
+size1f34..1f50 ->reason36, duplicate/missing sides1f64..1f7c/1fb0 ->reason38,
+source OutXy/OutSize1f80..1f9c ->reason37, total width1fe0..200c ->reason39;
+other cases reason35. No new hardware reads or synthetic mixer values.
+Selector1e80..1ea0 requires status13/zero requirements/reasons36..39 before
+code2..5, otherwise1. Decoder2014..278c retains original source/format/secure/
+address/coverage predicates. Complete2790..27c4 writes requirements22 and
+reason12, which remains unclassified1 in this geometry-only transport.
+
+Read2d08..2d60 limits aligned offset<=0x6c26c/count<330 before sole load2d50
+at0xae00000; revision126c has the same count cap1250..1264. Stack0x22e0 plus
+bounded existing helpers; no pixel access, MMIO stores, new map or GOP install.
+Full FAT/RAM_PAYLOAD1, STRUCTURE1/STRUCTURE_DETAIL1/ROUTE1 and remaining
+detail/layout/blend/staging/mask/query0 compilation is bound to packaged PE.
+ASan/UBSan330 failed reads/two waits/raw mutation and frame failure priority,
+768 classifier/resolver perturbations and19680 geometry selector cases pass.
+Code2..5 implies stable captured configuration/two moving windows, never a
+numeric register dump, physical panel route or visual composition proof.

@@ -115,3 +115,22 @@ untouched and checks their equality between samples. Bit31 only establishes
 left/right geometry per the pinned LM setup_out implementation. Successful
 structure is not visual composition or GOP readiness. A geometry/decode/runtime
 rejection refutes the hypothesis that blend qualification is the sole blocker.
+
+
+## S-035 structural result and stability-first geometry question
+
+S-035 valid code3 route-or-geometry-rejected; origin22.268..22.343,
+Android44.125s, independent identity/root/slot/unlock and both partition/backup
+digests pass. User disabled camera for current nonvisual probes. This refutes
+blend as the sole blocker; native geometry or subsequent topology decode
+still rejected. It does not establish three-sample stability.
+
+Next Native4 first captures and checks three raw snapshots under the existing
+safe single CTL/two source/two mixer capture contract, then explains pure
+geometry rejection. Main hypotheses: source output local coordinates/size
+assumption or right-mixer assignment, ahead of panel-size mismatch. The
+category can refute either without changing any layout admission or issuing
+additional register kinds. Code2..5 additionally requires both interfaces to
+advance in two bounded windows while full source/mixer/staging words remain
+stable. Code1 provides no such implication. Blend and CPU/downstream remain
+unproven. Maximum330 reads/two100ms/R-004 mapping unchanged.

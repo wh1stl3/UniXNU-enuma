@@ -5,7 +5,7 @@
 #include "Evidence.h"
 ENUMA_U32 EnumaNativeBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *,ENUMA_U32 *);
 ENUMA_U32 EnumaSampleVideoBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *);
-typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,ChangeBlend,NonBase,BlendFault,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
+typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,BadGeometry,ChangeBlend,NonBase,BlendFault,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
 static int allowed(unsigned O) {
   static const unsigned Fields[11]={0,8,12,16,20,36,48,52,56,0x170,0x70};
   if(!O) { return 1; }
@@ -58,6 +58,10 @@ static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
     if(O==B+48) { *V=0x236ff; }
     if(O==B+52) { *V=0x03020001; }
   }
+  if(M->BadGeometry==1&&O==0x45004) { *V^=1u<<16; }
+  if(M->BadGeometry==2&&O==0x5010) { *V=1; }
+  if(M->BadGeometry==3&&O==0x45000) { *V&=~(1u<<31); }
+  if(M->BadGeometry==4&&(O==0x45004||O==0x7000||O==0x700c)) { *V=(2560u<<16)|799; }
   for(unsigned I=0;I<2;I++) {
     unsigned B=0x6b800+I*0x800;
     if(O==B||O==B+0x26c) { *V=1; }
@@ -166,6 +170,24 @@ int main(void) {
   assert(EnumaSampleNativeStructureDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableConfig&&!memcmp(&E,&Before,sizeof(E)));
   M=(MODEL){.StallRight=1};E=Before;
   assert(EnumaSampleNativeStructureDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableFrame&&!memcmp(&E,&Before,sizeof(E)));
+  for(unsigned f=1;f<=4;f++) {
+    M=(MODEL){.BadGeometry=f,.NonBase=1,.BlendFault=3,.NoTiming=1,.BadCounter=1};E=Before;
+    assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&M.Reads==330&&M.Window==2&&Why==35+f&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  M=(MODEL){.NonBase=1,.BlendFault=3};assert(!EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)&&M.Reads==330&&M.Window==2&&E.Frame.Requirements==22);
+  for(unsigned f=1;f<=330;f++) {
+    M=(MODEL){.BadGeometry=2,.Fail=f};E=Before;
+    assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedBounds&&M.Reads==f&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  for(unsigned w=1;w<=2;w++) {
+    M=(MODEL){.BadGeometry=2,.FailWait=w};E=Before;
+    assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonWait&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  M=(MODEL){.BadGeometry=2,.NonBase=1,.ChangeBlend=1};E=Before;
+  assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableConfig&&!memcmp(&E,&Before,sizeof(E)));
+  M=(MODEL){.BadGeometry=2,.StallRight=1};E=Before;
+  assert(EnumaSampleNativeGeometryDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableFrame&&!memcmp(&E,&Before,sizeof(E)));
+  puts("PASS: geometry classifier after330 reads/two waits;330 collection failures, waits, raw mutation and stalled frame take priority over geometry");
   puts("PASS: structural sampler330 failures, two waits, raw blend mutation and stalled frame rejection; requirements22 retained");
   puts("PASS: four actual sampler blend categories, same110 first-sample reads, no wait, output unchanged");
   puts("PASS: native border all64 masks preserve raw snapshots,330 read failures, changed border/unknown staging/stability/mixer rejection");

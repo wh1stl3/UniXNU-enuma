@@ -116,6 +116,19 @@ int main(void) {
   }
   setup();S.Pipes[0].OutXy=1;assert(EnumaResolveMixerGeometry(&S,&T,&L,&O,0)==EnumaInheritedTopology);
   setup();S.Ctls[2].Layers[4][0]|=8;assert(EnumaResolveMixerGeometry(&S,&T,&L,&O,0)==EnumaInheritedTopology);
+  setup();assert(EnumaClassifyMixerGeometry(&S,&T,&L)==EnumaGeometryOther);
+  T.Mixers[0].Size^=1u<<16;assert(EnumaClassifyMixerGeometry(&S,&T,&L)==EnumaGeometryMixerSize);
+  setup();S.Pipes[0].OutXy=1;assert(EnumaClassifyMixerGeometry(&S,&T,&L)==EnumaGeometrySourceLocal);
+  setup();T.Mixers[0].Mode=0;assert(EnumaClassifyMixerGeometry(&S,&T,&L)==EnumaGeometrySides);
+  setup();T.Mixers[0].Size--;S.Pipes[1].OutSize--;assert(EnumaClassifyMixerGeometry(&S,&T,&L)==EnumaGeometryCombinedWidth);
+  for(unsigned field=0;field<24;field++)for(unsigned bit=0;bit<32;bit++) {
+    setup();unsigned *v=field==0?&T.Mixers[0].Mode:field==1?&T.Mixers[0].Size:field<13?&T.Mixers[0].Blend[field-2]:&T.Mixers[0].Alpha[field-13];*v^=1u<<bit;
+    ENUMA_MIXER_SNAPSHOT before=T;ENUMA_INHERITED_SNAPSHOT raw=S;
+    unsigned result=EnumaClassifyMixerGeometry(&S,&T,&L);
+    assert((result==EnumaGeometryOther)==!EnumaResolveMixerGeometry(&S,&T,&L,&O,0));
+    assert(!memcmp(&before,&T,sizeof(T))&&!memcmp(&raw,&S,sizeof(S)));
+  }
+  puts("PASS: four geometry explanation classes and768 bit mutations agree with geometry resolver, immutable inputs");
   puts("PASS: structural mixer768 bit mutations retain geometry/side rejection and raw inputs");
   puts("PASS: all11 selected blend stages by11 dim locations, operation/alpha cases and immutable snapshots");
   puts("PASS: layout first-predicate classes and4608 saved-word perturbations match fixed c45191c status/output; snapshots immutable");
