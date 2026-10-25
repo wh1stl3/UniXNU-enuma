@@ -1,0 +1,73 @@
+{
+  "scope": "constant native control for boot-origin calibration; no display accesses",
+  "trial": "S-021",
+  "native_query": 1,
+  "firmware_commit": "ed1d894eb3b8dc611d37e3cb5e7ec21583ccede5",
+  "image_sha256": "afe1e310bd07d2b1cd74275f9a9b2fe66e945fb956aee4cce3b80d529c457c43",
+  "fd_sha256": "ee67bdb7ee0054f29c74580db44a0ae9bb800e6c8668490ff92af5f1f28f333e",
+  "consumed": true,
+  "automatic_android_return": true,
+  "observation_valid": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261025T221511-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-25 22:15:25",
+    "issued_at_utc": "2026-10-25T14:15:25.988437+00:00",
+    "boot_command_return_seconds": 2.625,
+    "fastboot_disconnect_observed_seconds": 5.093,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 20.062,
+    "boot_complete_seconds": 34.968
+  },
+  "post_boot_clock": {
+    "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+    "boot_id_sha256": "9107737f47587883261dd4e628610a32b0ce06c886dd3804452cf7fc34b44505",
+    "origin_monotonic_lower": 177088.955,
+    "origin_monotonic_upper": 177089.025,
+    "uncertainty_seconds": 0.07000000000698492,
+    "calibrated_firmware_delay": false,
+    "origin_after_issue_lower": 12.25199999997858,
+    "origin_after_issue_upper": 12.321999999985565
+  },
+  "boot_clock_error": null,
+  "boot_id_changed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "b17949b2686db20268d934ab6429eaf764d7a734220989df6a16d703c5f863e3",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T221621-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 252,
+    "decoded_frames": 252,
+    "video": "out/camera-capture/20261025T221508-system-transport/system-transport.avi",
+    "sha256": "04ab300d5bfbe2c2d035938f52a9efe9aaa6770021732c1e9ca079b544b2d4bc",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_verified": false,
+  "display_reads": 0,
+  "display_writes": 0,
+  "calibration_passed": false
+}

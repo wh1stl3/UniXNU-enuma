@@ -1005,3 +1005,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-227，内核启动时钟常量校准资格通过，准备S-021
 
 2026-10-25T22:13:12+08:00。80290f4已推送S-019/020模糊结果与受控恢复。新固件ed1d894eb3b8dc611d37e3cb5e7ec21583ccede5，同INF常量1/5且cold Core可执行段不变，host Linux启动原点采集/资格及精确图已绑定。新S-021/S-022均未发出；先query1/warning1/2秒，独立恢复、文档再推送后才query2/warning5/7秒。无显示读写/新映射/verified/分区变化，原始影音仅本地。
+
+
+## D-228，S-021已受控返回，准备S-022七秒常量
+
+2026-10-25T22:16:21+08:00。80290f4已推送S-019/020模糊结果与受控恢复。新固件ed1d894eb3b8dc611d37e3cb5e7ec21583ccede5，同INF常量1/5且cold Core可执行段不变，host Linux启动原点采集/资格及精确图已绑定。S-021已单次发出、受控回Android并独立恢复核验，已consumed；S-022尚未发出。当前时钟界限：{"method": "host request interval minus quantized Linux uptime; 3-sample intersection", "boot_id_sha256": "9107737f47587883261dd4e628610a32b0ce06c886dd3804452cf7fc34b44505", "origin_monotonic_lower": 177088.955, "origin_monotonic_upper": 177089.025, "uncertainty_seconds": 0.07000000000698492, "calibrated_firmware_delay": false, "origin_after_issue_lower": 12.25199999997858, "origin_after_issue_upper": 12.321999999985565}。无显示读写/新映射/verified/分区变化，原始影音仅本地。

@@ -1,6 +1,6 @@
-# 当前状态：D-227，内核启动时钟常量校准资格通过，准备S-021
+# 当前状态：D-228，S-021已受控返回，准备S-022七秒常量
 
-2026-10-25T22:13:12+08:00。用户本轮要求“继续推进 触发硬停再停”。新S-021/S-022均未发出；先query1/warning1/2秒，独立恢复、文档再推送后才query2/warning5/7秒。没有新增像素/MMIO写、映射、board/verified/分区操作。原始视频/图像只留本地out，不录音/上传。
+2026-10-25T22:16:21+08:00。用户本轮要求“继续推进 触发硬停再停”。S-021已单次发出、受控回Android并独立恢复核验，已consumed；S-022尚未发出。当前时钟界限：{"method": "host request interval minus quantized Linux uptime; 3-sample intersection", "boot_id_sha256": "9107737f47587883261dd4e628610a32b0ce06c886dd3804452cf7fc34b44505", "origin_monotonic_lower": 177088.955, "origin_monotonic_upper": 177089.025, "uncertainty_seconds": 0.07000000000698492, "calibrated_firmware_delay": false, "origin_after_issue_lower": 12.25199999997858, "origin_after_issue_upper": 12.321999999985565}。没有新增像素/MMIO写、映射、board/verified/分区操作。原始视频/图像只留本地out，不录音/上传。
 
 S-019/S-020已双双自动返回Android并独立核验。ADB差-4.281秒支持补集方向，但Android完成差-1.359秒未进预设[-7,-3]窗口，正式结果保持ambiguous；旧对冻结且两图consumed，不换阈值或追认寄存器状态。两笔没有发生75秒超时/恢复失败，不能虚构为设备硬停。80290f4已发布该真实结果。
 
@@ -14,4 +14,4 @@ S-021图afe1e310bd07d2b1cd74275f9a9b2fe66e945fb956aee4cce3b80d529c457c43，FDee6
 
 预先固定校准：S-022原点区间减S-021区间，整个差区间必须落在[4,6]秒，且两笔新boot/恢复与摄像均通过，才认为该时基能辨别已知5秒差；任何失败/模糊校准冻结该新计划并停止追加设备动作。即便通过仍只支持时基、非唯一UEFI路径证明；显示谓词须另行新候选，不复用S-019/020或放宽GOP。ADB与Android完成原时序仍完整记录，不为新方法篡改旧判据。
 
-执行前源/两仓发布和全部当前文档对齐；即时唯一enuma身份、A槽/解锁、匹配本地boot_a/vendor_boot_a备份与设备摘要、既有受控/人工恢复路径和相机门禁保持。最近恢复证据out\device-tests\20261025T215702-recovery-reconciliation.json，Android完成/root/A槽/解锁及两分区设备与备份摘要通过；相机桌面已确认。75秒无识别返回仍停止追加，主机期限不冒称固件返回保证。真实GOP、小图案/阶段字、CPU/SMMU扫描源关系、I2C背光及XNU/iPadOS仍未实机闭合。
+执行前源/两仓发布和全部当前文档对齐；即时唯一enuma身份、A槽/解锁、匹配本地boot_a/vendor_boot_a备份与设备摘要、既有受控/人工恢复路径和相机门禁保持。最近恢复证据out\device-tests\20261025T221621-recovery-reconciliation.json，Android完成/root/A槽/解锁及两分区设备与备份摘要通过；相机桌面已确认。75秒无识别返回仍停止追加，主机期限不冒称固件返回保证。真实GOP、小图案/阶段字、CPU/SMMU扫描源关系、I2C背光及XNU/iPadOS仍未实机闭合。
