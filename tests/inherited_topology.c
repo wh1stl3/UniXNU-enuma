@@ -48,5 +48,28 @@ int main(void) {
   READER R={0}; assert(!EnumaCaptureMixers(read_reg,&R,&Out)&&R.Count==144);
   setup(); S.Ctls[2].IntfActive=2; R=(READER){0}; Out=Before;
   assert(EnumaCaptureRoutedMixers(&S,read_reg,&R,&Out)==EnumaInheritedTopology&&!R.Count&&!memcmp(&Out,&Before,sizeof(Out)));
+  for(unsigned mask=0;mask<64;mask++) {
+    setup();for(unsigned m=0;m<6;m++)if(mask&(1u<<m))S.Ctls[2].Layers[m][0]|=1u<<24;
+    ENUMA_INHERITED_SNAPSHOT before=S;
+    assert(EnumaClassifyVideoStaging(&S)==(mask?EnumaStagingBorderOnly:EnumaStagingOther));
+    assert(!memcmp(&S,&before,sizeof(S)));
+  }
+  for(unsigned m=0;m<6;m++)for(unsigned j=0;j<4;j++)for(unsigned bit=0;bit<32;bit++) {
+    setup();S.Ctls[2].Layers[m][j]^=1u<<bit;
+    ENUMA_INHERITED_SNAPSHOT before=S,norm=S;
+    for(unsigned k=0;k<6;k++)norm.Ctls[2].Layers[k][0]&=~(1u<<24);
+    unsigned ctl=99,mixers=99,pipes=99;
+    unsigned normalized_ok=EnumaSelectVideoRoute(&norm,&ctl,&mixers,&pipes)==EnumaInheritedOk;
+    unsigned classified=EnumaClassifyVideoStaging(&S);
+    assert((classified==EnumaStagingBorderOnly)==(normalized_ok&&j==0&&bit==24));
+    assert(!memcmp(&S,&before,sizeof(S)));
+  }
+  setup();S.Ctls[2].Layers[4][0]|=8;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingSourceShape);
+  setup();S.Ctls[2].Layers[4][3]=1;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingUnknownFields);
+  setup();S.Ctls[2].Layers[4][0]=8;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingCardinality);
+  setup();S.Ctls[2].Layers[4][0]=0;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingCardinality);
+  setup();S.Ctls[2].IntfActive=2;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingOther);
+  assert(EnumaClassifyVideoStaging(0)==EnumaStagingOther);
+  puts("PASS: pure staging classification, all64 border masks, 768 single-bit perturbations, source/unknown/cardinality cases, no mutation");
   puts("PASS: reversed mixer identities, explicit right flag, dual tile decode, 12 topology rejects and 144 callback failures; downstream/CPU proof remains required");
 }

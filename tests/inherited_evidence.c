@@ -101,7 +101,7 @@ int main(void) {
     assert((NewWhy>=EnumaVideoReasonNativeCtl?EnumaVideoReasonPipeline:NewWhy)==OldWhy);
   }
   const MODEL topo_cases[]={{.BadCtl=1},{.Border=1},{.BadMixer=1}};
-  const unsigned topo_reasons[]={EnumaVideoReasonNativeCtl,EnumaVideoReasonNativeStaging,EnumaVideoReasonNativeMixerLayout};
+  const unsigned topo_reasons[]={EnumaVideoReasonNativeCtl,EnumaVideoReasonStagingBorderOnly,EnumaVideoReasonNativeMixerLayout};
   for(unsigned I=0;I<3;I++) {
     M=topo_cases[I]; E=Before;
     assert(EnumaSampleNativeVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&Why==topo_reasons[I]&&!memcmp(&E,&Before,sizeof(E)));

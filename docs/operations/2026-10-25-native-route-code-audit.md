@@ -75,3 +75,33 @@ Host fixed fafb8a3 native callback/output parity at all330 failure boundaries,
 original strict baseline, three first-location fixtures and10080 detailed
 selector cases pass. Actual macros ROUTE1/DETAIL1/MASK0/QUERY0 were verified in
 both provider and Core compilation; original complete FAT and R-004 bounds hold.
+
+## S-031 staging classification, source5d2d3d2
+
+Archive `qualified-native-staging-5d2d3d2`, full disassembly digest
+`6c7990d755f68a2d9d06d83509106d259f3fb556f1a674ddb48d550dd10d5b1b`.
+Core PE remains a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f.
+Provider entry and complete capture/resolve/decode/stability flow reviewed:
+metadata1118..11a4, three samples122c/2714..2774, two bounded100ms waits1240..127c,
+STATUS-before-FRAME131c/132c. Strict staging1498..166c rejects to2890;
+selected SSPP1670..176c and mixer1790..19d0 retain prior admission and read counts.
+Resolve1a00..1e3c and Decode1e40..2570 retain layout/address/format restrictions.
+Stability2574..2804 compares raw configuration and full timing/enable words,
+checks active and nonwrapping frame deltas1..64. Success still requires0x14.
+
+New failure classifier2890..2a80 checks major6000 and exactly one video CTL6,
+loops six LM and eight known sources, copies four words to stack at2930..294c,
+clears only bit24 in that copy at295c. Stage shape29c8..29d0, exact four-word
+comparison2a20..2a40, duplicate source2a44..2a50 and final count2ae8..2afc
+are bounded RAM-only operations. No callback or MMIO occurs in this classifier;
+the only call is pure Stage2d48. Original captured snapshot is not overwritten.
+Return2a84..2aa4 requires zero output requirements and Topology status13;
+only reasons21..24 map to codes2..5, all others1. Code5 is a rejection here.
+Read2dc8..2e20 checks alignment, offset<=0x6c26c and count<330 before the
+single MMIO load2e10 from0xae00000+offset; no MMIO store or pixel access added.
+
+Host sanitizers, fixed baseline callback/status/output parity,64 border masks,
+768 field perturbations and12480 selector cases passed. These establish bounded
+classification, not physical route validity or visible output. Actual image
+414edab9053fc9a87c5661665c81b82ca19577877529c4aa0ac4453f62c55701
+is bound to ROUTE1/DETAIL1/STAGING1/MASK0/QUERY0 in qualification.
