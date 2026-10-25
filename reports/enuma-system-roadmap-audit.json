@@ -157,6 +157,28 @@
     "batch_stages": 13,
     "scope": "actual compiled and packaged driver, offline qualified; runtime FDT/SFS not observed"
   },
+  "full_input_return_boundary": {
+    "image_sha256": "d716e159d6852b398d1b8a999b17852c4affd8318123cbd61e8afe27047f8304",
+    "ram_payload_bytes": 100663296,
+    "detail_point": 13,
+    "completion_fallback_enabled": false,
+    "scope": "offline necessary isolation candidate; not a third device trial"
+  },
+  "device_activity_scope": "new_device_trials/device_writes describe this offline auditor only; actual trial results are separate",
+  "actual_trial_results": {
+    "enuma-system-transport-result.json": {
+      "phase": "recovered-android-boot-complete",
+      "candidate_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
+      "candidate_consumed": true,
+      "report_stages_observed": []
+    },
+    "enuma-system-transport-S002-result.json": {
+      "phase": "recovered-android-boot-complete",
+      "candidate_sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327",
+      "candidate_consumed": true,
+      "report_stages_observed": []
+    }
+  },
   "next_work_order": [
     "provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging",
     "observe the 13-stage transport batch in one controlled full-input trial once error output and recovery gates are met",

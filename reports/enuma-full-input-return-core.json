@@ -1,0 +1,365 @@
+{
+  "core_sha256": "17f706f4af6a568ea4a8807d0f83be144c6637e714a62c9133278bb8f323fa0f",
+  "point": 13,
+  "delay_contract": {
+    "mode": "constant_specialized_2x1s",
+    "microseconds": 2000000,
+    "nanosecond_calls": [
+      {
+        "rva": "0x1b7a0",
+        "branch": "bl",
+        "nanoseconds": 1000000000
+      },
+      {
+        "rva": "0x1b7b0",
+        "branch": "b",
+        "nanoseconds": 1000000000
+      }
+    ],
+    "callee_body": [
+      {
+        "rva": "0x1b790",
+        "mnemonic": "stp",
+        "operands": "x29, x30, [sp, #-0x10]!"
+      },
+      {
+        "rva": "0x1b794",
+        "mnemonic": "mov",
+        "operands": "x29, sp"
+      },
+      {
+        "rva": "0x1b798",
+        "mnemonic": "mov",
+        "operands": "w0, #0xca00"
+      },
+      {
+        "rva": "0x1b79c",
+        "mnemonic": "movk",
+        "operands": "w0, #0x3b9a, lsl #16"
+      },
+      {
+        "rva": "0x1b7a0",
+        "mnemonic": "bl",
+        "operands": "#0x1b6f0"
+      },
+      {
+        "rva": "0x1b7a4",
+        "mnemonic": "mov",
+        "operands": "w0, #0xca00"
+      },
+      {
+        "rva": "0x1b7a8",
+        "mnemonic": "movk",
+        "operands": "w0, #0x3b9a, lsl #16"
+      },
+      {
+        "rva": "0x1b7ac",
+        "mnemonic": "ldp",
+        "operands": "x29, x30, [sp], #0x10"
+      },
+      {
+        "rva": "0x1b7b0",
+        "mnemonic": "b",
+        "operands": "#0x1b6f0"
+      }
+    ]
+  },
+  "symbols": {
+    "CoreDispatcher": "0xfc68",
+    "CoreStartImage": "0xc314",
+    "EnumaDispatchDetailCheckpoint": "0xf8fc",
+    "ReadUnaligned64": "0x18d08",
+    "MicroSecondDelay": "0x1b790",
+    "ResetCold": "0x16f4",
+    "CpuDeadLoop": "0x13b8"
+  },
+  "checkpoint_body": [
+    {
+      "rva": "0xf8fc",
+      "mnemonic": "str",
+      "operands": "x19, [sp, #-0x20]!"
+    },
+    {
+      "rva": "0xf900",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf904",
+      "mnemonic": "add",
+      "operands": "x29, sp, #8"
+    },
+    {
+      "rva": "0xf908",
+      "mnemonic": "cmp",
+      "operands": "x0, #0xd"
+    },
+    {
+      "rva": "0xf90c",
+      "mnemonic": "b.ne",
+      "operands": "#0xf96c"
+    },
+    {
+      "rva": "0xf910",
+      "mnemonic": "mov",
+      "operands": "x19, x1"
+    },
+    {
+      "rva": "0xf914",
+      "mnemonic": "cbz",
+      "operands": "x1, #0xf96c"
+    },
+    {
+      "rva": "0xf918",
+      "mnemonic": "mov",
+      "operands": "x0, x19"
+    },
+    {
+      "rva": "0xf91c",
+      "mnemonic": "bl",
+      "operands": "#0x18d08"
+    },
+    {
+      "rva": "0xf920",
+      "mnemonic": "mov",
+      "operands": "x8, #0x22f"
+    },
+    {
+      "rva": "0xf924",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4138, lsl #16"
+    },
+    {
+      "rva": "0xf928",
+      "mnemonic": "movk",
+      "operands": "x8, #0x6c7, lsl #32"
+    },
+    {
+      "rva": "0xf92c",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4f79, lsl #48"
+    },
+    {
+      "rva": "0xf930",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf934",
+      "mnemonic": "b.ne",
+      "operands": "#0xf96c"
+    },
+    {
+      "rva": "0xf938",
+      "mnemonic": "add",
+      "operands": "x0, x19, #8"
+    },
+    {
+      "rva": "0xf93c",
+      "mnemonic": "bl",
+      "operands": "#0x18d08"
+    },
+    {
+      "rva": "0xf940",
+      "mnemonic": "mov",
+      "operands": "x8, #0x949c"
+    },
+    {
+      "rva": "0xf944",
+      "mnemonic": "movk",
+      "operands": "x8, #0x337e, lsl #16"
+    },
+    {
+      "rva": "0xf948",
+      "mnemonic": "movk",
+      "operands": "x8, #0x11b5, lsl #32"
+    },
+    {
+      "rva": "0xf94c",
+      "mnemonic": "movk",
+      "operands": "x8, #0xe7a4, lsl #48"
+    },
+    {
+      "rva": "0xf950",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf954",
+      "mnemonic": "b.ne",
+      "operands": "#0xf96c"
+    },
+    {
+      "rva": "0xf958",
+      "mnemonic": "bl",
+      "operands": "#0x1b790"
+    },
+    {
+      "rva": "0xf95c",
+      "mnemonic": "bl",
+      "operands": "#0x16f4"
+    },
+    {
+      "rva": "0xf960",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf964",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp], #0x20"
+    },
+    {
+      "rva": "0xf968",
+      "mnemonic": "b",
+      "operands": "#0x13b8"
+    },
+    {
+      "rva": "0xf96c",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf970",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp], #0x20"
+    },
+    {
+      "rva": "0xf974",
+      "mnemonic": "ret",
+      "operands": ""
+    }
+  ],
+  "callsites": [
+    {
+      "checkpoint_call_rva": "0x10470",
+      "CoreStartImage_calls_before": [
+        "0x10460"
+      ],
+      "CoreStartImage_calls_after": [],
+      "instructions": [
+        {
+          "rva": "0x10450",
+          "mnemonic": "add",
+          "operands": "x20, x20, #0x380"
+        },
+        {
+          "rva": "0x10454",
+          "mnemonic": "mov",
+          "operands": "x1, xzr"
+        },
+        {
+          "rva": "0x10458",
+          "mnemonic": "mov",
+          "operands": "x2, xzr"
+        },
+        {
+          "rva": "0x1045c",
+          "mnemonic": "stp",
+          "operands": "x0, x22, [x20]"
+        },
+        {
+          "rva": "0x10460",
+          "mnemonic": "bl",
+          "operands": "#0xc314"
+        },
+        {
+          "rva": "0x10464",
+          "mnemonic": "mov",
+          "operands": "w0, #0xd"
+        },
+        {
+          "rva": "0x10468",
+          "mnemonic": "mov",
+          "operands": "x1, x22"
+        },
+        {
+          "rva": "0x1046c",
+          "mnemonic": "stp",
+          "operands": "xzr, xzr, [x20]"
+        },
+        {
+          "rva": "0x10470",
+          "mnemonic": "bl",
+          "operands": "#0xf8fc"
+        },
+        {
+          "rva": "0x10474",
+          "mnemonic": "str",
+          "operands": "xzr, [sp]"
+        },
+        {
+          "rva": "0x10478",
+          "mnemonic": "str",
+          "operands": "wzr, [sp, #8]"
+        },
+        {
+          "rva": "0x1047c",
+          "mnemonic": "b",
+          "operands": "#0xfd18"
+        },
+        {
+          "rva": "0x10480",
+          "mnemonic": "ldr",
+          "operands": "x0, [sp, #0x10]"
+        },
+        {
+          "rva": "0x10484",
+          "mnemonic": "bl",
+          "operands": "#0x8348"
+        },
+        {
+          "rva": "0x10488",
+          "mnemonic": "adrp",
+          "operands": "x8, #0x2b000"
+        },
+        {
+          "rva": "0x1048c",
+          "mnemonic": "ldr",
+          "operands": "x0, [sp]"
+        },
+        {
+          "rva": "0x10490",
+          "mnemonic": "strb",
+          "operands": "wzr, [x8, #0x2c2]"
+        },
+        {
+          "rva": "0x10494",
+          "mnemonic": "add",
+          "operands": "sp, sp, #0x30"
+        },
+        {
+          "rva": "0x10498",
+          "mnemonic": "ldp",
+          "operands": "x29, x30, [sp, #0x50]"
+        },
+        {
+          "rva": "0x1049c",
+          "mnemonic": "ldp",
+          "operands": "x27, x28, [sp, #0x40]"
+        },
+        {
+          "rva": "0x104a0",
+          "mnemonic": "ldp",
+          "operands": "x25, x26, [sp, #0x30]"
+        },
+        {
+          "rva": "0x104a4",
+          "mnemonic": "ldp",
+          "operands": "x23, x24, [sp, #0x20]"
+        },
+        {
+          "rva": "0x104a8",
+          "mnemonic": "ldp",
+          "operands": "x21, x22, [sp, #0x10]"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "fixed Core/map static checks only; no proof of hardware reaching or returning from the gate",
+    "detail13 is any CoreStartImage return, not an EFI_STATUS value or successful SetMode"
+  ],
+  "scope": "offline archived Core call boundary review",
+  "linker_map_sha256": "7da17c9601f3fb82a941fb6049d7c11bd21e3f54d20b3d5735ca2086d1e43c67"
+}

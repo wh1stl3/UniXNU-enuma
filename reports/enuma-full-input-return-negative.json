@@ -1,0 +1,44 @@
+{
+  "scope": "offline qualifier and real-PE corruption tests; no device I/O",
+  "qualification_rejections": [
+    {
+      "case": "wrong point",
+      "rejected": true,
+      "reason": "Build profile mismatch"
+    },
+    {
+      "case": "fallback requested",
+      "rejected": true,
+      "reason": "Build profile mismatch"
+    },
+    {
+      "case": "wrong FAT",
+      "rejected": true,
+      "reason": "full-input boundary FAT differs from system-input report"
+    }
+  ],
+  "core_checks": [
+    {
+      "arguments": [
+        "--archive",
+        "out/full-boot/transport/return-boundary-cb9e568",
+        "--map",
+        "out/full-boot/transport/return-boundary-cb9e568/DxeCore.map"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS rejection: removed StartImage call\nPASS rejection: corrupt GUID immediate\nPASS rejection: wrong checkpoint point\nPASS rejection: altered specialized nanosecond delay\n"
+    },
+    {
+      "arguments": [
+        "--archive",
+        "out/display-entry-boundary/return-aa9ec66",
+        "--map",
+        "out/display-entry-boundary/return-aa9ec66/DxeCore.map",
+        "--compare-a",
+        "out/display-entry-boundary/pre-entry-aa9ec66"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS rejection: removed StartImage call\nPASS rejection: corrupt GUID immediate\nPASS rejection: wrong checkpoint point\nPASS rejection: PcdDxe code change cannot hide behind debug GUID normalization\n"
+    }
+  ]
+}

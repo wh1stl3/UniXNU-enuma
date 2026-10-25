@@ -1,0 +1,146 @@
+{
+  "scope": "offline artifact, compiler and FD qualification; no execution",
+  "detail_point": 13,
+  "target_guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+  "firmware_commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
+  "image": "out/full-boot/transport/enuma-display-return-full-input-v3.img",
+  "image_sha256": "d716e159d6852b398d1b8a999b17852c4affd8318123cbd61e8afe27047f8304",
+  "image_bytes": 103817216,
+  "archive": "out/full-boot/transport/return-boundary-cb9e568",
+  "compiler_defines": {
+    "ENUMA_DIAG_STAGE": "0xd",
+    "ENUMA_DIAG_DETAIL_POINT": "0xd",
+    "ENUMA_DIAG_DELAY_US": "0x1e8480",
+    "ENUMA_DIAG_DISPATCH_ORDINAL": "0x1",
+    "ENUMA_DIAG_GUID_ENABLED": "0x1",
+    "ENUMA_DIAG_GUID_ONLY": "0x1",
+    "ENUMA_DIAG_GUID_LOW64": "0x4f7906c74138022f",
+    "ENUMA_DIAG_GUID_HIGH64": "0xe7a411b5337e949c",
+    "ENUMA_DIAG_DISPATCH_FALLBACK": "0x0",
+    "ENUMA_DIAG_GOP_QUERY": "0x0",
+    "ENUMA_RAM_PAYLOAD": "0x1"
+  },
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "ram_payload_bytes": 100663296,
+  "completion_fallback_enabled": false,
+  "semantic_delay_review": {
+    "mode": "constant_specialized_2x1s",
+    "microseconds": 2000000,
+    "nanosecond_calls": [
+      {
+        "rva": "0x1b7a0",
+        "branch": "bl",
+        "nanoseconds": 1000000000
+      },
+      {
+        "rva": "0x1b7b0",
+        "branch": "b",
+        "nanoseconds": 1000000000
+      }
+    ],
+    "callee_body": [
+      {
+        "rva": "0x1b790",
+        "mnemonic": "stp",
+        "operands": "x29, x30, [sp, #-0x10]!"
+      },
+      {
+        "rva": "0x1b794",
+        "mnemonic": "mov",
+        "operands": "x29, sp"
+      },
+      {
+        "rva": "0x1b798",
+        "mnemonic": "mov",
+        "operands": "w0, #0xca00"
+      },
+      {
+        "rva": "0x1b79c",
+        "mnemonic": "movk",
+        "operands": "w0, #0x3b9a, lsl #16"
+      },
+      {
+        "rva": "0x1b7a0",
+        "mnemonic": "bl",
+        "operands": "#0x1b6f0"
+      },
+      {
+        "rva": "0x1b7a4",
+        "mnemonic": "mov",
+        "operands": "w0, #0xca00"
+      },
+      {
+        "rva": "0x1b7a8",
+        "mnemonic": "movk",
+        "operands": "w0, #0x3b9a, lsl #16"
+      },
+      {
+        "rva": "0x1b7ac",
+        "mnemonic": "ldp",
+        "operands": "x29, x30, [sp], #0x10"
+      },
+      {
+        "rva": "0x1b7b0",
+        "mnemonic": "b",
+        "operands": "#0x1b6f0"
+      }
+    ]
+  },
+  "core_materialized_constants": {
+    "0x4f7906c74138022f": [
+      "0xf92c"
+    ],
+    "0xe7a411b5337e949c": [
+      "0xf94c"
+    ],
+    "0x1e8480": []
+  },
+  "files": {
+    "audit.json": {
+      "sha256": "a379d47582208e64bcf5eee48e1e3e2aa60f22c6679951a013d941e80f81c341",
+      "bytes": 4383
+    },
+    "build.json": {
+      "sha256": "c2382d15e8674f5ccdf21f13666ef02996f456e7f910ba4342fe10e975868d4f",
+      "bytes": 15204
+    },
+    "candidate.fd": {
+      "sha256": "50bba978359f56b9d1c55bcb83fc5d545879127f4feaf82da2d15e734a2bc815",
+      "bytes": 3145728
+    },
+    "candidate.img": {
+      "sha256": "d716e159d6852b398d1b8a999b17852c4affd8318123cbd61e8afe27047f8304",
+      "bytes": 103817216
+    },
+    "candidate.raw": {
+      "sha256": "3028f483ea58039b1d2bd3dc1221097422c39fb89b13fce9046eb4e916348b34",
+      "bytes": 3145920
+    },
+    "DxeCore.efi": {
+      "sha256": "17f706f4af6a568ea4a8807d0f83be144c6637e714a62c9133278bb8f323fa0f",
+      "bytes": 163840
+    },
+    "DxeCore.GNUmakefile": {
+      "sha256": "977ed587537f905c27f0d006b836c151650d6257350527bfd09166a2cea495c8",
+      "bytes": 51477
+    },
+    "DxeCore.map": {
+      "sha256": "7da17c9601f3fb82a941fb6049d7c11bd21e3f54d20b3d5735ca2086d1e43c67",
+      "bytes": 238714
+    },
+    "package.json": {
+      "sha256": "51f12d17d67e0b03daa2795434ab852134ced19ca8a75821e4ccdebf7852a4c7",
+      "bytes": 807
+    },
+    "payload.json": {
+      "sha256": "eb32ba24412013f715b4f1fb100969e2cbf6b3ad5682096dda2faebd69bd047e",
+      "bytes": 443
+    }
+  },
+  "limits": [
+    "constant construction and compiler flags do not prove complete runtime control flow",
+    "no current device identity/recovery checks or hardware authorization evaluation",
+    "completion fallback disabled; absence of return does not prove the selected driver was reached",
+    "preceding drivers can run hardware writes"
+  ]
+}

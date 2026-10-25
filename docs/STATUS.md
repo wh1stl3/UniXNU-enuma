@@ -1,11 +1,13 @@
-# 当前状态：D-177，S-002也超时，已人工恢复并独立核验
+# 当前状态：D-178，两次整链超时均已恢复，返回边界新候选离线就绪
 
-两份完整输入候选均已单笔尝试并消耗，不重试。S-001 d2ab5ef8…7e1db75：14:12:13发出、2.625秒命令返回0、5.110秒断开，75秒无返回，14:15:38人工恢复后独立核验通过。S-002 5e07e65e…77413327：14:29:26.342062发出、2.657秒命令返回0、5.125秒断开，同样75秒无Android/fastboot返回；32a3c63发布后才执行。
+S-001/S-002均已单笔超时并消耗，不重试。S-001于14:12:13发出，2.625秒命令返回/5.110秒断开、75秒无返回，14:15:38人工恢复后独立核验通过。S-002于14:29:26发出，2.657秒命令返回/5.125秒断开、75秒无返回，14:31:50人工恢复后独立enuma/完成/root/A槽/解锁/boot_a与vendor_boot_a设备备份SHA256一致。主录像450/451帧和恢复录像739/741帧均可解码；无可判读13项报告。
 
-S-002已停止追加、写consumed账本，用户报告Android返回后14:31:50独立核验enuma/完成/root/A槽/解锁/boot_a与vendor_boot_a设备备份摘要一致。恢复已确认，无当前按键待办；没有第三笔boot、flash/erase/改槽。主录像451/451帧可解码，未观察可判读13项报告；恢复录像独立保存。不从时间或黑屏判断执行阶段。
+只关闭显示线程没有带来可观察改善，降低该单一策略优先级，不能据此确认配置查询已执行或定位根因。两次失败和恢复均已落实并推送，停止追加同类整链黑屏尝试，改为缺少直接错误时的必要边界定位。本轮没有第三笔启动。
 
-新的结论是“只关闭显示线程没有带来可观察改善”，降低该单一策略为首要解法的置信度，不能宣称线程配置已修复或根因已定位。配置消费者/真实provider ABI、实际SEC TE值0和单变量源码差异仍是有效静态事实；运行时可能未到该查询，或旧代码本已清零。
+已实际构建新的完整输入返回边界镜像：d716e159d6852b398d1b8a999b17852c4affd8318123cbd61e8afe27047f8304，103817216字节，out/full-boot/transport/enuma-display-return-full-input-v3.img；FD50bba978359f56b9d1c55bcb83fc5d545879127f4feaf82da2d15e734a2bc815，归档return-boundary-cb9e568。仍同firmwarecb9e568/UniXNU5fdbd5d、96MiB真实FAT和display-thread0，只启用正确DisplayDxe GUID的CoreStartImage返回后point13门，completion fallback关闭。point13是任何返回，不是成功状态或SetMode结果。
 
-按恢复后继续工作规则，转入离线必要边界定位：保留同一96MiB真实FAT和当前显示线程0，不再盲调更多配置；准备正确DisplayDxe GUID、CoreStartImage返回后的边界候选，明确无completion fallback，避免把回退当命中。该候选用于没有直接错误时的必要隔离，不把孤立早停恢复为默认主线。此时尚未构建或执行新的边界镜像，后续先实际Core/map/编译宏和完整载荷资格。
+完整构建、32保留OEM PE/DEPEX、实际Core/map/GUID/调用顺序、SEC TE值0与AOSP真实FAT往返通过。无fallback时编译器把2秒延时专门化为两次1秒NanoSecondDelay；审核器逐条核固定callee形状，不跳过常量检查。错point/GUID/StartImage调用/纳秒参数、fallback或错误FAT负例拒绝，旧A/B审核回归通过。机器证据enuma-full-input-return-boundary/core/negative.json。
 
-当前firmwarecb9e568/UniXNU5fdbd5d；S-001结果和恢复保持在enuma-system-transport-result.json，S-002独立enuma-system-transport-S002-result.json。执行前32a3c63与此前恢复6b1e390均已推送。current.local.json已恢复完成，原失败result.json未改。board/plan内存字段/512MiB/verified与分区门禁保持；无新审批待办，用户上机无需逐笔批准授权不变，但不盲试或重试失败镜像。
+下一步入口：run_system_transport_trial.py --qualification reports/enuma-full-input-return-boundary.json 默认离线，仅加--execute才会先相机/已发布源/即时身份备份守卫后发一笔，仍沿用户无需逐笔批准授权。当前未执行新门；若未来有受控返回只支持门命中，不以耗时唯一证明；无返回不能证明目标已到达或DisplayDxe挂死。本定位是恢复完整链实修的必要支线，非默认无限早停路线。
+
+详见operations/2026-10-25-full-input-return-boundary.md；两次真实结果分别enuma-system-transport-result.json和enuma-system-transport-S002-result.json，current.local.json已恢复完成。当前无人工/批准待办，无未恢复硬停；不复活两份失败镜像。board/plan内存字段/512MiB/verified/分区规则不变，无flash/erase/改槽。root/PMGR/UFS/Data/实际GOP/XNU仍未闭合。执行前32a3c63与最新恢复f98a37f已推送，本轮离线候选发布以Git/远端核验为准。

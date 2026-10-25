@@ -85,8 +85,43 @@ def code_review(core, map_text, point):
             if operands[0].imm == symbols['MicroSecondDelay']:
                 values.append(current.get('w0', current.get('x0')))
             current.clear()
-    if comparisons != [low, high] or values != [2000000]:
-        raise ValueError('Compared GUID halves or target delay mismatch')
+    delay_contract = {'mode': 'explicit_microseconds', 'microseconds': 2000000}
+    if comparisons != [low, high]:
+        raise ValueError('Compared GUID halves mismatch')
+    if values != [2000000]:
+        # With the completion fallback removed, LTO can specialize the only
+        # MicroSecondDelay call: two exact 1-second NanoSecondDelay calls.
+        # Accept that concrete body only, never a missing immediate by itself.
+        if values != [None] or 'NanoSecondDelay' not in symbols:
+            raise ValueError('Target delay argument mismatch')
+        callee_start = symbols['MicroSecondDelay']
+        callee_end = min(v for v in symbols.values() if v > callee_start)
+        callee = [i for i in instructions if callee_start <= i.address < callee_end and i.id]
+        calls = []; constant = None
+        for ins in callee:
+            op = ins.operands
+            if ins.mnemonic == 'mov' and len(op) == 2 and ins.reg_name(op[0].reg) in ['w0', 'x0'] and op[1].type == capstone.arm64.ARM64_OP_IMM:
+                constant = op[1].imm & 0xffffffffffffffff
+            elif ins.mnemonic == 'movk' and len(op) == 2 and ins.reg_name(op[0].reg) in ['w0', 'x0'] and op[1].type == capstone.arm64.ARM64_OP_IMM and constant is not None:
+                shift = op[1].shift.value
+                constant = (constant & ~(0xffff << shift)) | ((op[1].imm & 0xffff) << shift)
+            elif ins.mnemonic in ['bl', 'b']:
+                if op[0].type != capstone.arm64.ARM64_OP_IMM or op[0].imm != symbols['NanoSecondDelay']:
+                    raise ValueError('Specialized delay calls an unexpected target')
+                calls.append({'rva': hex(ins.address), 'branch': ins.mnemonic, 'nanoseconds': constant})
+                constant = None
+            elif ins.mnemonic in ['stp', 'ldp']:
+                expected_frame = {'stp': 'x29, x30, [sp, #-0x10]!', 'ldp': 'x29, x30, [sp], #0x10'}
+                if ins.op_str != expected_frame[ins.mnemonic]:
+                    raise ValueError('Specialized delay uses an unexpected stack/memory operation')
+            elif ins.mnemonic == 'mov' and len(op) == 2 and ins.reg_name(op[0].reg) in ['x29', 'fp'] and ins.reg_name(op[1].reg) == 'sp':
+                pass
+            else:
+                raise ValueError('Unexpected specialized delay instruction: ' + ins.mnemonic + ' ' + ins.op_str)
+        if [c['nanoseconds'] for c in calls] != [1000000000, 1000000000] or [c['branch'] for c in calls] != ['bl', 'b'] or callee[-1].mnemonic != 'b':
+            raise ValueError('Specialized delay is not exactly two one-second calls')
+        delay_contract = {'mode': 'constant_specialized_2x1s', 'microseconds': 2000000,
+                          'nanosecond_calls': calls, 'callee_body': render(callee)}
     contexts = []
     for index, ins in enumerate(instructions):
         if not ins.id or ins.mnemonic != 'bl' or ins.operands[0].imm != begin:
@@ -108,6 +143,7 @@ def code_review(core, map_text, point):
     if len(contexts) != 1:
         raise ValueError('Expected one concrete checkpoint call site')
     return {'core_sha256': digest(core), 'point': point,
+            'delay_contract': delay_contract,
             'symbols': {name: hex(symbols[name]) for name in required},
             'checkpoint_body': render(body), 'callsites': contexts,
             'limits': ['fixed Core/map static checks only; no proof of hardware reaching or returning from the gate',

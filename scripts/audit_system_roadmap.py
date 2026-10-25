@@ -118,6 +118,24 @@ def main():
             'image_bytes': transport['image_bytes'], 'batch_stages': 13,
             'scope': 'actual compiled and packaged driver, offline qualified; runtime FDT/SFS not observed'}
         report['firmware_initrd_publisher'] = 'implemented and offline-qualified; runtime discovery remains open'
+    boundary_path = ROOT / 'reports/enuma-full-input-return-boundary.json'
+    if boundary_path.exists():
+        boundary = json.loads(boundary_path.read_text())
+        candidate = ROOT / boundary['image']
+        if hashlib.sha256(candidate.read_bytes()).hexdigest() != boundary['image_sha256']:
+            raise ValueError('full-input return boundary image changed')
+        report['full_input_return_boundary'] = {
+            'image_sha256': boundary['image_sha256'], 'ram_payload_bytes': boundary['ram_payload_bytes'],
+            'detail_point': boundary['detail_point'], 'completion_fallback_enabled': boundary['completion_fallback_enabled'],
+            'scope': 'offline necessary isolation candidate; not a third device trial'}
+    report['device_activity_scope'] = 'new_device_trials/device_writes describe this offline auditor only; actual trial results are separate'
+    report['actual_trial_results'] = {}
+    for name in ['enuma-system-transport-result.json', 'enuma-system-transport-S002-result.json']:
+        result_path = ROOT / 'reports' / name
+        if result_path.exists():
+            trial = json.loads(result_path.read_text())
+            report['actual_trial_results'][name] = {k: trial.get(k) for k in
+                ['phase', 'candidate_sha256', 'candidate_consumed', 'report_stages_observed']}
     report['next_work_order'] = [
         'provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging',
         'observe the 13-stage transport batch in one controlled full-input trial once error output and recovery gates are met',

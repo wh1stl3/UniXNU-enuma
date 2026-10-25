@@ -1,9 +1,9 @@
-# enuma交接：D-177，两份整链候选均已恢复，转离线边界定位
+# enuma交接：D-178，两次整链已恢复，完整输入返回边界候选离线就绪
 
-先读AGENTS/STATUS/D-177和两份实测专项。S-001 d2ab5ef8…7e1db75与S-002 5e07e65e…77413327均已单笔75秒无返回并consumed；分别14:15:38和14:31:50独立Android完成/root/A槽/解锁/原boot/vendor_boot摘要核验通过。无需再问恢复或批准，禁止重试两份失败镜像。
+先读AGENTS/STATUS/D-178及operations/2026-10-25-full-input-return-boundary.md。用户要完整链/真实报错/同次多点，并已明确上机无需逐笔批准；实际两次整链都75秒无返回，均人工恢复并独立完成/root/A槽/解锁/原boot与vendor_boot摘要核验通过。S-001 d2ab5ef8…7e1db75和S-002 5e07e65e…77413327均consumed，禁止重试；最后核验14:31:50，无人工或批准待办。
 
-用户要求完整链/同次多点/上机无需逐笔批准；但两次无可判读报告后不能继续盲调配置。S-002只改显示线程0，真实consumer/provider ABI及实际SEC TE值0已证实，仍未带来可观察改善。不要宣称线程策略修复了问题或已排除根因，也不从黑屏/USB/耗时定执行阶段。
+关闭显示线程单一策略没有可观察改善；别从黑屏/时间/USB定位阶段。停止追加同类整链黑屏尝试，现准备必要返回边界定位，仍带相同96MiB FAT/display-thread0。源码firmwarecb9e568/UniXNU5fdbd5d，stage13/detail13/正确GUID-only/fallback0。镜像103817216字节，SHA256 d716e159d6852b398d1b8a999b17852c4affd8318123cbd61e8afe27047f8304，归档out/full-boot/transport/return-boundary-cb9e568。没有第三笔boot。
 
-按恢复后持续工作规则继续离线准备必要边界候选：完整96MiB FAT/当前cfg0保留，只在正确DisplayDxe CoreStartImage返回后使用已有精确GUID门，禁completion fallback混淆；目前新边界候选尚未构建。先实际Core/map/编译宏/打包资格，不把低带宽探针恢复成默认主线，目的只是没有直接错误时定位下一处修复。
+实际Core/map/GUID/调用顺序/SEC TE/原厂PE/AOSP资格完成。LTO延时专门化为两个1秒NanoSecondDelay，审核精确callee形状并有参数篡改拒绝；旧A/B及point/fallback/FAT负例回归通过。point13是任何CoreStartImage返回，不是成功或SetMode。受控返回仅支持门命中，未返回不证明目标曾到达。
 
-firmwarecb9e568/UniXNU5fdbd5d，执行前32a3c63已推送；S-002独立机器结果enuma-system-transport-S002-result.json，失败result保留，current.local已恢复。board/plan内存字段/512MiB/verified/分区规则不变，旧R-016/B/R-002/R-015限制保持。没有第三笔boot或当前人工待办，后续以STATUS和消耗账本为准。
+下一步用run_system_transport_trial.py --qualification reports/enuma-full-input-return-boundary.json离线检查；未来具备已发布源/即时设备备份/相机恢复条件时可加--execute直接单笔，不需再批准。此为无直接错误时必要支线，不恢复无限早停。任何超时先停止追加/恢复/同轮文档，恢复后自动离线分析。board/plan内存字段/512MiB/verified/分区规则及旧R-016/B/R-002/R-015限制保持；不声称GOP/XNU/iPadOS运行通过。

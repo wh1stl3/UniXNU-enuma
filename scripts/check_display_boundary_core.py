@@ -42,6 +42,18 @@ def main():
             print('PASS rejection: ' + name)
         else:
             raise AssertionError('Accepted corrupted boundary input: ' + name)
+    delay = valid.get('delay_contract', {})
+    if delay.get('mode') == 'constant_specialized_2x1s':
+        immediate = next(i for i in delay['callee_body'] if i['mnemonic'] == 'mov' and i['operands'].startswith('w0, #'))
+        bad_delay = bytearray(core)
+        offset = pe.get_offset_from_rva(int(immediate['rva'], 16))
+        struct.pack_into('<I', bad_delay, offset, struct.unpack_from('<I', bad_delay, offset)[0] ^ (1 << 5))
+        try:
+            code_review(bytes(bad_delay), map_text, point)
+        except ValueError:
+            print('PASS rejection: altered specialized nanosecond delay')
+        else:
+            raise AssertionError('Accepted an altered specialized delay')
     if args.compare_a:
         from audit_display_handoff import firmware_files
         from audit_display_boundary_core import codeview_guid_only

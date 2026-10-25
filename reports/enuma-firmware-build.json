@@ -69,16 +69,16 @@
       "MEMORY_PROTECTION": "TRUE",
       "SHIP_MODE": "FALSE",
       "BUILDID_STRING": "enuma-research",
-      "ENUMA_DIAG_STAGE": "0",
+      "ENUMA_DIAG_STAGE": "13",
       "ENUMA_DIAG_DELAY_US": "2000000",
       "ENUMA_DIAG_DISPATCH_ORDINAL": "1",
       "ENUMA_DIAG_DETAIL_POINT": "13",
-      "ENUMA_DIAG_GUID_ENABLED": "0",
-      "ENUMA_DIAG_GUID_LOW64": "0",
-      "ENUMA_DIAG_GUID_HIGH64": "0",
+      "ENUMA_DIAG_GUID_ENABLED": "1",
+      "ENUMA_DIAG_GUID_LOW64": "0x4f7906c74138022fULL",
+      "ENUMA_DIAG_GUID_HIGH64": "0xe7a411b5337e949cULL",
       "ENUMA_DIAG_DISABLE_UFS": "1",
       "ENUMA_DIAG_SIMPLEFB": "0",
-      "ENUMA_DIAG_GUID_ONLY": "0",
+      "ENUMA_DIAG_GUID_ONLY": "1",
       "ENUMA_DIAG_DISPATCH_FALLBACK": "0",
       "ENUMA_DIAG_GOP_QUERY": "0",
       "ENUMA_DIAG_GOP_STEP": "0",
@@ -97,7 +97,7 @@
       "ENUMA_VALUE_SHIFT": "0"
     }
   },
-  "diagnostic_stop_stage": 0,
+  "diagnostic_stop_stage": 13,
   "diagnostic_delay_seconds": 2,
   "diagnostic_dispatch_ordinal": 1,
   "archive_sha256": {
@@ -105,8 +105,8 @@
     "mu-basecore.tar.gz": "fddef5a195e8b947579e35726830cfb72ae562a877f77854280d6d6ce3e9d826"
   },
   "diagnostic_detail_point": 13,
-  "diagnostic_dispatch_guid": null,
-  "diagnostic_dispatch_guid_only": false,
+  "diagnostic_dispatch_guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+  "diagnostic_dispatch_guid_only": true,
   "diagnostic_dispatch_completion_fallback": false,
   "diagnostic_dispatch_completion_delay_seconds": null,
   "diagnostic_omitted_oem_modules": [
@@ -140,7 +140,7 @@
     }
   ],
   "fd_exists": true,
-  "fd_sha256": "43f18cd3e9355ea802822831060f2437d7d694750a1a6f897e5c4299cb357808",
+  "fd_sha256": "50bba978359f56b9d1c55bcb83fc5d545879127f4feaf82da2d15e734a2bc815",
   "source_inputs_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": "e2266d85a2783685525c6cea98ea490c19d9bea9b94c9945259cc4768bc2109f",

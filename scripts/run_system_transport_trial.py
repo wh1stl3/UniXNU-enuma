@@ -22,8 +22,16 @@ def write(path, data):
     path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
 
 
-def qualification(published=False):
-    q = json.loads((ROOT / 'reports/enuma-ram-payload-qualification.json').read_text())
+def qualification(published=False, report=None):
+    report = (report or ROOT / 'reports/enuma-ram-payload-qualification.json').resolve()
+    if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
+        raise ValueError('qualification must stay inside repository out/ or reports/')
+    q = json.loads(report.read_text())
+    if 'detail_point' in q:
+        fat = json.loads((ROOT / 'reports/enuma-full-payload.json').read_text())
+        if (q['detail_point'] != 13 or q['target_guid'] != '4138022f-06c7-4f79-9c94-7e33b511a4e7'
+                or q.get('completion_fallback_enabled') is not False or q.get('ram_payload_sha256') != fat['payload_sha256']):
+            raise ValueError('boundary mode requires exact DisplayDxe return, full FAT and no fallback')
     pin = json.loads((ROOT / 'config/uefi-source.lock.json').read_text())
     if q['firmware_commit'] != pin['commit']:
         raise ValueError('qualification differs from current firmware pin')
@@ -55,9 +63,10 @@ def main():
     mode = p.add_mutually_exclusive_group()
     mode.add_argument('--camera-check', action='store_true')
     mode.add_argument('--execute', action='store_true')
+    p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback boundary qualification; defaults to full-chain report')
     a = p.parse_args()
     if not a.camera_check:
-        q, image = qualification(a.execute)
+        q, image = qualification(a.execute, a.qualification)
         if not a.execute:
             print('PASS: qualified full-input candidate; offline only, no camera/device operation')
             return
@@ -87,8 +96,9 @@ def main():
         writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*'MJPG'), 5, (w, h))
         if not writer.isOpened(): raise RuntimeError('video writer failed; no device command issued')
         log = (out / 'runner.log').open('w', encoding='utf-8')
+        label = 'dxe-driver-return' if 'detail_point' in q else 'system-transport'
         process = subprocess.Popen([sys.executable, '-X', 'utf8', '-u', '-B', str(ROOT / 'scripts/run_enuma_entry_probe.py'),
-                                    '--image', str(image), '--label', 'system-transport'], cwd=ROOT,
+                                    '--image', str(image), '--label', label], cwd=ROOT,
                                    stdout=log, stderr=subprocess.STDOUT)
         report['device_runner_started'] = True
         start = time.monotonic(); last = -1; finished = None; times = []
