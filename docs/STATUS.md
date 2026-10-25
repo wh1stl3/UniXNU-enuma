@@ -1,13 +1,15 @@
-# 当前状态：D-173，S-001整链单笔已准备，执行前发布
+# 当前状态：D-174，S-001已超时，停止追加并等待恢复核验
 
-用户明确“继续 上机无需批准”，本轮已授权条件满足后直接临时boot，无需再问。修复报告错误路径，完成新候选完整构建/实际PE/打包资格；相机已恢复，当前尚未发出启动命令。将先发布本轮全部文档和runner，再执行一笔完整输入试启动。
+S-001已按用户“上机无需批准”执行一笔临时boot。2026-10-25 14:12:13.335723（Asia/Shanghai）发出镜像d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75；命令2.625秒返回0、5.110秒观察fastboot断开，命令返回后75秒没有Android/fastboot返回，runner退出2并标manual-recovery-needed。停止追加启动，候选已写consumed账本，禁止原样重试。
 
-firmware固定945942685770eb7200ac2a6551cd3ee5aa554b61并已推送；FD cb24c8f14dd19fba1e759301efbb8003d433cccd243f5a0fb087e6641a27dc09。103817216字节镜像out/full-boot/transport/enuma-system-transport-visible-v3.img，SHA256 d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75；独立资格归档qualified-9459426。旧698b7c1只保留历史，未上机。
+当前目标未枚举于ADB/fastboot，Android状态未确认；已请求用户沿此前成功路径长按电源恢复，正在采集恢复画面并监测。尚未独立确认恢复，不能写回Android或原分区摘要未变。没有发送flash/erase/改槽或额外boot。
 
-报告缺失/版本/文件/阶段失败统一先释放Map并flush再返回，13项放同屏行0..12，保留2秒后继续真实启动链。ASan/UBSan生产尾部故障注入、完整UEFI、32个保留OEM PE/DEPEX及实际PE/编译宏/常量/写保护代码、AOSP真实96MiB FAT往返通过。2秒是拍屏间隔，不是复位/阶段编码。runtime FDT/SFS、GOP可见输出、XNU/Hello仍未实证。
+相机主录像450帧均可解码，抽样看到黑屏，没有可判读UEFI/13项报告；全段画面复核待做，13项均未观察。不能用发送成功、断开或耗时认定已进入UEFI/BDS/XNU，不能把黑屏定案为DisplayDxe挂死。
 
-本轮只读复核确认Android完成/root/A槽/解锁与boot_a/vendor_boot_a设备和备份摘要一致。摄像头最初不可用，未发设备动作；用户连接后14:06:59采集恢复，1920x1080 OsmoAction5pro画面原图/旋转图可见Android。采集阻断已解除。新runner默认离线，执行前检查两仓已发布、资格与未消耗候选，先开相机再由原runner即时核设备并临时boot；75秒命令后观察，240秒总相机上限，无自动返回保证。超时/采集失联停止追加并优先恢复，按既有长按电源路径核Android/root/原摘要；恢复后自动继续离线分析，不原样重试。
+执行前0fb21cc已推送且两仓clean/远端相等，firmware9459426；新候选完整离线资格保持。父仓新wrapper先开启相机，再复用原守卫检查即时enuma/root/A槽/解锁及两份设备/备份摘要；camera并未丢失，触发的是实际75秒无返回硬停。规则来源AGENTS有界临时boot异常停止追加、恢复优先及同轮落实文档；无需再批准恢复或后续合规新候选。
 
-专项operations/2026-10-25-system-transport-trial.md，证据enuma-payload-report-flow.json、enuma-system-trial-preflight.json、enuma-system-trial-camera.json和新资格报告。计划同一候选检查13项；缺乏实际文本时只记未观察，USB/时间不替代日志。当前无按键动作待办，没有未解决硬停。
+证据out/device-tests/20261025T141158-system-transport、out/camera-capture/20261025T141155-system-transport（主录像/原图/旋转图）、reports/enuma-system-transport-result.json。恢复录像独立进行，按键若未拍到不推断。恢复后立即独立核Android完成/root/A槽/解锁/boot和vendor_boot摘要，再自动继续离线隔离与构建新软件，不重试失败镜像。
 
-UniXNU仍5fdbd5d，board仍example=true，512MiB请求和board/plan内存字段未改，无新增verified/flash/erase/改槽/像素探针；R-016 consumed、B备用、R-002失败/R-015暂停保持。本轮之前1f9088c已推送；新执行前发布号以Git和远端核验为准，S-001执行后同轮更新结果与恢复状态。
+已完成：9459426报告失败路径cleanup/flush修复、生产BDS尾部故障注入和完整构建/实际PE/AOSP96MiB FAT资格，以及S-001单笔执行。未完成：13项运行状态、可见错误、恢复核验、XNU/PMGR/UFS/root/Data。board/plan内存字段与512MiB请求未改，无新增verified；R-016仍consumed、旧B备用、R-002失败/R-015暂停不复活。
+
+当前唯一优先事项是恢复；没有追加候选或源码硬件操作计划。结果与恢复改变后同轮刷新本文件/交接/审查/人工及发布记录。

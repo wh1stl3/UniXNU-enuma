@@ -362,3 +362,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-25 · D-172：固件01ffaec实现运输/13项报告，336760b统一LF，首轮preflight拒绝DSC补丁上下文后698b7c1修复并完整构建通过，已推送固件main。enuma-abl-v3-concat实际PE原长推进及NOP负例通过；host transport ASan/UBSan正负例通过。FD5a031cd8…1e13f68，32个OEM PE/DEPEX保持仅省略UFS；实际driver/probe宏/PE数组/写保护代码和FAT boot-v3往返通过。103817216字节镜像194fa0f2…00f8b9e独立归档qualified-698b7c1。本次续接核验构建complete=true与归档；无设备动作/新硬停、内存字段/verified/分区变更。同步全部当前文档及AGENTS批量验证偏好，设备发布号以Git后续记录。
 
 2026-10-25 · 前轮1f9088c已推送。D-173重新只读核Android/root/A槽/解锁及两分区设备/备份摘要通过；相机最初不可用，用户连接后14:06:59成功采集。发现报告失败早退绕过cache flush，固件9459426修复并推送，生产尾部故障注入与完整构建/实际PE/AOSP资格通过；镜像d2ab5ef8…7e1db75、归档qualified-9459426。被测payload尾部与staging相等，staging多出的既有SimpleFb保护受实际宏0关闭。新增单笔相机wrapper、记录无需逐笔批准授权并同步全部当前文档；此条为执行前，尚未boot，发布号以Git后续记录。
+
+2026-10-25 14:12:13 · 执行前0fb21cc已推送。S-001镜像d2ab5ef8…7e1db75单笔boot，命令2.625秒返回0、断开5.110秒；75秒无返回，runner退出2，停止追加并consumed。450/450帧可解码，未观察可判读报告。证据out/device-tests/20261025T141158-system-transport、out/camera-capture/20261025T141155-system-transport及enuma-system-transport-result.json。已请求长按恢复并启动恢复录像；当前ADB/fastboot未枚举，恢复核验待完成，所有当前文档同步D-174。无flash/erase/改槽。

@@ -1,0 +1,23 @@
+{
+  "phase": "manual-recovery-needed",
+  "candidate_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
+  "issued_at_utc": "2026-10-25T06:12:13.335723+00:00",
+  "boot_returncode": 0,
+  "boot_command_return_seconds": 2.625,
+  "fastboot_disconnect_observed_seconds": 5.11,
+  "fastboot_return_seconds": null,
+  "adb_return_seconds": null,
+  "boot_complete_seconds": null,
+  "partition_writes": false,
+  "scope": "S-001 actual single temporary boot; timeout, recovery pending",
+  "device_evidence": "out/device-tests/20261025T141158-system-transport",
+  "camera_evidence": "out/camera-capture/20261025T141155-system-transport",
+  "camera_frames": 450,
+  "camera_decoded_frames": 450,
+  "target_online": {
+    "adb": false,
+    "fastboot": false
+  },
+  "report_stages_observed": [],
+  "no_stage_inference_from_timing": true
+}

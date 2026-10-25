@@ -522,3 +522,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-25 · D-172：用户推进boot v3运输并要求尽量一次验证多个点。复用umi只读BlockIO/FDT模式和本机既有Kernel映射，实际ABL PE确认原长vendor推进后接generic；runtime仍须范围/前缀/BPB/完整FAT检查。新增13项同次报告，SFS/文件延后BDS，失败停依赖项，payload模式移除60秒暂停。firmware698b7c1完整构建及实际PE/编译宏/常量/写保护机器码资格、AOSP真实96MiB FAT打包往返通过，镜像194fa0f2…00f8b9e；host ASan/UBSan正负例通过。CRC只作传输损坏检查。未上机，输出可见性/FDT/SFS、PMGR/UFS/root/Data仍未闭合；无新映射/内存字段/verified/分区或硬停。详见operations/2026-10-25-boot-v3-payload-transport.md。
 
 2026-10-25 · D-173：用户明确上机无需批准，满足资格/发布/身份/备份/采集/恢复后直接单笔临时boot。9459426修复payload失败绕过cache flush/Map清理，13行同屏并展示2秒再继续；主机生产尾部故障注入及完整构建/实际PE/AOSP资格通过，新镜像d2ab5ef8…7e1db75。初始相机未枚举而未发设备动作，用户连接后14:06:59采集恢复。S-001发布后由新相机wrapper执行一笔，75秒观察/240秒总上限不构成自动返回保证；异常停止追加、恢复核验后继续离线，无内存字段/verified/分区扩张。
+
+2026-10-25 · D-174：0fb21cc发布后S-001单笔于14:12:13发出，2.625秒命令返回0、5.110秒fastboot断开，命令后75秒无Android/fastboot返回，执行端标manual-recovery-needed并停止追加。相机450/450帧可解码，抽样黑屏，无可判读报告，13项均未观察，不认定DisplayDxe/UEFI/XNU阶段。候选consumed，不重试；请求既有长按恢复、独立核验后自动离线分析。当前恢复未确认，按AGENTS同轮落实所有停点文件。
