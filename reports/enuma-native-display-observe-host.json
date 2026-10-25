@@ -1,6 +1,6 @@
 {
   "scope": "unbound pure callback observer; synthetic host inputs only",
-  "result": "PASS: 48 observation/boundary cases; <=26 reads, two100ms waits, inactive-frame suppression, no eligibility relaxation",
+  "result": "PASS: 48 observation/boundary and 257 integrated zero-ready cases; <=26 reads, two100ms waits, inactive-frame suppression, no eligibility relaxation",
   "host_command": [
     "clang",
     "-std=c11",
@@ -38,8 +38,9 @@
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c": "6fdafa2d9833fe44926efe692ea3e6db1bc68f345828b61ffcdbdcca52ed51fc",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.h": "0b3bed21b26eaeefc66b8ac174057713795c0910cb875c21c74e1fc016ae0b07",
-    "tests/native_observe.c": "921dc5113f009410147fc2fdafc0c71698cb747fe01d4c1fb07321f6d455c764",
-    "scripts/check_native_display_observe.py": "b20a29a093a3bb816f876c85220b167105e02a1ea11f653459228abbd0e0748b"
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "63ab286705d8bfc270ba88c14185dfd1a2f81508672eadda07e7673f3033b783",
+    "tests/native_observe.c": "74e825cc2f8545c65434c3c14902709488ca200d82d83ff71c3e80db86cecafb",
+    "scripts/check_native_display_observe.py": "ecd623154328243902c607dc2d33ee845e4e92e940e16871a84555083f4e6d42"
   },
   "maximum_reads": 26,
   "maximum_waits": 2,

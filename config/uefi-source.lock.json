@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "9600b1900d4b175cedb4158c1b53cd6b21d3044c",
+  "commit": "5712c00bbd48947b8e5b1db2c610c04890511e21",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -21,7 +21,7 @@
     "Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "Resources/Enuma/extensions.json": "028e8d974e09905f099083a6c0e3725f337c10d4b4355a6ed7562d367099761c",
+    "Resources/Enuma/extensions.json": "0d8be79fb0279b3cc56958e18a7a6b907bc968a1ed1fc0127b0ff5706957f400",
     "Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "Resources/Enuma/migration.json": "c88527b44a775de5e04b8964160b91284a2b9793e85b4ab93d6b2228e23c8103",
     "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
@@ -31,7 +31,7 @@
     "Resources/Scripts/mkbootimg.py": "55037fd1a6d6cd861add76c2083d5d4321373bf714acae3f6a40deb004c27d47",
     "THIRD-PARTY.md": "281c9bfda789b6251021fc1e76039a6677f2178ab121aefeef8a7bd898833126",
     "diagnostics/EnumaDispatchCheckpoint.h": "123a723027de167c8fa5d2ce8de2d5716c663b0518f16139a6e8b6fdf683836d",
-    "diagnostics/EnumaDispatchDetailCheckpoint.h": "203bb325dd43d41e4cb1d7ceb0c2667382ef51191f6f1c8711b7cec909f01f28",
+    "diagnostics/EnumaDispatchDetailCheckpoint.h": "4a9b1abb683d2f84e20db855380e76ff1aa217e026ba6ff6d19afdd3c6319d6c",
     "diagnostics/EnumaStageCheckpoint.h": "bb6f9bdb7a4d0dc2206fb595e63ff1718933868f61265dfc89ebf9867c5645b0",
     "docs/diagnostic-without-ufs.md": "3d0bcca5322b8c35855de24c216aed1340ccd3947a9a601f5ab72fc35f5f2041",
     "docs/dispatch-details.md": "c9461ac63d3085a4fc15cba5ff1a81d2b3b827b48a98463608b1e5827a287312",
@@ -59,7 +59,7 @@
     "patches/simplefb-gop-query.patch": "3a013d8dabf37263db1c1c6b03b34c81d12aeaaf067386e6577928a9fc493071",
     "docs/gop-query.md": "c5e24e1a9b1681d3d7cf460ad01c2f885caa0f98ac363a8c7195ce838dabe378",
     "diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184",
-    "Resources/Scripts/build_enuma_firmware.py": "1573bdc926ac9fb6cb82a1e891ff4162ed6d316968329d951873554271835e77",
+    "Resources/Scripts/build_enuma_firmware.py": "311097fc0610815c80311b4630a08c77df6d3815f654f2c5127bd69cdf024c37",
     "Resources/Scripts/enuma_firmware_preflight.py": "eb9af118480cf90166854337ed76cf850485b6e2f890e592ed7a339fbc39521a",
     "diagnostics/EnumaScanoutAudit.h": "8f49f8c27f1211be834e77e2a79a056010d2de0e637f02f82f6b7bd3464ff702",
     "patches/display-mdp-map.patch": "5aa0f4e584349354000c50a181fb7a0aa31c43b1f4128a72bc35469e90fd14b4",
@@ -114,9 +114,9 @@
     "diagnostics/EnumaRamoopsReadCheckpoint.h": "b0a6b246596e8f8c7f8d8b9d8d9abbc4bc182371123f661fe281cf1cfaee7451",
     "diagnostics/EnumaRamoopsWarmCheckpoint.h": "e3079f8903d24ffa64996ae61464467f6f1238dc20d57b7c8ea7a7f61133669c",
     "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.h": "0b3bed21b26eaeefc66b8ac174057713795c0910cb875c21c74e1fc016ae0b07",
-    "docs/native-display-observe.md": "55a54c1e9eb6e4a44f0deb8c912a38e1eddab2140983c5a2e777013572892a5c",
+    "docs/native-display-observe.md": "ce0a0fc3e3b21cca3b5bcfa5f1721cc9649c4ee4b1b50464829480fc07e0a4af",
     "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c": "6fdafa2d9833fe44926efe692ea3e6db1bc68f345828b61ffcdbdcca52ed51fc",
-    "diagnostics/EnumaNativeObserve.c": "774b09793a064ca37c3f5de5ba154aebdad7ed7cd467d7f16397d3402064a7f4",
-    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "05df09a07050b7dee4dd4f98929253f450fbe4547e4888bdc748dc1e78ebd67b"
+    "diagnostics/EnumaNativeObserve.c": "fd92e784c1a09cee63e62ea2e48dd98775c9f389f10fd88d50f05c50bb3d488f",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "63ab286705d8bfc270ba88c14185dfd1a2f81508672eadda07e7673f3033b783"
   }
 }

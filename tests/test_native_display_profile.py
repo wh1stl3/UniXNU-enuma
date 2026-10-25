@@ -23,7 +23,7 @@ class NativeProfileTests(unittest.TestCase):
                    terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False})
             for key,bad in [('native_query',True),('native_control',True),('boot_clock_capture',False),
                             ('maximum_reads',27),('maximum_wait_calls',3),('pixel_access',True),
-                            ('native_mask_field',True),('native_mask_field',7),
+                            ('native_mask_field',True),('native_mask_field',8),
                             ('terminal_return',{'code_delays_seconds':[2,7,12,17,27],'completion_fallback':False})]:
                 with self.subTest(key=key),patch.object(runner,'ROOT',root):
                     changed={**q,key:bad};report.write_text(json.dumps(changed));(archive/'qualification.json').write_text(json.dumps(changed))

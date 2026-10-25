@@ -23,12 +23,12 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p){uint64_t v;memcpy(&v,p
     cmd=['clang','-std=c11','-O1','-Wall','-Wextra','-Werror','-fsanitize=address,undefined','-fno-pie','-no-pie',
          '-I'+str(out),'-I'+str(lib),'-DENUMA_DIAG_STAGE=13','-DENUMA_DIAG_DETAIL_POINT=16','-DENUMA_DIAG_DELAY_US=2000000',
          '-DENUMA_DIAG_DISPATCH_ORDINAL=3','-DENUMA_DIAG_GUID_ENABLED=1','-DENUMA_DIAG_GUID_ONLY=1',
-         '-DENUMA_DIAG_GOP_QUERY=1','-DENUMA_VIDEO_TERMINAL=1','-DENUMA_DIAG_DISPATCH_FALLBACK=0','-DENUMA_NATIVE_MASK_FIELD=6',
+         '-DENUMA_DIAG_GOP_QUERY=1','-DENUMA_VIDEO_TERMINAL=1','-DENUMA_DIAG_DISPATCH_FALLBACK=0','-DENUMA_NATIVE_MASK_FIELD=7',
          '-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL','-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL',
          '-DDETAIL_HEADER="'+str(h)+'"',str(ROOT/'tests/native_mask_terminal.c'),'-o',str(out/'test')]
     subprocess.run(cmd,check=True);result=subprocess.check_output([str(out/'test')],text=True).strip()
     invalid=[]
-    for flag,value in [('ENUMA_NATIVE_MASK_FIELD',7),('ENUMA_VIDEO_TERMINAL',0),('ENUMA_DIAG_GOP_QUERY',2),('ENUMA_DIAG_GUID_ONLY',0),('ENUMA_DIAG_DISPATCH_FALLBACK',1)]:
+    for flag,value in [('ENUMA_NATIVE_MASK_FIELD',8),('ENUMA_VIDEO_TERMINAL',0),('ENUMA_DIAG_GOP_QUERY',2),('ENUMA_DIAG_GUID_ONLY',0),('ENUMA_DIAG_DISPATCH_FALLBACK',1)]:
         bad=[('-D'+flag+'='+str(value)) if v.startswith('-D'+flag+'=') else v for v in cmd]
         p=subprocess.run(bad,capture_output=True,text=True)
         if p.returncode==0:raise ValueError('invalid selector accepted '+flag)

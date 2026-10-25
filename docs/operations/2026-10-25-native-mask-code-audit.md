@@ -32,3 +32,11 @@ The helper tail shifts by0x30. Byte comparison differs only at helper offset0x54
 ## S-027 field2 on9600b19
 
 Current-source `qualified-native-mask-9600b19-field2` retains the same Core PE as S-026. Relative to independently reviewed S-023 provider, full executable disassembly differs only at RVA14d4: offset0xda0 becomes0xda4, selecting TimingStableMask at observation offset0x74. Reviewed full disassembly digest `4c4ea0a70b7a3f53a3ee7be2678a3db2968b6f0da58fecda606f30916c537277`. Mask requires every sample nonzero AND equality between windows; rejection alone cannot distinguish zero from changing timing. The older2bb165f field2 remains unissued, distinct from this newly pinned candidate.
+
+## S-028 zero-Timing runtime conjunction
+
+Source5712c00, archive `qualified-native-mask-5712c00-field7`; full reviewed disassembly digest `fdeca59205a792732c61ac82130d422d2a360c92126cd76d733ab34a08dd762c`. Core executable sections remain byte-identical to S-023; whole-PE hash differs. Provider entry1050..1580 was reviewed independently, including exact metadata1110..118c, revision/count bounds11ac..11e8 and1468..14a0, two100000us waits1224..1274, STATUS-before-FRAME1338..1370, three-sample loop1218..1464 and unchanged independent comparisons.
+
+Completed observation copy14a4..14cc precedes three mask loads14d4/14e4/14f4 (ActiveThroughout/EnableStable/Moving), each<=3. AND1524/152c combines them. The bounded2-interface loop153c and3-sample loop1550 read only observation RAM: starting4d34, interface stride0x10, sample stride0x24, stop at0x6c. Any nonzero Timing clears that interface bit;157c returns mask+1. Failures return5 at1500. No extra MMIO, wait, GOP or pixel access.
+
+Read helper15f4..1678 retains26-read cap and exact R-004 offset allowlist, with only a load from accepted MMIO. Helper tail shifts by0x6c; byte differences only at offsets0x54 (BL still CpuPause1038),0xaac and0xadc (ADRP still targets3000 after crossing code-page boundary). Other helper bytes equal S-023. Tests:504 terminal,53 individual,521 combined,525 zero-ready selector cases;48 original collector boundary and257 actual-collector/selector integration cases, ASan/UBSan; collector AArch64 object has no undefined helpers.

@@ -3,14 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 #include "NativeObserve.h"
-typedef struct { unsigned Reads,Waits,Fail,FailWait,Enable,Inactive,Stop,Wrap,Jump,TimingChange,EnableChange,RevisionChange,ZeroTiming,BadRevision; int FailCode; } MODEL;
+#include "NativeMaskResult.h"
+typedef struct { unsigned Reads,Waits,Fail,FailWait,Enable,Inactive,Stop,Wrap,Jump,TimingChange,EnableChange,RevisionChange,ZeroTiming,BadRevision,ZeroTimingMask; int FailCode; } MODEL;
 static int read_reg(void *Ctx,unsigned Offset,unsigned *Value) {
   MODEL *M=Ctx;unsigned I,B;
   if(++M->Reads==M->Fail) { return M->FailCode; }
   if(!Offset) { *Value=M->BadRevision?0x50000000:0x60000000+(M->RevisionChange&&M->Waits==2); return 1; }
   for(I=0;I<2;I++) {
     B=0x6b800+I*0x800;
-    if(Offset==B) { *Value=M->ZeroTiming?0:1+(M->TimingChange&&M->Waits&&I==1); return 1; }
+    if(Offset==B) { *Value=(M->ZeroTiming||(M->ZeroTimingMask&(1u<<I)))?(M->TimingChange&&M->Waits&&I==1?1:0):1+(M->TimingChange&&M->Waits&&I==1); return 1; }
     if(Offset==B+0xa8) { *Value=M->Enable+(M->EnableChange&&M->Waits&&I==1); return 1; }
     if(Offset==B+0x26c) { *Value=(M->Inactive&(1u<<I))?0:1; return 1; }
     if(Offset==B+0xac) {
@@ -43,5 +44,17 @@ int main(void) {
   assert(EnumaObserveNativeVideo(read_reg,wait_window,&M,0)==EnumaInheritedArguments);Cases++;
   M=(MODEL){.BadRevision=1};O=Old;assert(EnumaObserveNativeVideo(read_reg,wait_window,&M,&O)==EnumaInheritedRevision&&M.Reads==1&&M.Waits==0&&!memcmp(&O,&Old,sizeof(O)));Cases++;
   for(int Code=-1;Code<=2;Code+=3) { M=(MODEL){.Fail=5,.FailCode=Code};O=Old;assert(EnumaObserveNativeVideo(read_reg,wait_window,&M,&O)==EnumaInheritedBounds&&M.Reads==5&&!memcmp(&O,&Old,sizeof(O)));Cases++; }
-  printf("PASS: %u observation/boundary cases; <=26 reads, two100ms waits, inactive-frame suppression, no eligibility relaxation\n",Cases);
+  unsigned Integrated=0;
+  for(unsigned Z=0;Z<4;Z++)for(unsigned E=0;E<4;E++)for(unsigned Inactive=0;Inactive<4;Inactive++)for(unsigned Change=0;Change<2;Change++)for(unsigned Stop=0;Stop<2;Stop++) {
+    M=(MODEL){.ZeroTimingMask=Z,.Enable=E,.Inactive=Inactive,.EnableChange=Change,.Stop=Stop};
+    unsigned Status=EnumaObserveNativeVideo(read_reg,wait_window,&M,&O);
+    unsigned Expected=Z&(3u&~Inactive)&(Change?1u:3u)&(Stop?1u:3u);
+    assert(Status==0&&M.Reads<=26&&M.Waits==2);
+    assert(EnumaNativeMaskResult(Status,&O,7)==Expected+1);
+    Integrated++;
+  }
+  M=(MODEL){.ZeroTimingMask=2,.TimingChange=1};
+  assert(!EnumaObserveNativeVideo(read_reg,wait_window,&M,&O));
+  assert(EnumaNativeMaskResult(0,&O,7)==1);Integrated++;
+  printf("PASS: %u observation/boundary and %u integrated zero-ready cases; <=26 reads, two100ms waits, inactive-frame suppression, no eligibility relaxation\n",Cases,Integrated);
 }

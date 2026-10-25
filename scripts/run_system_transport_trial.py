@@ -90,7 +90,7 @@ def qualification(published=False, report=None):
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
-        if type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,7):
+        if type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8):
             raise ValueError('invalid native mask field')
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
         if q.get('decode_plan')!=make_plan(ROOT) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:

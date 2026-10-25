@@ -37,7 +37,7 @@ int main(void) {
   }
   assert(EnumaNativeMaskResult(EnumaInheritedOk,0,1)==5);
   assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,0)==5);
-  assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,7)==5);
+  assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,8)==5);
   for(unsigned a=0;a<4;a++)for(unsigned b=0;b<4;b++)for(unsigned c=0;c<4;c++)for(unsigned d=0;d<4;d++) {
     o.ActiveThroughoutMask=a;o.TimingStableMask=b;o.EnableStableMask=c;o.MovingMask=d;
     o.ExactEnable3Mask=0; // exact-enable3 remains unrelated to this conjunction.
@@ -50,6 +50,25 @@ int main(void) {
     assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,6)==5);
   }
   assert(EnumaNativeMaskResult(EnumaInheritedOk,0,6)==5);
-  printf("PASS: %u actual terminal hook/status/GUID cases; 53 individual and 521 combined mask/error selector cases; max22s cold delay\n",cases);
+  for(unsigned a=0;a<4;a++)for(unsigned b=0;b<4;b++)for(unsigned c=0;c<4;c++)for(unsigned z=0;z<4;z++) {
+    o.ActiveThroughoutMask=a;o.EnableStableMask=b;o.MovingMask=c;
+    for(unsigned i=0;i<2;i++)for(unsigned n=0;n<3;n++)o.Samples[n].Interfaces[i].Timing=(z&(1u<<i))?0:1;
+    assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,7)==(a&b&c&z)+1);
+    assert(EnumaNativeMaskResult(EnumaInheritedBounds,&o,7)==5);
+  }
+  ENUMA_U32 *zero_inputs[]={&o.ActiveThroughoutMask,&o.EnableStableMask,&o.MovingMask};
+  for(unsigned i=0;i<3;i++)for(unsigned bad=0;bad<2;bad++) {
+    for(unsigned j=0;j<3;j++)*zero_inputs[j]=3;
+    *zero_inputs[i]=bad?UINT32_MAX:4;
+    assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,7)==5);
+  }
+  assert(EnumaNativeMaskResult(EnumaInheritedOk,0,7)==5);
+  for(unsigned i=0;i<2;i++)for(unsigned n=0;n<3;n++) {
+    for(unsigned j=0;j<3;j++)*zero_inputs[j]=3;
+    for(unsigned j=0;j<2;j++)for(unsigned k=0;k<3;k++)o.Samples[k].Interfaces[j].Timing=0;
+    o.Samples[n].Interfaces[i].Timing=UINT32_MAX;
+    assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,7)==(3u&~(1u<<i))+1);
+  }
+  printf("PASS: %u actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay\n",cases);
   return 0;
 }

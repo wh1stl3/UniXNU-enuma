@@ -16,7 +16,7 @@ ROOT=Path(__file__).resolve().parents[1]
 GUID='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(1,2),required=True); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(7),default=0); a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(1,2),required=True); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); a=p.parse_args()
     if a.native_mask_field and (a.native_control or a.native_query!=1): raise ValueError('mask requires native query1 without control')
     image=a.image.resolve(); archive=a.archive.resolve()
     if not image.is_relative_to(ROOT/'out') or not archive.is_relative_to(ROOT/'out') or archive.exists(): raise ValueError('require new in-out archive/image')
@@ -95,7 +95,7 @@ def main():
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
         if json.loads(calibration.read_text()).get('calibration_passed') is not True: raise ValueError('boot clock not calibrated')
         q.update(trial_kind='native-display-mask',native_mask_field=a.native_mask_field,boot_clock_capture=True,
-          native_mask_meaning={1:'ActiveThroughout',2:'TimingStableNonzero',3:'EnableStable',4:'Moving',5:'ExactEnable3',6:'ActiveThroughout AND TimingStableNonzero AND EnableStable AND Moving within same observation'}[a.native_mask_field],
+          native_mask_meaning={1:'ActiveThroughout',2:'TimingStableNonzero',3:'EnableStable',4:'Moving',5:'ExactEnable3',6:'ActiveThroughout AND TimingStableNonzero AND EnableStable AND Moving within same observation',7:'All three Timing words zero AND ActiveThroughout AND EnableStable AND Moving within same observation'}[a.native_mask_field],
           scope='independent two-bit native mask with distinct collection-error code; read only; no GOP admission',
           terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False},
           decode_plan=make_plan(ROOT),calibration_sha256=sha(calibration),
