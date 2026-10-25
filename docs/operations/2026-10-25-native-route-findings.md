@@ -204,3 +204,25 @@ Next isolated diagnostic classifies the first mismatching PAR attribute,
 without changing mappings or adding framebuffer data access. Normal NC/WB
 are both plausible, Device would raise a mapping-type concern. Do not change
 the expected attribute or call WB/NC qualified solely to obtain code5.
+
+
+## PAR reporting versus descriptor attributes: stronger downgrade hypothesis
+
+Arm architecture permits PAR ATTR/SH to report implemented resulting
+attributes rather than the literal translation descriptor/MAIR value. See
+[Arm PAR description](https://documentation-service.arm.com/static/60d32e78677cf7536a55bad7).
+The [Cortex-A77 TRM8.3](https://documentation-service.arm.com/static/64ac62b4df6cd61d528c60a0)
+states that inner WT and outer WT/NC are downgraded to NC. Therefore the
+S-040 non-bb report is not proof that the installed page table was changed
+or wrong. Main hypothesis becomes normal-NC effective reporting; it remains
+an inference until S-041. Executing-core identity and actual MAIR/table
+contents are not established by that hypothesis. WB and Device remain
+alternative distinguishable results; do not modify page/cache attributes.
+
+S-041 retains original stage1 query order, guards, bound and first failure,
+wrapping the callback only to retain its last PAR. Only actual code4 is
+reclassified:44→2 normalNC;ff→3 normalWB;00/04/08/0c→4 Device;other→5.
+Code1 includes earlier failure and all-WT, so it is not success. All256
+attribute encodings are tested at first read/write/last query with fault
+and nonidentity precedence; query count and requirements remain unchanged.
+No inference about remaining pages follows a first mismatch classification.

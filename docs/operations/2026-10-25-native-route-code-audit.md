@@ -457,3 +457,10 @@ guards;11 native Python tests cover five codes, ambiguity and immutable
 no-data/no-mapping/alpha obligations. Host proof is not physical access proof.
 Fixed clock calibration/tolerance is unchanged; added AT latency is not
 subtracted after observation. Ambiguous/invalid clock is a hard stop.
+
+
+## S-041 first non-WT attribute classifier
+
+Firmware beebc41d5a4c66d65469aa193239069598b3da35; image837085b1fdc0af57556d25db17c352561d23b378484cb59394c759cbb23c697e; provider32963b4ac19f92ceb03b22452e6ec175b190a1f9d7ad4aaab7a8127eec2830cd; FD8bfd2188bae6a9c506528f3b6d8e81e0e4357268ff7ef94b00ed2953e72ff1f2. Archive qualified-native-cpu-attribute-beebc41; combined disassembly1402cd601eb29683584ef169fe128c84bc37d00222e900b4067990ce4fc6d7e0.
+
+Core byte-identical. Every post-entry helper27c0..4008 from S-040 matches after+24 including all branches and data references; sampler/decode source bytes unchanged. Actual entry1b38..1cc0 retains complete/requirements22, EL/MMFR/SCTLR/TCR/HCR and frame/range/query guards. Four ATs1cdc/1cf0/1d00/1d10 each ISB/MRS, PAR and DAIF restoration1d1c..1d20 unchanged except register allocation. Fault1d24 and nonidentity1d2c..1d34 return unclassified1; same non-bb test1d3c..1d48 branches to2010. 2010 exact44→2,2018 exactff→3;203c..2048 top-byte maskf3==0→4 (only00/04/08/0c), else5. Full WT path1d5c returns1, not success. No additional AT/data load/store/cache op/new map/GOP; old query stop point and requirements unchanged. Host all256 attributes at first R/W/last point plus fault/nonidentity precedence and operation-count invariance pass; eleven Python tests pass. Actual compiler macros ATTRIBUTE/CPU_STAGE1/ALPHA/GLOBAL/STRUCTURE/ROUTE=1, all conflicting profiles0. Clock windows remain frozen; no post-observation adjustment.

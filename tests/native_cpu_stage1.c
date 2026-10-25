@@ -24,11 +24,28 @@ static unsigned Check(ENUMA_INHERITED_FRAME *F,unsigned Fail,unsigned Kind,unsig
   TEST T={0};ENUMA_INHERITED_FRAME Copy=*F;T.First=F->Base&~4095ULL;T.Fail=Fail;T.Kind=Kind;
   assert(EnumaCpuStage1(F,Translate,&T)==Expected);assert(memcmp(F,&Copy,sizeof(Copy))==0);return T.Calls;
 }
+typedef struct { TEST Query;unsigned Attr,Fault; } ATTRIBUTE;
+static int AttrTranslate(void *Opaque,ENUMA_U64 Page,ENUMA_U32 Write,ENUMA_U64 *Par) {
+  ATTRIBUTE *A=Opaque;int S=Translate(&A->Query,Page,Write,Par);
+  if(A->Query.Calls==A->Query.Fail) { *Par=Page|((ENUMA_U64)A->Attr<<56)|A->Fault; }
+  return S;
+}
 int main(void) {
   ENUMA_INHERITED_FRAME F={0},V;unsigned I,K,Count;
   F.Base=0x9c000000ULL;F.Width=1600;F.Height=2560;F.Stride=6400;F.Bytes=(ENUMA_U64)6400*2560;F.Requirements=22;
   Count=Check(&F,0,0,5);assert(Count==8000);
   for(I=1;I<=Count;I++) { for(K=0;K<7;K++) { assert(Check(&F,I,K,K<3?1:K==3?2:K<6?3:4)==I); } }
+  for(I=0;I<256;I++) {
+    unsigned Expected=I==0xbb?1:I==0x44?2:I==0xff?3:(I==0||I==4||I==8||I==12)?4:5;
+    for(K=0;K<3;K++) {
+      ATTRIBUTE A={0};A.Query.First=F.Base;A.Query.Fail=K==0?1:K==1?2:8000;A.Query.Kind=99;A.Attr=I;
+      V=F;assert(EnumaCpuAttribute(&F,AttrTranslate,&A)==Expected);
+      assert(A.Query.Calls==(I==0xbb?8000:A.Query.Fail)&&memcmp(&F,&V,sizeof(F))==0);
+      A.Query.Calls=0;A.Fault=1;assert(EnumaCpuAttribute(&F,AttrTranslate,&A)==1);
+    }
+  }
+  { TEST T={0};T.First=F.Base;T.Fail=1;T.Kind=4;assert(EnumaCpuAttribute(&F,Translate,&T)==1&&T.Calls==1); }
+  assert(EnumaCpuAttribute(&F,0,0)==1);
   F.Base+=4092;F.Stride=14744;F.Bytes=(ENUMA_U64)F.Stride*2560;assert(Check(&F,0,0,5)==18432);
   for(I=0;I<9;I++) {
     V=F;
@@ -36,5 +53,5 @@ int main(void) {
     assert(Check(&V,0,0,1)==0);
   }
   assert(EnumaCpuStage1(0,Translate,0)==1&&EnumaCpuStage1(&F,0,0)==1);
-  puts("PASS: 56000 fail/permission/identity/attribute boundary cases,18432 maximum query path, invalid contracts before callback and unchanged frame requirements");return 0;
+  puts("PASS: 56000 query boundaries,18432 maximum path, all256 attribute encodings at first read/write/last query plus fault and nonidentity precedence; unchanged frame and operation counts");return 0;
 }

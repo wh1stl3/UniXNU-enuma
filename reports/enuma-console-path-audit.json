@@ -1,6 +1,6 @@
 {
   "scope": "source and actual generated static-link evidence only; no console connection, visual or boot execution proof",
-  "firmware_commit": "d7e6969348810ef27fc51782fd2d79be70ebe2ee",
+  "firmware_commit": "beebc41d5a4c66d65469aa193239069598b3da35",
   "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
