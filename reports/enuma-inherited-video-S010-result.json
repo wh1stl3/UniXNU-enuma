@@ -1,0 +1,101 @@
+{
+  "scope": "S-010 actual temporary boot, bounded symmetric-terminal video predicate; independent postflight",
+  "trial": "S-010",
+  "firmware_commit": "1a4b20487aa6ac0fbb2973bf508aea1851b61192",
+  "image_sha256": "24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386",
+  "fd_sha256": "490fe01ebda7bf8091b3944a54135fb439f73c8c0f05d8ac609e7cdd19b9ba9e",
+  "consumed": true,
+  "evidence": "out/device-tests/20261025T182553-system-transport/result.json",
+  "fastboot_identity": [
+    {
+      "attempt": 0,
+      "variable": "product",
+      "returncode": 0,
+      "output": "product: enuma\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 0,
+      "variable": "current-slot",
+      "returncode": 0,
+      "output": "current-slot: a\r\nFinished. Total time: 0.009s\r\n"
+    },
+    {
+      "attempt": 0,
+      "variable": "unlocked",
+      "returncode": 0,
+      "output": "unlocked: yes\r\nFinished. Total time: 0.008s\r\n"
+    }
+  ],
+  "timing": {
+    "issued_at": "2026-10-25 18:26:07",
+    "issued_at_utc": "2026-10-25T10:26:07.186360+00:00",
+    "boot_command_return_seconds": 2.641,
+    "fastboot_disconnect_observed_seconds": 5.11,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 25.469,
+    "boot_complete_seconds": 39.438
+  },
+  "delta_vs_S009_seconds": {
+    "adb_return_seconds": 4.313,
+    "boot_complete_seconds": 4.219
+  },
+  "automatic_android_return": true,
+  "host_recovery_reboot_issued": false,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "d174a268f7657619d822c5519c4925f2b1192cb89cabf86083c4f4214d7ccfcb",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T182657-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 270,
+    "decoded_frames": 270,
+    "local_video": "out/camera-capture/20261025T182550-system-transport/system-transport.avi",
+    "sha256": "2f70930966d9d83a809299a9cc65c90c1a8fa4d8259b8892d794d62ff9614f56",
+    "raw_media_local_only": true,
+    "audio_recorded": false,
+    "visually_checked": [
+      "before-rotated.jpg: Android desktop",
+      "frame-0065-rotated.jpg: Xiaomi/Android boot logo",
+      "frame-0116-rotated.jpg: Android desktop"
+    ]
+  },
+  "interpretation": "Timing supports a FAIL5/7s terminal refusal rather than a no-report timeout. Not a directly logged status; exact rejecting stage and maximum executed MMIO count unknown.",
+  "predicate_pass_proven": false,
+  "exact_terminal_status_observed": false,
+  "gop_protocol_published": false,
+  "physical_gop_verified": false,
+  "xnu_entered": false,
+  "partition_writes": false,
+  "maximum_qualified_reads": 330,
+  "actual_reads_observed": null,
+  "getvar_anomaly": "Not reproduced: all three exact fields passed on attempt 0. Cause remains unknown; gate unchanged.",
+  "next": "Prioritize first-rejection stage/status evidence without loosening topology/format/address predicates or reviving consumed images.",
+  "validation": {
+    "identity_parser_tests": 3,
+    "reconciliation_tests": 2,
+    "recovery_guard_tests": 1,
+    "all_passed": true
+  }
+}

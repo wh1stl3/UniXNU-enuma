@@ -247,7 +247,7 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 
 2026-10-24 · daf28ca恢复交接推送后继续离线解析：成功/失败step20的两项差异PE（PcdDxe/SimpleFbDxe）只屏蔽标准COFF/debug时间戳及CodeView GUID/age后均逐字节相同，Boot头和192字节shim相同；PCD逻辑/显示代码差异嫌疑下降。封装FV随调试标识变化，不称全FD相同。根因优先转向设备恢复后启动/ABL状态及早期执行位置，下一软件使用无显示MMIO/等待的更早停止点。原冻结镜像不重试，当前Android独立恢复通过，证据enuma-step20-control-comparison.json。
 
-2026-10-24 16:38:36 · 热状态重跑曾成功的geometry20-control（`20f079b4…`，firmware 012715b），前置与两次超时同构（16:23:08恢复→离线约14分钟→临时boot，未断电），自动返回：adb 16.962秒、完成31.221秒、`boot_reason=bootloader`、分区摘要未变。同一条step20/query1谓词今日4笔为3成功1超时（`459961e1…`）。据此排除"人工恢复后设备残留状态"与step20代码路径；超时必为挂死——DxeCore仅在StartImage返回后按status选门，query1/query2各自的编码都未出现。只剩ResetCold/PSCI出口失效（中高）与SimpleFb `0x0ae00000..0x0ae84207` MMIO读挂死（中）两候选，现1 bit通道不可区分。断电冷启动不再执行；下一步为无显示MMIO/无等待的早期停止点候选并重复多笔。enuma `d0fd0840`与nuwa `fe5ed56e`同时在线，按`ro.product.device`精确选中enuma。证据reports/enuma-restart-control.json、out/device-tests/20261024T163822-dxe-driver-return及operations/2026-10-24-restart-control.md。
+2026-10-24 16:38:36 · 热状态重跑曾成功的geometry20-control（`20f079b4…`，firmware 012715b），前置与两次超时同构（16:23:08恢复→离线约14分钟→临时boot，未断电），自动返回：adb 16.962秒、完成31.221秒、`boot_reason=bootloader`、分区摘要未变。同一条step20/query1谓词今日4笔为3成功1超时（`459961e1…`）。据此排除"人工恢复后设备残留状态"与step20代码路径；超时必为挂死——DxeCore仅在StartImage返回后按status选门，query1/query2各自的编码都未出现。只剩ResetCold/PSCI出口失效（中高）与SimpleFb `0x0ae00000..0x0ae84207` MMIO读挂死（中）两候选，现1 bit通道不可区分。断电冷启动不再执行；下一步为无显示MMIO/无等待的早期停止点候选并重复多笔。enuma `<target-enuma>`与nuwa `fe5ed56e`同时在线，按`ro.product.device`精确选中enuma。证据reports/enuma-restart-control.json、out/device-tests/20261024T163822-dxe-driver-return及operations/2026-10-24-restart-control.md。
 
 2026-10-24 17:12 · R-006候选A（exit10-early）构建完成：`ENUMA_DIAG_STAGE=10`（`CoreDispatcher()`之前，无显示MMIO、无等待），FD `95cd88f9e2c156f65b23ce640cd521231f1f1b96c2d87505460ead3070e4fd51`，Boot v3 `a90836007b9900350ee52f5d3286b55b33f179c6227f88aa0351ac198cf5c517`（3153920字节）。固件源码未改（仍c45e52a），stage10已在既有`dxe-stage-checkpoints.patch`内。构建/FD审计（30个OEM PE/DEPEX不变、省略CPRDxe/DisplayDxe/UFSDxe）/Boot v3回环通过，尚未实机。构建期修复三处环境问题：WSL缺`tomli`（pip --user装2.5.0）、固件仓三个子模块未初始化（顶层checked out至gitlink b8d46c71/b70b4b7b/cfb93724）、staging `uefi/Common/Mu`与`Mu_OEM_Sample`仍是10-22遗留指向nuwa参考树的符号链接（WSL内删除后由preflight重建）。证据reports/enuma-exit-early-build.json、config/exit-early-probes.json及out/exit10-build.log。下一步逐笔实测，最多5笔。
 
@@ -261,7 +261,7 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 
 2026-10-24 17:31:23 硬停 · exit14-minimal（step14，仅两次只读0x0ae6b800/0x0ae6c000，无等待无写，镜像9609d2358b5b3d930c73fc4d82ad4913dd46e298e141cd7c4d751e99b730fa5b）第1笔75秒无ADB/fastboot返回，17:32:38停止追加，未执行第2-5笔。相机快照out/camera-capture/20261024T173305全黑，与16:03/16:20两次现场一致。该profile带7秒completion fallback，PASS或FAIL都会回Android，故无返回只能是挂死。对照：同期exit10-early（0次MMIO读）5笔0挂死，本候选（2次读）第1笔即挂——挂死点在首次触碰显示窗口，与读深度无关；主判断升为高置信，并提出状态假设（早期复位使XBL/ABL认为显示已初始化，下次启动跳过初始化，UEFI读落在未上电域挂总线），可解释历史S-001/250849f/S-002/S-003。待用户长按恢复并核验；恢复后先完全断电冷启动再跑同一镜像以判定该假设。证据reports/enuma-exit14-device.json、out/device-tests/20261024T173123-dxe-driver-return。无像素/MMIO/分区写。
 
-2026-10-24 17:36 恢复核验 · 用户长按后确认Android。主机独立核验通过：enuma `d0fd0840`（同时在线nuwa `fe5ed56e`未参与）、`sys.boot_completed=1`、root(magisk)、槽位`_a`、`ro.boot.flash.locked=0`、`boot_a`=8f40f0c9…与`vendor_boot_a`=3da202d0…均与备份一致。此间无分区写入。下一步按D-128做完全断电冷启动判别：关机后直接按住电源+音量下进fastboot，不经Android，再临时boot同一份exit14-minimal一次。
+2026-10-24 17:36 恢复核验 · 用户长按后确认Android。主机独立核验通过：enuma `<target-enuma>`（同时在线nuwa `fe5ed56e`未参与）、`sys.boot_completed=1`、root(magisk)、槽位`_a`、`ro.boot.flash.locked=0`、`boot_a`=8f40f0c9…与`vendor_boot_a`=3da202d0…均与备份一致。此间无分区写入。下一步按D-128做完全断电冷启动判别：关机后直接按住电源+音量下进fastboot，不经Android，再临时boot同一份exit14-minimal一次。
 
 2026-10-24 17:38:51 第二次硬停 · 完全断电冷启动判别：`adb reboot -p` 关机（enuma从adb消失），用户按电源+音量下直接进bootloader（不经Android），主机核验fastboot身份product=enuma/current-slot=a/unlocked=yes后临时boot同一份exit14-minimal（9609d235…），75秒无ADB/fastboot返回，停止追加。相机快照out/camera-capture/20261024T174026全黑。**D-128启动序列假设作为挂死原因被证伪**：真正断电冷启动同样在两次读处挂死。据此读窗口账本更新：15:06-16:02碰窗口7笔0挂；16:03-17:38碰窗口5笔3挂；17:15-17:24不碰窗口5笔0挂。主判断升为：16:03后该设备对显示窗口0x0ae00000..0x0ae84207的读取不可靠且冷启动不能恢复，读2个寄存器即挂；推论是恢复可靠访问前任何"读到什么"的显示结论都不可信，继续加深探针无意义。下一步按序：断电静置10分钟以上再单笔、离线核实XBL/ABL是否初始化显示域、必要时评估读窗口前显式确认域上电（需NEED-REVIEW）。新增scripts/run_enuma_fastboot_probe.py支持从fastboot冷启动坐标起跑。无像素/MMIO/分区写。
 
@@ -599,3 +599,20 @@ D-203（前提交032f069已推送）：
 2026-10-25T18:25+08:00。用户明确要求重启fastboot后执行S-010并按结果推进。Android完成/root/A槽/解锁、boot_a/vendor_boot_a设备与本地备份摘要再次独立通过（out/device-tests/20261025T182509-recovery-reconciliation.json）；1920x1080相机通过，不采音频。不可变镜像24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386及1a4b204资格再次通过，尚未消耗。
 
 文档提交推送后由既有runner定向重启选定enuma到bootloader，仍要求product=enuma/current-slot=a/unlocked=yes全部精确通过；再次异常则不发送，保留日志并恢复排查，不用Android结果代替fastboot门禁。通过后仅一笔S-010临时boot，连续本地拍屏及主机时序，75秒观察，无已识别返回立即consumed并停止追加，先恢复核验。2/7秒仅支持terminal分类，不唯一证明内部路径；未发布真实GOP。原始影音仅本地out，不上传Git/Release/CI。无flash/erase/改槽、内存字段或verified变更。此前D-202未发送的原始记录保留。
+
+
+D-204（执行前文档7d1312b已推送）：
+
+2026-10-25T18:29:27+08:00。S-010已于18:26:07（UTC10:26:07.186360）执行一次临时boot，镜像24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386，固件1a4b20487aa6ac0fbb2973bf508aea1851b61192，FD490fe01ebda7bf8091b3944a54135fb439f73c8c0f05d8ac609e7cdd19b9ba9e。全部执行前文档7d1312b已推送；即时Android/备份/相机门禁及fastboot product=enuma/current-slot=a/unlocked=yes首轮精确通过。上次GetVar异常没有重现，根因仍未知，不删除D-202原始中止记录，不放宽身份检查。
+
+命令2.641秒返回，5.110秒观察断开，ADB25.469秒出现、39.438秒完成Android。runner未发恢复reboot；随后独立核验完成/root/A槽/解锁和boot_a/vendor_boot_a设备及本地备份摘要全部通过。270/270拍屏帧解码通过，已目视核对试前桌面、中途小米/Android启动标志及试后桌面；无UEFI/GOP文本证据。原始影音仅out/camera-capture/20261025T182550-system-transport，未录音，不上传Git/Release/CI。
+
+本笔有受控返回，不能记为75秒无报告超时。相对S-009，ADB晚4.313秒、完成晚4.219秒，支持FAIL5/7秒终止的谓词拒绝判断，中等置信；不是直接状态日志，也不是PASS/GOP成功或精确寄存器定位。两个候选Core与采集范围不同、Android时序含噪声，不能仅凭差值确证7秒或S-008根因。S-010已consumed，S-001..010及旧失败图不重试。
+
+按结果推进：主判断转向保守准入模型与实际继承布局不匹配，优先细分首次拒绝阶段/状态，不再默认把本笔当MMIO挂死或盲改缓存。源码要求单CTL/双LM/两个独立SSPP、无border/额外staging、严格dim/blend及RGBX；历史step21保守混合拒绝提供同方向旁证，但不是本笔快照。单源跨LM、border/合法混合、格式/几何/地址边界列为候选；描述表/PCD门禁、双接口前置/稳定性仍不能排除。只有直接取得阶段/状态或同入口对照后才能排序到具体寄存器，不放宽安全准入换通过。
+
+新候选尚未实现/资格/执行。下一步保持同完整输入、完整GUID双结果终止及FALLBACK0，先设计可判读的首拒绝证据（同时区分未到达与已拒绝），主机故障注入和实际Core/provider审查后再构建；不恢复旧长时间编码或失败像素/value计划。若新证据显示采样/解码已全部通过或故障在入口前，则推翻当前拒绝模型主假设。真实GOP/CPU-SMMU/下游拓扑、13项RAM运输、XNU/iPadOS/PMGR/UFS/root/Data仍未实机闭合；ADDRESS/TOPOLOGY不清零。无flash/erase/改槽、内存字段或verified变更，当前无人工或审批待办。
+
+证据：reports/enuma-inherited-video-S010-result.json；原trial out/device-tests/20261025T182553-system-transport/result.json；独立恢复out\device-tests\20261025T182657-recovery-reconciliation.json。身份解析3项、恢复核验2项、恢复硬门1项回归通过；不可变归档各文件摘要再次匹配。当前源码固件未改动，设备文档/脱敏证据单独提交推送。
+
+D-204发布检查：当前WORKLOG与历史restart-control说明残留的目标标识已脱敏；不改写已推送历史。原始影音未纳入版本控制。

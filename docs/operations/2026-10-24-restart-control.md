@@ -56,4 +56,4 @@ step20/query1 这一条谓词，今天共 4 笔实机：
 
 ## 边界
 
-未执行像素写/MMIO 写/分区写/新映射/内存字段变更；R-005 仍 consumed。enuma 与 nuwa 同时在线，本轮按 `ro.product.device` 精确选中 enuma（`d0fd0840`），nuwa（`fe5ed56e`）未参与。证据 `reports/enuma-restart-control.json`、`out/device-tests/20261024T163822-dxe-driver-return/`。
+未执行像素写/MMIO 写/分区写/新映射/内存字段变更；R-005 仍 consumed。enuma 与 nuwa 同时在线，本轮按 `ro.product.device` 精确选中 enuma（`<target-enuma>`），nuwa（`fe5ed56e`）未参与。证据 `reports/enuma-restart-control.json`、`out/device-tests/20261024T163822-dxe-driver-return/`。
