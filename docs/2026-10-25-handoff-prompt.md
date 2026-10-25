@@ -35,3 +35,6 @@ ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330
 D-233：镜像发出前fastboot查询异常不作整轮硬停；恢复核验后允许重新进入一次fastboot，完整product/slot/unlocked门禁仍须通过。不重复已发图，不忽略FAILED正文。真实75秒无识别恢复、恢复失败、相机/时基失败或新时间码模糊，停止追加并当轮落实交接；有效负分类继续分析。
 
 按本轮类别推进运行稳定性、CTL/LM拓扑或源布局定位；稳定候选仍需CPU/SMMU扫描地址关系和下游路由证据，之后才谈受控图案与正式GOP接管。固件自产图案、背光I2C、GOP和XNU/iPadOS仍未闭合，不能声称点屏。
+
+
+2026-10-26 00:48：S-034首次预启动五组product/current-slot/unlocked查询均未通过，镜像未发出、未consumed。选定目标fastboot reboot正常返回Android；独立身份/root/A槽/解锁和两分区/备份摘要通过，相机384帧全部可解码，末帧桌面已人工查看。D-233允许重新进入一次fastboot并完整重做门禁；不是重试已发镜像。原始影音仅本地out/camera-capture/20261026T004622-system-transport。

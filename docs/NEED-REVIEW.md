@@ -891,3 +891,6 @@ R-014 执行结果（2026-10-25 01:20，D-161）：**两次均挂死，屏幕无
 完整GUID字节未命中既不能证明无提供者，也不能证明代码不调用或相关初始化无关。未知ABI不定义所谓“全返回EFI_UNSUPPORTED”的接口表。R-014配错目标门，但completion fallback已开启，无返回原因仍未定案。
 
 下一步使用DisplayDxe自身GUID的detail15/detail13边界定位，保持原厂PE不变，按专项方案独立资格。此为方案而非新批准；不修改DEPEX、发布stub、扩大内存/映射或写分区。
+
+
+2026-10-26 00:48：S-034首次预启动五组product/current-slot/unlocked查询均未通过，镜像未发出、未consumed。选定目标fastboot reboot正常返回Android；独立身份/root/A槽/解锁和两分区/备份摘要通过，相机384帧全部可解码，末帧桌面已人工查看。D-233允许重新进入一次fastboot并完整重做门禁；不是重试已发镜像。原始影音仅本地out/camera-capture/20261026T004622-system-transport。

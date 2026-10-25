@@ -305,3 +305,6 @@ D-242，S-028 独立显示掩码结果与交接：用户继续至硬停；新mas
 ## D-253，S-034 原生显示管线合并审计资格完成，准备实测
 
 2026-10-26T00:45:55+08:00，前里程碑8880b77，固件b915308fbaaeb1c0cce92649040bde8a2ced51e6。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和相机门禁通过后直接单次临时boot。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
+
+
+2026-10-26 00:48：S-034首次预启动五组product/current-slot/unlocked查询均未通过，镜像未发出、未consumed。选定目标fastboot reboot正常返回Android；独立身份/root/A槽/解锁和两分区/备份摘要通过，相机384帧全部可解码，末帧桌面已人工查看。D-233允许重新进入一次fastboot并完整重做门禁；不是重试已发镜像。原始影音仅本地out/camera-capture/20261026T004622-system-transport。
