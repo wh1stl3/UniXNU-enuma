@@ -1,0 +1,73 @@
+{
+  "trial": "S-016",
+  "consumed": true,
+  "firmware_commit": "a657b79018a47a0b4a6af4fe9c4b14a8f490cd12",
+  "image_sha256": "1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513",
+  "issued_at": "2026-10-25 20:21:48",
+  "issued_at_utc": "2026-10-25T12:21:48.301091+00:00",
+  "scope": {
+    "base": "0xB0000000",
+    "size": "0x200000",
+    "marker_bytes": 0,
+    "stage": 10,
+    "delay_seconds": 2,
+    "reset": "cold",
+    "pmsg_access": false
+  },
+  "console_content_access": false,
+  "automatic_android_return": true,
+  "boot_returncode": 0,
+  "boot_command_seconds": 2.641,
+  "fastboot_disconnect_seconds": 5.11,
+  "adb_return_seconds": 20.063,
+  "boot_complete_seconds": 35.406,
+  "fastboot_recovery_reboot_performed": false,
+  "independent_recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "a63babb11e4e905314c614a576cdfd759e0d152bf58f136aac2d2e853077cbd4",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T202334-recovery-reconciliation.json"
+  },
+  "camera": {
+    "directory": "out/camera-capture/20261025T202131-system-transport",
+    "frames": 251,
+    "decoded_frames": 251,
+    "video_sha256": "6264f35b1937c7f8092355baa0cec5d0861f485e72f784a053a4418144769003",
+    "inspected": [
+      "frame-0060-rotated.jpg: Android reboot logo",
+      "frame-0108-rotated.jpg: Android desktop"
+    ],
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "conclusion": "same-extent map-only plus baseline cold path controlled return supported; not physical console access or retention proof",
+  "suspects_ranked": [
+    "S-015 physical console access/writer interaction and warm reset path are still not separated",
+    "new mapping/earlier path alone is less likely to be a deterministic hang, not fully excluded",
+    "cross-boot/loader variation remains a confounder"
+  ],
+  "next": "minimal console-header read-only access with same cold gate; then isolate write and reset separately",
+  "gop_verified": false,
+  "ramoops_retention_verified": false
+}

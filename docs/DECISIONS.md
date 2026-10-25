@@ -940,3 +940,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-218：恢复后的S-016 map-only/cold独立对照资格
 
 2026-10-25T20:21:00+08:00。23d5538已推送S-015超时/独立恢复与采集器修复。固件a657b79018a47a0b4a6af4fe9c4b14a8f490cd12拆分map/writer，默认关闭，map-control保留原迁移header和stage10/delay2/ResetCold，不访问console内容。新镜像1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513，实际Core无writer/ResetWarm、描述符及完整FAT/Boot v3/归档资格通过；已绑定R-017-MAP独立图，不重授权consumed writer，无内存范围/分区/verified扩张。当前未上机，所有当前文档发布与即时身份/备份/相机/恢复后沿用户直接推进规则执行单笔。证据reports/enuma-ramoops-map-control-qualification.json与code.json。原始影音仅本地。
+
+
+## D-219：S-016自动返回与独立恢复，问题收敛到访问/写入和warm差异
+
+2026-10-25T20:25:27+08:00。S-016于20:21:48单次发出1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513，命令0/2.641秒、断开5.110秒、ADB20.063秒、完成35.406秒，无主机恢复reboot。251/251帧解码，目视Android重启logo和桌面，独立完成/root/A槽/解锁/设备双分区与本地备份摘要通过。e2b6ea5资格此前已推送；S-016与R-017-MAP单笔consumed。支持同范围map-only+原cold路径可控，不能称console物理访问/留存或GOP已验证；S-015物理writer访问与warm差异仍未分离，单独映射不再首嫌但未完全排除。下一步最小头只读/cold隔离，尚未实现/资格/执行。证据reports/enuma-ramoops-S-016-result.json与out\device-tests\20261025T202334-recovery-reconciliation.json，原始影音仅本地。
