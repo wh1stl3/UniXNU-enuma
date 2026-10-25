@@ -404,3 +404,56 @@ alpha_semantics_unproven=true;10 Python tests reject its removal/type changes.
 Sanitizer three alpha masks/64 format mutations/330 failures/two waits/raw
 alpha change/opmode-unpack-unknown rejection and old Native5 strict rejection
 support this review. ReservedMask describes storage only, not GOP write alpha.
+
+
+## S-040 CPU stage1 translation-only packaged code review
+
+Firmware d7e6969348810ef27fc51782fd2d79be70ebe2ee; image
+bfab79989097dbf0a849468d75c3e59f86ca61b40a28e8ed0b403c2ca49475dc,
+FD ea3aedbb248e1226c86fc3a012bb5a74beda3f2121b7ea6fdfd9a19b1e65a914.
+Provider0962c113f93ae0fa8dc6a05deb2916745c8a626e1744604b958ac5a1497b50f2.
+Archive out/inherited-gop/qualified-native-cpu-stage1-d7e6969.
+Combined disassembly e79d52c2f5a5279fd50ed8175ed1e598502aca952c7e59f63fa73543823dce04.
+
+Actual Core is byte-identical to S-039 (a27c5b3f...); exact GUID13/detail16
+and warning1..5 cold2/7/12/17/22s transport unchanged, no fallback.
+Actual provider macro CPU_STAGE1/ALPHA_VIEW/GLOBAL_OUTPUT/STRUCTURE/ROUTE=1,
+other detail/mask/query selectors0. Qualification binds actual staged header,
+entry, GNUmakefiles, PE in FD, full96MiB FAT and Boot v3. Native6 Evidence,
+Topology, Decode, VideoCapture sources byte-identical to S-039.
+
+Manual review: prerequisites return1; complete path27b4..27bc sets complete
+reason12 and requirements22 at2788..2794, then1b38..1b50 requires both before
+any AT. 1b54..1bac reads CurrentEL/MMFR0 and correct per-EL SCTLR/TCR, EL2
+HCR only in EL2. It rejects PARange>5, other EL, MMU-off, EL1 HA39/HD40,
+EL2 HA21/HD22 and VHE34. Optimized MMFR mask0xe comparison is equivalent to
+low-nibble>5. 1bd4..1c88 checks requirements22,1600x2560,stride>=6400/aligned,
+bytes=stride*2560, base aligned/inside9c000000..9e400000, bounded extent,
+then rounds covering first/last pages. No framebuffer-address load/store.
+
+1c8c..1d64 loops each page and both access types, rejects operation index
+>=18432 before query; page remains bounded/aligned.1cc4..1d20 saves DAIF,
+masks it, saves PAR, executes matching S1E1R/W or S1E2R/W, ISB and MRS PAR,
+then restores PAR and DAIF on all normal query branches. PAR fault→code2
+(201c), output bits51:12 differing from query→code3(2024), ATTR63:56!=bb→4,
+only both types on every covering page→5. Failure and success preserve
+requirements22. AT writes translation-result state and may populate TLBs;
+no pixel data instruction/cache op/TLBI/page-table setter/GOP call is present.
+
+Read309c..30f4 retains aligned offsets<=6c26c, count<330, only load at30e4
+from0xae00000+offset.123c..1280 retains max2 Stall100000us. Same sampler
+stack0x2390; no recursion/dynamic allocation. Helper comparison to S-039:
+old262c..2f08 relocates+194, old2f80..3eec+11c; all instructions and branch
+targets match except43 ADRP page moves+1000 and32 RDATA offsets. All22 unique
+offset targets were checked as identical strings/constant prefixes; geometry,
+capture normalization and decode helper control flow unchanged. Main inlined
+sampler/decode was reviewed around stability, original alpha view and terminal
+handoff; source and actual staged macro bindings unchanged before follow-up.
+
+ASan/UBSan56000 injected callback/fault/nonidentity/attribute boundaries,
+18432 maximum path, invalid contract before callbacks and unchanged frame
+pass. Freestanding actual Arm wrapper includes four AT variants and per-EL
+guards;11 native Python tests cover five codes, ambiguity and immutable
+no-data/no-mapping/alpha obligations. Host proof is not physical access proof.
+Fixed clock calibration/tolerance is unchanged; added AT latency is not
+subtracted after observation. Ambiguous/invalid clock is a hard stop.

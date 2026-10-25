@@ -1,0 +1,85 @@
+{
+  "scope": "source and actual generated static-link evidence only; no console connection, visual or boot execution proof",
+  "firmware_commit": "d7e6969348810ef27fc51782fd2d79be70ebe2ee",
+  "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
+  "sources": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/DXE.inc": "af06280fa95beb6702b138fc2cd64753284685947a2dee800b1a3c7d8bed0afe",
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": "347a4a3c8860047be223f388833708faabffa6c6535367f252d193a7be67e38f",
+    "firmware/Silicon/Silicium/SiliciumPkg/Library/BootManagerLib/BootManager.c": "eb4d965e685bff18d0be0da392c232d2a675f3cd08ff55c3742ef59fdbffffbb",
+    "firmware/Silicon/Silicium/SiliciumPkg/Include/Configuration/BootDevices.h": "0a4d268f2f8cac02dd247fd2c54bacf14cb766b1b5c9cd953a9fc115b4ecf931",
+    "firmware/Mu_Basecore/MdeModulePkg/Universal/BdsDxe/BdsEntry.c": "9ee81bc7f7d5d2673120f1493c82b48d71cccab00221e8f6e84a5f39ed85b0a1",
+    "firmware/Mu_Basecore/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsole.c": "9cf8b1a4e3f53930221034bbeda75b0249ec45801fcc6e0c1046a2cb4721655f",
+    "out/firmware-build/uefi/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/DarwinProbe.inc": "3399dd71737100254a065fd4318a3b7df880a2e8a56cb03cea9e3050075f27a4",
+    "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Main.c": "f01a46219b728b945719e8fa26416cf7e129f91e27e3f04df47364e7e3e3a79e",
+    "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Ui.c": "04bd798e1774697d85ee0eb0b2331bfd3016e32a01828fed0a37e6c7777723e9"
+  },
+  "links": {
+    "EnumaProbe": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/enumaPkg/Application/EnumaProbe/EnumaProbe/OUTPUT/static_library_files.lst",
+        "sha256": "70f0ec53218a736c7300fdb2fb3deb8da7627b7af41f6d4823e6c614ea9cd439",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "UniXNU": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/UniXNUPkg/Application/UniXNU/UniXNU/OUTPUT/static_library_files.lst",
+        "sha256": "8b17a45b20bafa7714095e74ae2ce94c9f5a29331bf17054e101df671311d788",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "DxeCore": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain/OUTPUT/static_library_files.lst",
+        "sha256": "bbaba974604b26d7c0ad53f0da27b78faa5066dc085ccaf95b8b430cc16d581b",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "Sec": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/SiliciumPkg/Sec/Sec/OUTPUT/static_library_files.lst",
+        "sha256": "159809f38c3974635b0eb4dbc0e907988e913f1a8342c4a589429c20717dcadd",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "GraphicsConsoleDxe": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe/OUTPUT/static_library_files.lst",
+        "sha256": "38846769bb43e6f5956dfc0805f2b3d07f37f0c23c7cacd63d43d91b18ceab91",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "ConSplitterDxe": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe/OUTPUT/static_library_files.lst",
+        "sha256": "2a629f2bb6089c23f233ef62dc57bcf35ce174c3777724f9cb3d6910e2d9d4fd",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ]
+  },
+  "paths": {
+    "graphics_console": "Packaged; BDS BeforeConsole registers ConOut/ErrOut device path, default-console connect precedes AfterConsole. GOP/device-path binding and text visibility need hardware qualification.",
+    "print": "EnumaProbe Line calls UefiLib Print through ConOut, not global DEBUG; current bounded diagnostic does not reach BDS/application.",
+    "diag_draw": "Generated hash-bound DarwinProbe.inc locates GOP then directly stores ff000000/ffffffff using Video stride; bypasses GOP Blt and assumes channel layout. Requires separate pixel/alpha/sync qualification before execution.",
+    "debug": "PlatformConfig overrides SerialPortLib with Null. Source has serial DebugLib; actual generated lists report effective binding per module. GOP/ConOut alone does not reconnect DEBUG.",
+    "menu": "EnumaProbe calls UniXNURun after payload checks. It connects controllers, loads config, injects drivers, initializes graphics/text UI then runs menu. Graphics UI uses GOP Blt, text fallback uses ConOut. Implemented but not reached by current diagnostic.",
+    "early_log": "No verified early on-screen global logger/replay. SEC/early DXE precede valid GOP and ConsoleOut; need bounded RAM logging plus later safe replay, not early guessed pixel writes."
+  },
+  "hardware_executed": false,
+  "pixel_access": false,
+  "device_action": false
+}

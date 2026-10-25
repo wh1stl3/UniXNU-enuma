@@ -1,0 +1,12 @@
+{
+  "scope": "actual portable per-page algorithm with synthetic PAR and freestanding actual AArch64 wrapper; no hardware/data proof",
+  "result": "PASS: 56000 fail/permission/identity/attribute boundary cases,18432 maximum query path, invalid contracts before callback and unchanged frame requirements",
+  "sources": {
+    "tests/native_cpu_stage1.c": "3c8ea4b44a77a99fcbc7e2757bdd3fb55b2a4553d5a14a7d5c9721e8fb20e2c4",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "4722ea525837b93bb963d3897b83ffc16c3069b5923b44e70fc1ddaa53633584",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
+    "scripts/check_native_cpu_stage1.py": "5b02fd94d9d045ba541be703e74f4f1b7cf6b3cec8503b04461dead7a42a407a"
+  },
+  "hardware_tested": false,
+  "physical_framebuffer_access": false
+}

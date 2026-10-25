@@ -368,3 +368,13 @@ D-242，S-028 独立显示掩码结果与交接：用户继续至硬停；新mas
 ## D-264，S-039 原生显示管线合并审计结果与交接
 
 2026-10-26T01:58:04+08:00，前里程碑6008039，固件29992292b8f46daf40bd09c9fc1baaeb32a01219。实测结果：{"conclusion": "route-category-inferred", "category": "stable-8888-logical-structure-alpha-blend-address-and-downstream-unproven", "warning_code": 5, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-039-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
+
+
+## 当前点屏验收目标（2026-10-26用户授权补充）
+
+先UEFI固件日志上屏，随后UniXNU菜单，用于继续固件开发；本阶段不以iPadOS图形界面为验收。按2026-10-26-uefi-console-menu-validation.md独立矩阵逐项记录依赖、已实现未实测、缺失、前置不足未执行。先尽量完成离线格式/范围/stride/覆盖、实际构建绑定、控制台连接、Print/DiagDraw/DEBUG路由及菜单入口审计。一次实机只合并原权限覆盖且结果可区分的低风险检查；五类时间码是首结果，不能声称同时取得多个独立结果。像素写、页表/缓存属性改变、路由切换仍按原门禁；consumed不重试，真正硬停当轮完整落地。纯只读查询继续无相机。
+
+
+## D-265，S-040 原生显示管线合并审计资格完成，准备实测
+
+2026-10-26T02:17:23+08:00，前里程碑d515a2a，固件d7e6969348810ef27fc51782fd2d79be70ebe2ee。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
