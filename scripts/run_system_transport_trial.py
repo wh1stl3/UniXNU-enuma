@@ -27,12 +27,15 @@ def qualification(published=False, report=None):
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
-    if q.get('trial_kind')=='inherited-video-audit':
+    if q.get('trial_kind') in ('inherited-video-audit','inherited-video-entry-control'):
         frozen=(ROOT/q['archive']/'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
             raise ValueError('video audit differs from frozen qualification')
-        if q.get('pixel_access') is not False or q.get('gop_published') is not False or q.get('maximum_reads')!=969:
+        expected=0 if q['trial_kind']=='inherited-video-entry-control' else 969
+        if q.get('pixel_access') is not False or q.get('gop_published') is not False or q.get('maximum_reads')!=expected:
             raise ValueError('unsupported video audit scope')
+        if expected==0 and q.get('control_actual_code',{}).get('review_required') is not False:
+            raise ValueError('actual control PE disassembly still needs review')
     if 'detail_point' in q:
         frozen_manifest = (ROOT / q['archive'] / 'qualification.json').resolve()
         if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:

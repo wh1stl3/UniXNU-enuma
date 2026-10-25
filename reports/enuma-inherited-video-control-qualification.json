@@ -1,0 +1,100 @@
+{
+  "trial_kind": "inherited-video-entry-control",
+  "scope": "qualified same-entry constant marker with no MMIO/map lookup",
+  "firmware_commit": "c7c29bb0fe8f2bbf6f8128689b7f423da7dcc72c",
+  "archive": "out/inherited-gop/qualified-control-c7c29bb-q1",
+  "files": {
+    "image.img": {
+      "sha256": "56eb63dc63bc7e4b76e6746cb42a0f05b25dfa08099b356f63117c8af89a00c7",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "a8b974eb6175b702f78f3e30e50afcef8de2b5d0cea0f28c7312c39cec0c20b2",
+      "bytes": 807
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "c87f3d1d296ef09679acf6c6887f34c9c892fbb720fc8005d3562fce35c4b28e",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "ebfedec587263a8f8adb556aa3cd51a480e7daa3f5c07e06d03682690fe530ed",
+      "bytes": 3145920
+    },
+    "SimpleFbDxe.efi": {
+      "sha256": "220e22421e89fc39d688acc04b804a273343289550429f90fb0e6a41e9792a66",
+      "bytes": 7680
+    },
+    "provider.GNUmakefile": {
+      "sha256": "70045f2cd36724f02d88b21fc6a2274a95f989942412543cc1468c9b012cbf44",
+      "bytes": 22449
+    },
+    "entry.c": {
+      "sha256": "7b2945d156533f554e7246cf6ced5cc949bfb865e3456437204c8dfa0acd3c6a",
+      "bytes": 386
+    },
+    "firmware-build.json": {
+      "sha256": "3534bafb5ca7590a086b759fb939210086fcce5b7d5bad2869fc95c0bd4986b8",
+      "bytes": 18557
+    },
+    "fd-audit.json": {
+      "sha256": "5a1108ca17402c2999b6354f427ab3e0431ea41c32b996531bab86a60a6e310e",
+      "bytes": 4326
+    },
+    "host-tests.json": {
+      "sha256": "74799f9e187c0a243577a518a11e4df4180346d8f7b899e95e547cd5c0dbc89b",
+      "bytes": 11651
+    },
+    "provider.disassembly.txt": {
+      "sha256": "401ebe34396c099a60c8a2e9fe0d0bf031c706da714d11870f6071e277763d9e",
+      "bytes": 24949
+    }
+  },
+  "image": "out/inherited-gop/qualified-control-c7c29bb-q1/image.img",
+  "image_sha256": "56eb63dc63bc7e4b76e6746cb42a0f05b25dfa08099b356f63117c8af89a00c7",
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "maximum_reads": 0,
+  "maximum_wait_calls": 0,
+  "maximum_mmio_offset": null,
+  "pixel_access": false,
+  "gop_published": false,
+  "map_record_in_actual_fd": true,
+  "packaged_provider_equal": true,
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "ebfedec587263a8f8adb556aa3cd51a480e7daa3f5c07e06d03682690fe530ed",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "result_interpretation": "Exact pass warning selects2s core gate; refusal may reach7s dispatcher fallback. Timing alone is not unique execution proof. 75s host timeout freezes the trial; recover first.",
+  "control_actual_code": {
+    "entry_rva": 4176,
+    "symbols": {
+      "CpuBreakpoint": 4096,
+      "InternalSwitchStackAsm": 4128,
+      "CpuPause": 4152,
+      "_ModuleEntryPoint": 4176,
+      "DebugAssert": 4320,
+      "AsciiSPrint": 4512,
+      "BasePrintLibFillBuffer": 4588,
+      "BasePrintLibSPrintMarker": 4628,
+      "BasePrintLibSPrint": 7696,
+      "AsciiStrnLenS": 7768,
+      "memcpy": 7820,
+      ".weak.memset.default._ModuleEntryPoint": 7852,
+      "mHexStr": 8192,
+      "mWarningString": 8208,
+      "mErrorString": 8416,
+      "mDeadLoopComparator": 12288,
+      "_MergedGlobals": 12296,
+      "gImageHandle": 12296,
+      "gST": 12304,
+      "gBS": 12312
+    },
+    "disassembly_sha256": "401ebe34396c099a60c8a2e9fe0d0bf031c706da714d11870f6071e277763d9e",
+    "body_source_sha256": "7b2945d156533f554e7246cf6ced5cc949bfb865e3456437204c8dfa0acd3c6a",
+    "review_required": false
+  }
+}

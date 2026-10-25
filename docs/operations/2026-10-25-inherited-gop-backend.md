@@ -45,3 +45,10 @@ sampler最终源898ae25：三个同次快照，每窗100ms；上限969回调读�
 S-008于17:05:25发出，命令2.641s返回0、断开5.109s；75秒观察无自动返回，停止追加、consumed，S-008未解码，不重试。用户长按恢复Android，17:08:12独立完成/root/A槽/解锁/原boot_a/vendor_boot_a及备份摘要通过。451主/740恢复帧解码一致，全部原始影音仅本地，未采音。末帧强反光暗屏，无可读固件文本；不据此定位寄存器或断言入口命中。
 
 实际SimpleFb AutoGen只有BaseDebugLibSerialPortConstructor、UefiBootServicesTableLibConstructor，实际库为BaseSerialPortLibNull，无PSCI/reset构造器。现中等置信度主判断是先分清入口/返回通道与正文访存；正文包含内存表查询及SSPP/CTL/PP/选中LM取数，未活动银行读为候选而非结论。下一步新的同INF/GUID/完整输入常量PASS正文，对照禁MMIO/查表/协议，实际PE指令资格后再按发布/即时恢复门禁单笔。若它失败，转构造器/Core/前驱路径；若它可控返回，进一步收缩读取，不扩读或写像素。
+
+
+## D-198：同入口常量对照资格（2026-10-25T17:21:12+08:00）
+
+固件c7c29bb0fe8f2bbf6f8128689b7f423da7dcc72c，S-009镜像56eb63dc63bc7e4b76e6746cb42a0f05b25dfa08099b356f63117c8af89a00c7，FD c87f3d1d296ef09679acf6c6887f34c9c892fbb720fc8005d3562fce35c4b28e；归档out/inherited-gop/qualified-control-c7c29bb-q1。实际入口RVA0x1050..0x10dc正常路径只有栈/UEFI全局指针保存、从ST+0x60取BootServices、非空断言分支以及mov w0,#1/ret；无查表/MMIO/像素/等待/分配/协议。DebugAssert非空失败路径保留，不假设异常输入会返回。反汇编使用skipdata覆盖文本中的0xcc链接填充并绑定完整SHA 401ebe34396c099a60c8a2e9fe0d0bf031c706da714d11870f6071e277763d9e；最初在填充处截断的inspection产物不获资格。
+
+与S-008实际FD比较72PE，70完全相同，只有目标正文运行时代码改变；PcdDxe仅8字节RSDS GUID，包含其余代码/路径/age全部相同，Core完全相同。AutoGen/库清单、固件配置、BootShim和完整FAT相同。报告enuma-inherited-control-pair.json。实际反汇编/源码/打包资格、21固件单测、当前Android备份和相机门禁通过，文档推送后单笔；尚未发出。

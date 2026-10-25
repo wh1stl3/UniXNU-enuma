@@ -8,6 +8,9 @@ from firmware_audit_policy import omitted_oem_modules
 
 
 class FirmwareAuditPolicyTests(unittest.TestCase):
+    def test_control_requires_video_profile_and_boolean(self):
+        for value in [dict(inherited_video_entry_control=True),dict(inherited_video_entry_control='1')]:
+            with self.assertRaises(ValueError): omitted_oem_modules(value,'a'*64)
     def test_video_audit_requires_read_only_profile_not_metadata_or_pixels(self):
         value=self.fixture()
         value.update(inherited_video_audit_read_only=True,diagnostic_simplefb_metadata_only=False,

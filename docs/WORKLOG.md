@@ -577,3 +577,6 @@ umi仍是同SM8250/同donor系统、UFS/root/Data的首要参考，审查HEAD未
 
 
 2026-10-25 17:05:25—17:08:12 D-197：根仓68ddbd8/固件898ae25发布后S-008单笔临时boot，SHA f8f14e3b…33a4dc8。命令2.641s成功、断开5.109s、75秒无自动返回，consumed并停止追加；用户长按恢复，独立Android完成/root/A槽/解锁/原分区与备份核验通过。451主/740恢复帧解码一致，全部本地无音频。无可判读marker，不能归因到某寄存器；继续同入口无MMIO/无查表常量对照。证据reports/enuma-inherited-video-S008-result.json、原失败result.json保留。
+
+
+2026-10-25T17:21:12+08:00 D-198：S-008恢复后自动离线实现新同入口常量对照c7c29bb，实际PE正常路径只保存UEFI表并return PASS，正文禁MMIO/查表/分配/等待/协议。S-009镜像56eb63dc63bc7e4b76e6746cb42a0f05b25dfa08099b356f63117c8af89a00c7已完整FAT/FD/PE/宏/BootShim/反汇编审查和不可变资格；72PE中70完全同S-008，目标正文变更，Pcd8字节仅RSDS GUID，其余包含Core相同。21固件单测和当前Android/root/槽/解锁/原分区备份、相机通过，发布后单笔，尚未执行。
