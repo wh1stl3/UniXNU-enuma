@@ -22,15 +22,47 @@
     "pmsg_access": false
   },
   "console_content_access": false,
-  "recovery_verified": false,
-  "actual_device_phase": "manual-recovery-needed",
-  "independent_recovery": null,
+  "recovery_verified": true,
+  "actual_device_phase": "recovered-android-boot-complete",
+  "independent_recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "ed29bf2e1613d2ffa5ecd6109f1cfc0009a0324eee4fc5c4d163186308a04749",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T210129-recovery-reconciliation.json"
+  },
   "camera": {
     "directory": "out/camera-capture/20261025T205656-system-transport",
     "complete": true,
     "frames": 1090,
     "decoded_frames": 1090,
-    "raw_media_local_only": true
+    "video_sha256": "880cdcb143928d4ef3b14c7c207a4824950b2823fc211d52099fff88c67ab548",
+    "last_trial_frame": "frame-0468-rotated.jpg: Android reboot logo inspected",
+    "after_recovery_directory": "out/camera-capture/20261025T210129-system-transport",
+    "after_recovery_desktop_visually_confirmed": true,
+    "button_action_visually_confirmed": false,
+    "raw_media_local_only": true,
+    "audio_recorded": false
   },
   "conclusion": "warm-only/no-console-access failed bounded return; warm request path is leading suspect relative to returned cold controls, not unique proof of reset2 execution or source of S-015 hang",
   "no_additional_device_boot_after_failure": true,

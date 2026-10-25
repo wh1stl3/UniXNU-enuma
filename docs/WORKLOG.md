@@ -791,3 +791,13 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-221：S-018无访问warm独立隔离
 
 2026-10-25T21:01:06+08:00。超时硬停，仍待恢复核验；停止追加镜像。固件5cfcd4cc68c0c37ffb322322efc256760d9389e3，图6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，仅同映射stage10/delay2/ResetWarm无console访问，实际PE/宏/描述符/完整FAT/Boot v3已资格；用户继续至硬停，不重复一般批准。结果见reports/enuma-ramoops-S-018-result.json；触发超时后不追加设备启动。原始影音仅本地。
+
+
+## D-221：S-018无访问warm独立隔离
+
+2026-10-25T21:02:06+08:00。超时硬停后Android已独立恢复；按用户要求停在此处。固件5cfcd4cc68c0c37ffb322322efc256760d9389e3，图6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，仅同映射stage10/delay2/ResetWarm无console访问，实际PE/宏/描述符/完整FAT/Boot v3已资格；用户继续至硬停，不重复一般批准。结果见reports/enuma-ramoops-S-018-result.json；触发超时后不追加设备启动。原始影音仅本地。
+
+
+## D-221补充：S-018硬停后独立恢复与最终停止
+
+2026-10-25T21:03:20+08:00。a3870d3已推送超时/恢复待核验记录；用户报告Android恢复后，21:01:29独立完成/root/A槽/解锁及设备/备份双分区摘要通过。1090/1090帧，录像尾部Android重启logo及独立补拍桌面目视，按键动作未明确核对。原失败记录保持，S-018/R-017-WARM consumed，无后续boot。无console访问的warm对照仍超时，相对两个已返回cold对照，warm请求链为优先嫌疑但未定位FEATURES/reset2/回退，不能证明writer安全。按用户触发硬停再停，本轮完成交接推送后停止；下一最小写入+cold候选尚未实现/构建/执行。原始影音仅本地。
