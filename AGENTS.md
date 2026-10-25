@@ -295,3 +295,8 @@ D-242，S-028 独立显示掩码结果与交接：用户继续至硬停；新mas
 ## D-251，S-033 原生显示管线合并审计资格完成，准备实测
 
 2026-10-26T00:31:44+08:00，前里程碑bea3a9a，固件60dd3d9da2010150a26b497ad43dbd09f704e70c。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和相机门禁通过后直接单次临时boot。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
+
+
+## D-252，S-033 原生显示管线合并审计结果与交接
+
+2026-10-26T00:34:13+08:00，前里程碑8cc8c0d，固件60dd3d9da2010150a26b497ad43dbd09f704e70c。实测结果：{"conclusion": "route-category-inferred", "category": "mixer-dim-or-blend-rejected", "warning_code": 2, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-033-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
