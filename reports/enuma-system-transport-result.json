@@ -1,5 +1,5 @@
 {
-  "phase": "manual-recovery-needed",
+  "phase": "recovered-android-boot-complete",
   "candidate_sha256": "d2ab5ef8c44a9160e79150a34651e3fa616852ca3205beefa99ab60df7e1db75",
   "issued_at_utc": "2026-10-25T06:12:13.335723+00:00",
   "boot_returncode": 0,
@@ -9,7 +9,7 @@
   "adb_return_seconds": null,
   "boot_complete_seconds": null,
   "partition_writes": false,
-  "scope": "S-001 actual single temporary boot; timeout, recovery pending",
+  "scope": "S-001 actual timeout followed by user-reported manual recovery and independent Android/root/slot/unlock/partition reconciliation",
   "device_evidence": "out/device-tests/20261025T141158-system-transport",
   "camera_evidence": "out/camera-capture/20261025T141155-system-transport",
   "camera_frames": 450,
@@ -19,5 +19,39 @@
     "fastboot": false
   },
   "report_stages_observed": [],
-  "no_stage_inference_from_timing": true
+  "no_stage_inference_from_timing": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "cf73727f7a19af933e4e0a8aa123e0b4324fe1eefcc7b0426d270c3d96b99405",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T141538-recovery-reconciliation.json"
+  },
+  "main_camera_snapshot_pairs": 194,
+  "recovery_video": {
+    "path": "out/camera-capture/20261025T141426/camera-test.avi",
+    "written_frames": 739,
+    "decoded_frames": 739
+  },
+  "candidate_consumed": true
 }
