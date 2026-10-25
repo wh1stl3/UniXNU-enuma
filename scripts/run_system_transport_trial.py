@@ -78,7 +78,7 @@ def qualification(published=False, report=None):
         if q.get('trial_kind') == 'ramoops-canary':
             from run_enuma_entry_probe import require_hardware_review
             require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
-                json.loads((ROOT/'config/hardware-review-approvals.json').read_text()))
+                json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))
         if q.get('reason_target'):
             review=json.loads((ROOT/'reports/enuma-video-reason-code.json').read_text())
             matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and x.get('query')==q['reason_query'] and x.get('reason_target')==q['reason_target'] and x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]

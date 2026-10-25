@@ -1,6 +1,6 @@
 # R-017 · 原生 ramoops console 最小映射与留存探针
 
-状态：**approved，D-216，当前S-015尚未发出**。用户在精确A提案后明确“上机无需批准 直接进行 注意使用摄像头记录关键节点”，按A的最小范围实施；不再索要批准。仅探针构建新增映射，实际产物资格及图摘要见当前STATUS和资格报告。
+状态：**consumed，D-217，S-015已超时并独立恢复Android**。用户在精确A提案后明确“上机无需批准 直接进行 注意使用摄像头记录关键节点”，按A的最小范围实施；不再索要批准。仅探针构建新增映射，实际产物资格及图摘要见当前STATUS和资格报告。
 
 背景：原生Android已reserve B0000000/4MiB并注册ramoops，console/pmsg各2MiB；当前UEFI未映射console。未接线writer的51,210项主机用例、ASan/UBSan、AArch64对象及5项收集器测试通过。具体审计与实现见[兼容审计](operations/2026-10-25-ramoops-compatibility-audit.md)，无新FD资格。
 

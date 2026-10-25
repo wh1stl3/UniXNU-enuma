@@ -1,0 +1,58 @@
+{
+  "trial": "S-015",
+  "image_sha256": "2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e",
+  "firmware_commit": "10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6",
+  "issued_at": "2026-10-25 20:04:30",
+  "issued_at_utc": "2026-10-25T12:04:30.815048+00:00",
+  "boot_returncode": 0,
+  "boot_command_seconds": 2.641,
+  "fastboot_disconnect_seconds": 5.11,
+  "automatic_return": false,
+  "observation_deadline_seconds": 75,
+  "consumed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "bbc01829a8624c6bf3749f963979a753ce4950cad52f5d5a2cc4d28414644f5c",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T200727-recovery-reconciliation.json"
+  },
+  "manual_recovery_reported_by_user": true,
+  "button_action_visually_confirmed": false,
+  "camera": {
+    "directory": "out/camera-capture/20261025T200413-system-transport",
+    "frames": 559,
+    "decoded_frames": 559,
+    "video_sha256": "513e4e8fda7ecae3433e469ce085f8691cde5f944afcfecc1820459b54657b95",
+    "last_frame_black": true,
+    "after_recovery_directory": "out/camera-capture/20261025T200727-system-transport",
+    "after_recovery_desktop_inspected": true,
+    "raw_media_local_only": true
+  },
+  "fresh_nonce_observed": false,
+  "valid_console_snapshots": 0,
+  "collector_defect": "exec-out returned zero and merged a 65-byte missing-file cat diagnostic into stdout; not pstore data",
+  "original_raw_evidence_preserved": true,
+  "conclusion": "bounded return failed; no native console evidence; mapping/write/reset/earlier path not isolated",
+  "next": "offline console-map-only + original stage10/cold control; same approved console extent, no console content read/write"
+}

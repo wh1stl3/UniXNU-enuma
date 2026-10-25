@@ -1,13 +1,11 @@
-# 当前状态：D-216，R-017 A已授权；S-015资格完成待单笔执行
+# 当前状态：D-217，S-015超时后Android已独立恢复；继续离线隔离
 
-2026-10-25T20:01:26+08:00。用户明确“上机无需批准 直接进行 注意使用摄像头记录关键节点”，在精确A范围后按R-017 A直接执行授权记录，不再索要批准。当前尚未启动新镜像。已完成源码、全FD、实际PE/宏/nonce/映射、完整FAT及Boot v3不可变资格，下一步先确认全部当前文档提交推送和即时设备/相机门禁，再执行S-015一次临时boot。
+2026-10-25T20:11:30+08:00。S-015于2026-10-25 20:04:30发出一次，fastboot返回0/2.641秒，5.110秒观察到断开，75秒未自动返回Android/fastboot，立即停止追加。用户报告已恢复Android，20:07:27独立核验完成/root/A槽/解锁及boot_a/vendor_boot_a设备和本地备份摘要均通过。当前Android正常，无人工恢复/审批待办；按持久规则继续离线分析和新软件，不把人工恢复当整轮结束。
 
-固件10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6已推送；镜像`2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e`，FD`9773cea18ea6a35694eb8ee5409d073fc92918543338c9e7d46e8db2fb8766e7`，103817216字节。归档`out/ramoops-audit/S-015-qualified`；资格、实际反汇编审查见reports/enuma-ramoops-canary-qualification.json与enuma-ramoops-canary-code.json。nonce `94c7031f6483d298b3d331a480fc0118`，完整标记44字节。实际Core在stage10、CoreDispatcher之前追加一次；仅本次显式profile增加B0000000/2MiB Normal Non-cacheable reserved映射。实际描述符AddMem/MEM_RES/UNCACHEABLE/Reserv/ArmUC0核对通过；pmsg不映射/不写，全局SerialPort仍Null，原迁移内存表及board.toml/bringup-plan不改。
+最后镜像`2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e`，固件`10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6`，FD9773cea18ea6a35694eb8ee5409d073fc92918543338c9e7d46e8db2fb8766e7。R-017 A一次writer试验及S-015均consumed，不原样重试。详细结果reports/enuma-ramoops-S-015-result.json，原始超时记录out/device-tests/20261025T200416-system-transport/result.json保留；最新独立恢复证据`out\device-tests\20261025T200727-recovery-reconciliation.json`。
 
-主机模拟通过stage9不写、stage10精确标记/中断排除/2秒延时/warm调用及pmsg保护页；未改的环核心51,210项ASan/UBSan独立队列用例与AArch64对象通过。实际Core核查RVA3eb4..4064写入、nonce表、两次1秒NanoSecondDelay及PSCI feature/reset2/cold回退；复位若返回进入CpuDeadLoop。静态/主机构建通过不等于硬件存活。
+没有本次nonce的有效pstore数据。旧收集器把exec-out返回0时stdout内65字节“cat文件不存在”诊断误存为快照；那不是console日志，原证据保留，不算读回。Android恢复后后端仍ramoops、console2MiB、pstore目录为空。已定位主机采集缺陷，改用shell -T保留远端状态并先test -f，补回归。不能用缺nonce唯一归因于映射、写入或warm复位。
 
-相机19:59预检1920x1080正常，已旋转目视Android桌面。最新只读Android完成/root/A槽/解锁和boot_a/vendor_boot_a设备及备份摘要通过，证据`out\device-tests\20261025T195919-recovery-reconciliation.json`。执行期间相机覆盖启动前、黑屏/返回与恢复节点；原始影音只存out，无录音。只读pstore收集器在启动前开启120秒有界窗口，逐次核对enuma、root读取固定console文件，使用同一local目标serial与runner独立选择结果绑定。
+相机启动/超时过程559/559帧解码通过，最后一帧仍黑屏镜面；恢复后补拍已目视Android桌面。用户恢复按键不在已确认的录像范围，不猜测按键时间。原始视频/图像/错误快照均仅本地out，无录音/上传。
 
-成功判据：原生console中找到本次完整nonce，且按既有门禁恢复并核验；只能支持本次stage10→复位→Android pstore留存链，不表示全局日志或显示成功。缺标记不唯一归因，先检查Android消费者/保留/实际到达；75秒主机观察无返回立即停止追加并优先恢复，不重试同图、不扩区。R-017单笔发出即consumed。无flash/erase/改槽/verified/显示寄存器写入。S-001..014及旧失败图consumed，GOP/XNU/iPadOS仍未实机闭合。
-
-接手不要重复已发出镜像；先看current.local及执行结果。若S-015已发出，先收敛采集/恢复并按结果更新本入口，不能把待执行文本当实际状态。
+主判断：S-015同时新增映射、物理写入和warm请求，没有内部到达证据，须先减变量。按信息价值和安全性准备独立map-only对照：仅相同已批准B0000000/2MiB映射，恢复原字节不变stage10/delay2/ResetCold，不访问console内容，不启用writer/warm。先排除新增映射和早期启动路径，再决定是否继续writer/reset隔离。该新候选尚未实现/构建/资格/执行；必须新源码/全FD/实际代码/镜像审计、所有当前文档提交推送和即时身份/备份/相机/恢复门禁后才能执行。无flash/erase/改槽/verified/pmsg/显示寄存器写入；S-001..015和旧失败图不重试。真实GOP/XNU/iPadOS仍未实机闭合。

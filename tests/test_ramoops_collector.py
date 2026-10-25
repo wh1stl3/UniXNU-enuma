@@ -31,7 +31,8 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(len(report['snapshots']), 1)
         self.assertEqual([c[-1] for c in calls], [
             'getprop ro.product.device', 'su -c "id -u"',
-            'su -c "cat /sys/fs/pstore/console-ramoops-0"'])
+            'su -c "test -f /sys/fs/pstore/console-ramoops-0 && cat /sys/fs/pstore/console-ramoops-0"'])
+        self.assertEqual(calls[-1][3:5], ['shell','-T'])
         self.assertTrue(all(c[1:3] == ['-s', 'TEST-ONLY'] for c in calls))
 
     def test_wrong_device_stops_before_root_or_console_read(self):
@@ -55,6 +56,16 @@ class CollectorTests(unittest.TestCase):
 
     def test_stale_marker_is_not_current(self):
         self.assertNotIn(collector.marker_for('a' * 32), collector.marker_for('b' * 32))
+    def test_remote_missing_file_error_is_not_saved_as_console(self):
+        def run(command, **kwargs):
+            if command[-1].startswith('getprop'):data,rc=b'enuma\n',0
+            elif command[-1]=='su -c "id -u"':data,rc=b'0\n',0
+            else:data,rc=b'cat: console-ramoops-0: No such file or directory\n',1
+            return subprocess.CompletedProcess(command,rc,data,b'')
+        with tempfile.TemporaryDirectory(dir=ROOT/'out') as parent:
+            report=collector.collect('adb','TEST-ONLY','a'*32,Path(parent)/'capture',seconds=0.02,run=run)
+            self.assertFalse(report['marker_present']);self.assertEqual(report['snapshots'],[])
+            self.assertGreater(report['read_errors'],0)
 
 
 if __name__ == '__main__':

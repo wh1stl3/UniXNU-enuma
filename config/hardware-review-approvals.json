@@ -9,7 +9,7 @@
     "execution_record": "reports/enuma-r005-device.json"
   },
   "R-017": {
-    "status": "approved",
+    "status": "consumed",
     "scope": "A console-only first retention marker; one qualified temporary boot",
     "image_sha256": [
       "2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e"
@@ -25,6 +25,6 @@
     },
     "authorization": "User explicitly instructed 上机无需批准 直接进行 注意使用摄像头记录关键节点 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
     "qualification": "reports/enuma-ramoops-canary-qualification.json",
-    "execution_record": null
+    "execution_record": "reports/enuma-ramoops-S-015-result.json"
   }
 }

@@ -930,3 +930,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-216：R-017 A直接执行授权与S-015实际产物资格
 
 2026-10-25T20:01:26+08:00。用户在精确提案后要求“上机无需批准 直接进行 注意使用摄像头记录关键节点”；批准A最小范围，不再重复询问。固件10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6已推送，conditional console map与独立DxeMain stage10 variant保留旧迁移基线/Null后端。完整构建、FD、实际Core/宏/nonce/描述符、完整FAT及Boot v3通过，镜像2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e，归档out/ramoops-audit/S-015-qualified。主机canary模拟和实际反汇编复核通过；相机已目视桌面，最新只读恢复核验通过。此记录尚未上机，下一步文档提交推送及即时门禁后执行单笔S-015。具体代码与资格见reports/enuma-ramoops-canary-code.json及qualification.json。原始影音仅本地。
+
+
+## D-217：S-015超时、恢复与采集证据更正
+
+2026-10-25T20:11:30+08:00。S-015于20:04:30单次发送，命令0/2.641秒，5.110秒断开，75秒无自动回归，停止追加。用户报告恢复，20:07:27Android完成/root/A槽/解锁/设备双分区与备份摘要独立核验通过；559/559帧、最后黑屏及恢复后桌面目视，按键未获连续录像确认。65字节快照是exec-out的缺文件cat诊断，不是pstore；无有效nonce，原证据保留。镜像2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e与R-017 writer单笔consumed，不重试。f17af47资格在执行前已推送。继续离线准备同范围map-only/原stage10-cold新候选，尚未构建/资格/上机，不从本次结果直接认定写入或warm是根因。详见reports/enuma-ramoops-S-015-result.json。原始影音仍仅本地，无分区/verified/pmsg扩张。

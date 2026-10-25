@@ -57,7 +57,10 @@ def collect(adb, serial, nonce, output, seconds=75, run=subprocess.run):
                     errors += 1
                     time.sleep(0.25)
                     continue
-                console = read('exec-out', 'su -c "cat ' + CONSOLE + '"')
+                # shell -T retains the remote exit status without PTY byte
+                # conversion. exec-out can return host status 0 with a remote
+                # cat error on stdout; never treat that error as a snapshot.
+                console = read('shell', '-T', 'su -c "test -f ' + CONSOLE + ' && cat ' + CONSOLE + '"')
                 if console.returncode == 0 and console.stdout:
                     digest = hashlib.sha256(console.stdout).hexdigest()
                     if digest not in seen:
