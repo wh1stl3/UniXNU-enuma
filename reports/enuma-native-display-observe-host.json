@@ -1,0 +1,52 @@
+{
+  "scope": "unbound pure callback observer; synthetic host inputs only",
+  "result": "PASS: 48 observation/boundary cases; <=26 reads, two100ms waits, inactive-frame suppression, no eligibility relaxation",
+  "host_command": [
+    "clang",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fno-builtin",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+    "-O1",
+    "-fsanitize=address,undefined",
+    "-fno-pie",
+    "-no-pie",
+    "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c",
+    "/mnt/d/Code/UniXNU-enuma/tests/native_observe.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/native-display-observe/test"
+  ],
+  "aarch64_command": [
+    "clang",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fno-builtin",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+    "-target",
+    "aarch64-none-elf",
+    "-ffreestanding",
+    "-O2",
+    "-c",
+    "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/native-display-observe/NativeObserve.o"
+  ],
+  "sources": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c": "6fdafa2d9833fe44926efe692ea3e6db1bc68f345828b61ffcdbdcca52ed51fc",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.h": "0b3bed21b26eaeefc66b8ac174057713795c0910cb875c21c74e1fc016ae0b07",
+    "tests/native_observe.c": "921dc5113f009410147fc2fdafc0c71698cb747fe01d4c1fb07321f6d455c764",
+    "scripts/check_native_display_observe.py": "b20a29a093a3bb816f876c85220b167105e02a1ea11f653459228abbd0e0748b"
+  },
+  "maximum_reads": 26,
+  "maximum_waits": 2,
+  "wait_us": 100000,
+  "full_gop_predicate_unchanged": true,
+  "mmio_writes": false,
+  "pixel_access": false,
+  "hardware_executed": false,
+  "runtime_binding": false
+}

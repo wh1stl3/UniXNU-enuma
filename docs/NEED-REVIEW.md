@@ -1,3 +1,9 @@
+# D-223 当前：显示离线分析及未接线观察器，无新增执行待审
+
+仅48项主机/对象测试和原GOP回归，不新增内存/像素/MMIO/verified/设备动作。详细待完成的运行时资格见operations/2026-10-25-display-frontier-analysis.md；不复活旧像素批准或S-001..018。
+
+以下为历史审查及执行账本。
+
 # D-222 当前：公开仓离线研究完成，无新增执行待审
 
 本轮未实施PMIC/SCM/长按行为或日志reader迁移；详细候选条件见operations/2026-10-25-enuma-elish-reset-reference-review.md。其他机型代码不授权enuma硬件操作，后续新增PMIC控制需先形成精确方案并沿原专项流程；当前不开始实验，不重试S-001..018。D-221硬停后Android已独立恢复，文档边界保持。

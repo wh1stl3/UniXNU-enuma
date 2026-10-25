@@ -806,3 +806,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-222：用户要求的同型enuma/elish公开源码离线研究
 
 2026-10-25T21:17:35+08:00。D-221后用户只要求参考同型仓及Wi-Fi版elish；本轮固定9仓40文件并SHA256/Git blob校验、9组源码事实通过，无新设备命令/重复恢复核验/构建/上机。Tlrenhb/enuma日志引用pipa PMIC/SPMI/PS_HOLD链但仍TODO；elish UniXNU未形成闭环，edk2-msm仍通用PSCI。新增优先方案来源为umi板级reset和pipa早期Linux reader，不把同地址/ECC参数或对方运行报告当enuma通过。下一步先离线匹配原生PON/SCM，writer+cold与持久化分开，reader移植去pmsg自测；未实施，不请求未准备好的批准。详细operations/2026-10-25-enuma-elish-reset-reference-review.md，config/enuma-elish-reset-sources.lock.json及reports/enuma-elish-reset-route-review.json。固件pin与设备硬停边界保持；原始影音仅本地，前一82430d4已推送。
+
+
+## D-223：显示侧分析及独立原生观察器离线增量
+
+2026-10-25T21:32:30+08:00。用户要求推进显示分析和UEFI，已完成NativeObserve核心（两路三样本<=26读/两次100ms、inactive-frame抑制、活动/Timing/Enable/帧进展/精确Enable3独立mask），48项ASan/UBSan与AArch64对象通过；完整GOP源/准入未变，Mu Blt/拓扑/330失败oracle/164选择回归通过。原生setup写3与status不以前者阻断读取分别保留，不简单删门。固件bbe30f697e1683e5e1621c26c85b88b9431ac7bc已推送并pin，只有未接线源，无新FD/运行时/设备动作；前一7873237研究已推送。显示验收色条/文字/恢复，背光优先原厂I2C ABI/应答，日志不再作显示分析前置。详见operations/2026-10-25-display-frontier-analysis.md和reports/enuma-display-frontier-analysis.json。原始影音仅本地。
