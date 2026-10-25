@@ -1,3 +1,7 @@
+## D-191当前硬停：S-007超时，恢复未确认
+
+停止追加并consumed，优先恢复独立核验。非新启动审批，无内存/verified/分区请求。
+
 ## D-190执行前（2026-10-25 16:03，Asia/Shanghai）
 
 用户明确要求执行point22。16:03:16即时enuma Android完成/root/A槽/解锁/原boot_a与vendor_boot_a及本地备份摘要一致；冻结point22完整载荷dedd87a6…17c25361离线复核通过，相机1920x1080画面可用，尚未发出。本次文档发布后S-007仅一笔临时boot，75秒观察，禁fallback；异常先停止追加并恢复。原始影音只留本地，不上传Git/Release/CI。无内存/verified/分区变更，无人工/审批待办。
