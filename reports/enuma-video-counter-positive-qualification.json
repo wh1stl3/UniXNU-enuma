@@ -1,0 +1,101 @@
+{
+  "trial_kind": "inherited-video-audit",
+  "scope": "first-reason classification; target1 initial counter enable, 2 later eligibility/stability, 3 initial timing/active, 4 RefreshMode10; no admission changes",
+  "topology_status_query": 0,
+  "topology_status_value": null,
+  "reason_target": 1,
+  "reason_query": 1,
+  "firmware_commit": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "archive": "out/inherited-gop/qualified-counter-b93b3bb-q1",
+  "files": {
+    "image.img": {
+      "sha256": "1090b697ce5e6703fa5098735a2a8c9fb65f9df87514b718b0d9f0ce0ad50048",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "2f7ed763b27210d34c59f3cca4d8133ce14cad2ff4f8eb8cbdbfd27ae100a81d",
+      "bytes": 807
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "54f057e2306d27d7e77f658472fc89a3de63339886afbfd4b1601f839a7b3d6a",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "0c06cd83b65c62b6816a4ddd283e95dd017108387d203d3ff8995b70843d45a1",
+      "bytes": 3145920
+    },
+    "SimpleFbDxe.efi": {
+      "sha256": "7b253e3646800a230e31908e57e74546799b1e4357d6ce5c65a51230114fe6e1",
+      "bytes": 18944
+    },
+    "provider.GNUmakefile": {
+      "sha256": "8ed83617800372c54a423880686455a6a47de6f7433e81946f1212430ce1702c",
+      "bytes": 22564
+    },
+    "entry.c": {
+      "sha256": "a46c470fe989939977a48427c0080bb9f1b0ba2ddd29bd8815960b892944c2f7",
+      "bytes": 3430
+    },
+    "DxeCore.efi": {
+      "sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "bytes": 164352
+    },
+    "core.GNUmakefile": {
+      "sha256": "e4adc8d34b58e85304b0603ab1bfb65ce1957b89f146e9735c6a11ccd23c6dad",
+      "bytes": 51592
+    },
+    "EnumaDispatchDetailCheckpoint.h": {
+      "sha256": "3a6e0cf398b1a3a7486f5768d0990c85865659e164f4340905a4d873f9968c0c",
+      "bytes": 4184
+    },
+    "VideoResult.h": {
+      "sha256": "b9c9375fad42acd8dd470bd2208e70ccbf17f22a2233f62e8dab30cceec324a7",
+      "bytes": 2286
+    },
+    "Evidence.c": {
+      "sha256": "bff3961f4c0b3c010358701dff15c370901498115559e2ad342ace1f9a93de69",
+      "bytes": 5046
+    },
+    "Evidence.h": {
+      "sha256": "6a4b1fce8c0bc2a4c6cbae532edef9d7d7930253ba732a32b4f2812ff670c177",
+      "bytes": 1997
+    },
+    "firmware-build.json": {
+      "sha256": "92f41bead363787b815d4cb3d2c7723ce796cb64b0c8d91b8f1f492a5cccff20",
+      "bytes": 19177
+    },
+    "fd-audit.json": {
+      "sha256": "0cd137340937676fbb439416648f0588cce381e9643f85b7cc8e638df6aee9af",
+      "bytes": 4326
+    },
+    "host-tests.json": {
+      "sha256": "9c52434a1043c2f79a9a9fa590e91a1d2c0dad64a6ace67267d28abbc3da6785",
+      "bytes": 16896
+    }
+  },
+  "image": "out/inherited-gop/qualified-counter-b93b3bb-q1/image.img",
+  "image_sha256": "1090b697ce5e6703fa5098735a2a8c9fb65f9df87514b718b0d9f0ce0ad50048",
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "maximum_reads": 330,
+  "maximum_wait_calls": 2,
+  "maximum_mmio_offset": "0x6c26c",
+  "pixel_access": false,
+  "gop_published": false,
+  "map_record_in_actual_fd": true,
+  "packaged_provider_equal": true,
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "0c06cd83b65c62b6816a4ddd283e95dd017108387d203d3ff8995b70843d45a1",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "terminal_return": {
+    "pass": 2,
+    "fail": 7,
+    "completion_fallback": false
+  },
+  "result_interpretation": "query1 matching first reason=>2s, other valid reason=>7s; query2 complement. Unknown/inconsistent status-reason and invalid success requirements emit no recognized marker. Only paired timing support, not direct reason log."
+}

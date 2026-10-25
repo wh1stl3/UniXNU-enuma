@@ -64,6 +64,11 @@ def qualification(published=False, report=None):
     if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
         raise ValueError('candidate differs')
     if published:
+        if q.get('reason_target'):
+            review=json.loads((ROOT/'reports/enuma-video-reason-code.json').read_text())
+            matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and x.get('query')==q['reason_query'] and x.get('reason_target')==q['reason_target'] and x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
+            if review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
+                raise ValueError('actual first-reason provider code review missing or mismatched')
         for repo in (ROOT, ROOT / 'firmware'):
             def git(*args):
                 return subprocess.check_output(['git', '-C', str(repo), *args], text=True).strip()

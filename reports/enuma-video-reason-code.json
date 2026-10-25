@@ -1,0 +1,66 @@
+{
+  "scope": "actual archived reason classifier executable comparison; manual review of every changed instruction is required",
+  "firmware_commit": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "queries": [
+    {
+      "query": 1,
+      "reason_target": 1,
+      "image_sha256": "1090b697ce5e6703fa5098735a2a8c9fb65f9df87514b718b0d9f0ce0ad50048",
+      "provider_sha256": "7b253e3646800a230e31908e57e74546799b1e4357d6ce5c65a51230114fe6e1",
+      "core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "core_executable_equal_reviewed_S010": true
+    },
+    {
+      "query": 2,
+      "reason_target": 1,
+      "image_sha256": "54f466c1fa0e617af343c237ac65b132d17b68640196f877c474453a86cff523",
+      "provider_sha256": "fa5e801eace7d5de056afb3ff79acd6fa1c5711d930a1d00e443fcbef1bb6f5c",
+      "core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "core_executable_equal_reviewed_S010": true
+    }
+  ],
+  "changes": [
+    {
+      "rva": "0x112c",
+      "positive": {
+        "mnemonic": "mov",
+        "operands": "w0, #5",
+        "bytes": "a0008052"
+      },
+      "negative": {
+        "mnemonic": "mov",
+        "operands": "w0, #1",
+        "bytes": "20008052"
+      }
+    },
+    {
+      "rva": "0x1188",
+      "positive": {
+        "mnemonic": "mov",
+        "operands": "w0, #5",
+        "bytes": "a0008052"
+      },
+      "negative": {
+        "mnemonic": "mov",
+        "operands": "w0, #1",
+        "bytes": "20008052"
+      }
+    },
+    {
+      "rva": "0x2874",
+      "positive": {
+        "mnemonic": "csinc",
+        "operands": "x9, x9, xzr, eq",
+        "bytes": "29059f9a"
+      },
+      "negative": {
+        "mnemonic": "csinc",
+        "operands": "x9, x9, xzr, ne",
+        "bytes": "29159f9a"
+      }
+    }
+  ],
+  "differences_sha256": "40e0c19e8f6a9e2bd1a5ab417f6d2eda64bc46ddf4a9b969a9409144df673552",
+  "review_required": false,
+  "hardware_success": false
+}

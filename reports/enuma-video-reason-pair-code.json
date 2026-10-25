@@ -1,0 +1,40 @@
+{
+  "scope": "actual two FD PE inventories and full input comparison; source revision differs only for documented control selection, not hardware success",
+  "sample_firmware": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "control_firmware": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "same_firmware_configuration": false,
+  "same_autogen_and_library_inventory": true,
+  "same_bootshim": true,
+  "same_full_fat": true,
+  "PE_count": 72,
+  "unchanged_PE_count": 70,
+  "changed_PE": {
+    "80cf7257-87ab-47f9-a3fe-d50b76d89541": {
+      "name": "PcdDxe",
+      "sample_sha256": "64c5915563278dc196557be938cc7ff28481c8791a064036bbb0362f4c4d75c0",
+      "control_sha256": "5ec5fda88811f7dbe6f264e0304710e86a192ed428e5d70f25bdf762d1354b9c"
+    },
+    "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92": {
+      "name": "SimpleFbDxe",
+      "sample_sha256": "7b253e3646800a230e31908e57e74546799b1e4357d6ce5c65a51230114fe6e1",
+      "control_sha256": "fa5e801eace7d5de056afb3ff79acd6fa1c5711d930a1d00e443fcbef1bb6f5c"
+    }
+  },
+  "debug_GUID_only_PE": {
+    "80cf7257-87ab-47f9-a3fe-d50b76d89541": {
+      "allowed_fields": [
+        {
+          "guid_file_offset": "0x6148",
+          "bytes": 16
+        }
+      ],
+      "actual_changed_bytes": 8,
+      "normalized_pe_sha256": "6a452d6458bf7730b81df13d541585c7a129fd2b12afd27f8e1c102c5bcdff17",
+      "scope": "all remaining PE bytes identical, including code, paths and debug age"
+    }
+  },
+  "sole_runtime_PE_change": "dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92",
+  "physical_gop_tested": false,
+  "same_configuration_except_classifier_query": true,
+  "topology_query_pair": null
+}
