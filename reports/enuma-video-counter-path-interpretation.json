@@ -1,0 +1,17 @@
+{
+  "scope": "source-path implications conditional on the supported indirect Reason5 classification; not direct hardware logs",
+  "firmware_commit": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "pair_result": "reports/enuma-video-counter-pair-result.json",
+  "question": "first sample Enable&3!=3",
+  "supported_reason": 5,
+  "exact_reason_observed": false,
+  "conditional_maximum_sample_read_callbacks": 9,
+  "conditional_wait_calls": 0,
+  "conditional_later_pipeline": "not reached",
+  "conditional_stability_check": "not reached",
+  "exact_enable_value": null,
+  "which_interface": null,
+  "active_value_of_rejecting_interface": null,
+  "rationale": "Original condition order is timing, enable, active after four interface reads. Reason5 is assigned only in sample0 before pipeline sampling or waits.",
+  "next": "Independent video-mode native active-state and two-window counter observation; keep full GOP admission unchanged until same-boot evidence supports a precise policy correction."
+}

@@ -1,0 +1,62 @@
+{
+  "scope": "actual first-return reason classifier; not GOP admission",
+  "trial": "S-014",
+  "firmware_commit": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "image_sha256": "54f466c1fa0e617af343c237ac65b132d17b68640196f877c474453a86cff523",
+  "fd_sha256": "835147420761982c133e90f5d943f047c78e6de18fe414edf6f8e630ba1da139",
+  "reason_target": 1,
+  "reason_query": 2,
+  "consumed": true,
+  "automatic_android_return": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261025T190921-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-25 19:09:35",
+    "issued_at_utc": "2026-10-25T11:09:35.719795+00:00",
+    "boot_command_return_seconds": 2.641,
+    "fastboot_disconnect_observed_seconds": 5.125,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 26.516,
+    "boot_complete_seconds": 41.063
+  },
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "ef9411c429e5bf326db588ab332ad772061fbc4e71d8bce55c6d173938f13c8e",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T191112-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 279,
+    "decoded_frames": 279,
+    "video": "out/camera-capture/20261025T190918-system-transport/system-transport.avi",
+    "sha256": "9165f405154efa9818cad2439f0db9be4ea328148eeb633076c9915dd5b7f610",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_published": false,
+  "exact_reason_observed": false,
+  "maximum_qualified_reads": 330,
+  "actual_reads_observed": null,
+  "conclusion": "controlled return; await complementary classification"
+}
