@@ -134,7 +134,7 @@ int main(void) {
     assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==native_reasons[I]&&!memcmp(&E,&Before,sizeof(E)));
   }
   M=(MODEL){.Borders=63,.BadMixer=1};E=Before;
-  assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&Why==EnumaVideoReasonNativeMixerLayout&&!memcmp(&E,&Before,sizeof(E)));
+  assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&Why==EnumaVideoReasonLayoutMode&&!memcmp(&E,&Before,sizeof(E)));
   puts("PASS: native border all64 masks preserve raw snapshots,330 read failures, changed border/unknown staging/stability/mixer rejection");
   puts("PASS: native fixed-source callback/result parity at all330 read failures and CTL/staging/LM first-location isolation");
   puts("PASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged");

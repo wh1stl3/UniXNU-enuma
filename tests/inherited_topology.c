@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "Topology.h"
+ENUMA_U32 EnumaResolveMixerOriginsBaseline(const ENUMA_INHERITED_SNAPSHOT *,const ENUMA_MIXER_SNAPSHOT *,const ENUMA_INHERITED_LIMITS *,ENUMA_INHERITED_LIMITS *);
 static ENUMA_INHERITED_SNAPSHOT S; static ENUMA_MIXER_SNAPSHOT T;
 static ENUMA_INHERITED_LIMITS L,O; static ENUMA_INHERITED_FRAME F;
 typedef struct { unsigned Count,Fail; } READER;
@@ -22,7 +23,17 @@ static void setup(void) {
   S.Pipes[1]=S.Pipes[0]; S.Pipes[1].Address+=3200;
   L.Width=1600; L.Height=2560; L.SplashBase=0x10000000; L.SplashBytes=0x2000000;
 }
+static unsigned parity(void) {
+  ENUMA_INHERITED_LIMITS A,B;unsigned W=99;memset(&A,0xa5,sizeof(A));B=A;
+  ENUMA_INHERITED_SNAPSHOT before=S;ENUMA_MIXER_SNAPSHOT mt=T;
+  unsigned status=EnumaResolveMixerOriginsDetailed(&S,&T,&L,&A,&W);
+  assert(EnumaResolveMixerOriginsBaseline(&S,&T,&L,&B)==status&&!memcmp(&A,&B,sizeof(A)));
+  assert(!memcmp(&before,&S,sizeof(S))&&!memcmp(&mt,&T,sizeof(T)));
+  if(!status)assert(W==EnumaLayoutOther);
+  return W;
+}
 static void bad(void) {
+  parity();
   ENUMA_INHERITED_LIMITS Before; memset(&O,0xa5,sizeof(O)); Before=O;
   assert(EnumaResolveMixerOrigins(&S,&T,&L,&O)==EnumaInheritedTopology&&!memcmp(&Before,&O,sizeof(O)));
 }
@@ -48,6 +59,16 @@ int main(void) {
   READER R={0}; assert(!EnumaCaptureMixers(read_reg,&R,&Out)&&R.Count==144);
   setup(); S.Ctls[2].IntfActive=2; R=(READER){0}; Out=Before;
   assert(EnumaCaptureRoutedMixers(&S,read_reg,&R,&Out)==EnumaInheritedTopology&&!R.Count&&!memcmp(&Out,&Before,sizeof(Out)));
+  setup();assert(parity()==EnumaLayoutOther);
+  T.Mixers[4].Blend[10]=1u<<16;assert(parity()==EnumaLayoutBlend);
+  setup();T.Mixers[0].Mode|=1u<<30;assert(parity()==EnumaLayoutMode);
+  setup();S.Pipes[0].OutXy=1;assert(parity()==EnumaLayoutGeometry);
+  setup();T.Mixers[0].Mode=0;assert(parity()==EnumaLayoutSides);
+  // Every bit in each saved mixer word; compare exact fixed-source status/output.
+  for(unsigned m=0;m<6;m++)for(unsigned field=0;field<24;field++)for(unsigned bit=0;bit<32;bit++) {
+    setup();unsigned *v=field==0?&T.Mixers[m].Mode:field==1?&T.Mixers[m].Size:field<13?&T.Mixers[m].Blend[field-2]:&T.Mixers[m].Alpha[field-13];
+    *v^=1u<<bit;parity();
+  }
   for(unsigned mask=0;mask<64;mask++) {
     setup();for(unsigned m=0;m<6;m++)if(mask&(1u<<m))S.Ctls[2].Layers[m][0]|=1u<<24;
     ENUMA_INHERITED_SNAPSHOT before=S;
@@ -70,6 +91,7 @@ int main(void) {
   setup();S.Ctls[2].Layers[4][0]=0;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingCardinality);
   setup();S.Ctls[2].IntfActive=2;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingOther);
   assert(EnumaClassifyVideoStaging(0)==EnumaStagingOther);
+  puts("PASS: layout first-predicate classes and4608 saved-word perturbations match fixed c45191c status/output; snapshots immutable");
   puts("PASS: pure staging classification, all64 border masks, 768 single-bit perturbations, source/unknown/cardinality cases, no mutation");
   puts("PASS: reversed mixer identities, explicit right flag, dual tile decode, 12 topology rejects and 144 callback failures; downstream/CPU proof remains required");
 }

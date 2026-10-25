@@ -1130,3 +1130,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-250，S-032 原生显示管线合并审计结果与交接
 
 2026-10-26T00:22:41+08:00，前里程碑3e247de，固件c45191c00100634ba6cfa09ee06986edaafe8d53。实测结果：{"conclusion": "route-category-inferred", "category": "mixer-or-layout-topology-rejected", "warning_code": 4, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-032-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
+
+
+## D-251，S-033 原生显示管线合并审计资格完成，准备实测
+
+2026-10-26T00:31:44+08:00，前里程碑bea3a9a，固件60dd3d9da2010150a26b497ad43dbd09f704e70c。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和相机门禁通过后直接单次临时boot。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。

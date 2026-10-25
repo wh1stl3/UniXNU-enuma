@@ -1,7 +1,7 @@
 {
   "scope": "real header/selector with sanitized host callbacks; no device execution",
-  "result": "PASS: 12480 staging selector cases; PASS: 10080 detailed route mappings; PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
-  "route_result": "PASS: 12480 staging selector cases; PASS: 10080 detailed route mappings; PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
+  "result": "PASS: 14880 layout selector cases; PASS: 12480 staging selector cases; PASS: 10080 detailed route mappings; PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
+  "route_result": "PASS: 14880 layout selector cases; PASS: 12480 staging selector cases; PASS: 10080 detailed route mappings; PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
   "route_command": [
     "clang",
     "-DENUMA_NATIVE_ROUTE_AUDIT=1",
@@ -73,11 +73,11 @@
     "route:ENUMA_DIAG_GUID_ONLY"
   ],
   "source_sha256": {
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "1bffd0ceee6d7ba4fdb0ce3cb269814193df589e88aa544aa9ee3afa8a8fce6e",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeRouteResult.h": "110a7c32b1f220318cce44b0cc345dc13525edf0c7e1f9a15ec6aa707bd0902a",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "ac35b83d036a2d2983c397e6a8e3981b5960a7956cc0e067d0f3baf3bb9327b1",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeRouteResult.h": "5d6acc76cd7cd2b58004f4bdba050dd31042d45b3c209a6817f21e3a2516ca48",
     "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "63ab286705d8bfc270ba88c14185dfd1a2f81508672eadda07e7673f3033b783",
-    "tests/native_mask_terminal.c": "6e92c24eaeb2526f47c4ebaf0bd5f636b033eb6732eb0c3221bb04bffa4d4db9",
+    "tests/native_mask_terminal.c": "a8365907234436ac60a69900e94bdec4e8a21d1393f4276ed2e29864851da0a1",
     "scripts/check_native_mask_terminal.py": "249cb2dd6c902e859d7991b6e6e4ccc8a77cd7836edb2ff5a3cadc34df539fa3"
   },
   "maximum_terminal_delay_us": 22000000,

@@ -5,36 +5,36 @@
   "boot_clock_capture": true,
   "review_required": false,
   "scope": "STATUS gated stable CTL/SSPP/LM/video layout candidate; no GOP admission",
-  "firmware_commit": "c45191c00100634ba6cfa09ee06986edaafe8d53",
-  "archive": "out/inherited-gop/qualified-native-border-c45191c",
+  "firmware_commit": "60dd3d9da2010150a26b497ad43dbd09f704e70c",
+  "archive": "out/inherited-gop/qualified-native-layout-60dd3d9",
   "files": {
     "image.img": {
-      "sha256": "4bc3fb98f20d1ea7780556652203be17dd02b5c27b5e1e08b029bf1fb3283243",
+      "sha256": "f6cf178d1dff01b6ace9767d08dbdc7e7d87bb842d29315a152b4d82ccc1982b",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "e5142bf7078bbabf37016e4ab679f49d6c2d49c8e9d343b9883038663d6b3124",
+      "sha256": "c5830d663e02afc5ad21d44877a536c00041d194931afd26a10016df1a9318b3",
       "bytes": 807
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "92c4cf55b3f19818f8056e3cedbceb3f09f2a57cb922c086799088c4c252f5f3",
+      "sha256": "ed405ff5bc46d28c2082fb4f63c9de37a9eee94a35559726c5a1f0ac93dd727c",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "60ff00ae3f299de552e8a7592046a60b915b1897ee22b60f24356b324dca084b",
+      "sha256": "8641c87360ce4284f72e84e016685b020dc73df0ffb6d4e07f0da3f693b6d5d6",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "12a3134748e2686583b56ee2cc706b7740240cddddf9658903a0cd87d31518e8",
+      "sha256": "41fb59d55e207b028b8de59bc85874b4bc43acca786424b875d21d9f32fbbcc1",
       "bytes": 18944
     },
     "provider.GNUmakefile": {
-      "sha256": "d2efdd39e4f69b637bc88034510fcd902cdb2a2c4eeb35bea78137961125fe3a",
-      "bytes": 22954
+      "sha256": "0638928dd6fad0203075493554d7b5d1af0f0a53a953643a5d7baf3266c87250",
+      "bytes": 22984
     },
     "entry.c": {
-      "sha256": "4820699de831fef46f15ab78a53d8aa8bcb7f557a42043f5e1af2e4ce9b16771",
-      "bytes": 4767
+      "sha256": "a2b061dc3c5826a3caa66415068739d5a5aee8fe80d992d248ab32ddc6689730",
+      "bytes": 5183
     },
     "DxeCore.efi": {
       "sha256": "a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f",
@@ -49,8 +49,8 @@
       "bytes": 1268
     },
     "core.GNUmakefile": {
-      "sha256": "bc98f90040127e78eac94f55b5f72c0e021cce4bc27c891ce993b9781308e5ae",
-      "bytes": 51982
+      "sha256": "8c710a9912b9b8d7b76b1581cf56bc5acf4bad10260c7632399617a128cd8b00",
+      "bytes": 52012
     },
     "EnumaDispatchDetailCheckpoint.h": {
       "sha256": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
@@ -61,24 +61,24 @@
       "bytes": 2286
     },
     "Evidence.c": {
-      "sha256": "dc1a06a66f13ff8720047849ca2c0f91f24d07eb7c174301d57a91b263bb9de7",
-      "bytes": 6831
+      "sha256": "28d5551d30ee08a54023366f88c06b35cfc5114edca460c6ef9fac80c713f9fb",
+      "bytes": 7121
     },
     "Evidence.h": {
-      "sha256": "1bffd0ceee6d7ba4fdb0ce3cb269814193df589e88aa544aa9ee3afa8a8fce6e",
-      "bytes": 3118
+      "sha256": "ac35b83d036a2d2983c397e6a8e3981b5960a7956cc0e067d0f3baf3bb9327b1",
+      "bytes": 3263
     },
     "firmware-build.json": {
-      "sha256": "780c47bf11e5cc972256c018b6e9513c1c786d7722c627a98cee094a65d4d0a7",
-      "bytes": 21488
+      "sha256": "b7e281ec998d2908d51a62b4b75158224869b8badcea757de257940af2010c22",
+      "bytes": 21559
     },
     "fd-audit.json": {
-      "sha256": "6c7dbc5f5745c112695b7ac0cda381623011775df18b3f17772a9031971a9c13",
+      "sha256": "b3ed1da61fe5a1d7a9f643b8261998ae668b4dbbe18beb4088efb072467d3451",
       "bytes": 4326
     },
     "host-tests.json": {
-      "sha256": "d49ebbd10dd1a9cc6892b391f47892898e95820d487997c8b5dd7163be620b46",
-      "bytes": 19409
+      "sha256": "38b932f809d9968d8cbb7e310fb854b2303b8bfa1157fa4ceb44debbc8ef5da2",
+      "bytes": 21551
     },
     "provider.map": {
       "sha256": "1e983cda38f9e7333dce08a47ac0a44e9c2047ff03a51200f6cb6d00823ad4d8",
@@ -101,24 +101,24 @@
       "bytes": 1070
     },
     "mask-host-tests.json": {
-      "sha256": "900e3cb3983bcf34d9b711ee5fbc52fede6dbd706b54a291cea8bc5b3c6f8c41",
-      "bytes": 3972
+      "sha256": "942310a90d8cf136ee3d08e50185e345007b4098dddfddad99d65f1035e7f547",
+      "bytes": 4042
     },
     "NativeRouteResult.h": {
-      "sha256": "110a7c32b1f220318cce44b0cc345dc13525edf0c7e1f9a15ec6aa707bd0902a",
-      "bytes": 1635
+      "sha256": "5d6acc76cd7cd2b58004f4bdba050dd31042d45b3c209a6817f21e3a2516ca48",
+      "bytes": 1877
     },
     "VideoCapture.c": {
       "sha256": "42a38eb9d85540e1fd6a6f0b948507a70e017ae1e8361bedeffa4eec06b3d49b",
       "bytes": 3599
     },
     "Topology.c": {
-      "sha256": "7299c889dca83256f42ec48cefa15d2b8ed273099514cedca24232f526bd925f",
-      "bytes": 8683
+      "sha256": "70ceec1b29b2e24cc8d422d91700884cd40463b0cc9cd77111c6700bb1ea3948",
+      "bytes": 9409
     },
     "Topology.h": {
-      "sha256": "f1148b3316ba7e19d19fe4c4bb14f69fcb9d0a63f3707b5e042295d35b43ae87",
-      "bytes": 1426
+      "sha256": "34ad2dbb3b540a7d4ab0abd919c9eee3abf41ea792496e7ed782c8067a56c983",
+      "bytes": 1774
     },
     "Decode.c": {
       "sha256": "dde2a43b870a368c3ecc7cdbcc07947ba2ba3abb3f18efee58d2bfac27a1734c",
@@ -129,16 +129,16 @@
       "bytes": 2709
     },
     "SimpleFbDxe.disassembly.txt": {
-      "sha256": "2c90c3ce25b43fa95292d922344d67f30070473056d0b99a336b1eafdb8f6f9e",
-      "bytes": 63839
+      "sha256": "89f438eca211de9c24d941c7e054e9f1fd52a28383c645efbcd7f29ea639cc1e",
+      "bytes": 63801
     },
     "DxeCore.disassembly.txt": {
       "sha256": "409ee5cd7535b71a4be41904b26a7d2b126a22b83ba05209c92b949d86b81e2c",
       "bytes": 702682
     }
   },
-  "image": "out/inherited-gop/qualified-native-border-c45191c/image.img",
-  "image_sha256": "4bc3fb98f20d1ea7780556652203be17dd02b5c27b5e1e08b029bf1fb3283243",
+  "image": "out/inherited-gop/qualified-native-layout-60dd3d9/image.img",
+  "image_sha256": "f6cf178d1dff01b6ace9767d08dbdc7e7d87bb842d29315a152b4d82ccc1982b",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
   "maximum_reads": 330,
   "maximum_wait_calls": 2,
@@ -153,7 +153,7 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "60ff00ae3f299de552e8a7592046a60b915b1897ee22b60f24356b324dca084b",
+    "kernel_sha256": "8641c87360ce4284f72e84e016685b020dc73df0ffb6d4e07f0da3f693b6d5d6",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
   "terminal_return": {
@@ -166,11 +166,12 @@
     ],
     "completion_fallback": false
   },
-  "result_interpretation": "Five first-result categories from native route sampler, not bit masks; code5 stable candidate retains ADDRESS and TOPOLOGY requirements. Indirect timing; ambiguous clock or failed recovery stops additional trials.",
+  "result_interpretation": "Five first-layout-rejection categories only; code5 is left/right rejection, not success. No extra reads or changed predicates. Ambiguous clock stops additional trials.",
   "native_border_view": true,
   "native_route_audit": true,
   "native_route_detail": true,
   "native_route_staging": false,
+  "native_route_layout": true,
   "decode_plan": {
     "baseline_envelope_seconds": [
       10.25199999997858,
@@ -213,10 +214,10 @@
   },
   "calibration_sha256": "48eaaaea519da34dd0eb52186807e9e8b7fa1180dc70d5ff1685f70a8814dacb",
   "result_categories": {
-    "1": "non-topology-or-contract-rejected",
-    "2": "ctl-selection-topology-rejected",
-    "3": "source-staging-topology-rejected",
-    "4": "mixer-or-layout-topology-rejected",
-    "5": "stable-candidate-address-and-downstream-unproven"
+    "1": "not-classified-as-layout-rejection",
+    "2": "mixer-dim-or-blend-rejected",
+    "3": "mixer-processing-mode-rejected",
+    "4": "mixer-or-source-geometry-rejected",
+    "5": "mixer-left-right-assignment-rejected"
   }
 }

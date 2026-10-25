@@ -134,3 +134,31 @@ Image4bc3fb98f20d1ea7780556652203be17dd02b5c27b5e1e08b029bf1fb3283243
 binds ROUTE1/DETAIL1/STAGING0 and native_border_view=true. Host64 border masks,
 330 failures and raw-border-change rejection passed. No physical or visible
 success is inferred from this review.
+
+## S-033 first layout rejection, source60dd3d9
+
+Archive qualified-native-layout-60dd3d9; full disassembly digest
+d9bd1a2dfa6051fa454c375dd93e42430f369e12f9a464274a495fe27409e053.
+Core whole bytes equal S-032. Provider helpers Normalize28ec,Select29d8,
+Stage2c08,Equal2c5c and Read2c88 retain their addresses and instructions.
+Compared complete provider instruction stream against S-032:27 normalized
+operand change groups, plus all changed branch destinations, manually reviewed.
+Branch normalization is only a navigation aid, not equivalence proof.
+Changes outside layout are return-register allocation, shifted labels and the
+new selector; metadata bounds, capture order,330-read cap, two100ms waits,
+normalized-view separation and raw stability logic retain prior semantics.
+
+Pure resolver checks now branch to first-category labels: dim/blend1a3c,
+1a70,1a9c ->26ac (reason26); mode1ac4 ->26f0 (reason27); height/width1af4,
+1afc ->26b0 with class3, local geometry1b54/1b70 and total width1bec ->26cc
+(reason28); duplicate/missing sides1b14/1b20/1bb4 ->26dc (reason29).
+Contract/source-owner failures go26a4 (reason25). No additional data loads or
+reads are required for classification. Selector262c..264c requires status13,
+zero output requirements and reason26..29, then returns2..5; otherwise1.
+Success still carries requirements0x14 but returns unclassified1 in this
+diagnostic profile, never the left/right rejection code5.
+
+Imagef6cf178d1dff01b6ace9767d08dbdc7e7d87bb842d29315a152b4d82ccc1982b
+binds actual ROUTE1/DETAIL1/LAYOUT1/STAGING0/MASK0/QUERY0 compilation. Fixed
+resolver4608 mutations and14880 selector cases support the review; no new
+admission, pixel operation, mapping or physical display claim.

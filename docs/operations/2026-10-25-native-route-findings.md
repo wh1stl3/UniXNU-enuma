@@ -50,3 +50,24 @@ being mistaken for routed mixers. Reads remain bounded330 and waits2x100ms.
 Unknown bits, source count/duplicates, layout, format, address bounds and raw
 configuration changes still reject. Successful audit still requires independent
 CPU/SMMU address and downstream association before a pixel experiment or GOP.
+
+## S-032 and first layout predicates (2026-10-26)
+
+S-032 origin27.225..27.339s uniquely mapped to mixer/layout topology rejection;
+Android completed51.297s, independent recovery and camera desktop passed. This
+supports progress through native source selection/capture, not three complete
+stable samples. The image is consumed. Source60dd3d9 adds only first rejection
+classification: blend, mode, geometry or left/right assignment. Fixed c45191c
+resolver status/output parity covers4608 saved-word mutations.
+
+Working hypothesis: the mode predicate may reject legitimate per-stage alpha
+output bits. This is a source-backed possibility, not a measured LM word.
+The fixed [MiCode LM implementation](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_lm.c)
+lines139..150 updates alpha output while preserving bits31/30; lines70..88 set
+the right-mixer flag in bit31, and lines104..120 pack FG/BG constant alpha.
+The matching [CRTC implementation](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_crtc.c)
+lines1330..1338 derives mixer_op_mode from stage/alpha conditions and line1492
+passes it to setup_alpha_out. Current resolver rejects all mode bits except31.
+A blend/geometry/side category would displace this hypothesis as the first
+blocking predicate. Even a mode category needs precise bit/source correlation
+before changing admission; bit30 remains unexplained and is not accepted.

@@ -18,7 +18,7 @@ def main():
     evidence=pkg/'InheritedScanoutLib/Evidence.c'
     video=pkg/'InheritedScanoutLib/VideoCapture.c'
     selector=pkg/'InheritedScanoutLib/VideoResult.h'
-    common=['clang','-std=c11','-Wall','-Wextra','-Werror','-fno-builtin','-fshort-wchar','-DMDEPKG_NDEBUG','-DENUMA_NATIVE_ROUTE_STAGING=1',
+    common=['clang','-std=c11','-Wall','-Wextra','-Werror','-fno-builtin','-fshort-wchar','-DMDEPKG_NDEBUG','-DENUMA_NATIVE_ROUTE_STAGING=1','-DENUMA_NATIVE_ROUTE_LAYOUT=1',
             '-I'+str(pkg/'InheritedGopLib'),'-I'+str(pkg/'InheritedScanoutLib'),
             '-I'+str(core/'MdePkg/Include'),'-I'+str(core/'MdeModulePkg/Include')]
     host=[*common,'-I'+str(core/'MdePkg/Include/X64'),'-O1','-fsanitize=address,undefined','-fno-pie','-no-pie']
@@ -29,8 +29,12 @@ def main():
     native_baseline=out/'native-baseline-Evidence.c'
     native_baseline.write_bytes(subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show','fafb8a388837d002a51e7723f643058e74180548:Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c']))
     checks.append(run([*[x for x in host if x!='-no-pie'],'-DEnumaSampleVideo=EnumaNativeStrictBaseline','-DEnumaSampleVideoDetailed=EnumaNativeStrictDetailedBaseline','-DEnumaSampleNativeVideoDetailed=EnumaNativeBaseline','-c',native_baseline,'-o',out/'native-baseline-Evidence.o']))
-    for name,sources in [('gop',[backend,blt,ROOT/'tests/inherited_gop.c']),
-                         ('topology',[topo,decode,ROOT/'tests/inherited_topology.c']),
+    topology_baseline=out/'baseline-Topology.c'
+    topology_baseline.write_bytes(subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show','c45191c00100634ba6cfa09ee06986edaafe8d53:Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c']))
+    renamed=['EnumaSelectVideoRoute','EnumaCaptureMixers','EnumaCaptureRoutedMixers','EnumaResolveMixerOrigins','EnumaClassifyVideoStaging','EnumaNormalizeVideoBorder']
+    checks.append(run([*[x for x in host if x!='-no-pie'],*['-D'+n+'='+n+'Baseline' for n in renamed],'-c',topology_baseline,'-o',out/'baseline-Topology.o']))
+    for name,sources in [('gop' ,[backend,blt,ROOT/'tests/inherited_gop.c']),
+                         ('topology',[topo,decode,ROOT/'tests/inherited_topology.c',out/'baseline-Topology.o']),
                          ('evidence',[capture,video,topo,decode,evidence,ROOT/'tests/inherited_evidence.c',out/'baseline-Evidence.o',out/'native-baseline-Evidence.o']),
                          ('video-result',[ROOT/'tests/inherited_video_result.c'])]:
         checks.append(run([*host,*sources,'-o',out/name])); checks.append(run([out/name]))
