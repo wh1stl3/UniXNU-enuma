@@ -816,3 +816,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-224，独立双路观测完整资格通过，准备S-019
 
 2026-10-25T21:52:10+08:00。前一87f188b已推送离线显示观察器。固定新固件57ae4ffb136f5330d6e9b759f21202f1d12cebc5、完整FD/PE/宏/映射/载荷与cold同hook资格闭合。S-019/S-020尚未发出。先S-019 query1单笔；仅受控返回、独立恢复核验及当前文档再次推送后执行S-020 query2。证据reports/enuma-native-display-code.json、q1/q2-qualification及对应result；全部原始影音本地，禁写/内存/verified/分区边界保持。
+
+
+## D-225，S-019受控返回，准备互补S-020
+
+2026-10-25T21:54:38+08:00。前一87f188b已推送离线显示观察器。固定新固件57ae4ffb136f5330d6e9b759f21202f1d12cebc5、完整FD/PE/宏/映射/载荷与cold同hook资格闭合。S-019 query1已单次发出并受控回Android、独立恢复通过；S-019 consumed。单笔时序不分类，当前文档推送与即时门禁后继续S-020 query2；S-020尚未发出。时序：{"issued_at": "2026-10-25 21:53:31", "issued_at_utc": "2026-10-25T13:53:31.737879+00:00", "boot_command_return_seconds": 2.625, "fastboot_disconnect_observed_seconds": 5.093, "fastboot_return_seconds": null, "adb_return_seconds": 25.422, "boot_complete_seconds": 39.531}。证据reports/enuma-native-display-code.json、q1/q2-qualification及对应result；全部原始影音本地，禁写/内存/verified/分区边界保持。
