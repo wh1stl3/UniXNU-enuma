@@ -21,6 +21,11 @@ def main():
     (out/'attribute-wrapper.disassembly.txt').write_text(attribute_dis)
     for op in ['s1e1r','s1e1w','s1e2r','s1e2w','PAR_EL1','DAIF','SCTLR_EL1','SCTLR_EL2','TCR_EL1','TCR_EL2','HCR_EL2','CurrentEL']:
         assert op.lower() in attribute_dis.lower(),op
+    subprocess.run([*common,'--target=aarch64-none-elf','-ffreestanding','-O2','-DENUMA_NATIVE_ROUTE_CPU_POLICY=1','-c',str(wrapper),'-o',str(out/'policy-wrapper.o')],check=True)
+    policy_dis=subprocess.check_output(['llvm-objdump','-d',str(out/'policy-wrapper.o')],text=True)
+    (out/'policy-wrapper.disassembly.txt').write_text(policy_dis)
+    for op in ['s1e1r','s1e1w','s1e2r','s1e2w','PAR_EL1','DAIF','SCTLR_EL1','SCTLR_EL2','TCR_EL1','TCR_EL2','HCR_EL2','CurrentEL']:
+        assert op.lower() in policy_dis.lower(),op
     report=dict(scope='actual portable per-page algorithm with synthetic PAR and freestanding actual AArch64 wrapper; no hardware/data proof',result=result,
       sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [source,lib/'CpuStage1.h',lib/'InheritedScanout.h',Path(__file__)]},hardware_tested=False,physical_framebuffer_access=False)
     (ROOT/'reports/enuma-cpu-stage1-host.json').write_text(json.dumps(report,indent=2)+'\n')

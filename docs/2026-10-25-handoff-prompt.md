@@ -1,6 +1,6 @@
-# 当前状态：D-268，S-041 原生显示管线合并审计结果与交接
+# 当前状态：D-269，S-042 原生显示管线合并审计资格完成，准备实测
 
-2026-10-26T02:31:01+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "first-non-wt-attribute-other-encoding", "warning_code": 5, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-041-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
+2026-10-26T02:40:19+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
 
 ## 已证实与主判断
 
@@ -24,9 +24,11 @@ S-038有效返回source-format-or-encoding-rejected，origin22.400..22.520秒、
 
 S-039有效返回stable-8888-logical-structure-alpha-blend-address-and-downstream-unproven，origin32.452..32.522秒、Android57.704秒，独立身份/root/A槽/解锁/设备及本地备份摘要通过，已consumed。支持同次完整逻辑描述，不等于真实CPU像素访问或SMMU。S-040有效返回cpu-stage1-memory-attribute-not-write-through，origin27.434..27.538秒、Android50.390秒，独立身份/分区/备份摘要通过，已consumed。只支持首个覆盖页的读AT非fault且输出恒等，随后的属性非0xbb触发提前返回；写AT及其余页未执行，不推断实际属性或SMMU。当前CPU stage1查询=True：仅Native6 complete/requirements22后，对覆盖候选范围的每4KiB页查询读写转换，最多18432次AT；禁止像素数据访问/页表setter/缓存维护，保留22和alpha义务。code1前置或CPU上下文/回调拒绝、2转换/权限fault、3非恒等、4非0xbb、5全部页的stage1 R/W恒等WT；EL1最终stage2、真实RAM、SMMU、混合及可见输出仍未证明。56000故障注入/18432边界/11项Python测试通过，实际打包四AT/上下文/DAIF和PAR恢复已审查。
 
-当前CPU属性细分=True：保持S-040查询/停止点不变，只细分原code4的最后PAR属性；code2=44 normalNC、3=ff normalWB、4=00/04/08/0c Device、5=其他非WT，code1未分类（含其他失败/全WT）。不改变缓存配置、不清任何义务、不声称其余页/写查询已执行。ARM允许PAR报告实际实施后的属性；A77文档有WT降NC规则，故S-040不是页表错误证明，主假设转为正常NC报告，执行核身份未证实。源码/实际库清单的控制台审计与菜单验收矩阵已独立落地。
+当前CPU属性细分=False：保持S-040查询/停止点不变，只细分原code4的最后PAR属性；code2=44 normalNC、3=ff normalWB、4=00/04/08/0c Device、5=其他非WT，code1未分类（含其他失败/全WT）。不改变缓存配置、不清任何义务、不声称其余页/写查询已执行。ARM允许PAR报告实际实施后的属性；A77文档有WT降NC规则，故S-040不是页表错误证明，主假设转为正常NC报告，执行核身份未证实。源码/实际库清单的控制台审计与菜单验收矩阵已独立落地。
 
 S-041有效返回first-non-wt-attribute-other-encoding，origin32.469..32.529秒、Android53.922秒，独立身份/设备及备份摘要通过，已consumed。排除该次首个失配PAR的精确44、ff和00/04/08/0c；正常NC精确44假设未获支持，不等于所有Normal/WB策略被排除，因为分配/Transient提示有不同编码。下一步只分类缓存策略，继续保留首结果/未执行边界。
+
+当前整段CPU策略审计=True：独立新诊断按原范围/18432上限执行每页R/W AT，保留fault/地址位和原始Frame要求；只在回调RAM副本替换ATTR以复用严格循环，绝不改实际PAR/页表。仅全部遍历后code2全段内外NC、3全段内外WT、4全段内外WB（允许分配/Transient提示差异）、5混合/其他；code1前置/上下文/回调/转换/非恒等拒绝，不能称全段通过。code2..5才支持该次所有覆盖页两类权限与恒等输出；code5不是正常内存资格。原严格WT与首属性API不变，不清22或alpha/真实数据/SMMU义务；CPU原始属性字节和提示位未留存/未导出，不能说具体MAIR数值已获知。全部256编码、混合/提示变化和18432最大路径主机测试通过。
 
 当前native_border_view=True。独立native border路径在解析副本仅清bit24，原始字保留并逐样本比较；原Native2其余严格源/混合器/布局条件不变；结构模式Native3另保留混合未验证要求。原严格和原native采样API不变，staging模式仍只分类。独立border路径全部64组合保留原始快照、330读失败、border中途变化/未知位/混合器/等待/帧稳定性拒绝通过。
 
@@ -34,13 +36,13 @@ S-041有效返回first-non-wt-attribute-other-encoding，origin32.469..32.529秒
 
 ## 当前候选与验证
 
-固件beebc41d5a4c66d65469aa193239069598b3da35已推送。原R-004 MDP0xae00000/0x85000，最多330次读取、两次100ms，最高偏移0x6c26c；Splash0x9c000000/0x2400000不变。无像素/MMIO写、新映射、board/verified或分区操作，不发布GOP，不继承consumed像素批准。原完整采样成功保留ADDRESS|TOPOLOGY；结构模式成功保留BLEND|ADDRESS|TOPOLOGY=22要求。
+固件44f8a66569202cb53e3a6a88b0acae9b45d917df已推送。原R-004 MDP0xae00000/0x85000，最多330次读取、两次100ms，最高偏移0x6c26c；Splash0x9c000000/0x2400000不变。无像素/MMIO写、新映射、board/verified或分区操作，不发布GOP，不继承consumed像素批准。原完整采样成功保留ADDRESS|TOPOLOGY；结构模式成功保留BLEND|ADDRESS|TOPOLOGY=22要求。
 
-选择器native_route_detail=False、native_route_staging=False；五码分类{"1": "not-classified-as-non-wt-attribute", "2": "first-non-wt-attribute-normal-non-cacheable", "3": "first-non-wt-attribute-normal-write-back", "4": "first-non-wt-attribute-device", "5": "first-non-wt-attribute-other-encoding"}。码义以本候选归档为准：staging模式code2仅支持局部清除已知border后恰好两条不同单源路由、无其他未知字段，code3源数量/编码、code4其他字段、code5混合器数量/重复源，code1其他结果。staging模式code5不是成功；不继续后级采样，不修改原快照。完整SimpleFb GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92返回点13/detail16接受warning1..5，cold延时2/7/12/17/22秒后deadloop，无dispatcher fallback。
+选择器native_route_detail=False、native_route_staging=False；五码分类{"1": "prior-context-translation-or-identity-rejected", "2": "all-pages-stage1-rw-identity-normal-nc", "3": "all-pages-stage1-rw-identity-normal-wt", "4": "all-pages-stage1-rw-identity-normal-wb", "5": "all-pages-stage1-rw-identity-mixed-or-other-attributes"}。码义以本候选归档为准：staging模式code2仅支持局部清除已知border后恰好两条不同单源路由、无其他未知字段，code3源数量/编码、code4其他字段、code5混合器数量/重复源，code1其他结果。staging模式code5不是成功；不继续后级采样，不修改原快照。完整SimpleFb GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92返回点13/detail16接受warning1..5，cold延时2/7/12/17/22秒后deadloop，无dispatcher fallback。
 
 ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330读失败和两等待失败、活动门控/配置/帧稳定性通过；对fafb8a3 native基线逐330边界比较调用顺序/状态/输出一致，三个拓扑位置fixture通过；staging64个border组合/768单比特扰动/快照不变及负例、12480staging结果映射通过；真实头文件7200普通和10080细分类映射、504入口/GUID/状态案例通过。主机测试只证明模型与边界，不替代实机。实际构建源码/宏、PE、FD R-004表、完整96MiB FAT与Boot v3已冻结审查。
 
-镜像SHA256 837085b1fdc0af57556d25db17c352561d23b378484cb59394c759cbb23c697e；FD 8bfd2188bae6a9c506528f3b6d8e81e0e4357268ff7ef94b00ed2953e72ff1f2；归档out/inherited-gop/qualified-native-cpu-attribute-beebc41。资格reports/enuma-native-route-qualification.json、代码审计reports/enuma-native-route-code.json；详细审查docs/operations/2026-10-25-native-route-code-audit.md。
+镜像SHA256 7dd02e04c50f7a82486432d8ea4ef31d50e7615a72fada479d8d8adf2dba6c3c；FD e28836c356b9d1c1247b7690adfa2872912d5a4901f8d1997dd88a131322c443；归档out/inherited-gop/qualified-native-cpu-policy-44f8a66。资格reports/enuma-native-route-qualification.json、代码审计reports/enuma-native-route-code.json；详细审查docs/operations/2026-10-25-native-route-code-audit.md。
 
 固定S-021/S-022校准计划{"baseline_envelope_seconds": [10.25199999997858, 10.347999999998137], "tolerance_seconds": 1, "sampler_seconds": [0, 0.2], "code_windows_after_issue": [[11.25199999997858, 13.547999999998137], [16.25199999997858, 18.547999999998137], [21.25199999997858, 23.547999999998137], [26.25199999997858, 28.547999999998137], [31.25199999997858, 33.54799999999814]], "source_trials": ["S-021", "S-022"], "full_interval_containment": true, "uncertainty_limit_seconds": 0.25, "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof."}。整个boot-origin区间须唯一窗口包含，三样本新boot-id且交集宽<=0.25秒；不按观测调整容差。时间码仍是间接分类，不是直接寄存器值、物理路由或可见显示证明。
 

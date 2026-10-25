@@ -1,6 +1,6 @@
 {
   "scope": "source and actual generated static-link evidence only; no console connection, visual or boot execution proof",
-  "firmware_commit": "beebc41d5a4c66d65469aa193239069598b3da35",
+  "firmware_commit": "44f8a66569202cb53e3a6a88b0acae9b45d917df",
   "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
@@ -13,7 +13,9 @@
     "firmware/Mu_Basecore/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsole.c": "9cf8b1a4e3f53930221034bbeda75b0249ec45801fcc6e0c1046a2cb4721655f",
     "out/firmware-build/uefi/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/DarwinProbe.inc": "3399dd71737100254a065fd4318a3b7df880a2e8a56cb03cea9e3050075f27a4",
     "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Main.c": "f01a46219b728b945719e8fa26416cf7e129f91e27e3f04df47364e7e3e3a79e",
-    "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Ui.c": "04bd798e1774697d85ee0eb0b2331bfd3016e32a01828fed0a37e6c7777723e9"
+    "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Ui.c": "04bd798e1774697d85ee0eb0b2331bfd3016e32a01828fed0a37e6c7777723e9",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c": "1b3dc06d5e638d01c666bdb6e5f0226288a4044bb0da3a9243697d7dec1b9307",
+    "firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c": "3c4ef872faa7e042bcd2199a225c28ae50afe6768363734210f73645e683fb53"
   },
   "links": {
     "EnumaProbe": [
@@ -71,13 +73,33 @@
       }
     ]
   },
+  "fd_sha256": "e28836c356b9d1c1247b7690adfa2872912d5a4901f8d1997dd88a131322c443",
+  "packaged_modules": {
+    "GraphicsConsoleDxe": {
+      "sha256": "8379ffc031d7a7528a341b9c9e368c3124a9ffbd11fcaf85d64f5b4c2d7c72f9",
+      "actual_fd_equal": true
+    },
+    "ConSplitterDxe": {
+      "sha256": "0fdf64aa775948fd77215c2b6388206239687e8a490477f1f47589c47fca4e42",
+      "actual_fd_equal": true
+    },
+    "EnumaProbe": {
+      "sha256": "3a7cab8c40f8c6640677b66a07546f1239105d8f8810eb81d4456f0c39b152ba",
+      "actual_fd_equal": true
+    },
+    "UniXNU": {
+      "sha256": "471501911fd2051454752f915864cdaafad2275bf136f285988fc7e6666397f8",
+      "actual_fd_equal": true
+    }
+  },
   "paths": {
     "graphics_console": "Packaged; BDS BeforeConsole registers ConOut/ErrOut device path, default-console connect precedes AfterConsole. GOP/device-path binding and text visibility need hardware qualification.",
     "print": "EnumaProbe Line calls UefiLib Print through ConOut, not global DEBUG; current bounded diagnostic does not reach BDS/application.",
     "diag_draw": "Generated hash-bound DarwinProbe.inc locates GOP then directly stores ff000000/ffffffff using Video stride; bypasses GOP Blt and assumes channel layout. Requires separate pixel/alpha/sync qualification before execution.",
     "debug": "PlatformConfig overrides SerialPortLib with Null. Source has serial DebugLib; actual generated lists report effective binding per module. GOP/ConOut alone does not reconnect DEBUG.",
     "menu": "EnumaProbe calls UniXNURun after payload checks. It connects controllers, loads config, injects drivers, initializes graphics/text UI then runs menu. Graphics UI uses GOP Blt, text fallback uses ConOut. Implemented but not reached by current diagnostic.",
-    "early_log": "No verified early on-screen global logger/replay. SEC/early DXE precede valid GOP and ConsoleOut; need bounded RAM logging plus later safe replay, not early guessed pixel writes."
+    "early_log": "No verified early on-screen global logger/replay. SEC/early DXE precede valid GOP and ConsoleOut; need bounded RAM logging plus later safe replay, not early guessed pixel writes.",
+    "opaque_fill": "Actual Mu VideoFill packs RGB masks only; caller Reserved=ff does not make stored alpha opaque. Existing backend SetMode clears all four bytes, so an opaque adapter must change the conversion path before RGBA admission."
   },
   "hardware_executed": false,
   "pixel_access": false,

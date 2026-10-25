@@ -19,7 +19,10 @@ CPU_STAGE1_CATEGORIES={'1':'prior-contract-or-cpu-context-rejected','2':'cpu-sta
 
 CPU_ATTRIBUTE_CATEGORIES={'1':'not-classified-as-non-wt-attribute','2':'first-non-wt-attribute-normal-non-cacheable','3':'first-non-wt-attribute-normal-write-back','4':'first-non-wt-attribute-device','5':'first-non-wt-attribute-other-encoding'}
 
-def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,structure=False,structure_detail=False,global_output=False,global_detail=False,alpha_view=False,cpu_stage1=False,cpu_attribute=False):
+CPU_POLICY_CATEGORIES={'1':'prior-context-translation-or-identity-rejected','2':'all-pages-stage1-rw-identity-normal-nc','3':'all-pages-stage1-rw-identity-normal-wt','4':'all-pages-stage1-rw-identity-normal-wb','5':'all-pages-stage1-rw-identity-mixed-or-other-attributes'}
+
+def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,structure=False,structure_detail=False,global_output=False,global_detail=False,alpha_view=False,cpu_stage1=False,cpu_attribute=False,cpu_policy=False):
+    if type(cpu_policy) is not bool or (cpu_policy and (not cpu_stage1 or cpu_attribute)): raise ValueError('invalid whole-range CPU policy scope')
     if type(cpu_attribute) is not bool or (cpu_attribute and not cpu_stage1): raise ValueError('invalid CPU attribute scope')
     if type(cpu_stage1) is not bool or (cpu_stage1 and not alpha_view): raise ValueError('invalid CPU stage1 scope')
     if type(alpha_view) is not bool or (alpha_view and (not global_output or global_detail)): raise ValueError('invalid alpha view scope')
@@ -34,4 +37,4 @@ def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,struct
     result=decode_clock(clock,plan)
     if result['stop_additional_trials']: return result
     code=result['warning_code']
-    return dict(conclusion='route-category-inferred',category=(CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if structure_detail else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)[str(code)],warning_code=code,stop_additional_trials=False,direct_register_log=False)
+    return dict(conclusion='route-category-inferred',category=(CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if structure_detail else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)[str(code)],warning_code=code,stop_additional_trials=False,direct_register_log=False)

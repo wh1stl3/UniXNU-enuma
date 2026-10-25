@@ -226,3 +226,35 @@ Code1 includes earlier failure and all-WT, so it is not success. All256
 attribute encodings are tested at first read/write/last query with fault
 and nonidentity precedence; query count and requirements remain unchanged.
 No inference about remaining pages follows a first mismatch classification.
+
+
+## S-041 other encoding; independent whole-range semantic policy
+
+Valid code5, origin32.469..32.529s, Android53.922s, independent root/slot/
+unlock and device/backup hashes pass. Consumed837085b1... . Exact44,ff and
+00/04/08/0c excluded on that first mismatch. The exact44 hypothesis was not
+supported. MAIR's inner/outer nibbles encode policy plus allocation/transient
+hints, so other encodings can still mean normal WT or WB. Do not infer a
+numeric byte or wrong mapping. Fixed
+[Arm MAIR table](https://documentation-service.arm.com/static/61b75264a2506b46a5c32065)
+has nibble4 NC,1..3/8..b WT,5..7/c..f WB,0 other. Use only that shared field
+encoding, not any R-profile-specific memory setup from the supplement.
+
+S-042 independently traverses the full decoded range, both R/W ATs/page, and
+aggregates semantic policy. Only RAM copies of callback ATTR are normalized
+to reuse the unchanged bounded R/W identity loop; actual PAR was already
+restored. Code1 prior/context/fault/nonidentity;2 all Normal inner/outerNC,
+3 allWT,4 allWB,5 mixed/other. Every2..5 requires full traversal;5 is not
+normal memory admission. Hints/raw attribute bytes are inspected transiently
+and not retained/exported (clarifies the loose wording in firmware44f8a66
+value-transport). No page/cache attribute change or data access, all22 and
+alpha/SMMU/downstream obligations remain. Host256 encodings, within-policy
+hint changes, cross-policy changes and failure precedence/counts pass.
+
+Actual existing Mu FrameBufferBltLib VideoFill constructs RGB masks only;
+setting caller BLT Reserved=ff alone cannot make the stored RGBA alpha opaque.
+Existing real-backend host test SetMode clears all four bytes tozero in24
+permutations. Any later opaque adapter must cover the actual fill/buffer
+conversion path, not just set the incoming BLT reserved field. DiagDraw's
+hardcoded top-byte colors also require channel-mask adaptation. Neither
+path executes in the current early-return diagnostic.
