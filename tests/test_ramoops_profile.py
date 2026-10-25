@@ -14,6 +14,9 @@ class ProfileTests(unittest.TestCase):
             ['--ramoops-map-control','--stop-stage','13'],
             ['--ramoops-map-control','--diagnostic-gop-query','1'],
             ['--ramoops-canary-nonce','A'*32],
+            ['--ramoops-read-header','--ramoops-map-control'],
+            ['--ramoops-read-header','--ramoops-canary-nonce','a'*32],
+            ['--ramoops-read-header','--stop-stage','9'],
             ['--ramoops-map-control','--stop-delay','7']]:
             with self.subTest(extra=extra):
                 r=subprocess.run(base+extra,capture_output=True,text=True,timeout=10)

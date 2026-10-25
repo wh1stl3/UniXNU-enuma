@@ -945,3 +945,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-219：S-016自动返回与独立恢复，问题收敛到访问/写入和warm差异
 
 2026-10-25T20:25:27+08:00。S-016于20:21:48单次发出1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513，命令0/2.641秒、断开5.110秒、ADB20.063秒、完成35.406秒，无主机恢复reboot。251/251帧解码，目视Android重启logo和桌面，独立完成/root/A槽/解锁/设备双分区与本地备份摘要通过。e2b6ea5资格此前已推送；S-016与R-017-MAP单笔consumed。支持同范围map-only+原cold路径可控，不能称console物理访问/留存或GOP已验证；S-015物理writer访问与warm差异仍未分离，单独映射不再首嫌但未完全排除。下一步最小头只读/cold隔离，尚未实现/资格/执行。证据reports/enuma-ramoops-S-016-result.json与out\device-tests\20261025T202334-recovery-reconciliation.json，原始影音仅本地。
+
+
+## D-220：S-017头部三读/cold隔离
+
+2026-10-25T20:47:04+08:00。完整资格完成，尚未发出。固件89e6491626ed0edbc48dc7fb41a6902e8ce7eb4c，图0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a，实际三load/无console store/warm审查与完整载荷归档资格通过。沿用户继续及直接上机授权，同已批准范围，无pmsg/分区/verified扩张。执行前先发布全部当前文档及即时恢复/相机门禁。原始影音只留本地。

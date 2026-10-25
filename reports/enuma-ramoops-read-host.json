@@ -1,0 +1,26 @@
+{
+  "scope": "host virtual page protection only; not physical RAM access",
+  "command": [
+    "clang",
+    "-std=c11",
+    "-D_GNU_SOURCE",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=undefined",
+    "-I",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/canary-host",
+    "-DENUMA_RAMOOPS_READ_HEADER=1",
+    "-DENUMA_DIAG_STAGE=10",
+    "-DENUMA_DIAG_DELAY_US=2000000",
+    "/mnt/d/Code/UniXNU-enuma/tests/ramoops_read_test.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/canary-host/read-test"
+  ],
+  "result": "PASS: stage9 touches no protected console; stage10 accepts read-only page and preserves header before cold reset",
+  "sha256": {
+    "firmware/diagnostics/EnumaRamoopsReadCheckpoint.h": "b0a6b246596e8f8c7f8d8b9d8d9abbc4bc182371123f661fe281cf1cfaee7451",
+    "tests/ramoops_read_test.c": "3e3cef3d87d0abc8618b673f8660ff6fa581cd344d6efbf41c59e6094a0620c8",
+    "scripts/test_ramoops_read.py": "ebd274e97398feb2fa869e5c62c59b01e44d87333b012af81846f10c6545de08"
+  }
+}

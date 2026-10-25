@@ -1,0 +1,129 @@
+{
+  "trial_kind": "ramoops-header-read",
+  "firmware_commit": "89e6491626ed0edbc48dc7fb41a6902e8ce7eb4c",
+  "archive": "out/ramoops-audit/S-017-qualified",
+  "image": "out/ramoops-audit/S-017-qualified/image.img",
+  "image_sha256": "0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a",
+  "nonce": null,
+  "ramoops_scope": {
+    "base": "0xB0000000",
+    "size": "0x200000",
+    "marker_bytes": 0,
+    "stage": 10,
+    "delay_seconds": 2,
+    "reset": "cold",
+    "pmsg_access": false,
+    "header_read_offsets": [
+      0,
+      4,
+      8
+    ]
+  },
+  "files": {
+    "image.img": {
+      "sha256": "0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "1e0becd3bf6d318f0aca6d22ac670b55ef4d5e4eab4cf7e763d99ece88123ffb",
+      "bytes": 1105
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "26e03f46313af2bf0a588eb1d8833ccb7859d4aca1f9b04cf40a20461e997440",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "682738b5755a50ab412dcb7b53d535d9dec0376cd83ffd3fde1252ecf9a6ee70",
+      "bytes": 3145920
+    },
+    "DxeCore.efi": {
+      "sha256": "5483561aa2a761e1032fc14728dd3d6a5de521131c10fc2bd145f00ed9d1079d",
+      "bytes": 163840
+    },
+    "core.GNUmakefile": {
+      "sha256": "96c7ff463579c46dd9ac23a467a84b957989044271fc192c9cdde18cbe91675e",
+      "bytes": 51737
+    },
+    "core.map": {
+      "sha256": "a7ac9c73b3ecb9630635e6a1f36a844a19ef98c3d175a18e2d5f768caa956a92",
+      "bytes": 237599
+    },
+    "MemoryMapLib.c": {
+      "sha256": "5fee8940c4cee08fb3cac33f75ffe706a624fce5e7f435447141bd133ab5fba8",
+      "bytes": 4855
+    },
+    "EnumaStageCheckpoint.h": {
+      "sha256": "b0a6b246596e8f8c7f8d8b9d8d9abbc4bc182371123f661fe281cf1cfaee7451",
+      "bytes": 892
+    },
+    "firmware-build.json": {
+      "sha256": "afc22b0ee57f242e2b43c90b37c14458767d3d12a539288456a67f9e3489400f",
+      "bytes": 19279
+    },
+    "fd-audit.json": {
+      "sha256": "2b5162e6f0c4a248ad10cf1eb7f7c3903990086bc442476d178937fed3ad85ac",
+      "bytes": 4326
+    },
+    "canary-host.json": {
+      "sha256": "946ce799e1723bba47b790dba0bc4893d5b7197a7db93b6f7cd83347a07e57ff",
+      "bytes": 1338
+    },
+    "core.disassembly.txt": {
+      "sha256": "f62dc72835ae2562b71d69a4a670daaa8aea920ef3e7c6b5253b91c24b9959f7",
+      "bytes": 734161
+    }
+  },
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "682738b5755a50ab412dcb7b53d535d9dec0376cd83ffd3fde1252ecf9a6ee70",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "pixel_access": false,
+  "gop_published": false,
+  "review_required": false,
+  "disassembly_sha256": "423e5677a9e4d51f2c9259af729a9244f7a0ca6c1b092f5cab50e8da419981a1",
+  "actual_map_record_present": true,
+  "actual_map_records": [
+    {
+      "module": "BdsDxe",
+      "offset": 378448,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "SimpleFbDxe",
+      "offset": 13360,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "EnumaRamPayloadDxe",
+      "offset": 17984,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    }
+  ],
+  "actual_nonce_words_equal": null,
+  "packaged_core_equal": true,
+  "interpretation": "Cold isolation control; header-read variant adds exactly three volatile loads, no stores. Automatic return supports reaching a controlled path, not console content access or logs. No writer/warm test."
+}

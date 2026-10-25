@@ -175,3 +175,6 @@ D-218：人工恢复独立核验后，沿用户本轮直接上机和隔离推进
 
 
 D-219执行账本：S-016同范围map-only/cold已自动回Android并独立核验，S-016/R-017-MAP单笔consumed。S-015 writer仍consumed，不复活；全部S-001..016不重试。下一步先隔离console最小只读可达性与原cold门，不据返回宣称物理访问/日志/verified通过；所有既有设备门禁和影音本地规则维持。
+
+
+D-220：用户继续推进最小console头部只读隔离S-017；同B0000000/2MiB、stage10三读+0/4/8及cold，无console写或warm。完整资格/当前文档发布/即时恢复与相机门禁后直接单笔；不重试consumed图，不扩大旧writer范围，影音仅本地。

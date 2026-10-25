@@ -32,6 +32,14 @@ class ReviewGateTests(unittest.TestCase):
         probe.require_hardware_review(meta,approval)
         with self.assertRaises(ValueError):probe.require_hardware_review({**meta,'ramoops_scope':{**scope,'marker_bytes':44}},approval)
         with self.assertRaisesRegex(ValueError,'not approved'):probe.require_hardware_review({'hardware_review':'R-017','image_sha256':'b'*64},approval)
+    def test_header_read_scope_cannot_expand(self):
+        scope={'base':'0xB0000000','size':'0x200000','marker_bytes':0,
+               'header_read_offsets':[0,4,8],'reset':'cold'}
+        meta={'hardware_review':'R-017-READ','image_sha256':'c'*64,'ramoops_scope':scope}
+        approval={'R-017-READ':{'status':'approved','image_sha256':['c'*64],'ramoops_scope':scope}}
+        probe.require_hardware_review(meta,approval)
+        for changes in [{'marker_bytes':44},{'header_read_offsets':[0,4,8,12]},{'reset':'warm'}]:
+            with self.assertRaises(ValueError):probe.require_hardware_review({**meta,'ramoops_scope':{**scope,**changes}},approval)
     def test_pending_main_never_calls_device_tools(self):
         with tempfile.TemporaryDirectory(dir=ROOT/'out',prefix='pixel-review-') as td:
             root=Path(td).resolve();image=root/'out/protected.img';image.parent.mkdir();image.write_bytes(b'protected fixture')

@@ -1,0 +1,9 @@
+{
+  "firmware_commit": "89e6491626ed0edbc48dc7fb41a6902e8ce7eb4c",
+  "image_sha256": "0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a",
+  "core_sha256": "5483561aa2a761e1032fc14728dd3d6a5de521131c10fc2bd145f00ed9d1079d",
+  "disassembly_sha256": "423e5677a9e4d51f2c9259af729a9244f7a0ca6c1b092f5cab50e8da419981a1",
+  "review_required": false,
+  "review": "Actual Core RVA3c8c sets w9=4;3c90 sets w8=B0000000;3c94 sets w9=B0000004. At3c9c/3ca0/3ca4 three volatile LDR WZR target base/base+4/base+8. Discarding results does not remove loads. Delay3ca8, ResetCold3cac, CpuDeadLoop3cb0 precede dispatcher3cb4. No target stores or value-dependent branch in added sequence, no ResetWarm symbol. Baseline ResetCold16f4 issues84000009. Descriptor fields and source/flags are bound by qualification.",
+  "limits": "Static evidence and controlled return cannot supply the three values or prove write/retention/GOP. No verified flag changed."
+}

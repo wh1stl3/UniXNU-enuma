@@ -1,3 +1,9 @@
+# D-220 当前：S-017同范围头部只读，无新增待审
+
+完整资格完成，尚未发出。仅+0/+4/+8三读及原cold gate，不复活writer，不扩大范围；当前精确图/状态见STATUS。
+
+以下保留历史审查及执行账本。
+
 # D-219 当前：S-015/S-016已consumed；无新增待审
 
 R-017原writer单笔及S-015已consumed并恢复，不重试。S-016仅同一已批准B0000000/2MiB范围的映射，原stage10/delay2/cold gate，无console内容访问、warm、pmsg、分区或verified变更；按用户本轮直接上机与恢复后故障隔离规则，以独立新资格和精确图绑定执行，不复活writer批准。S-016已于20:21:48发出并自动回Android，独立恢复核验通过；精确图与结果见STATUS和reports/enuma-ramoops-S-016-result.json。R-017-MAP单笔同样consumed，不重复。后续新增范围仍按原规则，原始影音只留本地。
