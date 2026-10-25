@@ -30,6 +30,8 @@ def analyze(positive,negative):
     else:result='ambiguous'
     return dict(scope='indirect paired timing support under same-source classifier; not direct firmware status or cross-boot snapshot stability',
                 conclusion=result,negative_minus_positive_seconds=deltas,
+                supported_status_set=[13] if result=='topology-status-supported' else list(range(13)) if result=='non-topology-status-supported' else None,
+                successful_sample_not_excluded=result!='topology-status-supported',
                 predeclared_absolute_delta_window_seconds=[3,7],exact_status_observed=False,gop_verified=False,
                 limitation='Android boot noise and changing inherited state remain confounders; timeout, missing recovery or an ambiguous pair cannot classify')
 

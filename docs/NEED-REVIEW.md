@@ -1,3 +1,9 @@
+## D-208当前：互补实测已恢复，无新增审批
+
+S-011/S-012时序支持非Topology13，不直接证明状态值或GOP。两笔独立恢复通过，已消耗不重试。转为优先隔离RefreshMode10；新候选未实现，不放宽准入。原内存/verified/分区和媒体本地边界保持。
+
+以下为历史记录。
+
 ## D-207，S-011受控返回并独立恢复，准备互补S-012；无新增审批
 
 S-011(query1)于18:45:34发出，镜像4f413f286bba150e007e2333d9aa466fef98d046bc23ebb05256d01f213261a7已consumed。命令2.625秒、断开5.093秒，ADB26.484秒/完成40.547秒受控回Android，无主机恢复reboot。独立Android完成/root/A槽/解锁及boot_a/vendor_boot_a设备与备份摘要全部通过，278/278帧解码，原始影音仅本地无音频。证据reports/enuma-video-topology-S-011-result.json，原trial out/device-tests/20261025T184520-system-transport/result.json。

@@ -17,7 +17,8 @@ class TopologyPairTests(unittest.TestCase):
 
     def test_both_consistent_directions_and_no_direct_claim(self):
         p,n=self.pair();r=analyze(p,n);self.assertEqual(r['conclusion'],'topology-status-supported');self.assertFalse(r['exact_status_observed'])
-        p['timing'],n['timing']=n['timing'],p['timing'];self.assertEqual(analyze(p,n)['conclusion'],'non-topology-status-supported')
+        p['timing'],n['timing']=n['timing'],p['timing'];r=analyze(p,n)
+        self.assertEqual(r['conclusion'],'non-topology-status-supported');self.assertIn(0,r['supported_status_set']);self.assertTrue(r['successful_sample_not_excluded'])
 
     def test_equal_noisy_or_conflicting_signals_are_ambiguous(self):
         for a,b in [(21,35),(29,43),(26,30),(23,40)]:

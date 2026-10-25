@@ -1,0 +1,39 @@
+{
+  "scope": "offline source/history consistency audit after S-011/S-012; no device action or predicate relaxation",
+  "source": {
+    "repository": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+    "commit": "52a2f180865f8368828985d6384130acd093fa93",
+    "path": "techpack/display/msm/sde/sde_hw_intf.c",
+    "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_intf.c",
+    "sha256": "7b02d0b3c116279f0b4ee891cc9267d676942855d3dc58a5b263ad2f10e332da",
+    "license": "GPL-2.0-only; cached reference, no code imported"
+  },
+  "native_v1_status_function_line": 399,
+  "native_gate": "INTF_STATUS bit0; reads FRAME_COUNT without requiring count-enable bits ==3",
+  "current_gate": {
+    "path": "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c",
+    "sha256": "4a96cbeb96556317e30fbe506f27918a93204fdf2d4b16886e1c0ebd402c2278",
+    "lines": [
+      22,
+      42
+    ],
+    "predicate": "both interfaces timing nonzero, enable&3==3, active bit0; repeated for stability"
+  },
+  "historical_strict_counter_gate": {
+    "predicate": "configuration",
+    "query1_minus_query2_adb_seconds": 5.297,
+    "timing_classification": "refused"
+  },
+  "historical_native_two_window_progress_supported": true,
+  "current_exact_counter_enable_value": null,
+  "current_first_status_observed": null,
+  "judgment": "The inherited audit reinstates a stronger counter-enable precondition than native get_status and the historical successful native progress predicate. After non-Topology support, refresh/eligibility is the leading isolation target, not an established root cause.",
+  "alternatives": [
+    "metadata/PCD rejection",
+    "revision/mode or decode failure",
+    "successful sampling status0 is also non-Topology"
+  ],
+  "next": "Classify RefreshMode10 versus its complement using a separately qualified new diagnostic; only then review exact native activity/dual-link criteria. Do not simply remove the gate to obtain PASS.",
+  "limitations": "Historical compound timing is not a numeric counter dump, and old/new launches need not inherit identical state; native-source behavior alone does not prove this launch reached the gate.",
+  "refutation": "First status outside RefreshMode10, or valid status0, or directly observed eligible counters would lower this hypothesis."
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "indirect paired timing support under same-source classifier; not direct firmware status or cross-boot snapshot stability",
+  "conclusion": "non-topology-status-supported",
+  "negative_minus_positive_seconds": {
+    "adb_return_seconds": -6.422,
+    "boot_complete_seconds": -6.766
+  },
+  "supported_status_set": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "successful_sample_not_excluded": true,
+  "predeclared_absolute_delta_window_seconds": [
+    3,
+    7
+  ],
+  "exact_status_observed": false,
+  "gop_verified": false,
+  "limitation": "Android boot noise and changing inherited state remain confounders; timeout, missing recovery or an ambiguous pair cannot classify"
+}
