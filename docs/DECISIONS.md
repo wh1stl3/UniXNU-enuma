@@ -518,3 +518,5 @@ D-075：互补时序支持固定几何假设拒绝后，采用只读实际描述
 2026-10-25 · D-170：用户澄清“一次性做到iPadOS 然后分析启动的报错 每次启动解决一些”，主线改为补齐完整链/真实错误/每轮修复一批，减少孤立早停，B降为备用。已复用固定上游实际发出54,231,040字节、29组件实验预链接，ARM64/4K/原始代码保持检查通过但非可boot包。发现并固定同SM8250同donor的UniXNU-umi 3eb7257/测试uefi 48bc412，核到真实ADT/RAM载荷/PMGR/UFS/CPU显示源码；先做ABI/板差迁移，不从零重写或拷其内存/GPT/触控。新物理数值/verified/分区门禁不变，无新增实机；完整方案见operations/2026-10-25-full-boot-mainline.md。
 
 2026-10-25 · D-171：复用固定umi编码器和当前UniXNU payload.build实际生成完整结构ADT与96MiB FAT，原始系统trust两模块保持，FAT回读及真实DarwinBoot解析器ASan/UBSan正负例通过；不等于实机启动。三段DRAM仅作历史信息，board内存字段/512MiB请求/verified不变。stock vendor ramdisk2230字节，两种前缀组合均不满足umi whole-initrd FAT契约，下一步核实际v3范围/映射、适配有界只读SFS与错误输出，不猜偏移或搬umi窗口。本轮无设备动作/硬停，详见operations/2026-10-25-full-adt-fat.md。
+
+2026-10-25 · D-172：用户推进boot v3运输并要求尽量一次验证多个点。复用umi只读BlockIO/FDT模式和本机既有Kernel映射，实际ABL PE确认原长vendor推进后接generic；runtime仍须范围/前缀/BPB/完整FAT检查。新增13项同次报告，SFS/文件延后BDS，失败停依赖项，payload模式移除60秒暂停。firmware698b7c1完整构建及实际PE/编译宏/常量/写保护机器码资格、AOSP真实96MiB FAT打包往返通过，镜像194fa0f2…00f8b9e；host ASan/UBSan正负例通过。CRC只作传输损坏检查。未上机，输出可见性/FDT/SFS、PMGR/UFS/root/Data仍未闭合；无新映射/内存字段/verified/分区或硬停。详见operations/2026-10-25-boot-v3-payload-transport.md。

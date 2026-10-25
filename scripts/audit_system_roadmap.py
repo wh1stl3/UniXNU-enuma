@@ -107,9 +107,20 @@ def main():
             raise ValueError('experimental FAT bundle changed')
         report['experimental_fat_payload'] = bundle
         report['gap_scope'] += '; complete_adt_tool_missing describes board integration, not absence of the offline enuma adapter/ADT/FAT output'
+    qualification = ROOT / 'reports/enuma-ram-payload-qualification.json'
+    if qualification.exists():
+        transport = json.loads(qualification.read_text())
+        image = ROOT / transport['archive'] / 'enuma-system-transport-v3.img'
+        if hashlib.sha256(image.read_bytes()).hexdigest() != transport['image_sha256']:
+            raise ValueError('qualified boot-v3 transport image changed')
+        report['experimental_ram_transport'] = {
+            'firmware_commit': transport['firmware_commit'], 'image_sha256': transport['image_sha256'],
+            'image_bytes': transport['image_bytes'], 'batch_stages': 13,
+            'scope': 'actual compiled and packaged driver, offline qualified; runtime FDT/SFS not observed'}
+        report['firmware_initrd_publisher'] = 'implemented and offline-qualified; runtime discovery remains open'
     report['next_work_order'] = [
-        'close actual ABL v3 initrd transport and read-only filesystem discovery without guessed offsets',
         'provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging',
+        'observe the 13-stage transport batch in one controlled full-input trial once error output and recovery gates are met',
         'integrate offline ADT/FAT composition with board only after runtime memory/identity and loader contracts are reviewed',
         'close native root storage/PMGR/security/Data contracts before claiming iPadOS userspace',
     ]

@@ -1,7 +1,7 @@
 {
   "scope": "source migration and official board configuration only; no device execution",
   "firmware_repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "firmware_commit": "74598dfa2b223716450de044caf937c4a30e51f5",
+  "firmware_commit": "698b7c17dbbd80993070a45e2aa5ae15d330b63b",
   "source_device_commit": "1ab7ee8",
   "migrated_files": {
     "LICENSE": {
@@ -54,7 +54,7 @@
     },
     "Platforms/Xiaomi/enumaPkg/enuma.dsc": {
       "destination": "Platforms/Xiaomi/enumaPkg/enuma.dsc",
-      "sha256": "1b5168906d4d93a8580921591c6ad2f3799b410f2de1f2f0c5b56de091b4ced8"
+      "sha256": "b6a4f09ae43f6c0fba27cf7014e24020fdee5101dfd5619a24a67cd698b94ee8"
     },
     "Platforms/Xiaomi/enumaPkg/enuma.fdf": {
       "destination": "Platforms/Xiaomi/enumaPkg/enuma.fdf",
@@ -74,11 +74,11 @@
     },
     "Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc": {
       "destination": "Platforms/Xiaomi/enumaPkg/Include/UniXNU.dsc.inc",
-      "sha256": "58fa405a615b4638e308c8e4a97d545088b320504a8b840900dbda411aa9a824"
+      "sha256": "af94bea69b78c6cdf84afbaac233045a5b5dfb18c5424e91c71143940b7c1bab"
     },
     "Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc": {
       "destination": "Platforms/Xiaomi/enumaPkg/Include/UniXNU.fdf.inc",
-      "sha256": "cdbd8813fb5dbb1372e211f889ac9b7a512ede75f2a3cb3626be60087ddaf2ee"
+      "sha256": "eb2e265dab9a94cdb27a828ea035d345771410076ec7218924b4c6ad189bd983"
     },
     "Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": {
       "destination": "Platforms/Xiaomi/enumaPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c",
@@ -98,7 +98,7 @@
     },
     "Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": {
       "destination": "Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c",
-      "sha256": "91577520b587083572a491b2501b54af6eebc855140b091030fe472030306da4"
+      "sha256": "11710ba267f58db4d108a03bddc16a2e31b8d61272346b2540ad1e6a24b29eb1"
     },
     "Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf": {
       "destination": "Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.inf",
@@ -112,8 +112,8 @@
   "firmware_extensions": {
     "diagnostics/EnumaDispatchDetailCheckpoint.h": "d5d0e4875d8331e3d8f516f5c38a97c51e8cf5766d7fca7441f4965aea83ea41",
     "patches/dxe-dispatch-details.patch": "49a051195269054894262788f65883c4665db5eec170db2f457e265b523be94d",
-    "patches/dispatch-detail-options.patch": "fec39dc5b6d6c7ad6d7ab0688f2012db4834f7bb4783b6ca0235be72c08d8d43",
-    "Resources/Scripts/enuma_preflight.py": "42f2fa4279d572c750fbe4b06f39bcfa88a2f07123dd8d1babd5d4f22df2bf63",
+    "patches/dispatch-detail-options.patch": "32fd2428ebd0f08665a6ce3e86978adf0abc3e336b66b1c3b29856c1a203cead",
+    "Resources/Scripts/enuma_preflight.py": "955e4fd100f2c5c105fd702538c8bd6a1f1c524f4f1b4d5dba118723f31509df",
     "Resources/Scripts/check_enuma_source.py": "b072717b35d63bf5b74ffb857e05d77de4ec13d84e641b25533246d2600975af",
     "patches/apriori-metronome.patch": "59f37df69981dc61593fedb1e20b382d0881b01d3dfefc05d6fcc1028f85f01f",
     "patches/diagnostic-ufs-selection.patch": "b79be283dc09951a91aa6fc99ec26aea7187f9845080d28445bf6dd50db5a523",
@@ -126,9 +126,9 @@
     "patches/simplefb-diagnostic-selection.patch": "a4dc584cf7e50833d095d8a6e0b4b5951fc88d74b771144f4383aa38002fe364",
     "diagnostics/EnumaDispatchCompletionCheckpoint.h": "863facc343dac1aa1b2a2b00a91a729f2014f5ef5c45ee5f1d919b5e4bf59b00",
     "diagnostics/EnumaGopAudit.h": "e6db3b2794b9dc49a5c98790ef2cfcf900af1126b3c2f20ebb30297c5eba46e5",
-    "patches/simplefb-gop-query.patch": "1fac5c897c082baa50297d56e92d62337131767dc11c463e29504253f779bbdd",
+    "patches/simplefb-gop-query.patch": "3a013d8dabf37263db1c1c6b03b34c81d12aeaaf067386e6577928a9fc493071",
     "diagnostics/EnumaGopResult.h": "15439f96c32387cccd57c8f40d5a703600af6478c616eebe896b6a5fb536d184",
-    "Resources/Scripts/build_enuma_firmware.py": "b722beb48a06f90ab29b2bc59b4ba113633a2ff8b4e8ea8159466615fe8eee4c",
+    "Resources/Scripts/build_enuma_firmware.py": "a4dd5ca79d5291ab98e722a1d0c8a02c95eac2229ba8a1df7b7bff9a5b02477b",
     "Resources/Scripts/enuma_firmware_preflight.py": "eb9af118480cf90166854337ed76cf850485b6e2f890e592ed7a339fbc39521a",
     "diagnostics/EnumaScanoutAudit.h": "8f49f8c27f1211be834e77e2a79a056010d2de0e637f02f82f6b7bd3464ff702",
     "patches/display-mdp-map.patch": "5aa0f4e584349354000c50a181fb7a0aa31c43b1f4128a72bc35469e90fd14b4",
@@ -144,7 +144,13 @@
     "diagnostics/EnumaScanoutBlendReason.h": "5a39836038db73afb9e72bbb6757f1cdfda303d88583a01ebfcb6c1430da8b7d",
     "diagnostics/EnumaScanoutSoleStage.h": "d833729776d97b0958985b108ab944891880770da423fd72f872670123abc6ae",
     "patches/sec-display-read.patch": "249295677829f341c4cf47287b78eb653a06d709fbb45659f0df76f9b5a4ad81",
-    "diagnostics/EnumaValueProbe.h": "9b8280675b1fb1d258ce38ea55117bcd56e05ab15e18d4a87cb09805238a5c6b"
+    "diagnostics/EnumaValueProbe.h": "5d25e723abbe44bb9743186441680461a17553341e6882a1b4b9812e679b1f5f",
+    "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/EnumaRamPayload.c": "bf58ac12edc254211f4f292c58f15174766e7bdea2029e35144d086b78add771",
+    "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/EnumaRamPayloadDxe.inf": "bb1e8e6f9111919204bbce6eb1022b74a42f360f1e89d24d5d47847cf12024c5",
+    "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/TransportBounds.h": "4cb024f0734b94c10409f2ef6952ae931bca85a6246896a51514a71e080adcca",
+    "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/TransportReport.h": "0b25f6998ffb306ac495c6d88125a8cca1adeaa731fe9624bafa4016360fbd75",
+    "Resources/Scripts/enuma_payload_contract.py": "11bce88f0f7b99dee9aec449dfb650bd0b7d5fa181795c8b799337557ec13f1d",
+    "docs/ram-payload-v3.md": "5340df29f52a8167e4e33914850450bac13517e00dc38877596971087612e787"
   },
   "new_firmware_table": {
     "config": "enuma",
@@ -208,5 +214,5 @@
     }
   },
   "other_board_tables_unchanged": true,
-  "firmware_input_files_checked": 72
+  "firmware_input_files_checked": 78
 }

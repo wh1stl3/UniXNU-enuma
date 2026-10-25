@@ -1,0 +1,44 @@
+{
+  "scope": "actual production bounds, BlockIO and CRC wrapper with host service adapters; synthetic physical addresses, no FDT/SFS/device execution",
+  "sources": {
+    "EnumaRamPayload.c": "bf58ac12edc254211f4f292c58f15174766e7bdea2029e35144d086b78add771",
+    "TransportBounds.h": "4cb024f0734b94c10409f2ef6952ae931bca85a6246896a51514a71e080adcca",
+    "ram_payload_contract.c": "785be81308a04f2d4698d323929248491cee8effd374d1679f5243ac23664deb"
+  },
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-pie",
+        "-no-pie",
+        "-I/mnt/d/Code/UniXNU-enuma/out/full-boot/transport",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe",
+        "/mnt/d/Code/UniXNU-enuma/tests/ram_payload_contract.c",
+        "-lz",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/transport/transport-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/transport/transport-test",
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/payload/payload.img",
+        "/mnt/d/Code/UniXNU-enuma/out/full-boot/transport/prefix.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: real unaligned payload read/last block; bounds, overflow, overlap, media, write protection and prefix/FAT corruption rejection (host ASan/UBSan)\n",
+      "stderr": ""
+    }
+  ],
+  "hardware_tested": false,
+  "new_memory_mapping": false
+}

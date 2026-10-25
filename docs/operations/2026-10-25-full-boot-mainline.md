@@ -1,3 +1,5 @@
+> D-172后续：boot v3运输与13项报告已实现，完整构建/实际PE/真实FAT打包资格通过，未实机；本文先前“运输未实现”是历史状态，当前以STATUS和[运输专项](2026-10-25-boot-v3-payload-transport.md)为准。
+
 > D-171后续：完整结构ADT与96MiB FAT已实际生成并经真实loader函数主机检查；本文的“缺ADT/FAT”是D-170历史状态。当前以STATUS和[新专项](2026-10-25-full-adt-fat.md)为准，v3运输/root/报错仍未闭合。
 
 # 完整启动链优先：按实际iPadOS报错迭代（D-170）

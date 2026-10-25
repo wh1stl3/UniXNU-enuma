@@ -1,0 +1,111 @@
+{
+  "scope": "actual saved ABL PE disassembly; no runtime execution",
+  "abl_sha256": "ff00cd26595d81f97673a7dacaf12e025d25053747bd3819c73dbefd02cc802a",
+  "linux_loader_sha256": "0460da8ebfc6c77012be96ecf075c4364466b498eb8f87a6f1b8b4bcd6cee612",
+  "instructions": [
+    {
+      "rva": "0x16448",
+      "bytes": "09cd4038",
+      "mnemonic": "ldrb",
+      "operands": "w9, [x8, #0xc]!"
+    },
+    {
+      "rva": "0x16468",
+      "bytes": "09831cb8",
+      "mnemonic": "stur",
+      "operands": "w9, [x24, #-0x38]"
+    },
+    {
+      "rva": "0x16470",
+      "bytes": "0a8d4138",
+      "mnemonic": "ldrb",
+      "operands": "w10, [x8, #0x18]!"
+    },
+    {
+      "rva": "0x1648c",
+      "bytes": "0a831db8",
+      "mnemonic": "stur",
+      "operands": "w10, [x24, #-0x28]"
+    },
+    {
+      "rva": "0x173a4",
+      "bytes": "885a44b9",
+      "mnemonic": "ldr",
+      "operands": "w8, [x20, #0x458]"
+    },
+    {
+      "rva": "0x173a8",
+      "bytes": "1f0d0071",
+      "mnemonic": "cmp",
+      "operands": "w8, #3"
+    },
+    {
+      "rva": "0x173ac",
+      "bytes": "83010054",
+      "mnemonic": "b.lo",
+      "operands": "#0x173dc"
+    },
+    {
+      "rva": "0x173c0",
+      "bytes": "02835db8",
+      "mnemonic": "ldur",
+      "operands": "w2, [x24, #-0x28]"
+    },
+    {
+      "rva": "0x173cc",
+      "bytes": "08b140f9",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x160]"
+    },
+    {
+      "rva": "0x173d0",
+      "bytes": "00013fd6",
+      "mnemonic": "blr",
+      "operands": "x8"
+    },
+    {
+      "rva": "0x173d4",
+      "bytes": "08835db8",
+      "mnemonic": "ldur",
+      "operands": "w8, [x24, #-0x28]"
+    },
+    {
+      "rva": "0x173d8",
+      "bytes": "b502088b",
+      "mnemonic": "add",
+      "operands": "x21, x21, x8"
+    },
+    {
+      "rva": "0x173e4",
+      "bytes": "022b7929",
+      "mnemonic": "ldp",
+      "operands": "w2, w10, [x24, #-0x38]"
+    },
+    {
+      "rva": "0x173e8",
+      "bytes": "e00315aa",
+      "mnemonic": "mov",
+      "operands": "x0, x21"
+    },
+    {
+      "rva": "0x173f4",
+      "bytes": "08b140f9",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x160]"
+    },
+    {
+      "rva": "0x173f8",
+      "bytes": "00013fd6",
+      "mnemonic": "blr",
+      "operands": "x8"
+    }
+  ],
+  "mutation_negative": "rejected",
+  "interpretation": "v3 branch uses vendor size from header+0x18, copies via slot0x160, advances destination by that raw size without rounding, then copies generic size from boot header+0xc; slot0x160 is consistent with UEFI CopyMem",
+  "runtime_layout_observed": false,
+  "source_contract": "https://android.googlesource.com/platform/system/tools/mkbootimg/+/808d42e197506319ee65eb078d3defd9602e2ac2/include/bootimg/bootimg.h",
+  "limits": [
+    "complete allocation and selected DTB paths not proven by these slices",
+    "temporary-entry FDT/start/end and exact payload integrity still checked at runtime"
+  ]
+}

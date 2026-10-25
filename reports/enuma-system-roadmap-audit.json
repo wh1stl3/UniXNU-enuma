@@ -89,7 +89,7 @@
     "upstream_native_root_requires_sheng_pmgr": true,
     "userdata_dry_run_does_not_compare_expanded_capacity": true
   },
-  "firmware_initrd_publisher": "not established by this audit",
+  "firmware_initrd_publisher": "implemented and offline-qualified; runtime discovery remains open",
   "root_volume_uuid": "not measured",
   "system_images_built": false,
   "new_device_trials": 0,
@@ -150,9 +150,16 @@
     ],
     "board_sha256": "bc627da4ed58ceca661dd1e28b2f5f1b6e6c3d0b283dabd343ec0fd4294d5952"
   },
+  "experimental_ram_transport": {
+    "firmware_commit": "698b7c17dbbd80993070a45e2aa5ae15d330b63b",
+    "image_sha256": "194fa0f2bf51236ba7d1ed2f741ea1597104c8278197a0485b039b8e100f8b9e",
+    "image_bytes": 103817216,
+    "batch_stages": 13,
+    "scope": "actual compiled and packaged driver, offline qualified; runtime FDT/SFS not observed"
+  },
   "next_work_order": [
-    "close actual ABL v3 initrd transport and read-only filesystem discovery without guessed offsets",
     "provide observable loader/XNU errors; do not revive failed R-002 cross-reset RAM logging",
+    "observe the 13-stage transport batch in one controlled full-input trial once error output and recovery gates are met",
     "integrate offline ADT/FAT composition with board only after runtime memory/identity and loader contracts are reviewed",
     "close native root storage/PMGR/security/Data contracts before claiming iPadOS userspace"
   ]

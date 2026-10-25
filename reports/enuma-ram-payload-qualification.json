@@ -1,0 +1,140 @@
+{
+  "scope": "offline actual PE/compiler/boot packaging qualification, no device execution",
+  "firmware_commit": "698b7c17dbbd80993070a45e2aa5ae15d330b63b",
+  "fd_sha256": "5a031cd8b39c84a23a3ffd847400adbe5c85944f5fde59e307f7c4c9c1e13f68",
+  "modules": {
+    "EnumaRamPayloadDxe": {
+      "bytes": 20992,
+      "sha256": "5517d8f792c4e3ad0fa4bad5abccd8c77d08b805ecc4bbf327cca24ae5922729",
+      "compiler_sha256": "fcc05637c2b489efe368307e9cf9d196069eceda6990d49152c696da3f217be4",
+      "flags": {
+        "ENUMA_RAM_PAYLOAD": "1",
+        "ENUMA_DIAG_STAGE": "0",
+        "ENUMA_DIAG_SIMPLEFB": "0",
+        "ENUMA_DIAG_DISPATCH_FALLBACK": "0",
+        "ENUMA_DIAG_GOP_QUERY": "0",
+        "ENUMA_DIAG_GOP_STEP": "0",
+        "ENUMA_VALUE_SOURCE": "0",
+        "ENUMA_DIAG_PIXEL_PREVIEW": "0"
+      },
+      "packaged_equal": true
+    },
+    "EnumaProbe": {
+      "bytes": 102400,
+      "sha256": "a9a8ff09a7b0f00c8a29a5bf96f2b5d4c851cf967a12f1413a48685855e4d496",
+      "compiler_sha256": "2596b7462c94aba775995f1185a4992c505e7fb2a140494d99d085e8501a97b6",
+      "flags": {
+        "ENUMA_RAM_PAYLOAD": "1",
+        "ENUMA_DIAG_STAGE": "0",
+        "ENUMA_DIAG_SIMPLEFB": "0",
+        "ENUMA_DIAG_DISPATCH_FALLBACK": "0",
+        "ENUMA_DIAG_GOP_QUERY": "0",
+        "ENUMA_DIAG_GOP_STEP": "0",
+        "ENUMA_VALUE_SOURCE": "0",
+        "ENUMA_DIAG_PIXEL_PREVIEW": "0"
+      },
+      "packaged_equal": true
+    }
+  },
+  "ram_write_instructions": [
+    [
+      "mov",
+      "x0, #8"
+    ],
+    [
+      "movk",
+      "x0, #0x8000, lsl #48"
+    ],
+    [
+      "ret",
+      ""
+    ]
+  ],
+  "constant_arrays_match": true,
+  "packaging": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "a69bccd9e25d78e267f015a38577995551ede43c91e69ff66f4a04d431802d61",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "image_sha256": "194fa0f2bf51236ba7d1ed2f741ea1597104c8278197a0485b039b8e100f8b9e",
+  "image_bytes": 103817216,
+  "archive": "out/full-boot/transport/qualified-698b7c1",
+  "files": {
+    "EnumaRamPayloadDxe.efi": {
+      "bytes": 20992,
+      "sha256": "5517d8f792c4e3ad0fa4bad5abccd8c77d08b805ecc4bbf327cca24ae5922729"
+    },
+    "EnumaRamPayloadDxe.map": {
+      "bytes": 32884,
+      "sha256": "7a765144c7d8876954d731846643f5cddaa2a651eafe1fec818a5156554f5e02"
+    },
+    "EnumaRamPayloadDxe.GNUmakefile": {
+      "bytes": 23748,
+      "sha256": "fcc05637c2b489efe368307e9cf9d196069eceda6990d49152c696da3f217be4"
+    },
+    "EnumaProbe.efi": {
+      "bytes": 102400,
+      "sha256": "a9a8ff09a7b0f00c8a29a5bf96f2b5d4c851cf967a12f1413a48685855e4d496"
+    },
+    "EnumaProbe.map": {
+      "bytes": 168286,
+      "sha256": "54080db1411a088341acd3da2247d01dfbdfe7aa53ff0d3911ba09f54711d2ea"
+    },
+    "EnumaProbe.GNUmakefile": {
+      "bytes": 23155,
+      "sha256": "2596b7462c94aba775995f1185a4992c505e7fb2a140494d99d085e8501a97b6"
+    },
+    "EnumaRamPayload.c": {
+      "bytes": 10281,
+      "sha256": "bf58ac12edc254211f4f292c58f15174766e7bdea2029e35144d086b78add771"
+    },
+    "TransportBounds.h": {
+      "bytes": 852,
+      "sha256": "4cb024f0734b94c10409f2ef6952ae931bca85a6246896a51514a71e080adcca"
+    },
+    "TransportReport.h": {
+      "bytes": 639,
+      "sha256": "0b25f6998ffb306ac495c6d88125a8cca1adeaa731fe9624bafa4016360fbd75"
+    },
+    "PayloadContract.h": {
+      "bytes": 355,
+      "sha256": "5a12596a0e5dcbd6ded4b0138aed826546a144a97f3d08bd9c8528d26dafe17d"
+    },
+    "SILICIUM_UEFI.fd": {
+      "bytes": 3145728,
+      "sha256": "5a031cd8b39c84a23a3ffd847400adbe5c85944f5fde59e307f7c4c9c1e13f68"
+    },
+    "enuma-uefi.raw": {
+      "bytes": 3145920,
+      "sha256": "a69bccd9e25d78e267f015a38577995551ede43c91e69ff66f4a04d431802d61"
+    },
+    "enuma-system-transport-v3.img": {
+      "bytes": 103817216,
+      "sha256": "194fa0f2bf51236ba7d1ed2f741ea1597104c8278197a0485b039b8e100f8b9e"
+    },
+    "firmware-build.json": {
+      "bytes": 15129,
+      "sha256": "acb216c5f249a4e75f850a33f13c29545bc34f365b40c362b1c8efa3dd0db84a"
+    },
+    "payload-contract.json": {
+      "bytes": 1404,
+      "sha256": "ab4df95a7e3041f7bc78912fb70721c828fd5c747ac9deaf5c496a3cfcb30380"
+    },
+    "host-checks.json": {
+      "bytes": 1634,
+      "sha256": "8f9f6832ce928291121f7e6b338bee5396d44d8588bfe1f913937eb9d66bea3e"
+    },
+    "abl-concat.json": {
+      "bytes": 3008,
+      "sha256": "4ed579b67038d58551d812941277eb1d1f8602eb6a4bcbfe9475fe985367b455"
+    }
+  },
+  "hardware_tested": false,
+  "runtime_fdt_sfs_observed": false,
+  "full_boot_ready": false,
+  "new_memory_mapping": false
+}

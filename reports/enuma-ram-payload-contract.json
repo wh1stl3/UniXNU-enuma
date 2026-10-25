@@ -1,0 +1,39 @@
+{
+  "scope": "offline exact-input contract; runtime prefix/layout/mapping not yet observed",
+  "fat_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "fat_bytes": 100663296,
+  "prefix_bytes": 2230,
+  "prefix_sha256": "c4d6aa28a09d7097fb527747d0d758b2e9886f38d64445f9431fe2fdac7c1fea",
+  "prefix_crc32": 785355783,
+  "fat_crc32": 3596507551,
+  "files": [
+    {
+      "path": "Payloads/kernel.macho",
+      "bytes": 54231040,
+      "sha256": "be83a7ec0c11132c13b9581d8784a1775584bb97ff5c66484bcbb2e7bef0879e",
+      "head_crc32": 2349073845
+    },
+    {
+      "path": "Payloads/kernel.macho.adt",
+      "bytes": 11024,
+      "sha256": "f8b5e0bc127967f785b464486f1a0ec0fac798592824206fd1ef91e7b0fb7cd2",
+      "head_crc32": 3750583243
+    },
+    {
+      "path": "Payloads/kernel.macho.trustcache",
+      "bytes": 61356,
+      "sha256": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7",
+      "head_crc32": 2925830739
+    },
+    {
+      "path": "unixnu.toml",
+      "bytes": 190,
+      "sha256": "96066b835a28a685113f8858ca0a6d56f8d494aa7a92249f94e8e2caa92c4f3e",
+      "head_crc32": 3540006753
+    }
+  ],
+  "header_sha256": "5a12596a0e5dcbd6ded4b0138aed826546a144a97f3d08bd9c8528d26dafe17d",
+  "integrity": "CRC32 for transport errors only; host SHA256 binds source inputs, no authentication claim",
+  "new_memory_mapping": false,
+  "hardware_tested": false
+}

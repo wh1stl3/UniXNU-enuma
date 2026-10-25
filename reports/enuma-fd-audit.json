@@ -1,8 +1,8 @@
 {
   "scope": "built FD structure and byte identity; no firmware execution",
-  "fd_sha256": "995a962df36d84c34b2ffa742a477baed69b8a6524302babdd58c525a30b53f2",
+  "fd_sha256": "5a031cd8b39c84a23a3ffd847400adbe5c85944f5fde59e307f7c4c9c1e13f68",
   "fd_bytes": 3145728,
-  "file_count": 80,
+  "file_count": 81,
   "matched_oem_modules": [
     "CPRDxe",
     "ChipInfo",
@@ -66,6 +66,7 @@
     "EmbeddedMonotonicCounter",
     "EnglishDxe",
     "EnumaProbe",
+    "EnumaRamPayloadDxe",
     "EnvDxe",
     "Fat",
     "GpiDxe",
