@@ -70,7 +70,7 @@
     "execution_record": "reports/enuma-ramoops-S-017-result.json"
   },
   "R-017-WARM": {
-    "status": "approved",
+    "status": "consumed",
     "image_sha256": [
       "6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5"
     ],
@@ -85,6 +85,6 @@
     },
     "authorization": "User requested continue until hard stop after minimum-read result; direct temporary boot already explicit. Same reviewed map extent; warm-only without console contents access, no writer reauthorization.",
     "qualification": "reports/enuma-ramoops-warm-control-qualification.json",
-    "execution_record": null
+    "execution_record": "reports/enuma-ramoops-S-018-result.json"
   }
 }

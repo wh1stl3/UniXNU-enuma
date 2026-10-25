@@ -781,3 +781,13 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-221：S-018无访问warm独立隔离
 
 2026-10-25T20:56:03+08:00。构建/实际产物资格完成，尚未发出。固件5cfcd4cc68c0c37ffb322322efc256760d9389e3，图6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，仅同映射stage10/delay2/ResetWarm无console访问，实际PE/宏/描述符/完整FAT/Boot v3已资格；用户继续至硬停，不重复一般批准。执行状态见STATUS，consumed图不重试。原始影音仅本地。
+
+
+## D-221：S-018无访问warm独立隔离
+
+2026-10-25T21:00:18+08:00。触发75秒无返回硬停，停止追加镜像，恢复状态待核验。固件5cfcd4cc68c0c37ffb322322efc256760d9389e3，图6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，仅同映射stage10/delay2/ResetWarm无console访问，实际PE/宏/描述符/完整FAT/Boot v3已资格；用户继续至硬停，不重复一般批准。执行状态见STATUS，consumed图不重试。原始影音仅本地。
+
+
+## D-221：S-018无访问warm独立隔离
+
+2026-10-25T21:01:06+08:00。超时硬停，仍待恢复核验；停止追加镜像。固件5cfcd4cc68c0c37ffb322322efc256760d9389e3，图6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，仅同映射stage10/delay2/ResetWarm无console访问，实际PE/宏/描述符/完整FAT/Boot v3已资格；用户继续至硬停，不重复一般批准。结果见reports/enuma-ramoops-S-018-result.json；触发超时后不追加设备启动。原始影音仅本地。

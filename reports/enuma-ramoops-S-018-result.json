@@ -1,0 +1,38 @@
+{
+  "trial": "S-018",
+  "consumed": true,
+  "firmware_commit": "5cfcd4cc68c0c37ffb322322efc256760d9389e3",
+  "image_sha256": "6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5",
+  "issued_at": "2026-10-25 20:57:13",
+  "boot_returncode": 0,
+  "boot_command_seconds": 2.641,
+  "fastboot_disconnect_seconds": 5.11,
+  "adb_return_seconds": null,
+  "boot_complete_seconds": null,
+  "automatic_android_return": false,
+  "observation_deadline_seconds": 75,
+  "hard_stop_triggered": true,
+  "scope": {
+    "base": "0xB0000000",
+    "size": "0x200000",
+    "marker_bytes": 0,
+    "stage": 10,
+    "delay_seconds": 2,
+    "reset": "warm-with-cold-fallback",
+    "pmsg_access": false
+  },
+  "console_content_access": false,
+  "recovery_verified": false,
+  "actual_device_phase": "manual-recovery-needed",
+  "independent_recovery": null,
+  "camera": {
+    "directory": "out/camera-capture/20261025T205656-system-transport",
+    "complete": true,
+    "frames": 1090,
+    "decoded_frames": 1090,
+    "raw_media_local_only": true
+  },
+  "conclusion": "warm-only/no-console-access failed bounded return; warm request path is leading suspect relative to returned cold controls, not unique proof of reset2 execution or source of S-015 hang",
+  "no_additional_device_boot_after_failure": true,
+  "next": "stop this run after recovery reconciliation and published handoff as requested; offline next inspect reset2/feature calls and compare a direct cold-reset writer isolation, never retry S-015/S-018"
+}
