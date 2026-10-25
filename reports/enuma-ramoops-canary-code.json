@@ -1,0 +1,64 @@
+{
+  "scope": "manual review of actual archived packaged Core; no execution claim",
+  "firmware_commit": "10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6",
+  "image_sha256": "2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e",
+  "core_sha256": "1fd62b293b620ca36da04eada0217fd95bb768bdc006075b620b4361848ab6eb",
+  "disassembly_sha256": "2a3858e25f64dfa37a6fcc0a4a655ebffa8e08633318927dfe841fd49f8b3f53",
+  "review_required": false,
+  "reviewed_ranges": {
+    "stage_gate": "RVA 0x3eb4..0x4064",
+    "warm_reset": "0x171c..0x1790",
+    "nonce_table": "0x1f000..0x1f00f",
+    "delay": "0x17ec0..0x17ee0"
+  },
+  "findings": [
+    "DxeMain 0x3d0c sets stage10; call at0x3d10 precedes CoreDispatcher at0x3d14",
+    "stage9 and stage11 calls return without writes; stage guard compares x0 with10",
+    "actual nonce words at1f000 verified against build nonce; prefix and hex loops build44 bytes",
+    "IRQ excluded before header loads; signature/capacity/start validation, optional reset and44 payload stores only",
+    "payload address B000000C+index, wrap at1FFFF4; header stores atB0000000/4/8; no pmsg access",
+    "dmb sy publication fences; restore IRQ before delay and ResetWarm call",
+    "specialized delay issues two NanoSecondDelay(1000000000) calls",
+    "ResetWarm requests PSCI_FEATURES 8400000A forC4000012, zero type forreset2, unsupported path84000009",
+    "reset returning branches to CpuDeadLoop, no ordinary dispatcher fallthrough"
+  ],
+  "actual_map_records": [
+    {
+      "module": "BdsDxe",
+      "offset": 378448,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "SimpleFbDxe",
+      "offset": 13360,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "EnumaRamPayloadDxe",
+      "offset": 17984,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    }
+  ],
+  "limitations": [
+    "not an instruction-by-instruction symbolic proof",
+    "hardware retention and early Android cleanup unverified"
+  ]
+}

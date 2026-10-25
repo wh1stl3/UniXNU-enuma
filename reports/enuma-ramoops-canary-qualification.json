@@ -1,0 +1,132 @@
+{
+  "trial_kind": "ramoops-canary",
+  "firmware_commit": "10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6",
+  "archive": "out/ramoops-audit/S-015-qualified",
+  "image": "out/ramoops-audit/S-015-qualified/image.img",
+  "image_sha256": "2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e",
+  "nonce": "94c7031f6483d298b3d331a480fc0118",
+  "ramoops_scope": {
+    "base": "0xB0000000",
+    "size": "0x200000",
+    "marker_bytes": 44,
+    "stage": 10,
+    "delay_seconds": 2,
+    "reset": "warm-with-cold-fallback",
+    "pmsg_access": false
+  },
+  "files": {
+    "image.img": {
+      "sha256": "2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "4de7973f99ee4971877a1762dee9edf3e0ab46aef6e41cfcadc8a39152af5137",
+      "bytes": 1053
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "9773cea18ea6a35694eb8ee5409d073fc92918543338c9e7d46e8db2fb8766e7",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "8271b15c6faefed0a4a72d340dc6c9e732d533e1ab8b6b32b3ab7c0a68a7f09d",
+      "bytes": 3145920
+    },
+    "DxeCore.efi": {
+      "sha256": "1fd62b293b620ca36da04eada0217fd95bb768bdc006075b620b4361848ab6eb",
+      "bytes": 164352
+    },
+    "core.GNUmakefile": {
+      "sha256": "1d4612687da8ea734f44d1ef64290fbffe254360ea3e9bfc610d911f55352024",
+      "bytes": 51721
+    },
+    "core.map": {
+      "sha256": "0926cada6bbdc7a1f3f3fdd7304b7752194f9cf0d5a792ee689039ee1903cb8e",
+      "bytes": 242805
+    },
+    "MemoryMapLib.c": {
+      "sha256": "9c382d2291ab2a0af987b06035caf1bd87a0f11c7984a7450506236de1f47f99",
+      "bytes": 4858
+    },
+    "EnumaStageCheckpoint.h": {
+      "sha256": "ff3b5d6b5c19ba60646fd47c47379332e9f39c35482b60db88fb74c8f4a68936",
+      "bytes": 787
+    },
+    "EnumaRamoopsCanary.h": {
+      "sha256": "9352ee92f3f47b69f61d87b814ee5dd75875585b4ae4d32936dea88a80865a80",
+      "bytes": 1237
+    },
+    "EnumaRamoopsBuffer.h": {
+      "sha256": "924921468fc8580100eaa9e2ab21ceabf065e87f73db5e03dccb03691ad34aae",
+      "bytes": 2890
+    },
+    "firmware-build.json": {
+      "sha256": "f7de701a050293d090367d5f25f0e4673394f6938676b57aeacdb93c82ab0675",
+      "bytes": 19080
+    },
+    "fd-audit.json": {
+      "sha256": "211f2d1b8e2950b87077a6c04560308ecf28fb91f58404dfbe8198d20a5794d4",
+      "bytes": 4326
+    },
+    "canary-host.json": {
+      "sha256": "946ce799e1723bba47b790dba0bc4893d5b7197a7db93b6f7cd83347a07e57ff",
+      "bytes": 1338
+    },
+    "core.disassembly.txt": {
+      "sha256": "e757655acc17de36b6eb509892be6c16df0e4a4a71c00e8fe4b8ad21ba69c36c",
+      "bytes": 732207
+    }
+  },
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "8271b15c6faefed0a4a72d340dc6c9e732d533e1ab8b6b32b3ab7c0a68a7f09d",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "pixel_access": false,
+  "gop_published": false,
+  "review_required": false,
+  "disassembly_sha256": "2a3858e25f64dfa37a6fcc0a4a655ebffa8e08633318927dfe841fd49f8b3f53",
+  "actual_map_record_present": true,
+  "actual_map_records": [
+    {
+      "module": "BdsDxe",
+      "offset": 378448,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "SimpleFbDxe",
+      "offset": 13360,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "EnumaRamPayloadDxe",
+      "offset": 17984,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    }
+  ],
+  "actual_nonce_words_equal": true,
+  "packaged_core_equal": true,
+  "interpretation": "Only fresh complete nonce in native pstore supports survival; timeout/absence is inconclusive; never reissue consumed image"
+}

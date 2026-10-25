@@ -35,3 +35,8 @@
 **停点与规则**：`firmware/AGENTS.md`明确“New memory size/base changes or *_verified=true still require the companion review process.” 因而本轮仅提交未接线核心、收集器和审计，内存表/board.toml/bringup-plan/Null后端均未改。R-017 pending，需明确批准A的地址/大小/标记写入/一次复位临时启动范围后，才能接线、完整构建审计并直接上机。用户一般性的“支持继续”不被代填成新地址的精确批准；既有R-002/R-008不扩张到此区域。
 
 本轮最终只读核验Android完成/root/A槽/解锁及boot_a/vendor_boot_a设备与本地备份摘要均通过，见 `reports/enuma-recovery-reconciliation.json`。未录音、未产生或上传新影音。S-001..014 consumed；真实GOP/XNU/iPadOS仍未实机闭合。
+
+
+## D-216：R-017 A直接执行授权与S-015实际产物资格
+
+2026-10-25T20:01:26+08:00。用户在精确提案后要求“上机无需批准 直接进行 注意使用摄像头记录关键节点”；批准A最小范围，不再重复询问。固件10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6已推送，conditional console map与独立DxeMain stage10 variant保留旧迁移基线/Null后端。完整构建、FD、实际Core/宏/nonce/描述符、完整FAT及Boot v3通过，镜像2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e，归档out/ramoops-audit/S-015-qualified。主机canary模拟和实际反汇编复核通过；相机已目视桌面，最新只读恢复核验通过。此记录尚未上机，下一步文档提交推送及即时门禁后执行单笔S-015。具体代码与资格见reports/enuma-ramoops-canary-code.json及qualification.json。原始影音仅本地。

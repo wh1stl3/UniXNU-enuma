@@ -1,0 +1,34 @@
+{
+  "scope": "host virtual RAM emulation; no physical memory or hardware execution",
+  "result": "PASS: exact 44-byte canary, stage9 no-op, stage10 append/delay/warm and IRQ ordering; pmsg guard page",
+  "sanitizers": [
+    "undefined"
+  ],
+  "command": [
+    "clang",
+    "-std=c11",
+    "-D_GNU_SOURCE",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=undefined",
+    "-I",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/canary-host",
+    "-DENUMA_RAMOOPS_CANARY=1",
+    "-DENUMA_DIAG_STAGE=10",
+    "-DENUMA_DIAG_DELAY_US=2000000",
+    "-DENUMA_RAMOOPS_NONCE_0=0x01234567U",
+    "-DENUMA_RAMOOPS_NONCE_1=0x89abcdefU",
+    "-DENUMA_RAMOOPS_NONCE_2=0x01234567U",
+    "-DENUMA_RAMOOPS_NONCE_3=0x89abcdefU",
+    "/mnt/d/Code/UniXNU-enuma/tests/ramoops_canary_test.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/canary-host/canary-test"
+  ],
+  "sha256": {
+    "firmware/diagnostics/EnumaRamoopsCanary.h": "9352ee92f3f47b69f61d87b814ee5dd75875585b4ae4d32936dea88a80865a80",
+    "firmware/diagnostics/EnumaRamoopsStageCheckpoint.h": "ff3b5d6b5c19ba60646fd47c47379332e9f39c35482b60db88fb74c8f4a68936",
+    "tests/ramoops_canary_test.c": "f7d01ead55411fe8a76148685766ddfb4767712605c99453d04e8a7352c81fc2",
+    "scripts/test_ramoops_canary.py": "5dd2789c3704b3d46f105d86e873bc5bd667d3ff0680fbfe012cb337299e2128"
+  }
+}

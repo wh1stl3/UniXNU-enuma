@@ -19,15 +19,17 @@ FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
 
 
 def require_hardware_review(meta, approvals):
-    """A build/package review tag is never authorization to execute pixels."""
+    """Protected profiles require recorded authorization for the exact image."""
     review = meta.get('hardware_review')
     if review is None:
         return
-    if review != 'R-005':
+    if review not in ('R-005', 'R-017'):
         raise ValueError('Unknown protected hardware review')
     entry = approvals.get(review, {})
     if entry.get('status') != 'approved' or meta['image_sha256'] not in entry.get('image_sha256', []):
-        raise ValueError('R-005 pixel preview is not approved for this exact image; no device action')
+        raise ValueError(review + ' is not approved for this exact image; no device action')
+    if review == 'R-017' and (not entry.get('ramoops_scope') or meta.get('ramoops_scope') != entry['ramoops_scope']):
+        raise ValueError('R-017 scope differs from exact reviewed console canary')
 
 
 def fastboot_value_matches(result, variable, expected):
@@ -52,6 +54,7 @@ def observe_fastboot_return(present, disconnected):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', type=Path, required=True)
+    parser.add_argument('--expected-serial', help='local-only camera/collector binding; must equal the independently selected enuma')
     parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch','dxe-dispatch-return','dxe-queue-entry','dxe-driver-return','gop-probe','android-log-reservation','system-transport'))
     args = parser.parse_args()
     image = args.image.resolve()
@@ -79,6 +82,8 @@ def main():
             if r.returncode==0 and r.stdout.strip()==b'enuma': candidates.append(fields[0])
     if len(candidates)!=1: raise ValueError('require exactly one online Android enuma')
     serial=candidates[0]
+    if args.expected_serial is not None and serial != args.expected_serial:
+        raise ValueError('independently selected enuma differs from camera/collector target')
     def adb(command, rooted=False, timeout=10):
         return invoke(ADB,['-s',serial,'shell',('su -c '+shlex.quote(command)) if rooted else command],timeout)
     if adb('getprop ro.boot.slot_suffix').stdout.decode().strip()!=previous['slot']: raise ValueError('slot changed')

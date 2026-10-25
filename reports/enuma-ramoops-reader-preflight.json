@@ -1,0 +1,8 @@
+{
+  "scope": "selected enuma root read-only pstore reader preflight; no RAM contents or device writes",
+  "collector_su_command_uid": "0",
+  "backend": "ramoops",
+  "console_size": 2097152,
+  "console_file_present": false,
+  "pstore_directory_empty": true
+}

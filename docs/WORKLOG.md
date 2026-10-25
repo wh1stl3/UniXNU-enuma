@@ -751,3 +751,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-215：原生ramoops未接线实现与新映射审查
 
 2026-10-25T19:45:02+08:00。用户支持继续后，完成固定umi来源的地址无关console writer、许可、源摘要和只读收集器；51,210项oracle/边界/ASan/UBSan及实际EDK头文件AArch64对象、5项收集器主机测试通过。当前页表确实缺少B0000000，XN别名不设置XN，warm可能cold回退；无物理访问/新boot/映射修改。固件91a8a7c56d327e30262765548e2cd98bd5107037已提交推送，设备仓随本里程碑pin；之前设备c0ab5d7已推送。完整新FD/接线需R-017精确A范围（console2MiB、44字节一次标记、MMU后有界Core、warm/cold及单笔新资格临时boot）审查后继续，B保留旧表继续计数。最终只读恢复核验通过，证据out/device-tests/20261025T194122-recovery-reconciliation.json。详见operations/2026-10-25-ramoops-compatibility-audit.md及三个ramoops审计报告；原始影音仍仅本地，无新媒体上传。
+
+
+## D-216：R-017 A直接执行授权与S-015实际产物资格
+
+2026-10-25T20:01:26+08:00。用户在精确提案后要求“上机无需批准 直接进行 注意使用摄像头记录关键节点”；批准A最小范围，不再重复询问。固件10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6已推送，conditional console map与独立DxeMain stage10 variant保留旧迁移基线/Null后端。完整构建、FD、实际Core/宏/nonce/描述符、完整FAT及Boot v3通过，镜像2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e，归档out/ramoops-audit/S-015-qualified。主机canary模拟和实际反汇编复核通过；相机已目视桌面，最新只读恢复核验通过。此记录尚未上机，下一步文档提交推送及即时门禁后执行单笔S-015。具体代码与资格见reports/enuma-ramoops-canary-code.json及qualification.json。原始影音仅本地。

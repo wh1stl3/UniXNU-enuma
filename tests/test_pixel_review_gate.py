@@ -17,6 +17,13 @@ class ReviewGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Unknown'):probe.require_hardware_review({'hardware_review':'unknown','image_sha256':'a'*64},{})
     def test_untagged_unchanged(self):
         probe.require_hardware_review({'image_sha256':'a'*64},{})
+    def test_r017_exact_scope_and_image_required(self):
+        scope={'base':'0xB0000000','size':'0x200000','marker_bytes':44,'stage':10}
+        meta={'hardware_review':'R-017','image_sha256':'a'*64,'ramoops_scope':scope}
+        approval={'R-017':{'status':'approved','image_sha256':['a'*64],'ramoops_scope':scope}}
+        probe.require_hardware_review(meta,approval)
+        for changes in [{'ramoops_scope':{}},{'image_sha256':'b'*64}]:
+            with self.assertRaises(ValueError):probe.require_hardware_review({**meta,**changes},approval)
     def test_pending_main_never_calls_device_tools(self):
         with tempfile.TemporaryDirectory(dir=ROOT/'out',prefix='pixel-review-') as td:
             root=Path(td).resolve();image=root/'out/protected.img';image.parent.mkdir();image.write_bytes(b'protected fixture')

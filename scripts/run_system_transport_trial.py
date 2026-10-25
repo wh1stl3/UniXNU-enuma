@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -27,6 +28,16 @@ def qualification(published=False, report=None):
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
+    if q.get('trial_kind') == 'ramoops-canary':
+        frozen = (ROOT / q['archive'] / 'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text()) != q:
+            raise ValueError('ramoops candidate differs from frozen qualification')
+        nonce = q.get('nonce', '')
+        expected = dict(base='0xB0000000', size='0x200000', marker_bytes=44, stage=10,
+                        delay_seconds=2, reset='warm-with-cold-fallback', pmsg_access=False)
+        if (re.fullmatch('[0-9a-f]{32}', nonce) is None or q.get('ramoops_scope') != expected or
+            q.get('review_required') is not False or q.get('pixel_access') is not False):
+            raise ValueError('R-017 exact console scope or actual code qualification missing')
     if q.get('trial_kind') in ('inherited-video-audit','inherited-video-entry-control'):
         frozen=(ROOT/q['archive']/'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
@@ -64,6 +75,10 @@ def qualification(published=False, report=None):
     if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
         raise ValueError('candidate differs')
     if published:
+        if q.get('trial_kind') == 'ramoops-canary':
+            from run_enuma_entry_probe import require_hardware_review
+            require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
+                json.loads((ROOT/'config/hardware-review-approvals.json').read_text()))
         if q.get('reason_target'):
             review=json.loads((ROOT/'reports/enuma-video-reason-code.json').read_text())
             matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and x.get('query')==q['reason_query'] and x.get('reason_target')==q['reason_target'] and x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
@@ -105,7 +120,7 @@ def main():
                   started_utc=datetime.now(timezone.utc).isoformat(), camera_ready=False,
                   device_runner_started=False, boot_issued=False)
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    writer = process = log = None
+    writer = process = log = collector = collector_log = None
     try:
         if not cap.isOpened(): raise RuntimeError('camera index0 DirectShow unavailable; no device command issued')
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920); cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
@@ -123,8 +138,19 @@ def main():
         if not writer.isOpened(): raise RuntimeError('video writer failed; no device command issued')
         log = (out / 'runner.log').open('w', encoding='utf-8')
         label = 'dxe-driver-return' if 'detail_point' in q else 'system-transport'
-        process = subprocess.Popen([sys.executable, '-X', 'utf8', '-u', '-B', str(ROOT / 'scripts/run_enuma_entry_probe.py'),
-                                    '--image', str(image), '--label', label], cwd=ROOT,
+        command = [sys.executable, '-X', 'utf8', '-u', '-B', str(ROOT / 'scripts/run_enuma_entry_probe.py'),
+                   '--image', str(image), '--label', label]
+        if q.get('trial_kind') == 'ramoops-canary':
+            previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+            target = json.loads((Path(previous['directory'])/'target.local.json').read_text())
+            command += ['--expected-serial', target['serial']]
+            collector_log = (out/'collector.log').open('w', encoding='utf-8')
+            collector = subprocess.Popen([sys.executable, '-X', 'utf8', '-u', '-B',
+                str(ROOT/'scripts/collect_enuma_pstore.py'), '--adb', target['adb'],
+                '--serial', target['serial'], '--nonce', q['nonce'], '--seconds', '120',
+                '--output', str(out/'pstore')], cwd=ROOT, stdout=collector_log, stderr=subprocess.STDOUT)
+            report['pstore_collection'] = (out/'pstore').relative_to(ROOT).as_posix()
+        process = subprocess.Popen(command, cwd=ROOT,
                                    stdout=log, stderr=subprocess.STDOUT)
         report['device_runner_started'] = True
         start = time.monotonic(); last = -1; finished = None; times = []
@@ -141,7 +167,7 @@ def main():
                     last = second
             if process.poll() is not None:
                 if finished is None: finished = time.monotonic()
-                if time.monotonic() - finished >= 3: break
+                if time.monotonic() - finished >= 3 and (collector is None or collector.poll() is not None): break
         else:
             raise RuntimeError('host bound reached; no further candidate, reconcile recovery')
         writer.release(); writer = None
@@ -156,6 +182,12 @@ def main():
         if decoded != len(times): raise RuntimeError('camera decode mismatch; no further candidate')
         print('Camera evidence saved; runner exit=' + str(process.returncode), flush=True)
         if process.returncode: raise RuntimeError('runner did not complete recovery; inspect runner.log and reconcile')
+        if collector is not None:
+            report['collector_exit'] = collector.returncode
+            collection_path = out/'pstore/collection.json'
+            if collector.returncode != 0 or not collection_path.is_file():
+                raise RuntimeError('pstore collection failed; no additional trial')
+            report['pstore_marker_present'] = json.loads(collection_path.read_text())['marker_present']
     except Exception as error:
         report['error'] = str(error)
         raise
@@ -164,6 +196,9 @@ def main():
             process.terminate(); process.wait(timeout=15)
         if writer is not None: writer.release()
         if log is not None: log.close()
+        if collector is not None and collector.poll() is None:
+            collector.terminate(); collector.wait(timeout=10)
+        if collector_log is not None: collector_log.close()
         cap.release()
         if report['device_runner_started']:
             state = json.loads((ROOT / 'out/device-tests/current.local.json').read_text())

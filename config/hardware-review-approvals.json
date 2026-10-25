@@ -5,7 +5,26 @@
     "image_sha256": [
       "c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534"
     ],
-    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated 批准R005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification.",
+    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated 鎵瑰噯R005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification.",
     "execution_record": "reports/enuma-r005-device.json"
+  },
+  "R-017": {
+    "status": "approved",
+    "scope": "A console-only first retention marker; one qualified temporary boot",
+    "image_sha256": [
+      "2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e"
+    ],
+    "ramoops_scope": {
+      "base": "0xB0000000",
+      "size": "0x200000",
+      "marker_bytes": 44,
+      "stage": 10,
+      "delay_seconds": 2,
+      "reset": "warm-with-cold-fallback",
+      "pmsg_access": false
+    },
+    "authorization": "User explicitly instructed 上机无需批准 直接进行 注意使用摄像头记录关键节点 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
+    "qualification": "reports/enuma-ramoops-canary-qualification.json",
+    "execution_record": null
   }
 }

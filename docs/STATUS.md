@@ -1,13 +1,11 @@
-# 当前状态：D-215，原生ramoops核心与审计完成；R-017映射待审
+# 当前状态：D-216，R-017 A已授权；S-015资格完成待单笔执行
 
-2026-10-25T19:45:02+08:00。用户支持继续后，已实现未接线的原生console环形写入核心及只读pstore收集器。51,210个独立队列oracle/边界用例、ASan/UBSan和实际EDK头文件AArch64对象编译通过；5个收集器主机测试通过。未完成新FD/打包/实机资格，不能称日志已经打通。
+2026-10-25T20:01:26+08:00。用户明确“上机无需批准 直接进行 注意使用摄像头记录关键节点”，在精确A范围后按R-017 A直接执行授权记录，不再索要批准。当前尚未启动新镜像。已完成源码、全FD、实际PE/宏/nonce/映射、完整FAT及Boot v3不可变资格，下一步先确认全部当前文档提交推送和即时设备/相机门禁，再执行S-015一次临时boot。
 
-核心来源为固定umi 3eb7257，保留BSD许可；MiCode 52a2f18仅作格式参考，未导入GPL内核代码。12字节DBGC头与本机ECC0、console2MiB布局相合。当前UEFI页表缺少B0000000区域，不能直接启用后端。Normal Non-cacheable不等于XN，ResetWarm可能回退cold，跨复位保留及Android早期清理仍未验证。
+固件10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6已推送；镜像`2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e`，FD`9773cea18ea6a35694eb8ee5409d073fc92918543338c9e7d46e8db2fb8766e7`，103817216字节。归档`out/ramoops-audit/S-015-qualified`；资格、实际反汇编审查见reports/enuma-ramoops-canary-qualification.json与enuma-ramoops-canary-code.json。nonce `94c7031f6483d298b3d331a480fc0118`，完整标记44字节。实际Core在stage10、CoreDispatcher之前追加一次；仅本次显式profile增加B0000000/2MiB Normal Non-cacheable reserved映射。实际描述符AddMem/MEM_RES/UNCACHEABLE/Reserv/ArmUC0核对通过；pmsg不映射/不写，全局SerialPort仍Null，原迁移内存表及board.toml/bringup-plan不改。
 
-**本轮停点是新增内存范围审查，不是设备故障。R-017 pending。** 固件AGENTS明确新memory size/base仍走companion review。最小A方案：仅新增0xB0000000/0x200000普通不可缓存保留映射，MMU完成后的有界Core入口仅追加一次44字节随机nonce标记，短延时后warm请求/不支持时cold回退，一笔新资格镜像临时boot；pmsg不映射/不写，不写分区/改槽/verified，不启全局SerialPort。B方案保留现表继续独立计数隔离。需明确A精确范围后才接线与完整构建审计；全部资格、文档发布和即时恢复门禁满足后沿已授权流程直接上机，不重复申请一般上机许可。
+主机模拟通过stage9不写、stage10精确标记/中断排除/2秒延时/warm调用及pmsg保护页；未改的环核心51,210项ASan/UBSan独立队列用例与AArch64对象通过。实际Core核查RVA3eb4..4064写入、nonce表、两次1秒NanoSecondDelay及PSCI feature/reset2/cold回退；复位若返回进入CpuDeadLoop。静态/主机构建通过不等于硬件存活。
 
-当前内存表、board.toml/bringup-plan及Null后端均保持。固件源码pin 91a8a7c56d327e30262765548e2cd98bd5107037 已推送，是未接线核心的新源码里程碑；最近已实测源码仍为b93b3bb。无新boot、物理RAM访问、模块加载或分区写入。最终只读核验Android完成/root/A槽/解锁及boot_a/vendor_boot_a设备和本地备份摘要均通过，证据 `out/device-tests/20261025T194122-recovery-reconciliation.json`、`reports/enuma-recovery-reconciliation.json`。
+相机19:59预检1920x1080正常，已旋转目视Android桌面。最新只读Android完成/root/A槽/解锁和boot_a/vendor_boot_a设备及备份摘要通过，证据`out\device-tests\20261025T195919-recovery-reconciliation.json`。执行期间相机覆盖启动前、黑屏/返回与恢复节点；原始影音只存out，无录音。只读pstore收集器在启动前开启120秒有界窗口，逐次核对enuma、root读取固定console文件，使用同一local目标serial与runner独立选择结果绑定。
 
-S-013/S-014的历史互补时序支持首样本Enable门禁Reason5（间接证据、中等置信），后续完整采样/稳定性按该路径未执行；S-001..014及旧失败镜像consumed，不重试。显示独立原生双路计数前缀尚未实现，完整GOP资格不放宽。真实GOP、CPU/SMMU地址/下游拓扑、13项RAM运输、XNU/iPadOS/PMGR/UFS/root/Data仍未实机闭合。
-
-详见 `docs/operations/2026-10-25-ramoops-compatibility-audit.md`、`reports/enuma-ramoops-compatibility-audit.json`、`reports/enuma-ramoops-buffer-tests.json`、`reports/enuma-ramoops-kernel-sources.json`。原始影音仅本地out，未录音/未上传；本轮未产生新影音。无人工恢复按键待办，审批见NEED-REVIEW的R-017，不把旧R-002/R-008扩张到新区域。
+成功判据：原生console中找到本次完整nonce，且按既有门禁恢复并核验；只能支持本次stage10→复位→Android pstore留存链，不表示全局日志或显示成功。缺标记不唯一归因，先检查Android消费者/保留/实际到达；75秒主机观察无返回立即停止追加并优先恢复，不重试同图、不扩区。R-017单笔发出即consumed。无flash/erase/改槽/verified/显示寄存器写入。S-001..014及旧失败图consumed，GOP/XNU/iPadOS仍未实机闭合。
