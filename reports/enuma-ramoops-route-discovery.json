@@ -1,0 +1,45 @@
+{
+  "scope": "selected enuma root read-only pstore/ramoops discovery; no boot, physical-memory read, module load or writes",
+  "records": {
+    "ramoops_parameters": {
+      "returncode": 0,
+      "stdout": "/sys/module/ramoops/parameters/console_size=2097152\n/sys/module/ramoops/parameters/dump_oops=1\n/sys/module/ramoops/parameters/ecc=0\n/sys/module/ramoops/parameters/ftrace_size=0\n/sys/module/ramoops/parameters/mem_address=2952790016\n/sys/module/ramoops/parameters/mem_size=4194304\n/sys/module/ramoops/parameters/mem_type=0\n/sys/module/ramoops/parameters/pmsg_size=2097152\n/sys/module/ramoops/parameters/record_size=0\n",
+      "stderr": ""
+    },
+    "pstore_backend": {
+      "returncode": 0,
+      "stdout": "ramoops\ntotal 0\n",
+      "stderr": ""
+    },
+    "reserved_iomem": {
+      "returncode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "pstore_dmesg": {
+      "returncode": 0,
+      "stdout": "[    3.647163] logd: Ignored bug_map definition in /system/etc/selinux/bug_map: 'init pstorefs dir b/77873135', (scontext, tcontext, tclass) denial combination is already tagged with bug metadata 'b/77873135'\n",
+      "stderr": ""
+    },
+    "selected_cmdline_tokens": {
+      "tokens": [
+        "ramoops_memreserve=4M"
+      ]
+    }
+  },
+  "boot_completed": "1",
+  "prior_recovery": "out\\device-tests\\20261025T191112-recovery-reconciliation.json",
+  "kpageflags_metadata": {
+    "scope": "kernel page-flag metadata only; no physical content read",
+    "base": "0xb0000000",
+    "bytes": 4194304,
+    "pages": 1024,
+    "kpf_reserved_pages": 1024,
+    "distinct_flag_values": [
+      "0x100000000"
+    ],
+    "all_pages_kpf_reserved": true
+  },
+  "limitation": "Current Linux ownership/backend and parameters do not qualify UEFI mapping, cache policy, writer compatibility, reset survival or collection before Android cleanup. No region writes or memory-map changes performed.",
+  "reviewed_at": "2026-10-25T19:28:32+08:00"
+}

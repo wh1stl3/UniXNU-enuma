@@ -1,0 +1,59 @@
+{
+  "scope": "public fixed-source review plus read-only native ramoops discovery; no firmware build/boot, memory-map change, RAM content read or writes",
+  "sources": [
+    {
+      "repository": "https://github.com/reAAAq/UniXNU-umi",
+      "commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+      "path": "overlay/Platforms/Xiaomi/umiPkg/Library/RamoopsSerialPortLib/RamoopsSerialPortLib.c",
+      "sha256": "137fce902e5891a815895b3d85936aad1344841ddf7483a53d6969fe2f835f15",
+      "git_blob_matches": true
+    },
+    {
+      "repository": "https://github.com/ht94911/uefi-cas",
+      "commit": "893f5025cea91a121f2566730779cb34955325fb",
+      "path": "Platforms/Xiaomi/casPkg/Library/CasDisplayLib/DisplayHardware.c",
+      "sha256": "b0c68fcd9503a5568254c9e4d522d4e691e0e70121e8b73b59be7ee600476aa5",
+      "git_blob_matches": true
+    },
+    {
+      "repository": "https://github.com/johnpanos/UniXNU-fajita",
+      "commit": "fb8c389bd9877d4db0ef6e09170b83752dec7259",
+      "path": "drivers/NativeGeniI2c/GeniI2c.c",
+      "sha256": "096e37df6cdc4ce40daf7f0c05f700c8423fc9cef7fbfbf6bc7beb3e402b9ace",
+      "git_blob_matches": true
+    }
+  ],
+  "discovery": "reports/enuma-ramoops-route-discovery.json",
+  "log_priority": "First audit umi-compatible native ramoops; current backend and geometry match. Qualify ownership/map/cache/format/reset survival before any writer.",
+  "display_priority": "Continue cas-style inherited scanout with native activity/progression qualification; enuma is dual-DSI video and must not copy cas command-refresh writes or addresses.",
+  "independent_backlight": "OEM I2C ABI plus Xiaomi KTZ8866 behavior first; fajita portable FIFO core is fallback, clock/pin/SE and execution bounds remain board-specific.",
+  "deferred": [
+    "OEM DisplayDxe with actual dependency/service evidence after a usable log path",
+    "USB device backend for enuma",
+    "QR export once GOP and logger producer exist",
+    "physical UART when testpoints and levels are confirmed"
+  ],
+  "rejected_shortcuts": [
+    "repeat consumed OEM/pixel/cold-log images",
+    "infer absence of ramoops from missing FDT node",
+    "copy umi memory/cache layout or cas CTL_START writes",
+    "make a generic stub for unknown OEM ABI"
+  ],
+  "current_readonly_facts": {
+    "backend": "ramoops",
+    "base": "0xb0000000",
+    "bytes": 4194304,
+    "console_bytes": 2097152,
+    "pmsg_bytes": 2097152,
+    "ecc": 0,
+    "reserved_page_flags": 1024,
+    "pages": 1024
+  },
+  "unresolved": [
+    "running-vendor pstore header/signature and ECC/old-buffer behavior",
+    "UEFI explicit mapping and exclusion from allocation",
+    "reset/bootloader survival and Android collection timing",
+    "single-core/reentrancy and cache/barrier requirements"
+  ],
+  "raw_media_local_only": true
+}

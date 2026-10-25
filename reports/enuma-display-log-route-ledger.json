@@ -85,5 +85,6 @@
   ],
   "assessment": "No alternate already-qualified early full-text channel was found. Keep inherited scanout as software primary; evaluate OEM I2C ABI/read qualification as an independent backlight branch. UART is the strongest display-independent early-log route if physical connection can be established. Do not repeat consumed OEM/pixel/cold-RAM tests.",
   "current_device": "last independently verified Android after S-014; no additional device commands during route review",
-  "raw_media_local_only": true
+  "raw_media_local_only": true,
+  "priority_update": "D-214: native Linux ramoops backend discovered; see enuma-public-route-priority-review.json. No UEFI write/retention qualification yet."
 }
