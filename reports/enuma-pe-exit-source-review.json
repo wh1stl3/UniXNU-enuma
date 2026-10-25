@@ -1,0 +1,14 @@
+{
+  "scope": "static baseline CoreExit and existing point22 patch applicability; no device access",
+  "image_source_sha256": "869a950195558132884e461dcd1a17f2426318d71561f4d6503bdfff21416962",
+  "patch_sha256": "49a051195269054894262788f65883c4665db5eec170db2f457e265b523be94d",
+  "direct_PE_return": "calls point21 before CoreExit; then CoreExit validates current image and LongJumps",
+  "direct_Exit": "bypasses point21 but valid current image can LongJump to StartImage",
+  "existing_point22": "after SetJump/entry block, before TPL check/free pool/handle connection; would cover successful LongJump and direct-return-via-CoreExit",
+  "limits": [
+    "point22 timeout still cannot distinguish entry hang, invalid Exit, failed ExitData allocation, exception or reset failure",
+    "point22 positive would support reaching post-exit context, not successful driver state or GOP",
+    "no new candidate or hardware action produced by this review"
+  ],
+  "next": "Qualify existing point22 with same full FAT and exact scheduled handle/GUID bridge, no fallback, after recovery; do not retry S-006"
+}

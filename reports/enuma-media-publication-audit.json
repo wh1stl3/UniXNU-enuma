@@ -1,0 +1,16 @@
+{
+  "scope": "media filenames in Git histories and public GitHub release assets, not an audit of unrelated third-party uploads",
+  "repositories": {
+    "UniXNU-enuma": {
+      "history_media_paths": [],
+      "release_asset_names": []
+    },
+    "uefi-enuma": {
+      "main_and_sheng_history_media_paths": [],
+      "release_asset_names": []
+    }
+  },
+  "local_capture": "out/camera-capture ignored; current OpenCV capture has no audio",
+  "workflow_upload_scope": "out/ci/macos/evidence, no local camera path",
+  "policy": "Raw field audio/video/images stay local; no force add, release or CI upload; text summaries only"
+}
