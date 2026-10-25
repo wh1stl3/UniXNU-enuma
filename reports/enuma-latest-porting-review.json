@@ -1,0 +1,24 @@
+{
+  "scope": "source reuse review and host decoder test only; no new device trial",
+  "reviewed_repositories": 8,
+  "reviewed_files": 40,
+  "cas_tested_firmware": "893f5025cea91a121f2566730779cb34955325fb",
+  "cas_platform_delta_from_tested": [],
+  "cas_decoder_host_tests": 16,
+  "host_test_log_sha256": "192bf0ff2c02e483c441969d734f6ff5b059b630634979f2a895ff97d97bfd8c",
+  "shared_ram_prefix_contract": {
+    "prefix_bytes": 2230,
+    "fat_bytes": 100663296,
+    "whole_initrd_sector_remainder": 182,
+    "scope": "predicted exact concatenation contract, not a runtime FDT measurement"
+  },
+  "cas_contains_pixel_and_CTL_START_writes": true,
+  "can_copy_board_addresses_or_approve_execution": false,
+  "recommendation": "Evaluate cas pure scanout decode for enuma offline, preserving own bounds; restore real GOP before QR logs; keep OEM service probes as fallback",
+  "limits": [
+    "cas and umi hardware results belong to their specific variants and revisions",
+    "QR menu needs working graphics/input and logger producer; it cannot diagnose a pre-menu hang alone",
+    "new framework migration is separate from this firmware fault; build pins stay unchanged",
+    "host synthetic snapshots do not establish enuma scanout or authorize pixel/MMIO writes"
+  ]
+}

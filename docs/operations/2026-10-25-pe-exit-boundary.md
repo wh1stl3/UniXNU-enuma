@@ -1,3 +1,5 @@
+> 最新D-193：S-007已执行超时并恢复核验，候选consumed；后续先看latest-porting-route-review，不再把本候选当未上机。下文保留历史。
+
 # 当前状态：D-189，S-006已恢复，Exit汇合边界候选离线就绪
 
 2026-10-25（Asia/Shanghai）S-006 point21于15:52:23发出；命令返回0/2.625秒、5.110秒断开，75秒无自动返回，已consumed，不重试。用户长按恢复Android，15:55:30独立核验enuma/Android完成/root/A槽/解锁/boot_a与vendor_boot_a及本地备份摘要一致。452/452主录像、740/740恢复录像可解码；抽样黑屏无可读阶段报告。当前Android恢复完成，无人工或审批待办。

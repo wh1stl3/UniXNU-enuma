@@ -1,0 +1,221 @@
+{
+  "scope": "review pins only; no build dependency or authorization change",
+  "references": [
+    {
+      "repository": "https://github.com/UniXNU/UniXNU.git",
+      "commit": "16e592abee8a550dec8154ed1f38b5ebc4f16213",
+      "local": "out/sources/UniXNU-latest-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "bytes": 2673
+        },
+        "README.md": {
+          "sha256": "3a1f60209486d93ce4bef1a327693639fa1c82ded3f89e07569894faf1ee2e95",
+          "bytes": 2957
+        },
+        "docs/porting/migration.md": {
+          "sha256": "da0e7e368158c13f76d081a99c66098b8c7e514005ee7ecf262c4453c24fcbd1",
+          "bytes": 20332
+        },
+        "docs/porting/uefi-firmware.md": {
+          "sha256": "99ac77e5fc787411873c880a727d0bff326d4873b5380a0a3519e8e1be2387af",
+          "bytes": 10800
+        },
+        "docs/porting/log-capture.md": {
+          "sha256": "1ddea227dd3ed2c6d94c434f09cbd448db9412185347b1f7a44d59318c301b3c",
+          "bytes": 9666
+        },
+        "docs/porting/bring-up.md": {
+          "sha256": "3eceb55ce14928903de4248c4a504508dc9c93407ddc2b56cedeb0570c89dbfb",
+          "bytes": 6164
+        },
+        "docs/porting/display.md": {
+          "sha256": "63713d352bb5242603c3d9482d91246c51045fa3497c3ebcaed3c746e4517eca",
+          "bytes": 6810
+        },
+        "docs/guide/debugging.md": {
+          "sha256": "a71f01dfc3726ec79d96f9a8cf61d5e74253769c380735dff8db142b5a9b7118",
+          "bytes": 18922
+        },
+        "package/UniXNUPkg/Driver/UniXNURamDiskDxe/UniXNURamDiskDxe.c": {
+          "sha256": "b1cf184ebd217656daf92446d9bd724570aad61cb3c7d6d6a2a39d43199d9f35",
+          "bytes": 5570
+        },
+        "package/UniXNUPkg/Driver/AdvancedLogDxe/AdvancedLogDxe.c": {
+          "sha256": "aa76c504a222cb79982dee09ab3cb913b33382da19cf07c68b99ddd9cf9d3745",
+          "bytes": 16208
+        },
+        "package/UniXNUPkg/Driver/AdvancedLogDxe/AdvancedLogDxe.inf": {
+          "sha256": "77dced57e7fad55121dbab8241db5bf92e2f31e396925bac91b65d2e5649b2de",
+          "bytes": 1212
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/UniXNU/uefi-sheng.git",
+      "commit": "20ac23d5e0937106c2129303dfc931b3390ae660",
+      "local": "out/sources/uefi-sheng-latest-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187",
+          "bytes": 1884
+        },
+        "Platforms/Xiaomi/shengPkg/Include/DXE.inc": {
+          "sha256": "c71eff1257d867ab4302ae2a9ad1b53d293f2be9d79a41063ae4245c3ff3c81e",
+          "bytes": 6346
+        },
+        "Platforms/Xiaomi/shengPkg/Library/ConfigurationMapLib/ConfigurationMapLib.c": {
+          "sha256": "2c233c1276d1b7bbcf728691d5bb1fecb394a61c730457e16f80640bcf020ecb",
+          "bytes": 1779
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/UniXNU/UniXNU-sheng.git",
+      "commit": "0e1f6e52638137db15905db8d775ad73757f39fa",
+      "local": "out/sources/UniXNU-sheng-latest-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "bytes": 2673
+        },
+        "board.toml": {
+          "sha256": "06d10db3e38c4cc6a717df4ff5cdd16107e38d6a0db90a2b5d9258a409e4a8e5",
+          "bytes": 5007
+        },
+        "feeds.toml": {
+          "sha256": "cfbdd242bc0ee510ca97caf3f4000e40492c434d80393c607bf4439e2a4ac648",
+          "bytes": 151
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/ht94911/uefi-cas.git",
+      "commit": "a491522d8f5fecd57be706df1e42e8bd3ca79b20",
+      "local": "out/sources/uefi-cas-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187",
+          "bytes": 1884
+        },
+        "Platforms/Xiaomi/casPkg/Include/CasDisplay.h": {
+          "sha256": "557d84967b41f21db423bde6784f17e0a8558524c8d50f0e9785f0cf2afb48d3",
+          "bytes": 2642
+        },
+        "Platforms/Xiaomi/casPkg/Include/CasPlatform.h": {
+          "sha256": "5dab626dcd8cb2319db334f33cf3eb9789cfb1d6f5166f3c5dcc509ada6b2c57",
+          "bytes": 2578
+        },
+        "Platforms/Xiaomi/casPkg/Library/CasDisplayLib/DisplayDecode.c": {
+          "sha256": "b15e588ed5a8f645e9cb0dbcd219316f0a4bf8c364732bad0e776e3141b36172",
+          "bytes": 6322
+        },
+        "Platforms/Xiaomi/casPkg/Library/CasDisplayLib/DisplayHardware.c": {
+          "sha256": "b0c68fcd9503a5568254c9e4d522d4e691e0e70121e8b73b59be7ee600476aa5",
+          "bytes": 6049
+        },
+        "Platforms/Xiaomi/casPkg/Library/CasDisplayLib/DisplayBlt.c": {
+          "sha256": "2c0ffcab01645b92ed62fe64a15e11fb6a1177768e06e199a527f754bf53b946",
+          "bytes": 3142
+        },
+        "Platforms/Xiaomi/casPkg/Drivers/CasGopDxe/CasGopDxe.c": {
+          "sha256": "bc89e4f16f1d7652237c37a75bce2511af89215049599d3ec3d2b5f24361ac38",
+          "bytes": 5798
+        },
+        "Platforms/Xiaomi/casPkg/Include/APRIORI.inc": {
+          "sha256": "a6e86a4b55d961f09c346f23bf741995464a8ffd0ef3531aeab84847ded1834d",
+          "bytes": 108
+        },
+        "Platforms/Xiaomi/casPkg/Include/DXE.inc": {
+          "sha256": "53f5be518d074030849a9fab3e6e5c10bd8f0544c2d528bfa3b8975089df5e6e",
+          "bytes": 1539
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/ht94911/UniXNU-cas.git",
+      "commit": "6cb54b05ceb1cfa3f716e7782b11da5962716856",
+      "local": "out/sources/UniXNU-cas-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "f2872d36ada11028dfa9ec62c69d22e880d5bab65b697c36ece61325fa3146f6",
+          "bytes": 2675
+        },
+        "README.md": {
+          "sha256": "2884def1b5767498a805222e12cf5a501fb24c55775afff01a8a1601a2cbf1db",
+          "bytes": 5417
+        },
+        "source-pins.json": {
+          "sha256": "cdd7a68b87bb82f0ccaaf96ee5eecff3a2b4cbfd88f6dd1245b3e44f8525c94a",
+          "bytes": 2324
+        },
+        "docs/validation.md": {
+          "sha256": "a37e0c03e6b1e8f641c4cee69583dbcd10f4b71bbe22b0f369606a3e3f58c5ed",
+          "bytes": 4677
+        },
+        "docs/architecture.md": {
+          "sha256": "d49c0e677426dc7633db6ebd6e6758cf6c400fafb7a4c5502fc75832c4866116",
+          "bytes": 3542
+        },
+        "tests/test_display.py": {
+          "sha256": "f226a700b315adb446de426274b1df88bd1c7b8def277619f41e8d4b44eac0d0",
+          "bytes": 8348
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/johnpanos/UniXNU-fajita.git",
+      "commit": "fb8c389bd9877d4db0ef6e09170b83752dec7259",
+      "local": "out/sources/UniXNU-fajita-latest-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "bytes": 2673
+        },
+        "README.md": {
+          "sha256": "1be727792d65d9d9d43273cf3a6cf98f33a8c5409ee4b67d45f52a8b9867d3f2",
+          "bytes": 6745
+        },
+        "board.toml": {
+          "sha256": "b02aadba61437ba56b420dda45e8c81397741d95032b58928a34c1db4e7feea9",
+          "bytes": 13882
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/hpadmx/UniXNU-elish.git",
+      "commit": "a357eae98a0da0796c8efec8519825367da1e3e7",
+      "local": "out/sources/UniXNU-elish-review",
+      "files": {
+        "LICENSE": {
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "bytes": 2673
+        },
+        "README.md": {
+          "sha256": "8b60fa50b0f6007c72101e050cb3b62931d219288b0ea7e643f50d9f4fa78100",
+          "bytes": 20598
+        },
+        "board.toml": {
+          "sha256": "15a548f30d8038c9255dd3437a95c561cef1bd4e32ad93115f1753887704399b",
+          "bytes": 22602
+        }
+      }
+    },
+    {
+      "repository": "https://github.com/reAAAq/UniXNU-umi.git",
+      "commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+      "local": "out/sources/UniXNU-umi",
+      "files": {
+        "LICENSE": {
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "bytes": 2673
+        },
+        "docs/validation.json": {
+          "sha256": "a411a1cf5cf5a5160e8187a0f38982707693a7636a29576edb8974756fce1bee",
+          "bytes": 3483
+        }
+      }
+    }
+  ]
+}

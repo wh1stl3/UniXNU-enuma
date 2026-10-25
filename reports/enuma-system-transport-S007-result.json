@@ -50,5 +50,10 @@
     "prior_state_sha256": "8a6d40785d2b1e59cf067262e14ccc2cf7d84c454555e5597325121776b3496d",
     "failed_trial_preserved": true,
     "evidence": "out\\device-tests\\20261025T160622-recovery-reconciliation.json"
+  },
+  "recovery_camera": {
+    "evidence": "out/camera-capture/20261025T160528",
+    "written_frames": 739,
+    "decoded_frames": 739
   }
 }
