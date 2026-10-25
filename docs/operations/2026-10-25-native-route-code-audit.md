@@ -46,3 +46,32 @@ generated provider and Core compiler flags include ROUTE1/MASK0/QUERY0,
 TERMINAL1/FALLBACK0 and exact GUID. R-004 table and full96MiB FAT/Bootv3 match.
 Host sanitizers and fixed strict baseline comparisons passed. These establish
 code and bounds, not timer availability, guaranteed recovery or visible output.
+
+## S-030 detailed location, source876d151
+
+Archive `qualified-native-route-detail-876d151`, full disassembly digest
+`a463b1d681d59c17cf7126f2ae4096d4c2ecd0a6f269faf6da7eb6ba5589687b`.
+Core whole PE equals S-029 (SHA256a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f).
+Provider register allocation/layout changed; it is not a single-instruction diff.
+The new entry and failure branches were reviewed independently:
+
+- Metadata1118..11a4 unchanged in meaning. Three samples1224/2730..2750;
+  bounded two100ms waits1238..127c. Revision1294 and STATUS-before-FRAME1320/1330.
+  Read helper2ba8..2c00 retains330 cap/alignment/offset and only MMIO load2bf0.
+- CTL1384..1494 first failures carry reason14 at2804/2808. Strict staging
+  1498..1684 carries reason15 at286c/2870; no source/mixer gates relaxed.
+  Selected SSPP read1710..1760 still11 fields; failed read reason16 at28e8.
+- Mixer selection17dc..18a4 carries reason17; selected reads18dc..199c still
+ 24 words per mixer. Resolve19c8..1e24 carries reason18 at2908/290c and retains
+  source ownership, dim/alpha/mode, left/right, dimensions and local coverage.
+  Decode1e28..2554 is RAM-only, reason19 at2930; original format/address/coverage
+  restrictions remain. Stability2558..27d4 retains full config and frame checks.
+- Success281c..285c copies evidence with requirements0x14, returns5. Failure
+  selector2874..28b8 first requires status13 and output Requirements0; reason14
+  returns2,15 returns3,17..19 returns4, all others1. Runtime/collection errors
+  cannot masquerade as topology locations. No extra read or wait to classify.
+
+Host fixed fafb8a3 native callback/output parity at all330 failure boundaries,
+original strict baseline, three first-location fixtures and10080 detailed
+selector cases pass. Actual macros ROUTE1/DETAIL1/MASK0/QUERY0 were verified in
+both provider and Core compilation; original complete FAT and R-004 bounds hold.

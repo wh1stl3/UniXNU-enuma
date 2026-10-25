@@ -41,7 +41,7 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p){uint64_t v;memcpy(&v,p
         bad=[('-D'+flag+'='+str(value)) if v.startswith('-D'+flag+'=') else v for v in route_cmd]
         if subprocess.run(bad,capture_output=True,text=True).returncode==0:raise ValueError('invalid route selector accepted '+flag)
         invalid.append('route:'+flag)
-    sources=[lib/'NativeRouteResult.h',h,lib/'NativeMaskResult.h',ROOT/'tests/native_mask_terminal.c',Path(__file__)]
+    sources=[lib/'Evidence.h',lib/'NativeRouteResult.h',h,lib/'NativeMaskResult.h',ROOT/'tests/native_mask_terminal.c',Path(__file__)]
     report=dict(scope='real header/selector with sanitized host callbacks; no device execution',result=result,route_result=route_result,route_command=route_cmd,command=cmd,
                 invalid_selectors_rejected=invalid,source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
                 maximum_terminal_delay_us=22000000,display_mmio=False,pixel_access=False)

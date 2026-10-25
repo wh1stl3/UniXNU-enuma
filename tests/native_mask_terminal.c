@@ -79,6 +79,17 @@ int main(void) {
     }
     assert(EnumaNativeRouteResult(s,r,w)==expected);
   }
+  for(unsigned s=0;s<=14;s++)for(unsigned w=0;w<=20;w++)for(unsigned r=0;r<32;r++) {
+    unsigned expected=1;
+    if(s==0&&w==EnumaVideoReasonComplete&&r==20)expected=5;
+    if(s==13&&!r) {
+      if(w==EnumaVideoReasonNativeCtl)expected=2;
+      if(w==EnumaVideoReasonNativeStaging)expected=3;
+      if(w==EnumaVideoReasonNativeMixerCapture||w==EnumaVideoReasonNativeMixerLayout||w==EnumaVideoReasonNativeDecode)expected=4;
+    }
+    assert(EnumaNativeRouteDetailResult(s,r,w)==expected);
+  }
+  printf("PASS: 10080 detailed route mappings; ");
   printf("PASS: 7200 route result mapping cases; ");
   printf("PASS: %u actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay\n",cases);
   return 0;

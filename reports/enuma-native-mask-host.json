@@ -1,7 +1,7 @@
 {
   "scope": "real header/selector with sanitized host callbacks; no device execution",
-  "result": "PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
-  "route_result": "PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
+  "result": "PASS: 10080 detailed route mappings; PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
+  "route_result": "PASS: 10080 detailed route mappings; PASS: 7200 route result mapping cases; PASS: 504 actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay",
   "route_command": [
     "clang",
     "-DENUMA_NATIVE_ROUTE_AUDIT=1",
@@ -73,11 +73,12 @@
     "route:ENUMA_DIAG_GUID_ONLY"
   ],
   "source_sha256": {
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeRouteResult.h": "bcbd5d7797ab241cc1870da4a1f4be6e2b268c32a11e8f2a756a7f847e6e8114",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "5ec2484ba0e46cff338fe197f8ebf8d590ac9cd7ee71196fc8d7839843ce180e",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeRouteResult.h": "b77045e07e7b6d1319c32c0682e8f75fcb9ba0b3d7ca245e0897984c49cce21d",
     "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "63ab286705d8bfc270ba88c14185dfd1a2f81508672eadda07e7673f3033b783",
-    "tests/native_mask_terminal.c": "96d376347497eb013102fd7668a006d5cd72c3a6631ac0bfefd6644459441ca8",
-    "scripts/check_native_mask_terminal.py": "6323fe9ff985c7b080681f556e1292dd5d24eb608bb9ed0187fd2c26b4a4448a"
+    "tests/native_mask_terminal.c": "2b70e975c207720495a5728da6d9f181af14932b1ebb615edd6a239c5bc811a4",
+    "scripts/check_native_mask_terminal.py": "249cb2dd6c902e859d7991b6e6e4ccc8a77cd7836edb2ff5a3cadc34df539fa3"
   },
   "maximum_terminal_delay_us": 22000000,
   "display_mmio": false,

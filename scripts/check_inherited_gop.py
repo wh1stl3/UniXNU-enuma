@@ -26,9 +26,12 @@ def main():
     baseline=out/'baseline-Evidence.c'
     baseline.write_bytes(subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show','8710ebd93da7b19bb7ffd0e388f6925399231153:Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c']))
     checks.append(run([*[x for x in host if x!='-no-pie'],'-DEnumaSampleVideo=EnumaSampleVideoBaseline','-c',baseline,'-o',out/'baseline-Evidence.o']))
+    native_baseline=out/'native-baseline-Evidence.c'
+    native_baseline.write_bytes(subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show','fafb8a388837d002a51e7723f643058e74180548:Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c']))
+    checks.append(run([*[x for x in host if x!='-no-pie'],'-DEnumaSampleVideo=EnumaNativeStrictBaseline','-DEnumaSampleVideoDetailed=EnumaNativeStrictDetailedBaseline','-DEnumaSampleNativeVideoDetailed=EnumaNativeBaseline','-c',native_baseline,'-o',out/'native-baseline-Evidence.o']))
     for name,sources in [('gop',[backend,blt,ROOT/'tests/inherited_gop.c']),
                          ('topology',[topo,decode,ROOT/'tests/inherited_topology.c']),
-                         ('evidence',[capture,video,topo,decode,evidence,ROOT/'tests/inherited_evidence.c',out/'baseline-Evidence.o']),
+                         ('evidence',[capture,video,topo,decode,evidence,ROOT/'tests/inherited_evidence.c',out/'baseline-Evidence.o',out/'native-baseline-Evidence.o']),
                          ('video-result',[ROOT/'tests/inherited_video_result.c'])]:
         checks.append(run([*host,*sources,'-o',out/name])); checks.append(run([out/name]))
         print(checks[-1]['stdout'].strip())
