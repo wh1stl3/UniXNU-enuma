@@ -39,6 +39,10 @@ def qualification(published=False, report=None):
         query=q.get('topology_status_query',0)
         if type(query) is not int or query not in (0,1,2) or (query and (expected!=330 or q.get('topology_status_value')!=13)):
             raise ValueError('unsupported topology status classification')
+        target=q.get('reason_target',0);reason_query=q.get('reason_query',0)
+        if (type(target) is not int or target not in range(5) or type(reason_query) is not int or reason_query not in (0,1,2) or
+            bool(target)!=bool(reason_query) or (target and (query or expected!=330))):
+            raise ValueError('unsupported first-reason classification')
         if expected==0 and q.get('control_actual_code',{}).get('review_required') is not False:
             raise ValueError('actual control PE disassembly still needs review')
     if 'detail_point' in q:

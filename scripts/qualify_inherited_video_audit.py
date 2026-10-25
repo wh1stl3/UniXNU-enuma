@@ -16,8 +16,8 @@ ROOT=Path(__file__).resolve().parents[1]
 GUID='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--control',action='store_true'); p.add_argument('--topology-query',type=int,choices=(0,1,2),default=0); p.add_argument('--reviewed-control-code-sha256'); p.add_argument('--tool-path',type=Path); a=p.parse_args()
-    if a.control and a.topology_query: raise ValueError('classification excludes constant control')
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--control',action='store_true'); p.add_argument('--topology-query',type=int,choices=(0,1,2),default=0); p.add_argument('--reason-target',type=int,choices=range(5),default=0); p.add_argument('--reason-query',type=int,choices=(0,1,2),default=0); p.add_argument('--reviewed-control-code-sha256'); p.add_argument('--tool-path',type=Path); a=p.parse_args()
+    if (a.control and (a.topology_query or a.reason_target)) or bool(a.reason_target)!=bool(a.reason_query) or (a.reason_target and a.topology_query): raise ValueError('incompatible diagnostic classifiers')
     if a.tool_path: sys.path.insert(0,str(a.tool_path.resolve()))
     if a.reviewed_control_code_sha256 and not a.control: raise ValueError('code review digest requires control profile')
     image=a.image.resolve(); archive=a.archive.resolve()
@@ -27,6 +27,7 @@ def main():
       'inherited_video_entry_control':a.control,
       'inherited_video_terminal':True,
       'inherited_video_topology_query':a.topology_query,
+      'inherited_video_reason_target':a.reason_target,'inherited_video_reason_query':a.reason_query,
       'diagnostic_stop_stage':13,'diagnostic_detail_point':16,'diagnostic_dispatch_guid':GUID,
       'diagnostic_dispatch_guid_only':True,'diagnostic_dispatch_completion_fallback':False,
       'diagnostic_delay_seconds':2,'diagnostic_gop_query':1,'diagnostic_gop_step':0,
@@ -46,7 +47,7 @@ def main():
     make=(output/'GNUmakefile').read_text(); defs=build['firmware_configuration']['defines']
     core_folder=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain'
     core_make=(core_folder/'GNUmakefile').read_text()
-    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY']:
+    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',make))!={defs[k]}: raise ValueError('actual provider flags mismatch: '+k)
         if set(re.findall(r'-D'+k+r'=([^\s]+)',core_make))!={defs[k]}: raise ValueError('actual Core flags mismatch: '+k)
     core_pe=core_folder/'OUTPUT/DxeCore.efi'
@@ -66,12 +67,15 @@ def main():
       'DxeCore.efi':core_pe,'core.GNUmakefile':core_folder/'GNUmakefile',
       'EnumaDispatchDetailCheckpoint.h':ROOT/'firmware/diagnostics/EnumaDispatchDetailCheckpoint.h',
       'VideoResult.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoResult.h',
+      'Evidence.c':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c',
+      'Evidence.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h',
       'firmware-build.json':ROOT/'reports/enuma-firmware-build.json','fd-audit.json':ROOT/'reports/enuma-fd-audit.json',
       'host-tests.json':ROOT/'reports/enuma-inherited-gop-host.json'}
     files={}
     for n,path in source_files.items(): shutil.copyfile(path,archive/n); files[n]={'sha256':sha(archive/n),'bytes':(archive/n).stat().st_size}
     q=dict(trial_kind='inherited-video-entry-control' if a.control else 'inherited-video-audit',scope='qualified same-entry constant marker with no MMIO/map lookup' if a.control else 'qualified bounded read-only three-sample dual-link configuration/counter predicate; not GOP/physical route proof',
       topology_status_query=a.topology_query,topology_status_value=13 if a.topology_query else None,
+      reason_target=a.reason_target,reason_query=a.reason_query,
       firmware_commit=pin['commit'],archive=archive.relative_to(ROOT).as_posix(),files=files,
       image=(archive/'image.img').relative_to(ROOT).as_posix(),image_sha256=sha(image),ram_payload_sha256=sha(fat),
       maximum_reads=0 if a.control else 330,maximum_wait_calls=0 if a.control else 2,maximum_mmio_offset=None if a.control else '0x6c26c',pixel_access=False,gop_published=False,
@@ -81,6 +85,9 @@ def main():
     if a.topology_query:
         q['scope']='first returned status equals Topology13 (query1) or its exact complement (query2); marker1 means diagnostic match only, never GOP/predicate success'
         q['result_interpretation']='query1: Topology13=>2s, all other valid statuses=>7s; query2: reverse. Metadata/PCD rejection maps Arguments11. Invalid status or success with wrong requirements emits no marker. Paired timing only supports classification; timeout/ambiguous pair stays unknown.'
+    if a.reason_target:
+        q['scope']='first-reason classification; target1 initial counter enable, 2 later eligibility/stability, 3 initial timing/active, 4 RefreshMode10; no admission changes'
+        q['result_interpretation']='query1 matching first reason=>2s, other valid reason=>7s; query2 complement. Unknown/inconsistent status-reason and invalid success requirements emit no recognized marker. Only paired timing support, not direct reason log.'
     if a.control:
         import pefile,capstone
         blob=pe.read_bytes(); parsed=pefile.PE(data=blob); md=capstone.Cs(capstone.CS_ARCH_ARM64,capstone.CS_MODE_LITTLE_ENDIAN); md.skipdata=True

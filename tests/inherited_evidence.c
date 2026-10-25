@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "Evidence.h"
-typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter; } MODEL;
+ENUMA_U32 EnumaSampleVideoBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *);
+typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,Events,Log[400]; } MODEL;
 static int allowed(unsigned O) {
   static const unsigned Fields[11]={0,8,12,16,20,36,48,52,56,0x170,0x70};
   if(!O) { return 1; }
@@ -21,9 +22,9 @@ static int allowed(unsigned O) {
   for(unsigned I=0;I<2;I++) { unsigned B=0x6b800+I*0x800; if(O==B||O==B+0xa8||O==B+0x26c||O==B+0xac) { return 1; } }
   return 0;
 }
-static int wait_window(void *Ctx,ENUMA_U32 Us) { MODEL *M=Ctx; assert(Us==100000); M->Window++; return M->FailWait==M->Window?-1:1; }
+static int wait_window(void *Ctx,ENUMA_U32 Us) { MODEL *M=Ctx; assert(Us==100000&&M->Events<400); M->Log[M->Events++]=0x80000000|Us; M->Window++; return M->FailWait==M->Window?-1:1; }
 static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
-  MODEL *M=Ctx; assert(!(O&3)&&O<=0x6c26c&&allowed(O)); if(++M->Reads==M->Fail) { return -1; } *V=0;
+  MODEL *M=Ctx; assert(!(O&3)&&O<=0x6c26c&&allowed(O)&&M->Events<400); M->Log[M->Events++]=O; if(++M->Reads==M->Fail) { return -1; } *V=0;
   if(O>=0x45000&&O<=0x4a114) { assert(O<0x46000||(O>=0x49000&&O<0x4a000)); }
   if(!O) { *V=0x60000000; }
   if(O==0x24f4) { *V=6; }
@@ -43,7 +44,9 @@ static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
   for(unsigned I=0;I<2;I++) {
     unsigned B=0x6b800+I*0x800;
     if(O==B||O==B+0x26c) { *V=1; }
-    if(O==B+0xa8) { *V=M->BadCounter?1:3; }
+    if(O==B&&M->NoTiming) { *V=0; }
+    if(O==B+0x26c&&M->NoActive) { *V=0; }
+    if(O==B+0xa8) { *V=(M->BadCounter||(M->LaterCounter&&M->Window))?1:3; }
     if(O==B+0xac) { *V=10+(M->StallRight&&I?0:M->Window*12); }
   }
   return 1;
@@ -61,5 +64,21 @@ int main(void) {
   M=(MODEL){.Changed=1}; E=Before; assert(EnumaSampleVideo(read_reg,wait_window,&M,&L,&E)==EnumaInheritedRefreshMode&&!memcmp(&E,&Before,sizeof(E)));
   M=(MODEL){.Transient=1}; assert(!EnumaSampleVideo(read_reg,wait_window,&M,&L,&E)&&!E.Samples[2].Scanout.Ctls[2].Flush&&!E.Samples[2].Scope.CtlTransientMask);
   M=(MODEL){.BadCounter=1}; E=Before; assert(EnumaSampleVideo(read_reg,wait_window,&M,&L,&E)==EnumaInheritedRefreshMode&&M.Reads==5&&!M.Window&&!memcmp(&E,&Before,sizeof(E)));
+  // Compare exact callback/wait order, return status and output against fixed
+  // pre-instrumentation production code at every failure boundary.
+  for(unsigned F=0;F<=330;F++) {
+    MODEL A={.Fail=F},B=A; ENUMA_VIDEO_EVIDENCE X=Before,Y=Before; unsigned Why=99;
+    unsigned S=EnumaSampleVideoBaseline(read_reg,wait_window,&A,&L,&X);
+    assert(EnumaSampleVideoDetailed(read_reg,wait_window,&B,&L,&Y,&Why)==S);
+    assert(A.Events==B.Events&&!memcmp(A.Log,B.Log,A.Events*sizeof(unsigned))&&!memcmp(&X,&Y,sizeof(X)));
+    assert(Why==(F?((F-1)%110<9?EnumaVideoReasonRead:EnumaVideoReasonPipeline):EnumaVideoReasonComplete));
+  }
+  const MODEL cases[]={{.BadCounter=1},{.LaterCounter=1},{.NoTiming=1},{.NoActive=1},{.StallRight=1},{.Changed=1},{.FailWait=1}};
+  const unsigned reasons[]={EnumaVideoReasonCounterInitial,EnumaVideoReasonCounterLater,EnumaVideoReasonInterfaceInitial,EnumaVideoReasonInterfaceInitial,EnumaVideoReasonStableFrame,EnumaVideoReasonStableConfig,EnumaVideoReasonWait};
+  for(unsigned I=0;I<sizeof(cases)/sizeof(cases[0]);I++) {
+    MODEL A=cases[I],B=A; ENUMA_VIDEO_EVIDENCE X=Before,Y=Before; unsigned Why=0;
+    assert(EnumaSampleVideoBaseline(read_reg,wait_window,&A,&L,&X)==EnumaSampleVideoDetailed(read_reg,wait_window,&B,&L,&Y,&Why));
+    assert(A.Events==B.Events&&!memcmp(A.Log,B.Log,A.Events*sizeof(unsigned))&&!memcmp(&X,&Y,sizeof(X))&&Why==reasons[I]);
+  }
   puts("PASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained");
 }

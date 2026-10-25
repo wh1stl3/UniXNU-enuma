@@ -50,6 +50,19 @@ class FirmwareAuditPolicyTests(unittest.TestCase):
         v=copy.deepcopy(value);v['firmware_configuration']['defines']['ENUMA_VIDEO_TOPOLOGY_QUERY']='2'
         with self.assertRaises(ValueError):omitted_oem_modules(v,'a'*64)
 
+    def test_reason_query_requires_consistent_selectors(self):
+        v=self.fixture()
+        v.update(inherited_video_audit_read_only=True,inherited_video_terminal=True,
+                 inherited_video_reason_target=1,inherited_video_reason_query=1,
+                 diagnostic_simplefb_metadata_only=False,diagnostic_dispatch_completion_fallback=False,
+                 diagnostic_gop_step=0,diagnostic_gop_query=1,value_probe={'source':'off'},
+                 diagnostic_omitted_oem_modules=['CPRDxe','DisplayDxe','UFSDxe'])
+        v['firmware_configuration']['defines'].update(ENUMA_DIAG_SIMPLEFB='1',ENUMA_VIDEO_REASON_TARGET='1',ENUMA_VIDEO_REASON_QUERY='1')
+        self.assertEqual(omitted_oem_modules(v,'a'*64),frozenset(v['diagnostic_omitted_oem_modules']))
+        for key,bad in [('inherited_video_reason_target',True),('inherited_video_reason_target',5),('inherited_video_reason_query',0),('inherited_video_terminal',False),('inherited_video_topology_query',1)]:
+            changed=copy.deepcopy(v);changed[key]=bad
+            with self.subTest(key=key),self.assertRaises(ValueError):omitted_oem_modules(changed,'a'*64)
+
     def test_explicit_matching_diagnostic_only(self):
         self.assertEqual(omitted_oem_modules(self.fixture(),'a'*64),frozenset(['UFSDxe']))
         self.assertEqual(omitted_oem_modules({},'b'*64),frozenset())

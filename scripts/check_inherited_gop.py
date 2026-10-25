@@ -1,6 +1,7 @@
 """Exercise real GOP backend and Mu Blt on host RAM, never device memory."""
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from check_enuma_drivers import run
 ROOT=Path(__file__).resolve().parents[1]
@@ -22,9 +23,12 @@ def main():
             '-I'+str(core/'MdePkg/Include'),'-I'+str(core/'MdeModulePkg/Include')]
     host=[*common,'-I'+str(core/'MdePkg/Include/X64'),'-O1','-fsanitize=address,undefined','-fno-pie','-no-pie']
     checks=[]
+    baseline=out/'baseline-Evidence.c'
+    baseline.write_bytes(subprocess.check_output(['git','-C',str(ROOT/'firmware'),'show','8710ebd93da7b19bb7ffd0e388f6925399231153:Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c']))
+    checks.append(run([*[x for x in host if x!='-no-pie'],'-DEnumaSampleVideo=EnumaSampleVideoBaseline','-c',baseline,'-o',out/'baseline-Evidence.o']))
     for name,sources in [('gop',[backend,blt,ROOT/'tests/inherited_gop.c']),
                          ('topology',[topo,decode,ROOT/'tests/inherited_topology.c']),
-                         ('evidence',[capture,video,topo,decode,evidence,ROOT/'tests/inherited_evidence.c']),
+                         ('evidence',[capture,video,topo,decode,evidence,ROOT/'tests/inherited_evidence.c',out/'baseline-Evidence.o']),
                          ('video-result',[ROOT/'tests/inherited_video_result.c'])]:
         checks.append(run([*host,*sources,'-o',out/name])); checks.append(run([out/name]))
         print(checks[-1]['stdout'].strip())
@@ -32,7 +36,7 @@ def main():
         checks.append(run([*common,'-I'+str(core/'MdePkg/Include/AArch64'),'-target','aarch64-none-elf','-ffreestanding','-O2','-c',source,'-o',out/(source.stem+'.o')]))
         checks.append(run(['llvm-nm','--undefined-only',out/(source.stem+'.o')]))
     wrapper=out/'video-result-freestanding.c'
-    wrapper.write_text('#include "VideoResult.h"\nENUMA_U32 Select(ENUMA_U32 S,ENUMA_U32 R,ENUMA_U32 Q) { return EnumaVideoResult(S,R,Q); }\n')
+    wrapper.write_text('#include "VideoResult.h"\nENUMA_U32 Select(ENUMA_U32 S,ENUMA_U32 R,ENUMA_U32 Q) { return EnumaVideoResult(S,R,Q); }\nENUMA_U32 Reason(ENUMA_U32 S,ENUMA_U32 R,ENUMA_U32 W,ENUMA_U32 T,ENUMA_U32 Q) { return EnumaVideoReasonResult(S,R,W,T,Q); }\n')
     checks.append(run([*common,'-I'+str(core/'MdePkg/Include/AArch64'),'-target','aarch64-none-elf','-ffreestanding','-O2','-c',wrapper,'-o',out/'VideoResult.o']))
     checks.append(run(['llvm-nm','--undefined-only',out/'VideoResult.o']))
     report=dict(scope='actual GOP callbacks and actual pinned Mu FrameBufferBltLib on synthetic host RAM; modeled allocation/TPL/BaseLib primitives',

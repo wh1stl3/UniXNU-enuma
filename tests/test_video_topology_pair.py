@@ -34,6 +34,14 @@ class TopologyPairTests(unittest.TestCase):
             with self.subTest(bad=bad),self.assertRaises(ValueError):analyze(p,n)
         p,n=self.pair();n['recovery']['checks']['root_available']=False
         with self.assertRaises(ValueError):analyze(p,n)
+
+    def test_reason_pair_keeps_selected_failure_separate_from_success(self):
+        p,n=self.pair()
+        for row,q in [(p,1),(n,2)]:row.update(reason_target=1,reason_query=q,topology_status_query=0)
+        r=analyze(p,n);self.assertEqual(r['conclusion'],'selected-reason-supported');self.assertEqual(r['supported_reason_set'],[5]);self.assertFalse(r['successful_sample_not_excluded'])
+        p['timing'],n['timing']=n['timing'],p['timing'];self.assertEqual(analyze(p,n)['conclusion'],'other-reason-supported')
+        n['reason_target']=2
+        with self.assertRaises(ValueError):analyze(p,n)
         p,n=self.pair();n['recovery']['partitions']=[]
         with self.assertRaises(ValueError):analyze(p,n)
         p,n=self.pair();n['timing']['fastboot_return_seconds']=10

@@ -13,7 +13,8 @@ ROOT=Path(__file__).resolve().parents[1]
 PROVIDER='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(b): return hashlib.sha256(b).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--sample',type=Path,required=True);p.add_argument('--control',type=Path,required=True);p.add_argument('--topology',action='store_true',help='query1/query2 complementary first-status pair, same source');p.add_argument('--tool-path',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--sample',type=Path,required=True);p.add_argument('--control',type=Path,required=True);p.add_argument('--topology',action='store_true',help='query1/query2 complementary first-status pair, same source');p.add_argument('--reason',action='store_true');p.add_argument('--tool-path',type=Path);a=p.parse_args()
+    if a.topology and a.reason:raise ValueError('choose one classifier')
     if a.tool_path: sys.path.insert(0,str(a.tool_path.resolve()))
     dirs=[x.resolve() for x in [a.sample,a.control]]
     qs=[json.loads((d/'qualification.json').read_text()) for d in dirs]
@@ -22,10 +23,13 @@ def main():
         for name,item in q['files'].items():
             if sha((d/name).read_bytes())!=item['sha256']: raise ValueError('archive changed: '+name)
     configs=[json.loads(json.dumps(b['firmware_configuration'])) for b in bs]
-    if a.topology:
-        if [q.get('topology_status_query') for q in qs]!=[1,2] or any(q['trial_kind']!='inherited-video-audit' for q in qs) or qs[0]['firmware_commit']!=qs[1]['firmware_commit']: raise ValueError('wrong topology pair')
+    if a.topology or a.reason:
+        field='reason_query' if a.reason else 'topology_status_query'
+        macro='ENUMA_VIDEO_REASON_QUERY' if a.reason else 'ENUMA_VIDEO_TOPOLOGY_QUERY'
+        if [q.get(field) for q in qs]!=[1,2] or any(q['trial_kind']!='inherited-video-audit' for q in qs) or qs[0]['firmware_commit']!=qs[1]['firmware_commit']: raise ValueError('wrong classifier pair')
+        if a.reason and (qs[0].get('reason_target')!=qs[1].get('reason_target') or not qs[0].get('reason_target')):raise ValueError('reason target changed')
         for i,c in enumerate(configs):
-            if c['defines'].pop('ENUMA_VIDEO_TOPOLOGY_QUERY')!=str(i+1): raise ValueError('topology macro differs')
+            if c['defines'].pop(macro)!=str(i+1): raise ValueError('classifier macro differs')
         if (dirs[0]/'entry.c').read_bytes()!=(dirs[1]/'entry.c').read_bytes(): raise ValueError('topology pair entry changed')
         if (dirs[0]/'VideoResult.h').read_bytes()!=(dirs[1]/'VideoResult.h').read_bytes(): raise ValueError('selector changed')
     elif qs[0]['trial_kind']!='inherited-video-audit' or qs[1]['trial_kind']!='inherited-video-entry-control': raise ValueError('wrong pair')
@@ -47,9 +51,9 @@ def main():
       same_firmware_configuration=True,same_autogen_and_library_inventory=True,same_bootshim=True,same_full_fat=True,
       PE_count=len(inventories[0]),unchanged_PE_count=unchanged,changed_PE=changed,debug_GUID_only_PE=metadata,
       sole_runtime_PE_change=PROVIDER,physical_gop_tested=False)
-    report['same_firmware_configuration']=not a.topology
-    report['same_configuration_except_topology_query']=a.topology
+    report['same_firmware_configuration']=not (a.topology or a.reason)
+    report['same_configuration_except_classifier_query']=a.topology or a.reason
     report['topology_query_pair']=[1,2] if a.topology else None
-    (ROOT/'reports'/('enuma-video-topology-pair-code.json' if a.topology else 'enuma-inherited-control-pair.json')).write_text(json.dumps(report,indent=2)+'\n')
+    (ROOT/'reports'/('enuma-video-reason-pair-code.json' if a.reason else 'enuma-video-topology-pair-code.json' if a.topology else 'enuma-inherited-control-pair.json')).write_text(json.dumps(report,indent=2)+'\n')
     print('PASS: only provider runtime PE changes; remaining differences are individually checked CodeView GUID bytes; constructor/config/BootShim/FAT match')
 if __name__=='__main__':main()

@@ -17,6 +17,20 @@ int main(void) {
     assert(EnumaVideoResult(~0u,req,q)==0); n+=4;
   }
   assert(EnumaVideoResult(13,req,3)==0); n++;
+  for(unsigned target=1;target<=4;target++) {
+    for(unsigned reason=1;reason<=13;reason++) {
+      unsigned refresh=reason==4||reason==5||reason==6||reason==7||reason==9||reason==10||reason==11||reason==13;
+      unsigned status=reason==12?0:refresh?10:reason==3?1:reason==2?7:reason==8?13:11;
+      unsigned match=target==1?reason==5:target==2?(reason==6||reason==9||reason==10||reason==11||reason==13):target==3?reason==4:refresh;
+      unsigned a=EnumaVideoReasonResult(status,req,reason,target,1),b=EnumaVideoReasonResult(status,req,reason,target,2);
+      assert(a==(match?1u:5u)&&b==(match?5u:1u));n+=2;
+    }
+  }
+  assert(EnumaVideoReasonResult(0,req,5,1,1)==0);
+  assert(EnumaVideoReasonResult(13,req,5,1,1)==0);
+  assert(EnumaVideoReasonResult(10,req,0,1,1)==0);
+  assert(EnumaVideoReasonResult(10,req,5,0,1)==0);
+  assert(EnumaVideoReasonResult(10,req,5,1,0)==0);n+=5;
   printf("PASS: %u diagnostic result cases; complementary status predicates, invalid-state rejection, old-mode regression\n",n);
   return 0;
 }

@@ -19,6 +19,12 @@ def omitted_oem_modules(build, fd_sha256):
     if (type(topology) is not int or topology not in (0,1,2) or topology_flag!=str(topology) or
         (topology and (not video or not terminal or control))):
         raise ValueError('unsupported topology status query profile')
+    target=build.get('inherited_video_reason_target',0);query=build.get('inherited_video_reason_query',0)
+    defs=build.get('firmware_configuration',{}).get('defines',{})
+    if (type(target) is not int or target not in range(5) or type(query) is not int or query not in (0,1,2) or
+        bool(target)!=bool(query) or defs.get('ENUMA_VIDEO_REASON_TARGET','0')!=str(target) or defs.get('ENUMA_VIDEO_REASON_QUERY','0')!=str(query) or
+        (target and (not video or not terminal or control or topology))):
+        raise ValueError('unsupported first-reason profile')
     if video and (simple!='1' or pixel or build.get('diagnostic_gop_step')!=0 or
                   build.get('diagnostic_gop_query') not in (1,2) or build.get('value_probe',{}).get('source')!='off' or
                   build.get('gop_backend_selftest_ram_only')):

@@ -6,8 +6,13 @@ from pathlib import Path
 
 
 def analyze(positive,negative):
+    target=positive.get('reason_target',0)
+    reason_mode=bool(target)
+    if reason_mode and (type(target) is not int or target not in range(1,5) or negative.get('reason_target')!=target):
+        raise ValueError('inconsistent first-reason targets')
+    field='reason_query' if reason_mode else 'topology_status_query'
     for row,query in [(positive,1),(negative,2)]:
-        if row.get('topology_status_query')!=query or row.get('consumed') is not True or row.get('automatic_android_return') is not True:
+        if type(row.get(field)) is not int or row.get(field)!=query or row.get('consumed') is not True or row.get('automatic_android_return') is not True:
             raise ValueError('require issued, recovered complementary status queries')
         if row.get('boot_returncode')!=0 or row.get('timing',{}).get('fastboot_return_seconds') is not None:
             raise ValueError('boot command failure or intervening fastboot reboot invalidates timing comparison')
@@ -28,10 +33,13 @@ def analyze(positive,negative):
     if all(3<=v<=7 for v in deltas.values()):result='topology-status-supported'
     elif all(-7<=v<=-3 for v in deltas.values()):result='non-topology-status-supported'
     else:result='ambiguous'
-    return dict(scope='indirect paired timing support under same-source classifier; not direct firmware status or cross-boot snapshot stability',
+    if reason_mode:
+        result={'topology-status-supported':'selected-reason-supported','non-topology-status-supported':'other-reason-supported','ambiguous':'ambiguous'}[result]
+    return dict(scope='indirect paired timing support under same-source classifier; not direct firmware status/reason or cross-boot snapshot stability',
                 conclusion=result,negative_minus_positive_seconds=deltas,
-                supported_status_set=[13] if result=='topology-status-supported' else list(range(13)) if result=='non-topology-status-supported' else None,
-                successful_sample_not_excluded=result!='topology-status-supported',
+                reason_target=target,supported_reason_set={1:[5],2:[6,9,10,11,13],3:[4],4:[4,5,6,7,9,10,11,13]}.get(target) if result=='selected-reason-supported' else None,
+                supported_status_set=([13] if result=='topology-status-supported' else list(range(13)) if result=='non-topology-status-supported' else None) if not reason_mode else None,
+                successful_sample_not_excluded=result not in ('topology-status-supported','selected-reason-supported'),
                 predeclared_absolute_delta_window_seconds=[3,7],exact_status_observed=False,gop_verified=False,
                 limitation='Android boot noise and changing inherited state remain confounders; timeout, missing recovery or an ambiguous pair cannot classify')
 
