@@ -1,11 +1,11 @@
-# 当前状态：D-176，S-001已恢复，S-002显示线程关闭新候选已资格
+# 当前状态：D-177，S-002也超时，已人工恢复并独立核验
 
-S-001失败镜像已consumed，用户报告人工恢复后14:15:38独立Android完成/root/A槽/解锁/原分区摘要核验通过。450主录像帧、194截图对及739恢复录像帧保留，无可判读13项报告；不把黑屏认作确定执行阶段。超时cf2ae7d、恢复6b1e390已推送。
+两份完整输入候选均已单笔尝试并消耗，不重试。S-001 d2ab5ef8…7e1db75：14:12:13发出、2.625秒命令返回0、5.110秒断开，75秒无返回，14:15:38人工恢复后独立核验通过。S-002 5e07e65e…77413327：14:29:26.342062发出、2.657秒命令返回0、5.125秒断开，同样75秒无Android/fastboot返回；32a3c63发布后才执行。
 
-恢复后已继续离线分析并生成新软件：只改EnableDisplayThread 1→0，沿同SM8250 umi测试策略，其他配置值/完整FAT/运输和13项均保持。实际OEM PE查询slot0x18、shim HOB GUID及生产provider ABI已核对；主机真实配置/helper正负例通过。0分支跳过线程创建/恢复，不证明同步模式初始化；若旧环境已缺Kernel接口并自动清零，此项可能无效。根因仍未定。
+S-002已停止追加、写consumed账本，用户报告Android返回后14:31:50独立核验enuma/完成/root/A槽/解锁/boot_a与vendor_boot_a设备备份摘要一致。恢复已确认，无当前按键待办；没有第三笔boot、flash/erase/改槽。主录像451/451帧可解码，未观察可判读13项报告；恢复录像独立保存。不从时间或黑屏判断执行阶段。
 
-firmware固定cb9e56866aeff2985a06b4b39cb8ec2390b2985a并已推送；FD43f18cd3e9355ea802822831060f2437d7d694750a1a6f897e5c4299cb357808。新boot-v3 out/full-boot/transport/enuma-display-thread-off-v3.img，103817216字节，SHA256 5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327；qualified-cb9e568独立归档。实际FD中SEC TE配置值0和改回1负例已核，32保留OEM PE/DEPEX未改，完整构建/实际PE/AOSP真实FAT往返通过。clock-skew警告已记录，用实际二进制而非仅build完成确认改动。
+新的结论是“只关闭显示线程没有带来可观察改善”，降低该单一策略为首要解法的置信度，不能宣称线程配置已修复或根因已定位。配置消费者/真实provider ABI、实际SEC TE值0和单变量源码差异仍是有效静态事实；运行时可能未到该查询，或旧代码本已清零。
 
-S-002当前未执行。用户授权上机无需逐笔批准；发布全部当前文档后由相同相机wrapper即时核Android/备份并一笔临时boot，完整输入尝试13项。75秒观察非自动返回保证；异常停止追加、先既有长按恢复并独立核验，不原样重试。若再次无报告，降低单一显示线程配置根因判断，转向其他实际路径证据。当前无按键或批准待办。
+按恢复后继续工作规则，转入离线必要边界定位：保留同一96MiB真实FAT和当前显示线程0，不再盲调更多配置；准备正确DisplayDxe GUID、CoreStartImage返回后的边界候选，明确无completion fallback，避免把回退当命中。该候选用于没有直接错误时的必要隔离，不把孤立早停恢复为默认主线。此时尚未构建或执行新的边界镜像，后续先实际Core/map/编译宏和完整载荷资格。
 
-专项operations/2026-10-25-display-thread-off.md；新机器证据enuma-display-thread-policy、enuma-display-config-contract、enuma-display-policy-delta、enuma-display-config-te及新资格报告。旧S-001真实结果在enuma-system-transport-result.json，不覆盖。UniXNU5fdbd5d、board example=true、内存字段/512MiB/verified/分区门禁不变；无flash/erase/改槽，旧R-016 consumed/B备用/R-002失败/R-015暂停保持。root/PMGR/UFS/Data/实际GOP/XNU仍未闭合。
+当前firmwarecb9e568/UniXNU5fdbd5d；S-001结果和恢复保持在enuma-system-transport-result.json，S-002独立enuma-system-transport-S002-result.json。执行前32a3c63与此前恢复6b1e390均已推送。current.local.json已恢复完成，原失败result.json未改。board/plan内存字段/512MiB/verified与分区门禁保持；无新审批待办，用户上机无需逐笔批准授权不变，但不盲试或重试失败镜像。

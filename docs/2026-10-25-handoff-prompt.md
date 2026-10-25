@@ -1,9 +1,9 @@
-# enuma交接：D-176，S-001已恢复，S-002单变量新候选已资格
+# enuma交接：D-177，两份整链候选均已恢复，转离线边界定位
 
-先读AGENTS/STATUS/D-176与operations/2026-10-25-display-thread-off.md。S-001 d2ab5ef8…7e1db75已单笔超时并consumed，14:15:38人工恢复后独立Android/root/A槽/解锁/原boot与vendor_boot摘要通过；不要重问或重试。
+先读AGENTS/STATUS/D-177和两份实测专项。S-001 d2ab5ef8…7e1db75与S-002 5e07e65e…77413327均已单笔75秒无返回并consumed；分别14:15:38和14:31:50独立Android完成/root/A槽/解锁/原boot/vendor_boot摘要核验通过。无需再问恢复或批准，禁止重试两份失败镜像。
 
-恢复后已按持久规则继续新软件：只改EnableDisplayThread1→0，固定同SM8250 umi测试策略，实际OEM slot0x18/shim HOB/生产provider链和主机正负例已核。实际FD SEC TE值0及改回1负例通过，完整构建/PE/AOSP真实FAT资格保持。配置0只是绕过线程创建，不等于同步显示初始化，旧代码缺Kernel时本也可能清零，所以不是已定根因。
+用户要求完整链/同次多点/上机无需逐笔批准；但两次无可判读报告后不能继续盲调配置。S-002只改显示线程0，真实consumer/provider ABI及实际SEC TE值0已证实，仍未带来可观察改善。不要宣称线程策略修复了问题或已排除根因，也不从黑屏/USB/耗时定执行阶段。
 
-firmwarecb9e568已推送，UniXNU仍5fdbd5d；新镜像103817216字节，SHA256 5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327，归档out/full-boot/transport/qualified-cb9e568。S-002执行前发布本轮文档，然后按用户“上机无需批准”直接由相机wrapper单笔临时boot完整输入/13项；先核当前状态和consumed，别重复发。
+按恢复后持续工作规则继续离线准备必要边界候选：完整96MiB FAT/当前cfg0保留，只在正确DisplayDxe CoreStartImage返回后使用已有精确GUID门，禁completion fallback混淆；目前新边界候选尚未构建。先实际Core/map/编译宏/打包资格，不把低带宽探针恢复成默认主线，目的只是没有直接错误时定位下一处修复。
 
-75秒观察非自动返回保证，异常停止追加并恢复/独立核验后继续离线。当前无人工待办，board/plan内存字段/512MiB/verified/分区规则保持，R-016 consumed/B备用/R-002失败/R-015暂停不复活。以STATUS与Git/实际执行账本为准，任何结果同轮落实文档推送。
+firmwarecb9e568/UniXNU5fdbd5d，执行前32a3c63已推送；S-002独立机器结果enuma-system-transport-S002-result.json，失败result保留，current.local已恢复。board/plan内存字段/512MiB/verified/分区规则不变，旧R-016/B/R-002/R-015限制保持。没有第三笔boot或当前人工待办，后续以STATUS和消耗账本为准。

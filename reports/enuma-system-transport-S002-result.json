@@ -1,0 +1,53 @@
+{
+  "phase": "recovered-android-boot-complete",
+  "candidate_sha256": "5e07e65e75bc02ac515b30eec4c6306cb89d9593c91d56c31b85002e77413327",
+  "issued_at_utc": "2026-10-25T06:29:26.342062+00:00",
+  "boot_returncode": 0,
+  "boot_command_return_seconds": 2.657,
+  "fastboot_disconnect_observed_seconds": 5.125,
+  "fastboot_return_seconds": null,
+  "adb_return_seconds": null,
+  "partition_writes": false,
+  "scope": "S-002 actual single temporary boot timeout followed by user manual recovery and independent reconciliation",
+  "timeout_phase": "manual-recovery-needed",
+  "camera_evidence": "out/camera-capture/20261025T142909-system-transport",
+  "device_evidence": "out/device-tests/20261025T142912-system-transport",
+  "camera_frames": 451,
+  "camera_decoded_frames": 451,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "b6e1f79aa596113f11b7aea0e5c7992db00d4ad1ed7c518d6b7b1705efa50ed8",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T143150-recovery-reconciliation.json"
+  },
+  "report_stages_observed": [],
+  "candidate_consumed": true,
+  "interpretation": "display-thread=0 did not yield readable report or controlled automatic return; not proof of the original root cause",
+  "recovery_camera": {
+    "written_frames": 741,
+    "decoded_frames": 741,
+    "wall_seconds": 90.01500000001397,
+    "sha256": "8c4d0d29f46d4773a6efc95c46d4729d29ecfcac38d258b1e585225778e4a72f"
+  }
+}

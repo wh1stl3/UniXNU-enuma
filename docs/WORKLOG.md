@@ -368,3 +368,5 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-25 14:15:38 · cf2ae7d超时停点已推送。用户回复已回Android后独立reconcile通过，证据out/device-tests/20261025T141538-recovery-reconciliation.json；恢复739/739帧解码，主录像450/450帧及194截图网格复核未见报告。S-001失败记录保留，current.local.json指向恢复完成；同步D-175全部当前状态/人工/审查文档，继续离线配置ABI隔离，不追加boot或重试失败镜像。
 
 2026-10-25 · 6b1e390恢复文档已推送。D-176核本机DisplayDxe实际字符串/slot0x18/zero分支和shim HOB GUID，固定umi测试配置；新固件cb9e568只变EnableDisplayThread1→0并已推送。主机实际provider ABI测试、实际FD SEC TE配置0和旧值负例、32个OEM PE/DEPEX/新实际PE及AOSP往返通过；5e07e65e…77413327归档qualified-cb9e568。记录clock-skew警告及实际产物证据。此条为S-002执行前，未追加boot，新状态/交接/审查同步。
+
+2026-10-25 14:29:26–14:31:50 · 执行前32a3c63已推送；S-002 5e07e65e…77413327单笔75秒无返回，2.657秒命令返回0/5.125秒断开，451/451帧可解码。已停止追加/consumed，恢复录像在请求前开启；用户报告返回后14:31:50独立reconcile通过，失败result保留。证据enuma-system-transport-S002-result.json，out/camera-capture/20261025T142909-system-transport及20261025T143053。同步D-177全部当前文档，无第三笔boot；继续离线必要边界定位。
