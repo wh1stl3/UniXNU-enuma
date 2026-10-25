@@ -68,5 +68,23 @@
     "authorization": "User continued the documented minimum-header-read isolation after explicit direct boot authorization; same approved extent, no writes/warm/pmsg expansion.",
     "qualification": "reports/enuma-ramoops-header-read-qualification.json",
     "execution_record": "reports/enuma-ramoops-S-017-result.json"
+  },
+  "R-017-WARM": {
+    "status": "approved",
+    "image_sha256": [
+      "6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5"
+    ],
+    "ramoops_scope": {
+      "base": "0xB0000000",
+      "size": "0x200000",
+      "marker_bytes": 0,
+      "stage": 10,
+      "delay_seconds": 2,
+      "reset": "warm-with-cold-fallback",
+      "pmsg_access": false
+    },
+    "authorization": "User requested continue until hard stop after minimum-read result; direct temporary boot already explicit. Same reviewed map extent; warm-only without console contents access, no writer reauthorization.",
+    "qualification": "reports/enuma-ramoops-warm-control-qualification.json",
+    "execution_record": null
   }
 }

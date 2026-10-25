@@ -28,8 +28,8 @@ def qualification(published=False, report=None):
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
-    if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read'):
-        control = q['trial_kind'] in ('ramoops-map-control','ramoops-header-read')
+    if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control'):
+        control = q['trial_kind'] in ('ramoops-map-control','ramoops-header-read','ramoops-warm-control')
         frozen = (ROOT / q['archive'] / 'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text()) != q:
             raise ValueError('ramoops candidate differs from frozen qualification')
@@ -37,6 +37,7 @@ def qualification(published=False, report=None):
         expected = dict(base='0xB0000000', size='0x200000', marker_bytes=0 if control else 44, stage=10,
                         delay_seconds=2, reset='cold' if control else 'warm-with-cold-fallback', pmsg_access=False)
         if q['trial_kind']=='ramoops-header-read':expected['header_read_offsets']=[0,4,8]
+        if q['trial_kind']=='ramoops-warm-control':expected['reset']='warm-with-cold-fallback'
         bad_nonce = nonce is not None if control else (not isinstance(nonce,str) or re.fullmatch('[0-9a-f]{32}', nonce) is None)
         if (bad_nonce or q.get('ramoops_scope') != expected or
             q.get('review_required') is not False or q.get('pixel_access') is not False):
@@ -78,7 +79,7 @@ def qualification(published=False, report=None):
     if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
         raise ValueError('candidate differs')
     if published:
-        if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read'):
+        if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control'):
             from run_enuma_entry_probe import require_hardware_review
             require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
                 json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))

@@ -40,6 +40,13 @@ class ReviewGateTests(unittest.TestCase):
         probe.require_hardware_review(meta,approval)
         for changes in [{'marker_bytes':44},{'header_read_offsets':[0,4,8,12]},{'reset':'warm'}]:
             with self.assertRaises(ValueError):probe.require_hardware_review({**meta,'ramoops_scope':{**scope,**changes}},approval)
+    def test_warm_only_scope_does_not_allow_console_access(self):
+        scope={'base':'0xB0000000','size':'0x200000','marker_bytes':0,'reset':'warm-with-cold-fallback','pmsg_access':False}
+        meta={'hardware_review':'R-017-WARM','image_sha256':'d'*64,'ramoops_scope':scope}
+        approval={'R-017-WARM':{'status':'approved','image_sha256':['d'*64],'ramoops_scope':scope}}
+        probe.require_hardware_review(meta,approval)
+        for changes in [{'marker_bytes':44},{'header_read_offsets':[0,4,8]},{'pmsg_access':True}]:
+            with self.assertRaises(ValueError):probe.require_hardware_review({**meta,'ramoops_scope':{**scope,**changes}},approval)
     def test_pending_main_never_calls_device_tools(self):
         with tempfile.TemporaryDirectory(dir=ROOT/'out',prefix='pixel-review-') as td:
             root=Path(td).resolve();image=root/'out/protected.img';image.parent.mkdir();image.write_bytes(b'protected fixture')

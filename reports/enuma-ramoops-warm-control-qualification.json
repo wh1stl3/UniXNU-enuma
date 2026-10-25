@@ -1,0 +1,124 @@
+{
+  "trial_kind": "ramoops-warm-control",
+  "firmware_commit": "5cfcd4cc68c0c37ffb322322efc256760d9389e3",
+  "archive": "out/ramoops-audit/S-018-qualified",
+  "image": "out/ramoops-audit/S-018-qualified/image.img",
+  "image_sha256": "6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5",
+  "nonce": null,
+  "ramoops_scope": {
+    "base": "0xB0000000",
+    "size": "0x200000",
+    "marker_bytes": 0,
+    "stage": 10,
+    "delay_seconds": 2,
+    "reset": "warm-with-cold-fallback",
+    "pmsg_access": false
+  },
+  "files": {
+    "image.img": {
+      "sha256": "6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5",
+      "bytes": 103817216
+    },
+    "image.json": {
+      "sha256": "17d8e55fec73fdfbe1328bd470166a61217857ce827d0354204607b9340aac12",
+      "bytes": 1057
+    },
+    "SILICIUM_UEFI.fd": {
+      "sha256": "fb8a9ae93a279e6ad8f181c277eb620483d5cd5b8f1cd4c41bf4b7af19f9908f",
+      "bytes": 3145728
+    },
+    "enuma-uefi.raw": {
+      "sha256": "85820e608a13ab11fb14a013e8f1033a984f85f2663bfe095f9a2aac1fdb4040",
+      "bytes": 3145920
+    },
+    "DxeCore.efi": {
+      "sha256": "988d47cb05c8d4f0d4627fc1a3914df75fb0bebfb7167fb52a206ac7193f3127",
+      "bytes": 164352
+    },
+    "core.GNUmakefile": {
+      "sha256": "c3acd0fd2bf35a1126da28a5561b61c693756ca6d9c9e784b28b19694105fa9e",
+      "bytes": 51768
+    },
+    "core.map": {
+      "sha256": "f3f2409e0f143725c95ede23040193f8164f65d126b15b5a71ab36d958ae7724",
+      "bytes": 237599
+    },
+    "MemoryMapLib.c": {
+      "sha256": "5fee8940c4cee08fb3cac33f75ffe706a624fce5e7f435447141bd133ab5fba8",
+      "bytes": 4855
+    },
+    "EnumaStageCheckpoint.h": {
+      "sha256": "e3079f8903d24ffa64996ae61464467f6f1238dc20d57b7c8ea7a7f61133669c",
+      "bytes": 619
+    },
+    "firmware-build.json": {
+      "sha256": "cffe6c7d93ed50c6a085e694c100df232533976bc5164dbae858b3547e35a531",
+      "bytes": 19478
+    },
+    "fd-audit.json": {
+      "sha256": "0f918d146d01b3a12643ddfc892a008c46105549b4b7c3f1109cad633cda6973",
+      "bytes": 4326
+    },
+    "canary-host.json": {
+      "sha256": "946ce799e1723bba47b790dba0bc4893d5b7197a7db93b6f7cd83347a07e57ff",
+      "bytes": 1338
+    },
+    "core.disassembly.txt": {
+      "sha256": "6f514ca7aaf2a822ea1fa797ad3ff5f6e7018edb5150aaf9afe48a0dd92f6769",
+      "bytes": 734033
+    }
+  },
+  "package": {
+    "header_version": 3,
+    "page_bytes": 4096,
+    "kernel_bytes": 3145920,
+    "ramdisk_bytes": 100663296,
+    "os_version_field": 0,
+    "kernel_sha256": "85820e608a13ab11fb14a013e8f1033a984f85f2663bfe095f9a2aac1fdb4040",
+    "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
+  },
+  "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
+  "pixel_access": false,
+  "gop_published": false,
+  "review_required": false,
+  "disassembly_sha256": "39775e862b0a9c2cdd6ef1f25e748f7317a11d888c9f9bf0d6fc8d0fbaf40423",
+  "actual_map_record_present": true,
+  "actual_map_records": [
+    {
+      "module": "BdsDxe",
+      "offset": 378448,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "SimpleFbDxe",
+      "offset": 13360,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "EnumaRamPayloadDxe",
+      "offset": 17984,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    }
+  ],
+  "actual_nonce_words_equal": null,
+  "packaged_core_equal": true,
+  "interpretation": "Warm request without any console contents access. Return/timeout supports only comparison with cold controls; reset2 support and actual executed reset path are not directly reported."
+}

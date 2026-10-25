@@ -1,13 +1,11 @@
-# 当前状态：D-220，S-017头部只读隔离：自动返回Android并独立核验
+# 当前状态：D-221，S-018无访问warm对照：构建/实际产物资格完成，尚未发出
 
-2026-10-25T20:49:39+08:00。用户继续推进，沿已明确的直接上机授权实施新S-017：相同B0000000/2MiB映射，在MMU后的stage10仅作三个volatile UINT32读取（+0/+4/+8），原2秒延时/ResetCold；不依赖读数、不写console、不读payload、不请求warm，不触及pmsg/分区/verified。默认profile仍无新增映射，全局SerialPort仍Null。完整FAT/Boot v3/实际FD、Core、参数及描述符资格已完成，实际代码审查见reports/enuma-ramoops-header-read-code.json。
+2026-10-25T20:56:03+08:00。用户最新要求“继续推进 触发硬停再停”。新S-018仅启用同已批准B0000000/2MiB保留映射，stage10原2秒延时后请求ResetWarm（PSCI feature检查，支持则SYSTEM_RESET2 type0，不支持则cold fallback），若返回则CpuDeadLoop；不读取或写入console头/payload、不使用nonce、不访问pmsg/显示寄存器、不写分区/改槽/verified。它不是consumed writer的重试，而是无console内容访问的独立复位对照。默认profile及Null SerialPort保持。
 
-固件`89e6491626ed0edbc48dc7fb41a6902e8ce7eb4c`，镜像`0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a`，FD`26e03f46313af2bf0a588eb1d8833ccb7859d4aca1f9b04cf40a20461e997440`；归档`out/ramoops-audit/S-017-qualified`。资格见reports/enuma-ramoops-header-read-qualification.json；三次读取实际机器码核对、无console store/warm/writer，10项保护门禁和8组无效CLI组合测试通过。执行前源码/全部当前文档已提交推送、即时身份/备份/恢复/相机门禁通过后发出一次；本笔自动返回，无须人工恢复。原始影音只留本地out，无录音/上传。
+固件`5cfcd4cc68c0c37ffb322322efc256760d9389e3`，镜像`6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5`，FD`fb8a9ae93a279e6ad8f181c277eb620483d5cd5b8f1cd4c41bf4b7af19f9908f`，103817216字节；完整FAT/Boot v3/实际Core/编译宏/描述符及不可变归档`out/ramoops-audit/S-018-qualified`资格完成，代码审查reports/enuma-ramoops-warm-control-code.json。11项保护门禁和11组无效CLI组合通过。实际ResetWarm请求链已核对，但不声称运行时reset2一定支持或实际走warm，不能从API名称保证DRAM保留。
 
-历史：S-015 writer/warm单笔75秒无自动返回，用户恢复且独立核验通过；无有效nonce，65字节cat缺文件诊断不算日志。S-016仅映射+原cold自动回Android，ADB20.063秒/完成35.406秒，独立完成/root/A槽/解锁/双分区备份摘要通过，相机251帧已目视logo和桌面。两笔及其专项账本consumed，不重试；详见reports/enuma-ramoops-S-015-result.json、S-016-result.json。
+执行前所有当前文档与源码先提交推送，随后即时enuma/Android完成/root/A槽/解锁/设备与本地备份双分区摘要/相机门禁后单笔临时boot。75秒无可控返回立即停止追加；相机继续记录关键节点并沿既有恢复路径处理。原始影音只留本地out、不录音、不上传。发送OK/黑屏/自动返回均不当作日志成功。
 
-判断：单独映射不再首嫌，S-015物理访问/写入与warm差异仍未分离。S-017自动返回只能支持此最小读取路径与cold返回的可控性，不能输出实际头数值、证明写权限/持久化/全局日志或GOP成功；超时同样不能唯一定位某条load，先恢复再分析。下一步按本笔结果隔离warm或写入，不能复活consumed writer或扩大范围。S-001..016已consumed，真实GOP/XNU/iPadOS仍未实机闭合。
+历史有效结论：S-015 writer+warm超时，人工恢复独立核验通过，无有效nonce；65字节cat缺文件诊断不算日志。S-016同映射/cold自动返回（ADB20.063/完成35.406秒）。S-017三次头部读取/cold自动返回（ADB20.047/完成35.969秒），独立完成/root/A槽/解锁/设备备份摘要通过，253帧录像与桌面确认。最小头读本身不再首嫌；写入/头更新与warm差异尚未分离。S-001..017及旧失败图consumed不重试。
 
-本笔实际结果：20:48:03发出一次，命令2.625秒/返回0，断开5.094秒，ADB20.047秒、完成35.969秒，无主机fastboot恢复reboot；独立完成/root/A槽/解锁与设备双分区及备份摘要全部通过。录像253/253帧解码并目视最终Android桌面。结果reports/enuma-ramoops-S-017-result.json；S-017/R-017-READ已consumed，S-001..017均不重试。
-
-当前主判断收敛：最小头部三读本身不再首嫌，S-015的写入/头更新与warm请求仍未分离。下一步优先同映射无console访问的warm对照，先隔离复位路径，再考虑新的写入候选。该下一候选尚未实现/构建/资格/上机；不会重复S-015或从读回归成功推断写入/持久化成功。当前最新独立恢复证据`out\device-tests\20261025T204851-recovery-reconciliation.json`。资格a0c7afb已在本笔执行前推送；结果与所有当前文档随本里程碑提交推送。
+本笔解释：若warm无访问对照超时，warm请求/其更复杂的PSCI调用与原cold差异成为优先嫌疑，不能唯一排除更早路径或跨启动噪声，也不能认定header写入安全。若自动返回则warm单独触发必现故障不获支持，下一步应隔离新写入+cold候选；本笔不证明持久化。真实GOP/XNU/iPadOS仍未实机闭合。

@@ -1,0 +1,18 @@
+{
+  "firmware_commit": "5cfcd4cc68c0c37ffb322322efc256760d9389e3",
+  "image_sha256": "6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5",
+  "core_sha256": "988d47cb05c8d4f0d4627fc1a3914df75fb0bebfb7167fb52a206ac7193f3127",
+  "disassembly_sha256": "39775e862b0a9c2cdd6ef1f25e748f7317a11d888c9f9bf0d6fc8d0fbaf40423",
+  "review_required": false,
+  "findings": [
+    "Actual Core3cdc delay then3ce0 ResetWarm then3ce4 deadloop precedes dispatcher3ce8; no added console loads/stores",
+    "ResetWarm16f4..1768 constructs FEATURES8400000A and RESET2C4000012, tests feature return, type0 on supported path, cold84000009 on fallback",
+    "CANARY0 READ_HEADER0 WARM_CONTROL1 MAP1, nonce all0; no marker/word table present; exact staged header and packaged Core matched",
+    "Actual descriptor fields reserved normal uncached; full FAT/Boot v3 fixed; default baseline profile unchanged"
+  ],
+  "limits": [
+    "No direct internal runtime trace; actual feature response/reset branch unknown",
+    "Return or timeout cannot itself prove reset2 executed",
+    "No console content access/retention/GOP claim"
+  ]
+}

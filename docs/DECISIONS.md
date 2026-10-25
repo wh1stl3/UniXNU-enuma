@@ -950,3 +950,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-220：S-017头部三读/cold隔离
 
 2026-10-25T20:49:39+08:00。自动返回Android并独立核验。固件89e6491626ed0edbc48dc7fb41a6902e8ce7eb4c，图0586196e4666f9e119cca0afd984901b635084237a30a29e82d9450e2a3ca43a，实际三load/无console store/warm审查与完整载荷归档资格通过。沿用户继续及直接上机授权，同已批准范围，无pmsg/分区/verified扩张。本笔结果见reports/enuma-ramoops-S-017-result.json。原始影音只留本地。
+
+
+## D-221：S-018无访问warm独立隔离
+
+2026-10-25T20:56:03+08:00。构建/实际产物资格完成，尚未发出。固件5cfcd4cc68c0c37ffb322322efc256760d9389e3，图6b145fd370bb67a5db16112764701d8a4234b27c0eabc5d9e043bb7d92d843a5，仅同映射stage10/delay2/ResetWarm无console访问，实际PE/宏/描述符/完整FAT/Boot v3已资格；用户继续至硬停，不重复一般批准。执行状态见STATUS，consumed图不重试。原始影音仅本地。

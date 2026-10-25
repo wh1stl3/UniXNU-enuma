@@ -23,12 +23,12 @@ def require_hardware_review(meta, approvals):
     review = meta.get('hardware_review')
     if review is None:
         return
-    if review not in ('R-005', 'R-017', 'R-017-MAP', 'R-017-READ'):
+    if review not in ('R-005', 'R-017', 'R-017-MAP', 'R-017-READ', 'R-017-WARM'):
         raise ValueError('Unknown protected hardware review')
     entry = approvals.get(review, {})
     if entry.get('status') != 'approved' or meta['image_sha256'] not in entry.get('image_sha256', []):
         raise ValueError(review + ' is not approved for this exact image; no device action')
-    if review in ('R-017','R-017-MAP', 'R-017-READ') and (not entry.get('ramoops_scope') or meta.get('ramoops_scope') != entry['ramoops_scope']):
+    if review in ('R-017','R-017-MAP', 'R-017-READ', 'R-017-WARM') and (not entry.get('ramoops_scope') or meta.get('ramoops_scope') != entry['ramoops_scope']):
         raise ValueError('R-017 scope differs from exact reviewed console canary')
 
 
