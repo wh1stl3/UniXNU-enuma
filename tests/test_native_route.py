@@ -5,7 +5,7 @@ from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from native_mask_decode import make_plan
-from native_route_decode import decode,CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES
+from native_route_decode import decode,CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES,CPU_BARRIER_CATEGORIES
 import run_system_transport_trial as runner
 class RouteTests(unittest.TestCase):
     def test_all_codes_and_ambiguity(self):
@@ -24,6 +24,7 @@ class RouteTests(unittest.TestCase):
             self.assertEqual(decode(dict(origin_after_issue_lower=x,origin_after_issue_upper=x+.01),plan,structure=True,global_output=True,alpha_view=True,cpu_stage1=True,cpu_attribute=True)['category'],CPU_ATTRIBUTE_CATEGORIES[str(n)])
             self.assertEqual(decode(dict(origin_after_issue_lower=x,origin_after_issue_upper=x+.01),plan,structure=True,global_output=True,alpha_view=True,cpu_stage1=True,cpu_policy=True)['category'],CPU_POLICY_CATEGORIES[str(n)])
             self.assertEqual(decode(dict(origin_after_issue_lower=x,origin_after_issue_upper=x+.01),plan,structure=True,global_output=True,alpha_view=True,cpu_stage1=True,cpu_policy=True,cpu_read=True)['category'],CPU_READ_CATEGORIES[str(n)])
+            self.assertEqual(decode(dict(origin_after_issue_lower=x,origin_after_issue_upper=x+.01),plan,structure=True,global_output=True,alpha_view=True,cpu_stage1=True,cpu_policy=True,cpu_read=True,cpu_barrier=True)['category'],CPU_BARRIER_CATEGORIES[str(n)])
             self.assertEqual(r['category'],CATEGORIES[str(n)])
             self.assertFalse(r['stop_additional_trials'])
             self.assertEqual(decode(dict(origin_after_issue_lower=x,origin_after_issue_upper=x+.01),plan,True,True)['category'],STAGING_CATEGORIES[str(n)])
@@ -35,7 +36,7 @@ class RouteTests(unittest.TestCase):
             q=dict(trial_kind='native-video-route',archive='out/a',native_query=0,native_control=False,native_route_audit=True,native_border_view=True,
               boot_clock_capture=True,maximum_reads=330,maximum_wait_calls=2,maximum_mmio_offset='0x6c26c',pixel_access=False,gop_published=False,
               terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False},result_categories=CATEGORIES)
-            for key,value in [('native_route_cpu_read',1),('native_route_cpu_read',True),('native_route_cpu_policy',1),('native_route_cpu_policy',True),('native_route_cpu_attribute',1),('native_route_cpu_attribute',True),('native_route_cpu_stage1',1),('native_route_cpu_stage1',True),('native_route_alpha_view',1),('native_route_alpha_view',True),('native_route_global_detail',1),('native_route_global_detail',True),('native_route_global_output',1),('native_route_global_output',True),('native_route_structure_detail',1),('native_route_structure_detail',True),('native_route_structure',1),('native_route_structure',True),('native_route_blend',1),('native_route_blend',True),('native_route_layout',1),('native_route_layout',True),('native_border_view',1),('native_border_view',False),('native_query',1),('native_route_audit',1),('maximum_reads',331),('pixel_access',True),('result_categories',{}),('native_route_detail',1),('native_route_detail',True),('native_route_staging',1),('native_route_staging',True)]:
+            for key,value in [('native_route_cpu_barrier',1),('native_route_cpu_barrier',True),('native_route_cpu_read',1),('native_route_cpu_read',True),('native_route_cpu_policy',1),('native_route_cpu_policy',True),('native_route_cpu_attribute',1),('native_route_cpu_attribute',True),('native_route_cpu_stage1',1),('native_route_cpu_stage1',True),('native_route_alpha_view',1),('native_route_alpha_view',True),('native_route_global_detail',1),('native_route_global_detail',True),('native_route_global_output',1),('native_route_global_output',True),('native_route_structure_detail',1),('native_route_structure_detail',True),('native_route_structure',1),('native_route_structure',True),('native_route_blend',1),('native_route_blend',True),('native_route_layout',1),('native_route_layout',True),('native_border_view',1),('native_border_view',False),('native_query',1),('native_route_audit',1),('maximum_reads',331),('pixel_access',True),('result_categories',{}),('native_route_detail',1),('native_route_detail',True),('native_route_staging',1),('native_route_staging',True)]:
                 changed={**q,key:value};report.write_text(json.dumps(changed));(arc/'qualification.json').write_text(json.dumps(changed))
                 with patch.object(runner,'ROOT',root),self.assertRaisesRegex(ValueError,'scope invalid'):runner.qualification(False,report)
     def test_cli_excludes_observer(self):

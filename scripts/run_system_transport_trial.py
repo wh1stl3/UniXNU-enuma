@@ -90,7 +90,7 @@ def qualification(published=False, report=None):
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
         route=q['trial_kind']=='native-video-route'
         if route:
-            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES
+            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES,CPU_BARRIER_CATEGORIES
             detail=q.get('native_route_detail',False)
             if type(detail) is not bool: raise ValueError('native route detail scope invalid')
             staging=q.get('native_route_staging',False)
@@ -120,7 +120,10 @@ def qualification(published=False, report=None):
             cpu_read=q.get('native_route_cpu_read',False)
             if type(cpu_read) is not bool or (cpu_read and not cpu_policy): raise ValueError('native single CPU read scope invalid')
             if cpu_read: expected.update(pixel_access=True,cpu_stage1_only=False,cpu_memory_data_access=True,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
-            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+            cpu_barrier=q.get('native_route_cpu_barrier',False)
+            if type(cpu_barrier) is not bool or (cpu_barrier and not cpu_read): raise ValueError('native CPU barrier scope invalid')
+            if cpu_barrier: expected.update(maximum_barriers=1,barrier_kind='dsb-sy-before-data-read')
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
@@ -182,6 +185,9 @@ def single_read_only_scope(q):
     required=dict(native_route_cpu_read=True,native_route_cpu_policy=True,native_route_cpu_stage1=True,
                   pixel_access=True,cpu_memory_data_access=True,cpu_stage1_only=False,
                   cpu_mapping_changes=False,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
+    barrier=q.get('native_route_cpu_barrier',False)
+    if type(barrier) is not bool: return False
+    if barrier: required.update(maximum_barriers=1,barrier_kind='dsb-sy-before-data-read')
     return all(type(q.get(k)) is type(v) and q.get(k)==v for k,v in required.items())
 
 

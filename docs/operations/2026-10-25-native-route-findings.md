@@ -278,3 +278,27 @@ contract/callback rejection;5 one word completed. Read0/ffffffff/other all
 produce the same completion code; nothing about content is inferred. This
 is separate from the S-042 AT-only baseline so a new failure is not casually
 attributed to a pixel store or cache-sync step that was never added.
+
+
+## S-043 actual single-word read; isolate a barrier without stores
+
+Valid code5, origin32.477..32.543s, Android56.312s; independent root/A/unlock
+and both device/backup hashes pass. Consumedba781a95... . This supports one
+aligned32-bit CPU data load at decoded base with a private stack dependency,
+after complete same-observation Native6 and all-page stage1 identity NormalWT.
+No value exported, and no whole-buffer/write/SMMU/visible qualification.
+
+Main judgment: absence of a usable logical framebuffer or gross stage1
+mapping/format failure is now less likely. The strongest next discriminator
+is a barrier/read baseline followed by the planned-region read and a bounded
+visual transaction. Historical combined Pixel Sync/Read/Write timeouts do not
+locate the store, and old addresses/context were not numerically established.
+Do not call cache maintenance the proven root cause.
+
+S-044 adds exactly one DSB SY before the same word load, after every normal
+guard. Original no-barrier API unchanged. No DC clean/invalidate or mapping/
+cache attribute setter/pixel store. Host callbacks verify order/count and
+failure precedence; actual fifth Arm profile contains one DSB. Code5 supports
+this pre-read barrier and one word only, not post-store/cache maintenance.
+Timeout has no terminal result and cannot uniquely identify an instruction;
+stop/recover/record under the existing hard-stop rule.

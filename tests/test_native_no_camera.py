@@ -54,7 +54,12 @@ class NoCameraTests(unittest.TestCase):
                  cpu_mapping_changes=False,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
         for key,value in [('maximum_framebuffer_reads',2),('maximum_framebuffer_reads',True),('framebuffer_writes',1),
                           ('cache_maintenance',True),('cpu_mapping_changes',True),('native_route_cpu_policy',False),
-                          ('cpu_stage1_only',True),('cpu_memory_data_access',False)]:
+                          ('cpu_stage1_only',True),('cpu_memory_data_access',False),('native_route_cpu_barrier',1),('native_route_cpu_barrier',True)]:
+            with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
+                runner.run_without_camera({**q,key:value},Path('unused.img'))
+            called.assert_not_called()
+        q.update(native_route_cpu_barrier=True,maximum_barriers=1,barrier_kind='dsb-sy-before-data-read')
+        for key,value in [('maximum_barriers',2),('maximum_barriers',True),('barrier_kind','other')]:
             with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
                 runner.run_without_camera({**q,key:value},Path('unused.img'))
             called.assert_not_called()

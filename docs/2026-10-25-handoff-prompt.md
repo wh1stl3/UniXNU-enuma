@@ -1,6 +1,6 @@
-# 当前状态：D-272，S-043 原生显示管线合并审计结果与交接
+# 当前状态：D-273，S-044 原生显示管线合并审计资格完成，准备实测
 
-2026-10-26T03:07:25+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "single-aligned-cpu-word-read-completed-no-data-export", "warning_code": 5, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-043-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
+2026-10-26T03:24:42+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
 
 ## 已证实与主判断
 
@@ -36,19 +36,21 @@ S-042有效返回all-pages-stage1-rw-identity-normal-wt，origin22.454..22.558�
 
 S-043有效返回single-aligned-cpu-word-read-completed-no-data-export，origin32.477..32.543秒、Android56.312秒，独立身份/分区/备份摘要通过，已consumed。实际单个32位load及私有栈值依赖的完成获间接时间码支持；不导出数值，不称整段RAM、写入/SMMU/可见输出通过。下一笔只隔离一个DSB SY，零像素写、零DCclean/invalidate，避免把屏障与新存储混成不可定位结果。
 
+当前单屏障隔离=True：保留S-043单字路径，所有同次完整描述/整段WT/范围验证后，wrapper先且仅先执行一次DSB SY回调，再执行相同数据load及私有栈值依赖。没有DCclean/invalidate、像素写或缓存属性改变。code1..3前置/策略拒绝，4屏障或读取契约/回调拒绝，5单次DSB及单字读取完成；5不证明存储后的屏障或整行cache维护。max_barriers=1、barrier_kind=dsb-sy-before-data-read，失败前置零回调/屏障失败不读/调用顺序和计数及第五ARM profile仅一DSB通过。
+
 当前native_border_view=True。独立native border路径在解析副本仅清bit24，原始字保留并逐样本比较；原Native2其余严格源/混合器/布局条件不变；结构模式Native3另保留混合未验证要求。原严格和原native采样API不变，staging模式仍只分类。独立border路径全部64组合保留原始快照、330读失败、border中途变化/未知位/混合器/等待/帧稳定性拒绝通过。
 
 新独立native sampler采用固定小米52a2f18 v1 STATUS bit0门控FRAME，允许Timing零和Enable低位非3，但保留完整Timing/Enable字相等、双路三样本活动、两个100ms窗口各非回绕递增1..64。复用现有六CTL、所选两源SSPP、两LM混合配置和布局解码，采集前置首次拒绝立即返回；Native4把纯RAM布局判据放到安全采集与稳定性之后，不读取未满足路由前置的管线。旧严格GOP路径与固定基线逐回调一致，不因本审计自动放宽GOP。
 
 ## 当前候选与验证
 
-固件f745fb1d7997303380467731bb8d02e70970e225已推送。原R-004 MDP0xae00000/0x85000，最多330次读取、两次100ms，最高偏移0x6c26c；Splash0x9c000000/0x2400000不变。无像素/MMIO写、新映射、board/verified或分区操作，不发布GOP，不继承consumed像素批准。原完整采样成功保留ADDRESS|TOPOLOGY；结构模式成功保留BLEND|ADDRESS|TOPOLOGY=22要求。
+固件93820068e213114d6eef7bf96c7c27e8d242cac8已推送。原R-004 MDP0xae00000/0x85000，最多330次读取、两次100ms，最高偏移0x6c26c；Splash0x9c000000/0x2400000不变。无像素/MMIO写、新映射、board/verified或分区操作，不发布GOP，不继承consumed像素批准。原完整采样成功保留ADDRESS|TOPOLOGY；结构模式成功保留BLEND|ADDRESS|TOPOLOGY=22要求。
 
-选择器native_route_detail=False、native_route_staging=False；五码分类{"1": "prior-context-translation-or-identity-rejected", "2": "normal-policy-differs-from-wt-baseline", "3": "mixed-or-other-cache-policy-rejected", "4": "single-word-read-contract-or-callback-rejected", "5": "single-aligned-cpu-word-read-completed-no-data-export"}。码义以本候选归档为准：staging模式code2仅支持局部清除已知border后恰好两条不同单源路由、无其他未知字段，code3源数量/编码、code4其他字段、code5混合器数量/重复源，code1其他结果。staging模式code5不是成功；不继续后级采样，不修改原快照。完整SimpleFb GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92返回点13/detail16接受warning1..5，cold延时2/7/12/17/22秒后deadloop，无dispatcher fallback。
+选择器native_route_detail=False、native_route_staging=False；五码分类{"1": "prior-context-translation-or-identity-rejected", "2": "normal-policy-differs-from-wt-baseline", "3": "mixed-or-other-cache-policy-rejected", "4": "single-barrier-or-word-read-contract-rejected", "5": "single-dsb-sy-and-aligned-cpu-read-completed-no-data-export"}。码义以本候选归档为准：staging模式code2仅支持局部清除已知border后恰好两条不同单源路由、无其他未知字段，code3源数量/编码、code4其他字段、code5混合器数量/重复源，code1其他结果。staging模式code5不是成功；不继续后级采样，不修改原快照。完整SimpleFb GUID dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92返回点13/detail16接受warning1..5，cold延时2/7/12/17/22秒后deadloop，无dispatcher fallback。
 
 ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330读失败和两等待失败、活动门控/配置/帧稳定性通过；对fafb8a3 native基线逐330边界比较调用顺序/状态/输出一致，三个拓扑位置fixture通过；staging64个border组合/768单比特扰动/快照不变及负例、12480staging结果映射通过；真实头文件7200普通和10080细分类映射、504入口/GUID/状态案例通过。主机测试只证明模型与边界，不替代实机。实际构建源码/宏、PE、FD R-004表、完整96MiB FAT与Boot v3已冻结审查。
 
-镜像SHA256 ba781a9506ace318ba5fd955a44d41b668b49285ad033521c2186781735c8492；FD a98b5c034691942168ab7fb0c3a80df704580c0ffc02dd44043e9ce5c0386fb9；归档out/inherited-gop/qualified-native-cpu-read-f745fb1。资格reports/enuma-native-route-qualification.json、代码审计reports/enuma-native-route-code.json；详细审查docs/operations/2026-10-25-native-route-code-audit.md。
+镜像SHA256 232c49649fb8eda3d79fc696ecc08ae1b1a0fc5b0670df757ac1077cc3dee8ed；FD 50ffa7caf44651c6c7ec699ad8f3341025ea603e3af56af2671967cd8a84a9df；归档out/inherited-gop/qualified-native-cpu-barrier-9382006。资格reports/enuma-native-route-qualification.json、代码审计reports/enuma-native-route-code.json；详细审查docs/operations/2026-10-25-native-route-code-audit.md。
 
 固定S-021/S-022校准计划{"baseline_envelope_seconds": [10.25199999997858, 10.347999999998137], "tolerance_seconds": 1, "sampler_seconds": [0, 0.2], "code_windows_after_issue": [[11.25199999997858, 13.547999999998137], [16.25199999997858, 18.547999999998137], [21.25199999997858, 23.547999999998137], [26.25199999997858, 28.547999999998137], [31.25199999997858, 33.54799999999814]], "source_trials": ["S-021", "S-022"], "full_interval_containment": true, "uncertainty_limit_seconds": 0.25, "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof."}。整个boot-origin区间须唯一窗口包含，三样本新boot-id且交集宽<=0.25秒；不按观测调整容差。时间码仍是间接分类，不是直接寄存器值、物理路由或可见显示证明。
 

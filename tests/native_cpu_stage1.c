@@ -39,9 +39,14 @@ static int PolicyTranslate(void *Opaque,ENUMA_U64 Page,ENUMA_U32 Write,ENUMA_U64
   }
   return S;
 }
-typedef struct { ENUMA_U64 Expected;unsigned Count,Value;int Result; } WORD;
+typedef struct { ENUMA_U64 Expected;unsigned Count,Value,BarrierCount,RequireBarrier;int Result,BarrierResult; } WORD;
 static int WordRead(void *Opaque,ENUMA_U64 Address,ENUMA_U32 *Value) {
-  WORD *W=Opaque;assert(Address==W->Expected&&!W->Count);W->Count++;*Value=W->Value;return W->Result;
+  WORD *W=Opaque;assert(Address==W->Expected&&!W->Count);
+  if(W->RequireBarrier) { assert(W->BarrierCount==1&&W->BarrierResult==1); }
+  W->Count++;*Value=W->Value;return W->Result;
+}
+static int WordBarrier(void *Opaque) {
+  WORD *W=Opaque;assert(!W->Count&&!W->BarrierCount);W->BarrierCount++;return W->BarrierResult;
 }
 int main(void) {
   ENUMA_INHERITED_FRAME F={0},V;unsigned I,K,Count;
@@ -89,6 +94,17 @@ int main(void) {
     assert(EnumaCpuReadOnce(&F,3,WordRead,&W)==(S==1?5:4)&&W.Count==1);
   } }
   assert(EnumaCpuReadOnce(&F,3,0,0)==4&&EnumaCpuReadOnce(0,3,WordRead,0)==4);
+  for(int S=-1;S<=2;S++) {
+    WORD W={.Expected=F.Base,.Result=1,.BarrierResult=S,.RequireBarrier=1};
+    assert(EnumaCpuReadWithBarrier(&F,3,WordRead,WordBarrier,&W)==(S==1?5:4));
+    assert(W.BarrierCount==1&&W.Count==(S==1));
+  }
+  for(I=0;I<7;I++) {
+    WORD W={.Expected=F.Base,.Result=1,.BarrierResult=1,.RequireBarrier=1};
+    assert(EnumaCpuReadWithBarrier(&F,I,WordRead,WordBarrier,&W)==(I==3?5:I==2||I==4?2:I==5?3:1));
+    assert(W.BarrierCount==(I==3)&&W.Count==(I==3));
+  }
+  assert(EnumaCpuReadWithBarrier(&F,3,WordRead,0,0)==4);
   F.Base+=4092;F.Stride=14744;F.Bytes=(ENUMA_U64)F.Stride*2560;assert(Check(&F,0,0,5)==18432);
   { POLICY P={0};P.Query.First=F.Base&~4095ULL;P.Query.Kind=99;P.Attr=0xaa;assert(EnumaCpuWholePolicy(&F,PolicyTranslate,&P)==3&&P.Query.Calls==18432); }
   for(I=0;I<9;I++) {
@@ -96,7 +112,8 @@ int main(void) {
     switch(I) {case 0:V.Base=0x9bfffffc;break;case 1:V.Base=0x9e400000;break;case 2:V.Base++;break;case 3:V.Bytes++;break;case 4:V.Requirements=0;break;case 5:V.Stride=6396;break;case 6:V.Width--;break;case 7:V.Height--;break;case 8:V.Bytes=~0ULL;break;}
     assert(Check(&V,0,0,1)==0);
     { WORD W={0};assert(EnumaCpuReadOnce(&V,3,WordRead,&W)==4&&W.Count==0); }
+    { WORD W={0};assert(EnumaCpuReadWithBarrier(&V,3,WordRead,WordBarrier,&W)==4&&W.Count==0&&W.BarrierCount==0); }
   }
   assert(EnumaCpuStage1(0,Translate,0)==1&&EnumaCpuStage1(&F,0,0)==1);
-  puts("PASS: 56000 query boundaries;18432 maximum; all256 attribute/policy encodings; mixed/hint/fault precedence; single-word read gating/count/value independence; invalid frames rejected before read");return 0;
+  puts("PASS: query/attribute/policy/read regressions; single barrier-before-read gating, exact counts, failure precedence and invalid frames before either callback");return 0;
 }
