@@ -1,0 +1,25 @@
+{
+  "scope": "indirect same-source paired timing, not direct native register log",
+  "conclusion": "ambiguous",
+  "negative_minus_positive_seconds": {
+    "adb_return_seconds": -4.281,
+    "boot_complete_seconds": -1.359
+  },
+  "predeclared_absolute_delta_window_seconds": [
+    3,
+    7
+  ],
+  "predicate": "collection success AND both active throughout AND both nonzero stable Timing AND both stable Enable AND both two-window Frame increments1..64",
+  "exact_enable3_not_required": true,
+  "complement_includes": [
+    "metadata/PCD rejection",
+    "read/wait/revision rejection",
+    "one or both inactive",
+    "Timing/Enable instability",
+    "one or both nonmoving/wrapped/over64 frames"
+  ],
+  "exact_values_observed": false,
+  "gop_verified": false,
+  "pixel_access": false,
+  "limitation": "Android boot noise and inherited state changes across boots remain confounders; complement does not uniquely identify which mask failed"
+}
