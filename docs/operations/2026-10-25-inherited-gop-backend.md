@@ -67,3 +67,12 @@ D-199的正文首嫌强度下调。旧query1仅PASS1触发返回点2秒终止；
 ## D-201执行前资格（2026-10-25T18:16:36+08:00）
 
 新terminal FD 490fe01ebda7bf8091b3944a54135fb439f73c8c0f05d8ac609e7cdd19b9ba9e，镜像24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386，归档out/inherited-gop/qualified-terminal-1a4b204-q1。实际Core0xf90c..f9b8的AND~4/compare1精确识别1和5，hook13及两半GUID之后，分别MicroSecondDelay2m/7m、ResetCold和CpuDeadLoop，FAIL无dispatcher继续路径。实际Core/provider宏均TERMINAL1/FALLBACK0、PE均在实际FD，R-004/BootShim/完整FAT/immutable资格通过。197主机场景/22固件单测和当前Android备份相机通过；文档发布后S-010单笔，当前未发出。
+
+
+## D-202：S-010准备中止
+
+2026-10-25T18:23+08:00。S-010准备流程在fastboot身份门禁中止：首个product查询返回enuma，current-slot/unlocked及后续完整查询失败，部分remote FAILED仍返回主机退出码0，精确值检查正确拒绝。未执行fastboot boot，镜像24aed9e0…ae9e2386未消耗；不能记为固件超时、PASS或FAIL。is-userspace也未返回有效值，不能据此认定fastbootd。已向先前选定的enuma执行普通reboot，随后独立核验Android完成/root/A槽/解锁及两个设备分区与本地备份摘要全部通过。112帧拍屏仅本地，无音频；原始中止result.json保留。当前无人工或审批待办。
+
+下一步先排查fastboot GetVar异常与设备/主机交互，保留精确机型/槽位/解锁门禁；不得将Android检查替代fastboot检查，也不把此次未发送当失败镜像重试。S-010仍只有离线资格，尚无新固件实机结果。修正并落实文档、通过即时身份/备份/采集/恢复门禁后，再按已有授权单笔。当前不追加启动。
+
+证据：reports/enuma-inherited-video-S010-preboot-result.json。

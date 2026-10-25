@@ -1,3 +1,11 @@
+## D-202当前：身份门禁中止已恢复，无新增审批待办
+
+2026-10-25T18:23+08:00。S-010准备流程在fastboot身份门禁中止：首个product查询返回enuma，current-slot/unlocked及后续完整查询失败，部分remote FAILED仍返回主机退出码0，精确值检查正确拒绝。未执行fastboot boot，镜像24aed9e0…ae9e2386未消耗；不能记为固件超时、PASS或FAIL。is-userspace也未返回有效值，不能据此认定fastbootd。已向先前选定的enuma执行普通reboot，随后独立核验Android完成/root/A槽/解锁及两个设备分区与本地备份摘要全部通过。112帧拍屏仅本地，无音频；原始中止result.json保留。当前无人工或审批待办。
+
+下一步先排查fastboot GetVar异常与设备/主机交互，保留精确机型/槽位/解锁门禁；不得将Android检查替代fastboot检查，也不把此次未发送当失败镜像重试。S-010仍只有离线资格，尚无新固件实机结果。修正并落实文档、通过即时身份/备份/采集/恢复门禁后，再按已有授权单笔。当前不追加启动。
+
+以下为历史记录。
+
 ## D-201当前：对称返回新候选已资格，无审批待办
 
 S-010镜像24aed9e0…ae9e2386，1a4b204，新Core同点PASS2秒/FAIL7秒且FALLBACK0。实际Core函数反汇编、Core/provider编译宏与FD、完整FAT/BootShim/归档检查通过，当前文档发布后沿授权单笔；尚未发出。无内存/verified/分区变更。附件规则只摘取适用条目，原始影音本地。以下历史保留。

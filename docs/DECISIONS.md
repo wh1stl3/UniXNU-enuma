@@ -761,3 +761,10 @@ Core明确只拦旧query1 PASS，FAIL继续dispatcher，completion fallback不�
 ## D-201：实际同点双结果Core产物资格后再验证video-only
 
 新Core实际函数0xf90c..f9b8已核hook13、状态1/5和完整GUID，然后FAIL7秒/PASS2秒直接复位。两级宏和实际FD/Core/provider、完整输入和归档绑定；旧非对称profile被新qualifier/runner拒绝。197头文件及22固件单测、当前恢复采集门禁通过，当前文档发布后S-010一笔。分类仍限时序支持；超时只表示没有识别的terminal报告，不直接称寄存器挂点。
+
+
+## D-202：未发送的身份拒绝不算固件结果
+
+2026-10-25T18:23+08:00。S-010准备流程在fastboot身份门禁中止：首个product查询返回enuma，current-slot/unlocked及后续完整查询失败，部分remote FAILED仍返回主机退出码0，精确值检查正确拒绝。未执行fastboot boot，镜像24aed9e0…ae9e2386未消耗；不能记为固件超时、PASS或FAIL。is-userspace也未返回有效值，不能据此认定fastbootd。已向先前选定的enuma执行普通reboot，随后独立核验Android完成/root/A槽/解锁及两个设备分区与本地备份摘要全部通过。112帧拍屏仅本地，无音频；原始中止result.json保留。当前无人工或审批待办。
+
+下一步先排查fastboot GetVar异常与设备/主机交互，保留精确机型/槽位/解锁门禁；不得将Android检查替代fastboot检查，也不把此次未发送当失败镜像重试。S-010仍只有离线资格，尚无新固件实机结果。修正并落实文档、通过即时身份/备份/采集/恢复门禁后，再按已有授权单笔。当前不追加启动。

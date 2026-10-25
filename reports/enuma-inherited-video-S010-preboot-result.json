@@ -1,0 +1,52 @@
+{
+  "scope": "S-010 preboot attempt; candidate not issued",
+  "candidate_sha256": "24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386",
+  "firmware_source": "1a4b20487aa6ac0fbb2973bf508aea1851b61192",
+  "phase": "fastboot-identity-aborted",
+  "boot_issued": false,
+  "candidate_consumed": false,
+  "partition_writes": false,
+  "identity_failed_fields": [
+    "product",
+    "current-slot",
+    "unlocked"
+  ],
+  "original_result": "out/device-tests/20261025T181726-system-transport/result.json",
+  "original_result_sha256": "ceb9b3bb55b35d88264d388920be5c9369972ce2a7176aa144ad22a312d8ced6",
+  "observation": "First product query returned enuma; current-slot/unlocked and subsequent complete sets failed. Some remote failures returned host exit code zero; the exact-value gate correctly rejected them. is-userspace query also failed; fastbootd is not established.",
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "fastboot-identity-aborted",
+    "prior_state_sha256": "387a5c206ba3dacf6bb1728006108922cf2bd8a068194eb456783ebddc167b39",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T182228-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 112,
+    "decoded_frames": 112,
+    "video": "out/camera-capture/20261025T181723-system-transport/system-transport.avi",
+    "video_sha256": "8d707eb253eb92d5b81a29291b8e30fe3e6fc7675b8469fadfe2ea59a15f4728",
+    "boot_issued": false
+  },
+  "interpretation": "No new firmware execution evidence; do not infer PASS/FAIL/MMIO behavior. Investigate fastboot GetVar failure before further temporary boot; preserve identity gate. Raw media local only."
+}

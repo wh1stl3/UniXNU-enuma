@@ -589,3 +589,6 @@ umi仍是同SM8250/同donor系统、UFS/root/Data的首要参考，审查HEAD未
 
 
 2026-10-25T18:16:36+08:00 D-201：1a4b204新terminal全构建和资格完成，S-010镜像24aed9e0c8c98d3af74f1baa1698b1930da8a6d6bfd2cd462623ba4dae9e2386，归档out/inherited-gop/qualified-terminal-1a4b204-q1。实际Core0xf90c..f9b8在hook13/1或5/完整GUID后，两条分支直接2/7秒复位，未回dispatcher。Core/provider宏TERMINAL1/FALLBACK0/实际PE、R-004、完整FAT/BootShim和immutable manifest通过，197头文件/22固件单测通过，当前Android/备份/相机复核通过。附件适用AGENTS已合并，发布后单笔，尚未执行；无原始影音上传。
+
+
+2026-10-25T18:23+08:00 D-202：根仓563e922已推送，包含适用AGENTS摘取。S-010准备流程fastboot身份检查失败，未发boot、未消耗候选；普通定向reboot后Android/root/A槽/解锁/设备与备份SHA独立通过。首个product正确但后续GetVar失败，is-userspace也未知，不认定fastbootd/固件失败。112帧只本地。证据reports/enuma-inherited-video-S010-preboot-result.json；下一步排查传输身份异常，保留门禁。
