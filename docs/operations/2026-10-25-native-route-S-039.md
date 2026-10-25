@@ -1,6 +1,6 @@
-# 当前状态：D-263，S-039 原生显示管线合并审计资格完成，准备实测
+# 当前状态：D-264，S-039 原生显示管线合并审计结果与交接
 
-2026-10-26T01:53:54+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
+2026-10-26T01:58:04+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "stable-8888-logical-structure-alpha-blend-address-and-downstream-unproven", "warning_code": 5, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-039-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
 
 ## 已证实与主判断
 
@@ -40,7 +40,7 @@ ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330
 
 ## 恢复、硬停与下一步
 
-最近独立恢复out\device-tests\20261026T014239-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
+最近独立恢复out\device-tests\20261026T015803-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
 
 D-233：镜像发出前fastboot查询异常不作整轮硬停；恢复核验后允许重新进入一次fastboot，完整product/slot/unlocked门禁仍须通过。不重复已发图，不忽略FAILED正文。真实75秒无识别恢复、恢复失败、所选观测通道失效/时基失败（无相机试验不要求图像）或新时间码模糊，停止追加并当轮落实交接；有效负分类继续分析。
 
