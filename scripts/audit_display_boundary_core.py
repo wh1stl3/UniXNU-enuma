@@ -38,7 +38,10 @@ def code_review(core, map_text, point):
         match = re.fullmatch(r'\s*([0-9a-fA-F]{8,16})\s+[0-9a-fA-F]+\s+0\s+(\S+)\s*', line)
         if match:
             symbols[match[2]] = int(match[1], 16)
-    required = ['CoreDispatcher', 'CoreStartImage', 'EnumaDispatchDetailCheckpoint',
+    if point not in (13, 15, 20):
+        raise ValueError('Unsupported reviewed checkpoint')
+    checkpoint = 'EnumaImageEntryCheckpoint' if point == 20 else 'EnumaDispatchDetailCheckpoint'
+    required = ['CoreDispatcher', 'CoreStartImage', checkpoint,
                 'ReadUnaligned64', 'MicroSecondDelay', 'ResetCold', 'CpuDeadLoop']
     if any(name not in symbols for name in required):
         raise ValueError('Required Core/map symbols missing')
@@ -46,10 +49,10 @@ def code_review(core, map_text, point):
     for section in pe.sections:
         if section.Characteristics & 0x20000000:
             instructions.extend(md.disasm(section.get_data()[:section.Misc_VirtualSize], section.VirtualAddress))
-    begin = symbols['EnumaDispatchDetailCheckpoint']
+    begin = symbols[checkpoint]
     end = min(address for address in symbols.values() if address > begin)
     body = [i for i in instructions if begin <= i.address < end and i.id]
-    if not any(i.mnemonic == 'cmp' and len(i.operands) == 2 and
+    if not any(i.mnemonic in (['ccmp'] if point == 20 else ['cmp']) and len(i.operands) >= 2 and
                i.operands[0].type == capstone.arm64.ARM64_OP_REG and
                i.reg_name(i.operands[0].reg) == 'x0' and
                i.operands[1].type == capstone.arm64.ARM64_OP_IMM and
@@ -78,7 +81,8 @@ def code_review(core, map_text, point):
             elif reg in current:
                 shift = operands[1].shift.value
                 current[reg] = (current[reg] & ~(0xffff << shift)) | ((operands[1].imm & 0xffff) << shift)
-        if ins.mnemonic == 'cmp' and len(operands) == 2 and operands[1].type == capstone.arm64.ARM64_OP_REG:
+        if (ins.mnemonic == 'cmp' and len(operands) == 2 and operands[1].type == capstone.arm64.ARM64_OP_REG
+                and (point != 20 or ins.reg_name(operands[0].reg) == 'x0')):
             value = current.get(ins.reg_name(operands[1].reg))
             comparisons.append(value)
         if ins.mnemonic == 'bl':
@@ -123,6 +127,8 @@ def code_review(core, map_text, point):
         delay_contract = {'mode': 'constant_specialized_2x1s', 'microseconds': 2000000,
                           'nanosecond_calls': calls, 'callee_body': render(callee)}
     contexts = []
+    if point == 20:
+        return entry_review(core, instructions, symbols, body, delay_contract, required)
     for index, ins in enumerate(instructions):
         if not ins.id or ins.mnemonic != 'bl' or ins.operands[0].imm != begin:
             continue
@@ -148,6 +154,58 @@ def code_review(core, map_text, point):
             'checkpoint_body': render(body), 'callsites': contexts,
             'limits': ['fixed Core/map static checks only; no proof of hardware reaching or returning from the gate',
                        'detail13 is any CoreStartImage return, not an EFI_STATUS value or successful SetMode']}
+
+
+def entry_review(core, instructions, symbols, body, delay, required):
+    """Accept the concrete LTO bridge and entry-call shape, not arbitrary proximity."""
+    for name in ['EnumaStartingImage', 'EnumaStartingFile']:
+        if name not in symbols:
+            raise ValueError('Scheduled image bridge symbols missing')
+    if [(i.mnemonic, i.op_str) for i in body[-3:]] != [
+            ('ldp', 'x29, x30, [sp, #8]'), ('ldr', 'x19, [sp], #0x20'), ('ret', '')]:
+        raise ValueError('Bridge rejection exit differs')
+    reject = body[-3].address
+    image, file = symbols['EnumaStartingImage'], symbols['EnumaStartingFile']
+    expected = [
+        ('str', 'x19, [sp, #-0x20]!'), ('stp', 'x29, x30, [sp, #8]'),
+        ('add', 'x29, sp, #8'), ('adrp', f'x8, #{hex(image & ~4095)}'),
+        ('ldr', f'x8, [x8, #{hex(image & 4095)}]'), ('cbz', f'x8, #{hex(reject)}'),
+        ('adrp', f'x9, #{hex(file & ~4095)}'), ('cmp', 'x8, x1'),
+        ('ldr', f'x19, [x9, #{hex(file & 4095)}]'), ('ccmp', 'x19, #0, #4, eq'),
+        ('ccmp', 'x0, #0x14, #0, ne'), ('b.ne', f'#{hex(reject)}')]
+    if [(i.mnemonic, i.op_str) for i in body[:12]] != expected:
+        raise ValueError('Scheduled handle/file/point bridge guard differs')
+    start = symbols['CoreStartImage']
+    end = min(v for v in symbols.values() if v > start)
+    function = [i for i in instructions if start <= i.address < end and i.id]
+    if not any(i.mnemonic == 'mov' and i.op_str == 'x22, x0' for i in function[:16]):
+        raise ValueError('Entry handle is not the saved StartImage argument')
+    contexts = []
+    for index, ins in enumerate(function):
+        if ins.mnemonic != 'bl' or ins.operands[0].imm != symbols['EnumaImageEntryCheckpoint']:
+            continue
+        before = function[max(0, index-4):index]
+        # Other bridge calls (21/22) must not be mistaken for point20.
+        if not any(i.mnemonic == 'mov' and i.op_str == 'w8, #0x14' for i in before):
+            continue
+        if [(i.mnemonic, i.op_str) for i in before] != [
+                ('mov', 'x1, x22'), ('strb', 'w8, [x19, #0x18]'),
+                ('mov', 'w8, #0x14'), ('mov', 'w0, w8')]:
+            raise ValueError('Point20/handle preparation differs')
+        after = function[index+1:index+5]
+        if [(i.mnemonic, i.op_str) for i in after] != [
+                ('ldr', 'x8, [x19, #0x20]'), ('mov', 'x0, x22'),
+                ('ldr', 'x1, [x19, #0x38]'), ('blr', 'x8')]:
+            raise ValueError('PE entry indirect call/arguments differ')
+        contexts.append(dict(checkpoint_call_rva=hex(ins.address), entry_call_rva=hex(after[-1].address),
+                             instructions=render(before+[ins]+after)))
+    if len(contexts) != 1:
+        raise ValueError('Expected one exact point20-to-PE-entry boundary')
+    return dict(core_sha256=digest(core), point=20, delay_contract=delay,
+                symbols={name:hex(symbols[name]) for name in required+['EnumaStartingImage','EnumaStartingFile']},
+                checkpoint_body=render(body), callsites=contexts,
+                limits=['Concrete fixed Core/map static shape only; no proof of gate execution or PE entry execution',
+                        'point20 precedes the indirect PE call; source struct offsets reviewed for this build only'])
 
 
 def render(seq):
@@ -247,7 +305,7 @@ def main():
     if args.compare_a:
         result['A_B_comparison'] = compare_pair(args.compare_a, args.archive)
     output.write_text(json.dumps(result, indent=2) + '\n')
-    print('PASS: point/GUID/delay/reset and CoreStartImage call order; ' +
+    print('PASS: point/GUID/delay/reset and reviewed StartImage/PE-entry call order; ' +
           ('A/B config differs only in point; Core runtime change and PcdDxe debug ID separately audited'
            if args.compare_a else 'no device execution'))
 

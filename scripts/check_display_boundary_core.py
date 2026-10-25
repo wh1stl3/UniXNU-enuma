@@ -23,7 +23,8 @@ def main():
     valid = code_review(core, map_text, point)
     pe = pefile.PE(data=core)
     calls = valid['callsites'][0]
-    start_address = (calls['CoreStartImage_calls_before'] if point == 13 else calls['CoreStartImage_calls_after'])[0]
+    start_address = (calls['entry_call_rva'] if point == 20 else
+                     (calls['CoreStartImage_calls_before'] if point == 13 else calls['CoreStartImage_calls_after'])[0])
     no_start = bytearray(core)
     offset = pe.get_offset_from_rva(int(start_address, 16))
     no_start[offset:offset + 4] = bytes.fromhex('1f2003d5')
@@ -42,6 +43,19 @@ def main():
             print('PASS rejection: ' + name)
         else:
             raise AssertionError('Accepted corrupted boundary input: ' + name)
+    if point == 20:
+        for label, instruction in [
+                ('removed null-handle gate', next(i for i in valid['checkpoint_body'] if i['mnemonic'] == 'cbz')),
+                ('removed scheduled-handle comparison', next(i for i in valid['checkpoint_body'] if i['mnemonic'] == 'cmp' and i['operands'] == 'x8, x1'))]:
+            damaged = bytearray(core)
+            offset = pe.get_offset_from_rva(int(instruction['rva'], 16))
+            damaged[offset:offset+4] = bytes.fromhex('1f2003d5')
+            try:
+                code_review(bytes(damaged), map_text, point)
+            except ValueError:
+                print('PASS rejection: ' + label)
+            else:
+                raise AssertionError('Accepted corrupted entry bridge: ' + label)
     delay = valid.get('delay_contract', {})
     if delay.get('mode') == 'constant_specialized_2x1s':
         immediate = next(i for i in delay['callee_body'] if i['mnemonic'] == 'mov' and i['operands'].startswith('w0, #'))

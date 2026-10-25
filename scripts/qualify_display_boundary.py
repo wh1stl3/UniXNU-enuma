@@ -170,7 +170,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', type=Path, required=True)
     parser.add_argument('--archive', type=Path, required=True)
-    parser.add_argument('--point', type=int, choices=[13, 15], required=True)
+    parser.add_argument('--point', type=int, choices=[13, 15, 20], required=True)
     parser.add_argument('--tool-path', type=Path)
     parser.add_argument('--ram-payload', type=Path, help='explicit exact system FAT; legacy default still requires empty ramdisk')
     parser.add_argument('--no-completion-fallback', action='store_true')
