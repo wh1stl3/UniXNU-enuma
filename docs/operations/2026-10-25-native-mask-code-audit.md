@@ -14,3 +14,7 @@ Real-header ASan/UBSan covers504 hook/status/GUID cases,53 mask/error selector c
 ## S-024 field4 comparison
 
 `qualified-native-mask-2bb165f-field4` has identical Core PE SHA256 `0d3c9f5b162baf032163d5fc247101c9637b9f4dd83b6928539e99e907f26594`. The full provider executable disassembly differs at exactly RVA14d4: `ldr w9,[x9,#0xda0]` becomes `ldr w9,[x9,#0xdac]`, selecting MovingMask at observation offset0x7c instead of ActiveThroughoutMask at0x70. Every sampling, metadata, bounds, wait and return-code instruction remains identical. Full disassembly digest `948335f72f21276f090a1a6c06699b6aa950715918410faa920131f9163795ee` was reviewed; no inference from build flags alone.
+
+## S-025 field5 comparison
+
+`qualified-native-mask-2bb165f-field5` retains the same Core PE. Full provider disassembly differs from field1 only at RVA14d4: offset0xda0 becomes0xdb0, selecting ExactEnable3Mask at observation offset0x80. Full reviewed disassembly digest `2754c8b673d331aaab680202170a4561c0a325814ee15bfca74ebc9f8639419c`; collection and all other instructions are unchanged. A zero result means neither interface satisfied low-two-bits==3 across all samples, not that the full Enable register was observed to equal0.
