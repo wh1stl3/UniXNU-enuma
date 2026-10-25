@@ -24,7 +24,7 @@ def main():
     if a.reviewed_sha256 and a.reviewed_sha256!=digest:raise ValueError('reviewed code changed')
     pending=a.reviewed_sha256 is None
     r=dict(scope='actual packaged '+q['trial_kind']+' provider and bounded exact-GUID Core terminal; manual disassembly review bound by digest',
-      firmware_commit=q['firmware_commit'],native_mask_field=q.get('native_mask_field'),trial_kind=q['trial_kind'],native_route_layout=q.get('native_route_layout',False),native_route_staging=q.get('native_route_staging',False),native_route_detail=q.get('native_route_detail',False),image_sha256=q['image_sha256'],
+      firmware_commit=q['firmware_commit'],native_mask_field=q.get('native_mask_field'),trial_kind=q['trial_kind'],native_route_blend=q.get('native_route_blend',False),native_route_layout=q.get('native_route_layout',False),native_route_staging=q.get('native_route_staging',False),native_route_detail=q.get('native_route_detail',False),image_sha256=q['image_sha256'],
       provider_sha256=q['files']['SimpleFbDxe.efi']['sha256'],core_sha256=q['files']['DxeCore.efi']['sha256'],
       combined_disassembly_sha256=digest,review_required=pending,hardware_success=False)
     q['review_required']=pending

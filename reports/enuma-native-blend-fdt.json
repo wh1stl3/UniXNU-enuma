@@ -1,0 +1,34 @@
+{
+  "scope": "saved post-Android FDT mixer descriptor cross-check; not runtime register proof",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "properties": {
+    "qcom,sde-mixer-off": [
+      282624,
+      286720,
+      290816,
+      294912,
+      299008,
+      303104
+    ],
+    "qcom,sde-mixer-size": [
+      800
+    ],
+    "qcom,sde-mixer-blend-op-off": [
+      32,
+      56,
+      80,
+      104,
+      128,
+      152,
+      176,
+      200,
+      224,
+      248,
+      272
+    ],
+    "qcom,sde-mixer-blendstages": [
+      11
+    ]
+  },
+  "matches_current_read_plan": true
+}

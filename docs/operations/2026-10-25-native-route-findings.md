@@ -71,3 +71,27 @@ passes it to setup_alpha_out. Current resolver rejects all mode bits except31.
 A blend/geometry/side category would displace this hypothesis as the first
 blocking predicate. Even a mode category needs precise bit/source correlation
 before changing admission; bit30 remains unexplained and is not accepted.
+
+## S-033 corrects the first-blocker hypothesis
+
+S-033 origin17.400..17.467s maps to dim/blend rejection; Android40.391s and
+independent recovery/camera passed. Thus mode bits are not the first blocking
+predicate on this observation. Source b915308 explains the already captured
+blend words without changing admission: selected-source dim, dim outside that
+stage, operation mismatch, or alpha mismatch. Tests cover11x11 stage/dim
+locations, all four actual110-read sampler rejection paths and17280 selectors.
+
+The fixed [MiCode blend definitions](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_mdss.h)
+lines60..75 distinguish constant/pixel alpha selection, inversion, modulation
+and transparency. Current0x100 requires FG constant for foreground and BG
+constant for background, with packed FG255/BG0. Other encodings must not be
+accepted merely because this exact word is absent. If operation/alpha is the
+blocker, evaluate explicitly constant-only effective FG255/BG0 semantics,
+rejecting pixel selection/modulation/transparency and unknown bits, before any
+admission change. Dim outside the source stage is not automatically inactive.
+
+Saved post-Android FDT SHA256643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62
+independently matches six mixer offsets45000..4a000, length320,11 blend offsets
+20..110 at stride18 and blendstage count11. See
+reports/enuma-native-blend-fdt.json. This checks descriptor provenance only,
+not handoff register values or dim inactivity.

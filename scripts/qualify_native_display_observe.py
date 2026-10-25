@@ -16,7 +16,8 @@ ROOT=Path(__file__).resolve().parents[1]
 GUID='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(0,1,2),default=0); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); p.add_argument('--native-route-audit',action='store_true'); p.add_argument('--native-route-detail',action='store_true'); p.add_argument('--native-route-layout',action='store_true'); p.add_argument('--native-route-staging',action='store_true'); a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(0,1,2),default=0); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); p.add_argument('--native-route-audit',action='store_true'); p.add_argument('--native-route-detail',action='store_true'); p.add_argument('--native-route-blend',action='store_true'); p.add_argument('--native-route-layout',action='store_true'); p.add_argument('--native-route-staging',action='store_true'); a=p.parse_args()
+    if a.native_route_blend and not a.native_route_layout: raise ValueError('blend requires layout')
     if a.native_route_layout and (not a.native_route_detail or a.native_route_staging): raise ValueError('layout requires detail and excludes staging')
     if a.native_route_staging and not a.native_route_detail: raise ValueError('staging requires detail')
     if a.native_route_detail and not a.native_route_audit: raise ValueError('detail requires route')
@@ -27,7 +28,7 @@ def main():
     if not image.is_relative_to(ROOT/'out') or not archive.is_relative_to(ROOT/'out') or archive.exists(): raise ValueError('require new in-out archive/image')
     build=json.loads((ROOT/'reports/enuma-firmware-build.json').read_text()); pin=json.loads((ROOT/'config/uefi-source.lock.json').read_text())
     required={'complete':True,'inherited_video_audit_read_only':True,'gop_backend_selftest_ram_only':False,
-      'native_route_layout':a.native_route_layout,'native_route_staging':a.native_route_staging,'native_route_detail':a.native_route_detail,'native_route_audit':a.native_route_audit,'inherited_video_entry_control':False,'native_observe_query':a.native_query,'native_observe_control':a.native_control,'native_mask_field':a.native_mask_field,
+      'native_route_blend':a.native_route_blend,'native_route_layout':a.native_route_layout,'native_route_staging':a.native_route_staging,'native_route_detail':a.native_route_detail,'native_route_audit':a.native_route_audit,'inherited_video_entry_control':False,'native_observe_query':a.native_query,'native_observe_control':a.native_control,'native_mask_field':a.native_mask_field,
       'inherited_video_terminal':True,
       'inherited_video_topology_query':0,
       'inherited_video_reason_target':0,'inherited_video_reason_query':0,
@@ -50,7 +51,7 @@ def main():
     make=(output/'GNUmakefile').read_text(); defs=build['firmware_configuration']['defines']
     core_folder=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain'
     core_make=(core_folder/'GNUmakefile').read_text()
-    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_ROUTE_LAYOUT','ENUMA_NATIVE_ROUTE_STAGING','ENUMA_NATIVE_ROUTE_DETAIL','ENUMA_NATIVE_ROUTE_AUDIT','ENUMA_NATIVE_MASK_FIELD','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
+    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_ROUTE_BLEND','ENUMA_NATIVE_ROUTE_LAYOUT','ENUMA_NATIVE_ROUTE_STAGING','ENUMA_NATIVE_ROUTE_DETAIL','ENUMA_NATIVE_ROUTE_AUDIT','ENUMA_NATIVE_MASK_FIELD','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',make))!={defs[k]}: raise ValueError('actual provider flags mismatch: '+k)
         if set(re.findall(r'-D'+k+r'=([^\s]+)',core_make))!={defs[k]}: raise ValueError('actual Core flags mismatch: '+k)
     core_pe=core_folder/'OUTPUT/DxeCore.efi'
@@ -115,16 +116,17 @@ def main():
         target_report='enuma-native-mask-qualification.json'
     if a.native_route_audit:
         from native_mask_decode import make_plan
-        from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES
+        from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
         if json.loads(calibration.read_text()).get('calibration_passed') is not True: raise ValueError('boot clock not calibrated')
-        q.update(trial_kind='native-video-route',native_border_view=not a.native_route_staging,native_route_audit=True,native_route_detail=a.native_route_detail,native_route_staging=a.native_route_staging,native_route_layout=a.native_route_layout,boot_clock_capture=True,
+        q.update(trial_kind='native-video-route',native_border_view=not a.native_route_staging,native_route_audit=True,native_route_detail=a.native_route_detail,native_route_staging=a.native_route_staging,native_route_layout=a.native_route_layout,native_route_blend=a.native_route_blend,boot_clock_capture=True,
           maximum_reads=330,scope='STATUS gated stable CTL/SSPP/LM/video layout candidate; no GOP admission',
           terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False},
-          decode_plan=make_plan(ROOT),calibration_sha256=sha(calibration),result_categories=LAYOUT_CATEGORIES if a.native_route_layout else STAGING_CATEGORIES if a.native_route_staging else DETAIL_CATEGORIES if a.native_route_detail else CATEGORIES,
+          decode_plan=make_plan(ROOT),calibration_sha256=sha(calibration),result_categories=BLEND_CATEGORIES if a.native_route_blend else LAYOUT_CATEGORIES if a.native_route_layout else STAGING_CATEGORIES if a.native_route_staging else DETAIL_CATEGORIES if a.native_route_detail else CATEGORIES,
           result_interpretation='Five first-result categories from native route sampler, not bit masks; code5 stable candidate retains ADDRESS and TOPOLOGY requirements. Indirect timing; ambiguous clock or failed recovery stops additional trials.')
         if a.native_route_layout: q['result_interpretation']='Five first-layout-rejection categories only; code5 is left/right rejection, not success. No extra reads or changed predicates. Ambiguous clock stops additional trials.'
         if a.native_route_staging: q['result_interpretation']='Five captured-staging categories only; code2 normalized border-only route is not admission; code5 is cardinality rejection, not success. No extra reads, no relaxed gate. Ambiguous clock stops additional trials.'
+        if a.native_route_blend: q['result_interpretation']='Five captured blend rejection categories; code5 is alpha rejection, not success. No extra reads or changed predicates; outside-source dim does not mean inactive.'
         target_report='enuma-native-route-qualification.json'
     for path in [archive/'qualification.json' ,ROOT/'reports'/target_report]: path.write_text(json.dumps(q,indent=2)+'\n')
     print('PASS: actual read-only audit PE, R-004 FD record, staged source/flags, full FAT boot-v3 and immutable archive')

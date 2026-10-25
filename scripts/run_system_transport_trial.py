@@ -90,14 +90,16 @@ def qualification(published=False, report=None):
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
         route=q['trial_kind']=='native-video-route'
         if route:
-            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES
+            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES
             detail=q.get('native_route_detail',False)
             if type(detail) is not bool: raise ValueError('native route detail scope invalid')
             staging=q.get('native_route_staging',False)
             if type(staging) is not bool or (staging and not detail): raise ValueError('native staging scope invalid')
             layout=q.get('native_route_layout',False)
             if type(layout) is not bool or (layout and (not detail or staging)): raise ValueError('native layout scope invalid')
-            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+            blend=q.get('native_route_blend',False)
+            if type(blend) is not bool or (blend and not layout): raise ValueError('native blend scope invalid')
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):

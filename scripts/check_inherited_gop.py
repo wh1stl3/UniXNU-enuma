@@ -18,7 +18,7 @@ def main():
     evidence=pkg/'InheritedScanoutLib/Evidence.c'
     video=pkg/'InheritedScanoutLib/VideoCapture.c'
     selector=pkg/'InheritedScanoutLib/VideoResult.h'
-    common=['clang','-std=c11','-Wall','-Wextra','-Werror','-fno-builtin','-fshort-wchar','-DMDEPKG_NDEBUG','-DENUMA_NATIVE_ROUTE_STAGING=1','-DENUMA_NATIVE_ROUTE_LAYOUT=1',
+    common=['clang','-std=c11','-Wall','-Wextra','-Werror','-fno-builtin','-fshort-wchar','-DMDEPKG_NDEBUG','-DENUMA_NATIVE_ROUTE_STAGING=1','-DENUMA_NATIVE_ROUTE_LAYOUT=1','-DENUMA_NATIVE_ROUTE_BLEND=1',
             '-I'+str(pkg/'InheritedGopLib'),'-I'+str(pkg/'InheritedScanoutLib'),
             '-I'+str(core/'MdePkg/Include'),'-I'+str(core/'MdeModulePkg/Include')]
     host=[*common,'-I'+str(core/'MdePkg/Include/X64'),'-O1','-fsanitize=address,undefined','-fno-pie','-no-pie']

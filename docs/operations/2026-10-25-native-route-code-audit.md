@@ -162,3 +162,32 @@ Imagef6cf178d1dff01b6ace9767d08dbdc7e7d87bb842d29315a152b4d82ccc1982b
 binds actual ROUTE1/DETAIL1/LAYOUT1/STAGING0/MASK0/QUERY0 compilation. Fixed
 resolver4608 mutations and14880 selector cases support the review; no new
 admission, pixel operation, mapping or physical display claim.
+
+## S-034 blend rejection classification, source b915308
+
+Archive qualified-native-blend-b915308; full disassembly digest
+2b4053306fc3a82bad907ffd5971c7ff315a27d2faf3bc2fae410a514672cfa2.
+Core bytes are identical to S-033. Reviewed 95 normalized operand-change
+groups and all unmatched branch targets against S-033; normalization was
+only navigation. Register allocation and shifted labels preserve capture,
+raw stability, activity/frame checks and existing layout predicates.
+
+Original dim scan 1a28..1a40, operation comparison 1a70..1a74 and alpha
+comparison 1a9c..1aa0 alone enter the new pure classifier at 26b8. It calls
+strict Select2b50 on the normalized RAM snapshot, bounds six mixers, eight
+source stages and eleven captured blend words; stage encoding is 1..12.
+Bit16 classification 2770..2790/27f0..2828 distinguishes selected-stage dim
+from other-stage dim without treating the latter as inactive. Operation
+27a4..27ac still compares 0x100, alpha27c0..27c8 still compares0x00ff0000.
+Labels emit reasons31/32/33/34, otherwise30. There are no new MMIO reads,
+waits, stores, admission paths or sampling continuation after rejection.
+
+Selector2630..2650 requires zero output requirements, status13 and reasons
+31..34 before returning2..5, otherwise1. Successful sampling still requires
+0x14 and is not mistaken for alpha rejection. Read2e00..2e58 checks aligned
+offset<=0x6c26c and count<330 before the sole MMIO load2e48 at base0xae00000.
+Remaining helpers and cold terminal retain prior semantics. Image
+bc43b96a4894ac52754442666957d26d5473f350e1721303c9d4e5d80dc37ea1 binds
+ROUTE1/DETAIL1/LAYOUT1/BLEND1/STAGING0/MASK0/QUERY0. Host 11x11 dim cases,
+four actual sampler branches and17280 selector cases support this review;
+no register value or visible display success is inferred.

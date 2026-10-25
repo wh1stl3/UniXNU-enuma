@@ -91,6 +91,22 @@ int main(void) {
   setup();S.Ctls[2].Layers[4][0]=0;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingCardinality);
   setup();S.Ctls[2].IntfActive=2;assert(EnumaClassifyVideoStaging(&S)==EnumaStagingOther);
   assert(EnumaClassifyVideoStaging(0)==EnumaStagingOther);
+  for(unsigned E=2;E<=12;E++)for(unsigned D=0;D<11;D++) {
+    setup();S.Ctls[2].Layers[0][0]=(E&7)<<3;S.Ctls[2].Layers[0][1]=(E>>3)<<2;
+    T.Mixers[0].Blend[E-2]=0x100;T.Mixers[0].Alpha[E-2]=0xff0000;
+    ENUMA_INHERITED_SNAPSHOT snap=S;ENUMA_MIXER_SNAPSHOT mix=T;
+    assert(EnumaClassifyVideoBlend(&S,&T)==EnumaBlendOther);
+    T.Mixers[0].Blend[D]|=1u<<16;
+    assert(EnumaClassifyVideoBlend(&S,&T)==(D==E-2?EnumaBlendSelectedDim:EnumaBlendOtherDim));
+    assert(!memcmp(&snap,&S,sizeof(S)));
+    T=mix;T.Mixers[0].Blend[E-2]=0;
+    assert(EnumaClassifyVideoBlend(&S,&T)==EnumaBlendOperation);
+    T=mix;T.Mixers[0].Alpha[E-2]=0;
+    assert(EnumaClassifyVideoBlend(&S,&T)==EnumaBlendAlpha);
+    mix=T;EnumaClassifyVideoBlend(&S,&T);assert(!memcmp(&mix,&T,sizeof(T)));
+  }
+  assert(EnumaClassifyVideoBlend(0,&T)==EnumaBlendOther&&EnumaClassifyVideoBlend(&S,0)==EnumaBlendOther);
+  puts("PASS: all11 selected blend stages by11 dim locations, operation/alpha cases and immutable snapshots");
   puts("PASS: layout first-predicate classes and4608 saved-word perturbations match fixed c45191c status/output; snapshots immutable");
   puts("PASS: pure staging classification, all64 border masks, 768 single-bit perturbations, source/unknown/cardinality cases, no mutation");
   puts("PASS: reversed mixer identities, explicit right flag, dual tile decode, 12 topology rejects and 144 callback failures; downstream/CPU proof remains required");
