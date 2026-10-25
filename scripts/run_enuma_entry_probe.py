@@ -56,6 +56,7 @@ def main():
     parser.add_argument('--image', type=Path, required=True)
     parser.add_argument('--expected-serial', help='local-only camera/collector binding; must equal the independently selected enuma')
     parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch','dxe-dispatch-return','dxe-queue-entry','dxe-driver-return','gop-probe','android-log-reservation','system-transport'))
+    parser.add_argument('--boot-clock',action='store_true',help='read-only before/after boot identity and bounded Linux uptime origin; calibration required')
     args = parser.parse_args()
     image = args.image.resolve()
     if not image.is_relative_to((ROOT/'out').resolve()): raise ValueError('image outside own out/')
@@ -126,6 +127,11 @@ def main():
         save()
         raise ValueError('fastboot identity mismatch: '+','.join(failed))
     save()
+    if args.boot_clock:
+        from boot_origin import capture
+        pre_clock,pre_samples=capture(adb)
+        state['pre_boot_clock']=pre_clock
+        (out/'pre-boot-clock.local.json').write_text(json.dumps(pre_samples,indent=2)+'\n');save()
     r=invoke(ADB,['-s',serial,'reboot','bootloader'])
     if r.returncode: raise ValueError('reboot bootloader failed')
     for _ in range(25):
@@ -169,6 +175,13 @@ def main():
                 state['phase']='recovered-android-boot-complete';state['recovery_boot_completed']=True
                 state['partition_digests_unchanged']=True;state['boot_complete_seconds']=round(time.monotonic()-before,3)
                 state['boot_reason']=adb('getprop ro.boot.bootreason').stdout.decode().strip();save()
+                if args.boot_clock:
+                    try:
+                        post_clock,post_samples=capture(adb,before,pre_clock['boot_id_sha256'])
+                        state['post_boot_clock']=post_clock
+                        (out/'post-boot-clock.local.json').write_text(json.dumps(post_samples,indent=2)+'\n');save()
+                    except Exception as error:
+                        state['boot_clock_error']=str(error);save();raise
                 print(json.dumps({k:v for k,v in state.items() if k not in ('directory','recovery_backup_directory','backups','candidate')},indent=2),flush=True)
                 return
         time.sleep(1)

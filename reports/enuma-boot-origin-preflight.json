@@ -1,0 +1,10 @@
+{
+  "scope": "read-only same-boot clock consistency; not firmware delay calibration",
+  "same_boot": true,
+  "request_count": 6,
+  "combined_origin_uncertainty_seconds": 0.08499999999185093,
+  "boot_clock_supported": true,
+  "firmware_delay_calibrated": false,
+  "reference": "https://docs.kernel.org/filesystems/proc.html",
+  "evidence": "out/device-tests/native-live-boot-clock.local.json"
+}

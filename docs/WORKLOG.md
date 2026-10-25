@@ -826,3 +826,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-226，独立双路显示观测配对完成，按结果隔离
 
 2026-10-25T21:58:11+08:00。前一87f188b已推送离线显示观察器。固定新固件57ae4ffb136f5330d6e9b759f21202f1d12cebc5、完整FD/PE/宏/映射/载荷与cold同hook资格闭合。S-019/S-020均consumed，均受控返回并独立恢复。配对结果：{"scope": "indirect same-source paired timing, not direct native register log", "conclusion": "ambiguous", "negative_minus_positive_seconds": {"adb_return_seconds": -4.281, "boot_complete_seconds": -1.359}, "predeclared_absolute_delta_window_seconds": [3, 7], "predicate": "collection success AND both active throughout AND both nonzero stable Timing AND both stable Enable AND both two-window Frame increments1..64", "exact_enable3_not_required": true, "complement_includes": ["metadata/PCD rejection", "read/wait/revision rejection", "one or both inactive", "Timing/Enable instability", "one or both nonmoving/wrapped/over64 frames"], "exact_values_observed": false, "gop_verified": false, "pixel_access": false, "limitation": "Android boot noise and inherited state changes across boots remain confounders; complement does not uniquely identify which mask failed"}。后续按实际结果选新候选，不重复本对镜像。证据reports/enuma-native-display-code.json、q1/q2-qualification及对应result；全部原始影音本地，禁写/内存/verified/分区边界保持。
+
+
+## D-227，内核启动时钟常量校准资格通过，准备S-021
+
+2026-10-25T22:13:12+08:00。80290f4已推送S-019/020模糊结果与受控恢复。新固件ed1d894eb3b8dc611d37e3cb5e7ec21583ccede5，同INF常量1/5且cold Core可执行段不变，host Linux启动原点采集/资格及精确图已绑定。新S-021/S-022均未发出；先query1/warning1/2秒，独立恢复、文档再推送后才query2/warning5/7秒。无显示读写/新映射/verified/分区变化，原始影音仅本地。

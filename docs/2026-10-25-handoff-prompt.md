@@ -1,19 +1,17 @@
-# 当前状态：D-226，独立双路显示观测配对完成，按结果隔离
+# 当前状态：D-227，内核启动时钟常量校准资格通过，准备S-021
 
-2026-10-25T21:58:11+08:00。用户明确“继续推进 触发硬停再停”。本轮恢复显示只读故障隔离及直接临时boot授权；完整资格、当前文档提交推送与即时身份/备份/相机/恢复门禁后执行，不逐笔申请。出现75秒无已识别返回、恢复/采集异常或授权边界问题，立即停止追加并记录硬停。本轮不复活旧图或像素批准，原始影音仅本地out，不录音/上传。
+2026-10-25T22:13:12+08:00。用户本轮要求“继续推进 触发硬停再停”。新S-021/S-022均未发出；先query1/warning1/2秒，独立恢复、文档再推送后才query2/warning5/7秒。没有新增像素/MMIO写、映射、board/verified/分区操作。原始视频/图像只留本地out，不录音/上传。
 
-S-019/S-020均consumed，均受控返回并独立恢复。配对结果：{"scope": "indirect same-source paired timing, not direct native register log", "conclusion": "ambiguous", "negative_minus_positive_seconds": {"adb_return_seconds": -4.281, "boot_complete_seconds": -1.359}, "predeclared_absolute_delta_window_seconds": [3, 7], "predicate": "collection success AND both active throughout AND both nonzero stable Timing AND both stable Enable AND both two-window Frame increments1..64", "exact_enable3_not_required": true, "complement_includes": ["metadata/PCD rejection", "read/wait/revision rejection", "one or both inactive", "Timing/Enable instability", "one or both nonmoving/wrapped/over64 frames"], "exact_values_observed": false, "gop_verified": false, "pixel_access": false, "limitation": "Android boot noise and inherited state changes across boots remain confounders; complement does not uniquely identify which mask failed"}。后续按实际结果选新候选，不重复本对镜像。
+S-019/S-020已双双自动返回Android并独立核验。ADB差-4.281秒支持补集方向，但Android完成差-1.359秒未进预设[-7,-3]窗口，正式结果保持ambiguous；旧对冻结且两图consumed，不换阈值或追认寄存器状态。两笔没有发生75秒超时/恢复失败，不能虚构为设备硬停。80290f4已发布该真实结果。
 
-新独立入口EnumaNativeObserve：沿已有R-004的Display MDP 0xae00000/0x85000，只允许revision及两路INTF的Timing、Enable、STATUS、Frame八个偏移；STATUS bit0门控Frame，最多26读、两次100ms。完整源与实际PE确认无像素/MMIO写入或GOP发布。原完整Evidence/VideoCapture/Topology/Decode及GOP准入不变，无新内存/board字段/verified/分区变更，RAMOOPS开关均0，未走warm。
+显示仍优先：为避免Android用户态启动波动继续遮蔽只读显示结果，先校准更窄的时基。Linux官方proc文档将uptime定义为启动后时间；主机每次用请求前后monotonic夹住uptime读发生时刻，并计入0.01秒量化，三样本求内核启动原点区间。原始样本/boot id仅本地；公开只保留boot-id摘要、区间与不确定度。先前同boot六次只读采样交集85ms仅证明同boot一致，不是UEFI延时资格，也不能回算缺少当时样本的S-019。来源https://docs.kernel.org/filesystems/proc.html，证据reports/enuma-boot-origin-preflight.json。
 
-诊断谓词是采集成功且两路ActiveThroughout/非零稳定Timing/稳定Enable/两窗非回绕Frame增量1..64均为3；ExactEnable3独立记录，不参与本谓词。query1匹配=>2秒，其他情况（包括metadata/采集拒绝）=>7秒；query2精确反转。二者均在相同精确GUID的CoreStartImage返回hook终止，不让失败流向后续dispatcher。延时仅支持间接分类，不是直接寄存器日志，更不是可见显示。
+新固件ed1d894eb3b8dc611d37e3cb5e7ec21583ccede5已推送；native constant control沿相同INF/构造器和已审Core exact GUID返回点，query1固定warning1=>cold延时2秒，query2固定warning5=>7秒；无map查找、显示读取/采样/等待/GOP发布。实际PE/宏/源/完整FAT与Boot v3/原R-004记录/不可变归档已核对，实际Core可执行段与S-010已审cold完全一致；provider二者只有返回常量1/5的一条MOV差异，完整控制入口已审。Ramoops/warm均关闭。
 
-预先固定配对negative-minus-positive：ADB出现与Android完成两项均+3..+7秒支持本谓词；均-7..-3秒支持其补集；其余ambiguous并停止追加这对计划。跨启动状态变化、Android噪声仍可混淆。补集含metadata/采集失败，不能唯一写为接口停止。未取得本机真实值前不放宽完整GOP准入。
+S-021图afe1e310bd07d2b1cd74275f9a9b2fe66e945fb956aee4cce3b80d529c457c43，FDee67bdb7ee0054f29c74580db44a0ae9bb800e6c8668490ff92af5f1f28f333e；S-022图6f7ad961fa49d91bac5398d318514468bdf1a0d943908c6000fc3f675804cabe，FD3d53a7db8a22625f886bff79696736adb55c232eebf4a951ddd8f8a49ee2f0a0。均103817216字节/完整96MiB FAT；归档out/inherited-gop/qualified-native-control-ed1d894-q1及out/inherited-gop/qualified-native-control-ed1d894-q2，资格reports/enuma-native-display-q1/q2-qualification.json、实际代码reports/enuma-native-display-code.json。旧双路观测采集器/完整GOP门不变，不能把本次常量对照当显示进展实测。
 
-固定固件57ae4ffb136f5330d6e9b759f21202f1d12cebc5已推送。S-019镜像14ae5bb1ba4cdabae2bbc9744d724bf3a4fdf1378bdba06d1586e2d2d36a84d5，FD49df9f370cf1ef38640cda339c014617334a0c7578cacfad17942436bae0acd8；S-020镜像7379bf4da9f31357f076c4652f62365452a194901565ecd710ada74972a2c463，FD37f3e7ab6027896b5a131cdd982e8bb157e375467b217b13e510946d972987e0。两份均103817216字节，完整96MiB FAT、Boot v3回环、实际PE/编译宏/源/映射记录与不可变归档通过。归档out/inherited-gop/qualified-native-57ae4ff-q1/q2；资格reports/enuma-native-display-q1/q2-qualification.json，代码reports/enuma-native-display-code.json。
+新的只读主机采集仅显式--boot-clock启用：重启前捕获旧boot id/uptime，Android完成及分区恢复通过后再取三样本；必须boot-id变化、时序/格式有效、区间相交且宽<=0.25秒、内核原点位于发出之后。不满足则不解码并停止追加、先恢复/交接。样本错误不改写已完成的设备恢复事实。单元覆盖量化/请求延迟、旧boot、非法数值/格式、时钟倒退/不相容及过宽区间，原恢复/fastboot身份和native scope门禁回归通过。
 
-48项ASan/UBSan与AArch64对象通过，原Mu Blt/拓扑/330边界oracle/164结果回归通过；新增混合CLI与8项错误scope门禁回归通过。实际Core可执行段与S-010已审cold终止代码一致，provider全代码及互补差异已审并绑定摘要；原INF/构造器、Reset库缺席保持。主判断仍是精确Enable门在观察之前拒绝（中等置信），原生setup写3的反证保留；本次独立观测用于检验该判断，而非预写结果。
+预先固定校准：S-022原点区间减S-021区间，整个差区间必须落在[4,6]秒，且两笔新boot/恢复与摄像均通过，才认为该时基能辨别已知5秒差；任何失败/模糊校准冻结该新计划并停止追加设备动作。即便通过仍只支持时基、非唯一UEFI路径证明；显示谓词须另行新候选，不复用S-019/020或放宽GOP。ADB与Android完成原时序仍完整记录，不为新方法篡改旧判据。
 
-最新独立恢复证据out\device-tests\20261025T215702-recovery-reconciliation.json：Android完成/root/A槽/解锁/设备与本地备份双分区摘要通过；相机前置桌面已目视。实际runner在每笔前再次核对唯一enuma、匹配备份、fastboot精确机型/槽/解锁，发出后先确认断开再接受返回。主机75秒期限不是固件自动返回保证。相机录制关键节点，原图保留并自行旋转，按键动作不明确时不猜测。
-
-历史S-018 warm对照已超时并恢复；所有S-001..018及旧R-005/R-007均consumed、不重试。显示交付仍须相机确认固件自产色条/阶段字及受控恢复；真实GOP、扫描源CPU/SMMU关系、背光I2C ABI及XNU/iPadOS仍未实机闭合。下一步由本对结果决定继续闭合路由/源布局或分解活动性；不以整套warm/ramoops修通作为显示前置。
+执行前源/两仓发布和全部当前文档对齐；即时唯一enuma身份、A槽/解锁、匹配本地boot_a/vendor_boot_a备份与设备摘要、既有受控/人工恢复路径和相机门禁保持。最近恢复证据out\device-tests\20261025T215702-recovery-reconciliation.json，Android完成/root/A槽/解锁及两分区设备与备份摘要通过；相机桌面已确认。75秒无识别返回仍停止追加，主机期限不冒称固件返回保证。真实GOP、小图案/阶段字、CPU/SMMU扫描源关系、I2C背光及XNU/iPadOS仍未实机闭合。

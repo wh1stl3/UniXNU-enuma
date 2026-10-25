@@ -200,3 +200,6 @@ D-225，S-019受控返回，准备互补S-020：用户本轮“继续推进 触�
 
 
 D-226，独立双路显示观测配对完成，按结果隔离：用户本轮“继续推进 触发硬停再停”，恢复同R-004只读显示临时boot推进；独立26读/two100ms观察器不放宽GOP、不继承旧像素批准。完整资格/当前文档发布/即时恢复与相机门禁后直接执行，异常立即停止追加、当轮落实硬停及恢复交接。S-019/S-020均consumed，均受控返回并独立恢复。配对结果：{"scope": "indirect same-source paired timing, not direct native register log", "conclusion": "ambiguous", "negative_minus_positive_seconds": {"adb_return_seconds": -4.281, "boot_complete_seconds": -1.359}, "predeclared_absolute_delta_window_seconds": [3, 7], "predicate": "collection success AND both active throughout AND both nonzero stable Timing AND both stable Enable AND both two-window Frame increments1..64", "exact_enable3_not_required": true, "complement_includes": ["metadata/PCD rejection", "read/wait/revision rejection", "one or both inactive", "Timing/Enable instability", "one or both nonmoving/wrapped/over64 frames"], "exact_values_observed": false, "gop_verified": false, "pixel_access": false, "limitation": "Android boot noise and inherited state changes across boots remain confounders; complement does not uniquely identify which mask failed"}。后续按实际结果选新候选，不重复本对镜像。原始影音仅本地。
+
+
+D-227，内核启动时钟常量校准资格通过，准备S-021：用户继续至硬停；S-019/020仅配对未知、无超时，不能虚构已硬停。新常量2/7秒对照及只读boot-origin用于校准，0显示访问/新映射/写入；全部资格/当前文档发布与即时设备相机恢复后单笔。三样本boot-id/区间门禁和预定整个差区间[4,6]秒不满足即冻结新校准并停止追加，当轮落实恢复交接，不重试consumed图。原始影音仅本地。

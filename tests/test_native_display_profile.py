@@ -34,7 +34,7 @@ class NativeProfileTests(unittest.TestCase):
                    terminal_return={'pass':2,'fail':7,'completion_fallback':False})
             for key,bad in [('native_query',True),('native_query',0),('maximum_reads',330),
                             ('maximum_wait_calls',3),('maximum_mmio_offset','0x85000'),
-                            ('pixel_access',True),('gop_published',True),
+                            ('pixel_access',True),('gop_published',True),('native_control','yes'),('native_control',True),
                             ('terminal_return',{'pass':2,'fail':7,'completion_fallback':True})]:
                 with self.subTest(key=key,bad=bad),patch.object(runner,'ROOT',root):
                     changed={**q,key:bad}

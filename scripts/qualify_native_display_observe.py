@@ -16,12 +16,12 @@ ROOT=Path(__file__).resolve().parents[1]
 GUID='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(1,2),required=True); a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(1,2),required=True); p.add_argument('--native-control',action='store_true'); a=p.parse_args()
     image=a.image.resolve(); archive=a.archive.resolve()
     if not image.is_relative_to(ROOT/'out') or not archive.is_relative_to(ROOT/'out') or archive.exists(): raise ValueError('require new in-out archive/image')
     build=json.loads((ROOT/'reports/enuma-firmware-build.json').read_text()); pin=json.loads((ROOT/'config/uefi-source.lock.json').read_text())
     required={'complete':True,'inherited_video_audit_read_only':True,'gop_backend_selftest_ram_only':False,
-      'inherited_video_entry_control':False,'native_observe_query':a.native_query,
+      'inherited_video_entry_control':False,'native_observe_query':a.native_query,'native_observe_control':a.native_control,
       'inherited_video_terminal':True,
       'inherited_video_topology_query':0,
       'inherited_video_reason_target':0,'inherited_video_reason_query':0,
@@ -44,7 +44,7 @@ def main():
     make=(output/'GNUmakefile').read_text(); defs=build['firmware_configuration']['defines']
     core_folder=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain'
     core_make=(core_folder/'GNUmakefile').read_text()
-    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
+    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',make))!={defs[k]}: raise ValueError('actual provider flags mismatch: '+k)
         if set(re.findall(r'-D'+k+r'=([^\s]+)',core_make))!={defs[k]}: raise ValueError('actual Core flags mismatch: '+k)
     core_pe=core_folder/'OUTPUT/DxeCore.efi'
@@ -75,10 +75,10 @@ def main():
       'NativeObserve.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.h'}
     files={}
     for n,path in source_files.items(): shutil.copyfile(path,archive/n); files[n]={'sha256':sha(archive/n),'bytes':(archive/n).stat().st_size}
-    q=dict(trial_kind='native-display-observe',native_query=a.native_query,review_required=True,scope='independent both-link active/stable/moving observation; exactEnable3 not required; complement includes metadata/collection failure; never GOP admission',
+    q=dict(trial_kind='native-display-observe',native_query=a.native_query,native_control=a.native_control,boot_clock_capture=a.native_control,review_required=True,scope='constant warning1/5, no map lookup or display reads; boot-origin calibration only' if a.native_control else 'independent both-link active/stable/moving observation; exactEnable3 not required; complement includes metadata/collection failure; never GOP admission',
       firmware_commit=pin['commit'],archive=archive.relative_to(ROOT).as_posix(),files=files,
       image=(archive/'image.img').relative_to(ROOT).as_posix(),image_sha256=sha(image),ram_payload_sha256=sha(fat),
-      maximum_reads=26,maximum_wait_calls=2,maximum_mmio_offset='0x6c26c',pixel_access=False,gop_published=False,
+      maximum_reads=0 if a.native_control else 26,maximum_wait_calls=0 if a.native_control else 2,maximum_mmio_offset=None if a.native_control else '0x6c26c',pixel_access=False,gop_published=False,
       map_record_in_actual_fd=True,packaged_provider_equal=True,package=package,
       terminal_return={'pass':2,'fail':7,'completion_fallback':False},
       result_interpretation='PASS1 and FAIL5 terminate at same exact Core driver-return hook,2/7s. Timing supports classification, not unique execution proof. Timeout means no recognized terminal report; recover first.')

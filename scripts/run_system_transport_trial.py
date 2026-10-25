@@ -64,8 +64,10 @@ def qualification(published=False, report=None):
         frozen=(ROOT/q['archive']/'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
             raise ValueError('native observer differs from frozen qualification')
-        if (type(q.get('native_query')) is not int or q.get('native_query') not in (1,2) or q.get('maximum_reads')!=26 or
-            q.get('maximum_wait_calls')!=2 or q.get('maximum_mmio_offset')!='0x6c26c' or
+        control=q.get('native_control',False)
+        if (type(control) is not bool or (control and q.get('boot_clock_capture') is not True) or
+            type(q.get('native_query')) is not int or q.get('native_query') not in (1,2) or q.get('maximum_reads')!=(0 if control else 26) or
+            q.get('maximum_wait_calls')!=(0 if control else 2) or q.get('maximum_mmio_offset')!=(None if control else '0x6c26c') or
             q.get('pixel_access') is not False or q.get('gop_published') is not False or
             q.get('terminal_return')!={'pass':2,'fail':7,'completion_fallback':False}):
             raise ValueError('native observer scope invalid')
@@ -161,6 +163,8 @@ def main():
         label = 'dxe-driver-return' if 'detail_point' in q else 'system-transport'
         command = [sys.executable, '-X', 'utf8', '-u', '-B', str(ROOT / 'scripts/run_enuma_entry_probe.py'),
                    '--image', str(image), '--label', label]
+        if q.get('boot_clock_capture') is True:
+            command += ['--boot-clock']
         if q.get('trial_kind') == 'ramoops-canary':
             previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
             target = json.loads((Path(previous['directory'])/'target.local.json').read_text())
