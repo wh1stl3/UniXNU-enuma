@@ -1,6 +1,6 @@
-# 当前状态：D-245，S-030 原生显示管线合并审计资格完成，准备实测
+# 当前状态：D-246，S-030 原生显示管线合并审计结果与交接
 
-2026-10-25T23:55:21+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和相机门禁通过后直接单次临时boot。
+2026-10-25T23:57:44+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "source-staging-topology-rejected", "warning_code": 3, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-030-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
 
 ## 已证实与主判断
 
@@ -24,7 +24,7 @@ ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330
 
 ## 恢复、硬停与下一步
 
-最近独立恢复out\device-tests\20261025T234624-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验并查看相机旋转图。原始视频/图像仅本地out，不上传、不录音。
+最近独立恢复out\device-tests\20261025T235658-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验并查看相机旋转图。原始视频/图像仅本地out，不上传、不录音。
 
 D-233：镜像发出前fastboot查询异常不作整轮硬停；恢复核验后允许重新进入一次fastboot，完整product/slot/unlocked门禁仍须通过。不重复已发图，不忽略FAILED正文。真实75秒无识别恢复、恢复失败、相机/时基失败或新时间码模糊，停止追加并当轮落实交接；有效负分类继续分析。
 
