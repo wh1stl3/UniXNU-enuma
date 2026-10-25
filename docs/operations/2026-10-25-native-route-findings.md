@@ -258,3 +258,23 @@ permutations. Any later opaque adapter must cover the actual fill/buffer
 conversion path, not just set the incoming BLT reserved field. DiagDraw's
 hardcoded top-byte colors also require channel-mask adaptation. Neither
 path executes in the current early-return diagnostic.
+
+
+## S-042 all pages R/W identity NormalWT; isolate physical read next
+
+Valid code3, origin22.454..22.558s, Android44.172s; independent root/A/unlock
+and device/local-backup hashes pass. Consumed7dd02e04... . All covering4KiB
+pages and both permission queries traversed, nonfault, identity and inner/outer
+normalWT semantics; exact allocation/transient hints still unknown. Thus the
+earlier exactbb rejection does not establish wrong memory type or a changed
+page table. This does not prove actual data or EL1 finalstage2/SMMU/display.
+
+S-043 repeats the same full-range policy audit, admitting a separate data
+step only for its WT code3, then rechecks frame extent/stride/geometry and
+reads one aligned32-bit word at decoded base. The callback guards exact base,
+Splash containment, alignment and count1. No DC-CIVAC/DSB, writes or data
+export. Code1 earlier failure;2 other Normal policy;3 mixed/other;4 read
+contract/callback rejection;5 one word completed. Read0/ffffffff/other all
+produce the same completion code; nothing about content is inferred. This
+is separate from the S-042 AT-only baseline so a new failure is not casually
+attributed to a pixel store or cache-sync step that was never added.

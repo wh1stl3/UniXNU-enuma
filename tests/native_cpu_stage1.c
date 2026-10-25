@@ -39,6 +39,10 @@ static int PolicyTranslate(void *Opaque,ENUMA_U64 Page,ENUMA_U32 Write,ENUMA_U64
   }
   return S;
 }
+typedef struct { ENUMA_U64 Expected;unsigned Count,Value;int Result; } WORD;
+static int WordRead(void *Opaque,ENUMA_U64 Address,ENUMA_U32 *Value) {
+  WORD *W=Opaque;assert(Address==W->Expected&&!W->Count);W->Count++;*Value=W->Value;return W->Result;
+}
 int main(void) {
   ENUMA_INHERITED_FRAME F={0},V;unsigned I,K,Count;
   F.Base=0x9c000000ULL;F.Width=1600;F.Height=2560;F.Stride=6400;F.Bytes=(ENUMA_U64)6400*2560;F.Requirements=22;
@@ -75,13 +79,24 @@ int main(void) {
     }
     assert(EnumaCpuWholePolicy(&F,0,0)==1);
   }
+  for(I=0;I<7;I++) {
+    WORD W={.Expected=F.Base,.Result=1};V=F;
+    assert(EnumaCpuReadOnce(&F,I,WordRead,&W)==(I==3?5:I==2||I==4?2:I==5?3:1));
+    assert(W.Count==(I==3)&&!memcmp(&F,&V,sizeof(F)));
+  }
+  for(int S=-1;S<=2;S++) { for(I=0;I<3;I++) {
+    WORD W={.Expected=F.Base,.Result=S,.Value=I==0?0:I==1?~0u:0x12345678};
+    assert(EnumaCpuReadOnce(&F,3,WordRead,&W)==(S==1?5:4)&&W.Count==1);
+  } }
+  assert(EnumaCpuReadOnce(&F,3,0,0)==4&&EnumaCpuReadOnce(0,3,WordRead,0)==4);
   F.Base+=4092;F.Stride=14744;F.Bytes=(ENUMA_U64)F.Stride*2560;assert(Check(&F,0,0,5)==18432);
   { POLICY P={0};P.Query.First=F.Base&~4095ULL;P.Query.Kind=99;P.Attr=0xaa;assert(EnumaCpuWholePolicy(&F,PolicyTranslate,&P)==3&&P.Query.Calls==18432); }
   for(I=0;I<9;I++) {
     V=F;
     switch(I) {case 0:V.Base=0x9bfffffc;break;case 1:V.Base=0x9e400000;break;case 2:V.Base++;break;case 3:V.Bytes++;break;case 4:V.Requirements=0;break;case 5:V.Stride=6396;break;case 6:V.Width--;break;case 7:V.Height--;break;case 8:V.Bytes=~0ULL;break;}
     assert(Check(&V,0,0,1)==0);
+    { WORD W={0};assert(EnumaCpuReadOnce(&V,3,WordRead,&W)==4&&W.Count==0); }
   }
   assert(EnumaCpuStage1(0,Translate,0)==1&&EnumaCpuStage1(&F,0,0)==1);
-  puts("PASS: 56000 query boundaries;18432 maximum; all256 first-attribute and whole-range semantic policies; mixed/hint changes; fault/nonidentity precedence; frame and operation counts unchanged");return 0;
+  puts("PASS: 56000 query boundaries;18432 maximum; all256 attribute/policy encodings; mixed/hint/fault precedence; single-word read gating/count/value independence; invalid frames rejected before read");return 0;
 }

@@ -1,6 +1,6 @@
 {
   "scope": "source and actual generated static-link evidence only; no console connection, visual or boot execution proof",
-  "firmware_commit": "44f8a66569202cb53e3a6a88b0acae9b45d917df",
+  "firmware_commit": "f745fb1d7997303380467731bb8d02e70970e225",
   "unixnu_commit": "5fdbd5d08518bc2d5c196264c56a377dd80cf5ca",
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
@@ -73,7 +73,7 @@
       }
     ]
   },
-  "fd_sha256": "e28836c356b9d1c1247b7690adfa2872912d5a4901f8d1997dd88a131322c443",
+  "fd_sha256": "a98b5c034691942168ab7fb0c3a80df704580c0ffc02dd44043e9ce5c0386fb9",
   "packaged_modules": {
     "GraphicsConsoleDxe": {
       "sha256": "8379ffc031d7a7528a341b9c9e368c3124a9ffbd11fcaf85d64f5b4c2d7c72f9",

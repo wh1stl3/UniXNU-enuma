@@ -4,37 +4,37 @@
   "native_control": false,
   "boot_clock_capture": true,
   "review_required": false,
-  "scope": "Whole decoded range stage1 read/write permission and identity, aggregate semantic cache policy; no pixel data access",
-  "firmware_commit": "44f8a66569202cb53e3a6a88b0acae9b45d917df",
-  "archive": "out/inherited-gop/qualified-native-cpu-policy-44f8a66",
+  "scope": "Exactly one aligned32-bit CPU data read at decoded base after complete same-observation native structure and full-range R/W identity NormalWT; no data export/cache ops/writes/GOP",
+  "firmware_commit": "f745fb1d7997303380467731bb8d02e70970e225",
+  "archive": "out/inherited-gop/qualified-native-cpu-read-f745fb1",
   "files": {
     "image.img": {
-      "sha256": "7dd02e04c50f7a82486432d8ea4ef31d50e7615a72fada479d8d8adf2dba6c3c",
+      "sha256": "ba781a9506ace318ba5fd955a44d41b668b49285ad033521c2186781735c8492",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "19aeb81af94277c2a3e9f5bd4cfe8c3e2d4350344141f7653a8815ec2f7ddad0",
+      "sha256": "07e088a768f6620dd5110c641b2625c6114307e79e1ec30f0a1fe0a7413498bf",
       "bytes": 807
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "e28836c356b9d1c1247b7690adfa2872912d5a4901f8d1997dd88a131322c443",
+      "sha256": "a98b5c034691942168ab7fb0c3a80df704580c0ffc02dd44043e9ce5c0386fb9",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "f25e4e2edb0ea85c1bce6f8c2fe19d4aa3c113424de4db0705f70e8b007b88c9",
+      "sha256": "341e399ebb422b72768e1a900835c9a17122422107da2d54ed5cd5625c04956f",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "a4696a618af24d33ee53038442b403357a0673a2fa73dd30617361ae940d5ce9",
+      "sha256": "9c1326e6940256dc362fb46a6748a722de9f837d9450d8ce2772ea000ca5b1a7",
       "bytes": 20480
     },
     "provider.GNUmakefile": {
-      "sha256": "e85ce4af82b9653a83fe94a61d7785054ff952836b92f1ec054e568cf3a688df",
-      "bytes": 23447
+      "sha256": "cef224f6b3eb5eb772fc2ad28d456e93b3dd198bd2ad6a9b3cbe6e887a5087bb",
+      "bytes": 23479
     },
     "entry.c": {
-      "sha256": "366b086c6e036f4e2e2de6e901ec9f4b764a165429123a3ff2150598f4bbeff5",
-      "bytes": 9541
+      "sha256": "45185a7a32f13ad40d8000b5547cf52dbb8f1adf1d5f078445b866e4d6f441c0",
+      "bytes": 9973
     },
     "DxeCore.efi": {
       "sha256": "a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f",
@@ -49,8 +49,8 @@
       "bytes": 1268
     },
     "core.GNUmakefile": {
-      "sha256": "f442a59495638f3ae2023b4ff5817b933c91319314624518e8e0841697d6d99f",
-      "bytes": 52327
+      "sha256": "55762806f461fd116ede3a2d66931a42eca8be9dbcc3b82e0c72c6b69570ab16",
+      "bytes": 52359
     },
     "EnumaDispatchDetailCheckpoint.h": {
       "sha256": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
@@ -69,11 +69,11 @@
       "bytes": 4527
     },
     "firmware-build.json": {
-      "sha256": "2f946396dd613f28045f12814a81763b71383408188ef118e53c7d21189347c2",
-      "bytes": 22444
+      "sha256": "69e3ad7c64879a57d4de30cc5dd43a56f23275484811993535337fdeb08ee648",
+      "bytes": 22615
     },
     "fd-audit.json": {
-      "sha256": "0b691ee709f64e43de56264f50a6284c9336f85a2ba650391758ad6967690d75",
+      "sha256": "e9d351f1ecc13552b993cc7606facfa74f678620e34281909de684f7c472e95e",
       "bytes": 4326
     },
     "host-tests.json": {
@@ -81,7 +81,7 @@
       "bytes": 23661
     },
     "provider.map": {
-      "sha256": "8a39a77b254a85f1c21cec6f8832f018ec0beb8f2af3bb4c93b283c2dec3e99f",
+      "sha256": "bd573a444abb63a054b536e388781252fb25a96b3f83c21aaa7a7e4c1ada57e7",
       "bytes": 15270
     },
     "provider.AutoGen.c": {
@@ -109,8 +109,8 @@
       "bytes": 3364
     },
     "CpuStage1.h": {
-      "sha256": "2313a913f0e52d79f294577d83dc717225a8eb7b5895c44e3c79ccde62231122",
-      "bytes": 6020
+      "sha256": "a2d77319fc7e4ada3fe80827719ea886e4b308d42d94843d237a0ebdae9d9730",
+      "bytes": 7568
     },
     "VideoCapture.c": {
       "sha256": "42a38eb9d85540e1fd6a6f0b948507a70e017ae1e8361bedeffa4eec06b3d49b",
@@ -133,25 +133,25 @@
       "bytes": 2709
     },
     "cpu-stage1-host.json": {
-      "sha256": "f507d5458eee2f78ba462fb409554ccb98646bf2af351e98bdde1490bfb68a11",
-      "bytes": 944
+      "sha256": "bd526fea3f975ac3739901c83376c7855bdc407f329b2be4539bc5a90f537b1d",
+      "bytes": 949
     },
     "SimpleFbDxe.disassembly.txt": {
-      "sha256": "2e2d6298b9a0baa3acb1aec4a3fb4fbbbbe234e19cb012dc258741c948ccd338",
-      "bytes": 73542
+      "sha256": "ca9414655bfd607128176d6b1a05368a61a0e0051c3028bcddf3e2f1db120be2",
+      "bytes": 72761
     },
     "DxeCore.disassembly.txt": {
       "sha256": "409ee5cd7535b71a4be41904b26a7d2b126a22b83ba05209c92b949d86b81e2c",
       "bytes": 702682
     }
   },
-  "image": "out/inherited-gop/qualified-native-cpu-policy-44f8a66/image.img",
-  "image_sha256": "7dd02e04c50f7a82486432d8ea4ef31d50e7615a72fada479d8d8adf2dba6c3c",
+  "image": "out/inherited-gop/qualified-native-cpu-read-f745fb1/image.img",
+  "image_sha256": "ba781a9506ace318ba5fd955a44d41b668b49285ad033521c2186781735c8492",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
   "maximum_reads": 330,
   "maximum_wait_calls": 2,
   "maximum_mmio_offset": "0x6c26c",
-  "pixel_access": false,
+  "pixel_access": true,
   "gop_published": false,
   "map_record_in_actual_fd": true,
   "packaged_provider_equal": true,
@@ -161,7 +161,7 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "f25e4e2edb0ea85c1bce6f8c2fe19d4aa3c113424de4db0705f70e8b007b88c9",
+    "kernel_sha256": "341e399ebb422b72768e1a900835c9a17122422107da2d54ed5cd5625c04956f",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
   "terminal_return": {
@@ -174,7 +174,7 @@
     ],
     "completion_fallback": false
   },
-  "result_interpretation": "Code1 prior/context/callback/fault/nonidentity;2..5 requires every covering4KiB page read+write translation nonfault and identity. 2 all inner+outerNC;3 allWT;4 allWB, allowing allocation/transient hint differences;5 mixed or other attributes, not normal admission. Original strict-WT API unchanged; callback only replaces ATTR in its RAM copy, no PAR/table/cache change. Requirements22, alpha/data/EL1-stage2/SMMU/downstream remain unproven.",
+  "result_interpretation": "Code1 prior/context/fault/nonidentity;2 Normal policy changed from WT baseline;3 mixed/other policy;4 read contract/callback rejected;5 exactly one word read completed. No pixel data value, all22/alpha/blend/SMMU/downstream obligations retained. No read result on timeout; recover and stop, no retry.",
   "native_border_view": true,
   "native_route_audit": true,
   "native_route_detail": false,
@@ -189,6 +189,7 @@
   "native_route_cpu_stage1": true,
   "native_route_cpu_attribute": false,
   "native_route_cpu_policy": true,
+  "native_route_cpu_read": true,
   "decode_plan": {
     "baseline_envelope_seconds": [
       10.25199999997858,
@@ -232,14 +233,17 @@
   "calibration_sha256": "48eaaaea519da34dd0eb52186807e9e8b7fa1180dc70d5ff1685f70a8814dacb",
   "result_categories": {
     "1": "prior-context-translation-or-identity-rejected",
-    "2": "all-pages-stage1-rw-identity-normal-nc",
-    "3": "all-pages-stage1-rw-identity-normal-wt",
-    "4": "all-pages-stage1-rw-identity-normal-wb",
-    "5": "all-pages-stage1-rw-identity-mixed-or-other-attributes"
+    "2": "normal-policy-differs-from-wt-baseline",
+    "3": "mixed-or-other-cache-policy-rejected",
+    "4": "single-word-read-contract-or-callback-rejected",
+    "5": "single-aligned-cpu-word-read-completed-no-data-export"
   },
   "alpha_semantics_unproven": true,
   "maximum_translation_operations": 18432,
-  "cpu_stage1_only": true,
-  "cpu_memory_data_access": false,
-  "cpu_mapping_changes": false
+  "cpu_stage1_only": false,
+  "cpu_memory_data_access": true,
+  "cpu_mapping_changes": false,
+  "maximum_framebuffer_reads": 1,
+  "framebuffer_writes": 0,
+  "cache_maintenance": false
 }

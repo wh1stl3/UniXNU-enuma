@@ -37,8 +37,9 @@ def main():
         assert len(matching)==1 and hashlib.sha256(matching[0]['data']).hexdigest()==digest,name
         packaged[name]=dict(sha256=digest,actual_fd_equal=True)
     links={}
+    library_lists=list(builds.rglob('static_library_files.lst'))
     for name in ['EnumaProbe','UniXNU','DxeCore','Sec','GraphicsConsoleDxe','ConSplitterDxe']:
-        found=[p for p in builds.rglob('static_library_files.lst') if p.parent.parent.name==name or (name=='DxeCore' and p.parent.parent.name=='DxeMain')]
+        found=[p for p in library_lists if p.parent.parent.name==name or (name=='DxeCore' and p.parent.parent.name=='DxeMain')]
         links[name]=[dict(path=p.relative_to(ROOT).as_posix(),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
           null_serial='BaseSerialPortLibNull' in p.read_text(),framebuffer_serial='FrameBufferSerialPortLib' in p.read_text(),
           serial_debug='BaseDebugLibSerialPort' in p.read_text()) for p in found]

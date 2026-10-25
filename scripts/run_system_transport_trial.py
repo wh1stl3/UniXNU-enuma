@@ -90,7 +90,7 @@ def qualification(published=False, report=None):
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
         route=q['trial_kind']=='native-video-route'
         if route:
-            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES
+            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES
             detail=q.get('native_route_detail',False)
             if type(detail) is not bool: raise ValueError('native route detail scope invalid')
             staging=q.get('native_route_staging',False)
@@ -117,7 +117,10 @@ def qualification(published=False, report=None):
             if type(cpu_attribute) is not bool or (cpu_attribute and not cpu_stage1): raise ValueError('native CPU attribute scope invalid')
             cpu_policy=q.get('native_route_cpu_policy',False)
             if type(cpu_policy) is not bool or (cpu_policy and (not cpu_stage1 or cpu_attribute)): raise ValueError('native whole-range CPU policy scope invalid')
-            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+            cpu_read=q.get('native_route_cpu_read',False)
+            if type(cpu_read) is not bool or (cpu_read and not cpu_policy): raise ValueError('native single CPU read scope invalid')
+            if cpu_read: expected.update(pixel_access=True,cpu_stage1_only=False,cpu_memory_data_access=True,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
@@ -175,10 +178,17 @@ def qualification(published=False, report=None):
     return q, image
 
 
+def single_read_only_scope(q):
+    required=dict(native_route_cpu_read=True,native_route_cpu_policy=True,native_route_cpu_stage1=True,
+                  pixel_access=True,cpu_memory_data_access=True,cpu_stage1_only=False,
+                  cpu_mapping_changes=False,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
+    return all(type(q.get(k)) is type(v) and q.get(k)==v for k,v in required.items())
+
+
 def run_without_camera(q, image):
     """Use the same guarded runner for a qualified read-only native route probe."""
     if (q.get('trial_kind') != 'native-video-route' or
-        q.get('pixel_access') is not False or q.get('gop_published') is not False or
+        (q.get('pixel_access') is not False and not single_read_only_scope(q)) or q.get('gop_published') is not False or
         q.get('boot_clock_capture') is not True):
         raise ValueError('camera-free mode requires read-only native route with boot clock')
     out = ROOT / 'out/system-transport' / datetime.now().strftime('%Y%m%dT%H%M%S')

@@ -1,11 +1,11 @@
 {
   "scope": "actual portable per-page algorithm with synthetic PAR and freestanding actual AArch64 wrapper; no hardware/data proof",
-  "result": "PASS: 56000 query boundaries;18432 maximum; all256 first-attribute and whole-range semantic policies; mixed/hint changes; fault/nonidentity precedence; frame and operation counts unchanged",
+  "result": "PASS: 56000 query boundaries;18432 maximum; all256 attribute/policy encodings; mixed/hint/fault precedence; single-word read gating/count/value independence; invalid frames rejected before read",
   "sources": {
-    "tests/native_cpu_stage1.c": "ff4eb0aae47dc0f445aad28da9b106a20b595012eef9c4c4ae369f2d5265372e",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "2313a913f0e52d79f294577d83dc717225a8eb7b5895c44e3c79ccde62231122",
+    "tests/native_cpu_stage1.c": "19656b6c2dc84a6ec519565891bd3aa806c4b115d91cdec50f040d12358d8c51",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "a2d77319fc7e4ada3fe80827719ea886e4b308d42d94843d237a0ebdae9d9730",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
-    "scripts/check_native_cpu_stage1.py": "a62f03a51525e47023fb21cc33a9d3092e6c92db29371a545125af57ba5d6ff0"
+    "scripts/check_native_cpu_stage1.py": "d37a52399ea7e43d851e077486fd899bfa7b0512bf9d5c7ff4bdded6144aa485"
   },
   "hardware_tested": false,
   "physical_framebuffer_access": false

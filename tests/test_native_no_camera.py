@@ -13,11 +13,15 @@ import run_system_transport_trial as runner
 
 class NoCameraTests(unittest.TestCase):
     def test_guarded_outcomes(self):
-        for outcome in ('returned', 'preissue-abort', 'host-timeout'):
+        for outcome in ('returned', 'single-word-returned', 'preissue-abort', 'host-timeout'):
             with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as tmp:
                 root=Path(tmp); (root/'out/device-tests').mkdir(parents=True); (root/'reports').mkdir()
                 q=dict(trial_kind='native-video-route',pixel_access=False,gop_published=False,
                        boot_clock_capture=True,image_sha256='abc')
+                if outcome=='single-word-returned':
+                    q.update(native_route_cpu_read=True,native_route_cpu_policy=True,native_route_cpu_stage1=True,
+                             pixel_access=True,cpu_memory_data_access=True,cpu_stage1_only=False,
+                             cpu_mapping_changes=False,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
                 state=dict(candidate_sha256='abc',phase='fastboot-identity-aborted')
                 if outcome!='preissue-abort':state.update(issued_at='test',phase='observing-reset-return')
                 (root/'out/device-tests/current.local.json').write_text(json.dumps(state))
@@ -26,9 +30,9 @@ class NoCameraTests(unittest.TestCase):
                     self.assertIn('--boot-clock',command)
                     self.assertEqual(kwargs['timeout'],240)
                     if outcome=='host-timeout':raise subprocess.TimeoutExpired(command,240)
-                    return subprocess.CompletedProcess(command,0 if outcome=='returned' else 1)
+                    return subprocess.CompletedProcess(command,0 if outcome in ('returned','single-word-returned') else 1)
                 with patch.object(runner,'ROOT',root),patch.object(runner.subprocess,'run',side_effect=invoke) as called:
-                    if outcome=='returned':runner.run_without_camera(q,root/'image.img')
+                    if outcome in ('returned','single-word-returned'):runner.run_without_camera(q,root/'image.img')
                     else:
                         with self.assertRaises((RuntimeError,subprocess.TimeoutExpired)):
                             runner.run_without_camera(q,root/'image.img')
@@ -42,6 +46,15 @@ class NoCameraTests(unittest.TestCase):
     def test_scope_before_device(self):
         q=dict(trial_kind='native-video-route',pixel_access=False,gop_published=False,boot_clock_capture=True)
         for key,value in [('trial_kind','other'),('pixel_access',True),('gop_published',True),('boot_clock_capture',False)]:
+            with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
+                runner.run_without_camera({**q,key:value},Path('unused.img'))
+            called.assert_not_called()
+        q.update(native_route_cpu_read=True,native_route_cpu_policy=True,native_route_cpu_stage1=True,
+                 pixel_access=True,cpu_memory_data_access=True,cpu_stage1_only=False,
+                 cpu_mapping_changes=False,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
+        for key,value in [('maximum_framebuffer_reads',2),('maximum_framebuffer_reads',True),('framebuffer_writes',1),
+                          ('cache_maintenance',True),('cpu_mapping_changes',True),('native_route_cpu_policy',False),
+                          ('cpu_stage1_only',True),('cpu_memory_data_access',False)]:
             with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
                 runner.run_without_camera({**q,key:value},Path('unused.img'))
             called.assert_not_called()
