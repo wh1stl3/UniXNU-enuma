@@ -1,11 +1,11 @@
 {
   "scope": "actual portable per-page algorithm with synthetic PAR and freestanding actual AArch64 wrapper; no hardware/data proof",
-  "result": "PASS: query/attribute/policy/read regressions; single barrier-before-read gating, exact counts, failure precedence and invalid frames before either callback",
+  "result": "PASS: prior regressions;128x8 ROI stride/address/call bounds, all1024 failures, one barrier, EL1/EL2 completion and invalid prerequisites before access",
   "sources": {
-    "tests/native_cpu_stage1.c": "24da8688c1769ca4508b60c03893a42230c6e2a22cc0ad3cfb9bf9a82ef78834",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "5bd11cc6b15fd127478e2c03f018f5fbc7cffbd6d01d0b1c076ba8366ad350f1",
+    "tests/native_cpu_stage1.c": "e27f014a9f78eab099755ee7c4ff37929268402281d99e6c97565e34d26af78a",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "816cd4ac72e2f6ea3afa61b99cd55f7a4eda40d6366e4957a30484501ba788a6",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
-    "scripts/check_native_cpu_stage1.py": "11609fdcf823788e444997cefb8059cd650ded4863a6eadbe36b935ed5f8d485"
+    "scripts/check_native_cpu_stage1.py": "98d6f0b89e8aad350d84a402e49f0a3619a1ed5ed783eb2d32cf6e0402b6da7f"
   },
   "hardware_tested": false,
   "physical_framebuffer_access": false

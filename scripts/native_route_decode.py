@@ -25,7 +25,10 @@ CPU_READ_CATEGORIES={'1':'prior-context-translation-or-identity-rejected','2':'n
 
 CPU_BARRIER_CATEGORIES={**CPU_READ_CATEGORIES,'4':'single-barrier-or-word-read-contract-rejected','5':'single-dsb-sy-and-aligned-cpu-read-completed-no-data-export'}
 
-def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,structure=False,structure_detail=False,global_output=False,global_detail=False,alpha_view=False,cpu_stage1=False,cpu_attribute=False,cpu_policy=False,cpu_read=False,cpu_barrier=False):
+CPU_ROI_CATEGORIES={'1':'prior-context-translation-or-identity-rejected','2':'normal-policy-differs-from-wt-baseline','3':'roi-contract-barrier-or-read-rejected-partial-count-unknown','4':'roi-128x8-reads-and-one-dsb-completed-at-el1','5':'roi-128x8-reads-and-one-dsb-completed-at-el2'}
+
+def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,structure=False,structure_detail=False,global_output=False,global_detail=False,alpha_view=False,cpu_stage1=False,cpu_attribute=False,cpu_policy=False,cpu_read=False,cpu_barrier=False,cpu_roi=False):
+    if type(cpu_roi) is not bool or (cpu_roi and not cpu_barrier): raise ValueError('invalid CPU ROI scope')
     if type(cpu_barrier) is not bool or (cpu_barrier and not cpu_read): raise ValueError('invalid CPU barrier scope')
     if type(cpu_read) is not bool or (cpu_read and not cpu_policy): raise ValueError('invalid single CPU read scope')
     if type(cpu_policy) is not bool or (cpu_policy and (not cpu_stage1 or cpu_attribute)): raise ValueError('invalid whole-range CPU policy scope')
@@ -43,4 +46,4 @@ def decode(clock,plan,detail=False,staging=False,layout=False,blend=False,struct
     result=decode_clock(clock,plan)
     if result['stop_additional_trials']: return result
     code=result['warning_code']
-    return dict(conclusion='route-category-inferred',category=(CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if structure_detail else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)[str(code)],warning_code=code,stop_additional_trials=False,direct_register_log=False)
+    return dict(conclusion='route-category-inferred',category=(CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if structure_detail else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)[str(code)],warning_code=code,stop_additional_trials=False,direct_register_log=False)

@@ -37,6 +37,14 @@ def main():
     (out/'barrier-wrapper.disassembly.txt').write_text(barrier_dis)
     assert len(re.findall(r'\bdsb\s+sy\b',barrier_dis,re.I))==1
     assert not re.search(r'\bldr\s+wzr\s*,',barrier_dis,re.I)
+    roi_wrapper=out/'roi-wrapper.c'
+    roi_wrapper.write_text('#include "CpuStage1.h"\nENUMA_U32 Probe(const ENUMA_INHERITED_FRAME *F) { ENUMA_U64 El=0;ENUMA_U32 P=EnumaCpuStage1ArmDetailed(F,&El);return EnumaCpuReadRoiArmProbe(F,P,El); }\n')
+    subprocess.run([*common,'--target=aarch64-none-elf','-ffreestanding','-O2','-DENUMA_NATIVE_ROUTE_CPU_POLICY=1','-DENUMA_NATIVE_ROUTE_CPU_READ=1','-DENUMA_NATIVE_ROUTE_CPU_BARRIER=1','-DENUMA_NATIVE_ROUTE_CPU_ROI=1','-c',str(roi_wrapper),'-o',str(out/'roi-wrapper.o')],check=True)
+    roi_dis=subprocess.check_output(['llvm-objdump','-d',str(out/'roi-wrapper.o')],text=True)
+    (out/'roi-wrapper.disassembly.txt').write_text(roi_dis)
+    assert len(re.findall(r'\bdsb\s+sy\b',roi_dis,re.I))==1
+    assert len(re.findall(r'\bmrs\s+[^\n]*CurrentEL',roi_dis,re.I))==1
+    assert not re.search(r'\bldr\s+wzr\s*,',roi_dis,re.I)
     report=dict(scope='actual portable per-page algorithm with synthetic PAR and freestanding actual AArch64 wrapper; no hardware/data proof',result=result,
       sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [source,lib/'CpuStage1.h',lib/'InheritedScanout.h',Path(__file__)]},hardware_tested=False,physical_framebuffer_access=False)
     (ROOT/'reports/enuma-cpu-stage1-host.json').write_text(json.dumps(report,indent=2)+'\n')

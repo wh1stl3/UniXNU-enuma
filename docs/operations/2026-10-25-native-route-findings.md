@@ -302,3 +302,23 @@ failure precedence; actual fifth Arm profile contains one DSB. Code5 supports
 this pre-read barrier and one word only, not post-store/cache maintenance.
 Timeout has no terminal result and cannot uniquely identify an instruction;
 stop/recover/record under the existing hard-stop rule.
+
+
+## S-044 barrier+word baseline; planned-region read before any stores
+
+Valid code5, origin32.474..32.531s, Android54.907s; independent root/A/unlock
+and both device/backup hashes pass. Consumed232c4964... . Supports exactly
+one pre-read DSB SY and one data word, not a post-store/cache-line result.
+
+S-045 reads128x8 at frame origin using real stride. The first word uses all
+existing guards and the single barrier; only then1023 additional addresses
+are read, with per-callback1024 cap and exact row/column expectation. No
+padding or data retention/export/stores. The existing CurrentEL MRS is
+exposed only after full completion:code4 EL1,5 EL2. Codes1 prior/context,
+2 other Normal policy,3 mixed/contract/barrier/read failure with unknown
+partial count. Code3 is not a zero-read or full-read conclusion. EL1 final
+stage2/SMMU and write/visible/alpha obligations remain. This validates the
+planned transaction's read region independently rather than hiding new
+read-depth and write effects in one unlocatable failure. All1024 synthetic
+failure points and stride/ordering/count/invalidEL tests pass; Arm profile
+adds no CurrentEL access and contains only one DSB.
