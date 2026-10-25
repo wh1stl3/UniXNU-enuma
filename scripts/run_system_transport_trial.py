@@ -60,6 +60,23 @@ def qualification(published=False, report=None):
             raise ValueError('unsupported first-reason classification')
         if expected==0 and q.get('control_actual_code',{}).get('review_required') is not False:
             raise ValueError('actual control PE disassembly still needs review')
+    if q.get('trial_kind')=='native-display-observe':
+        frozen=(ROOT/q['archive']/'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
+            raise ValueError('native observer differs from frozen qualification')
+        if (type(q.get('native_query')) is not int or q.get('native_query') not in (1,2) or q.get('maximum_reads')!=26 or
+            q.get('maximum_wait_calls')!=2 or q.get('maximum_mmio_offset')!='0x6c26c' or
+            q.get('pixel_access') is not False or q.get('gop_published') is not False or
+            q.get('terminal_return')!={'pass':2,'fail':7,'completion_fallback':False}):
+            raise ValueError('native observer scope invalid')
+        if published:
+            review=json.loads((ROOT/'reports/enuma-native-display-code.json').read_text())
+            matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and
+                      x.get('native_query')==q['native_query'] and
+                      x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and
+                      x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
+            if q.get('review_required') is not False or review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
+                raise ValueError('native actual PE code review missing or mismatched')
     if 'detail_point' in q:
         frozen_manifest = (ROOT / q['archive'] / 'qualification.json').resolve()
         if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:

@@ -1,6 +1,6 @@
 {
   "scope": "host camera preflight; device action only with --execute",
-  "started_utc": "2026-10-25T13:01:29.979565+00:00",
+  "started_utc": "2026-10-25T13:43:39.216988+00:00",
   "camera_ready": true,
   "device_runner_started": false,
   "boot_issued": false,

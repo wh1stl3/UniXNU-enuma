@@ -811,3 +811,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-223：显示侧分析及独立原生观察器离线增量
 
 2026-10-25T21:32:30+08:00。用户要求推进显示分析和UEFI，已完成NativeObserve核心（两路三样本<=26读/两次100ms、inactive-frame抑制、活动/Timing/Enable/帧进展/精确Enable3独立mask），48项ASan/UBSan与AArch64对象通过；完整GOP源/准入未变，Mu Blt/拓扑/330失败oracle/164选择回归通过。原生setup写3与status不以前者阻断读取分别保留，不简单删门。固件bbe30f697e1683e5e1621c26c85b88b9431ac7bc已推送并pin，只有未接线源，无新FD/运行时/设备动作；前一7873237研究已推送。显示验收色条/文字/恢复，背光优先原厂I2C ABI/应答，日志不再作显示分析前置。详见operations/2026-10-25-display-frontier-analysis.md和reports/enuma-display-frontier-analysis.json。原始影音仅本地。
+
+
+## D-224，独立双路观测完整资格通过，准备S-019
+
+2026-10-25T21:52:10+08:00。前一87f188b已推送离线显示观察器。固定新固件57ae4ffb136f5330d6e9b759f21202f1d12cebc5、完整FD/PE/宏/映射/载荷与cold同hook资格闭合。S-019/S-020尚未发出。先S-019 query1单笔；仅受控返回、独立恢复核验及当前文档再次推送后执行S-020 query2。证据reports/enuma-native-display-code.json、q1/q2-qualification及对应result；全部原始影音本地，禁写/内存/verified/分区边界保持。

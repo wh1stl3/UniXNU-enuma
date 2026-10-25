@@ -1,0 +1,44 @@
+{
+  "scope": "actual independent observer pair; independently review both optimized entry flows; helper tail equal except one reviewed CpuPause call relocation",
+  "firmware_commit": "57ae4ffb136f5330d6e9b759f21202f1d12cebc5",
+  "queries": [
+    {
+      "native_query": 1,
+      "image_sha256": "14ae5bb1ba4cdabae2bbc9744d724bf3a4fdf1378bdba06d1586e2d2d36a84d5",
+      "provider_sha256": "f8e57ef7d76d9306805da8894eb273d12260f9c597940d803f67b2c12bb1f995",
+      "core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "disassembly_sha256": "03c7107890dea24d508a358a53af0d4f5aa88f28bd9f5b1767438739c995fad5",
+      "core_executable_equal_reviewed_S010": true
+    },
+    {
+      "native_query": 2,
+      "image_sha256": "7379bf4da9f31357f076c4652f62365452a194901565ecd710ada74972a2c463",
+      "provider_sha256": "ecbbf887910ab21311f9667e3b3e46a5925c211c825586c9bbc8b847933cb3d7",
+      "core_sha256": "b4c3ac3efde8576b441a4db100d0f9c054a88b3f97d19175f4aa0fbf7d56c29e",
+      "disassembly_sha256": "4cc185281de1268b0680e66bb54afd7f0b4fbbcfc4dca173c970f8aaa4c7419a",
+      "core_executable_equal_reviewed_S010": true
+    }
+  ],
+  "difference_count": 1297,
+  "differences_sha256": "53d88344f1366061a3a50d7b3831aebbf66339b79ece077c78f6b02c5273621a",
+  "complete_diff": "out/native-display-code-diff.json",
+  "helper_tail_bytes_equal": false,
+  "helper_tail_relocations": [
+    {
+      "positive_rva": "0x1594",
+      "negative_rva": "0x157c",
+      "target": "CpuPause0x1038"
+    }
+  ],
+  "review_required": false,
+  "hardware_success": false,
+  "manual_review": [
+    "q1 entry1050..153c and q2 entry1050..1524 independently reviewed: compiler changes stack allocation and control-flow layout, so this is not a three-instruction-only pair",
+    "map/PCD contract precedes MMIO; revision first/final loads ae00000, major6000 and equality checks",
+    "two interfaces b800/c000 within MDP, loops3 samples, Stall100000 twice, STATUSbit0 before Frame, <=26 read bounds",
+    "zero Timing, changed Timing/Enable, inactive or non-increasing/wrapped/over64 Frame clear independent masks; ExactEnable3 only updates separate mask",
+    "q1 14d0..1514 requires collection success and four masks3 =>warning1 else5; q2 14c8..1504 failure=>1, all four masks3=>5",
+    "Read q1 15b0..1634 and q2 1598..161c whitelist four offsets per interface and revision; target access only LDR W, stores go to callback output/local state",
+    "linked helper tail equal except DebugAssert call1594/157c to same CpuPause1038; packaged Core executable byte-equal reviewed S010 cold terminal; no provider reset constructor/library or GOP publication"
+  ]
+}
