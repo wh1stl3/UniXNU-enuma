@@ -21,10 +21,10 @@ class RouteTests(unittest.TestCase):
     def test_scope_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp).resolve();arc=root/'out/a';arc.mkdir(parents=True);report=root/'reports/q.json';report.parent.mkdir()
-            q=dict(trial_kind='native-video-route',archive='out/a',native_query=0,native_control=False,native_route_audit=True,
+            q=dict(trial_kind='native-video-route',archive='out/a',native_query=0,native_control=False,native_route_audit=True,native_border_view=True,
               boot_clock_capture=True,maximum_reads=330,maximum_wait_calls=2,maximum_mmio_offset='0x6c26c',pixel_access=False,gop_published=False,
               terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False},result_categories=CATEGORIES)
-            for key,value in [('native_query',1),('native_route_audit',1),('maximum_reads',331),('pixel_access',True),('result_categories',{}),('native_route_detail',1),('native_route_detail',True),('native_route_staging',1),('native_route_staging',True)]:
+            for key,value in [('native_border_view',1),('native_border_view',False),('native_query',1),('native_route_audit',1),('maximum_reads',331),('pixel_access',True),('result_categories',{}),('native_route_detail',1),('native_route_detail',True),('native_route_staging',1),('native_route_staging',True)]:
                 changed={**q,key:value};report.write_text(json.dumps(changed));(arc/'qualification.json').write_text(json.dumps(changed))
                 with patch.object(runner,'ROOT',root),self.assertRaisesRegex(ValueError,'scope invalid'):runner.qualification(False,report)
     def test_cli_excludes_observer(self):

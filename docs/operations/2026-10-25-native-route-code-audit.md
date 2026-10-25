@@ -105,3 +105,32 @@ Host sanitizers, fixed baseline callback/status/output parity,64 border masks,
 classification, not physical route validity or visible output. Actual image
 414edab9053fc9a87c5661665c81b82ca19577877529c4aa0ac4453f62c55701
 is bound to ROUTE1/DETAIL1/STAGING1/MASK0/QUERY0 in qualification.
+
+## S-032 native border view, source c45191c
+
+Archive qualified-native-border-c45191c; full disassembly digest
+f06cc3c5f791a45221178345cec2699f34c46099dfeec9b1535e92980b0b55c2.
+Core PE remains a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f.
+Reviewed full entry1050..274c and new helpers28ec..2ce0. Exact R-004 metadata
+1118..119c, three samples1224, two100ms waits1240..1278, STATUS-before-FRAME
+1324/1334, CTL/raw staging138c..14a8 remain bounded. Normalize14bc precedes
+strict select14e4 and selected SSPP reads159c. Raw capture copy15c0..15d4
+remains separate from normalized view; second normalize1618 feeds mixer
+selection163c..16ec, selected reads1720..17c8, resolve17f0..1c20 and decode
+1c24..22f4. No downstream register or framebuffer access added.
+
+Normalize28ec copies0x42c bytes to local stack, loops six CTLs and six layers,
+clears only bit24 at2964 in the copy, then strict-select2994; only successful
+selection copies output29a4..29b8. Strict selector29d8..2c04 preserves exact
+two sources, one active video CTL6, stage1..12, unknown-field and duplicate
+rejection. Raw stability2300..2480 compares original sample arrays, including
+all CTL layer words at2468. Activity, timing/enable equality and two1..64
+nonwrapping frame deltas2508..2594 remain. Success25e0..2620 requires0x14 and
+returns5; detail rejection262c..2670 still requires Topology and zero output
+requirements. Read2c88 checks aligned offset<=6c26c/count<330 before load2cd0.
+No MMIO stores; stack frame0x2440 plus bounded helpers is ordinary RAM only.
+
+Image4bc3fb98f20d1ea7780556652203be17dd02b5c27b5e1e08b029bf1fb3283243
+binds ROUTE1/DETAIL1/STAGING0 and native_border_view=true. Host64 border masks,
+330 failures and raw-border-change rejection passed. No physical or visible
+success is inferred from this review.

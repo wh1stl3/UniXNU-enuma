@@ -117,7 +117,7 @@ def main():
         from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
         if json.loads(calibration.read_text()).get('calibration_passed') is not True: raise ValueError('boot clock not calibrated')
-        q.update(trial_kind='native-video-route',native_route_audit=True,native_route_detail=a.native_route_detail,native_route_staging=a.native_route_staging,boot_clock_capture=True,
+        q.update(trial_kind='native-video-route',native_border_view=not a.native_route_staging,native_route_audit=True,native_route_detail=a.native_route_detail,native_route_staging=a.native_route_staging,boot_clock_capture=True,
           maximum_reads=330,scope='STATUS gated stable CTL/SSPP/LM/video layout candidate; no GOP admission',
           terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False},
           decode_plan=make_plan(ROOT),calibration_sha256=sha(calibration),result_categories=STAGING_CATEGORIES if a.native_route_staging else DETAIL_CATEGORIES if a.native_route_detail else CATEGORIES,

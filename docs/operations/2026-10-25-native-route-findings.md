@@ -33,3 +33,20 @@ S-030细分code3，boot-origin22.257..22.322秒，Android45.750秒，独立
 字段；混合器数量或重复源。原快照不变，原失败仍返回，不因规范化能
 解码而继续读取后级。主机全部64种border组合、768单比特扰动和类别
 负例通过；这不是本机border值的证据，必须等待新的合格实测。
+# S-031 result and native border view (2026-10-26)
+
+S-031's boot-origin interval17.246..17.316s lies wholly in predeclared code2.
+Android completed40.812s; independent identity/root/slot/unlock/partition hashes
+and camera desktop passed. The image is consumed. This supports the captured
+staging's only strict two-source selection mismatch being the documented border
+bit24. It is not direct register output or evidence of complete stable routing.
+
+Next source52158d9 (documentation pin c45191c) isolates the correction in a new
+native border sampler, leaving strict and original native APIs intact. Only the
+RAM parsing view clears bit24; raw capture and stability retain that bit. Strict
+route selection must still pass before selected SSPP/mixer reads. The same view
+feeds mixer resolution and decode, preventing border-only inactive mixers from
+being mistaken for routed mixers. Reads remain bounded330 and waits2x100ms.
+Unknown bits, source count/duplicates, layout, format, address bounds and raw
+configuration changes still reject. Successful audit still requires independent
+CPU/SMMU address and downstream association before a pixel experiment or GOP.

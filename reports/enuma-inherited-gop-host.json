@@ -177,7 +177,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/evidence"
       ],
       "exit_code": 0,
-      "stdout": "PASS: native fixed-source callback/result parity at all330 read failures and CTL/staging/LM first-location isolation\nPASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged\nPASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained\n",
+      "stdout": "PASS: native border all64 masks preserve raw snapshots,330 read failures, changed border/unknown staging/stability/mixer rejection\nPASS: native fixed-source callback/result parity at all330 read failures and CTL/staging/LM first-location isolation\nPASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged\nPASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained\n",
       "stderr": ""
     },
     {
@@ -369,7 +369,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Evidence.o"
       ],
       "exit_code": 0,
-      "stdout": "                 U EnumaCaptureRoutedMixers\n                 U EnumaCaptureVideoConfig\n                 U EnumaCaptureVideoConfigDetailed\n                 U EnumaDecodeInherited\n                 U EnumaResolveMixerOrigins\n",
+      "stdout": "                 U EnumaCaptureNativeBorderConfig\n                 U EnumaCaptureRoutedMixers\n                 U EnumaCaptureVideoConfig\n                 U EnumaCaptureVideoConfigDetailed\n                 U EnumaDecodeInherited\n                 U EnumaNormalizeVideoBorder\n                 U EnumaResolveMixerOrigins\n",
       "stderr": ""
     },
     {
@@ -408,7 +408,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/VideoCapture.o"
       ],
       "exit_code": 0,
-      "stdout": "                 U EnumaClassifyVideoStaging\n                 U EnumaSelectVideoRoute\n",
+      "stdout": "                 U EnumaClassifyVideoStaging\n                 U EnumaNormalizeVideoBorder\n                 U EnumaSelectVideoRoute\n",
       "stderr": ""
     },
     {
@@ -454,15 +454,15 @@
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c": "1b3dc06d5e638d01c666bdb6e5f0226288a4044bb0da3a9243697d7dec1b9307",
     "firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c": "3c4ef872faa7e042bcd2199a225c28ae50afe6768363734210f73645e683fb53",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "aa2ef444d57e791cb8b5a7c55fd6fd93311cec2a79546dbb5b89d7d2652221c0",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "7299c889dca83256f42ec48cefa15d2b8ed273099514cedca24232f526bd925f",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "dde2a43b870a368c3ecc7cdbcc07947ba2ba3abb3f18efee58d2bfac27a1734c",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c": "1d61cd69efe4d4c284babc12e48ccd298ef5e3c51a0a6e570dee035c90ec62ec",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "dd725d9faf0135a549c7663923bd8c7994fdb5c7a44a9c47232cba942c2ad18d",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoCapture.c": "be740ad664f12515446407077527be25022f7b008fb3d0eed5d23546247e9a2e",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "dc1a06a66f13ff8720047849ca2c0f91f24d07eb7c174301d57a91b263bb9de7",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoCapture.c": "42a38eb9d85540e1fd6a6f0b948507a70e017ae1e8361bedeffa4eec06b3d49b",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoResult.h": "b9c9375fad42acd8dd470bd2208e70ccbf17f22a2233f62e8dab30cceec324a7",
     "tests/inherited_gop.c": "609dd979a3f05eefd9f159cf1dc41d0f462815ed8f56bed3004e6a8d1c95061c",
     "tests/inherited_topology.c": "d03861a39538c84260ece09b5f18c980f518949da71faa07bc6010c306693ac4",
-    "tests/inherited_evidence.c": "ea9e6c8235ff749f4e544f9785acceac67b6531463997e562613b6d2b7179662",
+    "tests/inherited_evidence.c": "84347af16e150408f5bef8bd54628f4c024c2f32b8b2260c9fbe8c51765d4c1a",
     "tests/inherited_video_result.c": "3bbea2b43deb42f1d378c41ed0b53f0347562288960ca118eff556a3f69dd794"
   },
   "hardware_tested": false,

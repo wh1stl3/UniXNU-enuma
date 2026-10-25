@@ -5,7 +5,7 @@
 #include "Evidence.h"
 ENUMA_U32 EnumaNativeBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *,ENUMA_U32 *);
 ENUMA_U32 EnumaSampleVideoBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *);
-typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,Border,BadMixer,Events,Log[400]; } MODEL;
+typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,BadCtl,Border,Borders,ChangeBorder,UnknownStaging,BadMixer,Events,Log[400]; } MODEL;
 static int allowed(unsigned O) {
   static const unsigned Fields[11]={0,8,12,16,20,36,48,52,56,0x170,0x70};
   if(!O) { return 1; }
@@ -31,6 +31,13 @@ static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
   if(O==0x24f4) { *V=M->BadCtl?2:6; }
   if(O==0x2410) { *V=1|(M->Border?(1u<<24):0); } // mixer4 LEFT pipe0 base stage
   if(O==0x2400) { *V=8; } // mixer0 RIGHT pipe1 base stage
+  for(unsigned LM=0;LM<6;LM++) {
+    if(O==0x2400+(LM==5?0x24:LM*4)) {
+      if((M->Borders>>LM)&1) { *V|=1u<<24; }
+      if(M->ChangeBorder&&M->Window&&LM==4) { *V^=1u<<24; }
+      if(M->UnknownStaging&&LM==4) { *V|=1u<<25; }
+    }
+  }
   if(O==0x45000) { *V=(1u<<31)|(M->BadMixer?1:0); }
   if(O==0x45004||O==0x49004) { *V=(2560u<<16)|800; }
   if(M->Transient&&(O==0x241c||O==0x2418)) { *V=M->Window; }
@@ -106,6 +113,29 @@ int main(void) {
     M=topo_cases[I]; E=Before;
     assert(EnumaSampleNativeVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&Why==topo_reasons[I]&&!memcmp(&E,&Before,sizeof(E)));
   }
+  for(unsigned B=0;B<64;B++) {
+    M=(MODEL){.Borders=B,.NoTiming=1,.BadCounter=1}; E=Before;
+    assert(!EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)&&M.Reads==330&&M.Window==2);
+    assert(E.Frame.Base==0x10100000&&E.Frame.Requirements==20);
+    for(unsigned N=0;N<3;N++) for(unsigned LM=0;LM<6;LM++) {
+      assert(((E.Samples[N].Scanout.Ctls[2].Layers[LM][0]>>24)&1)==((B>>LM)&1));
+    }
+  }
+  for(unsigned F=1;F<=330;F++) {
+    M=(MODEL){.Borders=63,.Fail=F};E=Before;
+    assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedBounds&&M.Reads==F&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  M=(MODEL){.Borders=63,.ChangeBorder=1};E=Before;
+  assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==EnumaVideoReasonStableConfig&&!memcmp(&E,&Before,sizeof(E)));
+  M=(MODEL){.Borders=63,.UnknownStaging=1};E=Before;
+  assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&M.Reads==40&&!M.Window&&!memcmp(&E,&Before,sizeof(E)));
+  for(unsigned I=0;I<7;I++) {
+    M=native_cases[I];M.Borders=63;E=Before;
+    assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==native_reasons[I]&&!memcmp(&E,&Before,sizeof(E)));
+  }
+  M=(MODEL){.Borders=63,.BadMixer=1};E=Before;
+  assert(EnumaSampleNativeBorderVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedTopology&&Why==EnumaVideoReasonNativeMixerLayout&&!memcmp(&E,&Before,sizeof(E)));
+  puts("PASS: native border all64 masks preserve raw snapshots,330 read failures, changed border/unknown staging/stability/mixer rejection");
   puts("PASS: native fixed-source callback/result parity at all330 read failures and CTL/staging/LM first-location isolation");
   puts("PASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged");
   puts("PASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained");
