@@ -278,6 +278,39 @@
         "failed_trial_preserved": true,
         "evidence": "out\\device-tests\\20261025T154047-recovery-reconciliation.json"
       }
+    },
+    "enuma-system-transport-S006-result.json": {
+      "phase": "manual-recovery-needed",
+      "candidate_sha256": "76d4b09fcbe1c8e1f02b3114d13dba0c786d365da97bd92595cfe005f3736b09",
+      "candidate_consumed": true,
+      "report_stages_observed": [],
+      "independent_recovery": {
+        "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+        "time_zone": "Asia/Shanghai",
+        "checks": {
+          "device": "enuma",
+          "boot_completed": "1",
+          "slot": "_a",
+          "flash_locked": "0",
+          "root_available": true
+        },
+        "partitions": [
+          {
+            "partition": "boot_a",
+            "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+            "device_and_backup_match": true
+          },
+          {
+            "partition": "vendor_boot_a",
+            "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+            "device_and_backup_match": true
+          }
+        ],
+        "prior_phase": "manual-recovery-needed",
+        "prior_state_sha256": "3ecf664f87ecf868a8c154ced2a9f157e44722f5ba9712c0822390b1a30da1db",
+        "failed_trial_preserved": true,
+        "evidence": "out\\device-tests\\20261025T155530-recovery-reconciliation.json"
+      }
     }
   },
   "next_work_order": [

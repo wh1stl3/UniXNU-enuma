@@ -23,7 +23,7 @@ def main():
     valid = code_review(core, map_text, point)
     pe = pefile.PE(data=core)
     calls = valid['callsites'][0]
-    start_address = (calls['entry_call_rva'] if point in (20, 21) else
+    start_address = (calls['setjump_call_rva'] if point == 22 else calls['entry_call_rva'] if point in (20, 21) else
                      (calls['CoreStartImage_calls_before'] if point == 13 else calls['CoreStartImage_calls_after'])[0])
     no_start = bytearray(core)
     offset = pe.get_offset_from_rva(int(start_address, 16))
@@ -43,7 +43,7 @@ def main():
             print('PASS rejection: ' + name)
         else:
             raise AssertionError('Accepted corrupted boundary input: ' + name)
-    if point in (20, 21):
+    if point in (20, 21, 22):
         for label, instruction in [
                 ('removed null-handle gate', next(i for i in valid['checkpoint_body'] if i['mnemonic'] == 'cbz')),
                 ('removed scheduled-handle comparison', next(i for i in valid['checkpoint_body'] if i['mnemonic'] == 'cmp' and i['operands'] == 'x8, x1'))]:
@@ -56,6 +56,18 @@ def main():
                 print('PASS rejection: ' + label)
             else:
                 raise AssertionError('Accepted corrupted entry bridge: ' + label)
+    if point == 22:
+        for label, address in [('removed CoreExit transfer', calls['exit_call_rva']),
+                               ('removed SetJump return branch', hex(int(calls['setjump_call_rva'],16)+4))]:
+            damaged = bytearray(core)
+            offset = pe.get_offset_from_rva(int(address,16))
+            damaged[offset:offset+4] = bytes.fromhex('1f2003d5')
+            try:
+                code_review(bytes(damaged),map_text,point)
+            except ValueError:
+                print('PASS rejection: '+label)
+            else:
+                raise AssertionError('Accepted corrupted Exit path: '+label)
     delay = valid.get('delay_contract', {})
     if delay.get('mode') == 'constant_specialized_2x1s':
         immediate = next(i for i in delay['callee_body'] if i['mnemonic'] == 'mov' and i['operands'].startswith('w0, #'))

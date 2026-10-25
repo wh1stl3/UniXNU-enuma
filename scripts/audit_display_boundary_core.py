@@ -38,13 +38,15 @@ def code_review(core, map_text, point):
         match = re.fullmatch(r'\s*([0-9a-fA-F]{8,16})\s+[0-9a-fA-F]+\s+0\s+(\S+)\s*', line)
         if match:
             symbols[match[2]] = int(match[1], 16)
-    if point not in (13, 15, 20, 21):
+    if point not in (13, 15, 20, 21, 22):
         raise ValueError('Unsupported reviewed checkpoint')
-    checkpoint = 'EnumaImageEntryCheckpoint' if point in (20, 21) else 'EnumaDispatchDetailCheckpoint'
+    checkpoint = 'EnumaImageEntryCheckpoint' if point in (20, 21, 22) else 'EnumaDispatchDetailCheckpoint'
     required = ['CoreDispatcher', 'CoreStartImage', checkpoint,
                 'ReadUnaligned64', 'MicroSecondDelay', 'ResetCold', 'CpuDeadLoop']
-    if point == 21:
+    if point in (21, 22):
         required.append('CoreExit')
+    if point == 22:
+        required.append('SetJump')
     if any(name not in symbols for name in required):
         raise ValueError('Required Core/map symbols missing')
     instructions = []
@@ -54,7 +56,7 @@ def code_review(core, map_text, point):
     begin = symbols[checkpoint]
     end = min(address for address in symbols.values() if address > begin)
     body = [i for i in instructions if begin <= i.address < end and i.id]
-    if not any(i.mnemonic in (['ccmp'] if point in (20, 21) else ['cmp']) and len(i.operands) >= 2 and
+    if not any(i.mnemonic in (['ccmp'] if point in (20, 21, 22) else ['cmp']) and len(i.operands) >= 2 and
                i.operands[0].type == capstone.arm64.ARM64_OP_REG and
                i.reg_name(i.operands[0].reg) == 'x0' and
                i.operands[1].type == capstone.arm64.ARM64_OP_IMM and
@@ -84,7 +86,7 @@ def code_review(core, map_text, point):
                 shift = operands[1].shift.value
                 current[reg] = (current[reg] & ~(0xffff << shift)) | ((operands[1].imm & 0xffff) << shift)
         if (ins.mnemonic == 'cmp' and len(operands) == 2 and operands[1].type == capstone.arm64.ARM64_OP_REG
-                and (point not in (20, 21) or ins.reg_name(operands[0].reg) == 'x0')):
+                and (point not in (20, 21, 22) or ins.reg_name(operands[0].reg) == 'x0')):
             value = current.get(ins.reg_name(operands[1].reg))
             comparisons.append(value)
         if ins.mnemonic == 'bl':
@@ -129,7 +131,7 @@ def code_review(core, map_text, point):
         delay_contract = {'mode': 'constant_specialized_2x1s', 'microseconds': 2000000,
                           'nanosecond_calls': calls, 'callee_body': render(callee)}
     contexts = []
-    if point in (20, 21):
+    if point in (20, 21, 22):
         return entry_review(core, instructions, symbols, body, delay_contract, required, point)
     for index, ins in enumerate(instructions):
         if not ins.id or ins.mnemonic != 'bl' or ins.operands[0].imm != begin:
@@ -186,6 +188,27 @@ def entry_review(core, instructions, symbols, body, delay, required, point=20):
     for index, ins in enumerate(function):
         if ins.mnemonic != 'bl' or ins.operands[0].imm != symbols['EnumaImageEntryCheckpoint']:
             continue
+        if point == 22:
+            before = function[max(0,index-4):index]
+            if not any(i.mnemonic == 'mov' and i.op_str == 'w8, #0x16' for i in before):
+                continue
+            if [(i.mnemonic,i.op_str) for i in before] != [
+                    ('bl',f'#{hex(symbols["CoreExit"])}'),('mov','w8, #0x16'),
+                    ('mov','x1, x22'),('mov','w0, w8')]:
+                raise ValueError('Point22 is not after CoreExit branch')
+            jump = [(a,b) for a,b in zip(function,function[1:]) if a.mnemonic=='bl' and
+                    a.operands[0].imm==symbols['SetJump'] and b.mnemonic=='cbnz' and
+                    b.op_str==f'x0, #{hex(before[1].address)}']
+            if len(jump)!=1:
+                raise ValueError('SetJump nonzero path does not reach point22')
+            after = function[index+1:index+4]
+            if [(i.mnemonic,i.op_str) for i in after] != [
+                    ('ldr','x8, [x19, #0xa0]'),('ldr','x9, [x25, #0x600]'),('cmp','x8, x9')]:
+                raise ValueError('Point22 not before TPL cleanup')
+            contexts.append(dict(checkpoint_call_rva=hex(ins.address),exit_call_rva=hex(before[0].address),
+                                 setjump_call_rva=hex(jump[0][0].address),
+                                 instructions=render([jump[0][0],jump[0][1]]+before+[ins]+after)))
+            continue
         if point == 21:
             before = function[max(0,index-8):index]
             if not any(i.mnemonic == 'mov' and i.op_str == 'w8, #0x15' for i in before[-4:]):
@@ -224,7 +247,7 @@ def entry_review(core, instructions, symbols, body, delay, required, point=20):
                 symbols={name:hex(symbols[name]) for name in required+['EnumaStartingImage','EnumaStartingFile']},
                 checkpoint_body=render(body), callsites=contexts,
                 limits=['Concrete fixed Core/map static shape only; no proof of gate execution or PE entry execution',
-                        'point20 precedes PE call; point21 follows direct return before CoreExit; direct Exit bypasses point21'])
+                        'point20 before PE; point21 direct return; point22 SetJump nonzero/post-CoreExit before TPL cleanup'])
 
 
 def render(seq):

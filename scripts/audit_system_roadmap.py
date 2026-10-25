@@ -132,7 +132,7 @@ def main():
     report['actual_trial_results'] = {}
     for name in ['enuma-system-transport-result.json', 'enuma-system-transport-S002-result.json',
                  'enuma-system-transport-S003-result.json', 'enuma-system-transport-S004-result.json',
-                 'enuma-system-transport-S005-result.json']:
+                 'enuma-system-transport-S005-result.json', 'enuma-system-transport-S006-result.json']:
         result_path = ROOT / 'reports' / name
         if result_path.exists():
             trial = json.loads(result_path.read_text())

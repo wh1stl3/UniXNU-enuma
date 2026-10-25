@@ -1,0 +1,327 @@
+{
+  "core_sha256": "ebc314dbb53cad1a838f5a95f8fe3c88563b67ef8d2658b3d752ea645fcf0d7a",
+  "point": 22,
+  "delay_contract": {
+    "mode": "constant_specialized_2x1s",
+    "microseconds": 2000000,
+    "nanosecond_calls": [
+      {
+        "rva": "0x1b784",
+        "branch": "bl",
+        "nanoseconds": 1000000000
+      },
+      {
+        "rva": "0x1b794",
+        "branch": "b",
+        "nanoseconds": 1000000000
+      }
+    ],
+    "callee_body": [
+      {
+        "rva": "0x1b774",
+        "mnemonic": "stp",
+        "operands": "x29, x30, [sp, #-0x10]!"
+      },
+      {
+        "rva": "0x1b778",
+        "mnemonic": "mov",
+        "operands": "x29, sp"
+      },
+      {
+        "rva": "0x1b77c",
+        "mnemonic": "mov",
+        "operands": "w0, #0xca00"
+      },
+      {
+        "rva": "0x1b780",
+        "mnemonic": "movk",
+        "operands": "w0, #0x3b9a, lsl #16"
+      },
+      {
+        "rva": "0x1b784",
+        "mnemonic": "bl",
+        "operands": "#0x1b6d4"
+      },
+      {
+        "rva": "0x1b788",
+        "mnemonic": "mov",
+        "operands": "w0, #0xca00"
+      },
+      {
+        "rva": "0x1b78c",
+        "mnemonic": "movk",
+        "operands": "w0, #0x3b9a, lsl #16"
+      },
+      {
+        "rva": "0x1b790",
+        "mnemonic": "ldp",
+        "operands": "x29, x30, [sp], #0x10"
+      },
+      {
+        "rva": "0x1b794",
+        "mnemonic": "b",
+        "operands": "#0x1b6d4"
+      }
+    ]
+  },
+  "symbols": {
+    "CoreDispatcher": "0xfc50",
+    "CoreStartImage": "0xc314",
+    "EnumaImageEntryCheckpoint": "0xf8d0",
+    "ReadUnaligned64": "0x18cec",
+    "MicroSecondDelay": "0x1b774",
+    "ResetCold": "0x16f4",
+    "CpuDeadLoop": "0x13b8",
+    "CoreExit": "0xc7a8",
+    "SetJump": "0x1050",
+    "EnumaStartingImage": "0x2b380",
+    "EnumaStartingFile": "0x2b388"
+  },
+  "checkpoint_body": [
+    {
+      "rva": "0xf8d0",
+      "mnemonic": "str",
+      "operands": "x19, [sp, #-0x20]!"
+    },
+    {
+      "rva": "0xf8d4",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf8d8",
+      "mnemonic": "add",
+      "operands": "x29, sp, #8"
+    },
+    {
+      "rva": "0xf8dc",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x2b000"
+    },
+    {
+      "rva": "0xf8e0",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x380]"
+    },
+    {
+      "rva": "0xf8e4",
+      "mnemonic": "cbz",
+      "operands": "x8, #0xf954"
+    },
+    {
+      "rva": "0xf8e8",
+      "mnemonic": "adrp",
+      "operands": "x9, #0x2b000"
+    },
+    {
+      "rva": "0xf8ec",
+      "mnemonic": "cmp",
+      "operands": "x8, x1"
+    },
+    {
+      "rva": "0xf8f0",
+      "mnemonic": "ldr",
+      "operands": "x19, [x9, #0x388]"
+    },
+    {
+      "rva": "0xf8f4",
+      "mnemonic": "ccmp",
+      "operands": "x19, #0, #4, eq"
+    },
+    {
+      "rva": "0xf8f8",
+      "mnemonic": "ccmp",
+      "operands": "x0, #0x16, #0, ne"
+    },
+    {
+      "rva": "0xf8fc",
+      "mnemonic": "b.ne",
+      "operands": "#0xf954"
+    },
+    {
+      "rva": "0xf900",
+      "mnemonic": "mov",
+      "operands": "x0, x19"
+    },
+    {
+      "rva": "0xf904",
+      "mnemonic": "bl",
+      "operands": "#0x18cec"
+    },
+    {
+      "rva": "0xf908",
+      "mnemonic": "mov",
+      "operands": "x8, #0x22f"
+    },
+    {
+      "rva": "0xf90c",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4138, lsl #16"
+    },
+    {
+      "rva": "0xf910",
+      "mnemonic": "movk",
+      "operands": "x8, #0x6c7, lsl #32"
+    },
+    {
+      "rva": "0xf914",
+      "mnemonic": "movk",
+      "operands": "x8, #0x4f79, lsl #48"
+    },
+    {
+      "rva": "0xf918",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf91c",
+      "mnemonic": "b.ne",
+      "operands": "#0xf954"
+    },
+    {
+      "rva": "0xf920",
+      "mnemonic": "add",
+      "operands": "x0, x19, #8"
+    },
+    {
+      "rva": "0xf924",
+      "mnemonic": "bl",
+      "operands": "#0x18cec"
+    },
+    {
+      "rva": "0xf928",
+      "mnemonic": "mov",
+      "operands": "x8, #0x949c"
+    },
+    {
+      "rva": "0xf92c",
+      "mnemonic": "movk",
+      "operands": "x8, #0x337e, lsl #16"
+    },
+    {
+      "rva": "0xf930",
+      "mnemonic": "movk",
+      "operands": "x8, #0x11b5, lsl #32"
+    },
+    {
+      "rva": "0xf934",
+      "mnemonic": "movk",
+      "operands": "x8, #0xe7a4, lsl #48"
+    },
+    {
+      "rva": "0xf938",
+      "mnemonic": "cmp",
+      "operands": "x0, x8"
+    },
+    {
+      "rva": "0xf93c",
+      "mnemonic": "b.ne",
+      "operands": "#0xf954"
+    },
+    {
+      "rva": "0xf940",
+      "mnemonic": "bl",
+      "operands": "#0x1b774"
+    },
+    {
+      "rva": "0xf944",
+      "mnemonic": "bl",
+      "operands": "#0x16f4"
+    },
+    {
+      "rva": "0xf948",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf94c",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp], #0x20"
+    },
+    {
+      "rva": "0xf950",
+      "mnemonic": "b",
+      "operands": "#0x13b8"
+    },
+    {
+      "rva": "0xf954",
+      "mnemonic": "ldp",
+      "operands": "x29, x30, [sp, #8]"
+    },
+    {
+      "rva": "0xf958",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp], #0x20"
+    },
+    {
+      "rva": "0xf95c",
+      "mnemonic": "ret",
+      "operands": ""
+    }
+  ],
+  "callsites": [
+    {
+      "checkpoint_call_rva": "0xc460",
+      "exit_call_rva": "0xc450",
+      "setjump_call_rva": "0xc3fc",
+      "instructions": [
+        {
+          "rva": "0xc3fc",
+          "mnemonic": "bl",
+          "operands": "#0x1050"
+        },
+        {
+          "rva": "0xc400",
+          "mnemonic": "cbnz",
+          "operands": "x0, #0xc454"
+        },
+        {
+          "rva": "0xc450",
+          "mnemonic": "bl",
+          "operands": "#0xc7a8"
+        },
+        {
+          "rva": "0xc454",
+          "mnemonic": "mov",
+          "operands": "w8, #0x16"
+        },
+        {
+          "rva": "0xc458",
+          "mnemonic": "mov",
+          "operands": "x1, x22"
+        },
+        {
+          "rva": "0xc45c",
+          "mnemonic": "mov",
+          "operands": "w0, w8"
+        },
+        {
+          "rva": "0xc460",
+          "mnemonic": "bl",
+          "operands": "#0xf8d0"
+        },
+        {
+          "rva": "0xc464",
+          "mnemonic": "ldr",
+          "operands": "x8, [x19, #0xa0]"
+        },
+        {
+          "rva": "0xc468",
+          "mnemonic": "ldr",
+          "operands": "x9, [x25, #0x600]"
+        },
+        {
+          "rva": "0xc46c",
+          "mnemonic": "cmp",
+          "operands": "x8, x9"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Concrete fixed Core/map static shape only; no proof of gate execution or PE entry execution",
+    "point20 before PE; point21 direct return; point22 SetJump nonzero/post-CoreExit before TPL cleanup"
+  ],
+  "scope": "offline archived Core call boundary review",
+  "linker_map_sha256": "e14220356b9ccd8888a3ee598accbd27791961d90bd27391b4b542616e30d605"
+}
