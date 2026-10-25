@@ -21,7 +21,7 @@
     }
   ],
   "prior_phase": "recovered-android-boot-complete",
-  "prior_state_sha256": "e0a93cebba5ce840ac099784709012b3858f4bab30af7e51edcd95043d7f0339",
+  "prior_state_sha256": "b4e4222d44ff52f46454a646524239bbc8bcd2f054d47495dbce551736a5e5a1",
   "failed_trial_preserved": true,
-  "evidence": "out\\device-tests\\20261025T232006-recovery-reconciliation.json"
+  "evidence": "out\\device-tests\\20261025T232840-recovery-reconciliation.json"
 }
