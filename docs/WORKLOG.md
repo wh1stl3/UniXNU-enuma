@@ -372,3 +372,8 @@ step12已受控返回；只能结合时序评估描述谓词，不认证活动/�
 2026-10-25 14:29:26–14:31:50 · 执行前32a3c63已推送；S-002 5e07e65e…77413327单笔75秒无返回，2.657秒命令返回0/5.125秒断开，451/451帧可解码。已停止追加/consumed，恢复录像在请求前开启；用户报告返回后14:31:50独立reconcile通过，失败result保留。证据enuma-system-transport-S002-result.json，out/camera-capture/20261025T142909-system-transport及20261025T143053。同步D-177全部当前文档，无第三笔boot；继续离线必要边界定位。
 
 2026-10-25 · f98a37f已推送S-002超时/已恢复状态。继续离线构建完整FAT返回边界：cb9e568 stage13/detail13/正确GUID-only/fallback0，FD50bba978…a2bc815，镜像d716e159…47f8304，归档return-boundary-cb9e568。初审因无2M立即数拒绝，复查实际MicroSecondDelay为两次1G纳秒调用后增加精确callee形状审核；新/旧Core破坏负例、错point/fallback/FAT拒绝通过。新wrapper显式资格模式离线通过，无第三笔启动；全当前文档同步D-178并准备发布。
+
+## D-179执行前状态（2026-10-25 15:21，Asia/Shanghai）
+
+用户继续授权；15:21:02只读核验enuma Android完成/root/A槽/解锁、boot_a与vendor_boot_a及本地备份摘要一致，相机1920x1080画面已人工判读为Android桌面，原图及90度旋转保留。d716e159…47f8304不可变完整输入候选离线复核通过，尚未发出。本轮在文档提交推送后直接执行一次point13精确DisplayDxe返回门，fallback关闭；相机先于设备，75秒观察期限，异常先恢复且不原样重试。无新增内存/verified/分区操作。当前无人工或审批待办，运行中状态以out/device-tests/current.local.json为准。
+

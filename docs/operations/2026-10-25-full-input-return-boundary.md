@@ -41,3 +41,8 @@ python scripts/run_system_transport_trial.py --qualification reports/enuma-full-
 未来在新文档已推送、即时设备/备份/相机/恢复门禁满足后，可沿用户现有授权加--execute执行一笔，无需再批准；仍会先相机再设备、消费镜像并禁止原样重试。当前**未调用--execute，没有第三笔boot**。不能把本轮离线资格写成实机返回门已命中。
 
 最新实际设备结果仍是S-002人工恢复后14:31:50独立Android完成/root/A槽/解锁/原两分区摘要一致。S-001/S-002均consumed且失败记录保留；没有当前人工按键/审批待办。其他R-001/R-002/R-015及内存/verified/分区规则保持。
+
+## D-179执行前状态（2026-10-25 15:21，Asia/Shanghai）
+
+用户继续授权；15:21:02只读核验enuma Android完成/root/A槽/解锁、boot_a与vendor_boot_a及本地备份摘要一致，相机1920x1080画面已人工判读为Android桌面，原图及90度旋转保留。d716e159…47f8304不可变完整输入候选离线复核通过，尚未发出。本轮在文档提交推送后直接执行一次point13精确DisplayDxe返回门，fallback关闭；相机先于设备，75秒观察期限，异常先恢复且不原样重试。无新增内存/verified/分区操作。当前无人工或审批待办，运行中状态以out/device-tests/current.local.json为准。
+
