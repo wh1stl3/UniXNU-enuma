@@ -1,4 +1,4 @@
-"""One authorized full-input temporary boot with camera; offline by default.
+"""One authorized full-input temporary boot; offline by default.
 
 Run --camera-check or --execute with the existing Python3.12 camera environment.
 No partition flash/erase/slot change. Reuses the guarded entry/recovery runner.
@@ -90,7 +90,7 @@ def qualification(published=False, report=None):
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
         route=q['trial_kind']=='native-video-route'
         if route:
-            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES
+            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES
             detail=q.get('native_route_detail',False)
             if type(detail) is not bool: raise ValueError('native route detail scope invalid')
             staging=q.get('native_route_staging',False)
@@ -99,7 +99,9 @@ def qualification(published=False, report=None):
             if type(layout) is not bool or (layout and (not detail or staging)): raise ValueError('native layout scope invalid')
             blend=q.get('native_route_blend',False)
             if type(blend) is not bool or (blend and not layout): raise ValueError('native blend scope invalid')
-            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+            structure=q.get('native_route_structure',False)
+            if type(structure) is not bool or (structure and (detail or staging or layout or blend)): raise ValueError('native structure scope invalid')
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
@@ -157,17 +159,61 @@ def qualification(published=False, report=None):
     return q, image
 
 
+def run_without_camera(q, image):
+    """Use the same guarded runner for a qualified read-only native route probe."""
+    if (q.get('trial_kind') != 'native-video-route' or
+        q.get('pixel_access') is not False or q.get('gop_published') is not False or
+        q.get('boot_clock_capture') is not True):
+        raise ValueError('camera-free mode requires read-only native route with boot clock')
+    out = ROOT / 'out/system-transport' / datetime.now().strftime('%Y%m%dT%H%M%S')
+    out.mkdir(parents=True)
+    report = dict(scope='qualified read-only native route; ADB/fastboot and calibrated boot clock',
+                  image_sha256=q['image_sha256'], camera_used=False, media_recorded=False,
+                  started_utc=datetime.now(timezone.utc).isoformat(),
+                  device_runner_started=False, boot_issued=False,
+                  runner_log=(out/'runner.log').relative_to(ROOT).as_posix())
+    command = [sys.executable, '-X', 'utf8', '-u', '-B',
+               str(ROOT/'scripts/run_enuma_entry_probe.py'), '--image', str(image),
+               '--label', 'system-transport', '--boot-clock']
+    try:
+        with (out/'runner.log').open('w', encoding='utf-8') as log:
+            report['device_runner_started'] = True
+            result = subprocess.run(command, cwd=ROOT, stdout=log,
+                                    stderr=subprocess.STDOUT, timeout=240)
+        report['runner_exit'] = result.returncode
+        if result.returncode:
+            raise RuntimeError('guarded runner failed; reconcile actual device state before further trial')
+        print('PASS: guarded runner returned; ADB/fastboot/boot-clock evidence saved; camera disabled')
+    except Exception as error:
+        report['error'] = str(error)
+        raise
+    finally:
+        state = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+        if state.get('candidate_sha256') == q['image_sha256'] and state.get('issued_at'):
+            report['boot_issued'] = True
+            write(ROOT/'out/device-tests'/('consumed-'+q['image_sha256']+'.local.json'),
+                  dict(image_sha256=q['image_sha256'], evidence=out.relative_to(ROOT).as_posix(), phase=state['phase']))
+        write(out/'observation.json', report)
+        write(ROOT/'reports/enuma-system-trial-observation.json', report)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     mode = p.add_mutually_exclusive_group()
     mode.add_argument('--camera-check', action='store_true')
     mode.add_argument('--execute', action='store_true')
     p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback pre-call or return qualification; defaults to full-chain report')
+    p.add_argument('--no-camera', action='store_true', help='qualified read-only native route: use ADB/fastboot and calibrated boot clock')
     a = p.parse_args()
+    if a.no_camera and a.camera_check:
+        p.error('--no-camera excludes --camera-check')
     if not a.camera_check:
         q, image = qualification(a.execute, a.qualification)
         if not a.execute:
             print('PASS: qualified full-input candidate; offline only, no camera/device operation')
+            return
+        if a.no_camera:
+            run_without_camera(q, image)
             return
     sys.path.insert(0, str(ROOT / 'out/camera-tools-py312'))
     import cv2
@@ -176,6 +222,7 @@ def main():
     out.mkdir()
     report = dict(scope='host camera preflight; device action only with --execute',
                   started_utc=datetime.now(timezone.utc).isoformat(), camera_ready=False,
+                  camera_used=True,
                   device_runner_started=False, boot_issued=False)
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     writer = process = log = collector = collector_log = None
@@ -282,6 +329,8 @@ def main():
                       dict(image_sha256=q['image_sha256'], evidence=out.relative_to(ROOT).as_posix(), phase=state['phase']))
         write(out / 'observation.json', report)
         write(ROOT / 'reports/enuma-system-trial-camera.json', report)
+        if a.execute:
+            write(ROOT / 'reports/enuma-system-trial-observation.json', {**report, 'image_sha256':q['image_sha256']})
 
 
 if __name__ == '__main__':

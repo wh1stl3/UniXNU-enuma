@@ -106,6 +106,17 @@ int main(void) {
     mix=T;EnumaClassifyVideoBlend(&S,&T);assert(!memcmp(&mix,&T,sizeof(T)));
   }
   assert(EnumaClassifyVideoBlend(0,&T)==EnumaBlendOther&&EnumaClassifyVideoBlend(&S,0)==EnumaBlendOther);
+  for(unsigned field=0;field<24;field++)for(unsigned bit=0;bit<32;bit++) {
+    setup();unsigned *v=field==0?&T.Mixers[0].Mode:field==1?&T.Mixers[0].Size:field<13?&T.Mixers[0].Blend[field-2]:&T.Mixers[0].Alpha[field-13];
+    *v^=1u<<bit;ENUMA_MIXER_SNAPSHOT raw=T;ENUMA_INHERITED_LIMITS before;memset(&before,0xa5,sizeof(before));O=before;unsigned why=99;
+    unsigned status=EnumaResolveMixerGeometry(&S,&T,&L,&O,&why);
+    assert((status==0)==!(field==1||(field==0&&bit==31)));
+    if(status)assert(!memcmp(&O,&before,sizeof(O)));
+    assert(!memcmp(&raw,&T,sizeof(T)));
+  }
+  setup();S.Pipes[0].OutXy=1;assert(EnumaResolveMixerGeometry(&S,&T,&L,&O,0)==EnumaInheritedTopology);
+  setup();S.Ctls[2].Layers[4][0]|=8;assert(EnumaResolveMixerGeometry(&S,&T,&L,&O,0)==EnumaInheritedTopology);
+  puts("PASS: structural mixer768 bit mutations retain geometry/side rejection and raw inputs");
   puts("PASS: all11 selected blend stages by11 dim locations, operation/alpha cases and immutable snapshots");
   puts("PASS: layout first-predicate classes and4608 saved-word perturbations match fixed c45191c status/output; snapshots immutable");
   puts("PASS: pure staging classification, all64 border masks, 768 single-bit perturbations, source/unknown/cardinality cases, no mutation");

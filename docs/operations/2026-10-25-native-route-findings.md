@@ -95,3 +95,23 @@ independently matches six mixer offsets45000..4a000, length320,11 blend offsets
 20..110 at stride18 and blendstage count11. See
 reports/enuma-native-blend-fdt.json. This checks descriptor provenance only,
 not handoff register values or dim inactivity.
+
+
+## S-034 result and next structural observation
+
+S-034 valid code4 selected-blend-operation-rejected; origin27.238..27.321,
+Android49.094s, independent identity/digests and camera desktop pass. First
+preissue identity gate failed without issuing image; D-233 recovery/reentry
+passed before the single consumed boot. No all-mixer/all-sample inference.
+
+Main hypothesis: the exact opaque blend predicate is narrower than inherited
+configuration. MiCode52a2f180865f8368828985d6384130acd093fa93
+[sde_crtc.c](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_crtc.c)
+420..476 configures distinct opaque, premultiplied and coverage operations.
+This does not identify the actual value. Rather than assume opacity, the next
+independent structural sampler retains BLEND as unproven and examines geometry,
+source decode and raw stability. It leaves actual blend/dim/processing words
+untouched and checks their equality between samples. Bit31 only establishes
+left/right geometry per the pinned LM setup_out implementation. Successful
+structure is not visual composition or GOP readiness. A geometry/decode/runtime
+rejection refutes the hypothesis that blend qualification is the sole blocker.

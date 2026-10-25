@@ -101,6 +101,11 @@ int main(void) {
     unsigned expected=(s==13&&!r&&w>=31&&w<=34)?w-29:1;
     assert(EnumaNativeBlendResult(s,r,w)==expected);
   }
+  for(unsigned s=0;s<=14;s++)for(unsigned w=0;w<=35;w++)for(unsigned r=0;r<32;r++) {
+    unsigned expected=s==0?((w==12&&r==22)?5:1):EnumaNativeRouteResult(s,r,w>=14&&w<=19?8:w);
+    assert(EnumaNativeStructureResult(s,r,w)==expected);
+  }
+  printf("PASS: 17280 structural selector cases; ");
   printf("PASS: 17280 blend selector cases; ");
   printf("PASS: 14880 layout selector cases; ");
   printf("PASS: 12480 staging selector cases; ");

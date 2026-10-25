@@ -313,3 +313,13 @@ D-242，S-028 独立显示掩码结果与交接：用户继续至硬停；新mas
 ## D-254，S-034 原生显示管线合并审计结果与交接
 
 2026-10-26T00:49:47+08:00，前里程碑5653979，固件b915308fbaaeb1c0cce92649040bde8a2ced51e6。实测结果：{"conclusion": "route-category-inferred", "category": "selected-blend-operation-rejected", "warning_code": 4, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-034-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
+
+
+## 当前只读探针的摄像头偏好（2026-10-26最新用户规则）
+
+用户明确“目前不需要摄像头，还没到点屏阶段，光看adb和fastboot状态”。当前禁绘制只读native探针使用--no-camera，保留完整镜像资格、即时身份/备份/恢复、ADB/fastboot状态与校准boot-origin分类，不因缺少画面硬停；USB恢复只证明恢复，不能单独当探针成功。实际点屏/画面变化判读或人工恢复需要时再启用相机；原始影音仍只留本地。此条取代前文当前纯探针每次必须相机的执行偏好，其他硬停与文档/提交推送边界不变。
+
+
+## D-255，S-035 原生显示管线合并审计资格完成，准备实测
+
+2026-10-26T01:04:43+08:00，前里程碑76e5eac，固件6da0a2a3f4cec385b3eec9b558a81ea9cb742685。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。

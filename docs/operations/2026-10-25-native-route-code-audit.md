@@ -191,3 +191,43 @@ bc43b96a4894ac52754442666957d26d5473f350e1721303c9d4e5d80dc37ea1 binds
 ROUTE1/DETAIL1/LAYOUT1/BLEND1/STAGING0/MASK0/QUERY0. Host 11x11 dim cases,
 four actual sampler branches and17280 selector cases support this review;
 no register value or visible display success is inferred.
+
+## S-035 independent structural observation, source6da0a2a
+
+Full-input archive qualified-native-structure-6da0a2a; disassembly digest
+7d79b07ffb4df20947df75eedf0dcee1ad1311c77eb01a02e77e4e55b350086d.
+Image a27d52effd2126e1e444babf5b3ce91fe8b581d83eb72bf189c7291e8c690f95;
+FD959b7e6a82785fabb242236d6b753766b64cd0298d8cb372d8ec7843728aaea8.
+Core SHAa27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f
+is unchanged. An earlier RAM_PAYLOAD0 offline build was discarded before
+packaging/qualification; only rebuilt RAM_PAYLOAD1 is this candidate.
+
+Reviewed complete entry1050..2664 and pure route/normalization/result/read
+helpers2804..2c70. Metadata112c..1194 binds exact R-004 MDP type/attributes and
+Splash base/size. Entry1218 bounds three samples; wait1228..1264 bounds two
+100000us calls. Revision read1268..1290 and all remaining Read2c18 calls retain
+count<330, aligned offset<=0x6c26c before the sole load2c60 at0xae00000.
+STATUS130c gates FRAME1320. Six CTLs and selected source/mixer capture remain
+bounded1374..17d0. Normalize2804 copies RAM, clears onlybit24 at287c and strict
+selects28ac before exposing the copy; raw arrays remain separately saved.
+
+Structural geometry17f8..1b90 preserves revision, exact single video CTL6,
+known single source/stage/owner, height2560, nonzero width, bit31 left/right,
+source fills local mixer and total1600 width. Blend/dim/other Mode tests are
+deliberately absent from this narrower diagnostic; no replacement values are
+written. Decoder1b94..2268 retains geometry/secure/multirect/RGBX0x236ff,
+opmode/unpack, address containment, common base/stride/pattern and coverage
+checks. Raw stability2274..23f0 compares mixer0x240 bytes, source words,
+scope/revision and raw CTL staging. Interface2460..24e8 requires both active,
+complete Timing/Enable equality and nonwrapping frame delta1..64 per window.
+
+Only all three successful samples reach2540: writes requirements0x16=22
+before evidence copy, then complete reason12. Selector2ba0..2c14 admits
+structural code5 only status0/reason12/requirements22. Failures preserve empty
+output; native reasons14..19 become pipeline8 for existing five categories.
+Old selectors still reject requirements22 as a complete blend-qualified
+candidate. ASan/UBSan330 failures/two waits/raw blend mutation/stalled frame,
+768 geometry/side perturbations and17280 structural selector cases passed.
+Actual RAM_PAYLOAD1/STRUCTURE1/ROUTE1 and DETAIL/STAGING/LAYOUT/BLEND/MASK/QUERY0
+are checked in both generated compilation files and the full packaged image.
+No GOP publication, pixel access, MMIO store, new mapping or composition claim.

@@ -179,7 +179,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/topology"
       ],
       "exit_code": 0,
-      "stdout": "PASS: all11 selected blend stages by11 dim locations, operation/alpha cases and immutable snapshots\nPASS: layout first-predicate classes and4608 saved-word perturbations match fixed c45191c status/output; snapshots immutable\nPASS: pure staging classification, all64 border masks, 768 single-bit perturbations, source/unknown/cardinality cases, no mutation\nPASS: reversed mixer identities, explicit right flag, dual tile decode, 12 topology rejects and 144 callback failures; downstream/CPU proof remains required\n",
+      "stdout": "PASS: structural mixer768 bit mutations retain geometry/side rejection and raw inputs\nPASS: all11 selected blend stages by11 dim locations, operation/alpha cases and immutable snapshots\nPASS: layout first-predicate classes and4608 saved-word perturbations match fixed c45191c status/output; snapshots immutable\nPASS: pure staging classification, all64 border masks, 768 single-bit perturbations, source/unknown/cardinality cases, no mutation\nPASS: reversed mixer identities, explicit right flag, dual tile decode, 12 topology rejects and 144 callback failures; downstream/CPU proof remains required\n",
       "stderr": ""
     },
     {
@@ -224,7 +224,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/evidence"
       ],
       "exit_code": 0,
-      "stdout": "PASS: four actual sampler blend categories, same110 first-sample reads, no wait, output unchanged\nPASS: native border all64 masks preserve raw snapshots,330 read failures, changed border/unknown staging/stability/mixer rejection\nPASS: native fixed-source callback/result parity at all330 read failures and CTL/staging/LM first-location isolation\nPASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged\nPASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained\n",
+      "stdout": "PASS: structural sampler330 failures, two waits, raw blend mutation and stalled frame rejection; requirements22 retained\nPASS: four actual sampler blend categories, same110 first-sample reads, no wait, output unchanged\nPASS: native border all64 masks preserve raw snapshots,330 read failures, changed border/unknown staging/stability/mixer rejection\nPASS: native fixed-source callback/result parity at all330 read failures and CTL/staging/LM first-location isolation\nPASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged\nPASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained\n",
       "stderr": ""
     },
     {
@@ -426,7 +426,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Evidence.o"
       ],
       "exit_code": 0,
-      "stdout": "                 U EnumaCaptureNativeBorderConfig\n                 U EnumaCaptureRoutedMixers\n                 U EnumaCaptureVideoConfig\n                 U EnumaCaptureVideoConfigDetailed\n                 U EnumaClassifyVideoBlend\n                 U EnumaDecodeInherited\n                 U EnumaNormalizeVideoBorder\n                 U EnumaResolveMixerOriginsDetailed\n",
+      "stdout": "                 U EnumaCaptureNativeBorderConfig\n                 U EnumaCaptureRoutedMixers\n                 U EnumaCaptureVideoConfig\n                 U EnumaCaptureVideoConfigDetailed\n                 U EnumaClassifyVideoBlend\n                 U EnumaDecodeInherited\n                 U EnumaNormalizeVideoBorder\n                 U EnumaResolveMixerGeometry\n                 U EnumaResolveMixerOriginsDetailed\n",
       "stderr": ""
     },
     {
@@ -515,15 +515,15 @@
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c": "1b3dc06d5e638d01c666bdb6e5f0226288a4044bb0da3a9243697d7dec1b9307",
     "firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c": "3c4ef872faa7e042bcd2199a225c28ae50afe6768363734210f73645e683fb53",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "d3569c33a7736e33717d0dd5fb7ab0476071841638ccbfd2d5ffd6608ea719d9",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "6808607fdfe59bcd10876ad8a4d1a4a1f23cb72a59ecaf8d94bcdda644555fee",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "dde2a43b870a368c3ecc7cdbcc07947ba2ba3abb3f18efee58d2bfac27a1734c",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c": "1d61cd69efe4d4c284babc12e48ccd298ef5e3c51a0a6e570dee035c90ec62ec",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "e6c79c08536cc5acc5cbb0c799236423e922cbcf7683ba53f4ac10241115ce3e",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "8ae68d7b085917b20107ecde9f0c16816e0818ac8e4ef2c2d9a1df20ff8d7f53",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoCapture.c": "42a38eb9d85540e1fd6a6f0b948507a70e017ae1e8361bedeffa4eec06b3d49b",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoResult.h": "b9c9375fad42acd8dd470bd2208e70ccbf17f22a2233f62e8dab30cceec324a7",
     "tests/inherited_gop.c": "609dd979a3f05eefd9f159cf1dc41d0f462815ed8f56bed3004e6a8d1c95061c",
-    "tests/inherited_topology.c": "d3c3da54c1ff228fd8d24e5d065f588b8fbeb2623a4fd9aceec82f6cac03a257",
-    "tests/inherited_evidence.c": "415683a7228e437ee15ab46948eb542982d9f156409e3c6e78f6a3ed02c7d4f1",
+    "tests/inherited_topology.c": "9e0519b79571dd425949e44ae704f6df344886cfd744ea8b1e43a11b40018766",
+    "tests/inherited_evidence.c": "3a06b271727be61a2113a4cb36ee9780b38c5dc4e71e5fb2e0329a4f2c44431a",
     "tests/inherited_video_result.c": "3bbea2b43deb42f1d378c41ed0b53f0347562288960ca118eff556a3f69dd794"
   },
   "hardware_tested": false,
