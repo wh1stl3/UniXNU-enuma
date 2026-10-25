@@ -761,3 +761,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-217：S-015超时、恢复与采集证据更正
 
 2026-10-25T20:11:30+08:00。S-015于20:04:30单次发送，命令0/2.641秒，5.110秒断开，75秒无自动回归，停止追加。用户报告恢复，20:07:27Android完成/root/A槽/解锁/设备双分区与备份摘要独立核验通过；559/559帧、最后黑屏及恢复后桌面目视，按键未获连续录像确认。65字节快照是exec-out的缺文件cat诊断，不是pstore；无有效nonce，原证据保留。镜像2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e与R-017 writer单笔consumed，不重试。f17af47资格在执行前已推送。继续离线准备同范围map-only/原stage10-cold新候选，尚未构建/资格/上机，不从本次结果直接认定写入或warm是根因。详见reports/enuma-ramoops-S-015-result.json。原始影音仍仅本地，无分区/verified/pmsg扩张。
+
+
+## D-218：恢复后的S-016 map-only/cold独立对照资格
+
+2026-10-25T20:21:00+08:00。23d5538已推送S-015超时/独立恢复与采集器修复。固件a657b79018a47a0b4a6af4fe9c4b14a8f490cd12拆分map/writer，默认关闭，map-control保留原迁移header和stage10/delay2/ResetCold，不访问console内容。新镜像1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513，实际Core无writer/ResetWarm、描述符及完整FAT/Boot v3/归档资格通过；已绑定R-017-MAP独立图，不重授权consumed writer，无内存范围/分区/verified扩张。当前未上机，所有当前文档发布与即时身份/备份/相机/恢复后沿用户直接推进规则执行单笔。证据reports/enuma-ramoops-map-control-qualification.json与code.json。原始影音仅本地。

@@ -26,5 +26,24 @@
     "authorization": "User explicitly instructed 上机无需批准 直接进行 注意使用摄像头记录关键节点 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
     "qualification": "reports/enuma-ramoops-canary-qualification.json",
     "execution_record": "reports/enuma-ramoops-S-015-result.json"
+  },
+  "R-017-MAP": {
+    "status": "approved",
+    "image_sha256": [
+      "1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513"
+    ],
+    "ramoops_scope": {
+      "base": "0xB0000000",
+      "size": "0x200000",
+      "marker_bytes": 0,
+      "stage": 10,
+      "delay_seconds": 2,
+      "reset": "cold",
+      "pmsg_access": false
+    },
+    "scope": "new isolated map-only/cold control, no console contents read/write, same previously approved exact extent",
+    "authorization": "Existing exact R-017 memory extent plus current direct bounded temporary-boot authorization and recovery-followed-by-isolation rule. Does not reauthorize the consumed writer trial.",
+    "qualification": "reports/enuma-ramoops-map-control-qualification.json",
+    "execution_record": null
   }
 }

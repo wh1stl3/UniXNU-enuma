@@ -20,6 +20,7 @@ def main():
     p.add_argument('--archive',type=Path,required=True)
     p.add_argument('--reviewed-disassembly-sha256')
     p.add_argument('--tool-path',type=Path)
+    p.add_argument('--map-control',action='store_true')
     a=p.parse_args();image=a.image.resolve();archive=a.archive.resolve()
     if a.tool_path:sys.path.insert(0,str(a.tool_path.resolve()))
     if not image.is_relative_to(ROOT/'out') or not archive.is_relative_to(ROOT/'out') or archive.exists():
@@ -31,16 +32,19 @@ def main():
               'diagnostic_dispatch_completion_fallback':False,'diagnostic_gop_query':0,
               'diagnostic_gop_step':0,'diagnostic_pixel_preview':False,
               'inherited_video_audit_read_only':False,'gop_backend_selftest_ram_only':False,
-              'hardware_review_required':'R-017',
+              'hardware_review_required':'R-017-MAP' if a.map_control else 'R-017',
               'diagnostic_omitted_oem_modules':['CPRDxe','DisplayDxe','UFSDxe']}
     if any(build.get(k)!=v for k,v in expected.items()) or build['uefi_source_commit']!=pin['commit']:
         raise ValueError('wrong R-017 build profile')
+    if bool(build.get('ramoops_map_control',False))!=a.map_control:raise ValueError('map control selection differs')
     nonce=build.get('ramoops_canary_nonce','')
-    if re.fullmatch('[0-9a-f]{32}',nonce) is None:raise ValueError('missing nonce')
+    if (a.map_control and nonce is not None) or (not a.map_control and (not isinstance(nonce,str) or re.fullmatch('[0-9a-f]{32}',nonce) is None)):
+        raise ValueError('wrong nonce/control profile')
     defs=build['firmware_configuration']['defines']
-    if defs['ENUMA_RAM_PAYLOAD']!='1' or defs['ENUMA_RAMOOPS_CANARY']!='1' or defs['ENUMA_VALUE_SOURCE']!='0':
+    if (defs['ENUMA_RAM_PAYLOAD']!='1' or defs['ENUMA_RAMOOPS_CANARY']!=('0' if a.map_control else '1') or
+        defs.get('ENUMA_RAMOOPS_MAP')!='1' or defs['ENUMA_VALUE_SOURCE']!='0'):
         raise ValueError('full FAT and standalone canary required')
-    if any(defs['ENUMA_RAMOOPS_NONCE_'+str(i)]!=str(int(nonce[i*8:i*8+8],16))+'U' for i in range(4)):
+    if any(defs['ENUMA_RAMOOPS_NONCE_'+str(i)]!=str(0 if a.map_control else int(nonce[i*8:i*8+8],16))+'U' for i in range(4)):
         raise ValueError('nonce words differ')
     fd=ROOT/build['fd'];raw=ROOT/'out/boot-candidate/enuma-uefi.raw';fat=ROOT/'out/full-boot/payload/payload.img'
     audit=json.loads((ROOT/'reports/enuma-fd-audit.json').read_text());full=json.loads((ROOT/'reports/enuma-full-payload.json').read_text())
@@ -48,7 +52,7 @@ def main():
         raise ValueError('FD/raw/full FAT mismatch')
     package=verify(image.read_bytes(),raw.read_bytes(),fat.read_bytes())
     meta=json.loads(image.with_suffix('.json').read_text())
-    if meta.get('hardware_review')!='R-017' or meta['image_sha256']!=sha(image):raise ValueError('missing protected package tag')
+    if meta.get('hardware_review')!=expected['hardware_review_required'] or meta['image_sha256']!=sha(image):raise ValueError('missing protected package tag')
     modules=list(firmware_files(fd.read_bytes())); names=[m['name'] for m in modules]
     if any(n in names for n in ['DisplayDxe','CPRDxe','UFSDxe','EnumaGopSelfTest']) or not all(n in names for n in ['SimpleFbDxe','EnumaRamPayloadDxe','EnumaProbe']):
         raise ValueError('wrong actual modules')
@@ -57,10 +61,11 @@ def main():
     actual=[m for m in modules if m['guid']=='d6a2cb7f-6a18-4e2f-b43b-9920a733700a']
     if len(actual)!=1 or hashlib.sha256(actual[0]['data']).hexdigest()!=sha(pe):raise ValueError('actual packaged Core differs')
     text=make.read_text()
-    for k in ['ENUMA_RAMOOPS_CANARY','ENUMA_DIAG_STAGE','ENUMA_DIAG_DELAY_US','ENUMA_RAM_PAYLOAD','ENUMA_DIAG_GOP_QUERY','ENUMA_VALUE_SOURCE']+['ENUMA_RAMOOPS_NONCE_'+str(i) for i in range(4)]:
+    for k in ['ENUMA_RAMOOPS_MAP','ENUMA_RAMOOPS_CANARY','ENUMA_DIAG_STAGE','ENUMA_DIAG_DELAY_US','ENUMA_RAM_PAYLOAD','ENUMA_DIAG_GOP_QUERY','ENUMA_VALUE_SOURCE']+['ENUMA_RAMOOPS_NONCE_'+str(i) for i in range(4)]:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',text))!={defs[k]}:raise ValueError('actual Core flags differ: '+k)
     staged=ROOT/'out/firmware-build/Mu_Basecore/MdeModulePkg/Core/Dxe/DxeMain'
-    if (staged/'EnumaStageCheckpoint.h').read_bytes()!=(ROOT/'firmware/diagnostics/EnumaRamoopsStageCheckpoint.h').read_bytes():
+    stage_header='EnumaStageCheckpoint.h' if a.map_control else 'EnumaRamoopsStageCheckpoint.h'
+    if (staged/'EnumaStageCheckpoint.h').read_bytes()!=(ROOT/'firmware/diagnostics'/stage_header).read_bytes():
         raise ValueError('actual staged stage header differs')
     for n in ['EnumaRamoopsCanary.h','EnumaRamoopsBuffer.h']:
         if (staged/n).read_bytes()!=(ROOT/'firmware/diagnostics'/n).read_bytes():raise ValueError('staged writer differs')
@@ -83,15 +88,18 @@ def main():
     parsed=pefile.PE(data=pe.read_bytes());md=capstone.Cs(capstone.CS_ARCH_ARM64,capstone.CS_MODE_LITTLE_ENDIAN);md.skipdata=True
     core_map=(core/'OUTPUT/DxeCore.map').read_text()
     word_match=re.search(r'^([0-9a-fA-F]+)\s+00000000\s+0\s+__const.EnumaWriteRamoopsCanary.Words\s*$',core_map,re.M)
-    if not word_match:raise ValueError('actual nonce word table symbol missing')
-    rva=int(word_match[1],16)
-    actual_words=struct.unpack('<4I',parsed.get_data(rva,16))
-    if actual_words!=tuple(int(nonce[i*8:i*8+8],16) for i in range(4)):raise ValueError('actual nonce data differs')
+    if a.map_control:
+        if word_match or b'ENUMA-R017:' in pe.read_bytes():raise ValueError('map control contains marker writer data')
+    else:
+        if not word_match:raise ValueError('actual nonce word table symbol missing')
+        rva=int(word_match[1],16)
+        actual_words=struct.unpack('<4I',parsed.get_data(rva,16))
+        if actual_words!=tuple(int(nonce[i*8:i*8+8],16) for i in range(4)):raise ValueError('actual nonce data differs')
     assembly='\n'.join(f'{i.address:x}: {i.mnemonic} {i.op_str}' for section in parsed.sections if section.Characteristics&0x20 for i in md.disasm(section.get_data(),section.VirtualAddress))+'\n'
     assembly_sha=hashlib.sha256(assembly.encode()).hexdigest()
     if a.reviewed_disassembly_sha256 and a.reviewed_disassembly_sha256!=assembly_sha:raise ValueError('actual disassembly changed')
-    scope=dict(base='0xB0000000',size='0x200000',marker_bytes=44,stage=10,delay_seconds=2,
-               reset='warm-with-cold-fallback',pmsg_access=False)
+    scope=dict(base='0xB0000000',size='0x200000',marker_bytes=0 if a.map_control else 44,stage=10,delay_seconds=2,
+               reset='cold' if a.map_control else 'warm-with-cold-fallback',pmsg_access=False)
     meta['ramoops_scope']=scope
     image.with_suffix('.json').write_text(json.dumps(meta,indent=2)+'\n')
     archive.mkdir(parents=True)
@@ -104,14 +112,15 @@ def main():
     for name,path in files.items():shutil.copyfile(path,archive/name)
     (archive/'core.disassembly.txt').write_text(assembly)
     entries={n:dict(sha256=sha(archive/n),bytes=(archive/n).stat().st_size) for n in [*files,'core.disassembly.txt']}
-    q=dict(trial_kind='ramoops-canary',firmware_commit=pin['commit'],archive=archive.relative_to(ROOT).as_posix(),
+    q=dict(trial_kind='ramoops-map-control' if a.map_control else 'ramoops-canary',firmware_commit=pin['commit'],archive=archive.relative_to(ROOT).as_posix(),
            image=(archive/'image.img').relative_to(ROOT).as_posix(),image_sha256=sha(image),nonce=nonce,
            ramoops_scope=scope,files=entries,package=package,ram_payload_sha256=sha(fat),pixel_access=False,
            gop_published=False,review_required=a.reviewed_disassembly_sha256 is None,
            disassembly_sha256=assembly_sha,actual_map_record_present=True,actual_map_records=records,
-           actual_nonce_words_equal=True,packaged_core_equal=True,
-           interpretation='Only fresh complete nonce in native pstore supports survival; timeout/absence is inconclusive; never reissue consumed image')
-    for p in [archive/'qualification.json',ROOT/'reports/enuma-ramoops-canary-qualification.json']:
+           actual_nonce_words_equal=None if a.map_control else True,packaged_core_equal=True,
+           interpretation=('Map-only with original cold gate. Automatic return supports reaching a controlled path, not console content access or logs. No writer/warm test.' if a.map_control else 'Only fresh complete nonce in native pstore supports survival; timeout/absence is inconclusive; never reissue consumed image'))
+    report_name='enuma-ramoops-map-control-qualification.json' if a.map_control else 'enuma-ramoops-canary-qualification.json'
+    for p in [archive/'qualification.json',ROOT/'reports'/report_name]:
         p.write_text(json.dumps(q,indent=2)+'\n')
     print('PASS: actual Core/map/full FAT and immutable archive; actual code review required='+str(q['review_required']))
     print('disassembly sha256='+assembly_sha)

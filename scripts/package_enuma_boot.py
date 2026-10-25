@@ -34,7 +34,7 @@ def verify(data, kernel, ramdisk):
 
 
 def package(kernel_path, ramdisk_path, output, fixture=False, hardware_review=None):
-    if hardware_review not in (None, 'R-005', 'R-017'): raise ValueError('unknown hardware review')
+    if hardware_review not in (None, 'R-005', 'R-017', 'R-017-MAP'): raise ValueError('unknown hardware review')
     lock = json.loads((ROOT / 'config/porting-sources.lock.json').read_text())['aosp_mkbootimg']
     base = Path(lock['path'])
     for name, expected in lock['sha256'].items():
@@ -76,7 +76,7 @@ def main():
     parser.add_argument('--kernel', type=Path, required=True, help='raw ARM64 BootShim plus real UEFI FD')
     parser.add_argument('--ramdisk', type=Path, required=True, help='explicit input; may be an empty file')
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--hardware-review', choices=('R-005','R-017'), help='tag a protected candidate; execution still checks the exact authorized image')
+    parser.add_argument('--hardware-review', choices=('R-005','R-017','R-017-MAP'), help='tag a protected candidate; execution still checks the exact authorized image')
     args = parser.parse_args()
     report = package(args.kernel, args.ramdisk, args.output, hardware_review=args.hardware_review)
     print(f'PASS: boot v3 roundtrip, {report["image_bytes"]} bytes; hardware readiness not established')

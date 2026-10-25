@@ -1,11 +1,11 @@
-# 当前状态：D-217，S-015超时后Android已独立恢复；继续离线隔离
+# 当前状态：D-218，S-015已恢复；S-016映射对照完成资格待执行
 
-2026-10-25T20:11:30+08:00。S-015于2026-10-25 20:04:30发出一次，fastboot返回0/2.641秒，5.110秒观察到断开，75秒未自动返回Android/fastboot，立即停止追加。用户报告已恢复Android，20:07:27独立核验完成/root/A槽/解锁及boot_a/vendor_boot_a设备和本地备份摘要均通过。当前Android正常，无人工恢复/审批待办；按持久规则继续离线分析和新软件，不把人工恢复当整轮结束。
+2026-10-25T20:21:00+08:00。S-015于20:04:30单次发出后75秒无自动返回，用户恢复Android，20:07:27起独立完成/root/A槽/解锁及boot_a/vendor_boot_a设备与本地备份摘要全部通过。当前最新只读恢复证据`out\device-tests\20261025T201930-recovery-reconciliation.json`，Android正常。原失败记录保留；R-017 writer单笔和S-015均consumed，不重试。没有有效nonce读回，65字节缺文件cat错误不算pstore日志；收集器已改shell -T/existence guard，6项回归通过。
 
-最后镜像`2583de23dbf426692e4edc573faeadb0a383147f8fa82d3f01aff1fb73abbd1e`，固件`10a546ee9a6b352ec4e2bcf2b9510dad5fc48fb6`，FD9773cea18ea6a35694eb8ee5409d073fc92918543338c9e7d46e8db2fb8766e7。R-017 A一次writer试验及S-015均consumed，不原样重试。详细结果reports/enuma-ramoops-S-015-result.json，原始超时记录out/device-tests/20261025T200416-system-transport/result.json保留；最新独立恢复证据`out\device-tests\20261025T200727-recovery-reconciliation.json`。
+恢复后按用户直接上机及故障隔离规则完成新S-016：只保留相同已批准B0000000/2MiB映射，不读取/写入console头或payload，不请求warm；原迁移stage10/delay2/ResetCold header逐字节不变。writer开关0、map1、nonce全0，实际Core无writer表/标记或ResetWarm符号。映射描述符实际字段及有界cold调用在CoreDispatcher之前已审查。默认生产profile仍无新增映射，Null后端不变。
 
-没有本次nonce的有效pstore数据。旧收集器把exec-out返回0时stdout内65字节“cat文件不存在”诊断误存为快照；那不是console日志，原证据保留，不算读回。Android恢复后后端仍ramoops、console2MiB、pstore目录为空。已定位主机采集缺陷，改用shell -T保留远端状态并先test -f，补回归。不能用缺nonce唯一归因于映射、写入或warm复位。
+固件`a657b79018a47a0b4a6af4fe9c4b14a8f490cd12`已推送；新镜像`1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513`，FD`b5c52587814fb17ad7bb80af9d576aa1831632e06af696914e2cacf2ca259325`，103817216字节，完整FAT/Boot v3回环及不可变归档`out/ramoops-audit/S-016-qualified`通过。资格/实际代码见reports/enuma-ramoops-map-control-qualification.json及enuma-ramoops-map-control-code.json。R-017-MAP只绑定此无内容访问的新对照，不继承或重新批准writer；无新base/size、pmsg/分区/verified/显示寄存器范围扩张。
 
-相机启动/超时过程559/559帧解码通过，最后一帧仍黑屏镜面；恢复后补拍已目视Android桌面。用户恢复按键不在已确认的录像范围，不猜测按键时间。原始视频/图像/错误快照均仅本地out，无录音/上传。
+当前S-016尚未发出。源码/实际PE/宏/描述符/完整载荷审计及保护门禁回归通过；当前文档提交推送后，沿即时身份/备份/恢复/相机门禁直接单笔临时boot。相机覆盖关键节点；若超时继续拍摄至独立恢复或235秒相机界限，主机75秒无返回仍立即停止追加。原始影音仅本地out，不录音/上传。
 
-主判断：S-015同时新增映射、物理写入和warm请求，没有内部到达证据，须先减变量。按信息价值和安全性准备独立map-only对照：仅相同已批准B0000000/2MiB映射，恢复原字节不变stage10/delay2/ResetCold，不访问console内容，不启用writer/warm。先排除新增映射和早期启动路径，再决定是否继续writer/reset隔离。该新候选尚未实现/构建/资格/执行；必须新源码/全FD/实际代码/镜像审计、所有当前文档提交推送和即时身份/备份/相机/恢复门禁后才能执行。无flash/erase/改槽/verified/pmsg/显示寄存器写入；S-001..015和旧失败图不重试。真实GOP/XNU/iPadOS仍未实机闭合。
+解释边界：自动回归只能支持map-only/early/cold路径可控，不能称console物理访问或日志成功，也不能唯一证明门命中；若成立，S-015怀疑重点转到writer物理访问与warm路径的差异。若再次超时，先恢复再分析新增映射/更早启动差异，不追加其他writer。S-001..015及旧失败图不重试；真实GOP/XNU/iPadOS仍未实机闭合。当前无人工按键/审批待办。

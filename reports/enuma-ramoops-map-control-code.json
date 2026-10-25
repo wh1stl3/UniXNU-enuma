@@ -1,0 +1,51 @@
+{
+  "scope": "manual actual Core review of no-content-access map-only cold control",
+  "firmware_commit": "a657b79018a47a0b4a6af4fe9c4b14a8f490cd12",
+  "image_sha256": "1fcb56736b7fbae40cf3250691c1e70b67866d375ff741bb43423f96471d1513",
+  "core_sha256": "abef19a5279b2c9ff6ccd22c7055ce659fd9942b1ab5c99f782c1a0a04fe458c",
+  "disassembly_sha256": "5bc70022f9e3c144eb8573ed58bcc5ae2fc44533d7eec5725bbd6a9bf776f079",
+  "review_required": false,
+  "findings": [
+    "baseline stage header byte-identical to migrated bb6f9bdb7a4d0dc2206fb595e63ff1718933868f61265dfc89ebf9867c5645b0",
+    "DxeMain inline gate 3c90 calls MicroSecondDelay, 3c94 ResetCold, 3c98 CpuDeadLoop before CoreDispatcher3c9c",
+    "ResetCold16f4..171c issues PSCI SYSTEM_RESET84000009 viaArmMonitorCall",
+    "no ResetWarm symbol, no canary Words symbol or ENUMA-R017 marker data in actual Core",
+    "CANARY0, MAP1, nonce words0U, stage10/delay2 and actual console descriptor fields verified",
+    "no console payload/header access added; mapping-only control does not prove physical console accessibility"
+  ],
+  "actual_map_records": [
+    {
+      "module": "BdsDxe",
+      "offset": 378448,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "SimpleFbDxe",
+      "offset": 13360,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    },
+    {
+      "module": "EnumaRamPayloadDxe",
+      "offset": 17984,
+      "fields": [
+        1,
+        5,
+        1024,
+        0,
+        0
+      ]
+    }
+  ]
+}

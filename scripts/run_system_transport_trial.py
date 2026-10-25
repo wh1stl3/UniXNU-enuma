@@ -28,14 +28,16 @@ def qualification(published=False, report=None):
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
-    if q.get('trial_kind') == 'ramoops-canary':
+    if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control'):
+        control = q['trial_kind']=='ramoops-map-control'
         frozen = (ROOT / q['archive'] / 'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text()) != q:
             raise ValueError('ramoops candidate differs from frozen qualification')
         nonce = q.get('nonce', '')
-        expected = dict(base='0xB0000000', size='0x200000', marker_bytes=44, stage=10,
-                        delay_seconds=2, reset='warm-with-cold-fallback', pmsg_access=False)
-        if (re.fullmatch('[0-9a-f]{32}', nonce) is None or q.get('ramoops_scope') != expected or
+        expected = dict(base='0xB0000000', size='0x200000', marker_bytes=0 if control else 44, stage=10,
+                        delay_seconds=2, reset='cold' if control else 'warm-with-cold-fallback', pmsg_access=False)
+        bad_nonce = nonce is not None if control else (not isinstance(nonce,str) or re.fullmatch('[0-9a-f]{32}', nonce) is None)
+        if (bad_nonce or q.get('ramoops_scope') != expected or
             q.get('review_required') is not False or q.get('pixel_access') is not False):
             raise ValueError('R-017 exact console scope or actual code qualification missing')
     if q.get('trial_kind') in ('inherited-video-audit','inherited-video-entry-control'):
@@ -75,7 +77,7 @@ def qualification(published=False, report=None):
     if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
         raise ValueError('candidate differs')
     if published:
-        if q.get('trial_kind') == 'ramoops-canary':
+        if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control'):
             from run_enuma_entry_probe import require_hardware_review
             require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
                 json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))
@@ -167,7 +169,21 @@ def main():
                     last = second
             if process.poll() is not None:
                 if finished is None: finished = time.monotonic()
-                if time.monotonic() - finished >= 3 and (collector is None or collector.poll() is not None): break
+                if time.monotonic() - finished >= 3 and (collector is None or collector.poll() is not None):
+                    if process.returncode == 0:
+                        break
+                    # Keep filming the user's recovery after a timeout. An
+                    # independent reconciliation updates only local state;
+                    # this camera loop issues no extra device commands.
+                    try:
+                        recovered = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+                    except (OSError,json.JSONDecodeError):
+                        recovered = {}
+                    if (recovered.get('phase')=='recovered-android-boot-complete' and
+                        recovered.get('candidate_sha256')==q['image_sha256']):
+                        break
+                    if now >= 235:
+                        break
         else:
             raise RuntimeError('host bound reached; no further candidate, reconcile recovery')
         writer.release(); writer = None
