@@ -8,6 +8,29 @@ from firmware_audit_policy import omitted_oem_modules
 
 
 class FirmwareAuditPolicyTests(unittest.TestCase):
+    def test_native_pixel_is_protected_and_never_declared_read_only(self):
+        value=self.fixture()
+        value.update(native_route_cpu_pattern=True,inherited_video_audit_read_only=False,
+            inherited_video_terminal=True,diagnostic_dispatch_completion_fallback=False,
+            diagnostic_simplefb_metadata_only=False,diagnostic_gop_step=0,diagnostic_gop_query=1,
+            diagnostic_omitted_oem_modules=['CPRDxe','DisplayDxe','UFSDxe'],
+            hardware_review_required='R-018',value_probe={'source':'off'},
+            inherited_video_compiled_contract=dict(maximum_read_callbacks=660,maximum_wait_calls=5,
+                maximum_framebuffer_reads=3072,framebuffer_writes=2048,pixel_access=True,
+                cache_maintenance=False,protocol_published=False))
+        defs=value['firmware_configuration']['defines']
+        defs['ENUMA_DIAG_SIMPLEFB']='1'
+        for name in ['CPU_PATTERN','CPU_ROI','CPU_BARRIER','CPU_READ','CPU_POLICY','CPU_STAGE1',
+                     'ALPHA_VIEW','GLOBAL_OUTPUT','STRUCTURE','AUDIT']:defs['ENUMA_NATIVE_ROUTE_'+name]='1'
+        self.assertEqual(omitted_oem_modules(value,'a'*64),frozenset(value['diagnostic_omitted_oem_modules']))
+        for key,bad in [('inherited_video_audit_read_only',True),('hardware_review_required',None),
+                        ('inherited_video_terminal',False),('diagnostic_simplefb_metadata_only',True)]:
+            candidate=copy.deepcopy(value);candidate[key]=bad
+            with self.subTest(key=key),self.assertRaises(ValueError):omitted_oem_modules(candidate,'a'*64)
+        for key in value['inherited_video_compiled_contract']:
+            candidate=copy.deepcopy(value);candidate['inherited_video_compiled_contract'][key]=None
+            with self.subTest(key=key),self.assertRaises(ValueError):omitted_oem_modules(candidate,'a'*64)
+
     def test_control_requires_video_profile_and_boolean(self):
         for value in [dict(inherited_video_entry_control=True),dict(inherited_video_entry_control='1')]:
             with self.assertRaises(ValueError): omitted_oem_modules(value,'a'*64)

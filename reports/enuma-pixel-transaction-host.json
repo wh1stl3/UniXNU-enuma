@@ -1,0 +1,15 @@
+{
+  "scope": "actual portable transaction on symbolic9c addresses backed by host arrays, callback failures and actual freestanding Arm wrapper compilation; no hardware",
+  "result": "PASS: 24 opaque byte permutations/white fallback;3072 read and4096 write-failure cases; full restoration attempts, failure precedence, revalidation and strict bounds; no hardware",
+  "hardware_tested": false,
+  "pixel_writes_on_device": false,
+  "sources": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelTransaction.h": "7ab68cc083835963d81f40f11709a2202412c02772cc928e0c7716f7738cfb59",
+    "firmware/diagnostics/EnumaPixelTransactionArm.h": "d4dac1403573ff395ae6bc947c2ba3c022286e9106b2d0b5f22456f65fd5c69c",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "6baed041919ca6944c0cec5544d473529b2b7117079080a04c54b5181f3123d0",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.h": "fca3106934b5569c09dc36ea2274e68edddc95a1e9f7963091afe17dbc395735",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
+    "tests/native_pixel_transaction.c": "28170e6c2d4274c1f798d01f20985327e54a6f20ecb465f70ef0074215af36d3",
+    "scripts/check_native_pixel_transaction.py": "f5a2229f8b45739edc9e771c886780b44f6220842a28ec4715b1c607bdb6eaa6"
+  }
+}

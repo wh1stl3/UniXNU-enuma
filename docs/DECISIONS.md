@@ -1271,3 +1271,8 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-277，S-045 原生显示管线合并审计结果与交接
 
 2026-10-26T04:03:32+08:00，前里程碑795a008，固件431f0a819e6b9705aebb24e4f6dae0603a7aeaad。实测结果：{"conclusion": "route-category-inferred", "category": "roi-128x8-reads-and-one-dsb-completed-at-el1", "warning_code": 4, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-045-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。沿R-004最多330读/two100ms，五种首结果分类，无像素/MMIO/页表写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
+
+
+## D-278，R-018离线资格与相机适用范围
+
+2026-10-26T04:30:24+08:00，前里程碑9795871，固件c9530a746dbf6efbd7b1d55c020ce63477b8c198。S-045已consumed；新像素候选743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56未执行，R-018 pending。只读前置继续无相机，ADB/fastboot和固定boot-clock判分类与恢复；真正图案/背光/画面验收才采摄像头，原始影音只留本地。主机/实际构建审查完成，零新增设备动作；不是硬件硬停。R-005 consumed不复用，新事务精确范围及A/B/C选项见docs/operations/2026-10-26-r018-bounded-pixel-transaction.md。恢复后状态和下一步已同步STATUS/HANDOFF；批准前不运行新像素候选。

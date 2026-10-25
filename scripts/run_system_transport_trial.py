@@ -80,7 +80,7 @@ def qualification(published=False, report=None):
             if q.get('review_required') is not False or review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
                 raise ValueError('native actual PE code review missing or mismatched')
     if q.get('trial_kind') in ('native-display-mask','native-video-route'):
-        from native_mask_decode import make_plan
+        from native_mask_decode import make_plan,make_pixel_plan
         frozen=(ROOT/q['archive']/'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
             raise ValueError('native mask differs from frozen qualification')
@@ -90,7 +90,7 @@ def qualification(published=False, report=None):
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
         route=q['trial_kind']=='native-video-route'
         if route:
-            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES,CPU_BARRIER_CATEGORIES,CPU_ROI_CATEGORIES
+            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES,CPU_BARRIER_CATEGORIES,CPU_ROI_CATEGORIES,CPU_PATTERN_CATEGORIES
             detail=q.get('native_route_detail',False)
             if type(detail) is not bool: raise ValueError('native route detail scope invalid')
             staging=q.get('native_route_staging',False)
@@ -126,13 +126,18 @@ def qualification(published=False, report=None):
             cpu_roi=q.get('native_route_cpu_roi',False)
             if type(cpu_roi) is not bool or (cpu_roi and not cpu_barrier): raise ValueError('native CPU ROI scope invalid')
             if cpu_roi: expected.update(maximum_framebuffer_reads=1024,roi_origin_x=0,roi_origin_y=0,roi_width=128,roi_height=8,cpu_context_on_completion=True)
-            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+            cpu_pattern=q.get('native_route_cpu_pattern',False)
+            if type(cpu_pattern) is not bool or (cpu_pattern and not cpu_roi): raise ValueError('native pixel scope invalid')
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_PATTERN_CATEGORIES if cpu_pattern else CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+        if route and cpu_pattern:
+            from native_pixel_scope import SCOPE
+            expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=3072,framebuffer_writes=2048,maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=500000,hold_calls_max=1,hardware_review='R-018',pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
             raise ValueError('invalid native mask field')
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
-        if q.get('decode_plan')!=make_plan(ROOT) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
+        if q.get('decode_plan')!=(make_pixel_plan(ROOT) if route and cpu_pattern else make_plan(ROOT)) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
             raise ValueError('fixed boot clock calibration/plan differs')
         if published:
             review=json.loads((ROOT/'reports'/('enuma-native-route-code.json' if route else 'enuma-native-mask-code.json')).read_text())
@@ -160,7 +165,7 @@ def qualification(published=False, report=None):
     if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
         raise ValueError('candidate differs')
     if published:
-        if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control'):
+        if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control') or q.get('native_route_cpu_pattern') is True:
             from run_enuma_entry_probe import require_hardware_review
             require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
                 json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))
@@ -203,6 +208,7 @@ def run_without_camera(q, image):
         (q.get('pixel_access') is not False and not single_read_only_scope(q)) or q.get('gop_published') is not False or
         q.get('boot_clock_capture') is not True):
         raise ValueError('camera-free mode requires read-only native route with boot clock')
+    if q.get('native_route_cpu_pattern') is True: raise ValueError('R-018 pixel scope requires camera')
     out = ROOT / 'out/system-transport' / datetime.now().strftime('%Y%m%dT%H%M%S')
     out.mkdir(parents=True)
     report = dict(scope='qualified read-only native route; ADB/fastboot and calibrated boot clock',
@@ -247,6 +253,8 @@ def main():
         p.error('--no-camera excludes --camera-check')
     if not a.camera_check:
         q, image = qualification(a.execute, a.qualification)
+        if a.no_camera and q.get('native_route_cpu_pattern') is True:
+            p.error('pixel visibility trial requires camera; read-only trials may use --no-camera')
         if not a.execute:
             print('PASS: qualified full-input candidate; offline only, no camera/device operation')
             return

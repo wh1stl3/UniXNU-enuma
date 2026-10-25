@@ -3,7 +3,7 @@
   "result": "PASS: prior regressions;128x8 ROI stride/address/call bounds, all1024 failures, one barrier, EL1/EL2 completion and invalid prerequisites before access",
   "sources": {
     "tests/native_cpu_stage1.c": "e27f014a9f78eab099755ee7c4ff37929268402281d99e6c97565e34d26af78a",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "816cd4ac72e2f6ea3afa61b99cd55f7a4eda40d6366e4957a30484501ba788a6",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/CpuStage1.h": "87fa42ebd700bf5aeefa33edae286d9f64cac9cc56e26b3688138acce6e46c6f",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
     "scripts/check_native_cpu_stage1.py": "98d6f0b89e8aad350d84a402e49f0a3619a1ed5ed783eb2d32cf6e0402b6da7f"
   },

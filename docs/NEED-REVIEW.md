@@ -1041,3 +1041,8 @@ R-014 执行结果（2026-10-25 01:20，D-161）：**两次均挂死，屏幕无
 
 
 D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像未发出、未consumed，无硬件运行结果。选定目标fastboot reboot后Android完成，独立root/A槽/解锁及设备与本地备份两分区摘要通过；本轮无相机。按D-233允许重新进入一次fastboot并完整重做product/slot/unlocked门禁，不能忽略FAILED正文；若再次失败不继续重入。候选315f5daa及资格/源码不变，不是重试已发图。证据reports/enuma-native-route-S-045-preissue.json。
+
+
+## R-018 · 有界像素事务
+
+状态：pending，未上机；镜像743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56，固件c9530a746dbf6efbd7b1d55c020ce63477b8c198。R-005已consumed不复用。最小批准为该图一次临时boot的128x8保存/重验证/不透明对比色500ms/完整恢复读回，无MMIO写/新映射/分区写/verified。候选A推荐，B只读保存复核，C直接GOP暂不推荐；详细代价、失败处理和绑定证据见[提案](operations/2026-10-26-r018-bounded-pixel-transaction.md)。只读探针无需相机，本实际图案试验需要连续本地摄像头，所有原始影音仅本地。

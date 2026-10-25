@@ -86,5 +86,41 @@
     "authorization": "User requested continue until hard stop after minimum-read result; direct temporary boot already explicit. Same reviewed map extent; warm-only without console contents access, no writer reauthorization.",
     "qualification": "reports/enuma-ramoops-warm-control-qualification.json",
     "execution_record": "reports/enuma-ramoops-S-018-result.json"
+  },
+  "R-018": {
+    "status": "pending",
+    "scope": "One exact-image bounded128x8 EL1 save/revalidate/contrast500ms/restore/readback experiment",
+    "image_sha256": [
+      "743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56"
+    ],
+    "pixel_scope": {
+      "experiment": "native-roi-contrast-restore-v1",
+      "origin_x": 0,
+      "origin_y": 0,
+      "width": 128,
+      "height": 8,
+      "required_current_el": 1,
+      "hold_us": 500000,
+      "hold_calls_max": 1,
+      "mdp_reads_max": 660,
+      "mdp_wait_calls_max": 4,
+      "mdp_wait_us": 100000,
+      "framebuffer_reads_max": 3072,
+      "framebuffer_writes_max": 2048,
+      "barriers_max": 3,
+      "cache_line_operations": 0,
+      "mdp_base": "0xae00000",
+      "mdp_bytes": "0x85000",
+      "cpu_splash_view_base": "0x9c000000",
+      "cpu_splash_view_bytes": "0x2400000",
+      "final_stage2_unproven": true,
+      "device_smmu_unproven": true,
+      "alpha_semantics_unproven": true,
+      "publish_gop": false,
+      "partition_writes": false,
+      "raw_media_local_only": true
+    },
+    "authorization": null,
+    "proposal": "docs/operations/2026-10-26-r018-bounded-pixel-transaction.md"
   }
 }

@@ -8,10 +8,25 @@ def omitted_oem_modules(build, fd_sha256):
     pixel=build.get('diagnostic_pixel_preview',False)
     pixel_flag=build.get('firmware_configuration',{}).get('defines',{}).get('ENUMA_DIAG_PIXEL_PREVIEW','0')
     video=build.get('inherited_video_audit_read_only',False)
+    pattern=build.get('native_route_cpu_pattern',False)
+    defs=build.get('firmware_configuration',{}).get('defines',{})
+    if type(pattern) is not bool or defs.get('ENUMA_NATIVE_ROUTE_CPU_PATTERN','0')!=str(int(pattern)):
+        raise ValueError('unsupported native pixel declaration')
+    if pattern:
+        required=['ENUMA_NATIVE_ROUTE_CPU_ROI','ENUMA_NATIVE_ROUTE_CPU_BARRIER','ENUMA_NATIVE_ROUTE_CPU_READ',
+                  'ENUMA_NATIVE_ROUTE_CPU_POLICY','ENUMA_NATIVE_ROUTE_CPU_STAGE1','ENUMA_NATIVE_ROUTE_ALPHA_VIEW',
+                  'ENUMA_NATIVE_ROUTE_GLOBAL_OUTPUT','ENUMA_NATIVE_ROUTE_STRUCTURE','ENUMA_NATIVE_ROUTE_AUDIT']
+        contract=build.get('inherited_video_compiled_contract',{})
+        if (video is not False or build.get('hardware_review_required')!='R-018' or
+            any(defs.get(k)!='1' for k in required) or
+            any(type(contract.get(k)) is not type(v) or contract.get(k)!=v for k,v in dict(maximum_read_callbacks=660,maximum_wait_calls=5,
+                maximum_framebuffer_reads=3072,framebuffer_writes=2048,pixel_access=True,
+                cache_maintenance=False,protocol_published=False).items())):
+            raise ValueError('native pixel requires protected R-018 bounded profile; not execution approval')
     control=build.get('inherited_video_entry_control',False)
     if type(control) is not bool or (control and not video): raise ValueError('unsupported video entry control')
     terminal=build.get('inherited_video_terminal',False)
-    if type(terminal) is not bool or (terminal and (not video or build.get('diagnostic_dispatch_completion_fallback') is not False or build.get('diagnostic_gop_query')!=1)):
+    if type(terminal) is not bool or (terminal and (not (video or pattern) or build.get('diagnostic_dispatch_completion_fallback') is not False or build.get('diagnostic_gop_query')!=1)) or (pattern and not terminal):
         raise ValueError('unsupported video terminal profile')
     if type(video) is not bool: raise ValueError('unsupported video audit declaration')
     topology=build.get('inherited_video_topology_query',0)
@@ -25,7 +40,7 @@ def omitted_oem_modules(build, fd_sha256):
         bool(target)!=bool(query) or defs.get('ENUMA_VIDEO_REASON_TARGET','0')!=str(target) or defs.get('ENUMA_VIDEO_REASON_QUERY','0')!=str(query) or
         (target and (not video or not terminal or control or topology))):
         raise ValueError('unsupported first-reason profile')
-    if video and (simple!='1' or pixel or build.get('diagnostic_gop_step')!=0 or
+    if (video or pattern) and (simple!='1' or pixel or build.get('diagnostic_gop_step')!=0 or
                   build.get('diagnostic_gop_query') not in (1,2) or build.get('value_probe',{}).get('source')!='off' or
                   build.get('gop_backend_selftest_ram_only')):
         raise ValueError('video audit requires exact read-only query profile')
@@ -38,7 +53,7 @@ def omitted_oem_modules(build, fd_sha256):
     if simple not in ('0','1'):raise ValueError('unsupported SimpleFb diagnostic mode')
     if simple=='1':
         if (flag!='1' or build.get('complete') is not True or build.get('fd_sha256')!=fd_sha256 or
-            build.get('diagnostic_simplefb_metadata_only') is not (not pixel and not video) or declared!=['CPRDxe','DisplayDxe','UFSDxe']):
+            build.get('diagnostic_simplefb_metadata_only') is not (not pixel and not video and not pattern) or declared!=['CPRDxe','DisplayDxe','UFSDxe']):
             raise ValueError('SimpleFb metadata mode needs exact omissions and matching completed FD')
         return frozenset(declared)
     if build.get('diagnostic_simplefb_metadata_only',False):raise ValueError('SimpleFb declaration without enabled mode')

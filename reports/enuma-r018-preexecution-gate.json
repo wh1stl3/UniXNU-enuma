@@ -1,0 +1,8 @@
+{
+  "scope": "host-only exact current candidate gate check; no device subprocess, camera or boot",
+  "image_sha256": "743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56",
+  "approval_status": "pending",
+  "execution_rejected": true,
+  "error": "R-018 is not approved for this exact image; no device action",
+  "device_action_issued": false
+}
