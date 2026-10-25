@@ -1,0 +1,55 @@
+{
+  "scope": "S-009 same-entry constant no-MMIO control, actual temporary boot and independent Android check",
+  "trial": "S-009",
+  "firmware_commit": "c7c29bb0fe8f2bbf6f8128689b7f423da7dcc72c",
+  "image_sha256": "56eb63dc63bc7e4b76e6746cb42a0f05b25dfa08099b356f63117c8af89a00c7",
+  "consumed": true,
+  "evidence": "out/device-tests/20261025T172136-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-25 17:21:50",
+    "issued_at_utc": "2026-10-25T09:21:50.936354+00:00",
+    "boot_command_return_seconds": 2.641,
+    "fastboot_disconnect_observed_seconds": 5.11,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 21.156,
+    "boot_complete_seconds": 35.219
+  },
+  "automatic_android_return": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "212a97c2df1025561527b0123d59c435cb12823be1585fd4b719f7a3327ad941",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T172535-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 252,
+    "decoded_frames": 252,
+    "local_video": "out/camera-capture/20261025T172133-system-transport/system-transport.avi",
+    "sha256": "6cb59edc1673db96651a2aa4518d79c78495204d17c6720c52d0a9957bb9c90a",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "conclusion": "Supports constant entry/Core return path; S-008 body access is primary moderate-confidence suspect, not proof of exact marker or register failure.",
+  "next": "Offline routed video-only sampler: no command/unused-PP or unselected-pipe reads; retain address/downstream requirements"
+}

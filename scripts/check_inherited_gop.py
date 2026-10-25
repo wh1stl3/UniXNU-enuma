@@ -15,6 +15,7 @@ def main():
     decode=pkg/'InheritedScanoutLib/Decode.c'
     capture=pkg/'InheritedScanoutLib/Capture.c'
     evidence=pkg/'InheritedScanoutLib/Evidence.c'
+    video=pkg/'InheritedScanoutLib/VideoCapture.c'
     common=['clang','-std=c11','-Wall','-Wextra','-Werror','-fno-builtin','-fshort-wchar','-DMDEPKG_NDEBUG',
             '-I'+str(pkg/'InheritedGopLib'),'-I'+str(pkg/'InheritedScanoutLib'),
             '-I'+str(core/'MdePkg/Include'),'-I'+str(core/'MdeModulePkg/Include')]
@@ -22,14 +23,14 @@ def main():
     checks=[]
     for name,sources in [('gop',[backend,blt,ROOT/'tests/inherited_gop.c']),
                          ('topology',[topo,decode,ROOT/'tests/inherited_topology.c']),
-                         ('evidence',[capture,topo,decode,evidence,ROOT/'tests/inherited_evidence.c'])]:
+                         ('evidence',[capture,video,topo,decode,evidence,ROOT/'tests/inherited_evidence.c'])]:
         checks.append(run([*host,*sources,'-o',out/name])); checks.append(run([out/name]))
         print(checks[-1]['stdout'].strip())
-    for source in [backend,blt,topo,evidence]:
+    for source in [backend,blt,topo,evidence,video]:
         checks.append(run([*common,'-I'+str(core/'MdePkg/Include/AArch64'),'-target','aarch64-none-elf','-ffreestanding','-O2','-c',source,'-o',out/(source.stem+'.o')]))
         checks.append(run(['llvm-nm','--undefined-only',out/(source.stem+'.o')]))
     report=dict(scope='actual GOP callbacks and actual pinned Mu FrameBufferBltLib on synthetic host RAM; modeled allocation/TPL/BaseLib primitives',
-      checks=checks,sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [backend,blt,topo,decode,capture,evidence,ROOT/'tests/inherited_gop.c',ROOT/'tests/inherited_topology.c',ROOT/'tests/inherited_evidence.c']},
+      checks=checks,sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [backend,blt,topo,decode,capture,evidence,video,ROOT/'tests/inherited_gop.c',ROOT/'tests/inherited_topology.c',ROOT/'tests/inherited_evidence.c']},
       hardware_tested=False,physical_framebuffer_access=False,protocol_published=False,
       unresolved=['same-boot PP/DSC/DSI downstream association','CPU/SMMU address relationship and uncached mapping','live stable activity/refresh/blend qualification'])
     (ROOT/'reports/enuma-inherited-gop-host.json').write_text(json.dumps(report,indent=2)+'\n')

@@ -49,6 +49,7 @@ int main(void) {
   setup(); S.Pipes[0].Secure=1; check(EnumaInheritedSecure);
   setup(); S.Pipes[0].Multirect=1; check(EnumaInheritedVirtualRect);
   setup(); S.Pipes[0].OpMode=1; check(EnumaInheritedFormat);
+  setup(); S.Pipes[0].Format|=1u<<8; check(EnumaInheritedFormat);
   setup(); S.Pipes[0].Stride|=1u<<16; check(EnumaInheritedGeometry);
   setup(); S.Pipes[0].Size--; check(EnumaInheritedGeometry);
   setup(); S.Pipes[0].Unpack=0; check(EnumaInheritedFormat);

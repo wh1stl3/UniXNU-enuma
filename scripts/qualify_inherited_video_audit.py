@@ -46,7 +46,7 @@ def main():
     staged=ROOT/'out/firmware-build/uefi/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe'
     entry=ROOT/'firmware/diagnostics'/('EnumaInheritedVideoEntryControl.c' if a.control else 'EnumaInheritedVideoAudit.c')
     if (staged/'SimpleFb.c').read_bytes()!=entry.read_bytes() or build['inherited_video_compiled_contract']['entry_source_sha256']!=sha(entry): raise ValueError('entry source not bound')
-    for n in ['InheritedScanout.h','Decode.c','Capture.c','Topology.h','Topology.c','Evidence.h','Evidence.c']:
+    for n in ['InheritedScanout.h','Decode.c','Capture.c','VideoCapture.c','Topology.h','Topology.c','Evidence.h','Evidence.c']:
         if (staged/'InheritedVideo'/n).read_bytes()!=(ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib'/n).read_bytes(): raise ValueError('staged source mismatch: '+n)
     # Verify the actual FD contains the exact table record prefix checked at runtime.
     prefix=b'Display MDP'+b'\0'*(32-len('Display MDP'))+struct.pack('<QQ',0xae00000,0x85000)
@@ -61,7 +61,7 @@ def main():
     q=dict(trial_kind='inherited-video-entry-control' if a.control else 'inherited-video-audit',scope='qualified same-entry constant marker with no MMIO/map lookup' if a.control else 'qualified bounded read-only three-sample dual-link configuration/counter predicate; not GOP/physical route proof',
       firmware_commit=pin['commit'],archive=archive.relative_to(ROOT).as_posix(),files=files,
       image=(archive/'image.img').relative_to(ROOT).as_posix(),image_sha256=sha(image),ram_payload_sha256=sha(fat),
-      maximum_reads=0 if a.control else 969,maximum_wait_calls=0 if a.control else 2,maximum_mmio_offset=None if a.control else '0x73830',pixel_access=False,gop_published=False,
+      maximum_reads=0 if a.control else 330,maximum_wait_calls=0 if a.control else 2,maximum_mmio_offset=None if a.control else '0x6c26c',pixel_access=False,gop_published=False,
       map_record_in_actual_fd=True,packaged_provider_equal=True,package=package,
       result_interpretation='Exact pass warning selects2s core gate; refusal may reach7s dispatcher fallback. Timing alone is not unique execution proof. 75s host timeout freezes the trial; recover first.')
     if a.control:

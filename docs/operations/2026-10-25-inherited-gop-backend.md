@@ -52,3 +52,8 @@ S-008于17:05:25发出，命令2.641s返回0、断开5.109s；75秒观察无自�
 固件c7c29bb0fe8f2bbf6f8128689b7f423da7dcc72c，S-009镜像56eb63dc63bc7e4b76e6746cb42a0f05b25dfa08099b356f63117c8af89a00c7，FD c87f3d1d296ef09679acf6c6887f34c9c892fbb720fc8005d3562fce35c4b28e；归档out/inherited-gop/qualified-control-c7c29bb-q1。实际入口RVA0x1050..0x10dc正常路径只有栈/UEFI全局指针保存、从ST+0x60取BootServices、非空断言分支以及mov w0,#1/ret；无查表/MMIO/像素/等待/分配/协议。DebugAssert非空失败路径保留，不假设异常输入会返回。反汇编使用skipdata覆盖文本中的0xcc链接填充并绑定完整SHA 401ebe34396c099a60c8a2e9fe0d0bf031c706da714d11870f6071e277763d9e；最初在填充处截断的inspection产物不获资格。
 
 与S-008实际FD比较72PE，70完全相同，只有目标正文运行时代码改变；PcdDxe仅8字节RSDS GUID，包含其余代码/路径/age全部相同，Core完全相同。AutoGen/库清单、固件配置、BootShim和完整FAT相同。报告enuma-inherited-control-pair.json。实际反汇编/源码/打包资格、21固件单测、当前Android备份和相机门禁通过，文档推送后单笔；尚未发出。
+
+
+## D-199：S-009实测与按资料修复
+
+S-00917:21:50发出，命令2.641s、断开5.110s、ADB21.156s、完成35.219s，自动回Android，独立完成/root/A槽/解锁/原分区和备份一致，252帧只留本地，无音频。S-008正文访问为首嫌，具体寄存器未确定。固定厂商dump电源前置、默认拓扑2/0/2与alpha差异促成d61b6ef：仅video选中路径、330读/最大0x6c26c、未读scope显式、source-alpha格式拒绝。主机30解码/330故障及21固件单测通过，新完整FD/实机资格正在重做，尚未S-010。详见单独judgment文档的证据、置信度与可推翻观测。

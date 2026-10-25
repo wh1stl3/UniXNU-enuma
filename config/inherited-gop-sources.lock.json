@@ -73,6 +73,30 @@
       "local_path": "out/display-native-sources/sde_hw_catalog.c",
       "sha256": "8d108cc673708f0ba629b86e0231686ecbd3437d1757c4144a60ad3a8bfc34de",
       "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde_dbg.c",
+      "local_path": "out/inherited-gop/routing-sources/sde_dbg.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde_dbg.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "sha256": "648cf8b724bbb96e4cbc4830849f8adbabee10bd11d36772d3b04645bd484a33",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/dsi/dsi_panel.c",
+      "local_path": "out/inherited-gop/routing-sources/dsi_panel.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/dsi/dsi_panel.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "sha256": "b8f1bdbdd1afe9ec4ea67d169e9d696f3bbaaa61930ab0eab0c05ea8be108eab",
+      "license": "GPL source reference only; not imported"
+    },
+    {
+      "path": "techpack/display/msm/sde/sde_hw_sspp.c",
+      "local_path": "out/display-native-sources/sde_hw_sspp.c",
+      "url": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/52a2f180865f8368828985d6384130acd093fa93/techpack/display/msm/sde/sde_hw_sspp.c",
+      "commit": "52a2f180865f8368828985d6384130acd093fa93",
+      "sha256": "b981480d1e1008fc9c7fe6722eb7e140db143d067db9374dbe1f56a254359040",
+      "license": "GPL source reference only; not imported"
     }
   ]
 }

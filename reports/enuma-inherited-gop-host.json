@@ -95,6 +95,7 @@
         "-fno-pie",
         "-no-pie",
         "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoCapture.c",
         "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c",
         "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c",
         "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c",
@@ -111,7 +112,7 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/evidence"
       ],
       "exit_code": 0,
-      "stdout": "PASS: 3 same-boot samples, both DSI counters, 969 read failure injections, 2 wait failures, route mutation and right-link stall rejected; address/downstream requirements retained\n",
+      "stdout": "PASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained\n",
       "stderr": ""
     },
     {
@@ -263,20 +264,59 @@
         "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/Evidence.o"
       ],
       "exit_code": 0,
-      "stdout": "                 U EnumaCaptureInherited\n                 U EnumaCaptureRoutedMixers\n                 U EnumaDecodeInherited\n                 U EnumaResolveMixerOrigins\n",
+      "stdout": "                 U EnumaCaptureRoutedMixers\n                 U EnumaCaptureVideoConfig\n                 U EnumaDecodeInherited\n                 U EnumaResolveMixerOrigins\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-fshort-wchar",
+        "-DMDEPKG_NDEBUG",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdeModulePkg/Include",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Mu_Basecore/MdePkg/Include/AArch64",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoCapture.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/VideoCapture.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-gop/VideoCapture.o"
+      ],
+      "exit_code": 0,
+      "stdout": "                 U EnumaSelectVideoRoute\n",
       "stderr": ""
     }
   ],
   "sources": {
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedGopLib/InheritedGop.c": "1b3dc06d5e638d01c666bdb6e5f0226288a4044bb0da3a9243697d7dec1b9307",
     "firmware/Mu_Basecore/MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.c": "3c4ef872faa7e042bcd2199a225c28ae50afe6768363734210f73645e683fb53",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "87db91ffbb0517b0b300254718784a8620ecfba0a5f6b73ff10b9bb269f3d893",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "3bfe404c5eadbcedcd7a1c06c5561e61bde09a8253b9fab9c178f20b0cff3ae2",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Topology.c": "e121b8a864ce92ba8e305f7ae3a3399fbe8843353111f30b8dbf381cfba2a6ae",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "dde2a43b870a368c3ecc7cdbcc07947ba2ba3abb3f18efee58d2bfac27a1734c",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c": "1d61cd69efe4d4c284babc12e48ccd298ef5e3c51a0a6e570dee035c90ec62ec",
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "6d4e7564c6728e6677cf65ffe79b3b99b2c1d3816b93a4629da4774f00cd5067",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c": "4a96cbeb96556317e30fbe506f27918a93204fdf2d4b16886e1c0ebd402c2278",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoCapture.c": "308ba7f1c1e8fdf82e7d78b0a4de31a40c9e985445ff40f96d76adc1e7f684e3",
     "tests/inherited_gop.c": "609dd979a3f05eefd9f159cf1dc41d0f462815ed8f56bed3004e6a8d1c95061c",
     "tests/inherited_topology.c": "9b282f4468a65f39d11d54f4ef58b50e7de311ad58c093f1baccc9c45a32d258",
-    "tests/inherited_evidence.c": "25c497949ea51b9fccb81b0131383300094379e4be66c93b5c1a156dcaf1707c"
+    "tests/inherited_evidence.c": "cb3b10f9c13d14cc36d231e09ac160500aa64025f814f4e9719c0e0eb4e196f9"
   },
   "hardware_tested": false,
   "physical_framebuffer_access": false,
