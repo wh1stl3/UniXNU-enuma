@@ -1,11 +1,11 @@
 {
   "scope": "qualified read-only native route; ADB/fastboot and calibrated boot clock",
-  "image_sha256": "b6193cc5d757f3cfe9a9dbbc3761ce15dd279018038208e34e50d433533eb9b8",
+  "image_sha256": "2d860389875dc054be30dc5c04575f903a85b1ab509cd6c0c196ab0483b4e51a",
   "camera_used": false,
   "media_recorded": false,
-  "started_utc": "2026-10-25T17:17:43.608213+00:00",
+  "started_utc": "2026-10-25T17:29:18.844789+00:00",
   "device_runner_started": true,
   "boot_issued": true,
-  "runner_log": "out/system-transport/20261026T011743/runner.log",
+  "runner_log": "out/system-transport/20261026T012918/runner.log",
   "runner_exit": 0
 }
