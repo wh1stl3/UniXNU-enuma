@@ -21,5 +21,33 @@
   "camera_decoded_frames": 453,
   "observed_stage_results": [],
   "interpretation": "No automatic return; does not establish DisplayDxe reached or hung",
-  "target_online_at_timeout": false
+  "target_online_at_timeout": false,
+  "user_reported_recovery": "Android",
+  "independent_recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "manual-recovery-needed",
+    "prior_state_sha256": "99921be611942eefe48d201746e7004a2a0dfdea737d24a6759d0034bc100132",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T152433-recovery-reconciliation.json"
+  }
 }
