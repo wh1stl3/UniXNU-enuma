@@ -1,0 +1,123 @@
+{
+  "scope": "indirect native-route classification using predeclared calibrated boot-origin windows",
+  "trial": "S-034",
+  "native_route_blend": true,
+  "native_border_view": true,
+  "native_route_layout": true,
+  "native_route_detail": true,
+  "native_route_staging": false,
+  "firmware_commit": "b915308fbaaeb1c0cce92649040bde8a2ced51e6",
+  "image_sha256": "bc43b96a4894ac52754442666957d26d5473f350e1721303c9d4e5d80dc37ea1",
+  "fd_sha256": "9ddfb2985a04a8302b2f6aa856de96f93559373d63977b240280fb2244492006",
+  "consumed": true,
+  "automatic_android_return": true,
+  "observation_valid": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261026T004826-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-26 00:48:40",
+    "issued_at_utc": "2026-10-25T16:48:40.761648+00:00",
+    "boot_command_return_seconds": 2.625,
+    "fastboot_disconnect_observed_seconds": 5.094,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 35.172,
+    "boot_complete_seconds": 49.094
+  },
+  "post_boot_clock": {
+    "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+    "boot_id_sha256": "90d33822652569f16bc735775bddcb7833cf701b08089286bdcc2af669b3abad",
+    "origin_monotonic_lower": 186298.70599999998,
+    "origin_monotonic_upper": 186298.789,
+    "uncertainty_seconds": 0.08300000001327135,
+    "calibrated_firmware_delay": false,
+    "origin_after_issue_lower": 27.237999999983003,
+    "origin_after_issue_upper": 27.320999999996275
+  },
+  "boot_clock_error": null,
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      0.2
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        13.547999999998137
+      ],
+      [
+        16.25199999997858,
+        18.547999999998137
+      ],
+      [
+        21.25199999997858,
+        23.547999999998137
+      ],
+      [
+        26.25199999997858,
+        28.547999999998137
+      ],
+      [
+        31.25199999997858,
+        33.54799999999814
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof."
+  },
+  "result": {
+    "conclusion": "route-category-inferred",
+    "category": "selected-blend-operation-rejected",
+    "warning_code": 4,
+    "stop_additional_trials": false,
+    "direct_register_log": false
+  },
+  "boot_id_changed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "b77a049d7b62c816a55f071a011f7869a69fcd84d5e2391660c1238744499c9c",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261026T004942-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 317,
+    "decoded_frames": 317,
+    "video": "out/camera-capture/20261026T004823-system-transport/system-transport.avi",
+    "sha256": "b15821115f915f220144b2128a700c52fb558887bb09532713606bf9775e70af",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_verified": false,
+  "display_maximum_reads": 330,
+  "display_writes": 0
+}

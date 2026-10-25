@@ -974,3 +974,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 
 
 2026-10-26 00:48：S-034首次预启动五组product/current-slot/unlocked查询均未通过，镜像未发出、未consumed。选定目标fastboot reboot正常返回Android；独立身份/root/A槽/解锁和两分区/备份摘要通过，相机384帧全部可解码，末帧桌面已人工查看。D-233允许重新进入一次fastboot并完整重做门禁；不是重试已发镜像。原始影音仅本地out/camera-capture/20261026T004622-system-transport。
+
+
+## D-254，S-034 原生显示管线合并审计结果与交接
+
+2026-10-26T00:49:47+08:00，前里程碑5653979，固件b915308fbaaeb1c0cce92649040bde8a2ced51e6。实测结果：{"conclusion": "route-category-inferred", "category": "selected-blend-operation-rejected", "warning_code": 4, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-034-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。沿R-004最多330读/two100ms，五种首结果分类，无写入；源码/实际代码/资格/镜像和固定时基见reports/enuma-native-route-qualification.json。原始影音仅本地。
