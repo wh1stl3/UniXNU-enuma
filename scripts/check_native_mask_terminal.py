@@ -27,14 +27,22 @@ static inline uint64_t ReadUnaligned64(const uint64_t *p){uint64_t v;memcpy(&v,p
          '-DENUMA_DIAG_GUID_LOW64=0x1122334455667788ULL','-DENUMA_DIAG_GUID_HIGH64=0x8877665544332211ULL',
          '-DDETAIL_HEADER="'+str(h)+'"',str(ROOT/'tests/native_mask_terminal.c'),'-o',str(out/'test')]
     subprocess.run(cmd,check=True);result=subprocess.check_output([str(out/'test')],text=True).strip()
+    route_cmd=[v.replace('-DENUMA_NATIVE_MASK_FIELD=7','-DENUMA_NATIVE_MASK_FIELD=0') for v in cmd]
+    route_cmd.insert(1,'-DENUMA_NATIVE_ROUTE_AUDIT=1')
+    subprocess.run(route_cmd,check=True)
+    route_result=subprocess.check_output([str(out/'test')],text=True).strip()
     invalid=[]
     for flag,value in [('ENUMA_NATIVE_MASK_FIELD',8),('ENUMA_VIDEO_TERMINAL',0),('ENUMA_DIAG_GOP_QUERY',2),('ENUMA_DIAG_GUID_ONLY',0),('ENUMA_DIAG_DISPATCH_FALLBACK',1)]:
         bad=[('-D'+flag+'='+str(value)) if v.startswith('-D'+flag+'=') else v for v in cmd]
         p=subprocess.run(bad,capture_output=True,text=True)
         if p.returncode==0:raise ValueError('invalid selector accepted '+flag)
         invalid.append(flag)
-    sources=[h,lib/'NativeMaskResult.h',ROOT/'tests/native_mask_terminal.c',Path(__file__)]
-    report=dict(scope='real header/selector with sanitized host callbacks; no device execution',result=result,command=cmd,
+    for flag,value in [('ENUMA_NATIVE_ROUTE_AUDIT',2),('ENUMA_VIDEO_TERMINAL',0),('ENUMA_NATIVE_MASK_FIELD',1),('ENUMA_DIAG_GUID_ONLY',0)]:
+        bad=[('-D'+flag+'='+str(value)) if v.startswith('-D'+flag+'=') else v for v in route_cmd]
+        if subprocess.run(bad,capture_output=True,text=True).returncode==0:raise ValueError('invalid route selector accepted '+flag)
+        invalid.append('route:'+flag)
+    sources=[lib/'NativeRouteResult.h',h,lib/'NativeMaskResult.h',ROOT/'tests/native_mask_terminal.c',Path(__file__)]
+    report=dict(scope='real header/selector with sanitized host callbacks; no device execution',result=result,route_result=route_result,route_command=route_cmd,command=cmd,
                 invalid_selectors_rejected=invalid,source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
                 maximum_terminal_delay_us=22000000,display_mmio=False,pixel_access=False)
     (ROOT/'reports/enuma-native-mask-host.json').write_text(json.dumps(report,indent=2)+'\n');print(result)

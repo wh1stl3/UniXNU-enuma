@@ -1,4 +1,4 @@
-"""Freeze disassembly for independent manual review of native-mask provider/Core."""
+"""Freeze disassembly for manual review of native mask/route provider and Core."""
 import argparse,hashlib,json,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -8,7 +8,8 @@ def main():
     d=a.archive.resolve()
     if not d.is_relative_to(ROOT/'out'):raise ValueError('outside out')
     q=json.loads((d/'qualification.json').read_text())
-    if q['trial_kind']!='native-display-mask':raise ValueError('wrong profile')
+    if q['trial_kind'] not in ('native-display-mask','native-video-route'):raise ValueError('wrong profile')
+    stem='enuma-native-route' if q['trial_kind']=='native-video-route' else 'enuma-native-mask'
     for n,v in q['files'].items():
         if sha((d/n).read_bytes())!=v['sha256']:raise ValueError('changed archive: '+n)
     sys.path.insert(0,str(a.tool_path.resolve()));import pefile,capstone
@@ -22,12 +23,12 @@ def main():
     digest=sha(('\n'.join(texts)).encode())
     if a.reviewed_sha256 and a.reviewed_sha256!=digest:raise ValueError('reviewed code changed')
     pending=a.reviewed_sha256 is None
-    r=dict(scope='actual packaged native-mask provider and new bounded exact-GUID Core terminal; manual disassembly review bound by digest',
-      firmware_commit=q['firmware_commit'],native_mask_field=q['native_mask_field'],image_sha256=q['image_sha256'],
+    r=dict(scope='actual packaged '+q['trial_kind']+' provider and bounded exact-GUID Core terminal; manual disassembly review bound by digest',
+      firmware_commit=q['firmware_commit'],native_mask_field=q.get('native_mask_field'),trial_kind=q['trial_kind'],image_sha256=q['image_sha256'],
       provider_sha256=q['files']['SimpleFbDxe.efi']['sha256'],core_sha256=q['files']['DxeCore.efi']['sha256'],
       combined_disassembly_sha256=digest,review_required=pending,hardware_success=False)
     q['review_required']=pending
-    for path in [d/'qualification.json',ROOT/'reports/enuma-native-mask-qualification.json']:path.write_text(json.dumps(q,indent=2)+'\n')
-    (ROOT/'reports/enuma-native-mask-code.json').write_text(json.dumps(r,indent=2)+'\n')
+    for path in [d/'qualification.json',ROOT/'reports'/(stem+'-qualification.json')]:path.write_text(json.dumps(q,indent=2)+'\n')
+    (ROOT/'reports'/(stem+'-code.json')).write_text(json.dumps(r,indent=2)+'\n')
     print(json.dumps(r,indent=2))
 if __name__=='__main__':main()

@@ -79,7 +79,7 @@ def qualification(published=False, report=None):
                       x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
             if q.get('review_required') is not False or review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
                 raise ValueError('native actual PE code review missing or mismatched')
-    if q.get('trial_kind')=='native-display-mask':
+    if q.get('trial_kind') in ('native-display-mask','native-video-route'):
         from native_mask_decode import make_plan
         frozen=(ROOT/q['archive']/'qualification.json').resolve()
         if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
@@ -88,15 +88,19 @@ def qualification(published=False, report=None):
                   'maximum_reads':26,'maximum_wait_calls':2,'maximum_mmio_offset':'0x6c26c',
                   'pixel_access':False,'gop_published':False,
                   'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
+        route=q['trial_kind']=='native-video-route'
+        if route:
+            from native_route_decode import CATEGORIES
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,result_categories=CATEGORIES)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
-        if type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8):
+        if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
             raise ValueError('invalid native mask field')
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
         if q.get('decode_plan')!=make_plan(ROOT) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
             raise ValueError('fixed boot clock calibration/plan differs')
         if published:
-            review=json.loads((ROOT/'reports/enuma-native-mask-code.json').read_text())
+            review=json.loads((ROOT/'reports'/('enuma-native-route-code.json' if route else 'enuma-native-mask-code.json')).read_text())
             if (q.get('review_required') is not False or review.get('review_required') is not False or
                 review.get('firmware_commit')!=q['firmware_commit'] or review.get('image_sha256')!=q['image_sha256'] or
                 review.get('provider_sha256')!=q['files']['SimpleFbDxe.efi']['sha256'] or

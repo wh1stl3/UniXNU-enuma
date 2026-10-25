@@ -4,7 +4,7 @@
 #include <string.h>
 #include "Evidence.h"
 ENUMA_U32 EnumaSampleVideoBaseline(ENUMA_INHERITED_READ,ENUMA_INHERITED_WAIT,void *,const ENUMA_INHERITED_LIMITS *,ENUMA_VIDEO_EVIDENCE *);
-typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,Events,Log[400]; } MODEL;
+typedef struct { unsigned Reads,Window,Fail,FailWait,StallRight,Changed,Transient,BadCounter,LaterCounter,NoTiming,NoActive,ChangedTiming,Events,Log[400]; } MODEL;
 static int allowed(unsigned O) {
   static const unsigned Fields[11]={0,8,12,16,20,36,48,52,56,0x170,0x70};
   if(!O) { return 1; }
@@ -44,6 +44,7 @@ static int read_reg(void *Ctx,ENUMA_U32 O,ENUMA_U32 *V) {
   for(unsigned I=0;I<2;I++) {
     unsigned B=0x6b800+I*0x800;
     if(O==B||O==B+0x26c) { *V=1; }
+    if(O==B&&M->ChangedTiming) { *V=M->Window; }
     if(O==B&&M->NoTiming) { *V=0; }
     if(O==B+0x26c&&M->NoActive) { *V=0; }
     if(O==B+0xa8) { *V=(M->BadCounter||(M->LaterCounter&&M->Window))?1:3; }
@@ -80,5 +81,18 @@ int main(void) {
     assert(EnumaSampleVideoBaseline(read_reg,wait_window,&A,&L,&X)==EnumaSampleVideoDetailed(read_reg,wait_window,&B,&L,&Y,&Why));
     assert(A.Events==B.Events&&!memcmp(A.Log,B.Log,A.Events*sizeof(unsigned))&&!memcmp(&X,&Y,sizeof(X))&&Why==reasons[I]);
   }
+  unsigned Why=0;
+  M=(MODEL){.NoTiming=1,.BadCounter=1}; E=Before;
+  assert(!EnumaSampleNativeVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)&&M.Reads==330&&M.Window==2&&Why==EnumaVideoReasonComplete);
+  assert(E.Frame.Requirements==(ENUMA_REQUIRE_ADDRESS|ENUMA_REQUIRE_TOPOLOGY));
+  for(unsigned F=1;F<=330;F++) { M=(MODEL){.NoTiming=1,.BadCounter=1,.Fail=F}; E=Before; assert(EnumaSampleNativeVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedBounds&&M.Reads==F&&!memcmp(&E,&Before,sizeof(E))); }
+  const MODEL native_cases[]={{.NoActive=1},{.ChangedTiming=1},{.LaterCounter=1},{.StallRight=1},{.Changed=1},{.FailWait=1},{.FailWait=2}};
+  const unsigned native_reasons[]={EnumaVideoReasonInterfaceInitial,EnumaVideoReasonStableInterface,EnumaVideoReasonStableInterface,EnumaVideoReasonStableFrame,EnumaVideoReasonStableConfig,EnumaVideoReasonWait,EnumaVideoReasonWait};
+  for(unsigned I=0;I<7;I++) {
+    M=native_cases[I]; E=Before;
+    assert(EnumaSampleNativeVideoDetailed(read_reg,wait_window,&M,&L,&E,&Why)==EnumaInheritedRefreshMode&&Why==native_reasons[I]&&!memcmp(&E,&Before,sizeof(E)));
+    if(!I) { assert(M.Reads==4&&M.Log[3]==0x6ba6c&&!M.Window); }
+  }
+  puts("PASS: native zero-timing/non3-enable full pipeline, 330 failures, inactive stops before FRAME, stability and wait rejection; strict baseline unchanged");
   puts("PASS: 3 video-only samples, 330 callback failures, 2 wait failures, no PP/command/unused pipe reads, explicit observation masks; address/downstream requirements retained");
 }

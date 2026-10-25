@@ -1,0 +1,12 @@
+{
+  "scope": "actual packaged native-video-route provider and bounded exact-GUID Core terminal; manual disassembly review bound by digest",
+  "firmware_commit": "fafb8a388837d002a51e7723f643058e74180548",
+  "native_mask_field": null,
+  "trial_kind": "native-video-route",
+  "image_sha256": "a5c96c8aeeb468688ee79ea1a73a8e54251fec6ebb1c29afe4373cbb891bb7dd",
+  "provider_sha256": "d52d51bdc5f28307f8f66d004c14cbdd56dd9006228796cbdbf436581ab7f7ac",
+  "core_sha256": "a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f",
+  "combined_disassembly_sha256": "cec436953e179a6844bf5827020b12556ceef98090c4347c3bc3d233c62af5a9",
+  "review_required": false,
+  "hardware_success": false
+}

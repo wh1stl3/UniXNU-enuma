@@ -11,6 +11,7 @@ void ResetCold(void) { resets++; }
 void CpuDeadLoop(void) { longjmp(stopped,1); }
 #include DETAIL_HEADER
 #include "NativeMaskResult.h"
+#include "NativeRouteResult.h"
 int main(void) {
   EFI_GUID good={0x1122334455667788ULL,0x8877665544332211ULL};
   EFI_GUID bad1=good,bad2=good;bad1.low^=1;bad2.high^=1;
@@ -69,6 +70,16 @@ int main(void) {
     o.Samples[n].Interfaces[i].Timing=UINT32_MAX;
     assert(EnumaNativeMaskResult(EnumaInheritedOk,&o,7)==(3u&~(1u<<i))+1);
   }
+  for(unsigned s=0;s<=14;s++)for(unsigned w=0;w<=14;w++)for(unsigned r=0;r<32;r++) {
+    unsigned expected=1;
+    if(s==0) { if(w==EnumaVideoReasonComplete&&r==(ENUMA_REQUIRE_ADDRESS|ENUMA_REQUIRE_TOPOLOGY))expected=5; }
+    else if(s<=13&&!r&&w>=4&&w<=13&&w!=EnumaVideoReasonWait) {
+      if(s==EnumaInheritedRefreshMode)expected=2;
+      else if(w==EnumaVideoReasonPipeline)expected=s==EnumaInheritedTopology?3:4;
+    }
+    assert(EnumaNativeRouteResult(s,r,w)==expected);
+  }
+  printf("PASS: 7200 route result mapping cases; ");
   printf("PASS: %u actual terminal hook/status/GUID cases; 53 individual and 521 combined and 525 zero-ready mask/error selector cases; max22s cold delay\n",cases);
   return 0;
 }

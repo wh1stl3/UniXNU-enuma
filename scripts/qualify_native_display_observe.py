@@ -16,13 +16,15 @@ ROOT=Path(__file__).resolve().parents[1]
 GUID='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(1,2),required=True); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(0,1,2),default=0); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); p.add_argument('--native-route-audit',action='store_true'); a=p.parse_args()
+    if a.native_route_audit and (a.native_query or a.native_control or a.native_mask_field): raise ValueError('route excludes native selectors')
+    if not a.native_route_audit and not a.native_query: raise ValueError('native query required')
     if a.native_mask_field and (a.native_control or a.native_query!=1): raise ValueError('mask requires native query1 without control')
     image=a.image.resolve(); archive=a.archive.resolve()
     if not image.is_relative_to(ROOT/'out') or not archive.is_relative_to(ROOT/'out') or archive.exists(): raise ValueError('require new in-out archive/image')
     build=json.loads((ROOT/'reports/enuma-firmware-build.json').read_text()); pin=json.loads((ROOT/'config/uefi-source.lock.json').read_text())
     required={'complete':True,'inherited_video_audit_read_only':True,'gop_backend_selftest_ram_only':False,
-      'inherited_video_entry_control':False,'native_observe_query':a.native_query,'native_observe_control':a.native_control,'native_mask_field':a.native_mask_field,
+      'native_route_audit':a.native_route_audit,'inherited_video_entry_control':False,'native_observe_query':a.native_query,'native_observe_control':a.native_control,'native_mask_field':a.native_mask_field,
       'inherited_video_terminal':True,
       'inherited_video_topology_query':0,
       'inherited_video_reason_target':0,'inherited_video_reason_query':0,
@@ -45,16 +47,16 @@ def main():
     make=(output/'GNUmakefile').read_text(); defs=build['firmware_configuration']['defines']
     core_folder=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain'
     core_make=(core_folder/'GNUmakefile').read_text()
-    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_MASK_FIELD','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
+    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_ROUTE_AUDIT','ENUMA_NATIVE_MASK_FIELD','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',make))!={defs[k]}: raise ValueError('actual provider flags mismatch: '+k)
         if set(re.findall(r'-D'+k+r'=([^\s]+)',core_make))!={defs[k]}: raise ValueError('actual Core flags mismatch: '+k)
     core_pe=core_folder/'OUTPUT/DxeCore.efi'
     actual_core=[m for m in modules if m['guid']=='d6a2cb7f-6a18-4e2f-b43b-9920a733700a']
     if len(actual_core)!=1 or hashlib.sha256(actual_core[0]['data']).hexdigest()!=sha(core_pe): raise ValueError('terminal Core PE not the one packaged')
     staged=ROOT/'out/firmware-build/uefi/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe'
-    entry=ROOT/'firmware/diagnostics/EnumaNativeObserve.c'
+    entry=ROOT/'firmware/diagnostics'/('EnumaInheritedVideoAudit.c' if a.native_route_audit else 'EnumaNativeObserve.c')
     if (staged/'SimpleFb.c').read_bytes()!=entry.read_bytes() or build['inherited_video_compiled_contract']['entry_source_sha256']!=sha(entry): raise ValueError('entry source not bound')
-    for n in ['InheritedScanout.h','Decode.c','Capture.c','VideoCapture.c','Topology.h','Topology.c','Evidence.h','Evidence.c','VideoResult.h','NativeObserve.h','NativeObserve.c','NativeMaskResult.h']:
+    for n in ['InheritedScanout.h','Decode.c','Capture.c','VideoCapture.c','Topology.h','Topology.c','Evidence.h','Evidence.c','VideoResult.h','NativeObserve.h','NativeObserve.c','NativeMaskResult.h','NativeRouteResult.h']:
         if (staged/'InheritedVideo'/n).read_bytes()!=(ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib'/n).read_bytes(): raise ValueError('staged source mismatch: '+n)
     # Verify the actual FD contains the exact table record prefix checked at runtime.
     prefix=b'Display MDP'+b'\0'*(32-len('Display MDP'))+struct.pack('<QQ',0xae00000,0x85000)
@@ -75,11 +77,18 @@ def main():
       'provider.libraries.txt':output/'OUTPUT/static_library_files.lst',
       'NativeObserve.c':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c',
       'NativeObserve.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.h'}
-    if a.native_mask_field:
+    if a.native_mask_field or a.native_route_audit:
         mask_host=ROOT/'reports/enuma-native-mask-host.json'
         for name,digest in json.loads(mask_host.read_text())['source_sha256'].items():
             if sha(ROOT/name)!=digest: raise ValueError('mask host test source changed: '+name)
         source_files['mask-host-tests.json']=mask_host
+    if a.native_route_audit:
+        host=ROOT/'reports/enuma-inherited-gop-host.json'
+        for name,digest in json.loads(host.read_text())['sources'].items():
+            if sha(ROOT/name)!=digest: raise ValueError('route host source changed: '+name)
+        source_files['host-tests.json']=host
+        for name in ['NativeRouteResult.h','VideoCapture.c','Topology.c','Topology.h','Decode.c','InheritedScanout.h']:
+            source_files[name]=ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib'/name
     files={}
     for n,path in source_files.items(): shutil.copyfile(path,archive/n); files[n]={'sha256':sha(archive/n),'bytes':(archive/n).stat().st_size}
     q=dict(trial_kind='native-display-observe',native_query=a.native_query,native_control=a.native_control,boot_clock_capture=a.native_control,review_required=True,scope='constant warning1/5, no map lookup or display reads; boot-origin calibration only' if a.native_control else 'independent both-link active/stable/moving observation; exactEnable3 not required; complement includes metadata/collection failure; never GOP admission',
@@ -101,6 +110,17 @@ def main():
           decode_plan=make_plan(ROOT),calibration_sha256=sha(calibration),
           result_interpretation='warning1..4 encode mask0..3, warning5 collection failure. Indirect boot-origin decoding only; ambiguous or failed recovery stops additional trials.')
         target_report='enuma-native-mask-qualification.json'
-    for path in [archive/'qualification.json',ROOT/'reports'/target_report]: path.write_text(json.dumps(q,indent=2)+'\n')
+    if a.native_route_audit:
+        from native_mask_decode import make_plan
+        from native_route_decode import CATEGORIES
+        calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
+        if json.loads(calibration.read_text()).get('calibration_passed') is not True: raise ValueError('boot clock not calibrated')
+        q.update(trial_kind='native-video-route',native_route_audit=True,boot_clock_capture=True,
+          maximum_reads=330,scope='STATUS gated stable CTL/SSPP/LM/video layout candidate; no GOP admission',
+          terminal_return={'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False},
+          decode_plan=make_plan(ROOT),calibration_sha256=sha(calibration),result_categories=CATEGORIES,
+          result_interpretation='Five first-result categories from native route sampler, not bit masks; code5 stable candidate retains ADDRESS and TOPOLOGY requirements. Indirect timing; ambiguous clock or failed recovery stops additional trials.')
+        target_report='enuma-native-route-qualification.json'
+    for path in [archive/'qualification.json' ,ROOT/'reports'/target_report]: path.write_text(json.dumps(q,indent=2)+'\n')
     print('PASS: actual read-only audit PE, R-004 FD record, staged source/flags, full FAT boot-v3 and immutable archive')
 if __name__=='__main__': main()

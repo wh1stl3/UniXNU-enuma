@@ -1,4 +1,6 @@
-# 双路活动与帧推进：当前显示判断
+# 双路活动与帧推进：显示判断演进
+
+当前结论已推进到下文S-028；前面各段保留当时假设和待验证项，不作为当前未完成清单。
 
 S-023在固定boot-origin窗口间接支持ActiveThroughoutMask=3；S-024支持MovingMask=3。二者均自动回到Android、独立核验原分区、相机确认桌面。S-024首次fastboot查询失败发生在发图之前，按用户指令恢复并重新进入后才执行，不算两次固件启动。
 
@@ -15,3 +17,9 @@ Timing非零且稳定、Enable完整字稳定仍需本机隔离；不同启动�
 S-025 ExactEnable3掩码0，表示两路均未在全部三个样本满足低两位==3，不是完整寄存器值0。S-026合并ActiveThroughout、非零TimingStable、EnableStable和Moving，掩码1：第一路在同次观测满足四项，第二路至少一项不足。两笔均自动回Android、独立摘要/身份核验和相机桌面通过。S-026有效负结果不是硬停，不能在此基础上进入“已证明双路完整前置”的路由采集。
 
 下一优先假设是第二路Timing条件，而非直接宣布第二路停止。固定小米52a2f18 `sde_hw_intf.c` 399–413行的v1 get_status使用STATUS bit0并读取帧计数；389行以TIMING_ENGINE_EN判断活动的是另一实现。源SHA256仍为7b02d0b3c116279f0b4ee891cc9267d676942855d3dc58a5b263ad2f10e332da。本次只据此提出Timing条件可能过严，不能从源码证明本机Timing为0、slave角色或硬件状态。S-027拟隔离非零TimingStable，若拒绝仍需区分0与变化，不能跳过稳定性或地址/拓扑边界。
+
+## S-027/S-028增量与合并路由审计
+
+S-027非零TimingStable mask1。S-028 ZeroTimingReady mask2：第二路在同次三样本中Timing均零、STATUS持续活动、Enable完整字稳定、两窗帧计数非回绕递增1..64。两次均自动回Android、独立恢复核验和相机桌面确认。当前工作判断是旧Timing非零条件不适合直接作为此接口的活动门，不推断master/slave，也不把跨boot不同掩码拼成一次完整GOP证明。
+
+据此新增独立native完整管线审计，STATUS门控FRAME，保留Timing/Enable全字稳定，复用CTL/SSPP/LM与布局检查。最多330读/two100ms，五类首结果帮助区分运行稳定性、拓扑、其他管线解码及完整候选。原严格GOP路径默认不变，ADDRESS和TOPOLOGY要求保留；新代码测试和构建不能称实际点屏。上机资格与最新结果以STATUS/HANDOFF为准。
