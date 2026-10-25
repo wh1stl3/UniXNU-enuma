@@ -2,7 +2,7 @@
   "schema": 1,
   "path": "firmware",
   "repository": "https://github.com/wh1stl3/uefi-enuma.git",
-  "commit": "cb9e56866aeff2985a06b4b39cb8ec2390b2985a",
+  "commit": "e6d186777ec1d4c940647ec5880dc3b8f31bfe0c",
   "upstream_commit": "329b473df1e53a3bfa64b2b39b79670c4c02279b",
   "file_sha256": {
     "LICENSE.enuma": "2c5a25036e382b259a871cffdcb52bf571f5b0f7b27bf061dc12effa6ed460c0",
@@ -21,7 +21,7 @@
     "Platforms/Xiaomi/enumaPkg/enuma.fdf": "c3e0377449f7833a57d098b2d8da0bb1f585470828674e5e062724a98dbca8f7",
     "Resources/Configs/enuma.toml": "2d7e9bc772eda9269dd6bbd6f5e3a3d07ddada8f3a02cde6808b51c10ae1e497",
     "Resources/Enuma/dependencies.json": "0fc4caee9b5ffe3275ef791424639e8bf898b66bee7358ee534cafa88da1b411",
-    "Resources/Enuma/extensions.json": "e181c526f7ba87333c9c23a2fe3e3b85a957019d38355863eed60959cedce2a4",
+    "Resources/Enuma/extensions.json": "9a13027b7a108a03aa3a5bb7fb096a8867c344a1f0534f6f13b2dccf2881a79c",
     "Resources/Enuma/interfaces.json": "e9df83230b1ce2dddaee8fcd83da605d84726696dfdfbf5d3c3486ec3ee66b7d",
     "Resources/Enuma/migration.json": "4f5277c80b3691c2010a91d059c42f543230ebec11166ff603d63b0042ebc1cd",
     "Resources/Enuma/reset.json": "aec3a83b27eed55da96e3b5be92e5b6deb49176ab34bd4609166af60bd645b75",
@@ -83,6 +83,13 @@
     "Platforms/Xiaomi/enumaPkg/Drivers/EnumaRamPayloadDxe/TransportReport.h": "0b25f6998ffb306ac495c6d88125a8cca1adeaa731fe9624bafa4016360fbd75",
     "Resources/Scripts/enuma_payload_contract.py": "11bce88f0f7b99dee9aec449dfb650bd0b7d5fa181795c8b799337557ec13f1d",
     "docs/ram-payload-v3.md": "0474d0231aa441426e6a98de46cc9bf8fa5de4c361b334e6dd0beab78b906095",
-    "docs/display-thread-policy.md": "f13db7ab983c2cdb66a1cfb6db196fe5391e5c57c0a984ee1ed5c343cf70d2a7"
+    "docs/display-thread-policy.md": "f13db7ab983c2cdb66a1cfb6db196fe5391e5c57c0a984ee1ed5c343cf70d2a7",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c": "1d61cd69efe4d4c284babc12e48ccd298ef5e3c51a0a6e570dee035c90ec62ec",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "66d05c9e1d34dbb0d70f848a064bc435b637b616e2d2128f3ce98cb19d84c56a",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanoutLib.inf": "6e9dea6dd06be1543abbb202d710ede54eca44da87cb53e193a8860ea2e6059d",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NOTICE.md": "83fbde80d406be6c60915c1b5d6f9f79d1e64a94717fc281c9fce4e44965abb6",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/sources.json": "7902b5e1a7423bcc2255dfbfed356f096d511a9e724eb6e67e77c9f13dff8645",
+    "Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/LICENSE.upstream": "2b031880c646006165194888f9814806719ab4c91c26d330c4eb71e1983f0187"
   }
 }

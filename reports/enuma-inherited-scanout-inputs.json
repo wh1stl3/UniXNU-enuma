@@ -1,0 +1,40 @@
+{
+  "scope": "saved FDT plus read-only Android DRM mode inventory; not current UEFI registers",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "default_panel": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video",
+  "panel_mode": "dsi_video_mode",
+  "link_indices": [
+    0,
+    1
+  ],
+  "timings": [
+    {
+      "path": "/soc/qcom,mdss_mdp@ae00000/qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video/qcom,mdss-dsi-display-timings/timing@0",
+      "width": 800,
+      "height": 2560
+    }
+  ],
+  "android_drm_mode_dimensions": [
+    [
+      1600,
+      2560
+    ]
+  ],
+  "source_mode_selector": {
+    "local_path": "out/display-activity-sources/sde_hw_ctl.c",
+    "commit": "d066b4b959a95fd4686754ee82a7c6d21466b27c",
+    "url": "https://android.googlesource.com/kernel/msm/+/d066b4b959a95fd4686754ee82a7c6d21466b27c/drivers/gpu/drm/msm/sde/sde_hw_ctl.c?format=TEXT",
+    "sha256": "7f1bd6eb204d06f93d634852e9605eb350e99db290c016cf1e1ef740659c3c61",
+    "license": "GPL-2.0-only; source cached only, not imported"
+  },
+  "conclusion": "Use explicit video policy; cas command-only decoder/kick cannot be directly adopted",
+  "remaining": [
+    "fresh UEFI register snapshot",
+    "dual-link mixer to full-panel coordinate mapping",
+    "activity and blend/occlusion",
+    "CPU physical relationship",
+    "visible GOP execution"
+  ],
+  "board_memory_unchanged": true,
+  "pixel_mmio_writes": false
+}

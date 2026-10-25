@@ -1,0 +1,117 @@
+{
+  "scope": "production decoder/capture with synthetic snapshots and callbacks only",
+  "sources": {
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c": "66d05c9e1d34dbb0d70f848a064bc435b637b616e2d2128f3ce98cb19d84c56a",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c": "1d61cd69efe4d4c284babc12e48ccd298ef5e3c51a0a6e570dee035c90ec62ec",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/InheritedScanout.h": "9d218ba072b12f8d430b4458359006eaa45b164ee00c609660b89db2b141349e",
+    "tests/inherited_scanout.c": "d302ed414e0030959d9b5521d35cbf03a15084b8431bc1b1fdf2482bdb36ac55"
+  },
+  "checks": [
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-O1",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c",
+        "/mnt/d/Code/UniXNU-enuma/tests/inherited_scanout.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-scanout/host-test"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-scanout/host-test"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: 28 decode scenarios, split/gap/bounds/mode rejection,267 callback failures, no MMIO/pixel access\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Decode.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-scanout/Decode.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-scanout/Decode.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-builtin",
+        "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+        "-target",
+        "aarch64-none-elf",
+        "-ffreestanding",
+        "-O2",
+        "-c",
+        "/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Capture.c",
+        "-o",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-scanout/Capture.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "llvm-nm",
+        "--undefined-only",
+        "/mnt/d/Code/UniXNU-enuma/out/inherited-scanout/Capture.o"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "hardware_tested": false,
+  "gop_published": false,
+  "pixel_or_mmio_access": false,
+  "capture_read_limit": 267,
+  "required_external_checks": [
+    "activity",
+    "blend/occlusion",
+    "CPU address relationship",
+    "refresh",
+    "dual-link/global coordinate topology"
+  ]
+}
