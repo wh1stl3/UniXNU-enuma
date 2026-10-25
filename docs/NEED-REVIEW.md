@@ -1,3 +1,18 @@
+# R-017 · 原生 ramoops console 最小映射与留存探针
+
+状态：**pending，D-215；未改映射、未上机**。用户支持推进路线，尚未明确批准这个新地址范围。
+
+背景：原生Android已reserve B0000000/4MiB并注册ramoops，console/pmsg各2MiB；当前UEFI未映射console。未接线writer的51,210项主机用例、ASan/UBSan、AArch64对象及5项收集器测试通过。具体审计与实现见[兼容审计](operations/2026-10-25-ramoops-compatibility-audit.md)，无新FD资格。
+
+- A（推荐）：只新增**0xB0000000/0x200000** console映射，AddMem/MEM_RES/UNCACHEABLE/Reserv/UNCACHED_UNBUFFERED。仅MMU成功后的有界Core入口，追加一次**44字节本次随机nonce标记**；有效旧头保留，坏头仅初始化12字节头。短延时后请求PSCI SYSTEM_RESET2 type0，不支持则cold fallback。完成源码/实际PE/宏/映射/产物审计、当前文档提交推送、即时身份/备份/采集/恢复门禁后，**一笔新资格镜像临时fastboot boot**。pmsg不映射/不写；不启全局SerialPort、不写Android boot/FDT或任何分区、不改槽/verified/显示寄存器，不复活旧失败镜像。75秒主机观察，超时停止追加、按既有恢复并核验。读回本次完整标记才算留存链支持；缺失不可唯一归因。
+- B：不新增映射，保留现有时序通道继续独立计数观察。无新RAM范围风险，但无法验证原生日志保留链。
+
+理由：A复用系统现有保留与读取端，可绕开旧R-002需要Android保留区镜像的前置；先单标记有助隔离映射/格式/保留链，避免全局日志过早写入。可能写入异常或复位不保留，需长按恢复；ResetWarm本身不是保留保证。首笔之后不自动扩大为批量日志或4MiB映射。
+
+规则原文（[firmware/AGENTS.md](../firmware/AGENTS.md)）：**“New memory size/base changes or *_verified=true still require the companion review process.”** 本项是对新区域的具体最小审查；旧R-002/R-008不覆盖它。批准A后按既有直接上机授权推进，不另索要一般临时boot批准。
+
+以下为历史记录，保留原状态与后续执行账本；其中旧“当前”标题不代表本轮停点。
+
 ## D-214当前：ramoops为新候选，只读审查无新增审批
 
 已确认Linux后端参数和页标志，不等于UEFI所有权/映射/缓存或跨复位资格。本次无内存字段/RAM写入/分区动作，不把R-002旧批准复用成新地址写入授权。后续实现涉及这些字段时按AGENTS提出具体最小范围；当前没有请求批准。

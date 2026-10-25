@@ -1,0 +1,41 @@
+{
+  "commit": "52a2f180865f8368828985d6384130acd093fa93",
+  "running_kernel_binary_identity": "4.19.157-perf-gf8cf95f4dc15; exact build source not established",
+  "sources": [
+    {
+      "path": "fs/pstore/ram.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/fs/pstore/ram.c",
+      "sha256": "c94cba95f26e0e044bd014ec7316c9b75b41a4126ac4352c77b942621d0ce2b6",
+      "local_path": "out/ramoops-audit/sources/fs_pstore_ram.c",
+      "license": "GPL-2.0 reference only; not firmware import"
+    },
+    {
+      "path": "fs/pstore/ram_core.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/fs/pstore/ram_core.c",
+      "sha256": "4d2a75c875f586df00ca245c1bc1a60d8ff908a008b7686d1cafae3e8cdfbf14",
+      "local_path": "out/ramoops-audit/sources/fs_pstore_ram_core.c",
+      "license": "GPL-2.0 reference only; not firmware import"
+    },
+    {
+      "path": "fs/pstore/platform.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/fs/pstore/platform.c",
+      "sha256": "370ae7691902e5f9b3aa7cd21d36aa6b695a39022260b5b9fb1a9aefc2e9ee07",
+      "local_path": "out/ramoops-audit/sources/fs_pstore_platform.c",
+      "license": "GPL-2.0 reference only; not firmware import"
+    },
+    {
+      "path": "include/linux/pstore_ram.h",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/include/linux/pstore_ram.h",
+      "sha256": "12e74f0b101884b4cf0fc8bd47980850e04e51a54fae01195a072fddf88abb73",
+      "local_path": "out/ramoops-audit/sources/include_linux_pstore_ram.h",
+      "license": "GPL-2.0 reference only; not firmware import"
+    },
+    {
+      "path": "drivers/firmware/efi/arm-init.c",
+      "url": "https://raw.githubusercontent.com/MiCode/Xiaomi_Kernel_OpenSource/52a2f180865f8368828985d6384130acd093fa93/drivers/firmware/efi/arm-init.c",
+      "sha256": "647b496018c5b4e053dea857a88585fd3ad2204ea60ba8edbc408b729b9bb5f3",
+      "local_path": "out/ramoops-audit/sources/drivers_firmware_efi_arm-init.c",
+      "license": "GPL-2.0 reference only; not firmware import"
+    }
+  ]
+}

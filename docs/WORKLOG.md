@@ -746,3 +746,8 @@ negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定
 ## D-214：固定公开实现与原生ramoops只读发现
 
 2026-10-25T19:28:32+08:00。D-214公开实现复审新增：选定enuma当前pstore后端为ramoops，0xB0000000/4MiB、console/pmsg各2MiB、ECC0，1024页元数据均报告Reserved；这与umi RamoopsSerialPortLib布局相合。此前FDT无节点不能排除厂商硬编码后端。日志优先审原生ramoops兼容/映射/缓存/保留链，显示继续cas式继承和独立原生活动/计数观察，I2C背光为独立支线。当前没有UEFI写入/跨复位读回资格，不更改内存表或写RAM。详见operations/2026-10-25-public-route-priorities.md及reports/enuma-ramoops-route-discovery.json。 仅root sysfs/命令行/pstore目录/页标志元数据查询，无新boot、物理内容读取、模块加载、写入或审批扩张。前次59d74d0已推送，固件b93b3bb未变。
+
+
+## D-215：原生ramoops未接线实现与新映射审查
+
+2026-10-25T19:45:02+08:00。用户支持继续后，完成固定umi来源的地址无关console writer、许可、源摘要和只读收集器；51,210项oracle/边界/ASan/UBSan及实际EDK头文件AArch64对象、5项收集器主机测试通过。当前页表确实缺少B0000000，XN别名不设置XN，warm可能cold回退；无物理访问/新boot/映射修改。固件91a8a7c56d327e30262765548e2cd98bd5107037已提交推送，设备仓随本里程碑pin；之前设备c0ab5d7已推送。完整新FD/接线需R-017精确A范围（console2MiB、44字节一次标记、MMU后有界Core、warm/cold及单笔新资格临时boot）审查后继续，B保留旧表继续计数。最终只读恢复核验通过，证据out/device-tests/20261025T194122-recovery-reconciliation.json。详见operations/2026-10-25-ramoops-compatibility-audit.md及三个ramoops审计报告；原始影音仍仅本地，无新媒体上传。

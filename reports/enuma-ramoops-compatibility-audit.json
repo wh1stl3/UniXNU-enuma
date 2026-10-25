@@ -1,0 +1,84 @@
+{
+  "scope": "source/host audit only; production map and Null serial binding unchanged",
+  "umi_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+  "umi_source": "out/sources/UniXNU-umi/overlay/Platforms/Xiaomi/umiPkg/Library/RamoopsSerialPortLib/RamoopsSerialPortLib.c",
+  "umi_source_sha256": "137fce902e5891a815895b3d85936aad1344841ddf7483a53d6969fe2f835f15",
+  "firmware_audited_before_change": "b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107",
+  "audited_files": {
+    "Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "d6ba2fd379001a7a5a1764d19a4cd2cb95818312692566087f12f2a7969958d3",
+    "Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+    "Silicon/Silicium/SiliciumPkg/Library/MemoryInitPeiLib/MemoryInitPei.c": "bd9e725793efe2b5c8e9a854dfeb0147ef0352c75ea4cb35baa97df7c49ce410",
+    "Silicon/Silicium/SiliciumPkg/Include/Library/MemoryMapLib.h": "c60c4b80e81388d40148cc014a25f22a20a89a1722c6dd0f1e784efa3268816b"
+  },
+  "native_format": {
+    "signature": "0x43474244",
+    "header_bytes": 12,
+    "signature_xor": 0,
+    "console_bytes": 2097152,
+    "capacity": 2097140,
+    "ecc_bytes": 0,
+    "old_log_order": "data[start:size] + data[0:start]"
+  },
+  "proposed_review": {
+    "id": "R-017",
+    "status": "pending",
+    "physical_base": "0xB0000000",
+    "size": "0x200000",
+    "mapping": "AddMem/MEM_RES/UNCACHEABLE/Reserv/UNCACHED_UNBUFFERED",
+    "production_map_changed": false,
+    "pmsg_mapped": false,
+    "pmsg_written": false,
+    "marker_bytes": 44,
+    "reset": "PSCI SYSTEM_RESET2 type0 if supported; cold fallback",
+    "boots": 1,
+    "partition_writes": false,
+    "verified_changes": false
+  },
+  "limitations": [
+    "running kernel exact source revision not established",
+    "no UEFI physical access, FD qualification or reset retention test",
+    "Android early pstore consumers/cleanup timing unknown",
+    "UNCACHED_UNBUFFERED_XN alias does not itself set execute-never",
+    "host buffer fences do not qualify cache or pre-MMU entry state"
+  ],
+  "collector_tests": {
+    "passed": 5,
+    "real_device_collection": false
+  },
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "ebb8db8efbe4c1de45befde7bfd8fafdd968fa86d81840e8a73adf5866ede9be",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T194122-recovery-reconciliation.json"
+  },
+  "hardware_verified": false,
+  "firmware_unbound_writer_commit": "91a8a7c56d327e30262765548e2cd98bd5107037",
+  "build_export_sha256": {
+    "out/firmware-build/Mu_Basecore/ArmPkg/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.c": "32dd3f12e4606489df2bd967670bd191057493c67073a83f159e14828a08b9f6",
+    "out/firmware-build/Mu_Basecore/UefiCpuPkg/Library/ArmMmuLib/AArch64/ArmMmuLibCore.c": "bf3be06245f00c6d1b24b94eb0068f607387780966297070836799fea2aa3521",
+    "out/firmware-build/Mu_Basecore/MdePkg/Include/Base.h": "a90f4bf7b02910711506fa1882a709ca10a6798bd5614c1690b5b10b843f9cfa",
+    "out/firmware-build/Mu_Basecore/MdePkg/Include/Library/BaseLib.h": "d6c977ab388cf58f5060987ef4d58e0fa48ed660c462e4f6bc9573b69a8a960f",
+    "out/firmware-build/Mu_Basecore/MdePkg/Include/AArch64/ProcessorBind.h": "c3f547e05561baa01d0dd8caa6ddc18607122660d2700861c64b3891eb953beb"
+  }
+}

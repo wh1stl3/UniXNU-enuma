@@ -1,23 +1,13 @@
-# 当前状态：D-214，发现原生ramoops日志候选；Android正常
+# 当前状态：D-215，原生ramoops核心与审计完成；R-017映射待审
 
-2026-10-25T19:28:32+08:00。D-214公开实现复审新增：选定enuma当前pstore后端为ramoops，0xB0000000/4MiB、console/pmsg各2MiB、ECC0，1024页元数据均报告Reserved；这与umi RamoopsSerialPortLib布局相合。此前FDT无节点不能排除厂商硬编码后端。日志优先审原生ramoops兼容/映射/缓存/保留链，显示继续cas式继承和独立原生活动/计数观察，I2C背光为独立支线。当前没有UEFI写入/跨复位读回资格，不更改内存表或写RAM。详见operations/2026-10-25-public-route-priorities.md及reports/enuma-ramoops-route-discovery.json。
+2026-10-25T19:45:02+08:00。用户支持继续后，已实现未接线的原生console环形写入核心及只读pstore收集器。51,210个独立队列oracle/边界用例、ASan/UBSan和实际EDK头文件AArch64对象编译通过；5个收集器主机测试通过。未完成新FD/打包/实机资格，不能称日志已经打通。
 
-2026-10-25T19:19:31+08:00。D-213替代路线对账：已核原厂显示栈/线程关闭、R-005/R-007像素及R-002跨bootloader标记的已执行结果，区分UART只读发现、独立背光未资格、warm/USB/QR未实机闭合。缺头文件不等于必须自写I2C，缺DEPEX GUID不解释APRIORI驱动黑屏。无新设备动作，D-212计数隔离结论与下一步独立原生计数观察不变；详情operations/2026-10-25-display-log-route-ledger.md和reports/enuma-display-log-route-ledger.json。
+核心来源为固定umi 3eb7257，保留BSD许可；MiCode 52a2f18仅作格式参考，未导入GPL内核代码。12字节DBGC头与本机ECC0、console2MiB布局相合。当前UEFI页表缺少B0000000区域，不能直接启用后端。Normal Non-cacheable不等于XN，ResetWarm可能回退cold，跨复位保留及Android早期清理仍未验证。
 
-2026-10-25T19:12:38+08:00。S-013/S-014互补时序支持首样本Enable门禁Reason5，后续稳定性按该路径未执行；两笔Android/root/A槽/解锁/原分区与备份独立核验通过，均consumed。下一步独立验证原生双路计数推进，不放宽GOP准入。
+**本轮停点是新增内存范围审查，不是设备故障。R-017 pending。** 固件AGENTS明确新memory size/base仍走companion review。最小A方案：仅新增0xB0000000/0x200000普通不可缓存保留映射，MMU完成后的有界Core入口仅追加一次44字节随机nonce标记，短延时后warm请求/不支持时cold回退，一笔新资格镜像临时boot；pmsg不映射/不写，不写分区/改槽/verified，不启全局SerialPort。B方案保留现表继续独立计数隔离。需明确A精确范围后才接线与完整构建审计；全部资格、文档发布和即时恢复门禁满足后沿已授权流程直接上机，不重复申请一般上机许可。
 
-S-013 target1/query1于19:07:50发送1090b697ce5e6703fa5098735a2a8c9fb65f9df87514b718b0d9f0ce0ad50048，命令2.640秒/断开5.109秒/ADB20.078秒/完成34.343秒；S-014 target1/query2于19:09:35发送54f466c1fa0e617af343c237ac65b132d17b68640196f877c474453a86cff523，命令2.641秒/断开5.125秒/ADB26.516秒/完成41.063秒。两笔fastboot product=enuma/current-slot=a/unlocked=yes首轮精确通过，无主机恢复reboot，随后分别独立核验Android完成/root/A槽/解锁及boot_a/vendor_boot_a设备与本地备份摘要全部通过。248/248与279/279拍屏帧解码，已目视核对恢复桌面；原始影音仅out/camera-capture/20261025T190733-system-transport及190918-system-transport，无音频、未上传。
+当前内存表、board.toml/bringup-plan及Null后端均保持。固件源码pin 91a8a7c56d327e30262765548e2cd98bd5107037 已推送，是未接线核心的新源码里程碑；最近已实测源码仍为b93b3bb。无新boot、物理RAM访问、模块加载或分区写入。最终只读核验Android完成/root/A槽/解锁及boot_a/vendor_boot_a设备和本地备份摘要均通过，证据 `out/device-tests/20261025T194122-recovery-reconciliation.json`、`reports/enuma-recovery-reconciliation.json`。
 
-negative-minus-positive：ADB+6.438秒、完成+6.720秒，均在执行前固定的+3..+7秒窗口。支持Reason5首样本CounterEnable条件先拒绝（中等置信），不是直接原因/寄存器数值日志，也不称GOP/显示成功。跨启动继承变化和Android噪声仍可混淆；S-010/S-011/S-012的历史结果不改写。
+S-013/S-014的历史互补时序支持首样本Enable门禁Reason5（间接证据、中等置信），后续完整采样/稳定性按该路径未执行；S-001..014及旧失败镜像consumed，不重试。显示独立原生双路计数前缀尚未实现，完整GOP资格不放宽。真实GOP、CPU/SMMU地址/下游拓扑、13项RAM运输、XNU/iPadOS/PMGR/UFS/root/Data仍未实机闭合。
 
-源码路径含义：Reason5只在N=0且Timing非零、Enable&3!=3时赋值，随后立即返回；按该分类成立的前提，采样回调最多9读、零等待，完整CTL/SSPP/LM采集、Decode及后续稳定性均未到达。不能称稳定性失败、Frame不递增、某接口不活动或某个bit为零；拒绝接口与实际Enable值未知，Enable检查之后的Active条件也可能尚未执行。实际执行读数仍未知，9为条件路径上限，不当作数字转储。
-
-当前主判断从泛化RefreshMode/稳定性收敛到过强的首样本Enable资格门：它阻断了对实际帧进展的观察。固定小米52a2f18 v1 get_status读取活动接口FrameCount不要求Enable&3==3；旧step15使能复合条件拒绝与step18原生至少一路双窗递增支持只作为同方向历史旁证，不能当本次两路数值。不能直接删条件换PASS，也不修改CounterEnable或时钟。
-
-下一步：实现独立诊断前缀，沿原映射仅观察两路原生活动状态、Timing与Enable稳定值、两窗各1..64非回绕Frame增量；不把Enable是否精确3作为其提前返回条件，不访问尚未证明安全的后续管线银行、不发布GOP。该前缀是新的独立观测，不等于放宽完整EnumaSampleVideo准入；成功后才评估有依据的原生资格修正，失败再细分活动性/稳定性/计数进展。新前缀尚未实现/构建/资格/上机，完整采样所有原条件保持。若新证据显示原因非5、两路不活动/不稳定或CounterEnable实际已满足，应修正当前判断。
-
-新增Detailed接口保留旧入口语义：固定8710ebd oracle覆盖330失败位置和成功的完整回调/等待顺序、返回状态、Out字节；首/后续计数、初始接口、等待、配置变动及Frame停滞原因用例通过，164选择器场景、24固件和4配对解析回归及AArch64对象通过。实际两FD/PE/宏/R-004/完整FAT/BootShim不可变资格通过，实际Core可执行段与已审查S-010相同，provider仅三条映射指令差异已人工审查并摘要绑定，现场运行前提交均已推送（d6c9dfa资格、f399374首笔结果）。
-
-证据reports/enuma-video-counter-S-013-result.json、S-014-result.json、pair-result.json、path-interpretation.json，enuma-video-reason-code.json及pair-code.json；源码b93b3bb已推送。S-001..014及旧失败图不重试，当前无人工/审批待办。
-
-固件固定b93b3bb9c0e8f32baa81c1b2b3d0eb22aedaf107。真实GOP、CPU/SMMU地址/下游拓扑、13项RAM运输、XNU/iPadOS/PMGR/UFS/root/Data仍未实机闭合，ADDRESS/TOPOLOGY不清零。无flash/erase/改槽、内存字段或verified变更；原始影音仅本地out，不录音、不上传Git/Release/CI。
+详见 `docs/operations/2026-10-25-ramoops-compatibility-audit.md`、`reports/enuma-ramoops-compatibility-audit.json`、`reports/enuma-ramoops-buffer-tests.json`、`reports/enuma-ramoops-kernel-sources.json`。原始影音仅本地out，未录音/未上传；本轮未产生新影音。无人工恢复按键待办，审批见NEED-REVIEW的R-017，不把旧R-002/R-008扩张到新区域。

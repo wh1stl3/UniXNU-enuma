@@ -1,0 +1,49 @@
+{
+  "scope": "unbound writer host tests and AArch64 object; no FD, mapping or device execution",
+  "host_result": "PASS: 51210 native ring/oracle and boundary cases",
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "host_command": [
+    "clang",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-I",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/host",
+    "-fsanitize=address,undefined",
+    "-g",
+    "/mnt/d/Code/UniXNU-enuma/tests/ramoops_buffer_test.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/host/ring-test"
+  ],
+  "aarch64_command": [
+    "clang",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-I",
+    "/mnt/d/Code/UniXNU-enuma/out/firmware-build/Mu_Basecore/MdePkg/Include",
+    "-I",
+    "/mnt/d/Code/UniXNU-enuma/out/firmware-build/Mu_Basecore/MdePkg/Include/AArch64",
+    "-fshort-wchar",
+    "--target=aarch64-none-elf",
+    "-ffreestanding",
+    "-DRAMOOPS_COMPILE_ONLY",
+    "-c",
+    "/mnt/d/Code/UniXNU-enuma/tests/ramoops_buffer_test.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/ramoops-audit/host/ring-aarch64.o"
+  ],
+  "sha256": {
+    "firmware/diagnostics/EnumaRamoopsBuffer.h": "924921468fc8580100eaa9e2ab21ceabf065e87f73db5e03dccb03691ad34aae",
+    "tests/ramoops_buffer_test.c": "d1543e1434cf8eff0a10db82d33ae67199dec6f376296d2e03223b172acb9377",
+    "scripts/test_ramoops_buffer.py": "feb3edfe0a166335dc8554a85205df573db6bf4ec2d82a1a42d89f8c1512d29e"
+  },
+  "hardware_verified": false,
+  "production_serial_backend": "Null",
+  "physical_address_in_writer": false
+}
