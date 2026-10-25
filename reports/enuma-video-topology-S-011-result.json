@@ -1,0 +1,61 @@
+{
+  "scope": "actual complementary first-status diagnostic; never GOP success",
+  "trial": "S-011",
+  "firmware_commit": "8710ebd93da7b19bb7ffd0e388f6925399231153",
+  "image_sha256": "4f413f286bba150e007e2333d9aa466fef98d046bc23ebb05256d01f213261a7",
+  "fd_sha256": "fa02b3a0ed300f4876c2f2b7a691efb1dbe2abbab17279e8c4f4b317245451d4",
+  "topology_status_query": 1,
+  "consumed": true,
+  "automatic_android_return": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261025T184520-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-25 18:45:34",
+    "issued_at_utc": "2026-10-25T10:45:34.989231+00:00",
+    "boot_command_return_seconds": 2.625,
+    "fastboot_disconnect_observed_seconds": 5.093,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 26.484,
+    "boot_complete_seconds": 40.547
+  },
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "08defd45b257179fa6ad918d8479999d70bad78fde0ceee2a08320088aca99c8",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261025T184632-recovery-reconciliation.json"
+  },
+  "camera": {
+    "frames": 278,
+    "decoded_frames": 278,
+    "video": "out/camera-capture/20261025T184517-system-transport/system-transport.avi",
+    "sha256": "02c9f42d0fd86d23eaa44b93c19cf211d13a18a501f46efd683311b9846d06ed",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_published": false,
+  "exact_status_observed": false,
+  "maximum_qualified_reads": 330,
+  "actual_reads_observed": null,
+  "conclusion": "Controlled return, await complementary pair; no single-timing exact-status claim"
+}
