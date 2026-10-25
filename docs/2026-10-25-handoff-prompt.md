@@ -1,6 +1,6 @@
-# 当前状态：D-265，S-040 原生显示管线合并审计资格完成，准备实测
+# 当前状态：D-266，S-040 原生显示管线合并审计结果与交接
 
-2026-10-26T02:17:23+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。本候选尚未发出。全部当前文档提交推送、即时身份/原槽/解锁/备份/恢复和观测门禁（当前无相机）通过后直接单次临时boot。
+2026-10-26T02:20:23+08:00。用户要求“继续推进 触发硬停再停，尽量一次推进最多的验证点和实测点”。实测结果：{"conclusion": "route-category-inferred", "category": "cpu-stage1-memory-attribute-not-write-through", "warning_code": 4, "stop_additional_trials": false, "direct_register_log": false}。自动Android返回=True，观察有效=True。本图已consumed，不重试。详见reports/enuma-native-route-S-040-result.json。有效分类不是硬停，按首个拒绝位置继续隔离或推进地址与下游证据。
 
 ## 已证实与主判断
 
@@ -22,7 +22,7 @@ S-037有效返回source-capture-or-layout-rejected，origin27.444..27.524秒、A
 
 S-038有效返回source-format-or-encoding-rejected，origin22.400..22.520秒、Android44.610秒，独立身份/摘要通过，已consumed。此次定位到Native5的实际源解码Format拒绝，支持此前原始稳定/精确整屏坐标/几何阶段已通过；仍不区分格式字、opmode或unpack数值。当前alpha通道视图=True：Native6仅允许所选源236ff/237ff且至少一个237ff，RAM副本只清SRCC3_EN bit8以检查RGB存储通道；原始格式不变并比较稳定性。其他格式/压缩/无alpha输入拒绝，其他编码/安全/stride/地址/覆盖判据不变。成功仍保留22，并强制alpha_semantics_unproven=true；不能把ReservedMask当可写零alpha的GOP契约。64格式位扰动、三种alpha组合、330失败/两等待/原始alpha变化/其他编码拒绝、旧Native5保持Format拒绝和10项native Python测试通过。
 
-S-039有效返回stable-8888-logical-structure-alpha-blend-address-and-downstream-unproven，origin32.452..32.522秒、Android57.704秒，独立身份/root/A槽/解锁/设备及本地备份摘要通过，已consumed。支持同次完整逻辑描述，不等于真实CPU像素访问或SMMU。当前CPU stage1查询=True：仅Native6 complete/requirements22后，对覆盖候选范围的每4KiB页查询读写转换，最多18432次AT；禁止像素数据访问/页表setter/缓存维护，保留22和alpha义务。code1前置或CPU上下文/回调拒绝、2转换/权限fault、3非恒等、4非0xbb、5全部页的stage1 R/W恒等WT；EL1最终stage2、真实RAM、SMMU、混合及可见输出仍未证明。56000故障注入/18432边界/11项Python测试通过，实际打包四AT/上下文/DAIF和PAR恢复已审查。
+S-039有效返回stable-8888-logical-structure-alpha-blend-address-and-downstream-unproven，origin32.452..32.522秒、Android57.704秒，独立身份/root/A槽/解锁/设备及本地备份摘要通过，已consumed。支持同次完整逻辑描述，不等于真实CPU像素访问或SMMU。S-040有效返回cpu-stage1-memory-attribute-not-write-through，origin27.434..27.538秒、Android50.390秒，独立身份/分区/备份摘要通过，已consumed。只支持首个覆盖页的读AT非fault且输出恒等，随后的属性非0xbb触发提前返回；写AT及其余页未执行，不推断实际属性或SMMU。当前CPU stage1查询=True：仅Native6 complete/requirements22后，对覆盖候选范围的每4KiB页查询读写转换，最多18432次AT；禁止像素数据访问/页表setter/缓存维护，保留22和alpha义务。code1前置或CPU上下文/回调拒绝、2转换/权限fault、3非恒等、4非0xbb、5全部页的stage1 R/W恒等WT；EL1最终stage2、真实RAM、SMMU、混合及可见输出仍未证明。56000故障注入/18432边界/11项Python测试通过，实际打包四AT/上下文/DAIF和PAR恢复已审查。
 
 当前native_border_view=True。独立native border路径在解析副本仅清bit24，原始字保留并逐样本比较；原Native2其余严格源/混合器/布局条件不变；结构模式Native3另保留混合未验证要求。原严格和原native采样API不变，staging模式仍只分类。独立border路径全部64组合保留原始快照、330读失败、border中途变化/未知位/混合器/等待/帧稳定性拒绝通过。
 
@@ -42,7 +42,7 @@ ASan/UBSan原严格路径固定基线330失败位置/负例回归、新native330
 
 ## 恢复、硬停与下一步
 
-最近独立恢复out\device-tests\20261026T015803-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
+最近独立恢复out\device-tests\20261026T021914-recovery-reconciliation.json：Android完成/root/A槽/解锁、boot_a和vendor_boot_a与本地备份摘要一致。每笔之后重新核验。用户2026-10-26明确当前未到点屏阶段无需摄像头，本候选采用--no-camera，保留同一有界runner的ADB/fastboot状态、新boot-id/三次uptime时基和身份/分区摘要；出现可见输出、需判读画面或人工恢复时再启用摄像头。native Python测试包含无相机成功/预启动失败/超时与consumed账本，均stub设备调用。原始视频/图像仅本地out，不上传、不录音。
 
 D-233：镜像发出前fastboot查询异常不作整轮硬停；恢复核验后允许重新进入一次fastboot，完整product/slot/unlocked门禁仍须通过。不重复已发图，不忽略FAILED正文。真实75秒无识别恢复、恢复失败、所选观测通道失效/时基失败（无相机试验不要求图像）或新时间码模糊，停止追加并当轮落实交接；有效负分类继续分析。
 

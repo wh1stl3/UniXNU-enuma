@@ -190,3 +190,17 @@ other decode check and requires alpha_semantics_unproven=true/requirements22.
 Code3 refutes this exact coordinate/format hypothesis; code4 leaves another
 decode condition; code5 is logical structure only. Alpha-safe pixel writes,
 blend, CPU/SMMU and physical routing still require their own proof.
+
+
+## S-040 CPU stage1 expected attribute rejected
+
+Valid code4, boot-origin27.434..27.538s, Android50.390s; independent root,
+A-slot/unlock and both device/backup digests pass. Imagebfab7998...consumed.
+The actual first page read query returned PAR.F=0 and identity page output,
+then ATTR63:56!=bb; it returned before write query or remaining pages. Thus
+neither those queries nor actual data access/SMMU are established. R-004
+static WRITE_THROUGH_XN is not evidence of the effective DXE mapping.
+Next isolated diagnostic classifies the first mismatching PAR attribute,
+without changing mappings or adding framebuffer data access. Normal NC/WB
+are both plausible, Device would raise a mapping-type concern. Do not change
+the expected attribute or call WB/NC qualified solely to obtain code5.

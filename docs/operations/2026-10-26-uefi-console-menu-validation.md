@@ -7,7 +7,7 @@
 | 两源 staging 与全屏坐标 | 安全路由采集、原始稳定、双路两窗推进 | S-039 间接码5支持精确逻辑坐标模型；三样本原始字保留 | 不等于物理 CTL→PP/DSC→DSI 关联；后者未闭合 |
 | 格式和颜色通道 | 仅236ff/237ff，至少一个开启alpha，其他编码不变 | S-039 支持逻辑8888 RGB描述；未输出原始寄存器数值 | alpha语义仍未验证；不能直接套用RGBX绘制策略 |
 | 候选地址、步长、范围、覆盖 | Native6完整decode | S-039同次通过4字节对齐、pitch>=1600*4、stride上位约束、bytes=pitch*2560、共同base/stride/unpack、Splash包含、完整几何覆盖 | 只支持解码模型，不能称实际CPU/SMMU地址等价，也不知道具体base/stride数值 |
-| CPU stage1每页映射 | 上述同次完整成功/requirements22 | S-040已实现，56000故障注入和18432最大查询主机路径通过，实际打包代码审计已通过，待单次上机 | 每覆盖4KiB页依次R/W AT成功、输出恒等、属性0xbb；仍不证明数据访问、EL1最终stage2或SMMU |
+| CPU stage1每页映射 | 上述同次完整成功/requirements22 | S-040已实现，56000故障注入和18432最大查询主机路径通过，S-040已有效实测：首个页读AT恒等/非fault，属性非0xbb提前返回；写权限及其余页未执行 | 每覆盖4KiB页依次R/W AT成功、输出恒等、属性0xbb；仍不证明数据访问、EL1最终stage2或SMMU |
 | CPU真实数据访问与缓存一致性 | 安全映射、恢复、明确像素实验范围 | 当前未执行；历史像素超时不能定位为store故障，Sync/Read先于Write | 独立区分Sync、只读、保存、写、恢复；不能把AT通过直接升级为可写 |
 | alpha/混合语义 | 实际操作字、源alpha、常量alpha及dim | S-034严格操作字门拒绝；Native6有意保留BLEND，且alpha_semantics_unproven=true | 从固定小米实现解释有效混合方式，并验证安全不透明写入；不能直接清requirements |
 | 正式GOP发布 | 上述义务及下游闭合 | InheritedGopLib后端已实现并有host/Mu Blt测试；当前诊断无GOP发布，生产接入未完成 | 合格Frame、持续Validate、GOP+匹配DisplayDevicePath在同一handle；拒绝requirements!=0；四种Blt和SetMode单独验证 |
