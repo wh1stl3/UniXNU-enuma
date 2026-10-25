@@ -28,3 +28,7 @@ Metadata1110..118c remains exact. Initial/final revision count guards11ac..11e8 
 After complete observation copy14a4..14cc, loads14d4/14e4/14f4/1504 select the four masks at0xda0/da4/da8/dac. Each must be<=3; otherwise1510 returns5. AND chain1534..153c and add1 at1540 generate warning1..4. ExactEnable3 at0xdb0 is not part of this conjunction. Failure branches reach1510 without using partial masks. No new read/wait/call/GOP/pixel path.
 
 The helper tail shifts by0x30. Byte comparison differs only at helper offset0x54 (BL to the unchanged CpuPause1038) and0xadc (ADRP encoding crosses a code page but still targets3000); remaining helper bytes equal the original tail. Full reviewed disassembly digest `5822c1c77fca73484b64c6b308fa9cb954c48032f41edd405d62636927528439`. Actual-header tests now cover504 terminal,53 individual and521 combined/error selector cases. Old field2 was built and archived offline only, not issued or consumed.
+
+## S-027 field2 on9600b19
+
+Current-source `qualified-native-mask-9600b19-field2` retains the same Core PE as S-026. Relative to independently reviewed S-023 provider, full executable disassembly differs only at RVA14d4: offset0xda0 becomes0xda4, selecting TimingStableMask at observation offset0x74. Reviewed full disassembly digest `4c4ea0a70b7a3f53a3ee7be2678a3db2968b6f0da58fecda606f30916c537277`. Mask requires every sample nonzero AND equality between windows; rejection alone cannot distinguish zero from changing timing. The older2bb165f field2 remains unissued, distinct from this newly pinned candidate.
