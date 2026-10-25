@@ -14,6 +14,11 @@ def omitted_oem_modules(build, fd_sha256):
     if type(terminal) is not bool or (terminal and (not video or build.get('diagnostic_dispatch_completion_fallback') is not False or build.get('diagnostic_gop_query')!=1)):
         raise ValueError('unsupported video terminal profile')
     if type(video) is not bool: raise ValueError('unsupported video audit declaration')
+    topology=build.get('inherited_video_topology_query',0)
+    topology_flag=build.get('firmware_configuration',{}).get('defines',{}).get('ENUMA_VIDEO_TOPOLOGY_QUERY','0')
+    if (type(topology) is not int or topology not in (0,1,2) or topology_flag!=str(topology) or
+        (topology and (not video or not terminal or control))):
+        raise ValueError('unsupported topology status query profile')
     if video and (simple!='1' or pixel or build.get('diagnostic_gop_step')!=0 or
                   build.get('diagnostic_gop_query') not in (1,2) or build.get('value_probe',{}).get('source')!='off' or
                   build.get('gop_backend_selftest_ram_only')):

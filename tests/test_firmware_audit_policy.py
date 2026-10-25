@@ -34,6 +34,22 @@ class FirmwareAuditPolicyTests(unittest.TestCase):
         return {'complete':True,'fd_sha256':'a'*64,'diagnostic_omitted_oem_modules':['UFSDxe'],
                 'firmware_configuration':{'defines':{'ENUMA_DIAG_DISABLE_UFS':'1'}}}
 
+    def test_topology_query_needs_exact_terminal_profile_and_flags(self):
+        value=self.fixture()
+        value.update(inherited_video_audit_read_only=True,inherited_video_terminal=True,
+                     inherited_video_topology_query=1,diagnostic_simplefb_metadata_only=False,
+                     diagnostic_dispatch_completion_fallback=False,diagnostic_gop_step=0,
+                     diagnostic_gop_query=1,value_probe={'source':'off'},
+                     diagnostic_omitted_oem_modules=['CPRDxe','DisplayDxe','UFSDxe'])
+        value['firmware_configuration']['defines'].update(ENUMA_DIAG_SIMPLEFB='1',ENUMA_VIDEO_TOPOLOGY_QUERY='1')
+        self.assertEqual(omitted_oem_modules(value,'a'*64),frozenset(value['diagnostic_omitted_oem_modules']))
+        for key,bad in [('inherited_video_topology_query',True),('inherited_video_topology_query',3),
+                        ('inherited_video_terminal',False),('inherited_video_entry_control',True)]:
+            v=copy.deepcopy(value);v[key]=bad
+            with self.subTest(key=key),self.assertRaises(ValueError):omitted_oem_modules(v,'a'*64)
+        v=copy.deepcopy(value);v['firmware_configuration']['defines']['ENUMA_VIDEO_TOPOLOGY_QUERY']='2'
+        with self.assertRaises(ValueError):omitted_oem_modules(v,'a'*64)
+
     def test_explicit_matching_diagnostic_only(self):
         self.assertEqual(omitted_oem_modules(self.fixture(),'a'*64),frozenset(['UFSDxe']))
         self.assertEqual(omitted_oem_modules({},'b'*64),frozenset())

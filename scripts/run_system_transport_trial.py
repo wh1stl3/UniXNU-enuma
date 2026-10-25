@@ -36,6 +36,9 @@ def qualification(published=False, report=None):
             raise ValueError('video trials require symmetric terminal return; old dispatcher-fallback profiles are consumed/historical')
         if q.get('pixel_access') is not False or q.get('gop_published') is not False or q.get('maximum_reads')!=expected:
             raise ValueError('unsupported video audit scope')
+        query=q.get('topology_status_query',0)
+        if type(query) is not int or query not in (0,1,2) or (query and (expected!=330 or q.get('topology_status_value')!=13)):
+            raise ValueError('unsupported topology status classification')
         if expected==0 and q.get('control_actual_code',{}).get('review_required') is not False:
             raise ValueError('actual control PE disassembly still needs review')
     if 'detail_point' in q:
