@@ -1,13 +1,18 @@
 {
-  "scope": "host camera preflight; device action only with --execute",
-  "started_utc": "2026-10-26T04:20:41.071913+00:00",
-  "camera_ready": false,
-  "camera_used": true,
-  "device_runner_started": false,
-  "boot_issued": false,
-  "observation_repeat": "R-021",
-  "execution_id": "a9f7f08c-900c-4938-ac34-0d12abe9dc41",
+  "scope": "explicit human-only close-up capture; host boot-clock/USB/recovery logs; no host video",
+  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+  "camera_used": false,
+  "host_camera_used": false,
   "human_capture_ready": true,
-  "error": "camera index0 DirectShow unavailable; no device command issued",
-  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf"
+  "human_media_pending": true,
+  "human_media_received": false,
+  "observation_channel": "human-primary-only",
+  "observation_repeat": "R-021",
+  "execution_id": "5ea538d3-8f78-45cb-b1d1-1be089b1a151",
+  "started_utc": "2026-10-26T04:28:09.918065+00:00",
+  "device_runner_started": true,
+  "boot_issued": true,
+  "host_audio_recorded": false,
+  "runner_log": "out/human-capture/20261026T122809-S049/runner.log",
+  "runner_exit": 0
 }

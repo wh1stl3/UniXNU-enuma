@@ -219,7 +219,7 @@
     "visual_execution_record": "reports/enuma-s048-visible-log.json"
   },
   "R-021": {
-    "status": "approved",
+    "status": "consumed",
     "mode": "explicit-observation-repeat",
     "base_review": "R-020",
     "base_trial": "S-048",
@@ -273,6 +273,9 @@
     "capture_mode": "human-primary-only",
     "host_camera_required": false,
     "capture_arrangement_authorization": "\u7528\u6237\u539f\u6587\uff1a\u91cd\u8dd1enuma \u6211\u6765\u62cd\u6444\u5c4f\u5e55\uff1b\u540e\u660e\u786e\uff1a\u4e3b\u673a\u6444\u50cf\u5934\u6e05\u6670\u5ea6\u4e0d\u8db3\u5df2\u65ad\u5f00\u3002",
-    "capture_mode_updated_at": "2026-10-26T12:27:12.637384+08:00"
+    "capture_mode_updated_at": "2026-10-26T12:27:12.637384+08:00",
+    "consumed_at": "2026-10-26T12:36:34.613333+08:00",
+    "execution_record": "reports/enuma-native-route-S-049-result.json",
+    "observation_outcome": "user reports defocus/merged strokes and2s insufficient to focus; no reliable status values"
   }
 }
