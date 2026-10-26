@@ -251,6 +251,47 @@ def run_without_camera(q, image):
         write(ROOT/'reports/enuma-system-trial-observation.json', report)
 
 
+def run_with_human_capture(q,image,authorization,execution_id,human_ready):
+    """Explicit R021 human camera replaces disconnected host camera; no pixels hidden as read-only."""
+    if (authorization!='R-021' or not human_ready or q.get('boot_log_replay') is not True or
+        q.get('trial_kind')!='native-video-route' or q.get('hardware_review')!='R-020'):
+        raise ValueError('human-only capture requires explicit R021, actual log replay and confirmed readiness')
+    approvals=json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8'))
+    if approvals.get(authorization,{}).get('capture_mode')!='human-primary-only':
+        raise ValueError('human-only observation arrangement not recorded')
+    from run_enuma_entry_probe import require_hardware_review
+    require_hardware_review(json.loads(image.with_suffix('.json').read_text()),approvals,authorization)
+    out=ROOT/'out/human-capture'/(datetime.now().strftime('%Y%m%dT%H%M%S')+'-S049')
+    out.mkdir(parents=True)
+    report=dict(scope='explicit human-only close-up capture; host boot-clock/USB/recovery logs; no host video',
+        image_sha256=q['image_sha256'],camera_used=False,host_camera_used=False,human_capture_ready=True,
+        human_media_pending=True,human_media_received=False,observation_channel='human-primary-only',
+        observation_repeat=authorization,execution_id=execution_id,started_utc=datetime.now(timezone.utc).isoformat(),
+        device_runner_started=False,boot_issued=False,host_audio_recorded=False,
+        runner_log=(out/'runner.log').relative_to(ROOT).as_posix())
+    command=[sys.executable,'-X','utf8','-u','-B',str(ROOT/'scripts/run_enuma_entry_probe.py'),
+             '--image',str(image),'--label','system-transport','--boot-clock',
+             '--observation-repeat',authorization,'--execution-id',execution_id,'--human-camera-ready']
+    try:
+        with (out/'runner.log').open('w',encoding='utf-8') as log:
+            report['device_runner_started']=True
+            result=subprocess.run(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,timeout=240)
+        report['runner_exit']=result.returncode
+        if result.returncode:raise RuntimeError('guarded runner failed; stop further trials and reconcile recovery')
+        print('PASS: host runner returned; human photos/video still required, no legibility conclusion')
+    except Exception as error:
+        report['error']=str(error)
+        raise
+    finally:
+        from observation_repeat import issued_for_attempt,finish
+        state=json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+        if issued_for_attempt(state,q['image_sha256'],authorization,execution_id):
+            report['boot_issued']=True
+            finish(ROOT,authorization,execution_id,state,out.relative_to(ROOT).as_posix())
+        write(out/'observation.json',report)
+        write(ROOT/'reports/enuma-system-trial-observation.json',report)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     mode = p.add_mutually_exclusive_group()
@@ -260,7 +301,9 @@ def main():
     p.add_argument('--no-camera', action='store_true', help='qualified read-only native route: use ADB/fastboot and calibrated boot clock')
     p.add_argument('--observation-repeat',choices=('R-021',))
     p.add_argument('--human-camera-ready',action='store_true')
+    p.add_argument('--human-camera-only',action='store_true',help='explicit R021 human close-up capture; host camera disconnected, never generic no-camera pixel execution')
     a = p.parse_args()
+    if a.human_camera_only and (a.observation_repeat!='R-021' or a.camera_check or a.no_camera):p.error('human-only mode is limited to explicit R021 observation repeat')
     if a.observation_repeat and (a.camera_check or a.no_camera):p.error('observation repeat requires the full camera runner')
     if a.execute and a.observation_repeat and not a.human_camera_ready:p.error('wait for explicit human capture readiness before repeat')
     if a.human_camera_ready and not a.observation_repeat:p.error('human readiness flag is specific to observation repeat')
@@ -273,6 +316,9 @@ def main():
             p.error('pixel visibility trial requires camera; read-only trials may use --no-camera')
         if not a.execute:
             print('PASS: qualified full-input candidate; offline only, no camera/device operation')
+            return
+        if a.human_camera_only:
+            run_with_human_capture(q,image,a.observation_repeat,execution_id,a.human_camera_ready)
             return
         if a.no_camera:
             run_without_camera(q, image)

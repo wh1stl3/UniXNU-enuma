@@ -269,6 +269,10 @@
     "base_result_sha256": "cee8202e0b88efccd0d538f73ce23271b835960745b69c5b5eede3ccab48890e",
     "authorized_at": "2026-10-26T04:13:39.440910+00:00",
     "authorization": "User explicitly answered the precise conflict question: authorize the original image for ONE additional screen-capture attempt, overriding the S048 no-repeat rule; wait for capture-ready confirmation before boot.",
-    "proposal": "docs/operations/2026-10-26-r021-human-capture-repeat.md"
+    "proposal": "docs/operations/2026-10-26-r021-human-capture-repeat.md",
+    "capture_mode": "human-primary-only",
+    "host_camera_required": false,
+    "capture_arrangement_authorization": "\u7528\u6237\u539f\u6587\uff1a\u91cd\u8dd1enuma \u6211\u6765\u62cd\u6444\u5c4f\u5e55\uff1b\u540e\u660e\u786e\uff1a\u4e3b\u673a\u6444\u50cf\u5934\u6e05\u6670\u5ea6\u4e0d\u8db3\u5df2\u65ad\u5f00\u3002",
+    "capture_mode_updated_at": "2026-10-26T12:27:12.637384+08:00"
   }
 }

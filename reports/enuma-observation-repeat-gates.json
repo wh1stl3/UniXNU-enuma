@@ -1,7 +1,7 @@
 {
   "scope": "host-only explicit observation-repeat gate; no device calls in tests; original image unchanged",
   "tests": {
-    "new_gate": 8,
+    "new_gate": 11,
     "scope_regression": 5,
     "protected_review_regression": 11
   },
@@ -11,10 +11,14 @@
   "base_result_sha256": "cee8202e0b88efccd0d538f73ce23271b835960745b69c5b5eede3ccab48890e",
   "source_sha256": {
     "scripts/observation_repeat.py": "906b7443823591f8bdbd152b34f8af7268e1043c78f4e2b6b06866e5f3015267",
-    "scripts/run_system_transport_trial.py": "87f98eac588ded443816e828e8b877f4f32dd53b7b833569dce60fb718c6a9f4",
+    "scripts/run_system_transport_trial.py": "4718a7d69aea7d66f2dd6b665dbc1e5ba5abaf7f92853e6c123a78b4a588dfd3",
     "scripts/run_enuma_entry_probe.py": "48da1918b54783ab52b8dfad868e9a55fb527303bc086bea110ef48baf118fd7",
-    "tests/test_observation_repeat.py": "e54346b465fc48c3d51dfebbb11dc6757e8fd00a4c892194e17348b60ade744e"
+    "tests/test_observation_repeat.py": "5f50eb0b91699e77ab9a08f6a4eed1e1e5c34b0407a412130b36c707c873690a"
   },
   "hardware_executed": false,
-  "human_capture_ready": false
+  "human_capture_ready": false,
+  "capture_mode": "human-primary-only",
+  "preissue_host_camera_failure": true,
+  "target_device_commands_in_failed_attempt": false,
+  "human_media_pending": true
 }

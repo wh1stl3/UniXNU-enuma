@@ -55,6 +55,39 @@ class ObservationRepeatTests(unittest.TestCase):
  def test_execution_before_human_ready_is_rejected_without_device(self):
   with patch.object(sys,'argv',['runner','--execute','--observation-repeat','R-021']),patch.object(runner.subprocess,'Popen') as popen,self.assertRaises(SystemExit):runner.main()
   popen.assert_not_called()
+ def test_human_only_mode_does_not_become_generic_camera_bypass(self):
+  for args in [['--execute','--human-camera-only'],['--execute','--human-camera-only','--observation-repeat','R-021']]:
+   with patch.object(sys,'argv',['runner',*args]),patch.object(runner.subprocess,'run') as run,self.assertRaises(SystemExit):runner.main()
+   run.assert_not_called()
+  with patch.object(runner.subprocess,'run') as run,self.assertRaises(ValueError):
+   runner.run_with_human_capture({'trial_kind':'native-video-route'},Path('unused'),'R-021','id',False)
+  run.assert_not_called()
+ def test_human_primary_success_preserves_original_and_waits_for_media(self):
+  from types import SimpleNamespace
+  self.authorization['capture_mode']='human-primary-only'
+  (self.root/'config/hardware-review-approvals.json').write_text(json.dumps(self.approvals))
+  image=self.root/'out/original.img';image.with_suffix('.json').write_text(json.dumps(self.meta))
+  identity=str(uuid.uuid4());old=self.marker.read_bytes()
+  q=dict(boot_log_replay=True,trial_kind='native-video-route',hardware_review='R-020',image_sha256=repeat.IMAGE)
+  def fake_run(*args,**kwargs):
+   repeat.claim(self.meta,self.approvals,'R-021',self.root,identity)
+   state=dict(candidate_sha256=repeat.IMAGE,issued_at='now',observation_repeat='R-021',execution_id=identity,phase='recovered-android-boot-complete')
+   (self.root/'out/device-tests/current.local.json').write_text(json.dumps(state))
+   return SimpleNamespace(returncode=0)
+  with patch.object(runner,'ROOT',self.root),patch.object(entry_probe,'ROOT',self.root),patch.object(runner.subprocess,'run',side_effect=fake_run):runner.run_with_human_capture(q,image,'R-021',identity,True)
+  report=json.loads((self.root/'reports/enuma-system-trial-observation.json').read_text())
+  self.assertTrue(report['boot_issued']);self.assertTrue(report['human_media_pending']);self.assertFalse(report['human_media_received']);self.assertFalse(report['host_camera_used'])
+  self.assertEqual(self.marker.read_bytes(),old)
+ def test_human_primary_preissue_failure_does_not_claim_old_boot(self):
+  from types import SimpleNamespace
+  self.authorization['capture_mode']='human-primary-only'
+  (self.root/'config/hardware-review-approvals.json').write_text(json.dumps(self.approvals))
+  image=self.root/'out/original.img';image.with_suffix('.json').write_text(json.dumps(self.meta))
+  old=dict(candidate_sha256=repeat.IMAGE,issued_at='S048',phase='recovered-android-boot-complete')
+  (self.root/'out/device-tests/current.local.json').write_text(json.dumps(old))
+  q=dict(boot_log_replay=True,trial_kind='native-video-route',hardware_review='R-020',image_sha256=repeat.IMAGE)
+  with patch.object(runner,'ROOT',self.root),patch.object(entry_probe,'ROOT',self.root),patch.object(runner.subprocess,'run',return_value=SimpleNamespace(returncode=1)),self.assertRaises(RuntimeError):runner.run_with_human_capture(q,image,'R-021',str(uuid.uuid4()),True)
+  report=json.loads((self.root/'reports/enuma-system-trial-observation.json').read_text());self.assertFalse(report['boot_issued']);self.assertFalse(repeat.used_path(self.root,'R-021').exists())
  def test_claim_invalid_execution_identity_does_not_consume(self):
   with self.assertRaises(ValueError):repeat.claim(self.meta,self.approvals,'R-021',self.root,'invalid')
   self.assertFalse(repeat.used_path(self.root,'R-021').exists())
