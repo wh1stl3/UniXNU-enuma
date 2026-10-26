@@ -128,7 +128,7 @@
     "consumed_at": "2026-10-26T09:54:54+08:00"
   },
   "R-019": {
-    "status": "pending",
+    "status": "approved",
     "scope": "One exact-image128x32 fixed UEFI bitmap save/revalidate/500ms hold/restore/readback experiment",
     "image_sha256": [
       "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60"
@@ -165,7 +165,8 @@
       "left_margin": 4,
       "top_margin": 2
     },
-    "authorization": null,
-    "proposal": "docs/operations/2026-10-26-r019-bounded-uefi-text.md"
+    "authorization": "2026-10-26 Asia/Shanghai: human explicitly approved R-019, direct one-image hardware verification, camera for text, raw media local only; proceed by results and stop on hard-stop conditions.",
+    "proposal": "docs/operations/2026-10-26-r019-bounded-uefi-text.md",
+    "authorized_at": "2026-10-26T10:16:28+08:00"
   }
 }

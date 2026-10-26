@@ -1,6 +1,6 @@
-# 当前状态：D-281，白条已可见，R-019文字候选离线资格完成
+# 当前状态：D-282，R-019已批准，S-047准备文字实测
 
-2026-10-26T10:12:52+08:00。R-018唯一批准镜像743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56已执行并consumed，不重试。**首次确认本UEFI诊断的最小区域白条可见；尚未显示UEFI文字/日志或UniXNU菜单。** 当前无硬停；本轮已继续完成R-019文字候选实现/构建/资格/审查，尚未上机、pending精确范围批准。实测源c9530a746dbf6efbd7b1d55c020ce63477b8c198保持历史归档；当前pin为bb60fb0500f2565cc05cbfd0a20067cae14aecd8。
+2026-10-26T10:16:28+08:00。R-018唯一批准镜像743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56已执行并consumed，不重试。**首次确认本UEFI诊断的最小区域白条可见；尚未显示UEFI文字/日志或UniXNU菜单。** 当前无硬停；本轮已继续完成R-019文字候选实现/构建/资格/审查，尚未上机、本轮用户已明确批准R-019。实测源c9530a746dbf6efbd7b1d55c020ce63477b8c198保持历史归档；当前pin为bb60fb0500f2565cc05cbfd0a20067cae14aecd8。
 
 ## 本次实机结果
 
@@ -27,6 +27,9 @@ S-046于2026-10-26 09:48:37+08:00首次发图，fastboot product/slot/unlocked�
 
 2026-10-26T10:11:25+08:00，新镜像5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60，固件bb60fb0500f2565cc05cbfd0a20067cae14aecd8，归档out/inherited-gop/qualified-native-cpu-text-bb60fb0。固定UEFI字形4x放大，128x32保存/复核/500ms/恢复读回，最多12288像素读/8192写/3DSB，原MDP660只读和四100ms采样、EL1全页NormalWT及Frame门保持；不发布GOP。原对比色回归、24字节排列、所有读写失败点、15项native/12项历史pixel/10项FD策略、真实PE字形表/范围/栈/恢复和完整FD/FAT/Boot v3审查完成。详见[精确提案](operations/2026-10-26-r019-bounded-uefi-text.md)。
 
-R-018已由S-046消耗，R-019是新镜像且新增行8..31，必须独立记录批准；config目前pending，不能因旧批准执行。S-047未发图，当前无新硬件失败或恢复待办。该候选只验固定文字和恢复，不是全局DEBUG/Print/菜单通过；原DiagDraw和Mu Blt的alpha问题仍待生产接入解决。批准后按既有文档推送、即时身份/备份/恢复/相机门直接一次boot。
+R-018已由S-046消耗，R-019是新镜像且新增行8..31，必须独立记录批准；config现为approved，来自本轮R-019新批准，未复用旧批准。S-047未发图，当前无新硬件失败或恢复待办。该候选只验固定文字和恢复，不是全局DEBUG/Print/菜单通过；原DiagDraw和Mu Blt的alpha问题仍待生产接入解决。批准后按既有文档推送、即时身份/备份/恢复/相机门直接一次boot。
 
-主机发布门验证reports/enuma-r019-preexecution-gate.json确认pending在任何设备动作前拒绝本新图；不以设备失败或硬停描述授权边界。
+reports/enuma-r019-preexecution-gate.json保留批准前拒绝事件，本轮批准后精确image/scope主机检查通过。
+
+
+D-282即时门：2026-10-26T10:16:28+08:00独立核验out\device-tests\20261026T101540-recovery-reconciliation.json通过，Android完成/root/A槽/解锁、两分区及本地备份摘要一致。相机1920x1080主机预检通过，本地out/camera-capture/20261026T101536-system-transport图像已查看，完整屏幕和原点可见。用户明确批准R-019并要求直接上机、文字用摄像头、原始影音仅本地、按结果至硬停。全部当前文档提交推送并即时门通过后直接单次临时boot，不再询问本图批准。S-047尚未发出；无新硬停。

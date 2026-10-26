@@ -4,5 +4,12 @@
   "approval_status_at_check": "pending",
   "execution_rejected": true,
   "error": "R-019 is not approved for this exact image; no device action",
-  "device_action_issued": false
+  "device_action_issued": false,
+  "event_scope": "Historical pre-approval rejection retained; exact post-approval scope host check added",
+  "post_approval_check": {
+    "checked_at": "2026-10-26T10:16:28+08:00",
+    "approval_status": "approved",
+    "exact_image_scope_passed": true,
+    "device_action_issued": false
+  }
 }
