@@ -1,6 +1,6 @@
-# 当前状态：D-278，R-018像素候选离线资格完成，未上机
+# 当前状态：D-279，R-018已批准，S-046准备单次上机
 
-2026-10-26T04:30:24+08:00。当前验收目标为UEFI固件日志上屏，随后UniXNU菜单。S-045已完成并consumed；新R-018像素事务只完成离线构建/资格/审查，**pending批准，不是硬件硬停，也没有执行S-046**。详见[R-018范围与选项](operations/2026-10-26-r018-bounded-pixel-transaction.md)。
+2026-10-26T09:47:31+08:00。当前验收目标为UEFI固件日志上屏，随后UniXNU菜单。S-045已完成并consumed；新R-018像素事务只完成离线构建/资格/审查，**用户已批准R-018，S-046尚未执行；不是硬件硬停**。详见[R-018范围与选项](operations/2026-10-26-r018-bounded-pixel-transaction.md)。
 
 ## 已获证据
 
@@ -12,14 +12,16 @@ S-045镜像315f5daa39f5b8a7b1e65edd030243eb179ea88a78713b27c39f3b08a8760f1e，or
 
 固件 `c9530a746dbf6efbd7b1d55c020ce63477b8c198`；镜像 `743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56`；归档 `out/inherited-gop/qualified-native-cpu-pattern-c9530a7`。R-018最多128x8保存/复核/不透明对比色500ms/完整恢复读回，3072像素读、2048像素写、3DSB、660MDP只读及四次100ms采样等待。仅EL1、同次完整Native6和整段恒等NormalWT与精确Frame门通过才尝试store；保留22与所有未证明义务。
 
-主机失败注入、实际Arm回调编译、14项native、12项历史pixel及10项FD策略测试、真实PE/Core手工审查、FD/完整FAT/Boot v3及控制台绑定完成。报告reports/enuma-pixel-transaction-host.json、enuma-native-route-qualification.json、enuma-native-route-code.json、enuma-console-path-audit.json。所有结果为离线资格，零本候选设备操作。reports/enuma-r018-preexecution-gate.json确认pending在设备动作前拒绝执行。
+主机失败注入、实际Arm回调编译、14项native、12项历史pixel及10项FD策略测试、真实PE/Core手工审查、FD/完整FAT/Boot v3及控制台绑定完成。报告reports/enuma-pixel-transaction-host.json、enuma-native-route-qualification.json、enuma-native-route-code.json、enuma-console-path-audit.json。所有结果为离线资格，零本候选设备操作。reports/enuma-r018-preexecution-gate.json保留批准前拒绝事件，批准后精确image/scope主机检查通过。
 
 ## 观察、恢复与下一步
 
 按用户最新偏好，**点屏之前的只读探针不使用摄像头**；用选定enuma的ADB/fastboot状态、新boot-id/三次uptime区间和独立恢复摘要判定分类/恢复。它们不证明实际显示；只有图案、背光或画面验收才启用摄像头。原始影音仅本地out，禁止上传/录音。
 
-最近独立恢复out/device-tests/20261026T040135-recovery-reconciliation.json：Android完成、root/A槽/解锁，boot_a/vendor_boot_a及本地备份摘要一致；本轮离线工作没有改变设备，当前在线状态须下次设备动作前重新查询，不把历史核验当即时状态。
+最新2026-10-26T09:47:31+08:00独立恢复核验 `out\device-tests\20261026T094641-recovery-reconciliation.json`：Android完成、root/A槽/解锁、boot_a/vendor_boot_a和本地备份摘要一致。摄像头主机预检通过，1920x1080，已查看本地90度顺时针图像，完整屏幕及左上原点在画面内；未开始设备runner。原始图像仅本地out/camera-capture/20261026T094557-system-transport。
 
-当前需R-018精确镜像的一次最小像素事务批准；R-005已consumed不可复用。批准之后先落实全部当前文档/提交推送、重新核验身份/备份/恢复和摄像头，再单次临时boot；未批准时不执行像素写。code4恢复未建立、75秒无识别恢复、恢复失败、所需观测/时基失败或码歧义时停止追加并当轮落地。发图前身份查询异常沿D-233可控恢复后仅重入一次，不能忽略FAILED或重复已发图。
+用户本轮明确“批准 R-018，直接上机验证，点屏实验用摄像头记录，原始影音只留本地。按结果继续推进，触发硬停再停，注意文档落地、提交推送”。批准精确镜像743335d2的一次128x8/500ms保存/重验证/图案/恢复事务，config/hardware-review-approvals.json为approved，不复用R-005。全部当前文档提交推送、即时身份/备份/恢复/摄像头门通过后，直接执行S-046一次临时boot，不再询问。
+
+code4恢复未建立、75秒无识别恢复、实际恢复失败、所需相机/时基失败或时间码歧义时停止追加启动，当轮落实原因/模式/恢复/结果并提交推送。发图前身份查询异常按D-233恢复核验后仅重入一次，镜像未发出不算consumed；不忽略FAILED，不重试任何已发图。有效负分类继续隔离，像素单图授权不扩张到新像素镜像/寄存器/映射/分区/verified；已授权只读推进和离线工作继续。
 
 控制台/菜单源码已存在并打包，但本诊断早于BDS返回，均未实测。全局DEBUG当前空SerialPort；还需安全GOP发布、mask/alpha绘制适配及屏幕日志接收/重放，见[验收矩阵](operations/2026-10-26-uefi-console-menu-validation.md)。本阶段尚未点屏，不以iPadOS图形作验收。更早记录保留WORKLOG/DECISIONS/operations，不叠为当前状态。
