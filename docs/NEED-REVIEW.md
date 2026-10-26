@@ -1076,3 +1076,8 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-283，S-047固定UEFI文字可见与恢复完成
 
 2026-10-26T10:25:23+08:00，前里程碑3a2358a，固件bb60fb0。R-019唯一批准镜像5e189f4e已由S-047执行并consumed。origin33.130..33.238秒唯一code5，Android55.625秒；独立身份/root/A槽/解锁及设备/备份摘要通过。352帧全解码；frame104/105可辨认UEFI，103前/106后消失，末帧Android。固定四字位图/小区域该次事务证据，不称全局DEBUG/Print/GOP/菜单或清除22、通用alpha/SMMU。原始影音仅本地，证据reports/enuma-native-route-S-047-result.json、reports/enuma-s047-visible-text.json、out\device-tests\20261026T101839-recovery-reconciliation.json。无硬停，继续有界真实日志/控制台离线工作；已发图不重试。
+
+
+## D-284，用户主线纠偏与安全交接结束写入
+
+2026-10-26T10:37:59+08:00，前里程碑afbfa49，固件bb60fb0。S-047固定UEFI字样正常显示后，用户明确不再继续该功能验证，转向UEFI固件开发和真实日志打印。随后用户授权安全收尾、保存证据/状态/完整交接，不开启新实验或实现，交出写入权等待唯一接续会话。最终只读核验out\device-tests\20261026T103544-recovery-reconciliation.json通过，Android完成/root/A槽/解锁/设备与本地备份摘要一致；无活动设备操作/相机/恢复/构建，无设备硬停。没有R-020候选、没有日志源码实现或新镜像；后续仅只读审查。现有S-047证据、consumed授权、未验证边界和源码入口写入STATUS/HANDOFF/交接词。收尾只提交文档与脱敏恢复报告，nuwa不动、原始影音仅本地。提交推送且确认清洁后本会话结束，不再写入。
