@@ -1,0 +1,204 @@
+{
+  "scope": "indirect native-route classification using predeclared calibrated boot-origin windows",
+  "trial": "S-048",
+  "native_route_cpu_roi": true,
+  "native_route_cpu_barrier": true,
+  "maximum_barriers": 3,
+  "native_route_cpu_read": true,
+  "maximum_framebuffer_reads": 73728,
+  "framebuffer_writes": 49152,
+  "cache_maintenance": false,
+  "native_route_cpu_policy": true,
+  "native_route_cpu_attribute": false,
+  "native_route_cpu_stage1": true,
+  "cpu_stage1_only": false,
+  "cpu_memory_data_access": true,
+  "native_route_alpha_view": true,
+  "alpha_semantics_unproven": true,
+  "native_route_global_detail": false,
+  "native_route_global_output": true,
+  "native_route_structure_detail": false,
+  "native_route_structure": true,
+  "native_route_blend": false,
+  "native_border_view": true,
+  "native_route_layout": false,
+  "native_route_detail": false,
+  "native_route_staging": false,
+  "firmware_commit": "962f8208a9d2eca3bc626db67090e28519e088e6",
+  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+  "fd_sha256": "57d94260b69ee1a19df285902ab539591fb3e1787e0b374e5194ac05393be884",
+  "consumed": true,
+  "automatic_android_return": true,
+  "observation_valid": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261026T113726-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-26 11:37:41",
+    "issued_at_utc": "2026-10-26T03:37:41.132213+00:00",
+    "boot_command_return_seconds": 2.625,
+    "fastboot_disconnect_observed_seconds": 5.094,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 43.532,
+    "boot_complete_seconds": 57.594
+  },
+  "post_boot_clock": {
+    "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+    "boot_id_sha256": "d020d0c1c4858e10d07514f0504c416b245a69012add2273511c4d025deb8a7e",
+    "origin_monotonic_lower": 225246.51099999997,
+    "origin_monotonic_upper": 225246.58299999998,
+    "uncertainty_seconds": 0.07200000001466833,
+    "calibrated_firmware_delay": false,
+    "origin_after_issue_lower": 34.66799999997602,
+    "origin_after_issue_upper": 34.73999999999069
+  },
+  "boot_clock_error": null,
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      2.4
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        15.747999999998138
+      ],
+      [
+        16.25199999997858,
+        20.747999999998136
+      ],
+      [
+        21.25199999997858,
+        25.747999999998136
+      ],
+      [
+        26.25199999997858,
+        30.747999999998136
+      ],
+      [
+        31.25199999997858,
+        35.747999999998136
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
+    "declared_profile": "R-020 two samplers and bounded2s hold; preissue envelope"
+  },
+  "result": {
+    "conclusion": "route-category-inferred",
+    "category": "cpu-pattern-and-exact-restoration-completed-visibility-unproven",
+    "warning_code": 5,
+    "stop_additional_trials": false,
+    "direct_register_log": false
+  },
+  "boot_id_changed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "a16563eb84014e91874e2dd94d66b176e50ddd47d74ba5461d89b28b2803b9fa",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261026T113926-recovery-reconciliation.json"
+  },
+  "camera": {
+    "used": true,
+    "frames": 360,
+    "decoded_frames": 360,
+    "video": "out/camera-capture/20261026T113723-system-transport/system-transport.avi",
+    "sha256": "f16b59973d60d8383dc738e9db2c0765689d5074d2ebb14d07345a6a18e88709",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_verified": false,
+  "display_maximum_reads": 660,
+  "display_writes": 0,
+  "roi_read_completion_supported": false,
+  "cpu_exception_level_inferred": 1,
+  "single_barrier_completion_supported": false,
+  "single_read_completion_supported": false,
+  "framebuffer_read_execution_count_inferred": 73728,
+  "native_route_cpu_text": false,
+  "native_route_cpu_pattern": true,
+  "pixel_scope": {
+    "experiment": "native-dxe-cached-return-replay-v1",
+    "origin_x": 0,
+    "origin_y": 0,
+    "width": 256,
+    "height": 96,
+    "required_current_el": 1,
+    "hold_us": 2000000,
+    "hold_calls_max": 1,
+    "mdp_reads_max": 660,
+    "mdp_wait_calls_max": 4,
+    "mdp_wait_us": 100000,
+    "framebuffer_reads_max": 73728,
+    "framebuffer_writes_max": 49152,
+    "barriers_max": 3,
+    "cache_line_operations": 0,
+    "mdp_base": "0xae00000",
+    "mdp_bytes": "0x85000",
+    "cpu_splash_view_base": "0x9c000000",
+    "cpu_splash_view_bytes": "0x2400000",
+    "final_stage2_unproven": true,
+    "device_smmu_unproven": true,
+    "alpha_semantics_unproven": true,
+    "publish_gop": false,
+    "partition_writes": false,
+    "raw_media_local_only": true,
+    "source": "Core point13 actual return snapshot",
+    "font": "three-by-five-hex",
+    "scale": 4,
+    "rows": 3,
+    "columns": 16,
+    "global_debug": false,
+    "cached_replay": true
+  },
+  "pixel_transaction_completion_supported": true,
+  "restoration_supported": true,
+  "restoration_not_established": false,
+  "framebuffer_write_execution_count_inferred": 49152,
+  "visible_output_verified": false,
+  "boot_log_replay": true,
+  "cached_replay": true,
+  "global_debug_verified": false,
+  "screen_log_verified": false,
+  "conout_verified": false,
+  "three_row_pattern_observed": true,
+  "exact_status_legibility": false,
+  "visual_evidence": "reports/enuma-s048-visible-log.json",
+  "stop_additional_device_trials": true,
+  "hard_stop_reason": "required cached-status content cannot be independently read from camera; timecode and recovery remain valid",
+  "hard_stop_recorded_at_utc": "2026-10-26T03:43:31.579475+00:00",
+  "device_recovery_failed": false,
+  "boot_clock_failed": false,
+  "hard_stop_rule": "D-286/current user delegation: required observation failure/ambiguity stops further device trials; exact cached EFI_STATUS could not be read",
+  "next_candidate_issued": false
+}

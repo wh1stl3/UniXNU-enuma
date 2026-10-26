@@ -1,0 +1,62 @@
+{
+  "scope": "local camera three-row output/continuity and insufficient status legibility; no raw media uploaded",
+  "trial": "S-048",
+  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+  "video": "out/camera-capture/20261026T113723-system-transport/system-transport.avi",
+  "video_sha256": "f16b59973d60d8383dc738e9db2c0765689d5074d2ebb14d07345a6a18e88709",
+  "frames": 360,
+  "decoded_frames": 360,
+  "rotation": "90 clockwise; original frames retained",
+  "three_row_pattern_observed": true,
+  "visible_frames": [
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114
+  ],
+  "visible_sample_span_seconds": 1.8910000000032596,
+  "boundaries": [
+    {
+      "frame": 104,
+      "time_seconds": 22.280999999988126,
+      "roi_bright_pixels": 0
+    },
+    {
+      "frame": 105,
+      "time_seconds": 22.514999999984866,
+      "roi_bright_pixels": 2733
+    },
+    {
+      "frame": 114,
+      "time_seconds": 24.405999999988126,
+      "roi_bright_pixels": 2833
+    },
+    {
+      "frame": 115,
+      "time_seconds": 24.671999999991385,
+      "roi_bright_pixels": 0
+    },
+    {
+      "frame": 359,
+      "time_seconds": 77.20299999997951,
+      "roi_bright_pixels": 0
+    }
+  ],
+  "independently_read_status": null,
+  "independently_read_ordinal": null,
+  "status_legibility": "insufficient: blur/saturation merges narrow glyph holes",
+  "cached_status_text_acceptance": "not passed",
+  "screen_log_verified": false,
+  "conout_verified": false,
+  "gop_verified": false,
+  "required_content_observation_ambiguous": true,
+  "stop_additional_device_trials": true,
+  "raw_media_local_only": true,
+  "audio_recorded": false
+}

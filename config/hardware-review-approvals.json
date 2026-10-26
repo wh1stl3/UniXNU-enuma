@@ -173,7 +173,7 @@
     "visual_execution_record": "reports/enuma-s047-visible-text.json"
   },
   "R-020": {
-    "status": "approved",
+    "status": "consumed",
     "image_sha256": [
       "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf"
     ],
@@ -213,6 +213,9 @@
     },
     "authorization": "Current user explicitly authorized all enuma project hardware actions with hard-stop rules and said proceed without repeated recovery questions; scoped here to one exact cached-status replay image, not old consumed permission.",
     "proposal": "docs/operations/2026-10-26-r020-cached-dxe-log-replay.md",
-    "authorized_at": "2026-10-26T03:33:49.136994+00:00"
+    "authorized_at": "2026-10-26T03:33:49.136994+00:00",
+    "consumed_at": "2026-10-26T03:47:26.368711+00:00",
+    "execution_record": "reports/enuma-native-route-S-048-result.json",
+    "visual_execution_record": "reports/enuma-s048-visible-log.json"
   }
 }

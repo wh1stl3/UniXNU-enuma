@@ -1315,3 +1315,7 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-286，用户新实机授权与R-020真实状态回放资格
 
 2026-10-26T03:33:49.136994+00:00。用户明确继续/授权本项目所需实机，且无需反复询问恢复；依据实际门禁直接推进，非豁免硬停。固件962f8208a9d2eca3bc626db67090e28519e088e6、图c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf、归档out/inherited-gop/qualified-dxe-log-r020-962f820。新私有只读Core journal Snapshot，取最新实际point13返回状态；原点256x96/2s/保存复核绘制验证恢复读回，73728load/49152store/3DSB，原Native6/EL1/全帧WT及660MDP保持，无新映射/MMIO/页表/分区写、GOP/verified变化。资格及实际代码审查完成，尚未执行S-048。当前恢复证据out\device-tests\20261026T111629-recovery-reconciliation.json；相机已取帧/旋转查看，仅本地。全部当前文档和源码发布及即时门后一次临时boot，code4/75秒/观测时钟恢复等失败立即停追加并落实当轮交接。旧consumed图不重试，缓存回放不称全局DEBUG/ConOut/菜单。详见operations/2026-10-26-r020-cached-dxe-log-replay.md。
+
+## D-287，S-048恢复完成但必需日志内容判读不足，停止追加
+
+2026-10-26T03:47:26.368711+00:00，前里程碑182b302，固件962f8208a9d2eca3bc626db67090e28519e088e6。S-048于2026-10-26T03:37:41.132213+00:00单次发图c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf，已consumed；自动Android57.594s，独立完成/root/A槽/解锁/两分区设备及备份摘要通过，证据out\device-tests\20261026T113926-recovery-reconciliation.json。原点34.668..34.740s唯一code5，主机时钟有效；360帧完整解码，105..114连续三行/104前115后消失、末帧Android。但status/ordinal不能独立读清，按本轮D-286/用户委派的观测失败/歧义门禁于内容审查证据2026-10-26T03:43:31.579475+00:00停止追加。不是计时代码歧义、超时或恢复失败；当前无需按键。R-020及S-001..048 consumed，不重试；硬停后仅既有媒体取证和交接，不构建/发新图。工作假设优先3x5细孔与焦点/高亮叠加，保留渲染/通道等替代及推翻条件；后续先主机可读性/离线字形评估，新候选完整资格发布与即时门后再推进。未提任何verified/GOP/DEBUG/ConOut/菜单结论。证据reports/enuma-native-route-S-048-result.json、reports/enuma-s048-visible-log.json；原始影音仅本地。
