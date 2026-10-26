@@ -9,7 +9,9 @@ def omitted_oem_modules(build, fd_sha256):
     pixel_flag=build.get('firmware_configuration',{}).get('defines',{}).get('ENUMA_DIAG_PIXEL_PREVIEW','0')
     video=build.get('inherited_video_audit_read_only',False)
     pattern=build.get('native_route_cpu_pattern',False)
+    text=build.get('native_route_cpu_text',False)
     defs=build.get('firmware_configuration',{}).get('defines',{})
+    if type(text) is not bool or (text and not pattern) or defs.get('ENUMA_NATIVE_ROUTE_CPU_TEXT','0')!=str(int(text)): raise ValueError('unsupported native text declaration')
     if type(pattern) is not bool or defs.get('ENUMA_NATIVE_ROUTE_CPU_PATTERN','0')!=str(int(pattern)):
         raise ValueError('unsupported native pixel declaration')
     if pattern:
@@ -17,12 +19,12 @@ def omitted_oem_modules(build, fd_sha256):
                   'ENUMA_NATIVE_ROUTE_CPU_POLICY','ENUMA_NATIVE_ROUTE_CPU_STAGE1','ENUMA_NATIVE_ROUTE_ALPHA_VIEW',
                   'ENUMA_NATIVE_ROUTE_GLOBAL_OUTPUT','ENUMA_NATIVE_ROUTE_STRUCTURE','ENUMA_NATIVE_ROUTE_AUDIT']
         contract=build.get('inherited_video_compiled_contract',{})
-        if (video is not False or build.get('hardware_review_required')!='R-018' or
+        if (video is not False or build.get('hardware_review_required')!=('R-019' if text else 'R-018') or
             any(defs.get(k)!='1' for k in required) or
             any(type(contract.get(k)) is not type(v) or contract.get(k)!=v for k,v in dict(maximum_read_callbacks=660,maximum_wait_calls=5,
-                maximum_framebuffer_reads=3072,framebuffer_writes=2048,pixel_access=True,
+                maximum_framebuffer_reads=12288 if text else 3072,framebuffer_writes=8192 if text else 2048,pixel_access=True,
                 cache_maintenance=False,protocol_published=False).items())):
-            raise ValueError('native pixel requires protected R-018 bounded profile; not execution approval')
+            raise ValueError('native pixel requires protected R-018/R-019 bounded profile; not execution approval')
     control=build.get('inherited_video_entry_control',False)
     if type(control) is not bool or (control and not video): raise ValueError('unsupported video entry control')
     terminal=build.get('inherited_video_terminal',False)

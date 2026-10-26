@@ -34,7 +34,7 @@ def verify(data, kernel, ramdisk):
 
 
 def package(kernel_path, ramdisk_path, output, fixture=False, hardware_review=None):
-    if hardware_review not in (None, 'R-005', 'R-017', 'R-017-MAP', 'R-017-READ', 'R-017-WARM','R-018'): raise ValueError('unknown hardware review')
+    if hardware_review not in (None, 'R-005', 'R-017', 'R-017-MAP', 'R-017-READ', 'R-017-WARM','R-018','R-019'): raise ValueError('unknown hardware review')
     lock = json.loads((ROOT / 'config/porting-sources.lock.json').read_text())['aosp_mkbootimg']
     base = Path(lock['path'])
     for name, expected in lock['sha256'].items():
@@ -67,8 +67,9 @@ def package(kernel_path, ramdisk_path, output, fixture=False, hardware_review=No
                    'unresolved': ['ABL acceptance of raw BootShim ARM64 entry', 'UEFI FD relocation/handoff',
                                   'GOP and vendor protocol runtime closure']})
     if hardware_review is not None: report['hardware_review'] = hardware_review
-    if hardware_review=='R-018':
-        from native_pixel_scope import SCOPE
+    if hardware_review in ('R-018','R-019'):
+        from native_pixel_scope import scope_for_review
+        SCOPE=scope_for_review(hardware_review)
         report['pixel_scope']=SCOPE
     output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
     return report
@@ -79,7 +80,7 @@ def main():
     parser.add_argument('--kernel', type=Path, required=True, help='raw ARM64 BootShim plus real UEFI FD')
     parser.add_argument('--ramdisk', type=Path, required=True, help='explicit input; may be an empty file')
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--hardware-review', choices=('R-005','R-017','R-017-MAP', 'R-017-READ', 'R-017-WARM','R-018'), help='tag a protected candidate; execution still checks the exact authorized image')
+    parser.add_argument('--hardware-review', choices=('R-005','R-017','R-017-MAP', 'R-017-READ', 'R-017-WARM','R-018','R-019'), help='tag a protected candidate; execution still checks the exact authorized image')
     args = parser.parse_args()
     report = package(args.kernel, args.ramdisk, args.output, hardware_review=args.hardware_review)
     print(f'PASS: boot v3 roundtrip, {report["image_bytes"]} bytes; hardware readiness not established')

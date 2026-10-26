@@ -128,16 +128,20 @@ def qualification(published=False, report=None):
             if cpu_roi: expected.update(maximum_framebuffer_reads=1024,roi_origin_x=0,roi_origin_y=0,roi_width=128,roi_height=8,cpu_context_on_completion=True)
             cpu_pattern=q.get('native_route_cpu_pattern',False)
             if type(cpu_pattern) is not bool or (cpu_pattern and not cpu_roi): raise ValueError('native pixel scope invalid')
+            cpu_text=q.get('native_route_cpu_text',False)
+            if type(cpu_text) is not bool or (cpu_text and not cpu_pattern): raise ValueError('native text scope invalid')
             expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_PATTERN_CATEGORIES if cpu_pattern else CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if route and cpu_pattern:
-            from native_pixel_scope import SCOPE
-            expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=3072,framebuffer_writes=2048,maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=500000,hold_calls_max=1,hardware_review='R-018',pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
+            from native_pixel_scope import scope_for_review
+            review="R-019" if cpu_text else "R-018"
+            SCOPE=scope_for_review(review)
+            expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=SCOPE["framebuffer_reads_max"],framebuffer_writes=SCOPE["framebuffer_writes_max"],roi_height=SCOPE["height"],maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=500000,hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
             raise ValueError('invalid native mask field')
         calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
-        if q.get('decode_plan')!=(make_pixel_plan(ROOT) if route and cpu_pattern else make_plan(ROOT)) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
+        if q.get('decode_plan')!=(make_pixel_plan(ROOT,review) if route and cpu_pattern else make_plan(ROOT)) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
             raise ValueError('fixed boot clock calibration/plan differs')
         if published:
             review=json.loads((ROOT/'reports'/('enuma-native-route-code.json' if route else 'enuma-native-mask-code.json')).read_text())
@@ -208,7 +212,7 @@ def run_without_camera(q, image):
         (q.get('pixel_access') is not False and not single_read_only_scope(q)) or q.get('gop_published') is not False or
         q.get('boot_clock_capture') is not True):
         raise ValueError('camera-free mode requires read-only native route with boot clock')
-    if q.get('native_route_cpu_pattern') is True: raise ValueError('R-018 pixel scope requires camera')
+    if q.get('native_route_cpu_pattern') is True: raise ValueError('protected pixel scope requires camera')
     out = ROOT / 'out/system-transport' / datetime.now().strftime('%Y%m%dT%H%M%S')
     out.mkdir(parents=True)
     report = dict(scope='qualified read-only native route; ADB/fastboot and calibrated boot clock',

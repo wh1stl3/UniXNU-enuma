@@ -1,0 +1,8 @@
+{
+  "scope": "host-only current exact text candidate execution gate; no device/camera subprocess",
+  "image_sha256": "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60",
+  "approval_status_at_check": "pending",
+  "execution_rejected": true,
+  "error": "R-019 is not approved for this exact image; no device action",
+  "device_action_issued": false
+}

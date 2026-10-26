@@ -23,6 +23,12 @@ class FirmwareAuditPolicyTests(unittest.TestCase):
         for name in ['CPU_PATTERN','CPU_ROI','CPU_BARRIER','CPU_READ','CPU_POLICY','CPU_STAGE1',
                      'ALPHA_VIEW','GLOBAL_OUTPUT','STRUCTURE','AUDIT']:defs['ENUMA_NATIVE_ROUTE_'+name]='1'
         self.assertEqual(omitted_oem_modules(value,'a'*64),frozenset(value['diagnostic_omitted_oem_modules']))
+        text=copy.deepcopy(value);text.update(native_route_cpu_text=True,hardware_review_required='R-019')
+        text['firmware_configuration']['defines']['ENUMA_NATIVE_ROUTE_CPU_TEXT']='1'
+        text['inherited_video_compiled_contract'].update(maximum_framebuffer_reads=12288,framebuffer_writes=8192)
+        self.assertEqual(omitted_oem_modules(text,'a'*64),frozenset(text['diagnostic_omitted_oem_modules']))
+        text['hardware_review_required']='R-018'
+        with self.assertRaises(ValueError):omitted_oem_modules(text,'a'*64)
         for key,bad in [('inherited_video_audit_read_only',True),('hardware_review_required',None),
                         ('inherited_video_terminal',False),('diagnostic_simplefb_metadata_only',True)]:
             candidate=copy.deepcopy(value);candidate[key]=bad

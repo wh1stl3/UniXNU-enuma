@@ -4,37 +4,37 @@
   "native_control": false,
   "boot_clock_capture": true,
   "review_required": false,
-  "scope": "R-018 pending exact scope: save/revalidate/contrast128x8/hold500ms/restore/readback; two bounded Native6 observations and EL1 NormalWT; no MMIO/cache/map writes or GOP",
-  "firmware_commit": "c9530a746dbf6efbd7b1d55c020ce63477b8c198",
-  "archive": "out/inherited-gop/qualified-native-cpu-pattern-c9530a7",
+  "scope": "R-019 pending exact128x32 fixed UEFI bitmap at4x scale; save/revalidate/hold500ms/restore/readback; no GOP/MMIO/map writes",
+  "firmware_commit": "bb60fb0500f2565cc05cbfd0a20067cae14aecd8",
+  "archive": "out/inherited-gop/qualified-native-cpu-text-bb60fb0",
   "files": {
     "image.img": {
-      "sha256": "743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56",
+      "sha256": "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "d0edd7831caa55495bfbc70dbfc9e2c649da25104a393cab8926d1cbff466a3a",
-      "bytes": 1638
+      "sha256": "be141eeabe17af4ba458d104153b48b9d71d0bb1b3bda8a7f334f760ccb9368e",
+      "bytes": 1760
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "b030d691720e39c4e33ff4758baf37039b91d86e8873aa70dbd26f441f9cb9d0",
+      "sha256": "9c5046669399564bbdb61028a4b579dbb7fe3b6b58fc3bb769d5c38b6827482b",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "e2fe6f507a96a5f11c0c42cb67b2715801db07371194fc64559ba191856b355b",
+      "sha256": "7e56e22c7667454223872e258f4a32605b73f97109e1295c2c480641d0ca20dc",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "68110e5a9222ee17da8a5874f5eb690e9d2deea7211f86f911ccda7a55909011",
+      "sha256": "e008583ad4b4190bf249983d7c3eebd85672e7231bb50052496f78b599cbf2de",
       "bytes": 22528
     },
     "provider.GNUmakefile": {
-      "sha256": "ac2463973f814977446537ae66f69e1a24c4aaf48f65ec95da4b6c29ad51b643",
-      "bytes": 23580
+      "sha256": "e50677b4e6fb7274de93c301c1f1858ae507784e60197606cec6e74b393a0d70",
+      "bytes": 23612
     },
     "entry.c": {
-      "sha256": "f6002932a6521ad9f6b2169c8436704ab8ff16593f734436ec1ea2292130c2bd",
-      "bytes": 11432
+      "sha256": "635741983884c49a8c9bbe6ec6f0115c6e0241802d9c94324c145de2ea4b9ced",
+      "bytes": 11727
     },
     "DxeCore.efi": {
       "sha256": "a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f",
@@ -49,8 +49,8 @@
       "bytes": 1268
     },
     "core.GNUmakefile": {
-      "sha256": "e950d17e6b4a78ddec6c29827b2ef26b5cee5717e5b25be3f1dd8e615bbe2d65",
-      "bytes": 52460
+      "sha256": "f650eeebd42ec5dd0965628be9a2fe47b16a07b8a4940f3149bbd76d548f9097",
+      "bytes": 52492
     },
     "EnumaDispatchDetailCheckpoint.h": {
       "sha256": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
@@ -69,11 +69,11 @@
       "bytes": 4527
     },
     "firmware-build.json": {
-      "sha256": "665dd4234e8f2b3cb9b0c685d1a2662266e2f446d69a9f4948d8727da7558292",
-      "bytes": 23140
+      "sha256": "125dea786a032d9125c4eb686cb84832cdbd080bd17eec8c92cc3135ff24e447",
+      "bytes": 23366
     },
     "fd-audit.json": {
-      "sha256": "7b4c70d54bcb9389e60548c2f9a72084de74470ba872d72fb80507c41c1d3ad5",
+      "sha256": "f920c8bd7c5304e9c190bdbf66e531d29e9c83fb03716559c0f395e68518fa1e",
       "bytes": 4326
     },
     "host-tests.json": {
@@ -81,8 +81,8 @@
       "bytes": 23661
     },
     "provider.map": {
-      "sha256": "39ce884842e1b5a36330fda8ac7e23e265fa14d81f0ee42ee97cc01b33503ff0",
-      "bytes": 18954
+      "sha256": "d48fac664287ecf9d0bd8774e4904db7d4a3b759f115219312697ae7a7468df0",
+      "bytes": 19480
     },
     "provider.AutoGen.c": {
       "sha256": "93f750179c8b2f09eac2caa475ffa588f562956947a688cdc70ad3dfccd2c769",
@@ -113,8 +113,12 @@
       "bytes": 10348
     },
     "PixelTransaction.h": {
-      "sha256": "7ab68cc083835963d81f40f11709a2202412c02772cc928e0c7716f7738cfb59",
-      "bytes": 4214
+      "sha256": "5ac8df846986ae8a3edd2d6f45dafe0a136487866087ee98a528ab3546103e2a",
+      "bytes": 4823
+    },
+    "PixelText.h": {
+      "sha256": "a42c3d58ce581511dd66175f8f7dffeaabe968fc55925c0ee806a96c85fe9c89",
+      "bytes": 689
     },
     "VideoCapture.c": {
       "sha256": "42a38eb9d85540e1fd6a6f0b948507a70e017ae1e8361bedeffa4eec06b3d49b",
@@ -141,24 +145,24 @@
       "bytes": 907
     },
     "pixel-host-tests.json": {
-      "sha256": "9d05076044bb528d8673c8b023c196f17d83ada47e345c5cfe736c3c9499ba3f",
-      "bytes": 1407
+      "sha256": "31579127cb28954818d7b5e7b259021e707feec773e6033cae174f1d69a7f1ba",
+      "bytes": 1845
     },
     "EnumaPixelTransactionArm.h": {
-      "sha256": "d4dac1403573ff395ae6bc947c2ba3c022286e9106b2d0b5f22456f65fd5c69c",
-      "bytes": 2378
+      "sha256": "dda67853c73b69c0bf7fbe6878179df813a12972dd43f9d94d386c7500ee6098",
+      "bytes": 2440
     },
     "SimpleFbDxe.disassembly.txt": {
-      "sha256": "93d34b8807d7dcbdee2ab918e70ffaa76380795d5391b6ed1a11b2804f1e4a67",
-      "bytes": 84980
+      "sha256": "e128b64c973f4e605f805b0daff1b1e71569bac2cd9c624bfa3b91d72f7c5b83",
+      "bytes": 84543
     },
     "DxeCore.disassembly.txt": {
       "sha256": "409ee5cd7535b71a4be41904b26a7d2b126a22b83ba05209c92b949d86b81e2c",
       "bytes": 702682
     }
   },
-  "image": "out/inherited-gop/qualified-native-cpu-pattern-c9530a7/image.img",
-  "image_sha256": "743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56",
+  "image": "out/inherited-gop/qualified-native-cpu-text-bb60fb0/image.img",
+  "image_sha256": "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
   "maximum_reads": 660,
   "maximum_wait_calls": 5,
@@ -173,7 +177,7 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "e2fe6f507a96a5f11c0c42cb67b2715801db07371194fc64559ba191856b355b",
+    "kernel_sha256": "7e56e22c7667454223872e258f4a32605b73f97109e1295c2c480641d0ca20dc",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
   "terminal_return": {
@@ -186,7 +190,7 @@
     ],
     "completion_fallback": false
   },
-  "result_interpretation": "1 no stores: prerequisite/save/revalidation rejected;2 pattern rejected but original region restored;3 hold rejected but restored;4 restoration not established HARD STOP;5 CPU pattern and restoration complete, visible output still requires camera evidence. Save3072reads/2048stores max,3DSB,2 samplers660MDP/4x100ms plus1x500ms hold. Predeclared sampler envelope0..0.9s; no post-result adjustment. R-005 consumed does not approve this image; R-018 exact approved image/scope and camera required before any device action.",
+  "result_interpretation": "1 no stores;2 text-pattern verification rejected but original region restored;3 hold rejected but restored;4 restoration not established HARD STOP;5 CPU text pattern and exact restoration completed, visible legibility requires camera. Max12288reads/8192stores/3DSB;660MDP/4x100ms plusone500ms hold. Same predeclared0..0.9s envelope; no post-result adjustment. Only R-019 exact-image/scope approval authorizes execution; R-018 is consumed.",
   "native_border_view": true,
   "native_route_audit": true,
   "native_route_detail": false,
@@ -204,6 +208,7 @@
   "native_route_cpu_read": true,
   "native_route_cpu_barrier": true,
   "native_route_cpu_roi": true,
+  "native_route_cpu_text": true,
   "native_route_cpu_pattern": true,
   "decode_plan": {
     "baseline_envelope_seconds": [
@@ -244,7 +249,7 @@
     "full_interval_containment": true,
     "uncertainty_limit_seconds": 0.25,
     "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
-    "declared_profile": "R-018 two samplers and bounded500ms hold; preissue envelope"
+    "declared_profile": "R-019 two samplers and bounded500ms hold; preissue envelope"
   },
   "calibration_sha256": "48eaaaea519da34dd0eb52186807e9e8b7fa1180dc70d5ff1685f70a8814dacb",
   "result_categories": {
@@ -259,34 +264,34 @@
   "cpu_stage1_only": false,
   "cpu_memory_data_access": true,
   "cpu_mapping_changes": false,
-  "maximum_framebuffer_reads": 3072,
-  "framebuffer_writes": 2048,
+  "maximum_framebuffer_reads": 12288,
+  "framebuffer_writes": 8192,
   "cache_maintenance": false,
   "maximum_barriers": 3,
   "barrier_kind": "dsb-sy-before-save-after-pattern-after-restore",
   "roi_origin_x": 0,
   "roi_origin_y": 0,
   "roi_width": 128,
-  "roi_height": 8,
+  "roi_height": 32,
   "cpu_context_on_completion": false,
   "required_current_el": 1,
   "hold_us": 500000,
   "hold_calls_max": 1,
-  "hardware_review": "R-018",
+  "hardware_review": "R-019",
   "pixel_scope": {
-    "experiment": "native-roi-contrast-restore-v1",
+    "experiment": "native-roi-uefi-text-restore-v1",
     "origin_x": 0,
     "origin_y": 0,
     "width": 128,
-    "height": 8,
+    "height": 32,
     "required_current_el": 1,
     "hold_us": 500000,
     "hold_calls_max": 1,
     "mdp_reads_max": 660,
     "mdp_wait_calls_max": 4,
     "mdp_wait_us": 100000,
-    "framebuffer_reads_max": 3072,
-    "framebuffer_writes_max": 2048,
+    "framebuffer_reads_max": 12288,
+    "framebuffer_writes_max": 8192,
     "barriers_max": 3,
     "cache_line_operations": 0,
     "mdp_base": "0xae00000",
@@ -298,7 +303,12 @@
     "alpha_semantics_unproven": true,
     "publish_gop": false,
     "partition_writes": false,
-    "raw_media_local_only": true
+    "raw_media_local_only": true,
+    "text": "UEFI",
+    "font": "fixed-five-by-seven",
+    "scale": 4,
+    "left_margin": 4,
+    "top_margin": 2
   },
   "camera_required": true,
   "execution_approval_required": true

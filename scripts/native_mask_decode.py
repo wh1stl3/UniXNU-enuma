@@ -18,13 +18,13 @@ def make_plan(root):
                 full_interval_containment=True,uncertainty_limit_seconds=.25,
                 limitation='Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.')
 
-def make_pixel_plan(root):
+def make_pixel_plan(root,review="R-018"):
     plan=make_plan(root)
     # Two complete100ms-window samplers plus at most500ms hold: total0.9s.
     plan['sampler_seconds']=[0,.9]
     base=plan['baseline_envelope_seconds']
     plan['code_windows_after_issue']=[[base[0]+d-1,base[1]+d+.9+1] for d in [2,7,12,17,22]]
-    plan['declared_profile']='R-018 two samplers and bounded500ms hold; preissue envelope'
+    plan['declared_profile']=review+' two samplers and bounded500ms hold; preissue envelope'
     return plan
 
 def decode(clock,plan):

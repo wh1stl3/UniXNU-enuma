@@ -126,5 +126,46 @@
     "execution_record": "reports/enuma-native-route-S-046-result.json",
     "visual_execution_record": "reports/enuma-s046-visible-output.json",
     "consumed_at": "2026-10-26T09:54:54+08:00"
+  },
+  "R-019": {
+    "status": "pending",
+    "scope": "One exact-image128x32 fixed UEFI bitmap save/revalidate/500ms hold/restore/readback experiment",
+    "image_sha256": [
+      "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60"
+    ],
+    "pixel_scope": {
+      "experiment": "native-roi-uefi-text-restore-v1",
+      "origin_x": 0,
+      "origin_y": 0,
+      "width": 128,
+      "height": 32,
+      "required_current_el": 1,
+      "hold_us": 500000,
+      "hold_calls_max": 1,
+      "mdp_reads_max": 660,
+      "mdp_wait_calls_max": 4,
+      "mdp_wait_us": 100000,
+      "framebuffer_reads_max": 12288,
+      "framebuffer_writes_max": 8192,
+      "barriers_max": 3,
+      "cache_line_operations": 0,
+      "mdp_base": "0xae00000",
+      "mdp_bytes": "0x85000",
+      "cpu_splash_view_base": "0x9c000000",
+      "cpu_splash_view_bytes": "0x2400000",
+      "final_stage2_unproven": true,
+      "device_smmu_unproven": true,
+      "alpha_semantics_unproven": true,
+      "publish_gop": false,
+      "partition_writes": false,
+      "raw_media_local_only": true,
+      "text": "UEFI",
+      "font": "fixed-five-by-seven",
+      "scale": 4,
+      "left_margin": 4,
+      "top_margin": 2
+    },
+    "authorization": null,
+    "proposal": "docs/operations/2026-10-26-r019-bounded-uefi-text.md"
   }
 }

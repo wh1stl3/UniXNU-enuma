@@ -5,7 +5,7 @@ import sys
 import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from native_pixel_scope import SCOPE
+from native_pixel_scope import SCOPE,TEXT_SCOPE
 from native_mask_decode import make_pixel_plan
 from native_route_decode import decode,CPU_PATTERN_CATEGORIES
 from run_enuma_entry_probe import require_hardware_review
@@ -21,6 +21,15 @@ class PixelScopeTests(unittest.TestCase):
         changed=copy.deepcopy(SCOPE);changed['hold_us']=500001
         with self.assertRaises(ValueError):require_hardware_review({**meta,'pixel_scope':changed},{'R-018':approved})
 
+    def test_text_scope_cannot_reuse_contrast_approval(self):
+        meta=dict(hardware_review='R-019',image_sha256='text',pixel_scope=TEXT_SCOPE)
+        approved=dict(status='approved',image_sha256=['text'],pixel_scope=TEXT_SCOPE)
+        require_hardware_review(meta,{'R-019':approved})
+        for entry in [{**approved,'status':'pending'},{**approved,'pixel_scope':SCOPE},
+                      {**approved,'image_sha256':['contrast']}]:
+            with self.assertRaises(ValueError):require_hardware_review(meta,{'R-019':entry})
+        with self.assertRaises(ValueError):require_hardware_review(meta,{'R-018':approved})
+
     def test_camera_free_rejected_before_device(self):
         with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
             runner.run_without_camera(dict(native_route_cpu_pattern=True,trial_kind='native-video-route',
@@ -34,6 +43,9 @@ class PixelScopeTests(unittest.TestCase):
     def test_five_results_and_restore_hard_stop(self):
         plan=make_pixel_plan(Path(__file__).resolve().parents[1])
         self.assertEqual(plan['sampler_seconds'],[0,.9])
+        text_plan=make_pixel_plan(Path(__file__).resolve().parents[1],'R-019')
+        self.assertEqual(text_plan['code_windows_after_issue'],plan['code_windows_after_issue'])
+        self.assertTrue(text_plan['declared_profile'].startswith('R-019'))
         windows=plan['code_windows_after_issue']
         for a,b in zip(windows,windows[1:]):self.assertLess(a[1],b[0])
         flags=dict(structure=True,global_output=True,alpha_view=True,cpu_stage1=True,cpu_policy=True,
