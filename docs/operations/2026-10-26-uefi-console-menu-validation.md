@@ -52,3 +52,6 @@ D-287当前更新：S-048/R-020已执行一次并consumed。唯一间接code5/�
 ## D-292当前补充
 
 S049已恢复但用户反馈2秒对焦不足，精确数值仍未读清；旧图及R021均consumed。新8秒同区域候选已完成离线资格，R022 pending，计划S050未执行。详见2026-10-26-r022-eight-second-log-observation.md；不可把构建/机器码通过当实机日志验收，也不得绕过当前观测硬停。
+
+
+D293补充：新增独立栅格反读/严格人工转录与输出链顺序审计，见2026-10-26-offline-log-readability-and-console-readiness.md。实机延后，R022保持冻结pending；当前回放不能含提供器自己尚未发生的返回，Print/DiagDraw/DEBUG/ConOut与菜单分别验收。

@@ -1,0 +1,324 @@
+{
+  "scope": "source-order/sink dependencies and actual existing static-link lists; no new firmware build or runtime proof",
+  "sources": {
+    "firmware/patches/dxe-dispatch-details.patch": {
+      "sha256": "49a051195269054894262788f65883c4665db5eec170db2f457e265b523be94d",
+      "anchors": [
+        {
+          "line": 24,
+          "text": "+        EnumaDispatchDetailCheckpoint (15, &DriverEntry->FileName, EFI_SUCCESS);"
+        },
+        {
+          "line": 27,
+          "text": "         Status = CoreStartImage (DriverEntry->ImageHandle, NULL, NULL);"
+        },
+        {
+          "line": 31,
+          "text": "+        EnumaDispatchDetailCheckpoint (13, &DriverEntry->FileName, Status);"
+        }
+      ]
+    },
+    "firmware/diagnostics/EnumaInheritedVideoAudit.c": {
+      "sha256": "71553866952d41009898f67263d3a420fac34088cb3cd2dbfc1687d290ab2521",
+      "anchors": [
+        {
+          "line": 220,
+          "text": "if(Status==EnumaInheritedOk&&Reason==EnumaVideoReasonComplete&&mEvidence.Frame.Requirements==22)"
+        },
+        {
+          "line": 226,
+          "text": "if(Policy!=3||El!=4||!gBS||!gBS->LocateProtocol||"
+        },
+        {
+          "line": 228,
+          "text": "Journal->Version!=1||Journal->Bytes!=sizeof(*Journal)||!Journal->Snapshot||"
+        },
+        {
+          "line": 229,
+          "text": "!Journal->Snapshot(&mReplaySnapshot)||!EnumaLogPageFromSnapshot(&mReplaySnapshot,&mEnumaLogPage)"
+        },
+        {
+          "line": 231,
+          "text": "return (EFI_STATUS)PixelArmProbe(&mEvidence.Frame,Policy,El);"
+        }
+      ]
+    },
+    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": {
+      "sha256": "3951994b81ceaff5a349afedc93cbcb31ac0010907b19abecaabee3d51e68e2e",
+      "anchors": [
+        {
+          "line": 42,
+          "text": "EnumaJournalPublishAttempted=TRUE;"
+        },
+        {
+          "line": 43,
+          "text": "EnumaJournalPublishStatus=CoreInstallProtocolInterface("
+        },
+        {
+          "line": 112,
+          "text": "  EnumaJournalPublish();"
+        },
+        {
+          "line": 116,
+          "text": "  (VOID) EnumaBootLogAppend (&EnumaDxeBootLog, (UINT32)Point,"
+        }
+      ]
+    },
+    "firmware/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/EnumaProbe.c": {
+      "sha256": "b88bd5b5add591e4fa972de7f98eea02f3fbda9a51fffa202ee7281eabd9437e",
+      "anchors": [
+        {
+          "line": 25,
+          "text": "  Print (L\"%s\\n\", Text);"
+        },
+        {
+          "line": 26,
+          "text": "  DiagDraw (Text, Row);"
+        },
+        {
+          "line": 129,
+          "text": "  Status = UniXNURun (ImageHandle, UniXNUHostFirmware);"
+        }
+      ]
+    },
+    "firmware/Mu_Basecore/MdePkg/Library/UefiLib/UefiLibPrint.c": {
+      "sha256": "8c264dbe55760ea43bf6e1396e79331d916accd736128fe8c26bebf228035109",
+      "anchors": [
+        {
+          "line": 80,
+          "text": "    Status = Console->OutputString (Console, Buffer);"
+        },
+        {
+          "line": 123,
+          "text": "  Return = InternalPrint (Format, gST->ConOut, Marker);"
+        }
+      ]
+    },
+    "firmware/Mu_Basecore/MdeModulePkg/Universal/BdsDxe/BdsEntry.c": {
+      "sha256": "9ee81bc7f7d5d2673120f1493c82b48d71cccab00221e8f6e84a5f39ed85b0a1",
+      "anchors": [
+        {
+          "line": 927,
+          "text": "  PlatformBootManagerBeforeConsole ();"
+        },
+        {
+          "line": 955,
+          "text": "    EfiBootManagerConnectAllDefaultConsoles ();"
+        },
+        {
+          "line": 972,
+          "text": "  PlatformBootManagerAfterConsole ();"
+        }
+      ]
+    },
+    "firmware/Silicon/Silicium/SiliciumPkg/Library/BootManagerLib/BootManager.c": {
+      "sha256": "eb4d965e685bff18d0be0da392c232d2a675f3cd08ff55c3742ef59fdbffffbb",
+      "anchors": [
+        {
+          "line": 52,
+          "text": "  EfiBootManagerUpdateConsoleVariable (ConOut, (EFI_DEVICE_PATH_PROTOCOL *)&DisplayDevicePath, NULL);"
+        }
+      ]
+    },
+    "firmware/Platforms/Xiaomi/enumaPkg/Include/PlatformConfig.inc": {
+      "sha256": "4cc4845fd092d2c24a702fcc5592d3ad867a92a9e8a4b51bf95aa2152220efbd",
+      "anchors": [
+        {
+          "line": 6,
+          "text": "SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf"
+        }
+      ]
+    },
+    "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Main.c": {
+      "sha256": "f01a46219b728b945719e8fa26416cf7e129f91e27e3f04df47364e7e3e3a79e",
+      "anchors": [
+        {
+          "line": 42,
+          "text": "  DEBUG ((PcdGet32 (PcdUniXNUDebugLevel), \"%a\", Line));"
+        },
+        {
+          "line": 45,
+          "text": "    mSerial->Write (mSerial, &Size, Line);"
+        },
+        {
+          "line": 82,
+          "text": "    UniXNUConnectAll ();"
+        },
+        {
+          "line": 85,
+          "text": "  UniXNUConfigLoad (ImageHandle, &Config);"
+        },
+        {
+          "line": 104,
+          "text": "  UniXNUInjectDrivers (ImageHandle, &Config, &Stats);"
+        },
+        {
+          "line": 107,
+          "text": "  UniXNUUiInit (&Config, &Ui);"
+        },
+        {
+          "line": 120,
+          "text": "    Index  = UniXNUMenuRun (&Ui, &Config, Countdown);"
+        }
+      ]
+    },
+    "out/sources/UniXNU/package/UniXNUPkg/Library/UniXNULib/Ui.c": {
+      "sha256": "04bd798e1774697d85ee0eb0b2331bfd3016e32a01828fed0a37e6c7777723e9",
+      "anchors": [
+        {
+          "line": 653,
+          "text": "  Ui->Mode = UniXNUUiHeadless;"
+        },
+        {
+          "line": 658,
+          "text": "      Status = gBS->HandleProtocol (gST->ConsoleOutHandle, &gEfiGraphicsOutputProtocolGuid, (VOID **)&Ui->Gop);"
+        },
+        {
+          "line": 662,
+          "text": "      Status = gBS->LocateProtocol (&gEfiGraphicsOutputProtocolGuid, NULL, (VOID **)&Ui->Gop);"
+        },
+        {
+          "line": 666,
+          "text": "      Ui->Mode   = UniXNUUiGraphics;"
+        },
+        {
+          "line": 684,
+          "text": "    if (!EFI_ERROR (gST->ConOut->QueryMode (gST->ConOut, gST->ConOut->Mode->Mode, &Ui->TextColumns, &Ui->TextRows))) {"
+        },
+        {
+          "line": 685,
+          "text": "      Ui->Mode = UniXNUUiText;"
+        }
+      ]
+    },
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelLogPage.h": {
+      "sha256": "93072cd51cbe55f8b21e7a676d317cb0794be16f0b281aa2efaf2e902f707d7d",
+      "anchors": [
+        {
+          "line": 14,
+          "text": "    if(E->Point==13) { Event=E;break; }"
+        },
+        {
+          "line": 20,
+          "text": "  Page->Text[0][4]='O';EnumaBootLogHex(&Page->Text[0][5],Event->Ordinal,8);"
+        },
+        {
+          "line": 22,
+          "text": "  Page->Text[1][0]='S';EnumaBootLogHex(&Page->Text[1][1],Event->Status>>32,8);"
+        },
+        {
+          "line": 23,
+          "text": "  EnumaBootLogHex(&Page->Text[2][1],Event->Status&0xffffffffu,8);"
+        },
+        {
+          "line": 24,
+          "text": "  Page->Sequence=Event->Sequence;Page->Ready=TRUE;return 1;"
+        }
+      ]
+    },
+    "out/firmware-build/uefi/Platforms/Xiaomi/enumaPkg/Application/EnumaProbe/DarwinProbe.inc": {
+      "sha256": "3399dd71737100254a065fd4318a3b7df880a2e8a56cb03cea9e3050075f27a4",
+      "anchors": [
+        {
+          "line": 54,
+          "text": "DiagDraw (CONST CHAR16 *Text, UINTN Row)"
+        },
+        {
+          "line": 63,
+          "text": "  if (EFI_ERROR (gBS->LocateProtocol (&gEfiGraphicsOutputProtocolGuid, NULL, (VOID **)&Gop)) ||"
+        },
+        {
+          "line": 77,
+          "text": "        Fb[(Y + Gy) * (Video[2] / 4) + X + Gx] = 0xFF000000;"
+        },
+        {
+          "line": 86,
+          "text": "              Fb[(Y + Gy * Scale + Dy) * (Video[2] / 4) + X + Gx * Scale + Dx] = 0xFFFFFFFF;"
+        }
+      ]
+    }
+  },
+  "frozen_r022_image_sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
+  "firmware_commit": "8680ea79d6fd14d4526d314f430e9812955cb78a",
+  "source_order_findings": {
+    "current_invocation_return_not_yet_recorded_during_snapshot": true,
+    "newest_point13_can_belong_to_prior_driver": true,
+    "page_omits_guid_and_sequence": true,
+    "publish_attempt_once_without_retry": true,
+    "snapshot_single_writer_quiescent_contract": true,
+    "bds_connection_precedes_after_console": true,
+    "probe_print_and_diagdraw_are_two_independent_writes": true,
+    "unixnu_log_targets_debug_and_optional_serialio_not_conout": true,
+    "unixnu_drivers_precede_ui": true,
+    "ui_has_graphics_then_text_then_headless_paths": true
+  },
+  "actual_link_bindings": {
+    "EnumaProbe": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/enumaPkg/Application/EnumaProbe/EnumaProbe/OUTPUT/static_library_files.lst",
+        "sha256": "70f0ec53218a736c7300fdb2fb3deb8da7627b7af41f6d4823e6c614ea9cd439",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "UniXNU": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/UniXNUPkg/Application/UniXNU/UniXNU/OUTPUT/static_library_files.lst",
+        "sha256": "8b17a45b20bafa7714095e74ae2ce94c9f5a29331bf17054e101df671311d788",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "DxeCore": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain/OUTPUT/static_library_files.lst",
+        "sha256": "bbaba974604b26d7c0ad53f0da27b78faa5066dc085ccaf95b8b430cc16d581b",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "Sec": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/SiliciumPkg/Sec/Sec/OUTPUT/static_library_files.lst",
+        "sha256": "159809f38c3974635b0eb4dbc0e907988e913f1a8342c4a589429c20717dcadd",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "GraphicsConsoleDxe": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe/OUTPUT/static_library_files.lst",
+        "sha256": "38846769bb43e6f5956dfc0805f2b3d07f37f0c23c7cacd63d43d91b18ceab91",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ],
+    "ConSplitterDxe": [
+      {
+        "path": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe/OUTPUT/static_library_files.lst",
+        "sha256": "2a629f2bb6089c23f233ef62dc57bcf35ce174c3777724f9cb3d6910e2d9d4fd",
+        "null_serial": true,
+        "framebuffer_serial": false,
+        "serial_debug": true
+      }
+    ]
+  },
+  "limitations": [
+    "Source order is not executed-path evidence",
+    "Patch series is reverted by official backend after build; current unpatched staging is not actual compiled Core source",
+    "R022 PE review is separately bound to frozen packaged binaries",
+    "Snapshot ABI has no concurrency lock or exception/AP guarantee",
+    "SerialIo protocol availability is not established by Null SerialPortLib binding"
+  ],
+  "hardware_executed": false,
+  "device_action": false,
+  "screen_log_verified": false,
+  "global_debug": false,
+  "gop_admitted": false,
+  "menu_executed": false
+}

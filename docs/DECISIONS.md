@@ -1352,3 +1352,8 @@ B：保留禁重试，做实质字形/可读性改进并重新完成源/PE/栈/�
 ## D-292：S049观测失败后的实际8秒改进及离线资格
 
 2026-10-26T04:54:45.695706+00:00；前里程碑8aa23b5；固件8680ea79d6fd14d4526d314f430e9812955cb78a。用户2秒对焦不足是本次改变依据。见 [docs/operations/2026-10-26-r022-eight-second-log-observation.md](operations/2026-10-26-r022-eight-second-log-observation.md)；新镜像f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b，R022 pending/计划S050未执行。仅增加6秒，不改面积和I/O；机器码两指令差异、Core相同、模型/Arm/全FD/FAT/Boot v3通过。旧补拍授权不复活，当前观测硬停必须按精确新范围确认后再协调拍摄；75秒/恢复/时钟门禁与所有verified限制保持。
+
+
+## D-293：实机延后，增加主机格式反读与依赖证据
+
+2026-10-26T05:49:29.611853+00:00；前设备里程碑fafe890，固件仍8680ea7。用户要求晚间才能实机、本轮仅离线；R022 pending不自动启动。新增96组C页面/2359296像素/64bit反读与严格转录测试、6模块链接/源码顺序审计通过，固件/归档/镜像未改。当前页只能含此前已完成point13，不能归为当前provider返回；GUID/sequence未显示。详见operations/2026-10-26-offline-log-readability-and-console-readiness.md；实际值和菜单/ConOut/GOP仍未实测。

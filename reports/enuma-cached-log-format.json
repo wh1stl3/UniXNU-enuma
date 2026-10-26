@@ -1,0 +1,47 @@
+{
+  "scope": "synthetic C production formatter/rasterizer -> independent exact-grid inverse -> strict text parser; not photo OCR",
+  "cases": 96,
+  "status_bit_walk": 64,
+  "includes_zero_max_and_mixed_bits": true,
+  "wrapped_ring_newest_return": true,
+  "total_pixels_checked": 2359296,
+  "damaged_sample_rejected": true,
+  "known_contextual_collisions": [
+    "O and0",
+    "S and5",
+    "C andc"
+  ],
+  "limitations": [
+    "No blur/exposure/focus tolerance or photograph recognition",
+    "No visual identity or real hardware value evidence",
+    "128-record snapshot retains only latest point13 on this page; no driver GUID displayed"
+  ],
+  "screen_log_verified": false,
+  "hardware_executed": false,
+  "device_action": false,
+  "command": [
+    "clang",
+    "-std=c11",
+    "-O1",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-unused-function",
+    "-fsanitize=address,undefined",
+    "-fno-pie",
+    "-no-pie",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/diagnostics",
+    "-I/mnt/d/Code/UniXNU-enuma/out/boot-journal-tests",
+    "/mnt/d/Code/UniXNU-enuma/tests/cached_log_format.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/cached-log-format/test"
+  ],
+  "sources": {
+    "tests/cached_log_format.c": "90b01655c9bf15216d25a4fa4dafb365bd95f8ab90eea86c170b829446789d0f",
+    "scripts/check_cached_log_format.py": "27641db602800e96438c4a2af8f9efee9dafa7e1715726692870359829d01a57",
+    "scripts/decode_cached_log_text.py": "72cf3630035d1b2b007ed978cb515cf9fa1b89965ce6f802caa64c6d68800723",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelLogPage.h": "93072cd51cbe55f8b21e7a676d317cb0794be16f0b281aa2efaf2e902f707d7d",
+    "firmware/diagnostics/EnumaBootJournal.h": "eb48820349ea1b6b9b8e1ec7dac6d853e894bca1dcf11d8dd3d7551e210cbb51"
+  }
+}
