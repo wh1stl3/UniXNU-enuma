@@ -1,0 +1,39 @@
+{
+  "scope": "page and transaction host ASan/UBSan plus actual EDK Arm callbacks; not hardware",
+  "result": "PASS: live-status page from newest point13/full64 status; 24 channel layouts; 960 row/pass read-write failure boundaries;256x96/2s/full restore; no hardware",
+  "arm_command": [
+    "clang",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-unused-function",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib",
+    "-I/mnt/d/Code/UniXNU-enuma/out/log-replay-tests",
+    "-I/mnt/d/Code/UniXNU-enuma/firmware/diagnostics",
+    "-I/mnt/d/Code/UniXNU-enuma/out/firmware-build/Mu_Basecore/MdePkg/Include",
+    "-I/mnt/d/Code/UniXNU-enuma/out/firmware-build/Mu_Basecore/MdePkg/Include/AArch64",
+    "-DENUMA_BOOT_LOG_REPLAY=1",
+    "-target",
+    "aarch64-none-elf",
+    "-ffreestanding",
+    "-fshort-wchar",
+    "-fstack-usage",
+    "-O2",
+    "-c",
+    "/mnt/d/Code/UniXNU-enuma/out/log-replay-tests/arm.c",
+    "-o",
+    "/mnt/d/Code/UniXNU-enuma/out/log-replay-tests/arm.o"
+  ],
+  "stack_usage": "/mnt/d/Code/UniXNU-enuma/out/log-replay-tests/arm.c:8:Probe\t98544\tstatic\n/mnt/d/Code/UniXNU-enuma/out/log-replay-tests/arm.c:55:EnumaPixelFrameValid\t0\tstatic\n",
+  "hardware_executed": false,
+  "sources": {
+    "tests/native_log_replay.c": "5d0389283dfcf6da18ad662fb18b26f97ca800385c9e44ae1e62cdc6559c6e7c",
+    "scripts/check_log_replay.py": "e46fbe415082a9ef01c532d8aed9ed3892761d91c0c305da9a5d70236c960423",
+    "firmware/diagnostics/EnumaBootJournal.h": "eb48820349ea1b6b9b8e1ec7dac6d853e894bca1dcf11d8dd3d7551e210cbb51",
+    "firmware/diagnostics/EnumaBootJournalProtocol.h": "c66e5561ed3157ae15316e5833c023e240c57d1f83f948183a8413a0264d8daf",
+    "firmware/diagnostics/EnumaPixelTransactionArm.h": "4424e1ecee52cc059070344c580dd7caa76611581e755bbc84921309da889981",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelTransaction.h": "a02da8c3dd63de2deba496a7744bc3d9ba9f35d855e5b00f71d172dd6e7a7d39",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelLogPage.h": "93072cd51cbe55f8b21e7a676d317cb0794be16f0b281aa2efaf2e902f707d7d"
+  }
+}

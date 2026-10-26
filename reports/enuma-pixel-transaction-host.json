@@ -5,8 +5,8 @@
   "hardware_tested": false,
   "pixel_writes_on_device": false,
   "sources": {
-    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelTransaction.h": "5ac8df846986ae8a3edd2d6f45dafe0a136487866087ee98a528ab3546103e2a",
-    "firmware/diagnostics/EnumaPixelTransactionArm.h": "dda67853c73b69c0bf7fbe6878179df813a12972dd43f9d94d386c7500ee6098",
+    "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelTransaction.h": "a02da8c3dd63de2deba496a7744bc3d9ba9f35d855e5b00f71d172dd6e7a7d39",
+    "firmware/diagnostics/EnumaPixelTransactionArm.h": "4424e1ecee52cc059070344c580dd7caa76611581e755bbc84921309da889981",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelText.h": "a42c3d58ce581511dd66175f8f7dffeaabe968fc55925c0ee806a96c85fe9c89",
     "tests/native_pixel_text.c": "d019dd426f0eb534e039c5865ad730c04656546fc6a7c0a3a5a1900b8f19886c",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "6baed041919ca6944c0cec5544d473529b2b7117079080a04c54b5181f3123d0",

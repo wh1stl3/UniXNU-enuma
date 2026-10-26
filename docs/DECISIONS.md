@@ -1311,3 +1311,7 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-285，真实DXE状态记录离线里程碑与当前授权边界
 
 2026-10-26T03:04:58.537652+00:00，基线fecd938，固件b2ce0befab9d7938a52b5c381bc4a9e5d93b29c0。用户委派唯一新写入会话，目标日志上屏与后续菜单，本轮先离线。新增默认关闭128条DXE RAM状态日志、完整status/GUID、快照/逐行可拒绝回放；接过滤前真实检查点，不动终端与Null SerialPort。主机和AArch64验证、完整FD真实宏/staging绑定通过。首次缺C宏构建不计资格；修复加入后断言并用volatile防LTO消除未消费日志。非PIE ASan/UBSan通过，PIE间歇SIGSEGV根因未定。无新设备命令/摄像头/镜像打包，实际模式未新鲜核验；S-001..047/R-018/R-019 consumed。屏幕sink/跨模块协议/全局DEBUG/ConOut/GOP/菜单未通过，不提升22/alpha/SMMU/verified。后续先离线完成真实快照有界回放及精确预算，再提出新批准；不把本轮一般开发授权当新硬件批准。证据reports/enuma-boot-journal-tests.json、reports/enuma-boot-journal-build.json及operations/2026-10-26-dxe-status-journal.md。本轮仅本地提交，未推送，无设备硬停。
+
+## D-286，用户新实机授权与R-020真实状态回放资格
+
+2026-10-26T03:33:49.136994+00:00。用户明确继续/授权本项目所需实机，且无需反复询问恢复；依据实际门禁直接推进，非豁免硬停。固件962f8208a9d2eca3bc626db67090e28519e088e6、图c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf、归档out/inherited-gop/qualified-dxe-log-r020-962f820。新私有只读Core journal Snapshot，取最新实际point13返回状态；原点256x96/2s/保存复核绘制验证恢复读回，73728load/49152store/3DSB，原Native6/EL1/全帧WT及660MDP保持，无新映射/MMIO/页表/分区写、GOP/verified变化。资格及实际代码审查完成，尚未执行S-048。当前恢复证据out\device-tests\20261026T111629-recovery-reconciliation.json；相机已取帧/旋转查看，仅本地。全部当前文档和源码发布及即时门后一次临时boot，code4/75秒/观测时钟恢复等失败立即停追加并落实当轮交接。旧consumed图不重试，缓存回放不称全局DEBUG/ConOut/菜单。详见operations/2026-10-26-r020-cached-dxe-log-replay.md。

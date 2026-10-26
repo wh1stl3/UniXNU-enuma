@@ -18,6 +18,18 @@ static UINT64 ReadUnaligned64(CONST UINT64 *p) {
   for (unsigned i=0; i<8; i++) { value |= (UINT64)((CONST UINT8*)p)[i] << (i*8); }
   return value;
 }
+#if ENUMA_BOOT_LOG_REPLAY
+static unsigned publishes;
+static VOID *published_interface;
+static EFI_STATUS CoreInstallProtocolInterface(EFI_HANDLE *handle,EFI_GUID *guid,UINTN type,VOID *interface) {
+  (void)guid;(void)type;(void)published_interface;publishes++;
+#if ENUMA_TEST_PROTOCOL_FAIL
+  (void)handle;(void)interface;return 0x8000000000000009ULL;
+#else
+  *handle=(EFI_HANDLE)1;published_interface=interface;return 0;
+#endif
+}
+#endif
 #include "../firmware/diagnostics/EnumaDispatchDetailCheckpoint.h"
 #ifndef BOOT_JOURNAL_COMPILE_ONLY
 #include <assert.h>
@@ -40,6 +52,16 @@ int main(void) {
   assert(snapshot.Count == 7 && snapshot.Events[0].Status == 0x8000000000000001ULL);
   assert(snapshot.Events[5].HasGuid == FALSE && snapshot.Events[6].Point == 13);
   assert(snapshot.Events[2].Point == 20 && snapshot.Events[4].Point == 22);
+#endif
+#if ENUMA_BOOT_LOG_REPLAY
+  assert(publishes==1);
+#if ENUMA_TEST_PROTOCOL_FAIL
+  assert(!published_interface&&!EnumaJournalHandle&&EnumaJournalPublishStatus==0x8000000000000009ULL);
+#else
+  assert(published_interface==&EnumaJournalProtocol);
+#endif
+  assert(EnumaJournalProtocol.Version==1&&EnumaJournalProtocol.Bytes==sizeof(EnumaJournalProtocol));
+  assert(EnumaJournalProtocol.Snapshot(&snapshot)&&snapshot.Count==7);
 #endif
   puts("PASS: production hook preserves filtering, records all pre-filter points when enabled");
 }

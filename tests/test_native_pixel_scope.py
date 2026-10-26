@@ -30,6 +30,17 @@ class PixelScopeTests(unittest.TestCase):
             with self.assertRaises(ValueError):require_hardware_review(meta,{'R-019':entry})
         with self.assertRaises(ValueError):require_hardware_review(meta,{'R-018':approved})
 
+    def test_log_scope_has_independent_authorization_and_timing(self):
+        from native_pixel_scope import LOG_SCOPE
+        meta=dict(hardware_review='R-020',image_sha256='log',pixel_scope=LOG_SCOPE)
+        approved=dict(status='approved',image_sha256=['log'],pixel_scope=LOG_SCOPE)
+        require_hardware_review(meta,{'R-020':approved})
+        for changes in [{'pixel_scope':TEXT_SCOPE},{'pixel_scope':SCOPE},{'status':'consumed'},{'image_sha256':['old']}]:
+            with self.assertRaises(ValueError):require_hardware_review(meta,{'R-020':{**approved,**changes}})
+        plan=make_pixel_plan(Path(__file__).resolve().parents[1],'R-020')
+        self.assertEqual(plan['sampler_seconds'],[0,2.4])
+        for a,b in zip(plan['code_windows_after_issue'],plan['code_windows_after_issue'][1:]):self.assertLess(a[1],b[0])
+
     def test_camera_free_rejected_before_device(self):
         with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
             runner.run_without_camera(dict(native_route_cpu_pattern=True,trial_kind='native-video-route',

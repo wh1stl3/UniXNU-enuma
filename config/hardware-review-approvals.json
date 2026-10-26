@@ -5,7 +5,7 @@
     "image_sha256": [
       "c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534"
     ],
-    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated 鎵瑰噯R005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification.",
+    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated \u93b5\u7470\u566fR005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification.",
     "execution_record": "reports/enuma-r005-device.json"
   },
   "R-017": {
@@ -23,7 +23,7 @@
       "reset": "warm-with-cold-fallback",
       "pmsg_access": false
     },
-    "authorization": "User explicitly instructed 上机无需批准 直接进行 注意使用摄像头记录关键节点 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
+    "authorization": "User explicitly instructed \u4e0a\u673a\u65e0\u9700\u6279\u51c6 \u76f4\u63a5\u8fdb\u884c \u6ce8\u610f\u4f7f\u7528\u6444\u50cf\u5934\u8bb0\u5f55\u5173\u952e\u8282\u70b9 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
     "qualification": "reports/enuma-ramoops-canary-qualification.json",
     "execution_record": "reports/enuma-ramoops-S-015-result.json"
   },
@@ -171,5 +171,48 @@
     "consumed_at": "2026-10-26T10:25:23+08:00",
     "execution_record": "reports/enuma-native-route-S-047-result.json",
     "visual_execution_record": "reports/enuma-s047-visible-text.json"
+  },
+  "R-020": {
+    "status": "approved",
+    "image_sha256": [
+      "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf"
+    ],
+    "pixel_scope": {
+      "experiment": "native-dxe-cached-return-replay-v1",
+      "origin_x": 0,
+      "origin_y": 0,
+      "width": 256,
+      "height": 96,
+      "required_current_el": 1,
+      "hold_us": 2000000,
+      "hold_calls_max": 1,
+      "mdp_reads_max": 660,
+      "mdp_wait_calls_max": 4,
+      "mdp_wait_us": 100000,
+      "framebuffer_reads_max": 73728,
+      "framebuffer_writes_max": 49152,
+      "barriers_max": 3,
+      "cache_line_operations": 0,
+      "mdp_base": "0xae00000",
+      "mdp_bytes": "0x85000",
+      "cpu_splash_view_base": "0x9c000000",
+      "cpu_splash_view_bytes": "0x2400000",
+      "final_stage2_unproven": true,
+      "device_smmu_unproven": true,
+      "alpha_semantics_unproven": true,
+      "publish_gop": false,
+      "partition_writes": false,
+      "raw_media_local_only": true,
+      "source": "Core point13 actual return snapshot",
+      "font": "three-by-five-hex",
+      "scale": 4,
+      "rows": 3,
+      "columns": 16,
+      "global_debug": false,
+      "cached_replay": true
+    },
+    "authorization": "Current user explicitly authorized all enuma project hardware actions with hard-stop rules and said proceed without repeated recovery questions; scoped here to one exact cached-status replay image, not old consumed permission.",
+    "proposal": "docs/operations/2026-10-26-r020-cached-dxe-log-replay.md",
+    "authorized_at": "2026-10-26T03:33:49.136994+00:00"
   }
 }

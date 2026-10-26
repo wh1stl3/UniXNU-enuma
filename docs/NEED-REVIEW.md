@@ -1086,3 +1086,7 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-285 · 离线日志已实现，暂无可执行的新批准项
 
 本轮只离线，未请求或获得R-020新硬件批准。候选A有界真实状态回放、B无屏幕共享导出、C直接GOP/ConOut代价见operations/2026-10-26-dxe-status-journal.md。A推荐但屏幕sink/精确load-store预算/新镜像摘要尚未形成；先做完离线实现再形成可审核批准范围，不将R-019的128x32一次许可视为可复用。无内存字段/verified/破坏操作变更，本轮不因开发完成而自动上机。
+
+## R-020 · 缓存真实DXE返回状态回放
+
+状态approved，源于本轮用户明确授权项目所需实机并要求直接做，不复用旧许可。单笔S-048图c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf、固件962f8208a9d2eca3bc626db67090e28519e088e6，精确LOG_SCOPE见config/hardware-review-approvals.json和operations/2026-10-26-r020-cached-dxe-log-replay.md。新范围256x96/2s/73728读49152写3DSB，既有MDP/WT/恢复门保持。候选A实施，B仅RAM导出、C直连ConOut代价及最小范围已完整列出；尚未发图，资格发布与即时门不因批准而省略。

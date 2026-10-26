@@ -14,6 +14,9 @@ def main():
 #include <stdint.h>
 #include <stddef.h>
 #define STATIC static
+#define EFIAPI
+#define EFI_NATIVE_INTERFACE 0
+typedef void *EFI_HANDLE;
 #define CONST const
 #define VOID void
 #define TRUE 1
@@ -34,7 +37,9 @@ typedef struct { UINT32 Data1; uint16_t Data2,Data3; UINT8 Data4[8]; } EFI_GUID;
     common = ['clang', '-std=c11', '-Wall', '-Wextra', '-Werror', '-Wno-unused-function']
     for file, defines, tag in [('boot_journal_test.c', [], 'journal'),
                                ('boot_journal_hook_test.c', ['-DENUMA_BOOT_JOURNAL=1'], 'hook-on'),
-                               ('boot_journal_hook_test.c', ['-DENUMA_BOOT_JOURNAL=0'], 'hook-off')]:
+                               ('boot_journal_hook_test.c', ['-DENUMA_BOOT_JOURNAL=0'], 'hook-off'),
+                               ('boot_journal_hook_test.c', ['-DENUMA_BOOT_JOURNAL=1','-DENUMA_BOOT_LOG_REPLAY=1'], 'protocol-on'),
+                               ('boot_journal_hook_test.c', ['-DENUMA_BOOT_JOURNAL=1','-DENUMA_BOOT_LOG_REPLAY=1','-DENUMA_TEST_PROTOCOL_FAIL=1'], 'protocol-fail')]:
         source = str(ROOT / 'tests' / file)
         binary = str(out / tag)
         run(common + ['-I', str(out), '-fsanitize=address,undefined', '-fno-pie', '-no-pie', '-g'] + defines + [source, '-o', binary])
@@ -52,13 +57,13 @@ typedef struct { UINT32 Data1; uint16_t Data2,Data3; UINT8 Data4[8]; } EFI_GUID;
              'firmware/Resources/Scripts/enuma_preflight.py', 'firmware/Resources/Scripts/build_enuma_firmware.py',
              'tests/boot_journal_test.c', 'tests/boot_journal_hook_test.c', 'scripts/test_boot_journal.py']
     report = dict(scope='host ASan/UBSan execution and pinned EDK AArch64 objects; no whole FD/QEMU/device run',
-                  results=results, aarch64_objects=3, invalid_selector_rejected=True,
+                  results=results, aarch64_objects=5, invalid_selector_rejected=True,
                   commands=commands, sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in files},
                   hardware_executed=False, pixel_access=False, global_debug_connected=False, screen_sink=False,
                   default_enabled=False, concurrency='single writer, quiescent copy, immutable replay snapshot')
     (ROOT / 'reports/enuma-boot-journal-tests.json').write_text(json.dumps(report, indent=2)+'\n')
     print('\n'.join(results))
-    print('PASS: three AArch64 objects with pinned EDK headers; invalid selector rejected')
+    print('PASS: five AArch64 objects with pinned EDK headers; invalid selector rejected')
 
 if __name__ == '__main__':
     main()

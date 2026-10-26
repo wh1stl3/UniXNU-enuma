@@ -133,9 +133,10 @@ def qualification(published=False, report=None):
             expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_PATTERN_CATEGORIES if cpu_pattern else CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if route and cpu_pattern:
             from native_pixel_scope import scope_for_review
-            review="R-019" if cpu_text else "R-018"
+            review="R-020" if q.get("boot_log_replay") is True else "R-019" if cpu_text else "R-018"
             SCOPE=scope_for_review(review)
-            expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=SCOPE["framebuffer_reads_max"],framebuffer_writes=SCOPE["framebuffer_writes_max"],roi_height=SCOPE["height"],maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=500000,hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
+            if review=='R-020' and (q.get('boot_journal') is not True or q.get('cached_replay') is not True or q.get('global_debug') is not False or cpu_text): raise ValueError('invalid cached journal replay profile')
+            expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=SCOPE["framebuffer_reads_max"],framebuffer_writes=SCOPE["framebuffer_writes_max"],roi_height=SCOPE["height"],maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=SCOPE['hold_us'],roi_width=SCOPE['width'],hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
         if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
@@ -180,7 +181,7 @@ def qualification(published=False, report=None):
                 raise ValueError('actual first-reason provider code review missing or mismatched')
         for repo in (ROOT, ROOT / 'firmware'):
             def git(*args):
-                return subprocess.check_output(['git', '-C', str(repo), *args], text=True).strip()
+                return subprocess.check_output(['git','-c','safe.directory='+repo.as_posix(), '-C', str(repo), *args], text=True).strip()
             if git('status', '--porcelain', '--ignore-submodules=all'):
                 raise ValueError('source/current documents must be clean before a trial')
             head = git('rev-parse', 'HEAD')

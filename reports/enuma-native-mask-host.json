@@ -75,7 +75,7 @@
   "source_sha256": {
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h": "6baed041919ca6944c0cec5544d473529b2b7117079080a04c54b5181f3123d0",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeRouteResult.h": "7a026df32dfec0da46901f9e6fcfd6e035bac9bf27431faba185605f3db87f5e",
-    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "94410c586f4be25733202b53a5cc44ec749bc470cee69def233bb099fcf97358",
+    "firmware/diagnostics/EnumaDispatchDetailCheckpoint.h": "3951994b81ceaff5a349afedc93cbcb31ac0010907b19abecaabee3d51e68e2e",
     "firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h": "63ab286705d8bfc270ba88c14185dfd1a2f81508672eadda07e7673f3033b783",
     "tests/native_mask_terminal.c": "5d0b5899d0902e54bc61d1205a39d5566fb30f321b4af96fae609f912d7c36eb",
     "scripts/check_native_mask_terminal.py": "249cb2dd6c902e859d7991b6e6e4ccc8a77cd7836edb2ff5a3cadc34df539fa3"

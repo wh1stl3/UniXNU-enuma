@@ -16,7 +16,8 @@ ROOT=Path(__file__).resolve().parents[1]
 GUID='dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92'
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(0,1,2),default=0); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); p.add_argument('--native-route-audit',action='store_true'); p.add_argument('--native-route-detail',action='store_true'); p.add_argument('--native-route-cpu-text',action='store_true'); p.add_argument('--native-route-cpu-pattern',action='store_true'); p.add_argument('--native-route-cpu-roi',action='store_true'); p.add_argument('--native-route-cpu-barrier',action='store_true'); p.add_argument('--native-route-cpu-read',action='store_true'); p.add_argument('--native-route-cpu-policy',action='store_true'); p.add_argument('--native-route-cpu-attribute',action='store_true'); p.add_argument('--native-route-cpu-stage1',action='store_true'); p.add_argument('--native-route-alpha-view',action='store_true'); p.add_argument('--native-route-global-detail',action='store_true'); p.add_argument('--native-route-global-output',action='store_true'); p.add_argument('--native-route-structure-detail',action='store_true'); p.add_argument('--native-route-structure',action='store_true'); p.add_argument('--native-route-blend',action='store_true'); p.add_argument('--native-route-layout',action='store_true'); p.add_argument('--native-route-staging',action='store_true'); a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument('--image',type=Path,required=True); p.add_argument('--archive',type=Path,required=True); p.add_argument('--native-query',type=int,choices=(0,1,2),default=0); p.add_argument('--native-control',action='store_true'); p.add_argument('--native-mask-field',type=int,choices=range(8),default=0); p.add_argument('--native-route-audit',action='store_true'); p.add_argument('--native-route-detail',action='store_true'); p.add_argument('--boot-log-replay',action='store_true'); p.add_argument('--native-route-cpu-text',action='store_true'); p.add_argument('--native-route-cpu-pattern',action='store_true'); p.add_argument('--native-route-cpu-roi',action='store_true'); p.add_argument('--native-route-cpu-barrier',action='store_true'); p.add_argument('--native-route-cpu-read',action='store_true'); p.add_argument('--native-route-cpu-policy',action='store_true'); p.add_argument('--native-route-cpu-attribute',action='store_true'); p.add_argument('--native-route-cpu-stage1',action='store_true'); p.add_argument('--native-route-alpha-view',action='store_true'); p.add_argument('--native-route-global-detail',action='store_true'); p.add_argument('--native-route-global-output',action='store_true'); p.add_argument('--native-route-structure-detail',action='store_true'); p.add_argument('--native-route-structure',action='store_true'); p.add_argument('--native-route-blend',action='store_true'); p.add_argument('--native-route-layout',action='store_true'); p.add_argument('--native-route-staging',action='store_true'); a=p.parse_args()
+    if a.boot_log_replay and (not a.native_route_cpu_pattern or a.native_route_cpu_text): raise ValueError("log replay requires pixel profile without fixed text")
     if a.native_route_cpu_text and not a.native_route_cpu_pattern: raise ValueError('Text requires pixel transaction')
     if a.native_route_cpu_pattern and not a.native_route_cpu_roi: raise ValueError('Pixel transaction requires ROI profile')
     if a.native_route_cpu_roi and not a.native_route_cpu_barrier: raise ValueError('ROI read requires barrier profile')
@@ -40,7 +41,7 @@ def main():
     image=a.image.resolve(); archive=a.archive.resolve()
     if not image.is_relative_to(ROOT/'out') or not archive.is_relative_to(ROOT/'out') or archive.exists(): raise ValueError('require new in-out archive/image')
     build=json.loads((ROOT/'reports/enuma-firmware-build.json').read_text()); pin=json.loads((ROOT/'config/uefi-source.lock.json').read_text())
-    required={'complete':True,'inherited_video_audit_read_only':not a.native_route_cpu_pattern,'gop_backend_selftest_ram_only':False,
+    required={'boot_log_replay':a.boot_log_replay,'complete':True,'inherited_video_audit_read_only':not a.native_route_cpu_pattern,'gop_backend_selftest_ram_only':False,
       'native_route_cpu_text':a.native_route_cpu_text,'native_route_cpu_pattern':a.native_route_cpu_pattern,'native_route_cpu_roi':a.native_route_cpu_roi,'native_route_cpu_barrier':a.native_route_cpu_barrier,'native_route_cpu_read':a.native_route_cpu_read,'native_route_cpu_policy':a.native_route_cpu_policy,'native_route_cpu_attribute':a.native_route_cpu_attribute,'native_route_cpu_stage1':a.native_route_cpu_stage1,'native_route_alpha_view':a.native_route_alpha_view,'native_route_global_detail':a.native_route_global_detail,'native_route_global_output':a.native_route_global_output,'native_route_structure_detail':a.native_route_structure_detail,'native_route_structure':a.native_route_structure,'native_route_blend':a.native_route_blend,'native_route_layout':a.native_route_layout,'native_route_staging':a.native_route_staging,'native_route_detail':a.native_route_detail,'native_route_audit':a.native_route_audit,'inherited_video_entry_control':False,'native_observe_query':a.native_query,'native_observe_control':a.native_control,'native_mask_field':a.native_mask_field,
       'inherited_video_terminal':True,
       'inherited_video_topology_query':0,
@@ -61,10 +62,10 @@ def main():
     output=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/SiliciumPkg/Drivers/SimpleFbDxe/SimpleFbDxe'
     pe=output/'OUTPUT/SimpleFbDxe.efi'; packaged=[m for m in modules if m['name']=='SimpleFbDxe']
     if len(packaged)!=1 or hashlib.sha256(packaged[0]['data']).hexdigest()!=sha(pe): raise ValueError('actual PE not packaged')
-    make=(output/'GNUmakefile').read_text(); defs=build['firmware_configuration']['defines']
+    make=(output/'OUTPUT/cc_resp.txt').read_text(); defs=build['firmware_configuration']['defines']
     core_folder=ROOT/'out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain'
-    core_make=(core_folder/'GNUmakefile').read_text()
-    for k in ['ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_ROUTE_CPU_TEXT','ENUMA_NATIVE_ROUTE_CPU_PATTERN','ENUMA_NATIVE_ROUTE_CPU_ROI','ENUMA_NATIVE_ROUTE_CPU_BARRIER','ENUMA_NATIVE_ROUTE_CPU_READ','ENUMA_NATIVE_ROUTE_CPU_POLICY','ENUMA_NATIVE_ROUTE_CPU_ATTRIBUTE','ENUMA_NATIVE_ROUTE_CPU_STAGE1','ENUMA_NATIVE_ROUTE_ALPHA_VIEW','ENUMA_NATIVE_ROUTE_GLOBAL_DETAIL','ENUMA_NATIVE_ROUTE_GLOBAL_OUTPUT','ENUMA_NATIVE_ROUTE_STRUCTURE_DETAIL','ENUMA_NATIVE_ROUTE_STRUCTURE','ENUMA_NATIVE_ROUTE_BLEND','ENUMA_NATIVE_ROUTE_LAYOUT','ENUMA_NATIVE_ROUTE_STAGING','ENUMA_NATIVE_ROUTE_DETAIL','ENUMA_NATIVE_ROUTE_AUDIT','ENUMA_NATIVE_MASK_FIELD','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
+    core_make=(core_folder/'OUTPUT/cc_resp.txt').read_text()
+    for k in ['ENUMA_BOOT_JOURNAL','ENUMA_BOOT_LOG_REPLAY','ENUMA_RAM_PAYLOAD','ENUMA_DIAG_STAGE','ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GOP_QUERY','ENUMA_DIAG_GOP_STEP','ENUMA_DIAG_GUID_ONLY','ENUMA_DIAG_DISPATCH_FALLBACK','ENUMA_DIAG_PIXEL_PREVIEW','ENUMA_VALUE_SOURCE','ENUMA_NATIVE_ROUTE_CPU_TEXT','ENUMA_NATIVE_ROUTE_CPU_PATTERN','ENUMA_NATIVE_ROUTE_CPU_ROI','ENUMA_NATIVE_ROUTE_CPU_BARRIER','ENUMA_NATIVE_ROUTE_CPU_READ','ENUMA_NATIVE_ROUTE_CPU_POLICY','ENUMA_NATIVE_ROUTE_CPU_ATTRIBUTE','ENUMA_NATIVE_ROUTE_CPU_STAGE1','ENUMA_NATIVE_ROUTE_ALPHA_VIEW','ENUMA_NATIVE_ROUTE_GLOBAL_DETAIL','ENUMA_NATIVE_ROUTE_GLOBAL_OUTPUT','ENUMA_NATIVE_ROUTE_STRUCTURE_DETAIL','ENUMA_NATIVE_ROUTE_STRUCTURE','ENUMA_NATIVE_ROUTE_BLEND','ENUMA_NATIVE_ROUTE_LAYOUT','ENUMA_NATIVE_ROUTE_STAGING','ENUMA_NATIVE_ROUTE_DETAIL','ENUMA_NATIVE_ROUTE_AUDIT','ENUMA_NATIVE_MASK_FIELD','ENUMA_NATIVE_CONTROL','ENUMA_NATIVE_OBSERVE_QUERY','ENUMA_VIDEO_TERMINAL','ENUMA_VIDEO_TOPOLOGY_QUERY','ENUMA_VIDEO_REASON_TARGET','ENUMA_VIDEO_REASON_QUERY']:
         if set(re.findall(r'-D'+k+r'=([^\s]+)',make))!={defs[k]}: raise ValueError('actual provider flags mismatch: '+k)
         if set(re.findall(r'-D'+k+r'=([^\s]+)',core_make))!={defs[k]}: raise ValueError('actual Core flags mismatch: '+k)
     core_pe=core_folder/'OUTPUT/DxeCore.efi'
@@ -73,24 +74,29 @@ def main():
     staged=ROOT/'out/firmware-build/uefi/Silicon/Silicium/SiliciumPkg/Drivers/SimpleFbDxe'
     entry=ROOT/'firmware/diagnostics'/('EnumaInheritedVideoAudit.c' if a.native_route_audit else 'EnumaNativeObserve.c')
     if (staged/'SimpleFb.c').read_bytes()!=entry.read_bytes() or build['inherited_video_compiled_contract']['entry_source_sha256']!=sha(entry): raise ValueError('entry source not bound')
-    for n in ['InheritedScanout.h','Decode.c','Capture.c','VideoCapture.c','Topology.h','Topology.c','Evidence.h','Evidence.c','VideoResult.h','NativeObserve.h','NativeObserve.c','NativeMaskResult.h','NativeRouteResult.h','CpuStage1.h','PixelTransaction.h','PixelText.h']:
+    for n in ['InheritedScanout.h','Decode.c','Capture.c','VideoCapture.c','Topology.h','Topology.c','Evidence.h','Evidence.c','VideoResult.h','NativeObserve.h','NativeObserve.c','NativeMaskResult.h','NativeRouteResult.h','CpuStage1.h','PixelTransaction.h','PixelText.h','PixelLogPage.h']:
         if (staged/'InheritedVideo'/n).read_bytes()!=(ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib'/n).read_bytes(): raise ValueError('staged source mismatch: '+n)
     if a.native_route_cpu_pattern and (staged/'EnumaPixelTransactionArm.h').read_bytes()!=(ROOT/'firmware/diagnostics/EnumaPixelTransactionArm.h').read_bytes(): raise ValueError('pixel Arm source not staged')
+    if a.boot_log_replay:
+        for name in ('EnumaBootJournal.h','EnumaBootJournalProtocol.h'):
+            if (staged/name).read_bytes()!=(ROOT/'firmware/diagnostics'/name).read_bytes(): raise ValueError('staged replay ABI differs: '+name)
+            core_header=ROOT/'out/firmware-build/Mu_Basecore/MdeModulePkg/Core/Dxe/Dispatcher'/name
+            if core_header.read_bytes()!=(staged/name).read_bytes(): raise ValueError('Core/provider ABI differs: '+name)
     # Verify the actual FD contains the exact table record prefix checked at runtime.
     prefix=b'Display MDP'+b'\0'*(32-len('Display MDP'))+struct.pack('<QQ',0xae00000,0x85000)
     if not any(prefix in m['data'] for m in modules): raise ValueError('actual FD lacks exact R-004 table record')
     archive.mkdir(parents=True)
     source_files={'image.img':image,'image.json':image.with_suffix('.json'),'SILICIUM_UEFI.fd':fd,'enuma-uefi.raw':raw,
-      'SimpleFbDxe.efi':pe,'provider.GNUmakefile':output/'GNUmakefile','entry.c':entry,
-      'DxeCore.efi':core_pe,'core.map':core_folder/'OUTPUT/DxeCore.map',
-      'NativeMaskResult.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h','core.GNUmakefile':core_folder/'GNUmakefile',
+      'SimpleFbDxe.efi':pe,'provider.cc_resp.txt':output/'OUTPUT/cc_resp.txt','entry.c':entry,
+      'DxeCore.efi':core_pe,'core.map':core_folder/'DEBUG/DxeCore.map',
+      'NativeMaskResult.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeMaskResult.h','core.cc_resp.txt':core_folder/'OUTPUT/cc_resp.txt',
       'EnumaDispatchDetailCheckpoint.h':ROOT/'firmware/diagnostics/EnumaDispatchDetailCheckpoint.h',
       'VideoResult.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/VideoResult.h',
       'Evidence.c':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.c',
       'Evidence.h':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/Evidence.h',
       'firmware-build.json':ROOT/'reports/enuma-firmware-build.json','fd-audit.json':ROOT/'reports/enuma-fd-audit.json',
       'host-tests.json':ROOT/'reports/enuma-native-display-observe-host.json',
-      'provider.map':output/'OUTPUT/SimpleFbDxe.map',
+      'provider.map':output/'DEBUG/SimpleFbDxe.map',
       'provider.AutoGen.c':output/'DEBUG/AutoGen.c',
       'provider.libraries.txt':output/'OUTPUT/static_library_files.lst',
       'NativeObserve.c':ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/NativeObserve.c',
@@ -186,7 +192,7 @@ def main():
         if a.native_route_cpu_pattern:
             from native_mask_decode import make_pixel_plan
             from native_pixel_scope import scope_for_review
-            review="R-019" if a.native_route_cpu_text else "R-018"
+            review="R-020" if a.boot_log_replay else "R-019" if a.native_route_cpu_text else "R-018"
             SCOPE=scope_for_review(review)
             host=ROOT/'reports/enuma-pixel-transaction-host.json'
             for name,digest in json.loads(host.read_text())['sources'].items():
@@ -197,13 +203,22 @@ def main():
             if meta.get('hardware_review')!=review or meta.get('pixel_scope')!=SCOPE or build.get('hardware_review_required')!=review: raise ValueError('protected R-018 image/scope tag missing')
             q.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=SCOPE["framebuffer_reads_max"],framebuffer_writes=SCOPE["framebuffer_writes_max"],roi_height=SCOPE["height"],
               maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,
-              required_current_el=1,hold_us=500000,hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,
+              required_current_el=1,hold_us=SCOPE["hold_us"],hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,roi_width=SCOPE["width"],
               camera_required=True,execution_approval_required=True,decode_plan=make_pixel_plan(ROOT,review))
             q['scope']='Protected pixel candidate exact scope: save/revalidate/contrast128x8/hold500ms/restore/readback; two bounded Native6 observations and EL1 NormalWT; no MMIO/cache/map writes or GOP'
             q['result_interpretation']='1 no stores: prerequisite/save/revalidation rejected;2 pattern rejected but original region restored;3 hold rejected but restored;4 restoration not established HARD STOP;5 CPU pattern and restoration complete, visible output still requires camera evidence. Save3072reads/2048stores max,3DSB,2 samplers660MDP/4x100ms plus1x500ms hold. Predeclared sampler envelope0..0.9s; no post-result adjustment. R-005 consumed does not approve this image; R-018 exact approved image/scope and camera required before any device action.'
         if a.native_route_cpu_text:
             q['scope']='R-019 pending exact128x32 fixed UEFI bitmap at4x scale; save/revalidate/hold500ms/restore/readback; no GOP/MMIO/map writes'
             q['result_interpretation']='1 no stores;2 text-pattern verification rejected but original region restored;3 hold rejected but restored;4 restoration not established HARD STOP;5 CPU text pattern and exact restoration completed, visible legibility requires camera. Max12288reads/8192stores/3DSB;660MDP/4x100ms plusone500ms hold. Same predeclared0..0.9s envelope; no post-result adjustment. Only R-019 exact-image/scope approval authorizes execution; R-018 is consumed.'
+        if a.boot_log_replay:
+            if build['boot_journal']['actual_core_cc_define']!='-DENUMA_BOOT_JOURNAL=1': raise ValueError('journal absent from Core')
+            q.update(boot_log_replay=True,boot_journal=True,cached_replay=True,global_debug=False)
+            q['scope']='R-020 cached Core point13 return status snapshot;256x96,2s,save/revalidate/verify/restore/readback; no GOP,ConOut,MMIO/map/cache writes'
+            q['result_interpretation']='Same pixel first-result codes1..5. Code1 also includes journal protocol/snapshot/no-return refusal. Code5 supports CPU transaction/restoration only; camera independently judges actual cached status text. Max73728loads/49152stores/3DSB,660MDP/four100ms plus2s hold. Predeclared total sampler/hold envelope0..2.4s. No old consumed authorization reused.'
+            for name,path in [('EnumaBootJournal.h',ROOT/'firmware/diagnostics/EnumaBootJournal.h'),('EnumaBootJournalProtocol.h',ROOT/'firmware/diagnostics/EnumaBootJournalProtocol.h'),('PixelLogPage.h',ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib/PixelLogPage.h'),('log-replay-host.json',ROOT/'reports/enuma-log-replay-host.json')]:
+                shutil.copyfile(path,archive/name);q['files'][name]={'sha256':sha(path),'bytes':path.stat().st_size}
+            host_data=json.loads((ROOT/'reports/enuma-log-replay-host.json').read_text())
+            if any(sha(ROOT/name)!=value for name,value in host_data['sources'].items()): raise ValueError('replay host inputs changed')
         target_report='enuma-native-route-qualification.json'
     for path in [archive/'qualification.json' ,ROOT/'reports'/target_report]: path.write_text(json.dumps(q,indent=2)+'\n')
     print('PASS: actual bounded audit PE, R-004 FD record, staged source/flags, full FAT boot-v3 and immutable archive')

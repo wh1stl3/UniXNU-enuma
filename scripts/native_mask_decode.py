@@ -21,10 +21,11 @@ def make_plan(root):
 def make_pixel_plan(root,review="R-018"):
     plan=make_plan(root)
     # Two complete100ms-window samplers plus at most500ms hold: total0.9s.
-    plan['sampler_seconds']=[0,.9]
+    duration=2.4 if review=='R-020' else .9
+    plan['sampler_seconds']=[0,duration]
     base=plan['baseline_envelope_seconds']
-    plan['code_windows_after_issue']=[[base[0]+d-1,base[1]+d+.9+1] for d in [2,7,12,17,22]]
-    plan['declared_profile']=review+' two samplers and bounded500ms hold; preissue envelope'
+    plan['code_windows_after_issue']=[[base[0]+d-1,base[1]+d+duration+1] for d in [2,7,12,17,22]]
+    plan['declared_profile']=review+' two samplers and bounded'+('2s' if review=='R-020' else '500ms')+' hold; preissue envelope'
     return plan
 
 def decode(clock,plan):
