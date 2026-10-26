@@ -128,7 +128,7 @@
     "consumed_at": "2026-10-26T09:54:54+08:00"
   },
   "R-019": {
-    "status": "approved",
+    "status": "consumed",
     "scope": "One exact-image128x32 fixed UEFI bitmap save/revalidate/500ms hold/restore/readback experiment",
     "image_sha256": [
       "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60"
@@ -167,6 +167,9 @@
     },
     "authorization": "2026-10-26 Asia/Shanghai: human explicitly approved R-019, direct one-image hardware verification, camera for text, raw media local only; proceed by results and stop on hard-stop conditions.",
     "proposal": "docs/operations/2026-10-26-r019-bounded-uefi-text.md",
-    "authorized_at": "2026-10-26T10:16:28+08:00"
+    "authorized_at": "2026-10-26T10:16:28+08:00",
+    "consumed_at": "2026-10-26T10:25:23+08:00",
+    "execution_record": "reports/enuma-native-route-S-047-result.json",
+    "visual_execution_record": "reports/enuma-s047-visible-text.json"
   }
 }

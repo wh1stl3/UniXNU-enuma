@@ -1122,3 +1122,8 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-282，R-019明确批准与S-047即时门
 
 2026-10-26T10:16:28+08:00，前里程碑96606e1，固件bb60fb0。用户明确批准R-019并要求直接上机，文字摄像头记录、原始影音仅本地，按结果继续至硬停。精确镜像5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60及原TEXT_SCOPE记录approved，仅一次128x32固定UEFI/500ms/保存复核恢复事务。独立核验out\device-tests\20261026T101540-recovery-reconciliation.json通过，Android完成/root/A槽/解锁/两分区及备份摘要一致；相机1920x1080完整屏幕与原点已查看。S-047未发图，文档提交推送且即时门通过后直接执行，不再询问本图批准。code4/超时/恢复或所需观测失败即硬停，停止追加并当轮落地恢复和提交推送；不重复已发图。
+
+
+## D-283，S-047固定UEFI文字可见与恢复完成
+
+2026-10-26T10:25:23+08:00，前里程碑3a2358a，固件bb60fb0。R-019唯一批准镜像5e189f4e已由S-047执行并consumed。origin33.130..33.238秒唯一code5，Android55.625秒；独立身份/root/A槽/解锁及设备/备份摘要通过。352帧全解码；frame104/105可辨认UEFI，103前/106后消失，末帧Android。固定四字位图/小区域该次事务证据，不称全局DEBUG/Print/GOP/菜单或清除22、通用alpha/SMMU。原始影音仅本地，证据reports/enuma-native-route-S-047-result.json、reports/enuma-s047-visible-text.json、out\device-tests\20261026T101839-recovery-reconciliation.json。无硬停，继续有界真实日志/控制台离线工作；已发图不重试。

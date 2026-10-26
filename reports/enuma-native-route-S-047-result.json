@@ -1,0 +1,189 @@
+{
+  "scope": "indirect native-route classification using predeclared calibrated boot-origin windows",
+  "trial": "S-047",
+  "native_route_cpu_roi": true,
+  "native_route_cpu_barrier": true,
+  "maximum_barriers": 3,
+  "native_route_cpu_read": true,
+  "maximum_framebuffer_reads": 12288,
+  "framebuffer_writes": 8192,
+  "cache_maintenance": false,
+  "native_route_cpu_policy": true,
+  "native_route_cpu_attribute": false,
+  "native_route_cpu_stage1": true,
+  "cpu_stage1_only": false,
+  "cpu_memory_data_access": true,
+  "native_route_alpha_view": true,
+  "alpha_semantics_unproven": true,
+  "native_route_global_detail": false,
+  "native_route_global_output": true,
+  "native_route_structure_detail": false,
+  "native_route_structure": true,
+  "native_route_blend": false,
+  "native_border_view": true,
+  "native_route_layout": false,
+  "native_route_detail": false,
+  "native_route_staging": false,
+  "firmware_commit": "bb60fb0500f2565cc05cbfd0a20067cae14aecd8",
+  "image_sha256": "5e189f4ed32fa9b25a5b07bc974d950fd48929cc19818a12c7c982379ab42f60",
+  "fd_sha256": "9c5046669399564bbdb61028a4b579dbb7fe3b6b58fc3bb769d5c38b6827482b",
+  "consumed": true,
+  "automatic_android_return": true,
+  "observation_valid": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261026T101649-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-26 10:17:03",
+    "issued_at_utc": "2026-10-26T02:17:03.574646+00:00",
+    "boot_command_return_seconds": 2.625,
+    "fastboot_disconnect_observed_seconds": 5.109,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 41.39,
+    "boot_complete_seconds": 55.625
+  },
+  "post_boot_clock": {
+    "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+    "boot_id_sha256": "ea9ad382e11109de95284978bfb2909a100eb6a13c6bf91b5f9ed814e70584c7",
+    "origin_monotonic_lower": 220407.411,
+    "origin_monotonic_upper": 220407.519,
+    "uncertainty_seconds": 0.10800000000745058,
+    "calibrated_firmware_delay": false,
+    "origin_after_issue_lower": 33.13000000000466,
+    "origin_after_issue_upper": 33.23800000001211
+  },
+  "boot_clock_error": null,
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      0.9
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        14.247999999998138
+      ],
+      [
+        16.25199999997858,
+        19.247999999998136
+      ],
+      [
+        21.25199999997858,
+        24.247999999998136
+      ],
+      [
+        26.25199999997858,
+        29.247999999998136
+      ],
+      [
+        31.25199999997858,
+        34.247999999998136
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
+    "declared_profile": "R-019 two samplers and bounded500ms hold; preissue envelope"
+  },
+  "result": {
+    "conclusion": "route-category-inferred",
+    "category": "cpu-pattern-and-exact-restoration-completed-visibility-unproven",
+    "warning_code": 5,
+    "stop_additional_trials": false,
+    "direct_register_log": false
+  },
+  "boot_id_changed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "985cdadaa24b2d60a7ec78590e1e23db46aee2e3e4bda7028bc78bbd1f63cde1",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261026T101839-recovery-reconciliation.json"
+  },
+  "camera": {
+    "used": true,
+    "frames": 352,
+    "decoded_frames": 352,
+    "video": "out/camera-capture/20261026T101646-system-transport/system-transport.avi",
+    "sha256": "cab404e23d4c9e7426c54a6b08ab3a745fa13eed8947319fa3849adc326503ed",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_verified": false,
+  "display_maximum_reads": 660,
+  "display_writes": 0,
+  "roi_read_completion_supported": false,
+  "cpu_exception_level_inferred": 1,
+  "single_barrier_completion_supported": false,
+  "single_read_completion_supported": false,
+  "framebuffer_read_execution_count_inferred": 12288,
+  "native_route_cpu_text": true,
+  "native_route_cpu_pattern": true,
+  "pixel_scope": {
+    "experiment": "native-roi-uefi-text-restore-v1",
+    "origin_x": 0,
+    "origin_y": 0,
+    "width": 128,
+    "height": 32,
+    "required_current_el": 1,
+    "hold_us": 500000,
+    "hold_calls_max": 1,
+    "mdp_reads_max": 660,
+    "mdp_wait_calls_max": 4,
+    "mdp_wait_us": 100000,
+    "framebuffer_reads_max": 12288,
+    "framebuffer_writes_max": 8192,
+    "barriers_max": 3,
+    "cache_line_operations": 0,
+    "mdp_base": "0xae00000",
+    "mdp_bytes": "0x85000",
+    "cpu_splash_view_base": "0x9c000000",
+    "cpu_splash_view_bytes": "0x2400000",
+    "final_stage2_unproven": true,
+    "device_smmu_unproven": true,
+    "alpha_semantics_unproven": true,
+    "publish_gop": false,
+    "partition_writes": false,
+    "raw_media_local_only": true,
+    "text": "UEFI",
+    "font": "fixed-five-by-seven",
+    "scale": 4,
+    "left_margin": 4,
+    "top_margin": 2
+  },
+  "pixel_transaction_completion_supported": true,
+  "restoration_supported": true,
+  "restoration_not_established": false,
+  "framebuffer_write_execution_count_inferred": 8192,
+  "visible_output_verified": true,
+  "visible_output_scope": "fixed four-letter UEFI bitmap in one bounded region; not global DEBUG/Print/menu qualification",
+  "visual_evidence": "reports/enuma-s047-visible-text.json"
+}

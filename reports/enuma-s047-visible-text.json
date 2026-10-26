@@ -1,0 +1,37 @@
+{
+  "scope": "Manual review of original-resolution local video frames and nearest-neighbor inspection crops; original media and derived inspection images remain local",
+  "video": "out/camera-capture/20261026T101646-system-transport/system-transport.avi",
+  "video_sha256": "cab404e23d4c9e7426c54a6b08ab3a745fa13eed8947319fa3849adc326503ed",
+  "frames": 352,
+  "decoded_frames": 352,
+  "manually_reviewed": true,
+  "visible_text_observed": true,
+  "recognized_text": "UEFI",
+  "region": "upper-left bounded diagnostic region; not full screen or GOP qualification",
+  "preceding_frame": 103,
+  "visible_frames": [
+    104,
+    105
+  ],
+  "following_frame": 106,
+  "sampled_timestamps_seconds": {
+    "102": 21.687999999994645,
+    "103": 21.921999999991385,
+    "104": 22.125,
+    "105": 22.34399999998277,
+    "106": 22.562999999994645,
+    "107": 22.765999999974156
+  },
+  "visible_sample_span_seconds": 0.219,
+  "on_off_edge_outer_bracket_seconds": 0.641,
+  "exact_hold_duration_measured": false,
+  "brightness_calibrated": false,
+  "full_display_verified": false,
+  "gop_verified": false,
+  "global_debug_log_verified": false,
+  "conout_print_verified": false,
+  "unixnu_menu_verified": false,
+  "raw_media_local_only": true,
+  "audio_recorded": false,
+  "reviewed_at": "2026-10-26T10:25:23+08:00"
+}
