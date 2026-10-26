@@ -18,8 +18,12 @@ ADB = 'D:/Code/PortingiOS/common/tools/platform-tools/adb.exe'
 FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
 
 
-def require_hardware_review(meta, approvals):
+def require_hardware_review(meta, approvals, observation_repeat=None):
     """Protected profiles require recorded authorization for the exact image."""
+    if observation_repeat is not None:
+        from observation_repeat import validate
+        validate(meta,approvals,observation_repeat,ROOT)
+        return
     review = meta.get('hardware_review')
     if review is None:
         return
@@ -61,14 +65,24 @@ def main():
     parser.add_argument('--image', type=Path, required=True)
     parser.add_argument('--expected-serial', help='local-only camera/collector binding; must equal the independently selected enuma')
     parser.add_argument('--label', required=True, choices=('shim-entry-2s','shim-entry-7s','shim-copy-2s','sec-entry','sec-memory','dxe-entry','dxe-dispatch','dxe-dispatch-return','dxe-queue-entry','dxe-driver-return','gop-probe','android-log-reservation','system-transport'))
+    parser.add_argument('--observation-repeat', choices=('R-021',))
+    parser.add_argument('--execution-id')
+    parser.add_argument('--human-camera-ready', action='store_true')
     parser.add_argument('--boot-clock',action='store_true',help='read-only before/after boot identity and bounded Linux uptime origin; calibration required')
     args = parser.parse_args()
+    if args.observation_repeat and (not args.human_camera_ready or not args.execution_id):
+        raise ValueError('repeat requires confirmed human capture readiness and unique execution identity')
+    if args.observation_repeat:
+        from uuid import UUID
+        if str(UUID(args.execution_id))!=args.execution_id:raise ValueError('invalid repeat execution identity')
+    if not args.observation_repeat and (args.execution_id or args.human_camera_ready):
+        raise ValueError('repeat-only arguments require an explicit observation repeat')
     image = args.image.resolve()
     if not image.is_relative_to((ROOT/'out').resolve()): raise ValueError('image outside own out/')
     meta = json.loads(image.with_suffix('.json').read_text())
     if hashlib.sha256(image.read_bytes()).hexdigest() != meta['image_sha256']: raise ValueError('image changed')
     if meta.get('hardware_review') is not None:
-        require_hardware_review(meta, json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))
+        require_hardware_review(meta, json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')), args.observation_repeat)
     previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
     if previous.get('phase') == 'manual-recovery-needed':
         raise ValueError('Previous probe is not recovered; restore and verify Android before any new trial')
@@ -107,6 +121,8 @@ def main():
     state={'directory':str(out),'recovery_backup_directory':str(backup_dir),'slot':previous['slot'],
            'backups':backups,'candidate':str(image),'candidate_sha256':meta['image_sha256'],'label':args.label,
            'phase':'preflight-complete','preflight_boot_completed':True,'partition_writes':False}
+    if args.observation_repeat:
+        state.update(observation_repeat=args.observation_repeat,execution_id=args.execution_id,human_capture_ready=True)
     def save():
         (ROOT/'out/device-tests/current.local.json').write_text(json.dumps(state,indent=2))
         (out/'result.json').write_text(json.dumps({k:v for k,v in state.items() if k not in ('directory','recovery_backup_directory')},indent=2)+'\n')
@@ -144,6 +160,9 @@ def main():
         time.sleep(1)
     else: raise ValueError('selected enuma absent in fastboot')
     fastboot_identity()
+    if args.observation_repeat:
+        from observation_repeat import claim
+        claim(meta,json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')),args.observation_repeat,ROOT,args.execution_id)
     before=time.monotonic()
     state['phase']='temporary-boot-issued';state['issued_at']=time.strftime('%Y-%m-%d %H:%M:%S')
     state['issued_at_utc']=datetime.now(timezone.utc).isoformat()

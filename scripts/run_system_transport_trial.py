@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 import re
+import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,7 +24,7 @@ def write(path, data):
     path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
 
 
-def qualification(published=False, report=None):
+def qualification(published=False, report=None, observation_repeat=None):
     report = (report or ROOT / 'reports/enuma-ram-payload-qualification.json').resolve()
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
@@ -169,11 +170,15 @@ def qualification(published=False, report=None):
     image = (ROOT / q['image']).resolve()
     if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
         raise ValueError('candidate differs')
+    if observation_repeat:
+        from run_enuma_entry_probe import require_hardware_review
+        require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
+            json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')),observation_repeat)
     if published:
         if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control') or q.get('native_route_cpu_pattern') is True:
             from run_enuma_entry_probe import require_hardware_review
             require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
-                json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')))
+                json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')),observation_repeat)
         if q.get('reason_target'):
             review=json.loads((ROOT/'reports/enuma-video-reason-code.json').read_text())
             matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and x.get('query')==q['reason_query'] and x.get('reason_target')==q['reason_target'] and x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
@@ -189,7 +194,7 @@ def qualification(published=False, report=None):
                 raise ValueError('source/current documents must be pushed before a trial')
             if repo.name == 'firmware' and head != q['firmware_commit']:
                 raise ValueError('firmware checkout differs')
-        if (ROOT / 'out/device-tests' / ('consumed-' + q['image_sha256'] + '.local.json')).exists():
+        if not observation_repeat and (ROOT / 'out/device-tests' / ('consumed-' + q['image_sha256'] + '.local.json')).exists():
             raise ValueError('candidate already issued; do not repeat a failed/consumed image')
     return q, image
 
@@ -253,11 +258,17 @@ def main():
     mode.add_argument('--execute', action='store_true')
     p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback pre-call or return qualification; defaults to full-chain report')
     p.add_argument('--no-camera', action='store_true', help='qualified read-only native route: use ADB/fastboot and calibrated boot clock')
+    p.add_argument('--observation-repeat',choices=('R-021',))
+    p.add_argument('--human-camera-ready',action='store_true')
     a = p.parse_args()
+    if a.observation_repeat and (a.camera_check or a.no_camera):p.error('observation repeat requires the full camera runner')
+    if a.execute and a.observation_repeat and not a.human_camera_ready:p.error('wait for explicit human capture readiness before repeat')
+    if a.human_camera_ready and not a.observation_repeat:p.error('human readiness flag is specific to observation repeat')
+    execution_id=str(uuid.uuid4()) if a.observation_repeat else None
     if a.no_camera and a.camera_check:
         p.error('--no-camera excludes --camera-check')
     if not a.camera_check:
-        q, image = qualification(a.execute, a.qualification)
+        q, image = qualification(a.execute, a.qualification, a.observation_repeat)
         if a.no_camera and q.get('native_route_cpu_pattern') is True:
             p.error('pixel visibility trial requires camera; read-only trials may use --no-camera')
         if not a.execute:
@@ -274,7 +285,7 @@ def main():
     report = dict(scope='host camera preflight; device action only with --execute',
                   started_utc=datetime.now(timezone.utc).isoformat(), camera_ready=False,
                   camera_used=True,
-                  device_runner_started=False, boot_issued=False)
+                  device_runner_started=False, boot_issued=False,observation_repeat=a.observation_repeat,execution_id=execution_id,human_capture_ready=a.human_camera_ready)
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     writer = process = log = collector = collector_log = None
     try:
@@ -296,6 +307,8 @@ def main():
         label = 'dxe-driver-return' if 'detail_point' in q else 'system-transport'
         command = [sys.executable, '-X', 'utf8', '-u', '-B', str(ROOT / 'scripts/run_enuma_entry_probe.py'),
                    '--image', str(image), '--label', label]
+        if a.observation_repeat:
+            command += ['--observation-repeat',a.observation_repeat,'--execution-id',execution_id,'--human-camera-ready']
         if q.get('boot_clock_capture') is True:
             command += ['--boot-clock']
         if q.get('trial_kind') == 'ramoops-canary':
@@ -374,10 +387,15 @@ def main():
         cap.release()
         if report['device_runner_started']:
             state = json.loads((ROOT / 'out/device-tests/current.local.json').read_text())
-            if state.get('candidate_sha256') == q['image_sha256'] and state.get('issued_at'):
+            from observation_repeat import issued_for_attempt,finish
+            issued=(issued_for_attempt(state,q['image_sha256'],a.observation_repeat,execution_id) if a.observation_repeat else state.get('candidate_sha256') == q['image_sha256'] and state.get('issued_at'))
+            if issued:
                 report['boot_issued'] = True
-                write(ROOT / 'out/device-tests' / ('consumed-' + q['image_sha256'] + '.local.json'),
-                      dict(image_sha256=q['image_sha256'], evidence=out.relative_to(ROOT).as_posix(), phase=state['phase']))
+                if a.observation_repeat:
+                    finish(ROOT,a.observation_repeat,execution_id,state,out.relative_to(ROOT).as_posix())
+                else:
+                    write(ROOT / 'out/device-tests' / ('consumed-' + q['image_sha256'] + '.local.json'),
+                          dict(image_sha256=q['image_sha256'], evidence=out.relative_to(ROOT).as_posix(), phase=state['phase']))
         write(out / 'observation.json', report)
         write(ROOT / 'reports/enuma-system-trial-camera.json', report)
         if a.execute:

@@ -1,0 +1,20 @@
+{
+  "scope": "host-only explicit observation-repeat gate; no device calls in tests; original image unchanged",
+  "tests": {
+    "new_gate": 8,
+    "scope_regression": 5,
+    "protected_review_regression": 11
+  },
+  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+  "firmware_commit": "962f8208a9d2eca3bc626db67090e28519e088e6",
+  "original_consumed_marker_sha256": "0dd4d4f6e6b8bca41f17c95af275073d51d7a7e3c1d3857ae09fa5e4871e2d90",
+  "base_result_sha256": "cee8202e0b88efccd0d538f73ce23271b835960745b69c5b5eede3ccab48890e",
+  "source_sha256": {
+    "scripts/observation_repeat.py": "906b7443823591f8bdbd152b34f8af7268e1043c78f4e2b6b06866e5f3015267",
+    "scripts/run_system_transport_trial.py": "87f98eac588ded443816e828e8b877f4f32dd53b7b833569dce60fb718c6a9f4",
+    "scripts/run_enuma_entry_probe.py": "48da1918b54783ab52b8dfad868e9a55fb527303bc086bea110ef48baf118fd7",
+    "tests/test_observation_repeat.py": "e54346b465fc48c3d51dfebbb11dc6757e8fd00a4c892194e17348b60ade744e"
+  },
+  "hardware_executed": false,
+  "human_capture_ready": false
+}
