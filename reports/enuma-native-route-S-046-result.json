@@ -1,0 +1,183 @@
+{
+  "scope": "indirect native-route classification using predeclared calibrated boot-origin windows",
+  "trial": "S-046",
+  "native_route_cpu_roi": true,
+  "native_route_cpu_barrier": true,
+  "maximum_barriers": 3,
+  "native_route_cpu_read": true,
+  "maximum_framebuffer_reads": 3072,
+  "framebuffer_writes": 2048,
+  "cache_maintenance": false,
+  "native_route_cpu_policy": true,
+  "native_route_cpu_attribute": false,
+  "native_route_cpu_stage1": true,
+  "cpu_stage1_only": false,
+  "cpu_memory_data_access": true,
+  "native_route_alpha_view": true,
+  "alpha_semantics_unproven": true,
+  "native_route_global_detail": false,
+  "native_route_global_output": true,
+  "native_route_structure_detail": false,
+  "native_route_structure": true,
+  "native_route_blend": false,
+  "native_border_view": true,
+  "native_route_layout": false,
+  "native_route_detail": false,
+  "native_route_staging": false,
+  "firmware_commit": "c9530a746dbf6efbd7b1d55c020ce63477b8c198",
+  "image_sha256": "743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56",
+  "fd_sha256": "b030d691720e39c4e33ff4758baf37039b91d86e8873aa70dbd26f441f9cb9d0",
+  "consumed": true,
+  "automatic_android_return": true,
+  "observation_valid": true,
+  "boot_returncode": 0,
+  "evidence": "out/device-tests/20261026T094822-system-transport/result.json",
+  "timing": {
+    "issued_at": "2026-10-26 09:48:37",
+    "issued_at_utc": "2026-10-26T01:48:37.107191+00:00",
+    "boot_command_return_seconds": 2.641,
+    "fastboot_disconnect_observed_seconds": 5.109,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 41.406,
+    "boot_complete_seconds": 55.875
+  },
+  "post_boot_clock": {
+    "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+    "boot_id_sha256": "9ef40591c2217413be5bf6894ced0aacca332491e5be39901ce5b82d86848a32",
+    "origin_monotonic_lower": 218700.94799999997,
+    "origin_monotonic_upper": 218701.058,
+    "uncertainty_seconds": 0.11000000001513399,
+    "calibrated_firmware_delay": false,
+    "origin_after_issue_lower": 33.1359999999695,
+    "origin_after_issue_upper": 33.24599999998463
+  },
+  "boot_clock_error": null,
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      0.9
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        14.247999999998138
+      ],
+      [
+        16.25199999997858,
+        19.247999999998136
+      ],
+      [
+        21.25199999997858,
+        24.247999999998136
+      ],
+      [
+        26.25199999997858,
+        29.247999999998136
+      ],
+      [
+        31.25199999997858,
+        34.247999999998136
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
+    "declared_profile": "R-018 two samplers and bounded500ms hold; preissue envelope"
+  },
+  "result": {
+    "conclusion": "route-category-inferred",
+    "category": "cpu-pattern-and-exact-restoration-completed-visibility-unproven",
+    "warning_code": 5,
+    "stop_additional_trials": false,
+    "direct_register_log": false
+  },
+  "boot_id_changed": true,
+  "recovery": {
+    "scope": "read-only recovery reconciliation; no boot, flash or device writes",
+    "time_zone": "Asia/Shanghai",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "prior_phase": "recovered-android-boot-complete",
+    "prior_state_sha256": "1b899b9a4e501bf28e725b168824f3705ebb7096492d3621e2b14a9cfe7d8f67",
+    "failed_trial_preserved": true,
+    "evidence": "out\\device-tests\\20261026T095008-recovery-reconciliation.json"
+  },
+  "camera": {
+    "used": true,
+    "frames": 350,
+    "decoded_frames": 350,
+    "video": "out/camera-capture/20261026T094819-system-transport/system-transport.avi",
+    "sha256": "810f97a724ac36e470ab17d0235ce79ad1f06c1de97724704d72ce19bb07c17a",
+    "raw_media_local_only": true,
+    "audio_recorded": false
+  },
+  "gop_verified": false,
+  "display_maximum_reads": 660,
+  "display_writes": 0,
+  "roi_read_completion_supported": false,
+  "cpu_exception_level_inferred": 1,
+  "single_barrier_completion_supported": false,
+  "single_read_completion_supported": false,
+  "framebuffer_read_execution_count_inferred": 3072,
+  "native_route_cpu_pattern": true,
+  "pixel_scope": {
+    "experiment": "native-roi-contrast-restore-v1",
+    "origin_x": 0,
+    "origin_y": 0,
+    "width": 128,
+    "height": 8,
+    "required_current_el": 1,
+    "hold_us": 500000,
+    "hold_calls_max": 1,
+    "mdp_reads_max": 660,
+    "mdp_wait_calls_max": 4,
+    "mdp_wait_us": 100000,
+    "framebuffer_reads_max": 3072,
+    "framebuffer_writes_max": 2048,
+    "barriers_max": 3,
+    "cache_line_operations": 0,
+    "mdp_base": "0xae00000",
+    "mdp_bytes": "0x85000",
+    "cpu_splash_view_base": "0x9c000000",
+    "cpu_splash_view_bytes": "0x2400000",
+    "final_stage2_unproven": true,
+    "device_smmu_unproven": true,
+    "alpha_semantics_unproven": true,
+    "publish_gop": false,
+    "partition_writes": false,
+    "raw_media_local_only": true
+  },
+  "pixel_transaction_completion_supported": true,
+  "restoration_supported": true,
+  "restoration_not_established": false,
+  "framebuffer_write_execution_count_inferred": 2048,
+  "visible_output_verified": true,
+  "visible_output_scope": "one bounded upper-left white bar only; not GOP/text/full-screen qualification",
+  "visual_evidence": "reports/enuma-s046-visible-output.json"
+}

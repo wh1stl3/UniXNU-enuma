@@ -1281,3 +1281,8 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-279，R-018用户批准与S-046上机门禁
 
 2026-10-26T09:47:31+08:00，前里程碑3be6fbf，固件c9530a7。用户明确批准R-018并要求直接上机，实际像素用相机、原始影音仅本地、按结果继续至硬停。精确镜像743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56和既有scope记录approved，仅一次临时boot的128x8保存/复核/500ms不透明对比色/恢复读回；尚未发图。独立Android/root/A槽/解锁/分区及备份摘要通过，证据out\device-tests\20261026T094641-recovery-reconciliation.json；摄像头预检1920x1080，完整屏幕和原点已查看。当前文档提交推送且即时门通过后直接执行，不再申请本图批准。无MMIO/页表/缓存属性写、新映射、GOP发布、分区操作或verified改变。code4/超时/恢复或必需观测失败即硬停并当轮记录；已发图consumed不重试。
+
+
+## D-280，S-046 CPU事务恢复完成且小白条可见
+
+2026-10-26T09:54:54+08:00，前里程碑e17167d，固件c9530a7。S-046唯一批准R-018镜像743335d2已consumed；origin33.136..33.246秒唯一code5，Android55.875秒自动返回且独立身份/root/A槽/解锁、两分区/备份摘要通过。AVI350帧全部解码，原点白条在frame103/104/105连续出现，102前/106后消失；支持最小区域可见输出，不称UEFI文字/GOP/全屏/菜单或解除22。原始影音仅本地。证据reports/enuma-native-route-S-046-result.json、reports/enuma-s046-visible-output.json、out\device-tests\20261026T095008-recovery-reconciliation.json。无硬停，继续离线安全文字/控制台工作；不重试已发图。

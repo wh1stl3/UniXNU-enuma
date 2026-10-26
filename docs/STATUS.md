@@ -1,27 +1,23 @@
-# 当前状态：D-279，R-018已批准，S-046准备单次上机
+# 当前状态：D-280，S-046最小白条可见，已恢复Android
 
-2026-10-26T09:47:31+08:00。当前验收目标为UEFI固件日志上屏，随后UniXNU菜单。S-045已完成并consumed；新R-018像素事务只完成离线构建/资格/审查，**用户已批准R-018，S-046尚未执行；不是硬件硬停**。详见[R-018范围与选项](operations/2026-10-26-r018-bounded-pixel-transaction.md)。
+2026-10-26T09:54:54+08:00。R-018唯一批准镜像743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56已执行并consumed，不重试。**首次确认本UEFI诊断的最小区域白条可见；尚未显示UEFI文字/日志或UniXNU菜单。** 当前无硬停；继续安全文字输出与控制台接入离线工作。固件c9530a746dbf6efbd7b1d55c020ce63477b8c198，源码/资格和实际代码审查保持归档。
 
-## 已获证据
+## 本次实机结果
 
-S-039稳定逻辑8888描述保留BLEND|ADDRESS|TOPOLOGY=22；S-042覆盖范围每页stage1读写转换恒等NormalWT；S-043一个实际字读取、S-044一个读前DSB、S-045原点128x8全部1024字读取及一个DSB在EL1完成。上述结论由预先声明的校准时间码间接支持，不能称原始数值日志、最终stage2、SMMU、写入、alpha/混合或可见显示通过。
+S-046于2026-10-26 09:48:37+08:00首次发图，fastboot product/slot/unlocked在第0轮通过。临时boot返回0，命令2.641秒、USB断开5.109秒、ADB41.406秒、Android55.875秒。新boot-id三次uptime交集origin33.136..33.246秒，不确定性0.110秒；唯一落入预先声明的code5窗口。code5间接支持该次128x8保存/复核/图案写入/500ms hold/精确恢复读回完成，最多3072load/2048store/3DSB，两次Native6共660MDP读及四次100ms。不是直接寄存器或原始像素值日志。
 
-S-045镜像315f5daa39f5b8a7b1e65edd030243eb179ea88a78713b27c39f3b08a8760f1e，origin27.462..27.522秒，Android49.172秒。首次发图前身份查询拒绝，恢复核验后按D-233仅重入一次，完整身份门通过才首次发图；现已consumed，历史preissue未发图状态不代表当前未消耗。证据reports/enuma-native-route-S-045-result.json。S-001..045全部consumed，不重试。
+本地AVI350帧全部解码；完整屏幕/原点在画面内，已人工检查全程时间线和原分辨率目标区域。frame102(21.891s)无白条，103/104/105(22.094/22.313/22.516s)连续可见左上白条，106(22.719s)消失。可见样本跨度0.422s，开关外侧括区0.828s，与500ms实验相容，不能称精确测得持续时间或亮度。CPU code5独立支持保存值恢复，录像只支持视觉出现/消失和Android恢复。
 
-## 当前候选
+实测reports/enuma-native-route-S-046-result.json；可见输出文字证据reports/enuma-s046-visible-output.json。原始AVI/JPG、裁图和本地检查图仅out/camera-capture/20261026T094819-system-transport，AVI SHA256810f97a724ac36e470ab17d0235ce79ad1f06c1de97724704d72ce19bb07c17a；不上传、不录音。
 
-固件 `c9530a746dbf6efbd7b1d55c020ce63477b8c198`；镜像 `743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56`；归档 `out/inherited-gop/qualified-native-cpu-pattern-c9530a7`。R-018最多128x8保存/复核/不透明对比色500ms/完整恢复读回，3072像素读、2048像素写、3DSB、660MDP只读及四次100ms采样等待。仅EL1、同次完整Native6和整段恒等NormalWT与精确Frame门通过才尝试store；保留22与所有未证明义务。
+## 设备与限制
 
-主机失败注入、实际Arm回调编译、14项native、12项历史pixel及10项FD策略测试、真实PE/Core手工审查、FD/完整FAT/Boot v3及控制台绑定完成。报告reports/enuma-pixel-transaction-host.json、enuma-native-route-qualification.json、enuma-native-route-code.json、enuma-console-path-audit.json。所有结果为离线资格，零本候选设备操作。reports/enuma-r018-preexecution-gate.json保留批准前拒绝事件，批准后精确image/scope主机检查通过。
+独立恢复证据 `out\device-tests\20261026T095008-recovery-reconciliation.json`：Android完成/root/A槽/解锁，boot_a/vendor_boot_a和本地备份摘要一致。S-001..046全部consumed；R-018现consumed，不重复此图或复用单图批准。镜像发出前的身份异常仍沿D-233可控恢复后仅一次重入；此次没有发生预启动拒绝。
 
-## 观察、恢复与下一步
+主判断：继承扫描输出和CPU候选视图至少在左上小区域能够产生可见结果，“完全不能通过此视图改屏”的解释已被本次反驳。它不证明全屏/右半/其他颜色或持续绘制，不清BLEND|ADDRESS|TOPOLOGY=22，也不证明通用alpha语义、EL1最终stage2或设备SMMU等价。不能将正式GOP或菜单标verified。
 
-按用户最新偏好，**点屏之前的只读探针不使用摄像头**；用选定enuma的ADB/fastboot状态、新boot-id/三次uptime区间和独立恢复摘要判定分类/恢复。它们不证明实际显示；只有图案、背光或画面验收才启用摄像头。原始影音仅本地out，禁止上传/录音。
+## 下一步
 
-最新2026-10-26T09:47:31+08:00独立恢复核验 `out\device-tests\20261026T094641-recovery-reconciliation.json`：Android完成、root/A槽/解锁、boot_a/vendor_boot_a和本地备份摘要一致。摄像头主机预检通过，1920x1080，已查看本地90度顺时针图像，完整屏幕及左上原点在画面内；未开始设备runner。原始图像仅本地out/camera-capture/20261026T094557-system-transport。
+先完成mask-aware不透明绘制/文字输出与控制台安全接入离线审查、主机测试和构建。当前正式GOP要求requirements0；本次小白条不解除22，不能直接把它发布给GraphicsConsole触发SetMode/全屏清屏。全局DEBUG为Null SerialPort，还需独立安全日志接收或RAM重放；Print/DiagDraw和菜单已打包但当前Core早于BDS返回，未执行。详细验收矩阵见operations/2026-10-26-uefi-console-menu-validation.md。
 
-用户本轮明确“批准 R-018，直接上机验证，点屏实验用摄像头记录，原始影音只留本地。按结果继续推进，触发硬停再停，注意文档落地、提交推送”。批准精确镜像743335d2的一次128x8/500ms保存/重验证/图案/恢复事务，config/hardware-review-approvals.json为approved，不复用R-005。全部当前文档提交推送、即时身份/备份/恢复/摄像头门通过后，直接执行S-046一次临时boot，不再询问。
-
-code4恢复未建立、75秒无识别恢复、实际恢复失败、所需相机/时基失败或时间码歧义时停止追加启动，当轮落实原因/模式/恢复/结果并提交推送。发图前身份查询异常按D-233恢复核验后仅重入一次，镜像未发出不算consumed；不忽略FAILED，不重试任何已发图。有效负分类继续隔离，像素单图授权不扩张到新像素镜像/寄存器/映射/分区/verified；已授权只读推进和离线工作继续。
-
-控制台/菜单源码已存在并打包，但本诊断早于BDS返回，均未实测。全局DEBUG当前空SerialPort；还需安全GOP发布、mask/alpha绘制适配及屏幕日志接收/重放，见[验收矩阵](operations/2026-10-26-uefi-console-menu-validation.md)。本阶段尚未点屏，不以iPadOS图形作验收。更早记录保留WORKLOG/DECISIONS/operations，不叠为当前状态。
+只读前置用ADB/fastboot和校准时序，不采相机；实际图案/文字/背光验收才连续本地记录。当前没有恢复按键待办。用户要求按结果推进至硬停；有效code5/可见结果不是硬停。新像素范围/镜像不自动继承本次单图许可，离线工作与已有只读授权继续。code4恢复未建立、75秒无识别恢复、恢复失败、所需观测/时基失败或码歧义时停止追加启动并当轮交接、提交推送；无需等待下一次提醒才落地。

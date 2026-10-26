@@ -1,0 +1,36 @@
+{
+  "scope": "Manual review of local camera video, whole display timeline and upper-left before/during/after native-resolution crops; raw media remains local",
+  "video": "out/camera-capture/20261026T094819-system-transport/system-transport.avi",
+  "video_sha256": "810f97a724ac36e470ab17d0235ce79ad1f06c1de97724704d72ce19bb07c17a",
+  "frames": 350,
+  "decoded_frames": 350,
+  "manually_reviewed": true,
+  "visible_white_bar_observed": true,
+  "region": "small upper-left rectangle consistent with the bounded native ROI; exact pixel geometry is not a camera measurement",
+  "preceding_frame": 102,
+  "visible_frames": [
+    103,
+    104,
+    105
+  ],
+  "following_frame": 106,
+  "sampled_timestamps_seconds": {
+    "101": 21.687999999994645,
+    "102": 21.890999999974156,
+    "103": 22.09399999998277,
+    "104": 22.312999999994645,
+    "105": 22.515999999974156,
+    "106": 22.71899999998277
+  },
+  "visible_sample_span_seconds": 0.422,
+  "on_off_edge_outer_bracket_seconds": 0.828,
+  "conclusion": "A white bar appears in three consecutive samples and disappears after the transaction; CPU code5 separately supports exact saved-data restoration",
+  "brightness_calibrated": false,
+  "exact_hold_duration_measured": false,
+  "full_display_verified": false,
+  "gop_verified": false,
+  "uefi_text_verified": false,
+  "raw_media_local_only": true,
+  "audio_recorded": false,
+  "reviewed_at": "2026-10-26T09:54:54+08:00"
+}

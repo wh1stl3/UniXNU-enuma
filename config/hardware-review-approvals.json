@@ -88,7 +88,7 @@
     "execution_record": "reports/enuma-ramoops-S-018-result.json"
   },
   "R-018": {
-    "status": "approved",
+    "status": "consumed",
     "scope": "One exact-image bounded128x8 EL1 save/revalidate/contrast500ms/restore/readback experiment",
     "image_sha256": [
       "743335d25d8cbd4b590acc462081fd992e5d4b32c0bcb234386033d13af08b56"
@@ -122,6 +122,9 @@
     },
     "authorization": "2026-10-26 Asia/Shanghai: human user explicitly approved R-018, direct hardware verification, camera for pixel experiment, raw media local only; proceed by results and stop on hard-stop conditions.",
     "proposal": "docs/operations/2026-10-26-r018-bounded-pixel-transaction.md",
-    "authorized_at": "2026-10-26T09:47:31+08:00"
+    "authorized_at": "2026-10-26T09:47:31+08:00",
+    "execution_record": "reports/enuma-native-route-S-046-result.json",
+    "visual_execution_record": "reports/enuma-s046-visible-output.json",
+    "consumed_at": "2026-10-26T09:54:54+08:00"
   }
 }
