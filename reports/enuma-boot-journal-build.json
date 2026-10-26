@@ -1,0 +1,25 @@
+{
+  "scope": "offline full FD build and actual DXE compiler/staging binding only; no image packaging or device execution",
+  "firmware_commit": "b2ce0befab9d7938a52b5c381bc4a9e5d93b29c0",
+  "fd_sha256": "f0c0608f597192c0589db8eb62fffd2c9532233c7a2f71874050e16da16ffc03",
+  "fd": "out/firmware-build/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd",
+  "boot_journal": {
+    "enabled": true,
+    "scope": "DXE-local RAM only",
+    "capacity": 128,
+    "screen_sink": false,
+    "global_debug": false,
+    "actual_core_cc_define": "-DENUMA_BOOT_JOURNAL=1",
+    "core_makefile_sha256": "ab79b7cfb5be85398e4de7020eac5b825412b0a419006164c9294275855c21f1",
+    "core_cc_response_sha256": "ceb68974feed31cf6d0157dc0952d8b712de42097f397673078a2482b885d1ba",
+    "staged_header_sha256": "eb48820349ea1b6b9b8e1ec7dac6d853e894bca1dcf11d8dd3d7551e210cbb51",
+    "core_pe_sha256": "5a20538ff9e8596b7aa63ce79935c93a0b8240343b3c0387e113ceb8c9c731e7"
+  },
+  "core_patch_reversion_checked": true,
+  "full_build_report_sha256": "2bfe617d60ab418de997da870f274ca53042f0a4bacf1b746fa107ba4e8f54a3",
+  "hardware_executed": false,
+  "pixel_access": false,
+  "global_debug_connected": false,
+  "console_connected": false,
+  "hardware_candidate": false
+}

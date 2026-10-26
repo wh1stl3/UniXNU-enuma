@@ -1306,3 +1306,8 @@ D-276预启动补充：S-045首次发图前fastboot身份门禁拒绝，镜像�
 ## D-284，用户主线纠偏与安全交接结束写入
 
 2026-10-26T10:37:59+08:00，前里程碑afbfa49，固件bb60fb0。S-047固定UEFI字样正常显示后，用户明确不再继续该功能验证，转向UEFI固件开发和真实日志打印。随后用户授权安全收尾、保存证据/状态/完整交接，不开启新实验或实现，交出写入权等待唯一接续会话。最终只读核验out\device-tests\20261026T103544-recovery-reconciliation.json通过，Android完成/root/A槽/解锁/设备与本地备份摘要一致；无活动设备操作/相机/恢复/构建，无设备硬停。没有R-020候选、没有日志源码实现或新镜像；后续仅只读审查。现有S-047证据、consumed授权、未验证边界和源码入口写入STATUS/HANDOFF/交接词。收尾只提交文档与脱敏恢复报告，nuwa不动、原始影音仅本地。提交推送且确认清洁后本会话结束，不再写入。
+
+
+## D-285，真实DXE状态记录离线里程碑与当前授权边界
+
+2026-10-26T03:04:58.537652+00:00，基线fecd938，固件b2ce0befab9d7938a52b5c381bc4a9e5d93b29c0。用户委派唯一新写入会话，目标日志上屏与后续菜单，本轮先离线。新增默认关闭128条DXE RAM状态日志、完整status/GUID、快照/逐行可拒绝回放；接过滤前真实检查点，不动终端与Null SerialPort。主机和AArch64验证、完整FD真实宏/staging绑定通过。首次缺C宏构建不计资格；修复加入后断言并用volatile防LTO消除未消费日志。非PIE ASan/UBSan通过，PIE间歇SIGSEGV根因未定。无新设备命令/摄像头/镜像打包，实际模式未新鲜核验；S-001..047/R-018/R-019 consumed。屏幕sink/跨模块协议/全局DEBUG/ConOut/GOP/菜单未通过，不提升22/alpha/SMMU/verified。后续先离线完成真实快照有界回放及精确预算，再提出新批准；不把本轮一般开发授权当新硬件批准。证据reports/enuma-boot-journal-tests.json、reports/enuma-boot-journal-build.json及operations/2026-10-26-dxe-status-journal.md。本轮仅本地提交，未推送，无设备硬停。
