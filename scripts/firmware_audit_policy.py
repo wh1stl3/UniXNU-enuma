@@ -11,17 +11,19 @@ def omitted_oem_modules(build, fd_sha256):
     pattern=build.get('native_route_cpu_pattern',False)
     text=build.get('native_route_cpu_text',False)
     replay=build.get('boot_log_replay',False)
+    hold=build.get('boot_log_hold_seconds',2) if replay else 2
     defs=build.get('firmware_configuration',{}).get('defines',{})
     if type(text) is not bool or (text and not pattern) or defs.get('ENUMA_NATIVE_ROUTE_CPU_TEXT','0')!=str(int(text)): raise ValueError('unsupported native text declaration')
     if type(pattern) is not bool or defs.get('ENUMA_NATIVE_ROUTE_CPU_PATTERN','0')!=str(int(pattern)):
         raise ValueError('unsupported native pixel declaration')
+    if hold not in (2,8) or (hold==8 and defs.get('ENUMA_BOOT_LOG_HOLD_US')!='8000000'): raise ValueError('unsupported cached hold duration')
     if type(replay) is not bool or (replay and (not pattern or text or defs.get('ENUMA_BOOT_LOG_REPLAY')!='1' or defs.get('ENUMA_BOOT_JOURNAL')!='1')): raise ValueError('unsupported cached replay declaration')
     if pattern:
         required=['ENUMA_NATIVE_ROUTE_CPU_ROI','ENUMA_NATIVE_ROUTE_CPU_BARRIER','ENUMA_NATIVE_ROUTE_CPU_READ',
                   'ENUMA_NATIVE_ROUTE_CPU_POLICY','ENUMA_NATIVE_ROUTE_CPU_STAGE1','ENUMA_NATIVE_ROUTE_ALPHA_VIEW',
                   'ENUMA_NATIVE_ROUTE_GLOBAL_OUTPUT','ENUMA_NATIVE_ROUTE_STRUCTURE','ENUMA_NATIVE_ROUTE_AUDIT']
         contract=build.get('inherited_video_compiled_contract',{})
-        if (video is not False or build.get('hardware_review_required')!=('R-020' if replay else 'R-019' if text else 'R-018') or
+        if (video is not False or build.get('hardware_review_required')!=('R-022' if replay and hold==8 else 'R-020' if replay else 'R-019' if text else 'R-018') or
             any(defs.get(k)!='1' for k in required) or
             any(type(contract.get(k)) is not type(v) or contract.get(k)!=v for k,v in dict(maximum_read_callbacks=660,maximum_wait_calls=5,
                 maximum_framebuffer_reads=73728 if replay else 12288 if text else 3072,framebuffer_writes=49152 if replay else 8192 if text else 2048,pixel_access=True,

@@ -1,0 +1,21 @@
+{
+  "scope": "manual disassembly reviewed and fixed offsets/data checked for this exact R-022 PE pair",
+  "image_sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
+  "firmware_commit": "8680ea79d6fd14d4526d314f430e9812955cb78a",
+  "provider_sha256": "d60b05086b19bcb5477f047b10febd2baa7c84aab240367e0e122b407d309f9b",
+  "core_sha256": "753ff2dd2444aeec2404c149c32771933f71d84dcb5e3b371261f7f1c15fb6da",
+  "reviewed_disassembly_sha256": "e23b12cdeeea632ceec769d97d22d1eecbc51f267f89f6bafab2d444a11f5f38",
+  "actual_entry_stack_bytes": 98832,
+  "core_snapshot_copy_bytes": 6168,
+  "observations": [
+    "private GUID identical in Core/provider; v1/bytes and EFIAPI snapshot checked before page",
+    "newest point13 filtered; full status high/low and ordinal read from actual snapshot offsets",
+    "24576-word save and pattern/verify/restore/readback loops; row<96 and column byte offset<1024; read/write counters bound",
+    "three DSB; hold immediate0x7a1200; complete restoration attempted despite rejected callbacks",
+    "actual mask-aware glyph bytes20x5 match source; no direct cache-line or translation-table setter instructions",
+    "Core publish attempted flag before install; true event status stored before same exact GUID-only warning1..5 cold terminal"
+  ],
+  "hardware_executed": false,
+  "gop_admitted": false,
+  "global_debug": false
+}

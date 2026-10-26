@@ -5,7 +5,7 @@
     "image_sha256": [
       "c81def7defd58f55beb7b3c22161b3314fb20b49d98057279074d0ea385df534"
     ],
-    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated \u93b5\u7470\u566fR005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification.",
+    "authorization": "2026-10-24 Asia/Shanghai: user explicitly stated 鎵瑰噯R005 in the takeover chat; scope is the documented c73eb6e step13 single temporary preview after matching step12 control and recovery/camera gates. Exact image digest is bound only after full offline qualification.",
     "execution_record": "reports/enuma-r005-device.json"
   },
   "R-017": {
@@ -23,7 +23,7 @@
       "reset": "warm-with-cold-fallback",
       "pmsg_access": false
     },
-    "authorization": "User explicitly instructed \u4e0a\u673a\u65e0\u9700\u6279\u51c6 \u76f4\u63a5\u8fdb\u884c \u6ce8\u610f\u4f7f\u7528\u6444\u50cf\u5934\u8bb0\u5f55\u5173\u952e\u8282\u70b9 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
+    "authorization": "User explicitly instructed 上机无需批准 直接进行 注意使用摄像头记录关键节点 after the exact R-017 A proposal; no partition/verified/pmsg expansion.",
     "qualification": "reports/enuma-ramoops-canary-qualification.json",
     "execution_record": "reports/enuma-ramoops-S-015-result.json"
   },
@@ -225,7 +225,7 @@
     "base_trial": "S-048",
     "trial": "S-049",
     "allow_consumed_image": true,
-    "user_authorization": "\u660e\u786e\u6388\u6743\u539f\u955c\u50cf\u4ec5\u8865\u62cd\u4e00\u6b21",
+    "user_authorization": "明确授权原镜像仅补拍一次",
     "image_sha256": [
       "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf"
     ],
@@ -272,10 +272,57 @@
     "proposal": "docs/operations/2026-10-26-r021-human-capture-repeat.md",
     "capture_mode": "human-primary-only",
     "host_camera_required": false,
-    "capture_arrangement_authorization": "\u7528\u6237\u539f\u6587\uff1a\u91cd\u8dd1enuma \u6211\u6765\u62cd\u6444\u5c4f\u5e55\uff1b\u540e\u660e\u786e\uff1a\u4e3b\u673a\u6444\u50cf\u5934\u6e05\u6670\u5ea6\u4e0d\u8db3\u5df2\u65ad\u5f00\u3002",
+    "capture_arrangement_authorization": "用户原文：重跑enuma 我来拍摄屏幕；后明确：主机摄像头清晰度不足已断开。",
     "capture_mode_updated_at": "2026-10-26T12:27:12.637384+08:00",
     "consumed_at": "2026-10-26T12:36:34.613333+08:00",
     "execution_record": "reports/enuma-native-route-S-049-result.json",
     "observation_outcome": "user reports defocus/merged strokes and2s insufficient to focus; no reliable status values"
+  },
+  "R-022": {
+    "status": "pending",
+    "image_sha256": [
+      "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b"
+    ],
+    "firmware_commit": "8680ea79d6fd14d4526d314f430e9812955cb78a",
+    "pixel_scope": {
+      "experiment": "native-dxe-cached-return-replay-8s-v1",
+      "origin_x": 0,
+      "origin_y": 0,
+      "width": 256,
+      "height": 96,
+      "required_current_el": 1,
+      "hold_us": 8000000,
+      "hold_calls_max": 1,
+      "mdp_reads_max": 660,
+      "mdp_wait_calls_max": 4,
+      "mdp_wait_us": 100000,
+      "framebuffer_reads_max": 73728,
+      "framebuffer_writes_max": 49152,
+      "barriers_max": 3,
+      "cache_line_operations": 0,
+      "mdp_base": "0xae00000",
+      "mdp_bytes": "0x85000",
+      "cpu_splash_view_base": "0x9c000000",
+      "cpu_splash_view_bytes": "0x2400000",
+      "final_stage2_unproven": true,
+      "device_smmu_unproven": true,
+      "alpha_semantics_unproven": true,
+      "publish_gop": false,
+      "partition_writes": false,
+      "raw_media_local_only": true,
+      "source": "Core point13 actual return snapshot",
+      "font": "three-by-five-hex",
+      "scale": 4,
+      "rows": 3,
+      "columns": 16,
+      "global_debug": false,
+      "cached_replay": true
+    },
+    "capture_mode": "human-primary-only",
+    "human_capture_required": true,
+    "host_camera_required": false,
+    "proposal": "docs/operations/2026-10-26-r022-eight-second-log-observation.md",
+    "trial": "S-050",
+    "authorization": null
   }
 }

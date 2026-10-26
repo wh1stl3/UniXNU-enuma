@@ -41,6 +41,22 @@ class PixelScopeTests(unittest.TestCase):
         self.assertEqual(plan['sampler_seconds'],[0,2.4])
         for a,b in zip(plan['code_windows_after_issue'],plan['code_windows_after_issue'][1:]):self.assertLess(a[1],b[0])
 
+    def test_extended_hold_pass_window_unique_and_all_failures_stop(self):
+        from native_pixel_scope import LONG_LOG_SCOPE
+        self.assertEqual(LONG_LOG_SCOPE['hold_us'],8000000)
+        self.assertEqual(LONG_LOG_SCOPE['width'],256)
+        self.assertEqual(LONG_LOG_SCOPE['framebuffer_writes_max'],49152)
+        plan=make_pixel_plan(Path(__file__).resolve().parents[1],'R-022')
+        self.assertTrue(plan['success_only'])
+        windows=plan['code_windows_after_issue']
+        self.assertGreater(windows[4][0],max(w[1] for w in windows[:4]))
+        flags=dict(structure=True,global_output=True,alpha_view=True,cpu_stage1=True,cpu_policy=True,cpu_read=True,cpu_barrier=True,cpu_roi=True,cpu_pattern=True)
+        for n,(lo,hi) in enumerate(windows,1):
+            middle=(lo+hi)/2
+            result=decode(dict(origin_after_issue_lower=middle,origin_after_issue_upper=middle+.01),plan,**flags)
+            self.assertEqual(result['stop_additional_trials'],n!=5)
+            if n==5:self.assertEqual(result['warning_code'],5)
+
     def test_camera_free_rejected_before_device(self):
         with patch.object(runner.subprocess,'run') as called,self.assertRaises(ValueError):
             runner.run_without_camera(dict(native_route_cpu_pattern=True,trial_kind='native-video-route',

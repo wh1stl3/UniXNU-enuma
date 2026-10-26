@@ -4,33 +4,33 @@
   "native_control": false,
   "boot_clock_capture": true,
   "review_required": false,
-  "scope": "R-020 cached Core point13 return status snapshot;256x96,2s,save/revalidate/verify/restore/readback; no GOP,ConOut,MMIO/map/cache writes",
-  "firmware_commit": "962f8208a9d2eca3bc626db67090e28519e088e6",
-  "archive": "out/inherited-gop/qualified-dxe-log-r020-962f820",
+  "scope": "R-022 new software: same real cached return page and256x96 rectangle; hold8s, unchanged save/revalidate/verify/restore/readback and73728loads/49152stores/3DSB",
+  "firmware_commit": "8680ea79d6fd14d4526d314f430e9812955cb78a",
+  "archive": "out/inherited-gop/qualified-dxe-log-8s-8680ea7",
   "files": {
     "image.img": {
-      "sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+      "sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
       "bytes": 103817216
     },
     "image.json": {
-      "sha256": "52aad15b9779a8600ff183e412bd65de547a4c55e2a14660518df0d4a1be00db",
-      "bytes": 1843
+      "sha256": "60f887c2781392fb0b94465a1a6573e8ce3335088b124d1357f16ae9366d60b3",
+      "bytes": 1846
     },
     "SILICIUM_UEFI.fd": {
-      "sha256": "57d94260b69ee1a19df285902ab539591fb3e1787e0b374e5194ac05393be884",
+      "sha256": "7bee85343b6f8837c1081f5cb08db939facfc1ec084c6f498d918ded1e02f035",
       "bytes": 3145728
     },
     "enuma-uefi.raw": {
-      "sha256": "a985c0a665338fde64aa60613c9659194da0e46b6fa607ca55ed513e6523f13d",
+      "sha256": "a4863cb70e2e7d93e24fc176472f941f48e8e3d4daf4f8e8dad7ead1ae0be9b3",
       "bytes": 3145920
     },
     "SimpleFbDxe.efi": {
-      "sha256": "203677990bb4d3bd11738b3e0910d3b78b61f477b427d395cf60fd083d0c97c2",
+      "sha256": "d60b05086b19bcb5477f047b10febd2baa7c84aab240367e0e122b407d309f9b",
       "bytes": 23040
     },
     "provider.cc_resp.txt": {
-      "sha256": "3ddf742e3df086077d07583c8583eff9da371badde1b2a6251f4273e46e9c8a0",
-      "bytes": 4236
+      "sha256": "ba527c16d2e94d540790217469a1ce8c6e396f77ac03df0f21cc0932a0cdaec2",
+      "bytes": 4269
     },
     "entry.c": {
       "sha256": "71553866952d41009898f67263d3a420fac34088cb3cd2dbfc1687d290ab2521",
@@ -49,8 +49,8 @@
       "bytes": 1268
     },
     "core.cc_resp.txt": {
-      "sha256": "ea9e3bb5570ee7561b95d2ab42292d34c32f20a67fa47f8778511594a51eb71f",
-      "bytes": 5157
+      "sha256": "9ed632e3b12a34792945126ba287eef5fc6fca64363ebcac6c7e7adfdd6c13ef",
+      "bytes": 5190
     },
     "EnumaDispatchDetailCheckpoint.h": {
       "sha256": "3951994b81ceaff5a349afedc93cbcb31ac0010907b19abecaabee3d51e68e2e",
@@ -69,11 +69,11 @@
       "bytes": 4527
     },
     "firmware-build.json": {
-      "sha256": "eddf57e30176c5df11615a8d5986419daf3eab17dac3e22a71b6b28b5e5d3bfb",
-      "bytes": 24480
+      "sha256": "1fae735c5bbf07e69a117f3296c07c4b74d5737a4d426611e7256cfe0fc1e644",
+      "bytes": 24553
     },
     "fd-audit.json": {
-      "sha256": "6b17c85c92253f21e8859b1a121308def0fd9373665466d12f53a567d33e3bb0",
+      "sha256": "6c0b091f5c9289392756e1f4923b14748e7f6b1adb86e94da3931e562bc242e8",
       "bytes": 4326
     },
     "host-tests.json": {
@@ -113,8 +113,8 @@
       "bytes": 10348
     },
     "PixelTransaction.h": {
-      "sha256": "a02da8c3dd63de2deba496a7744bc3d9ba9f35d855e5b00f71d172dd6e7a7d39",
-      "bytes": 5303
+      "sha256": "bd36e783989b7bbdba8495321900b0c5c37f4eda24c8e71b112ab800b0236682",
+      "bytes": 5521
     },
     "PixelText.h": {
       "sha256": "a42c3d58ce581511dd66175f8f7dffeaabe968fc55925c0ee806a96c85fe9c89",
@@ -145,7 +145,7 @@
       "bytes": 907
     },
     "pixel-host-tests.json": {
-      "sha256": "977ca3843f01dc3dddb5f5a1214f7c53631c926876d1d539fa024894d9679080",
+      "sha256": "eae4ea459c9dc6da84dd74acf6ac28a9f15c81c32be51d31bc64b7abf2e47114",
       "bytes": 1845
     },
     "EnumaPixelTransactionArm.h": {
@@ -165,11 +165,11 @@
       "bytes": 2341
     },
     "log-replay-host.json": {
-      "sha256": "20679600147ffba41c8ed4e9cb54590f170b74528bb2e6fa6b6963c1c687df3a",
-      "bytes": 2162
+      "sha256": "5b39a9679f7240b10c3a9fd6e408e72c83e73442f33c7366f88d0278683910b6",
+      "bytes": 3427
     },
     "SimpleFbDxe.disassembly.txt": {
-      "sha256": "2e2eb0f1a2d199c318b27980912880a9c76323b5072e9e502d23f8a80aa8206c",
+      "sha256": "66ef5df21610fca449ed036ae9837dc79b5be118bb255fbb8a69255120836ec2",
       "bytes": 87276
     },
     "DxeCore.disassembly.txt": {
@@ -177,8 +177,8 @@
       "bytes": 719768
     }
   },
-  "image": "out/inherited-gop/qualified-dxe-log-r020-962f820/image.img",
-  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+  "image": "out/inherited-gop/qualified-dxe-log-8s-8680ea7/image.img",
+  "image_sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
   "ram_payload_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773",
   "maximum_reads": 660,
   "maximum_wait_calls": 5,
@@ -193,7 +193,7 @@
     "kernel_bytes": 3145920,
     "ramdisk_bytes": 100663296,
     "os_version_field": 0,
-    "kernel_sha256": "a985c0a665338fde64aa60613c9659194da0e46b6fa607ca55ed513e6523f13d",
+    "kernel_sha256": "a4863cb70e2e7d93e24fc176472f941f48e8e3d4daf4f8e8dad7ead1ae0be9b3",
     "ramdisk_sha256": "49b4d6229e88180c338eb41a347f8ecf9572ba60c7efc476ccf4573936818773"
   },
   "terminal_return": {
@@ -206,7 +206,7 @@
     ],
     "completion_fallback": false
   },
-  "result_interpretation": "Same pixel first-result codes1..5. Code1 also includes journal protocol/snapshot/no-return refusal. Code5 supports CPU transaction/restoration only; camera independently judges actual cached status text. Max73728loads/49152stores/3DSB,660MDP/four100ms plus2s hold. Predeclared total sampler/hold envelope0..2.4s. No old consumed authorization reused.",
+  "result_interpretation": "8s intended hold, same five Core warning delays. Only unique code5 plus independent recovery supports transaction/restoration; codes1..4 and any overlapping/ambiguous timing stop. Pass window uses nominal8s minimum plus two-window0..0.4s envelope; fail windows conservatively allow0..8.4s. Human readable content remains independent. No old repeat authority reused.",
   "native_border_view": true,
   "native_route_audit": true,
   "native_route_detail": false,
@@ -234,28 +234,28 @@
     "tolerance_seconds": 1,
     "sampler_seconds": [
       0,
-      2.4
+      8.4
     ],
     "code_windows_after_issue": [
       [
         11.25199999997858,
-        15.747999999998138
+        13.747999999998138
       ],
       [
         16.25199999997858,
-        20.747999999998136
+        26.747999999998136
       ],
       [
         21.25199999997858,
-        25.747999999998136
+        31.747999999998136
       ],
       [
         26.25199999997858,
-        30.747999999998136
+        36.747999999998136
       ],
       [
-        31.25199999997858,
-        35.747999999998136
+        39.25199999997858,
+        41.747999999998136
       ]
     ],
     "source_trials": [
@@ -265,7 +265,9 @@
     "full_interval_containment": true,
     "uncertainty_limit_seconds": 0.25,
     "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
-    "declared_profile": "R-020 two samplers and bounded2s hold; preissue envelope"
+    "success_only": true,
+    "declared_profile": "R-0228s hold;unique-code5-only,failures/overlap stop;preissue windows",
+    "failure_windows_may_overlap": true
   },
   "calibration_sha256": "48eaaaea519da34dd0eb52186807e9e8b7fa1180dc70d5ff1685f70a8814dacb",
   "result_categories": {
@@ -291,17 +293,17 @@
   "roi_height": 96,
   "cpu_context_on_completion": false,
   "required_current_el": 1,
-  "hold_us": 2000000,
+  "hold_us": 8000000,
   "hold_calls_max": 1,
-  "hardware_review": "R-020",
+  "hardware_review": "R-022",
   "pixel_scope": {
-    "experiment": "native-dxe-cached-return-replay-v1",
+    "experiment": "native-dxe-cached-return-replay-8s-v1",
     "origin_x": 0,
     "origin_y": 0,
     "width": 256,
     "height": 96,
     "required_current_el": 1,
-    "hold_us": 2000000,
+    "hold_us": 8000000,
     "hold_calls_max": 1,
     "mdp_reads_max": 660,
     "mdp_wait_calls_max": 4,
@@ -331,6 +333,7 @@
   "camera_required": true,
   "execution_approval_required": true,
   "boot_log_replay": true,
+  "boot_log_hold_seconds": 8,
   "boot_journal": true,
   "cached_replay": true,
   "global_debug": false

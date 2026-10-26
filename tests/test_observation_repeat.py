@@ -88,6 +88,22 @@ class ObservationRepeatTests(unittest.TestCase):
   q=dict(boot_log_replay=True,trial_kind='native-video-route',hardware_review='R-020',image_sha256=repeat.IMAGE)
   with patch.object(runner,'ROOT',self.root),patch.object(entry_probe,'ROOT',self.root),patch.object(runner.subprocess,'run',return_value=SimpleNamespace(returncode=1)),self.assertRaises(RuntimeError):runner.run_with_human_capture(q,image,'R-021',str(uuid.uuid4()),True)
   report=json.loads((self.root/'reports/enuma-system-trial-observation.json').read_text());self.assertFalse(report['boot_issued']);self.assertFalse(repeat.used_path(self.root,'R-021').exists())
+ def test_new_eight_second_candidate_does_not_reuse_repeat_claim(self):
+  from types import SimpleNamespace
+  from native_pixel_scope import LONG_LOG_SCOPE
+  newhash='b'*64;meta=dict(hardware_review='R-022',image_sha256=newhash,pixel_scope=LONG_LOG_SCOPE)
+  self.approvals['R-022']=dict(status='approved',image_sha256=[newhash],pixel_scope=LONG_LOG_SCOPE,capture_mode='human-primary-only')
+  (self.root/'config/hardware-review-approvals.json').write_text(json.dumps(self.approvals))
+  image=self.root/'out/new-eight.img';image.with_suffix('.json').write_text(json.dumps(meta))
+  q=dict(boot_log_replay=True,boot_log_hold_seconds=8,trial_kind='native-video-route',hardware_review='R-022',image_sha256=newhash)
+  def fake_run(*args,**kwargs):
+   (self.root/'out/device-tests/current.local.json').write_text(json.dumps(dict(candidate_sha256=newhash,issued_at='now',phase='recovered-android-boot-complete')))
+   return SimpleNamespace(returncode=0)
+  old=self.marker.read_bytes()
+  with patch.object(runner,'ROOT',self.root),patch.object(entry_probe,'ROOT',self.root),patch.object(runner.subprocess,'run',side_effect=fake_run):runner.run_with_human_capture(q,image,None,str(uuid.uuid4()),True)
+  self.assertTrue((self.root/'out/device-tests'/('consumed-'+newhash+'.local.json')).exists())
+  self.assertFalse(repeat.used_path(self.root,'R-021').exists());self.assertEqual(self.marker.read_bytes(),old)
+
  def test_claim_invalid_execution_identity_does_not_consume(self):
   with self.assertRaises(ValueError):repeat.claim(self.meta,self.approvals,'R-021',self.root,'invalid')
   self.assertFalse(repeat.used_path(self.root,'R-021').exists())

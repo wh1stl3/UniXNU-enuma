@@ -134,9 +134,9 @@ def qualification(published=False, report=None, observation_repeat=None):
             expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_PATTERN_CATEGORIES if cpu_pattern else CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
         if route and cpu_pattern:
             from native_pixel_scope import scope_for_review
-            review="R-020" if q.get("boot_log_replay") is True else "R-019" if cpu_text else "R-018"
+            review="R-022" if q.get("boot_log_replay") is True and q.get("boot_log_hold_seconds")==8 else "R-020" if q.get("boot_log_replay") is True else "R-019" if cpu_text else "R-018"
             SCOPE=scope_for_review(review)
-            if review=='R-020' and (q.get('boot_journal') is not True or q.get('cached_replay') is not True or q.get('global_debug') is not False or cpu_text): raise ValueError('invalid cached journal replay profile')
+            if review in ('R-020','R-022') and (q.get('boot_journal') is not True or q.get('cached_replay') is not True or q.get('global_debug') is not False or cpu_text): raise ValueError('invalid cached journal replay profile')
             expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=SCOPE["framebuffer_reads_max"],framebuffer_writes=SCOPE["framebuffer_writes_max"],roi_height=SCOPE["height"],maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=SCOPE['hold_us'],roi_width=SCOPE['width'],hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
         if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
             raise ValueError('native mask scope invalid')
@@ -253,15 +253,18 @@ def run_without_camera(q, image):
 
 def run_with_human_capture(q,image,authorization,execution_id,human_ready):
     """Explicit R021 human camera replaces disconnected host camera; no pixels hidden as read-only."""
-    if (authorization!='R-021' or not human_ready or q.get('boot_log_replay') is not True or
-        q.get('trial_kind')!='native-video-route' or q.get('hardware_review')!='R-020'):
-        raise ValueError('human-only capture requires explicit R021, actual log replay and confirmed readiness')
+    repeat_mode=(authorization=='R-021' and q.get('hardware_review')=='R-020')
+    new_mode=(authorization is None and q.get('hardware_review')=='R-022' and q.get('boot_log_hold_seconds')==8)
+    if (not (repeat_mode or new_mode) or not human_ready or q.get('boot_log_replay') is not True or
+        q.get('trial_kind')!='native-video-route'):
+        raise ValueError('human-only capture requires exact R021 repeat or new R0228s profile and confirmed readiness')
     approvals=json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8'))
-    if approvals.get(authorization,{}).get('capture_mode')!='human-primary-only':
+    review=authorization if repeat_mode else 'R-022'
+    if approvals.get(review,{}).get('capture_mode')!='human-primary-only':
         raise ValueError('human-only observation arrangement not recorded')
     from run_enuma_entry_probe import require_hardware_review
     require_hardware_review(json.loads(image.with_suffix('.json').read_text()),approvals,authorization)
-    out=ROOT/'out/human-capture'/(datetime.now().strftime('%Y%m%dT%H%M%S')+'-S049')
+    out=ROOT/'out/human-capture'/(datetime.now().strftime('%Y%m%dT%H%M%S')+('-S049' if repeat_mode else '-S050'))
     out.mkdir(parents=True)
     report=dict(scope='explicit human-only close-up capture; host boot-clock/USB/recovery logs; no host video',
         image_sha256=q['image_sha256'],camera_used=False,host_camera_used=False,human_capture_ready=True,
@@ -270,8 +273,8 @@ def run_with_human_capture(q,image,authorization,execution_id,human_ready):
         device_runner_started=False,boot_issued=False,host_audio_recorded=False,
         runner_log=(out/'runner.log').relative_to(ROOT).as_posix())
     command=[sys.executable,'-X','utf8','-u','-B',str(ROOT/'scripts/run_enuma_entry_probe.py'),
-             '--image',str(image),'--label','system-transport','--boot-clock',
-             '--observation-repeat',authorization,'--execution-id',execution_id,'--human-camera-ready']
+             '--image',str(image),'--label','system-transport','--boot-clock']
+    if repeat_mode:command+=['--observation-repeat',authorization,'--execution-id',execution_id,'--human-camera-ready']
     try:
         with (out/'runner.log').open('w',encoding='utf-8') as log:
             report['device_runner_started']=True
@@ -285,9 +288,11 @@ def run_with_human_capture(q,image,authorization,execution_id,human_ready):
     finally:
         from observation_repeat import issued_for_attempt,finish
         state=json.loads((ROOT/'out/device-tests/current.local.json').read_text())
-        if issued_for_attempt(state,q['image_sha256'],authorization,execution_id):
+        issued=(issued_for_attempt(state,q['image_sha256'],authorization,execution_id) if repeat_mode else state.get('candidate_sha256')==q['image_sha256'] and bool(state.get('issued_at')))
+        if issued:
             report['boot_issued']=True
-            finish(ROOT,authorization,execution_id,state,out.relative_to(ROOT).as_posix())
+            if repeat_mode:finish(ROOT,authorization,execution_id,state,out.relative_to(ROOT).as_posix())
+            else:write(ROOT/'out/device-tests'/('consumed-'+q['image_sha256']+'.local.json'),dict(image_sha256=q['image_sha256'],evidence=out.relative_to(ROOT).as_posix(),phase=state['phase']))
         write(out/'observation.json',report)
         write(ROOT/'reports/enuma-system-trial-observation.json',report)
 
@@ -301,13 +306,13 @@ def main():
     p.add_argument('--no-camera', action='store_true', help='qualified read-only native route: use ADB/fastboot and calibrated boot clock')
     p.add_argument('--observation-repeat',choices=('R-021',))
     p.add_argument('--human-camera-ready',action='store_true')
-    p.add_argument('--human-camera-only',action='store_true',help='explicit R021 human close-up capture; host camera disconnected, never generic no-camera pixel execution')
+    p.add_argument('--human-camera-only',action='store_true',help='explicit R021 repeat or new R0228s human capture only; never generic no-camera pixels')
     a = p.parse_args()
-    if a.human_camera_only and (a.observation_repeat!='R-021' or a.camera_check or a.no_camera):p.error('human-only mode is limited to explicit R021 observation repeat')
+    if a.human_camera_only and (a.observation_repeat not in (None,'R-021') or a.camera_check or a.no_camera):p.error('human-only mode requires an explicit approved R021/R022 capture profile')
     if a.observation_repeat and (a.camera_check or a.no_camera):p.error('observation repeat requires the full camera runner')
-    if a.execute and a.observation_repeat and not a.human_camera_ready:p.error('wait for explicit human capture readiness before repeat')
-    if a.human_camera_ready and not a.observation_repeat:p.error('human readiness flag is specific to observation repeat')
-    execution_id=str(uuid.uuid4()) if a.observation_repeat else None
+    if a.execute and (a.observation_repeat or a.human_camera_only) and not a.human_camera_ready:p.error('wait for explicit human capture readiness before repeat')
+    if a.human_camera_ready and not (a.observation_repeat or a.human_camera_only):p.error('human readiness flag is specific to observation repeat')
+    execution_id=str(uuid.uuid4()) if (a.observation_repeat or a.human_camera_only) else None
     if a.no_camera and a.camera_check:
         p.error('--no-camera excludes --camera-check')
     if not a.camera_check:

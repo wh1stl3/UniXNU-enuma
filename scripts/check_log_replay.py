@@ -13,6 +13,8 @@ def main():
  source=ROOT/'tests/native_log_replay.c'
  subprocess.run(common+['-I'+str(shim),'-O1','-fsanitize=address,undefined','-fno-pie','-no-pie',str(source),'-o',str(out/'test')],check=True)
  result=subprocess.check_output([str(out/'test')],text=True,cwd=out).strip();print(result)
+ subprocess.run(common+['-I'+str(shim),'-O1','-fsanitize=address,undefined','-fno-pie','-no-pie','-DENUMA_BOOT_LOG_HOLD_US=8000000','-DENUMA_EXPECT_HOLD_US=8000000',str(source),'-o',str(out/'test8')],check=True)
+ result8=subprocess.check_output([str(out/'test8')],text=True,cwd=out).strip();print(result8)
  includes=out/'InheritedVideo';includes.mkdir(exist_ok=True)
  for n in ['PixelTransaction.h','PixelText.h','PixelLogPage.h','Evidence.h','Topology.h','InheritedScanout.h']:shutil.copyfile(lib/n,includes/n)
  wrapper=out/'arm.c'
@@ -20,7 +22,10 @@ def main():
  cmd=common+['-I'+str(diag),'-I'+str(edk),'-I'+str(edk/'AArch64'),'-DENUMA_BOOT_LOG_REPLAY=1','-target','aarch64-none-elf','-ffreestanding','-fshort-wchar','-fstack-usage','-O2','-c',str(wrapper),'-o',str(out/'arm.o')]
  subprocess.run(cmd,check=True)
  stack=(out/'arm.su').read_text();assert max(int(line.split('\t')[1]) for line in stack.splitlines())<131072,stack
+ cmd8=cmd[:-2]+['-DENUMA_BOOT_LOG_HOLD_US=8000000','-o',str(out/'arm8.o')]
+ subprocess.run(cmd8,check=True)
+ stack8=(out/'arm8.su').read_text();assert max(int(line.split('\t')[1]) for line in stack8.splitlines())<131072,stack8
  sources=[source,Path(__file__),diag/'EnumaBootJournal.h',diag/'EnumaBootJournalProtocol.h',diag/'EnumaPixelTransactionArm.h',lib/'PixelTransaction.h',lib/'PixelLogPage.h']
- (ROOT/'reports/enuma-log-replay-host.json').write_text(json.dumps(dict(scope='page and transaction host ASan/UBSan plus actual EDK Arm callbacks; not hardware',result=result,arm_command=cmd,stack_usage=stack,hardware_executed=False,sources={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}),indent=2)+'\n')
+ (ROOT/'reports/enuma-log-replay-host.json').write_text(json.dumps(dict(scope='page and transaction host ASan/UBSan plus actual EDK Arm callbacks; not hardware',result=result,hold8_result=result8,hold_durations_us_tested=[2000000,8000000],arm_command=cmd,arm8_command=cmd8,stack_usage=stack,stack8_usage=stack8,hardware_executed=False,sources={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}),indent=2)+'\n')
  print('PASS: pinned EDK Arm wrapper, total reported stack frame below128KiB')
 if __name__=='__main__':main()

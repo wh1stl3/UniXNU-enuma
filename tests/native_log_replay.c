@@ -22,7 +22,10 @@ static int Write(void *C,ENUMA_U64 A,ENUMA_U32 Value) {
 }
 static int Validate(void *C,const ENUMA_INHERITED_FRAME *Frame) { assert(C==&F&&Frame==&F&&R==24576&&!W&&!V&&!H&&B==1);V++;return !FailV; }
 static int Barrier(void *C) { assert(C==&F&&B<3);B++;return B!=FailB; }
-static int Hold(void *C,ENUMA_U32 Us) { assert(C==&F&&!H&&Us==2000000);H++;return !FailH; }
+#ifndef ENUMA_EXPECT_HOLD_US
+#define ENUMA_EXPECT_HOLD_US 2000000
+#endif
+static int Hold(void *C,ENUMA_U32 Us) { assert(C==&F&&!H&&Us==ENUMA_EXPECT_HOLD_US);H++;return !FailH; }
 static void Init(unsigned Stride) {
   memset(&F,0,sizeof F);F.Base=0x9c000004;F.Width=1600;F.Height=2560;F.Stride=Stride;F.Bytes=(ENUMA_U64)Stride*2560;F.Requirements=22;
   F.RedMask=0xff0000;F.GreenMask=0xff00;F.BlueMask=0xff;F.ReservedMask=0xff000000;
@@ -64,5 +67,5 @@ int main(void) {
   Init(6404);FailV=1;assert(Run()==1&&!W);
   Init(6404);FailH=1;assert(Run()==3&&!memcmp(Pixels,Original,sizeof Pixels));
   Log.Head=128;assert(!EnumaLogPageFromSnapshot(&Log,&mEnumaLogPage));Init(6404);assert(Run()==1&&!R&&!W);
-  printf("PASS: live-status page from newest point13/full64 status; %u channel layouts; %u row/pass read-write failure boundaries;256x96/2s/full restore; no hardware\n",Patterns,Cases);
+  printf("PASS: live-status page from newest point13/full64 status; %u channel layouts; %u row/pass read-write failure boundaries;256x96/%uus/full restore; no hardware\n",Patterns,Cases,ENUMA_EXPECT_HOLD_US);
 }

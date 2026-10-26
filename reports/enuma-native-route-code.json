@@ -1,7 +1,8 @@
 {
   "scope": "actual packaged native-video-route provider and bounded exact-GUID Core terminal; manual disassembly review bound by digest",
+  "boot_log_hold_seconds": 8,
   "boot_log_replay": true,
-  "firmware_commit": "962f8208a9d2eca3bc626db67090e28519e088e6",
+  "firmware_commit": "8680ea79d6fd14d4526d314f430e9812955cb78a",
   "native_mask_field": null,
   "trial_kind": "native-video-route",
   "native_route_cpu_text": false,
@@ -21,10 +22,10 @@
   "native_route_layout": false,
   "native_route_staging": false,
   "native_route_detail": false,
-  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
-  "provider_sha256": "203677990bb4d3bd11738b3e0910d3b78b61f477b427d395cf60fd083d0c97c2",
+  "image_sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
+  "provider_sha256": "d60b05086b19bcb5477f047b10febd2baa7c84aab240367e0e122b407d309f9b",
   "core_sha256": "753ff2dd2444aeec2404c149c32771933f71d84dcb5e3b371261f7f1c15fb6da",
-  "combined_disassembly_sha256": "9f2906c4e14109f5cc928ded733eb519d0375a92f6cd2526f25b0c4d224ef174",
+  "combined_disassembly_sha256": "e23b12cdeeea632ceec769d97d22d1eecbc51f267f89f6bafab2d444a11f5f38",
   "review_required": false,
   "hardware_success": false
 }
