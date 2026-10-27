@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "hardware_executed": false,
+  "board_sink_connected": false,
+  "firmware_profile_activated": false,
+  "truncated_or_mismatched_frames_rejected": 749,
+  "original_service_entered_witness": true,
+  "producer_terminated_after_export": true,
+  "external_snapshot_survived": true,
+  "producer_returncode": -9,
+  "aarch64_ordering_and_six_deletion_checks": true,
+  "pixel_function_stack_frame_bytes": 112,
+  "external_sha256": "180a3508524db7e19674edecc290dea51177427dfd020d47a7b0d9aad48bb28b",
+  "qualification": "out/oem-precall-20261027-c999/final1/result.json",
+  "qualification_sha256": "2851236ba3995a7fcfe1e71e3585aa21db939aae6671981bbd9116fd92061892",
+  "preservation": {
+    "r027_image_unchanged": true,
+    "r027_qualification_unchanged": true,
+    "source_bindings_checked": 2434,
+    "source_bindings_changed": [],
+    "r027_qualification_files_checked": 19,
+    "r027_qualification_files_changed": []
+  },
+  "firmware_commit": "11c6cf1",
+  "remaining": [
+    "Exact Core handle/PE/FV binding and default-off profile",
+    "Board CPU policy, route and exclusive window ownership",
+    "Independent nonreturning terminal recovery and exception policy",
+    "Complete firmware build and execution qualification; hardware paused"
+  ]
+}

@@ -1277,3 +1277,8 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 ## 2026-10-27：OEM入口与返回RVA离线增量
 
 已核对Core真实EntryPoint传入Image->Info.SystemTable及同句柄LoadedImage来源；新增精确OEM PE返回RVA校验工具，6项失败/指令测试通过，原追踪5条资格命令独立重跑通过。证据out/oem-rva-20261027-session-c999；详见docs/operations/2026-10-27-oem-rva-and-entry-binding.md。未接Core/profile、未运行OEM或新建固件候选；现有同步像素窗口不能保证OEM非返回时的恢复/所有权，取证出口仍阻塞。实机暂停、R027冻结未消费，无人工录像待办；本轮新增代码/测试/文档准备本地提交，不推送。共享工作区其余文件保持。
+
+
+## 2026-10-27：OEM调用前单次取证出口离线实现
+
+固件11c6cf1新增默认NULL观察器、单次带身份/完整性快照、持久缓存像素后端；窗口恢复未确认时非返回Stop，不转发OEM或编造状态。final1通过host sanitizer/AArch64/6删除负测、749种文本损坏拒绝和独立进程非返回后的外部文件保存；像素测试含恢复失败、异常、24种通道排列。证据out/oem-precall-20261027-c999，报告reports/enuma-oem-precall-capture-development.json，详见operations/2026-10-27-oem-precall-capture.md。板级物理/窗口所有权/终止恢复和Core精确绑定尚未接入，无新固件构建或硬件资格。R027镜像/资格/2434源绑定保持，实机暂停、无当前人工录像/按键待办。仅本地提交，不推送；设备仓提交号由git log查询。
