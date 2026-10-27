@@ -1481,3 +1481,6 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 ## 2026-10-27 OEM early-v3离线交付
 
 采用Core发布时点同步，避免仅服务返回后修复遗漏通知重入。新FD及qualification3通过，32项Python测试、真实Core生命周期测试、两处源码删除负测和23处机器指令删除/一次GUID变异拒绝。未上机；不把已复现的软件缺陷定为实机根因。来源、精确摘要、失败记录及边界见operations/2026-10-27-oem-early-v3.md和reports/enuma-oem-early-candidate.json。R027/旧候选与共享主线保持。
+
+
+发布状态：设备仓4ca8be4、固件7c97dc6已本地提交；固件两次及设备仓一次GitHub推送均连接443失败，未确认远端发布。源码/媒体/产物未改写，网络恢复后补推；实测前发布门禁仍未满足。
