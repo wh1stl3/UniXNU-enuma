@@ -41,7 +41,7 @@ def relocate(record,source,sdk):
     """Data-only template. Output/dependency files cannot retain runner paths."""
     args=record['arguments'];cwd=record['directory'];result=['${CXX}'];i=1
     pair={'-I','-isystem','-iquote','-F','-iframework','-isysroot','--sysroot','-include','-imacros'}
-    joined=('-isystem=','--sysroot=','-iframework','-isystem','-isysroot','-iquote','-include','-imacros','-I','-F')
+    joined=('-fsanitize-ignorelist=','-isystem=','--sysroot=','-iframework','-isystem','-isysroot','-iquote','-include','-imacros','-I','-F')
     if not isinstance(args,list) or not args or not all(isinstance(a,str) for a in args):raise ValueError('bad compile arguments')
     while i<len(args):
         arg=args[i]

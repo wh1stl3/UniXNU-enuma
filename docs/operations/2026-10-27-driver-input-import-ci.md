@@ -6,3 +6,5 @@
 
 28项合成宿主测试通过（14导出、14导入），证据 out/kernel-userland-20261027-5/input-tests-final.log。真实XNU输入包尚未取得；下一步独立CI分支 preflight -> platform，按同次构建身份下载验收。macos-15固定Xcode16.4/iPhoneOS18.5，版本不符即失败。
 首次平台运行40475779089在成功链接后导出失败：编译记录含不存在的EXPORT_HDRS/libsa搜索路径。修正为仅对源码范围内缺席的搜索目录记录absent_include_paths，不创建假头；强制include缺失仍拒绝。30项合成测试通过，待重新构建。
+
+下载首次真实编译记录后发现-fsanitize-ignorelist也是必要文件输入，新增采集及路径重定位、缺失拒绝测试，合计32项通过。取消运行中的40477102284，改用同时含搜索目录缺席与sanitizer输入修复的新提交构建；取消不记构建失败或通过。

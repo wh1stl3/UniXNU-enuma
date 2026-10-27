@@ -68,6 +68,8 @@ def export_inputs(source, destination, kernel, records, expected, sdk):
                 if arg.startswith(prefix) and len(arg)>len(prefix) and not arg.startswith(prefix+'='):
                     paths.append((prefix,absolute(arg[len(prefix):])))
             if arg.startswith(('-isystem=','--sysroot=')):paths.append((arg.split('=')[0],absolute(arg.split('=',1)[1])))
+            if arg.startswith('-fsanitize-ignorelist='):
+                paths.append(('-fsanitize-ignorelist',absolute(arg.split('=',1)[1])))
             i+=1
         for flag,path in paths:
             if not path.exists() and flag in {'-I','-isystem','-iquote','-F','-iframework'}:
