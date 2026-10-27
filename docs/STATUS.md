@@ -1,8 +1,12 @@
-# 当前：根卷读取桥接与真实Data载荷完成离线验证，OEM继续等待
+# 当前：易失Data块后端完成离线验证，下一步接OS ABI与服务
 
 2026-10-27。仅独立worktrees/enuma-oem-display可写；共享主线不改，R027冻结，不上机、不推送。按AGENTS引用的官网具体适配规则推进。
 
 ## 本轮增量
+
+EnumaRamDisk复用固定生产SparseDisk算法，实现真实seed导入、512字节块读写、显式resident预算、短复制及失败清理、同锁stop与重启。完整512MiB APFS读回匹配；23处导入分配失败、写分配失败/预算耗尽和并发stop通过ASan/UBSan。iOS17 ARM64归档f9f357d0…生成，四个入口及Mach-O平台检查通过。证据out/kernel-userland-20261027-3/ram2，见[实现与下一依赖](operations/2026-10-27-volatile-data-backend.md)。未接IOKit或链接XNU，无挂载/用户态结果。
+
+## 保留的前轮增量
 
 - EnumaRootRead复用固定生产RootWindowRead，接EnumaUfsRead；支持512字节请求到4KiB读转换、同锁校验/复制及真实部分完成。ARM64 Mach-O静态库18f609c4…已生成，尚未链接XNU或接IOKit/MMIO。
 - Linux固定参考生成真实可丢弃APFS Data：逻辑512MiB，54个目录，packed 86128字节，SHA256 8a4483bcc910875cbae2cc2ee1090abced93ea8297ef4c346a263ca42a9c5385。apfsck、目录权限/对象校验和回读、解包逐字节一致；没有SetupDone或身份文件。该容量仅主机文件系统大小，不修改板级内存或设备分区。
@@ -17,7 +21,7 @@
 
 实际UFS stream归属、控制器/队列隔离、PMGR ABI、IOKit注册与初始化/XNU归档、Root/Owner/Data UUID策略、RamBlock服务仍未闭环。新Data已经构造，但尚未被目标OS挂载；CPU framebuffer/IOSurface、NT36523 HID、launchd/backboardd/SpringBoard无新运行结论。不能将带Data FAT称为可用桌面或已资格上机镜像。
 
-优先继续真实storage/PMGR/RamBlock服务闭包；独立离线开发继续，硬件缺口保持未知。依据固定umi/fajita/sheng实现逐项核对，不继承其他机型参数或验收结论。
+优先准备匹配的XNU生成头、编译记录与storage/PMGR ABI，接通真实IOKit provider和初始化，再将归档链接XNU；继续真实storage/PMGR/RamBlock服务闭包；独立离线开发继续，硬件缺口保持未知。依据固定umi/fajita/sheng实现逐项核对，不继承其他机型参数或验收结论。
 
 ## 冻结候选
 

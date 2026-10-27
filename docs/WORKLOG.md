@@ -1442,3 +1442,5 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 2026-10-27 · 依用户要求将官网具体适配方法落位为规则：新增operations/official-adaptation-rules.md，覆盖八阶段的接口、实施顺序、失败清理、验证及enuma差异，并由AGENTS强制引用。规则只在隔离worktree生效，待后续整合；仅文档变更，不改变已有运行结论、冻结候选或设备授权。
 
 2026-10-27 · 按官网规则继续离线：完成EnumaRootRead与生产窗口算法接线/ARM64库，139组packed差分、传输/完整性失败及5项CLI拒绝；固定Linux参考构造真实512MiB目录型APFS Data（packed 8a4483bc…），apfsck/回读通过并进入96MiB FAT 4a9c77df…。真实DarwinBoot解析通过，未重链接XNU/挂载Data/进入桌面。上次提交a791dff，本次见git log；证据out/kernel-userland-20261027-2及reports/enuma-root-data-offline.json。OEM摘要不变，R027冻结，共享主线不改，无设备/推送。
+
+2026-10-27 · 按依赖完成EnumaRamDisk易失Data块后端及iOS17 ARM64库f9f357d0…；实际512MiB APFS全量读回、23处导入分配失败、预算/写分配失败/短写/并发停止通过ASan/UBSan。未接IOKit或重链接XNU；下一步匹配XNU编译输入与storage/PMGR ABI。前次6f2f892，本次见git log。证据out/kernel-userland-20261027-3/ram2及reports/enuma-volatile-data-backend.json；OEM/R027保持，无设备/推送。

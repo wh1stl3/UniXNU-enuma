@@ -1592,3 +1592,5 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 2026-10-27 · 依用户要求将官网具体适配方法落位为规则：新增operations/official-adaptation-rules.md，覆盖八阶段的接口、实施顺序、失败清理、验证及enuma差异，并由AGENTS强制引用。规则只在隔离worktree生效，待后续整合；仅文档变更，不改变已有运行结论、冻结候选或设备授权。
 
 2026-10-27 · 采用固定fajita Linux APFS builder和umi打包器构造仅目录的可丢弃Data，排除参考偏好文件；512MiB仅主机文件系统几何，不改内存/分区。生产RootWindowRead通过明确C ABI回调接本仓SCSI准备，IOKit完成回调在解锁后执行；真实transport仍承担DMA隔离。详情operations/2026-10-27-root-data-offline.md。
+
+2026-10-27 · Data先完成独立易失块后端，不等待UFS持久化，也不伪造IOKit类/PMGR ABI来跨过依赖。新库复用固定SparseDisk；锁覆盖导入/读写/停止，失败清理真实分配，OS完成通知在解锁后。后续必须取得匹配编译记录、生成头与ABI再集成XNU。详见operations/2026-10-27-volatile-data-backend.md。

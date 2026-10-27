@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "native_ram_block_commit": "d4d22d9819b0162eda49f6402235dddc2279410d",
+  "production_header_sha256": "5ab6516488b7daaef88e788fffef17195e7d2f74746da2206c6d9ed3a63c8c74",
+  "seed_sha256": "8a4483bcc910875cbae2cc2ee1090abced93ea8297ef4c346a263ca42a9c5385",
+  "raw_sha256": "b2c589db422d7160a5b130c3d7cbc907b1c8705dd7009c4d6dd6ee28e2d91089",
+  "source_hashes": {
+    "EnumaRamDisk.cpp": "21e41ec8a5070ede7b08255f77dd6cfc7907afb636ed641209c3350834cd448f",
+    "EnumaRamDisk.h": "afdf6d332511e6c8e9ef0d7b706f6f1e0e6e109f3b16c1c7bb66b196f63f7409",
+    "enuma_ram_disk.cpp": "f270a44549d4aa2a8e0c3acd1c70ca1bbd21e4940ed6fb79bd9406d500140d15",
+    "check_enuma_ram_disk.py": "fb330477b4001e6f5829d409b2bd24c8780ba65b6aec18c8156385bd8f5ec66c"
+  },
+  "archive_sha256": "f9f357d00513b4318501ae3213c47477a23e94becc605b64a2dcb67c28af8b0c",
+  "object_build_version": [
+    [
+      2,
+      1114112
+    ]
+  ],
+  "host_result": "PASS: complete 512MiB seed readback, 23 import allocation failures, partial writes, budget exhaustion, stop/restart and concurrent stop",
+  "kernel_linked": false,
+  "iokit_registered": false,
+  "apfs_mounted": false,
+  "hardware_executed": false,
+  "persistence_mode": "volatile only, no storage callbacks",
+  "scope": "real packed Data import and block I/O, host sanitizer execution and ARM64 Mach-O archive"
+}
