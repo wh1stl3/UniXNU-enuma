@@ -1,0 +1,73 @@
+{
+  "trial_id": "5052a582-523a-4a70-a7fd-2af21a95d496",
+  "image_sha256": "3d263b531074c483fb96c60954ac52d139c7342b8e7bf561d31ea64f25af1628",
+  "boot_count": 1,
+  "consumed": true,
+  "observation": "no qualified fastboot return within 75 seconds",
+  "manual_recovery_verified": true,
+  "visual": {
+    "user_confirmed": false,
+    "observations": [
+      {
+        "phase": 1,
+        "event": "call1-before",
+        "experiment": "oem-early-v3",
+        "session": "0xb53a9560064a37d8",
+        "sequence": 2,
+        "call": 1,
+        "caller_rva": "0x3abc",
+        "returned": false,
+        "status": null,
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim",
+        "file": "s1.jpg",
+        "media_sha256": "8af0aef4d92c236e71b3d7870497ee7507dc8f785efdc99f2040c71b798563fc"
+      },
+      {
+        "phase": 2,
+        "event": "call1-return",
+        "experiment": "oem-early-v3",
+        "session": "0xb53a9560064a37d8",
+        "sequence": 3,
+        "call": 1,
+        "caller_rva": "0x3abc",
+        "returned": true,
+        "status": "0x0",
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim",
+        "file": "s2.jpg",
+        "media_sha256": "8927344ff770e490c6a6b4d7778acf686a65cdd4eba2a36bb53adc964ff3a144"
+      },
+      {
+        "phase": 3,
+        "event": "kernel-locate-before",
+        "experiment": "oem-early-v3",
+        "session": "0xb53a9560064a37d8",
+        "sequence": 6,
+        "call": 3,
+        "caller_rva": "0x616c",
+        "returned": false,
+        "status": null,
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim",
+        "file": "s3.jpg",
+        "media_sha256": "e929a6547209f6ab453d0c1234ead58ebd6b339556d7548f7a501e9f05bb5754"
+      },
+      {
+        "phase": 4,
+        "event": "kernel-locate-return",
+        "experiment": "oem-early-v3",
+        "session": "0xb53a9560064a37d8",
+        "sequence": 7,
+        "call": 3,
+        "caller_rva": "0x616c",
+        "returned": true,
+        "status": "0x800000000000000e",
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim",
+        "file": "s4.jpg",
+        "media_sha256": "e195071e8e7966d51f76e553c6e94b130411c633cbb132dccf777ec04e35a60c"
+      }
+    ],
+    "method": "independent visual transcription before user confirmation",
+    "continuous_video_received": false
+  },
+  "hardware_driver_return_proven": false,
+  "root_cause_proven": false
+}
