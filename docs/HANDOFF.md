@@ -1,25 +1,25 @@
-# 当前：v6单次已消费，主入口E01确认，自行回Android（2026-10-27）
+# 当前：far-chain-v7镜像与离线资格完成，未上机（2026-10-28）
 
-用户本次“上机”并重新确认“拍摄已就绪，在场可恢复”。准备提交f7dc965及固件d393211执行前远端精确核验通过；Git直连连接失败保留，改用Windows已启用系统代理的单命令http.proxy完成推送及核验，没有改全局Git/系统代理或共享主线。即时身份/原备份/恢复门禁通过后仅一次临时fastboot boot。
+用户要求“不是更细，而是更远”，本轮继续到可上机镜像。v7取消全部OEM内部前置/返回绘制，只在RAM锁存粗粒度阶段和真实状态；目标驱动point13保存真实日志后继续，不再提前2秒复位。真实CoreDispatcher返回后才查询GOP/Mode/ConOut存在性并输出一次汇总页（最多8秒），再沿既有7秒恢复出口复位。本版覆盖目标为OEM真实返回及后续DXE分派完成，仍在BDS前停止；不是正常BDS/XNU启动包。
 
-scope oem-main-entry-v6，trial cfee120a-a6a4-4b02-bcff-21b1aa82372f已claim/consumed，镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d（out/oem-main-entry-20261027/qualification2/image.img，3153920字节）；原资格/FD/镜像不回写。fastboot调用0.401秒返回0；执行器观察断开后Android完成。用户明确没有操作、设备自行返回；23:06独立核验enuma、boot_completed=1、root、A槽、解锁及原boot_a/vendor_boot_a和本地备份摘要全部通过。无追加启动、分区写入、改槽或恢复欠项，没有设备硬停。
+- 镜像：out/oem-far-chain-20261027/qualification2/image.img，3153920字节，SHA256 c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d。
+- FD：out/oem-far-chain-20261027/build2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd，SHA256 e16748c382248cdfddd4514ea6e274032ec3c987fc96bcd11ad01a3117610a2f。
+- 资格：out/oem-far-chain-20261027/qualification2/qualification.json，SHA256 a1cdb2c1fbb1e4c7aacd0f6862db68c45275297f643e0241d092c7a622612823；software_ready=true、hardware_executed=false。
+- scope oem-far-chain-v7；trial 61c29945-1399-49eb-8133-d11d465bb6c4；session 9369882057737620086；selected_call=0仅配置占位，实际选择是ram-only-until-dxe-complete；未claim、未消费。
+- 固件源码提交1f05eef62b62fc6f57b805e1cb346e3643457db7。build2为d393211基线加本轮源码的工作树快照，source-manifest保留；不是提交后重编。固件已非force发布并精确核对远端oem-progress-20261027，设备仓提交/发布以git log及out/oem-far-chain-20261027/device-publication.json为准。
 
-目录内一张原图已先独立判读保存（independent-read1.json），再严格解码和本次session绑定，用户确认五行逐字一致且现场只有这一页：
+ASan/UBSan状态机、真实失败状态、无前段UI、缺失里程碑不补写、末端TPL/sink失败、point13继续和completion导出→7秒→复位、实际页面格式检查通过；精确OEM PE路径/真实ARM64 ChipInfo ABI及重定位/错PE拒绝/板级绑定通过。44项Python（含模拟传输）通过；链接机器码30处运行路径+108处后移路径删除与3处GUID变异全部拒绝；完整FD审计、Boot v3封包/解包回读和默认离线2456项绑定通过。本轮没有设备命令。失败build1（补丁CRLF）/qualification1及check1..4保留，成功为build2/check5/qualification2，不覆盖旧记录。
 
-```text
-E01C0000000000000006
-Q000000000000000C
-O0000000000003608
-E
-G91C9B0CA3369EA72
+最大可操作嫌疑仍是v6 E01窗口收尾/转发对后续执行的影响（诊断优先级中等，唯一根因置信低），v7直接移除该前段干扰并允许后续DXE继续。竞争解释为ChipInfo查询/接口方法及条件事件、OEM后段或后续其他DXE不返回，以及末端显示路线变化导致出口拒绝。v7取得S05汇总时才能确认本次真实Core和分派返回；全无页不能区分上述解释，无独立看门狗/持久崩溃日志。S行是原始Core状态，C是里程碑位图而非call号。GOP/Mode/ConOut位只证明存在性，不能当生产显示、控制台或实体输入通过。
+
+下一步：以新v7单次实测取得远端汇总；Core失败按真实状态与阶段修复，Core成功无GOP则查协议发布/依赖，有GOP无可用控制台则检查模式几何/显示所有权及控制台连接。继续到BDS之前须核对CoreAllEfiServicesAvailable/gBds及实际PlatformBootManager、配置/存储发现，不能只删除诊断复位就宣称完整启动。详见[far-chain-v7实现、位图与下一卡点](operations/2026-10-27-oem-far-chain-v7.md)。
+
+实机条件尚未准备：本轮仅离线，不沿用v6拍摄/在场状态；未来启动前须当前文档发布、精确新单次、即时enuma身份/原备份/恢复核验与本次拍摄/人在场恢复。75秒无合格返回停止追加，先恢复核验，不自动重试。设备最后已知为v6后23:06独立Android完成/root/A槽/解锁与原双分区摘要通过，当前在线状态未知。v6 consumed且单页E01/C6/Qc/RVA3608人工确认，不复活。共享主线只读，R027及历史镜像/资格冻结；无flash/erase/改槽、内存base/size或verified变更。媒体/out/二进制/备份/设备标识只留本地。
+
+默认离线复核（不触碰设备、不claim）：
+
+```powershell
+wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/python3 -B scripts/run_oem_runtime_trial.py --qualification out/oem-far-chain-20261027/qualification2
 ```
 
-照片SHA256 7a8f944ea3b53063c339cc34b6cdbf67c7b1fb7a5c4a5005fe176c39106f4b8d。E01/C6/Qc/RVA3608支持原厂最后注册构造返回并进入主入口ChipInfo查询包装入口；本次没有注册区间/服务返回侧绘制，不能再说本次未到主入口。E01可见先于窗口恢复/读回及原始LocateProtocol调用，所以不证明查询执行/返回、GetChipFamily、SID或CoreStartImage返回。没有S02/S04是v6设计，不是缺失返回记录。
-
-下一最大可操作区间为E01窗口收尾/包装器转发→ChipInfo原始查询→接口+48 GetChipFamily及条件协议方法/事件创建→SID入口和后续输出准入。唯一根因置信低，优先诊断取证收尾/出口，不能根据单页判ChipInfo/SID内部死锁。v6绕过旧v5 S02绘制并到达主入口，只支持本次路径到达；不反推v5收尾通过或把变化唯一归因为移除窗口。实际代码和后续方案依据见[main-entry-v6分析](operations/2026-10-27-oem-main-entry-v6.md)。
-
-当前无人工媒体/字符串/恢复欠项；v6不重试，下一新软件须独立资格、当前发布及当次拍摄/即时身份备份恢复门禁，旧就绪不复用。共享主线只读、R027及旧候选冻结；内存base/size、verified、分区边界不变。生产GOP/ConOut/BDS/实体输入/XNU仍未验收。
-
-结果reports/enuma-oem-main-entry-v6-trial-20261027.json；证据out/device-tests/oem-cfee120a-a6a4-4b02-bcff-21b1aa82372f及out/oem-main-entry-live-20261027（publication-verified、preflight、postcheck、human-return-confirmation、media-review）。runner的pending-user-confirmation和独立初读pending快照保留，通过新确认文件闭合，不覆盖历史证据。independent-read.json为首次写入异常留下的空文件，有效初读为independent-read1.json。
-
-原始媒体只在D:/Code/PortingiOS/enuma/Media-enuma/OEM-main-entry-v6-20261027-cfee120a；原图/裁图/out/二进制/备份/设备标识不入Git或云端。本轮结果提交/发布以git log及result-publication.json为准。
+接续先读AGENTS、firmware/AGENTS、本文件与operations/v7；按实际机器码和资格继续，勿沿用旧prompt的“未上机/录像就绪”。

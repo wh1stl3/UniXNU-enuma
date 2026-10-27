@@ -730,3 +730,18 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 用户在先前明确“允许推送”，取代此前离线阶段“不推送”限制；源码/脱敏文档可向既有GitHub分支正常发布，不强推、不改main。原始媒体/out/二进制/备份/设备标识仍不可上传。固件origin指向本地共享主线，不得推送origin，应显式使用GitHub URL。最新远端发布未确认，不把本地提交写成远端成功。
 
 用户本轮仅要求全部文档、本地提交和新会话prompt。现行接续入口docs/2026-10-27-oem-registration-v5-handoff-prompt.md；唯一写入根D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display，其firmware为实际固件源码，共享UniXNU-enuma只读。registration-v5已离线编出、未claim/上机，旧v4两笔consumed且两组日志已确认；R027冻结。既有部署授权不替代新试验当前手机录像/人在场恢复、身份/备份及精确资格门禁。本轮不追加设备或重复构建。
+
+
+## 补丁换行与构建前检查（2026-10-27 用户持久规则）
+
+用户明确要求：反复发生的“补丁CRLF与目标文件LF不一致”必须记入规则。
+
+- 新建或修改.patch前，先按字节检查补丁与目标文件的LF/CRLF/混合换行，确认目标是源码树、隔离staging还是冻结记录。
+- 新建/修改.patch一律显式UTF-8、LF。Windows原生Python不得用默认newline的write_text/open文本写入.patch；使用write_bytes(text.replace('\r\n','\n').encode('utf-8'))，或open(...,encoding='utf-8',newline='\n')。优先使用WSL Python；PowerShell写入也必须明确编码/换行，写后按字节复核。
+- 每次完整构建前，先运行scripts/check_changed_patch_eol.py；在隔离staging中按实际顺序执行git apply --check，再应用补丁，换行/上下文失败立即拒绝，不等完整编译后才发现。正式构建原有preflight不能跳过。
+- 目标必须统一换行时，只规范当前新源码或一次性staging中的明确文件，并记录原因；禁止批量重写共享主线、原始归档、冻结R027/旧资格/镜像/历史证据或媒体。补丁LF与目标原有CRLF需在隔离副本显式处理，不修改原证据来迁就补丁。
+- 保留失败输出，新构建另建out路径；修复后重新做适用的补丁/构建/来源绑定，不能把失败资格标通过。原本受控CRLF的非补丁文件不因本规则一刀切重写。
+
+## 2026-10-28 far-chain-v7当前边界
+
+用户要求重点让启动链走得更远；v7已完成离线镜像/资格，OEM期间RAM-only、真实返回后继续整轮DXE，分派结束一次汇总，仍在BDS前保留恢复出口。精确产物与后续卡点见STATUS/HANDOFF及operations/2026-10-27-oem-far-chain-v7.md。v7未claim/上机，旧v6就绪不沿用；共享主线只读、R027/旧镜像冻结。源码/脱敏文档沿既有显式GitHub URL/oem-progress-20261027发布授权，不推固件origin，不force，不上传out/媒体/二进制/备份/标识。

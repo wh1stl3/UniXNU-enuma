@@ -82,7 +82,12 @@ int main(int argc,char **argv){
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_ALREADY_STARTED);
   if(ENUMA_OEM_RUNTIME){
     for(UINTN I=0;I<ENUMA_PROGRESS_CALL;I++){assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,256,NULL)==EFI_OUT_OF_RESOURCES);}
-    if(ENUMA_OEM_MAIN_ENTRY){
+    if(ENUMA_OEM_FAR_CHAIN){
+      assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL)==EFI_OUT_OF_RESOURCES);
+      assert(!Stops);EnumaOemCoreAfterStart((EFI_HANDLE)1,EFI_ABORTED);assert(!Stops);
+      if(setjmp(StopJump)==0){EnumaOemFarDispatchComplete();assert(0);}
+      assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL+1);
+    }else if(ENUMA_OEM_MAIN_ENTRY){
       EFI_GUID Main={0xb0760469,0x970c,0x487a,{0xa4,0xb5,0x28,0xdb,0x7b,0x45,0xce,0xf1}};
       assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL)==EFI_OUT_OF_RESOURCES);
       assert(!Stops); // unrelated calls must not trigger the old ordinal-only stop

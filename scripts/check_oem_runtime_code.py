@@ -14,7 +14,7 @@ def check_exception(pe,mapping):
     if struct.unpack_from('<I',pe,file_offset(pe,start+16))[0]!=0x17ffffff:raise ValueError('CPU exception loop missing')
     return start
 
-def check(pe,mapping,progress=False):
+def check(pe,mapping,progress=False,far=False):
     entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
     def sym(n):
         hits={a for a,name in entries if name==n}
@@ -36,15 +36,27 @@ def check(pe,mapping,progress=False):
         if len(hits)!=1:raise ValueError('missing/ambiguous runtime sequence '+name)
         sites[name]=hits[0];return hits[0]
     dispatch=unique('dispatcher',calls('DxeMain','CoreDispatcher'))
-    # The dispatcher runs BEFORE the completion fallback, unlike stage10.
-    for off,name in [(12,'MicroSecondDelay'),(16,'ResetCold'),(20,'CpuDeadLoop')]:
-        if target(dispatch+off)!=sym(name):raise ValueError('completion fallback missing')
-        sites['completion_'+name]=dispatch+off
-    if word(dispatch+4)!=0x5299f800 or word(dispatch+8)!=0x72a00d40:raise ValueError('fallback delay differs from 7s')
-    detail=unique('target_delay',calls('EnumaDispatchDetailCheckpoint','MicroSecondDelay'))
-    if word(detail-8)!=0x52909000 or word(detail-4)!=0x72a003c0:raise ValueError('target delay differs from 2s')
-    if target(detail+4)!=sym('ResetCold') or target(detail+16)!=sym('CpuDeadLoop'):raise ValueError('target stop missing')
-    sites['target_reset']=detail+4;sites['target_loop']=detail+16
+    # Far scope's probe is inlined into DxeMain between actual dispatch return
+    # and the same reviewed 7-second recovery fallback.
+    if far:
+        exported=unique('far_dispatch_export',calls('DxeMain','OemProgressFarFinish'))
+        delays=[a for a in calls('DxeMain','MicroSecondDelay') if dispatch<a<dispatch+0x200]
+        if len(delays)!=1 or not dispatch<exported<delays[0]:raise ValueError('far completion/export order differs')
+        delay=delays[0]
+        if word(delay-8)!=0x5299f800 or word(delay-4)!=0x72a00d40:raise ValueError('far fallback delay differs')
+        for off,name in [(0,'MicroSecondDelay'),(4,'ResetCold'),(8,'CpuDeadLoop')]:
+            if target(delay+off)!=sym(name):raise ValueError('far fallback terminal differs')
+            sites['completion_'+name]=delay+off
+    else:
+        for off,name in [(12,'MicroSecondDelay'),(16,'ResetCold'),(20,'CpuDeadLoop')]:
+            if target(dispatch+off)!=sym(name):raise ValueError('completion fallback missing')
+            sites['completion_'+name]=dispatch+off
+        if word(dispatch+4)!=0x5299f800 or word(dispatch+8)!=0x72a00d40:raise ValueError('fallback delay differs from 7s')
+    if not far:
+        detail=unique('target_delay',calls('EnumaDispatchDetailCheckpoint','MicroSecondDelay'))
+        if word(detail-8)!=0x52909000 or word(detail-4)!=0x72a003c0:raise ValueError('target delay differs from 2s')
+        if target(detail+4)!=sym('ResetCold') or target(detail+16)!=sym('CpuDeadLoop'):raise ValueError('target stop missing')
+        sites['target_reset']=detail+4;sites['target_loop']=detail+16
     # Identical code folding may alias the capture terminal and exception entry.
     for name in ('OemCaptureTerminal','DumpCpuContext'):
         start=sym(name)
@@ -57,7 +69,7 @@ def check(pe,mapping,progress=False):
         # actual linked gate and saved x0 status, not an absent source symbol.
         observed=unique('progress_after_start',calls('CoreDispatcher','OemProgressReturned'))
         if observed!=started+64:raise ValueError('unexpected inlined return gate extent')
-        for off,expected in {4:0xf9404288,8:0xaa0003fb,12:0xf9400b49,16:0xeb08013f,
+        for off,expected in {4:0xf9404288,8:0xaa0003fb,12:(0xf9400f49 if far else 0xf9400b49),16:0xeb08013f,
                              32:0xf84d6129,36:0xeb08013f,52:0x39400108,60:0xaa1b03e0}.items():
             if word(started+off)!=expected:raise ValueError('return identity/status gate changed')
             sites['progress_gate_'+str(off)]=started+off
@@ -79,11 +91,11 @@ def check(pe,mapping,progress=False):
     unique('hold_direct_timer',calls('OemHold','MicroSecondDelay'))
     return sites
 
-def verify_with_deletions(pe,mapping,progress=False):
-    sites=check(pe,mapping,progress)
+def verify_with_deletions(pe,mapping,progress=False,far=False):
+    sites=check(pe,mapping,progress,far)
     for name,a in sites.items():
         offset=file_offset(pe,a);mutated=pe[:offset]+bytes.fromhex('1f2003d5')+pe[offset+4:]
-        try:check(mutated,mapping,progress)
+        try:check(mutated,mapping,progress,far)
         except ValueError:pass
         else:raise ValueError('removed instruction admitted: '+name)
     return dict(sites={n:hex(a) for n,a in sites.items()},deletion_checks=len(sites),

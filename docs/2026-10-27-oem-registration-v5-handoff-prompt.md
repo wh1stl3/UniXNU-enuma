@@ -1,3 +1,5 @@
+> 2026-10-28当前候选为far-chain-v7，完整镜像和qualification2已完成但未claim/上机。先读STATUS/HANDOFF及operations/2026-10-27-oem-far-chain-v7.md；本文件余下为历史，不能复用任何旧录像就绪或旧未消费状态。
+
 > 2026-10-27已由后续main-entry-v6推进取代当前候选入口。v5已经消费且真实安装返回已确认；最新候选/资格/卡点/边界请先读STATUS、HANDOFF和operations/2026-10-27-oem-main-entry-v6.md。以下为保留的v5交接历史，不能据其未claim/录像状态启动。
 
 # 接续 enuma OEM DisplayDxe：registration-v5 已编出，尚未上机

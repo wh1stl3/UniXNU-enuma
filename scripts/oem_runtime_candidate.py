@@ -13,7 +13,9 @@ EARLY_SCOPE='oem-early-v3'
 POST_SCOPE='oem-post-kernel-v4'
 REG_SCOPE='oem-registration-v5'
 MAIN_SCOPE='oem-main-entry-v6'
+FAR_SCOPE='oem-far-chain-v7'
 def limits_for(scope):
+    if scope==FAR_SCOPE:return dict(LIMITS,selected_call=0,max_windows=1,max_total_hold_us=8000000,call_selection='ram-only-until-dxe-complete')
     if scope==MAIN_SCOPE:return dict(LIMITS,selected_call=6,max_windows=3,max_total_hold_us=24000000,call_selection='minimum6-and-exact-rva3608')
     if scope==REG_SCOPE:return dict(LIMITS,selected_call=5,max_windows=5,max_total_hold_us=40000000)
     if scope==SCOPE:return dict(LIMITS)
@@ -29,7 +31,7 @@ def validate(root, directory):
     root=root.resolve(); directory=directory.resolve()
     directory.relative_to(root/'out')
     q=json.loads((directory/'qualification.json').read_text())
-    if q.get('passed') is not True or q.get('software_ready') is not True or q.get('scope') not in (SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,POST_SCOPE,REG_SCOPE,MAIN_SCOPE):
+    if q.get('passed') is not True or q.get('software_ready') is not True or q.get('scope') not in (SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,POST_SCOPE,REG_SCOPE,MAIN_SCOPE,FAR_SCOPE):
         raise ValueError('not an admitted OEM runtime candidate')
     c=q['run_config']
     if (set(c)!=set(('trial_id','session','selected_call','profile','experiment')) or

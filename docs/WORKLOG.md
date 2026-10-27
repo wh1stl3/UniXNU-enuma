@@ -1654,3 +1654,7 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 一张本地照片先独立保存完整五行和摘要，再解码及人工核对；用户确认一致且现场只有一页。E01/C6/Qc/RVA3608/session91c9b0ca3369ea72，支持原厂注册后已到主入口ChipInfo查询包装入口；不证明E01窗口恢复或原始查询执行/返回，更未证明GetChipFamily/SID/Core返回。没有S02/S04是本版设计，不可作为缺失返回。下一定位优先E01收尾/转发、ChipInfo查询与+48方法、条件协议/事件至SID及出口；唯一根因未知，不凭最后可见页判死锁。结果reports/enuma-oem-main-entry-v6-trial-20261027.json，out/oem-main-entry-live-20261027保存确认/恢复/发布证据；原图SHA256 7a8f944ea3b53063c339cc34b6cdbf67c7b1fb7a5c4a5005fe176c39106f4b8d仅本地Media-enuma本次目录。R027/旧候选冻结，v6不重试，无人工欠项。
 
 直连GitHub失败后通过系统已有代理的单命令Git参数完成推送，不修改全局配置。有效独立初读为media-review/independent-read1.json，首次写入异常空文件保留；原runner/独立初读pending状态不回写，由新human确认闭合。
+
+## 2026-10-28T00:04:58+08:00 far-chain-v7离线资格与镜像完成
+
+用户要求走得更远，已实现OEM期间RAM-only、目标真实返回后继续全部DXE分派及单张末端汇总，仍保留BDS前恢复出口。固件1f05eef62b62fc6f57b805e1cb346e3643457db7，设备仓前提交cacd246；镜像c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d，资格a1cdb2c1fbb1e4c7aacd0f6862db68c45275297f643e0241d092c7a622612823。ASan/UBSan/ARM64/44 Python、30+108删除与3 GUID变异、完整FD/Boot v3回读和2456绑定通过，未claim/上机。证据out/oem-far-chain-20261027、reports/enuma-oem-far-chain-v7-candidate.json。失败输出保留，R027/旧候选冻结，共享主线只读；旧录像不复用。换行规则纳入AGENTS并加构建前只读检查。固件显式GitHub URL正常推送且远端核对；设备仓发布见device-publication.json。本轮未触碰设备。

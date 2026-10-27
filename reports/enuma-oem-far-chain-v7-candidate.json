@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "software_ready": true,
+  "hardware_executed": false,
+  "scope": "oem-far-chain-v7",
+  "run_config": {
+    "trial_id": "61c29945-1399-49eb-8133-d11d465bb6c4",
+    "session": 9369882057737620086,
+    "selected_call": 0,
+    "profile": "oem-control",
+    "experiment": "oem-far-chain-v7"
+  },
+  "image": {
+    "path": "out/oem-far-chain-20261027/qualification2/image.img",
+    "sha256": "c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d",
+    "bytes": 3153920
+  },
+  "qualification": {
+    "path": "out/oem-far-chain-20261027/qualification2/qualification.json",
+    "sha256": "a1cdb2c1fbb1e4c7aacd0f6862db68c45275297f643e0241d092c7a622612823"
+  },
+  "fd_sha256": "e16748c382248cdfddd4514ea6e274032ec3c987fc96bcd11ad01a3117610a2f",
+  "firmware_commit": "1f05eef62b62fc6f57b805e1cb346e3643457db7",
+  "build_snapshot_base": "d393211b792ff5a219224e62b26ddcaabdf4257e",
+  "source_bindings": 2456,
+  "runtime_deletion_checks": 30,
+  "far_deletion_checks": 108,
+  "guid_mutation_checks": 3,
+  "python_tests": 44,
+  "trial_claimed": false,
+  "current_camera_ready": false,
+  "device_commands_executed": false,
+  "limitations": [
+    "pre-forward entry is not proof original service ran",
+    "no automatic recovery guarantee for OEM hang",
+    "local interrupt masking does not prove exclusion of AP or external DMA",
+    "no GOP/BDS/input acceptance",
+    "no export if OEM hangs before the selected wrapped service",
+    "SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause",
+    "each window requires inherited route still valid; refusal after OEM display changes is not OEM failure",
+    "one late DXE-complete summary; no earlier window and no independent watchdog or durable RAM recovery",
+    "phase5 Q is next trace sequence, not a synthetic service event"
+  ],
+  "evidence": "out/oem-far-chain-20261027"
+}

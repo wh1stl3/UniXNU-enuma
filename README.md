@@ -1,3 +1,5 @@
+> **2026-10-28 当前：** [far-chain-v7镜像与资格](docs/operations/2026-10-27-oem-far-chain-v7.md)已完成，未claim/上机。OEM期间只记RAM，真实返回后继续DXE，整轮分派完成才输出一张汇总，仍在BDS前恢复。旧v6已消费，旧拍摄就绪不复用；以下旧“当前/未上机”文字按历史阅读。现行STATUS/HANDOFF。
+
 > **2026-10-27 最新：** v6已单次消费，原厂主入口ChipInfo查询前E01已人工确认，用户无操作自行回Android且独立核验通过；原始查询/方法/SID/Core返回仍未证实。无人工欠项，不重试v6，现行状态见STATUS/HANDOFF。以下构建/未上机表述保留为历史。
 
 > **2026-10-27 当前入口：** [STATUS](docs/STATUS.md)、[HANDOFF](docs/HANDOFF.md)、[main-entry-v6分析与镜像](docs/operations/2026-10-27-oem-main-entry-v6.md)。新v6完整固件/Boot header v3镜像与离线资格已完成，未上机；v5两页确认真实配置安装返回EFI_SUCCESS，已consumed并恢复Android。共享主线只读、R027冻结，本轮不继承旧拍摄就绪。

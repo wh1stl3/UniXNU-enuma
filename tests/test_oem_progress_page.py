@@ -47,4 +47,14 @@ class Pages(unittest.TestCase):
             self.assertRaises(ValueError,decode,bad,123,'oem-main-entry-v6')
         self.assertEqual(decode(self.page(5),123,'oem-main-entry-v6')['event'],'core-start-image-return')
 
+    def test_far_summary(self):
+        rows=self.page(5).splitlines();rows[0]='S05C'+f'{0xc1:016x}';rows[2]='O'+f'{0x3608:016x}'+' '*3
+        page='\n'.join(rows);d=decode(page,123,'oem-far-chain-v7')
+        self.assertTrue(d['milestones']['dxe-dispatch-complete']);self.assertFalse(d['milestones']['sid-entered'])
+        self.assertEqual(d['status'],'0x800000000000000e')
+        for flags in (0,0x41,0x4000|0xc1,0x2c1,0x8c1):
+            bad=list(rows);bad[0]='S05C'+f'{flags:016x}'
+            self.assertRaises(ValueError,decode,'\n'.join(bad),123,'oem-far-chain-v7')
+        self.assertRaises(ValueError,decode,page,124,'oem-far-chain-v7')
+
 if __name__=='__main__':unittest.main()
