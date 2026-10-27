@@ -1609,3 +1609,10 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 ## 2026-10-27 22:01 v5本次拍照就绪与即时前检
 
 用户“随时准备拍照 可以开始了”放行本次registration-v5精确镜像一次临时启动，沿已有在场长按恢复安排，本次就绪独立记录。网络恢复，固件fd94b26已向显式GitHub URL/oem-progress-20261027正常推送；设备仓本准备提交发布并核验远端后才发图。只读前检确认enuma/Android完成/root/A槽/解锁及原双分区和本地备份摘要通过。trial仍4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e、镜像f9bd10078db5b049e7ad0cd050300c872cdcd1d0d975b6ed3065e4b03dac650d，未claim/启动，runner仍即时复核且只boot一次。证据out/oem-registration-live-20261027/authorization.json、preflight.json、firmware-push.json。R027冻结、共享主线只读，不flash/erase/改槽；75秒无返回先恢复并记录，媒体先独立判读再人工核对。
+
+
+## 2026-10-27 22:05 v5已消费，自行回Android，媒体待判读
+
+固件fd94b26/准备c878c8d已先后发布且执行前远端精确核验；本次即时身份/备份/恢复门禁通过，只boot一次，trial 4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e consumed。fastboot调用0.394秒返回0，执行器观察Android完成；用户确认没有操作、自行返回。22:05独立enuma/完成/root/A槽/解锁及双分区与本地原备份摘要通过，无追加启动/分区操作或硬停。媒体尚未判读，安装/SID/Core返回未知，不以Android终点推断OEM/GOP成功。
+
+用户纠正媒体位置，已在D:/Code/PortingiOS/enuma/Media-enuma/OEM-registration-v5-20261027-4549e5e6建目录；此前误建out/media为空且不使用。下一步原媒体独立判读落盘→展示全文→人工核对→精确代码归因。本次不重试，R027冻结、共享主线只读。结果reports/enuma-oem-registration-v5-trial-20261027.json，恢复/现场确认out/oem-registration-live-20261027；原runner状态不回写，human-return-confirmation独立关闭按键待办。

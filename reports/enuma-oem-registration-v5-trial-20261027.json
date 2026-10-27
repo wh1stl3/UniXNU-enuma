@@ -1,0 +1,23 @@
+{
+  "scope": "oem-registration-v5",
+  "trial_id": "4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e",
+  "image_sha256": "f9bd10078db5b049e7ad0cd050300c872cdcd1d0d975b6ed3065e4b03dac650d",
+  "firmware_commit": "fd94b265d1b0112c4a60d36a058d7b91efbb250d",
+  "preparation_commit": "c878c8d13dc9f061a1730530609cb6d20182abef",
+  "publication_verified_before_boot": true,
+  "boot_count": 1,
+  "consumed": true,
+  "boot_transport_returncode": 0,
+  "observed_endpoint": "android",
+  "independent_android_postcheck_passed": true,
+  "manual_recovery": false,
+  "return_method_basis": "user confirmation",
+  "media_review": "pending local files",
+  "root_cause_proven": false,
+  "oem_return_proven": false,
+  "production_gop_verified": false,
+  "partition_writes": false,
+  "evidence_directory": "out/device-tests/oem-4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e",
+  "postcheck": "out/oem-registration-live-20261027/postcheck.json",
+  "media_directory": "D:/Code/PortingiOS/enuma/Media-enuma/OEM-registration-v5-20261027-4549e5e6"
+}
