@@ -61,7 +61,7 @@ EnumaDispatchCheckpoint.h 仅在stage12/13统计实际队列序号，`--dispatch
 复现命令（本地工具和备份不发布）：
 
 ```powershell
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --dispatch-ordinal 1 --stop-delay 7
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOSLegacy/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --dispatch-ordinal 1 --stop-delay 7
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/run_enuma_entry_probe.py --image out/boot-candidate/enuma-official-queue1-stage13-delay7-boot-v3.img --label dxe-driver-return
 ```
 

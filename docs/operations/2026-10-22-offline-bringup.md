@@ -31,7 +31,7 @@ python -B scripts/audit_reuse.py
 `audit_inputs.py` 顺序读约 8.5 GB 系统 DMG；`check_workspace.py` 只复核来源固定点与已有摘要报告，不代替完整重算。
 
 ```powershell
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/check_reused_ufs.py --source /mnt/d/Code/PortingiOS/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_reused_ufs.py --source /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
 ```
 
 ## iPadOS donor

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ADB = 'D:/Code/PortingiOS/common/tools/platform-tools/adb.exe'
+ADB = 'D:/Code/PortingiOSLegacy/common/tools/platform-tools/adb.exe'
 
 
 def sha256(path):
@@ -54,7 +54,8 @@ def reconcile(root=ROOT, invoke=None):
     if (checks['device'] != 'enuma' or checks['boot_completed'] != '1' or
             checks['slot'] != state['slot'] or checks['flash_locked'] != '0' or not checks['root_available']):
         raise ValueError('recovery identity, boot, root or slot check failed')
-    backup_root = Path(state.get('recovery_backup_directory', state['directory']))
+    from enuma_paths import evidence_path
+    backup_root = evidence_path(state.get('recovery_backup_directory', state['directory']),root)
     partitions = []
     if {item['partition'] for item in state['backups']} != {'boot_a', 'vendor_boot_a'} or state['slot'] != '_a':
         raise ValueError('recovery is limited to the captured enuma slot A contract')

@@ -1,0 +1,64 @@
+{
+  "trial": "S-051",
+  "execution_id": "3d3f2ede-2e1f-4bd7-9937-ea4ae6c213e1",
+  "image_sha256": "360b5ec7eeb26f76858069fba78d3f69bbe90d40f125730dfcd324dbe69fbd8a",
+  "media_path": "../Media-enuma/S-051-R023/微信图片_20261026204213_136_25.jpg",
+  "media_sha256": "d95cf925d253837ae623069279305d7250596a1e6b7fe9371bb82ca7176b1f0a",
+  "assistant_independent_transcription": [
+    "C0d O0000001f+",
+    "S0000000000000000",
+    "Q00000000000000b9",
+    "G004de8591d2b34077",
+    "G1bbbeb12070094eb6"
+  ],
+  "human_transcription": [
+    "COD 00000001F+",
+    "S0000000000000000",
+    "Q00000000000000B9",
+    "G004DE8591D2B34077",
+    "G1BBBEB12070094EB6"
+  ],
+  "normalized_transcription": [
+    "C0d O0000001f+",
+    "S0000000000000000",
+    "Q00000000000000b9",
+    "G004de8591d2b34077",
+    "G1bbbeb12070094eb6"
+  ],
+  "human_crosscheck_passed": true,
+  "numeric_fields_match": true,
+  "full_page_content_crosschecked": true,
+  "corner_occlusion_observed": false,
+  "glyph_identity_unambiguous": false,
+  "normalization": [
+    "hexadecimal letters case-folded",
+    "C O D header read as fixed C0d context: O/0 share the same glyph",
+    "nine digit-like characters after space represent O label plus eight ordinal hex digits, not a nine-digit ordinal"
+  ],
+  "known_glyph_collisions": [
+    "O/0",
+    "S/5",
+    "C/c"
+  ],
+  "status_hex": "0000000000000000",
+  "ordinal": 31,
+  "sequence": 185,
+  "guid": "04de8591-d2b3-4077-bbbe-b12070094eb6",
+  "packaged_driver_candidates": [
+    {
+      "name": "I2C",
+      "sha256": "71845af503fc8bc18aa885ac7d86e6630220a990b789cc9cca85f2af76ce4dc4"
+    }
+  ],
+  "inference": "Previously completed point13 StartImage return for packaged I2C driver is EFI_SUCCESS; not current provider return or proof of I2C bus/peripheral functionality",
+  "hold_duration_confirmed_from_still": false,
+  "global_debug": false,
+  "formal_gop": false,
+  "menu_hardware_tested": false,
+  "bindings": {
+    "out\\r023-live-20261026\\assistant-independent-transcription.json": "0a661b8f37e484c99a94a36c5dff05a7a2d06aca615f82666b700ef56ca06fc2",
+    "out\\r023-live-20261026\\human-transcription.txt": "5182b1a3666fcf0db74ae5e3d26c58bcf594aa74e305670e0b7e18eb0cd8b60f",
+    "out\\r023-live-20261026\\crosschecked-transcription.txt": "f8e71298e0873aaf6f7e36e656b5abe90049e16bbf8e1ac5ee938cab7a82bb3e",
+    "out\\r023-live-20261026\\crosschecked-decoded.json": "b72da7c97f35c2284de53c34e17e00653cb388b90490cc07b074a52a7a4899b6"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "milestone": "D-315",
+  "scope": "offline complete UniXNU application entry and child GOP binding",
+  "passed": true,
+  "qemu": "out/menu-application-20261027/qemu6/result.json",
+  "host_failure_scenarios": 9,
+  "commands": 22,
+  "actual_config_loaded": true,
+  "actual_exit_action_executed": true,
+  "application_host_status": "EFI_SUCCESS",
+  "firmware_host_status": "EFI_ABORTED",
+  "frame_crc32": "15EA20DF",
+  "physical_device_action": false,
+  "board_bds_executed": false,
+  "new_board_image_built": false,
+  "new_helper_enabled_in_board_profile": false,
+  "production_gop_admitted": false,
+  "requirements_retained": 22,
+  "r025_artifacts_preserved": true,
+  "bindings": {
+    "firmware/diagnostics/EnumaMenuApplication.h": "923cc683d74569680f5fd08f45f0738dd04cfb7ff90187758faf0fd3fc0e6410",
+    "tests/menu_application_lifetime.c": "928197ce4b3bbb73cfb0c654b690f79a27edf9b8daf292473193ded62623b1c3",
+    "tests/uefi_application_chain.c": "196f6d015805af6542f1fadb91ec71a5d15fbcc4e7c59d7f15a5d1960317b71f",
+    "scripts/check_unixnu_application_qemu.py": "339303d994784c1d3a19026617b13a0732e8f9fedd851b15c8a5a809fe871cdd",
+    "config/menu-entry-validation.toml": "81e868473adccb5ba40e0f66dce78e7839be6203ab058b502ed99ee1335ef7d9"
+  },
+  "limitations": [
+    "VM allocated RAM GOP; does not extend physical write budgets",
+    "No physical key input tested",
+    "firmware host calls ConnectAll before parsing connect_all=false",
+    "existing stage13 stop and transient bounded provider remain in board profile"
+  ]
+}

@@ -186,7 +186,7 @@ def source_audit(base):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--reference-root', type=Path, default=Path('D:/Code/PortingiOS'))
+    parser.add_argument('--reference-root', type=Path, default=Path('D:/Code/PortingiOSLegacy'))
     parser.add_argument('--output', type=Path, default=ROOT / 'reports/input-audit.json')
     args = parser.parse_args()
     if not args.output.resolve().is_relative_to(ROOT):

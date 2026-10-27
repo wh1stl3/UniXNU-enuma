@@ -44,13 +44,13 @@ SEC原实现会在DEBUG启动时清空整个显示保留区。新增按enuma开�
 
 ```powershell
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/collect_enuma_platform.py
-wsl -d Ubuntu-22.04 -- python3 -m venv /mnt/d/Code/UniXNU-enuma/out/firmware-tools
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/pip install -r /mnt/d/Code/UniXNU-enuma/config/firmware-tools-requirements.txt
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/extract_enuma_xbl.py
+wsl -d Ubuntu-22.04 -- python3 -m venv /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/pip install -r /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/config/firmware-tools-requirements.txt
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/extract_enuma_xbl.py
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/prepare_enuma_platform.py
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/audit_enuma_fd.py
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/prepare_enuma_boot_payload.py --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOSLegacy/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/audit_enuma_fd.py
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/prepare_enuma_boot_payload.py --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/package_enuma_boot.py --kernel out/boot-candidate/enuma-uefi.raw --ramdisk out/boot-candidate/empty-ramdisk --output out/boot-candidate/enuma-new-run-boot-v3.img
 ```
 

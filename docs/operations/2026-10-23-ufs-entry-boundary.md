@@ -36,9 +36,9 @@ Metronome插入后UFS序号28。原厂84项APRIORI确有Metronome早于UFS，Mu 
 
 ```powershell
 # 所有实际构建仍经官方backend；先预检、审计、独立v3回读，后临时启动。
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/audit_oem_apriori.py
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/audit_oem_apriori.py
 # 当前GOP隔离模式，不代表完整固件：
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --dispatch-ordinal 32 --dispatch-guid 4138022f-06c7-4f79-9c94-7e33b511a4e7 --diagnostic-without-ufs
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOSLegacy/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --dispatch-ordinal 32 --dispatch-guid 4138022f-06c7-4f79-9c94-7e33b511a4e7 --diagnostic-without-ufs
 ```
 
 精确FD/镜像/源提交见entry-device-tests各variant；快照out/entry-probe/<variant>/包含FD、构建/预检/审计/payload和日志。来源CI281179c/run39810564733及b988fa4/run39811887053均回读PASS，未跑新的macOS内核CI。静态原厂顺序与三份固定Mu服务源码摘要见enuma-oem-apriori-gap-audit，缺项审计负向证据见enuma-firmware-omission-policy-check。

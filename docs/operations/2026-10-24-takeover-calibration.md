@@ -62,7 +62,7 @@ assert not any(name in libraries.lower() for name in ('pscireset','resetsystemli
 1. `(info/'alternates').write_text(objects.as_posix()+'\n')` → Windows 把 `\n` 写成 `\r\n`，git 读到 `.../objects\r`，`update-ref` 报 `object directory ... does not exist`。修为 `write_bytes`（96d354a），WSL 下等价。
 2. `link.symlink_to(..., target_is_directory=True)` → 创建符号链接需特权，普通权限 `OSError: [WinError 1920]`。**未修**。
 
-历史上所有构建记录都在 WSL 内完成，所以这两处缺陷此前不会暴露。本轮起构建命令固定为 `wsl.exe -e bash -lc "cd /mnt/d/Code/UniXNU-enuma && python3 scripts/build_enuma_firmware.py ..."`，环境 Python 3.10.12 + tomli。
+历史上所有构建记录都在 WSL 内完成，所以这两处缺陷此前不会暴露。本轮起构建命令固定为 `wsl.exe -e bash -lc "cd /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma && python3 scripts/build_enuma_firmware.py ..."`，环境 Python 3.10.12 + tomli。
 
 **构建不可复现**：撤回到 74598df 等价源码后，用与已资格 zero 完全相同的参数重建，FD 为 `02f8d31d…` 而非 `bfb3d6a6…`。含义是“资格”只能绑定到已归档的镜像文件，不能靠重建复得；本轮重建产物未用于任何实测。
 

@@ -69,7 +69,7 @@ def plan(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--fdt', type=Path, default=Path('D:/Code/PortingiOS/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout'))
+    parser.add_argument('--fdt', type=Path, default=Path('D:/Code/PortingiOSLegacy/enuma/backups/android-root/20261021T124813939334Z/android-root-fdt.stdout'))
     args = parser.parse_args()
     result = plan(args.fdt)
     board_path = ROOT / 'board.toml'

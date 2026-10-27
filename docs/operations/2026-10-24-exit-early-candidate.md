@@ -42,10 +42,10 @@
 固件源码不变（stage 10 已在既有补丁里），固定提交仍是 `c45e52a`。在 WSL 中执行：
 
 ```bash
-cd /mnt/d/Code/UniXNU-enuma
+cd /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma
 python3 scripts/build_enuma_firmware.py \
-  --device-root /mnt/d/Code/UniXNU-enuma \
-  --unixnu /mnt/d/Code/UniXNU-enuma/out/sources/UniXNU \
+  --device-root /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma \
+  --unixnu /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU \
   --stop-stage 10 --stop-delay 2 \
   --dispatch-ordinal 1 --detail-point 13 \
   --diagnostic-simplefb --jobs 8

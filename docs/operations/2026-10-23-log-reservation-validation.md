@@ -49,11 +49,11 @@
 python -B -m unittest discover -s tests
 python -B scripts/check_workspace.py
 python -B scripts/audit_log_reservation.py
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/check_log_fdt.py
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/build_log_reservation_boot.py --approved-r002 --stock-boot /mnt/d/Code/UniXNU-enuma/out/device-tests/20261022T201404/boot_a.bin --output /mnt/d/Code/UniXNU-enuma/out/boot-candidate/r002-android-reservation-02.img
-python -B scripts/run_enuma_entry_probe.py --image D:/Code/UniXNU-enuma/out/boot-candidate/r002-android-reservation-02.img --label android-log-reservation
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_log_fdt.py
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/build_log_reservation_boot.py --approved-r002 --stock-boot /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/device-tests/20261022T201404/boot_a.bin --output /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/boot-candidate/r002-android-reservation-02.img
+python -B scripts/run_enuma_entry_probe.py --image D:/Code/PortingiOS/enuma/UniXNU-enuma/out/boot-candidate/r002-android-reservation-02.img --label android-log-reservation
 python -B scripts/capture_log_reservation.py --name reservation-device-02
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/build_log_reader.py
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/build_log_reader.py
 ```
 
 45 项 Python、21 组实际 C ASan/UBSan（含拒绝时零修改、重复拒绝、全部节点/属性值相等）、来源/board/defconfig/example 检查、AOSP v3 回读通过。ABI 探针编译通过。没有重新构建 UEFI、重跑 macOS CI 或设置 verified 标记。不要覆盖已有候选或报告，复测选新名字。

@@ -22,7 +22,7 @@ scripts/check_darwin_adt.py 从 UniXNU 75bc13dd 的 DarwinBoot.c 按固定函数
 ```powershell
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/check_workspace.py
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/plan_adt.py
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/check_darwin_adt.py --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_darwin_adt.py --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
 ```
 
 先重新生成JSON计划，随后检查其board摘要以拒绝过期计划。检查只编译主机测试程序，输出位于 out/darwin-adt-contract；不会生成 ADT、EFI、FD、boot.img 或改动设备。证据 reports/workspace-check.json、reports/enuma-adt-plan.json、reports/darwin-adt-contract.json。

@@ -1,0 +1,21 @@
+{
+  "execution_id": "845452c8-b72b-4384-aa5d-70de3f616fd6",
+  "candidate_sha256": "17a18ace93a002ac394ef4727148e893d7defe420496b4d3e8df7dde115be0cd",
+  "issued_at": "2026-10-27 00:09:34",
+  "boot_returncode": 0,
+  "boot_command_return_seconds": 2.625,
+  "adb_return_seconds": 49.812,
+  "boot_complete_seconds": 64.406,
+  "phase": "recovered-android-boot-complete",
+  "partition_digests_unchanged": true,
+  "trial": "S-053",
+  "hardware_review": "R-025",
+  "independent_recovery_passed": true,
+  "visual_read": "out/r025-live-20261027/independent-visual-read.json",
+  "user_crosscheck": "pending",
+  "firmware_return_code": null,
+  "production_gop_admitted": false,
+  "full_unixnu_run": false,
+  "physical_input": false,
+  "device_result": "out\\device-tests\\20261027T000919-dxe-driver-return\\result.json"
+}

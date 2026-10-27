@@ -24,7 +24,7 @@ scripts/prepare_full_payload.py核对上游Git blob，用上游DER函数解出�
 构建（WSL Ubuntu-22.04，firmware-tools虚拟环境含tomli；不运行参考仓默认builder）：
 
 ```text
-env PATH=/mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin:/usr/bin:/bin python -B /mnt/d/Code/UniXNU-enuma/scripts/prepare_full_payload.py
+env PATH=/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin:/usr/bin:/bin python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/prepare_full_payload.py
 ```
 
 实际FAT由mtype回读四个输入，内核和trust摘要匹配原输入，ADT和配置归档至out/full-boot/payload-readback.*。机器证据reports/enuma-full-payload.json、enuma-full-adt.json。

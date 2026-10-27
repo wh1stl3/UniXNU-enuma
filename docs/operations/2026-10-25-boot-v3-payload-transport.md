@@ -73,4 +73,4 @@ CONNECT可能因已绑定设备返回非成功；只要SFS与文件成功即可�
 
 机器证据：enuma-ram-payload-host.json、enuma-ram-payload-contract.json、enuma-ram-payload-qualification.json、enuma-abl-v3-concat.json、enuma-firmware-build.json、enuma-fd-audit.json及源迁移报告。source/host/build/packaging通过均不等于实机运输/SFS通过。
 
-设备仓以firmware/子模块为权威，本轮pin升级到698b7c1，UniXNU仍5fdbd5d；standalone D:/Code/uefi-enuma旧74598df及其已有Mu脏状态未动，不要误用其旧检出构建本候选。board仍example=true、R-001仍512MiB、没有新增verified/分区写入/像素试验。A/R-016 consumed、B备用、R-015暂停和R-002失败限制保持。
+设备仓以firmware/子模块为权威，本轮pin升级到698b7c1，UniXNU仍5fdbd5d；standalone D:/Code/PortingiOS/enuma/uefi-enuma旧74598df及其已有Mu脏状态未动，不要误用其旧检出构建本候选。board仍example=true、R-001仍512MiB、没有新增verified/分区写入/像素试验。A/R-016 consumed、B备用、R-015暂停和R-002失败限制保持。

@@ -1,18 +1,18 @@
 {
   "scope": "explicit human-only close-up capture; host boot-clock/USB/recovery logs; no host video",
-  "image_sha256": "c75b6c863d294d7b3e2772ddb7f46a239c7915685b9c7309f11310049945d8bf",
+  "image_sha256": "e789df474e05e4de37f329cc4a1dd623cb1975ede0ae48b134bcf866db9f2969",
   "camera_used": false,
   "host_camera_used": false,
   "human_capture_ready": true,
   "human_media_pending": true,
   "human_media_received": false,
   "observation_channel": "human-primary-only",
-  "observation_repeat": "R-021",
-  "execution_id": "5ea538d3-8f78-45cb-b1d1-1be089b1a151",
-  "started_utc": "2026-10-26T04:28:09.918065+00:00",
+  "observation_repeat": null,
+  "execution_id": "66cb0cc9-4cce-4f47-b882-b61a0dda2959",
+  "started_utc": "2026-10-26T13:55:56.850250+00:00",
   "device_runner_started": true,
   "boot_issued": true,
   "host_audio_recorded": false,
-  "runner_log": "out/human-capture/20261026T122809-S049/runner.log",
+  "runner_log": "out/human-capture/20261026T215556-S052/runner.log",
   "runner_exit": 0
 }

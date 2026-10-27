@@ -1,0 +1,31 @@
+{
+  "milestone": "D-311",
+  "hardware_review": "R-025",
+  "trial": "S-053",
+  "software_qualification_passed": true,
+  "hardware_executed": false,
+  "candidate_claimed": false,
+  "image": "out/menu-window-20261026/qualification2/image.img",
+  "image_sha256": "17a18ace93a002ac394ef4727148e893d7defe420496b4d3e8df7dde115be0cd",
+  "qualification": "out/menu-window-20261026/qualification2/qualification.json",
+  "execution_review": "out/menu-window-20261026/execution-review.json",
+  "local_preparation": "out/menu-window-20261026/preparation1/preparation.json",
+  "device_preflight": "out/menu-window-20261026/read-only-preflight2.json",
+  "scope": "transient 800x600 GOP window, actual UniXNU Ui/Menu, 8-second countdown, save/restore/readback",
+  "full_unixnu_run": false,
+  "bds_reached": false,
+  "physical_input": false,
+  "formal_gop": false,
+  "media_directory": "D:/Code/PortingiOS/enuma/Media-enuma/S-053-R025",
+  "approval_status": "pending",
+  "current_capture_ready": false,
+  "automatic_return_required": false,
+  "frozen_artifacts_preservation": "out/menu-window-20261026/preservation.json",
+  "source_state": "uncommitted working-tree snapshot; no commit/push/reset/clean",
+  "remaining": [
+    "current R025 one-shot filming confirmation",
+    "immediate bound target/backup/recovery guards",
+    "one temporary boot",
+    "independent media transcription and user crosscheck"
+  ]
+}

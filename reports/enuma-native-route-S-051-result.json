@@ -1,0 +1,74 @@
+{
+  "trial": "S-051",
+  "hardware_review": "R-023",
+  "execution_id": "3d3f2ede-2e1f-4bd7-9937-ea4ae6c213e1",
+  "image_sha256": "360b5ec7eeb26f76858069fba78d3f69bbe90d40f125730dfcd324dbe69fbd8a",
+  "issued_at": "2026-10-26 20:41:44",
+  "boot_returncode": 0,
+  "boot_command_return_seconds": 2.64,
+  "adb_return_seconds": 49.844,
+  "automatic_android_return": true,
+  "boot_complete_seconds": 65.062,
+  "independent_recovery_passed": true,
+  "warning_code_inferred": 5,
+  "origin_after_issue": [
+    40.72900000002119,
+    40.802000000025146
+  ],
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      8.4
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        13.747999999998138
+      ],
+      [
+        16.25199999997858,
+        26.747999999998136
+      ],
+      [
+        21.25199999997858,
+        31.747999999998136
+      ],
+      [
+        26.25199999997858,
+        36.747999999998136
+      ],
+      [
+        39.25199999997858,
+        41.747999999998136
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
+    "success_only": true,
+    "declared_profile": "R-0238s hold;unique-code5-only,failures/overlap stop;preissue windows",
+    "failure_windows_may_overlap": true
+  },
+  "observation": "indirect timing supports bounded CPU transaction and restoration; not direct register/GOP proof",
+  "media_received": true,
+  "human_transcription_crosscheck_pending": true,
+  "full_page_acceptance": false,
+  "additional_boots_authorized": false,
+  "partition_writes": false,
+  "bindings": {
+    "out\\device-tests\\20261026T204130-system-transport\\result.json": "44c42919614b2fd4b251c8ae8fc5d79b66787a79b97408c27d5596f932209256",
+    "out\\device-tests\\20261026T204130-system-transport\\pre-boot-clock.local.json": "b4aca95094fd706ef45152ca5a8231856c7a5d3d92dfcb004c39f2a1e7d2a092",
+    "out\\device-tests\\20261026T204130-system-transport\\post-boot-clock.local.json": "c6be80dfa3d3a9a1dbbc648b0792414e4ea6aac833ebb25b46e59533600e1610",
+    "out\\r023-live-20261026\\postcheck.json": "f39a8fddc0db5f3e58de959c15d04d47a8e2e64562c7f922efdc0449f740642a",
+    "out\\r023-live-20261026\\assistant-independent-transcription.json": "0a661b8f37e484c99a94a36c5dff05a7a2d06aca615f82666b700ef56ca06fc2"
+  }
+}

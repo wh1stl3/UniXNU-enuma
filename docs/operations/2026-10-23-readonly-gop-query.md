@@ -36,7 +36,7 @@ Core可能卸载驱动，令已发布的函数指针悬空。同步兜底仍不�
 固件构建命令使用本仓WSL虚拟环境Python，两个候选仅改变`--diagnostic-gop-query 1/2`：
 
 ```text
-scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --stop-delay 2 --dispatch-ordinal 1 --detail-point 16 --dispatch-guid dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92 --dispatch-guid-only --dispatch-completion-fallback --diagnostic-simplefb --diagnostic-gop-query 1 --jobs 8
+scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOSLegacy/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --stop-delay 2 --dispatch-ordinal 1 --detail-point 16 --dispatch-guid dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92 --dispatch-guid-only --dispatch-completion-fallback --diagnostic-simplefb --diagnostic-gop-query 1 --jobs 8
 ```
 
 之后逐项运行FD审计、BootShim载荷准备、v3打包，完整报告与镜像留在out。

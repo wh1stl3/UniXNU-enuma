@@ -11,7 +11,7 @@
 两次官方函数输出的尾部空闲簇出现不同非零字节，即使固定输入mtime和SOURCE_DATE_EPOCH仍不同，故没有沿用“原函数自然确定性”的假设。脚本检查FAT32几何和两份FAT一致后，仅清空FAT条目标为free的簇及完整簇后padding，保留全部已分配簇和元数据；实际两次各清理一个非零空闲簇。最终两镜像逐字节相同；mdir递归只见目标配置，mcopy提取逐字节回读相同。三组测试覆盖已分配数据保留、FAT分歧与畸形/截断拒绝且不改输入。
 
 ```sh
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/prepare_enuma_discovery_volume.py --unixnu /mnt/d/Code/UniXNU-enuma/out/sources/UniXNU
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/prepare_enuma_discovery_volume.py --unixnu /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU
 ```
 
 这仍不是可启动候选：未打包boot v3、未新增固件initrd publisher、未证明实际initrd范围或SFS发现。10秒菜单倒计时遇输入会取消，不是独立复位保护或挂死看门狗，不满足单独实机安全门禁。现有三份晚间镜像不包含它。

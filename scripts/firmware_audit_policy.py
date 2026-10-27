@@ -2,6 +2,54 @@
 
 
 def omitted_oem_modules(build, fd_sha256):
+    full_defs=build.get('firmware_configuration',{}).get('defines',{})
+    if full_defs.get('ENUMA_DEFERRED_MENU','0')!='0' or build.get('deferred_menu'):
+        from deferred_menu_scope import SCOPE
+        required={'ENUMA_DEFERRED_MENU':'1','ENUMA_FULL_MENU':'1','ENUMA_BOUNDED_MENU':'1','ENUMA_DIAG_SIMPLEFB':'1','ENUMA_DIAG_DISABLE_UFS':'1',
+                  'ENUMA_DIAG_STAGE':'13','ENUMA_DIAG_DETAIL_POINT':'16','ENUMA_DIAG_GUID_ONLY':'1',
+                  'ENUMA_DIAG_DISPATCH_FALLBACK':'0','ENUMA_DIAG_GOP_QUERY':'1','ENUMA_DIAG_GOP_STEP':'0',
+                  'ENUMA_BOOT_LOG_REPLAY':'0','ENUMA_PROBE_JOURNAL_REPLAY':'0','ENUMA_NATIVE_ROUTE_CPU_TEXT':'0',
+                  'ENUMA_NATIVE_ROUTE_CPU_PATTERN':'1','ENUMA_NATIVE_ROUTE_CPU_POLICY':'1',
+                  'ENUMA_NATIVE_ROUTE_ALPHA_VIEW':'1'}
+        if (build.get('deferred_menu') is not True or build.get('complete') is not True or
+            build.get('fd_sha256')!=fd_sha256 or build.get('profile')!='deferred-menu' or
+            build.get('deferred_menu_scope')!=SCOPE or build.get('hardware_review_required')!='R-027' or
+            any(full_defs.get(k)!=v for k,v in required.items()) or
+            build.get('diagnostic_omitted_oem_modules')!=['CPRDxe','DisplayDxe','UFSDxe']):
+            raise ValueError('full application requires independent R027 scope; R026 is not reusable')
+        return frozenset(['CPRDxe','DisplayDxe','UFSDxe'])
+    if full_defs.get('ENUMA_FULL_MENU','0')!='0' or build.get('full_menu'):
+        from full_menu_scope import SCOPE
+        required={'ENUMA_FULL_MENU':'1','ENUMA_BOUNDED_MENU':'1','ENUMA_DIAG_SIMPLEFB':'1','ENUMA_DIAG_DISABLE_UFS':'1',
+                  'ENUMA_DIAG_STAGE':'13','ENUMA_DIAG_DETAIL_POINT':'16','ENUMA_DIAG_GUID_ONLY':'1',
+                  'ENUMA_DIAG_DISPATCH_FALLBACK':'0','ENUMA_DIAG_GOP_QUERY':'1','ENUMA_DIAG_GOP_STEP':'0',
+                  'ENUMA_BOOT_LOG_REPLAY':'0','ENUMA_PROBE_JOURNAL_REPLAY':'0','ENUMA_NATIVE_ROUTE_CPU_TEXT':'0',
+                  'ENUMA_NATIVE_ROUTE_CPU_PATTERN':'1','ENUMA_NATIVE_ROUTE_CPU_POLICY':'1',
+                  'ENUMA_NATIVE_ROUTE_ALPHA_VIEW':'1'}
+        if (build.get('full_menu') is not True or build.get('complete') is not True or
+            build.get('fd_sha256')!=fd_sha256 or build.get('profile')!='full-menu' or
+            build.get('full_menu_scope')!=SCOPE or build.get('hardware_review_required')!='R-026' or
+            any(full_defs.get(k)!=v for k,v in required.items()) or
+            build.get('diagnostic_omitted_oem_modules')!=['CPRDxe','DisplayDxe','UFSDxe']):
+            raise ValueError('full application requires independent R026 scope; R025 is not reusable')
+        return frozenset(['CPRDxe','DisplayDxe','UFSDxe'])
+    menu_flag=build.get('firmware_configuration',{}).get('defines',{}).get('ENUMA_BOUNDED_MENU','0')
+    if menu_flag!='0' or build.get('bounded_menu'):
+        from menu_window_scope import SCOPE
+        defs=build.get('firmware_configuration',{}).get('defines',{})
+        required={'ENUMA_BOUNDED_MENU':'1','ENUMA_DIAG_SIMPLEFB':'1','ENUMA_DIAG_DISABLE_UFS':'1',
+                  'ENUMA_DIAG_STAGE':'13','ENUMA_DIAG_DETAIL_POINT':'16','ENUMA_DIAG_GUID_ONLY':'1',
+                  'ENUMA_DIAG_DISPATCH_FALLBACK':'0','ENUMA_DIAG_GOP_QUERY':'1','ENUMA_DIAG_GOP_STEP':'0',
+                  'ENUMA_BOOT_LOG_REPLAY':'0','ENUMA_PROBE_JOURNAL_REPLAY':'0','ENUMA_NATIVE_ROUTE_CPU_TEXT':'0',
+                  'ENUMA_NATIVE_ROUTE_CPU_PATTERN':'1','ENUMA_NATIVE_ROUTE_CPU_POLICY':'1',
+                  'ENUMA_NATIVE_ROUTE_ALPHA_VIEW':'1'}
+        if (build.get('bounded_menu') is not True or build.get('complete') is not True or
+            build.get('fd_sha256')!=fd_sha256 or build.get('profile')!='menu-window' or
+            build.get('menu_window_scope')!=SCOPE or build.get('hardware_review_required')!='R-025' or
+            any(defs.get(k)!=v for k,v in required.items()) or
+            build.get('diagnostic_omitted_oem_modules')!=['CPRDxe','DisplayDxe','UFSDxe']):
+            raise ValueError('bounded menu requires independently bound R025 scope and exact diagnostic profile')
+        return frozenset(['CPRDxe','DisplayDxe','UFSDxe'])
     flag=build.get('firmware_configuration',{}).get('defines',{}).get('ENUMA_DIAG_DISABLE_UFS','0')
     declared=build.get('diagnostic_omitted_oem_modules',[])
     simple=build.get('firmware_configuration',{}).get('defines',{}).get('ENUMA_DIAG_SIMPLEFB','0')
@@ -13,20 +61,30 @@ def omitted_oem_modules(build, fd_sha256):
     replay=build.get('boot_log_replay',False)
     hold=build.get('boot_log_hold_seconds',2) if replay else 2
     defs=build.get('firmware_configuration',{}).get('defines',{})
+    diagnostic=build.get('diagnostic_pixel_log',False)
+    if type(diagnostic) is not bool or (diagnostic and (not replay or hold!=8 or defs.get('ENUMA_BOOT_LOG_REPLAY')!='3' or defs.get('ENUMA_PROBE_JOURNAL_REPLAY')!='1')):
+        raise ValueError('unsupported diagnostic cached replay')
+    attributed=build.get('attributed_pixel_log',False)
+    if diagnostic and attributed: raise ValueError('conflicting cached replay profiles')
+    inset=diagnostic or attributed
+    if type(attributed) is not bool or (attributed and (not replay or hold!=8 or defs.get('ENUMA_BOOT_LOG_REPLAY')!='2')):
+        raise ValueError('unsupported attributed cached replay')
     if type(text) is not bool or (text and not pattern) or defs.get('ENUMA_NATIVE_ROUTE_CPU_TEXT','0')!=str(int(text)): raise ValueError('unsupported native text declaration')
     if type(pattern) is not bool or defs.get('ENUMA_NATIVE_ROUTE_CPU_PATTERN','0')!=str(int(pattern)):
         raise ValueError('unsupported native pixel declaration')
     if hold not in (2,8) or (hold==8 and defs.get('ENUMA_BOOT_LOG_HOLD_US')!='8000000'): raise ValueError('unsupported cached hold duration')
-    if type(replay) is not bool or (replay and (not pattern or text or defs.get('ENUMA_BOOT_LOG_REPLAY')!='1' or defs.get('ENUMA_BOOT_JOURNAL')!='1')): raise ValueError('unsupported cached replay declaration')
+    if type(replay) is not bool or (replay and (not pattern or text or defs.get('ENUMA_BOOT_LOG_REPLAY')!=('3' if diagnostic else '2' if attributed else '1') or defs.get('ENUMA_BOOT_JOURNAL')!='1')): raise ValueError('unsupported cached replay declaration')
     if pattern:
         required=['ENUMA_NATIVE_ROUTE_CPU_ROI','ENUMA_NATIVE_ROUTE_CPU_BARRIER','ENUMA_NATIVE_ROUTE_CPU_READ',
                   'ENUMA_NATIVE_ROUTE_CPU_POLICY','ENUMA_NATIVE_ROUTE_CPU_STAGE1','ENUMA_NATIVE_ROUTE_ALPHA_VIEW',
                   'ENUMA_NATIVE_ROUTE_GLOBAL_OUTPUT','ENUMA_NATIVE_ROUTE_STRUCTURE','ENUMA_NATIVE_ROUTE_AUDIT']
         contract=build.get('inherited_video_compiled_contract',{})
-        if (video is not False or build.get('hardware_review_required')!=('R-022' if replay and hold==8 else 'R-020' if replay else 'R-019' if text else 'R-018') or
+        if inset and build.get('attributed_pixel_scope')!={'origin_x':64,'origin_y':96,'width':320,'height':160,'hold_us':8000000,'barriers_max':3}:
+            raise ValueError('attributed pixel bounds mismatch')
+        if (video is not False or build.get('hardware_review_required')!=('R-024' if diagnostic else 'R-023' if attributed else 'R-022' if replay and hold==8 else 'R-020' if replay else 'R-019' if text else 'R-018') or
             any(defs.get(k)!='1' for k in required) or
             any(type(contract.get(k)) is not type(v) or contract.get(k)!=v for k,v in dict(maximum_read_callbacks=660,maximum_wait_calls=5,
-                maximum_framebuffer_reads=73728 if replay else 12288 if text else 3072,framebuffer_writes=49152 if replay else 8192 if text else 2048,pixel_access=True,
+                maximum_framebuffer_reads=153600 if inset else 73728 if replay else 12288 if text else 3072,framebuffer_writes=102400 if inset else 49152 if replay else 8192 if text else 2048,pixel_access=True,
                 cache_maintenance=False,protocol_published=False).items())):
             raise ValueError('native pixel requires protected R-018/R-019 bounded profile; not execution approval')
     control=build.get('inherited_video_entry_control',False)

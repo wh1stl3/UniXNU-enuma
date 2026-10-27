@@ -26,8 +26,8 @@ Windows 的 Python 指向 C:/Program Files/WorkBuddy/resources/vendor/python/pyt
 ```powershell
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/fetch_porting_references.py --fetch
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B -m unittest discover -s tests -p test_firmware_overlay.py -v
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/check_enuma_drivers.py --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/check_firmware_overlay.py --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU --firmware-root /mnt/d/Code/PortingiOS/common/sources/uefi-sheng
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_enuma_drivers.py --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_firmware_overlay.py --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU --firmware-root /mnt/d/Code/PortingiOSLegacy/common/sources/uefi-sheng
 ```
 
 首次缓存缺失才需要 --fetch；默认只核验。固件检查末尾加 --require-image-ready 应返回2并列出缺少的输入。该程序从不调用实际 build，因此即便检查规则未来发生错误，也不会产生固件镜像。完整构建必须在新的可写工作区进行，因为 UniXNU firmware.py 会更新子模块并 apply/revert 补丁。

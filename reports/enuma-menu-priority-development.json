@@ -1,0 +1,35 @@
+{
+  "scope": "direct UniXNU entry selection and offline menu dependency reduction",
+  "full_UniXNURun_executed": false,
+  "deployment_ready": false,
+  "milestone": "D-308",
+  "image": "out/menu-priority-20261026/qualification3/enuma-development-stage10.img",
+  "image_sha256": "0808ef8b0dcb36329c927f0d5096f484a4eeac7bc9c8c45e124eff117b0292dc",
+  "fd_sha256": "c72d4e3ef72b386fccd0353d5eb59aee2c9f3552d5a7e5a28319ff29817270ae",
+  "hardware_execution": false,
+  "bindings": {
+    "scripts/qualify_development_fd.py": "1037b3fcef204aa08856a6cc6980bc8374f0140022165866197fca2973d4e7de",
+    "out/menu-priority-20261026/build1/source-manifest.json": "e18dbdb7e20db4e65de053d018fd212f7def4d061b3db575ff503eee20bfdc0c",
+    "out/menu-priority-20261026/build1/build-result.json": "cd6126040fb63cc18aa1e571cc61ee201e2f812f21e4cac5a445fbe8f929a5e0",
+    "out/menu-priority-20261026/qualification3/result.json": "b04eda6730f9505bd99dafd44a75fe5c6e4f411e2c722f4bfdc5656c4b3ef47b",
+    "out/menu-priority-20261026/direct-entry.json": "ed59fa97306c12e8c1ff4e9e75c6e2fbf1df2c023d4c4711dfbf265acd1f7d95",
+    "out/menu-priority-20261026/old-probe-regression.json": "2453e0a2ef76b738db0339f4e160212446b28339420b6f0d3ca3c455481cc706",
+    "out/menu-priority-20261026/rejected-mismatched-selector.log": "d8becb4754283758a591fc63c5257a0a92a89a5a96108509cd9816999abf8f60",
+    "out/menu-priority-20261026/frozen-images-check.json": "a031f0692e5ff2b7fc91620752f7b4afbceba7aa2bc67ac554aee091b6656e81",
+    "out/menu-priority-20261026/qemu1/result.json": "ce72cf59b11d92d939db7eeb2622a2ae67d8f4c7b9802952fc7a5548b2f37534",
+    "out/menu-priority-20261026/qr-applicability.json": "b2d2869bf7c8e8eba1681d78334aa3d110d7ce3804e8f75b0050c9ead4c70f7b",
+    "scripts/audit_enuma_fd.py": "3641066e8c4578e2c65853a1e7b6272078376bacf4fe3b35a886e12ea8e5826c",
+    "out/menu-priority-20261026/qualification3/fd-audit.json": "57da4ba0ff5029587b12da94338df8e744c251f264eac74902d224cf1b9e54c2"
+  },
+  "remaining": [
+    "physical GOP admission and continuous validation",
+    "bounded menu return independent of disabled BDS watchdog",
+    "full configuration discovery and physical input"
+  ],
+  "physical_gop_verified": false,
+  "failures_retained": [
+    "qualification1: old auditor required Probe target",
+    "qualification2: old qualifier expected pre-session console writer"
+  ],
+  "passed": true
+}

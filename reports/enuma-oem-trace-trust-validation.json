@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "qualification": "out/oem-service-trace-20261027/trust-check2/result.json",
+  "qualification_sha256": "38121ca8e5873b9cb828cbf939e2adf8b79537e0fc529e6e2cd92ee88228cbff",
+  "python_tests": 7,
+  "reference_model_seeds": 32,
+  "snapshot_comparisons": 320,
+  "host_asan_ubsan": true,
+  "aarch64_object_check": true,
+  "partial_sink_does_not_advance_or_retry": true,
+  "deadlock_established": false,
+  "frozen_qualifications": {
+    "R022": "1d730f656f05d80b595168736807c1f1afe6fbcab19d5a3041c101a73cf55e9d",
+    "R023": "56e41c6cf2abd4c46890ae6d01c9440b437d32328666c67016f8ab486084ed50",
+    "R024": "04243277a66b86931a545743c5e9ba0e3d4195b59969ba63997626a60d72e42f",
+    "R025": "c75195089fccf00420dbf1f30b36932cc1cbe26bc9409dc3d2e9d6e551b85285",
+    "R026": "10d3564a3cd5d4fce35b7b597098a0de31a546d9186d5cbe74da7d9a60d77221",
+    "R027": "e82028edad3baf06c3a4fd919d61c650da79e09b1d1bd5056402acb198a02af9"
+  },
+  "hardware_executed": false
+}

@@ -1,0 +1,18 @@
+# Offline full-application entry validation. No payload or partition operations.
+version = 1
+[boot]
+default = "return"
+timeout = 2
+fallback_timeout = 2
+connect_all = false
+[ui]
+title = "UniXNU entry validation"
+console = "graphics"
+layout = "landscape"
+scale = 1
+logo = true
+[[entry]]
+id = "return"
+title = "Return to firmware"
+type = "action"
+action = "exit"

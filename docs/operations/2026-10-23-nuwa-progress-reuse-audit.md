@@ -34,4 +34,4 @@ Mu目标文件为BSD-2-Clause-Patent。nuwa设备仓本轮未检索到许可文�
 4. Display库构造器/UEFI服务边界仍继续，但要核对真实调用归属，避免把嵌套镜像/事件回调当目标PE。已有canary前缀存在证据不被推翻。
 5. 只有本机证据指向需要修改内存字段，才提出精确审阅项；本轮不申请或实施扩堆，不照搬209.75MiB，也不重启失败的RAM日志路线。
 
-主要参考：[nuwa分配实测](D:/Code/UniXNU-nuwa/docs/operations/2026-10-23-dxe-allocation-build-trial.md)、[nuwa分配器审计](D:/Code/UniXNU-nuwa/docs/operations/2026-10-23-dxe-allocation-source-audit.md)、[nuwa实际SEC验收](D:/Code/UniXNU-nuwa/docs/operations/2026-10-23-factory-heap-build-trial.md)。这些是本机只读参考链接；机器报告固定具体哈希，后续工作树更新不改变本次审计结论范围。
+主要参考：[nuwa分配实测](D:/Code/PortingiOS/nuwa/UniXNU-nuwa/docs/operations/2026-10-23-dxe-allocation-build-trial.md)、[nuwa分配器审计](D:/Code/PortingiOS/nuwa/UniXNU-nuwa/docs/operations/2026-10-23-dxe-allocation-source-audit.md)、[nuwa实际SEC验收](D:/Code/PortingiOS/nuwa/UniXNU-nuwa/docs/operations/2026-10-23-factory-heap-build-trial.md)。这些是本机只读参考链接；机器报告固定具体哈希，后续工作树更新不改变本次审计结论范围。

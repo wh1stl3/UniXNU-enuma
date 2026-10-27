@@ -1,0 +1,170 @@
+{
+  "trial": "S-050",
+  "review": "R-022",
+  "execution_id": "2070e2ad-2885-4c83-a948-26311baa1737",
+  "image_sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
+  "firmware_commit": "8680ea79d6fd14d4526d314f430e9812955cb78a",
+  "fd_sha256": "7bee85343b6f8837c1081f5cb08db939facfc1ec084c6f498d918ded1e02f035",
+  "consumed": true,
+  "automatic_android_return": true,
+  "host_observation_valid": true,
+  "timing": {
+    "issued_at_utc": "2026-10-26T10:21:03.022970+00:00",
+    "boot_command_return_seconds": 2.625,
+    "fastboot_disconnect_observed_seconds": 5.094,
+    "fastboot_return_seconds": null,
+    "adb_return_seconds": 48.703,
+    "boot_complete_seconds": 62.594
+  },
+  "post_boot_clock": {
+    "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+    "boot_id_sha256": "dcfa7b71250a02bacf903b328b89667abc79c7308419ab2e342dd844eb41d43f",
+    "origin_monotonic_lower": 249454.368,
+    "origin_monotonic_upper": 249454.487,
+    "uncertainty_seconds": 0.1190000000060536,
+    "calibrated_firmware_delay": false,
+    "origin_after_issue_lower": 40.63399999999092,
+    "origin_after_issue_upper": 40.75299999999697
+  },
+  "decode_plan": {
+    "baseline_envelope_seconds": [
+      10.25199999997858,
+      10.347999999998137
+    ],
+    "tolerance_seconds": 1,
+    "sampler_seconds": [
+      0,
+      8.4
+    ],
+    "code_windows_after_issue": [
+      [
+        11.25199999997858,
+        13.747999999998138
+      ],
+      [
+        16.25199999997858,
+        26.747999999998136
+      ],
+      [
+        21.25199999997858,
+        31.747999999998136
+      ],
+      [
+        26.25199999997858,
+        36.747999999998136
+      ],
+      [
+        39.25199999997858,
+        41.747999999998136
+      ]
+    ],
+    "source_trials": [
+      "S-021",
+      "S-022"
+    ],
+    "full_interval_containment": true,
+    "uncertainty_limit_seconds": 0.25,
+    "limitation": "Indirect timing inference; boot overhead can change. No exact register or unique execution-path proof.",
+    "success_only": true,
+    "declared_profile": "R-0228s hold;unique-code5-only,failures/overlap stop;preissue windows",
+    "failure_windows_may_overlap": true
+  },
+  "result": {
+    "conclusion": "route-category-inferred",
+    "category": "cpu-pattern-and-exact-restoration-completed-visibility-unproven",
+    "warning_code": 5,
+    "stop_additional_trials": false,
+    "direct_register_log": false
+  },
+  "pixel_transaction_completion_supported": true,
+  "restoration_supported": true,
+  "interpretation": "indirect unique code5 timing; separate photo supports readable numeric fields only",
+  "recovery": {
+    "started_utc": "2026-10-26T10:23:31.871692+00:00",
+    "passed": true,
+    "boot_issued": false,
+    "scope": "independent read-only post-trial recovery check; no reboot/fastboot/partition writes",
+    "checks": {
+      "device": "enuma",
+      "boot_completed": "1",
+      "slot": "_a",
+      "flash_locked": "0",
+      "root_available": true
+    },
+    "trial": "S-050",
+    "execution_id": "2070e2ad-2885-4c83-a948-26311baa1737",
+    "partitions": [
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "device_and_backup_match": true
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "device_and_backup_match": true
+      }
+    ],
+    "boot_clock": {
+      "method": "host request interval minus quantized Linux uptime; 3-sample intersection",
+      "boot_id_sha256": "dcfa7b71250a02bacf903b328b89667abc79c7308419ab2e342dd844eb41d43f",
+      "origin_monotonic_lower": 249454.403,
+      "origin_monotonic_upper": 249454.468,
+      "uncertainty_seconds": 0.0650000000023283,
+      "calibrated_firmware_delay": false
+    },
+    "image_sha256": "f684ef22ea79178953ff8efcc81fb2243f189a096ef276a676c6a27e7b4b6e5b",
+    "prior_state_sha256": "2e7cc7abef153cd474f07a25f06ca8b3dff241336964eb5c788b552ede0612df",
+    "media_directory": "D:/Code/PortingiOS/enuma/Media-enuma/S-050-R022",
+    "capture_ready": false,
+    "finished_utc": "2026-10-26T10:23:33.327865+00:00"
+  },
+  "pixel_scope": {
+    "experiment": "native-dxe-cached-return-replay-8s-v1",
+    "origin_x": 0,
+    "origin_y": 0,
+    "width": 256,
+    "height": 96,
+    "required_current_el": 1,
+    "hold_us": 8000000,
+    "hold_calls_max": 1,
+    "mdp_reads_max": 660,
+    "mdp_wait_calls_max": 4,
+    "mdp_wait_us": 100000,
+    "framebuffer_reads_max": 73728,
+    "framebuffer_writes_max": 49152,
+    "barriers_max": 3,
+    "cache_line_operations": 0,
+    "mdp_base": "0xae00000",
+    "mdp_bytes": "0x85000",
+    "cpu_splash_view_base": "0x9c000000",
+    "cpu_splash_view_bytes": "0x2400000",
+    "final_stage2_unproven": true,
+    "device_smmu_unproven": true,
+    "alpha_semantics_unproven": true,
+    "publish_gop": false,
+    "partition_writes": false,
+    "raw_media_local_only": true,
+    "source": "Core point13 actual return snapshot",
+    "font": "three-by-five-hex",
+    "scale": 4,
+    "rows": 3,
+    "columns": 16,
+    "global_debug": false,
+    "cached_replay": true
+  },
+  "numeric_fields_legibility_passed": true,
+  "full_page_legibility_passed": false,
+  "visible_log_report": "reports/enuma-s050-visible-log.json",
+  "additional_trials_stopped": true,
+  "stop_reason": "partial page identifier occluded by rounded screen corner; no same-image reissue",
+  "gop_verified": false,
+  "conout_verified": false,
+  "global_debug_verified": false,
+  "menu_verified": false,
+  "raw_trial_evidence": "out\\device-tests\\20261026T182048-system-transport\\result.json",
+  "original_raw_clock_files": {
+    "pre-boot-clock.local.json": "726015e36f9117490398c4dcccbe95336f5c874cf148345284b82fdd4f67a063",
+    "post-boot-clock.local.json": "1ea32a011ceb71750cfef68d770037ffd6e7b802b43f28ce4e3455aa8b9359ca"
+  }
+}

@@ -30,7 +30,7 @@ class FragmentTests(unittest.TestCase):
     def setUpClass(cls):
         # Windows offline fixtures use only hash-locked source paths.
         cls.blob, _ = hardware_fragment(ROOT/'out/device/live-fdt.bin',
-            locked_encoder(Path('D:/Code/PortingiOS/common/sources/UniXNU-sheng')))
+            locked_encoder(Path('D:/Code/PortingiOSLegacy/common/sources/UniXNU-sheng')))
         cls.nodes = decode(cls.blob)
 
     def test_cpu_affinity_and_identity(self):

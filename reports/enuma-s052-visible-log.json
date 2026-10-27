@@ -1,0 +1,40 @@
+{
+  "trial": "S-052",
+  "execution_id": "66cb0cc9-4cce-4f47-b882-b61a0dda2959",
+  "image_sha256": "e789df474e05e4de37f329cc4a1dd623cb1975ede0ae48b134bcf866db9f2969",
+  "media_sha256": "2b589eb6b3d627cad5260cea34745d9739b927d81c9c3ae9f48b54afa27e85ac",
+  "media_bytes": 1578717,
+  "assistant_transcript": [
+    "C0d O0000001f+",
+    "S0000000000000000",
+    "Q00000000000000b9",
+    "G004de8591d2b34077",
+    "G1bbbeb12070094eb6"
+  ],
+  "human_confirmation": "能对上",
+  "human_crosscheck": true,
+  "full_five_rows_visible": true,
+  "corner_occlusion": false,
+  "ordinal": 31,
+  "status_hex": "0000000000000000",
+  "sequence": 185,
+  "guid": "04de8591-d2b3-4077-bbbe-b12070094eb6",
+  "packaged_driver": {
+    "name": "I2C",
+    "sha256": "71845af503fc8bc18aa885ac7d86e6630220a990b789cc9cca85f2af76ce4dc4"
+  },
+  "meaning": "previous completed I2C StartImage returned EFI_SUCCESS; not current display provider or I2C bus/peripheral functional proof",
+  "current_provider_return": false,
+  "global_debug_verified": false,
+  "formal_gop_verified": false,
+  "menu_verified": false,
+  "single_photo_proves_eight_seconds": false,
+  "glyph_scope": "new S/O/C labels visually distinct from hex digits in this photograph; no claim that every25 glyph was photographed",
+  "new_workflow": "assistant independently reads and saves first, publishes transcript, user confirms/corrects, then exact-image GUID attribution; uncertain characters stay ?",
+  "bindings": {
+    "out\\r024-live-20261026\\postcheck.json": "96a2a546ba3a205936e19bcc206d5c0a9bae35abb12f61fbc95035877466d280",
+    "out\\r024-live-20261026\\assistant-independent-transcription.json": "d92d82c9e8951920d28bb56eb8bfee9b1c804f8761980db139afbd99b5e007a9",
+    "out\\r024-live-20261026\\human-confirmation.txt": "f742045e6365928cbccc59c0d11221a7912d4afa993f64da66e0c8ac94c54454",
+    "out\\r024-live-20261026\\crosschecked-decoded.json": "1a3ee2d7916a049a103bb177dcb42b8ff3f60ac9fdef2687d2fa58069fdba710"
+  }
+}

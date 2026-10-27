@@ -80,7 +80,7 @@ Core矩阵保留原用例并增加1/5标记、错误GUID、NULL、非目标hook�
 可复现的固件命令：
 
 ```text
-scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --stop-delay 2 --dispatch-ordinal 1 --detail-point 16 --dispatch-guid dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92 --dispatch-guid-only --dispatch-completion-fallback --diagnostic-simplefb --diagnostic-gop-query 1 --diagnostic-gop-step 0 --jobs 8
+scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOSLegacy/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU --stop-stage 13 --stop-delay 2 --dispatch-ordinal 1 --detail-point 16 --dispatch-guid dcfd1e6d-788d-4ffc-8e1b-ca2f75651a92 --dispatch-guid-only --dispatch-completion-fallback --diagnostic-simplefb --diagnostic-gop-query 1 --diagnostic-gop-step 0 --jobs 8
 ```
 
 step1只改`--diagnostic-gop-step 1`。构建与workspace qualification必须串行。

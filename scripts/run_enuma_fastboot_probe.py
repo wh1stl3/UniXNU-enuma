@@ -13,8 +13,8 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ADB = 'D:/Code/PortingiOS/common/tools/platform-tools/adb.exe'
-FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
+ADB = 'D:/Code/PortingiOSLegacy/common/tools/platform-tools/adb.exe'
+FASTBOOT = 'D:/Code/PortingiOSLegacy/common/tools/platform-tools/fastboot.exe'
 
 
 def invoke(tool, argv, timeout=15):

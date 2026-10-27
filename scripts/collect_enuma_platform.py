@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--adb', default='D:/Code/PortingiOS/common/tools/platform-tools/adb.exe')
+    parser.add_argument('--adb', default='D:/Code/PortingiOSLegacy/common/tools/platform-tools/adb.exe')
     args = parser.parse_args()
     def run(argv):
         return subprocess.run([args.adb, *argv], capture_output=True, timeout=60)

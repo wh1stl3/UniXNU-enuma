@@ -1,0 +1,49 @@
+{
+  "milestone": "D-305",
+  "complete_development_build": true,
+  "hardware_execution": false,
+  "deployment_ready": false,
+  "profile": "diagnostic-log",
+  "image_sha256": "e789df474e05e4de37f329cc4a1dd623cb1975ede0ae48b134bcf866db9f2969",
+  "fd_sha256": "1179eb69f81f303c0fd6012b3aaa7597aed589366a4dc88462391a389f44d2b7",
+  "image_path": "out\\diagnostic-log-20261026\\qualification1\\image.img",
+  "fd_path": "out\\diagnostic-log-20261026\\qualification1\\SILICIUM_UEFI.fd",
+  "bindings": {
+    "out\\diagnostic-log-20261026\\build3\\build-result.json": "5fdb8bfcde45de8438aa363c6bb0de102cad44f787d6aa3028a9e5f5047ae8ec",
+    "out\\diagnostic-log-20261026\\build3\\source-manifest.json": "daf2c6f00ef30d84f2e84d4660680584797a1ea45fb7179aa055c60abd61da44",
+    "out\\diagnostic-log-20261026\\qualification1\\qualification.json": "23973294225470662a4c9246805bd2e99f8455400b8be0c62d865839c80a0d73",
+    "out\\diagnostic-log-20261026\\pixel-tests1\\result.json": "d8e24af416ef29e8944992dc13a04800488efa4dfa70966933f270dd17f7d8d3",
+    "out\\diagnostic-log-20261026\\console-tests2\\result.json": "61c2f381db4e0d791f6c643e0ff07942e5632030d34dc31ee1549c9865137649",
+    "out\\diagnostic-log-20261026\\menu-qemu1\\result.json": "30177c911390492866390923f5fc3fa0281ab73d2b8d982cc7822e66d987c00c",
+    "out\\diagnostic-log-20261026\\policy-tests1.json": "2d2758e8041a1fdb293966d164d73134789f58eb7f5aad4856bd34051fbdf17f",
+    "out\\diagnostic-log-20261026\\decoder-tests1.json": "3ad2e98a2ef95af7057ba1eab9da5ada8326c856f95b4fa1f7b836c6901671e9",
+    "out\\diagnostic-log-20261026\\source-scope-comparison.json": "a22b42da3a3d32037224a52f1cf8c728487d9afbe053262b513fca140317e51e",
+    "out\\diagnostic-log-20261026\\final-preservation.json": "66298f3eea745c2b7ea01596beb24d4a33eb94fc017b76243f6d979a61f44421",
+    "out\\diagnostic-log-20261026\\compiled-code-review.json": "bff79b4e2b90d934d08baff5b63b47861469d99935472fda9b9ea0c09363f76e",
+    "out\\diagnostic-log-20261026\\console-link2\\result.json": "6b9e165e55f3693075dfffedfc542fde283cc7478a8fc950942f5bf8859568f2",
+    "out/diagnostic-log-20261026/final-validation.json": "f32475ca8acb63b267e76bb779256b92f8c0ddf79ac8ec87a8c1147fdaf056d6"
+  },
+  "frozen_preserved": {
+    "passed": true,
+    "scope": "historical qualification bindings plus pre-document evidence/media snapshot",
+    "checked_files": {
+      "R022": 43,
+      "R023": 28,
+      "current_evidence": 8,
+      "local_media": 2
+    },
+    "hardware_execution": false
+  },
+  "diagnostic_probe_is_unsupported_guard": true,
+  "late_console_linked_separately": true,
+  "late_console_pe_sha256": "210a2b61d816c03f7cb89c1184690f43a608f7fba1e2cfb69885838cbb4f4d94",
+  "physical_gop_conout_menu_verified": false,
+  "global_debug": false,
+  "requirements22_cleared": false,
+  "pending": [
+    "whole-candidate execution review and independent runner qualification",
+    "explicit single-shot approval and current filming readiness",
+    "fresh identity/backups/recovery/clock gates"
+  ],
+  "formatting_note": "Strict firmware diff check reports one blank EOF line in EnumaProbe.inf; source retained exactly as built; no functional failure."
+}

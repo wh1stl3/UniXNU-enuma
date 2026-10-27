@@ -8,7 +8,7 @@
 - firmware/改为Git子模块，URL指向wh1stl3/uefi-enuma；当前固定 **3376c4411e08442f45f4120ed6d96f2e302c51e8**，并由config/uefi-source.lock.json记录33项输入摘要。Gitlink、锁、实际HEAD与文件逐项核对。
 - uefi-enuma是UniXNU/uefi-sheng的派生仓，以329b473df1e53a3bfa64b2b39b79670c4c02279b为基线。迁移自设备提交1ab7ee8，25个原文件逐字节核对，映射见Resources/Enuma/migration.json。六个补丁、两份诊断头、板级DSC/FDF、内存/配置表和打包配置保持原字节。旧LICENSE改名LICENSE.enuma，旧README保存在docs/enuma-overlay.md，根LICENSE保留上游许可。
 - 保留Mu_Basecore、Common/Mu、Common/Mu_OEM_Sample三个固定gitlink；移除继承的Binaries/外板ACPI/未用OpenSSL入口和外板构建工作流。新工作流仅手动检查源码契约，不能产生OEM固件。
-- 本地独立维护树D:/Code/uefi-enuma与设备firmware子模块为两个checkout；修改应先提交/推送固件仓，再更新设备gitlink与锁，禁止复制回重复的板级源码。
+- 本地独立维护树D:/Code/PortingiOS/enuma/uefi-enuma与设备firmware子模块为两个checkout；修改应先提交/推送固件仓，再更新设备gitlink与锁，禁止复制回重复的板级源码。
 
 厂商102个输入只有路径/摘要写入Resources/Enuma/vendor.json；33个PE/DEPEX、原始cfg/XML、备份及标识留在设备out/。不自动下载或公开厂商内容。
 

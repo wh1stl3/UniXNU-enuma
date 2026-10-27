@@ -24,11 +24,19 @@ def write(path, data):
     path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
 
 
-def qualification(published=False, report=None, observation_repeat=None):
+def qualification(published=False, report=None, observation_repeat=None, local_preparation=None):
     report = (report or ROOT / 'reports/enuma-ram-payload-qualification.json').resolve()
     if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
         raise ValueError('qualification must stay inside repository out/ or reports/')
     q = json.loads(report.read_text())
+    if q.get('hardware_review')=='R-024':
+        if observation_repeat is not None: raise ValueError('R-024 is not an observation repeat')
+        from r024_preparation import qualification as diagnostic_qualification
+        return diagnostic_qualification(report,published,local_preparation,ROOT)
+    if q.get('hardware_review')=='R-023':
+        if observation_repeat is not None: raise ValueError('R-023 is not an observation repeat')
+        from r023_preparation import qualification as attributed_qualification
+        return attributed_qualification(report,published,local_preparation,ROOT)
     if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control'):
         control = q['trial_kind'] in ('ramoops-map-control','ramoops-header-read','ramoops-warm-control')
         frozen = (ROOT / q['archive'] / 'qualification.json').resolve()
@@ -184,7 +192,12 @@ def qualification(published=False, report=None, observation_repeat=None):
             matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and x.get('query')==q['reason_query'] and x.get('reason_target')==q['reason_target'] and x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
             if review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
                 raise ValueError('actual first-reason provider code review missing or mismatched')
-        for repo in (ROOT, ROOT / 'firmware'):
+        if local_preparation is not None:
+            if observation_repeat is not None:
+                raise ValueError('local frozen preparation does not authorize an observation repeat')
+            from r022_preparation import require_local_preparation
+            require_local_preparation(local_preparation,q,ROOT)
+        for repo in (() if local_preparation is not None else (ROOT, ROOT / 'firmware')):
             def git(*args):
                 return subprocess.check_output(['git','-c','safe.directory='+repo.as_posix(), '-C', str(repo), *args], text=True).strip()
             if git('status', '--porcelain', '--ignore-submodules=all'):
@@ -254,17 +267,17 @@ def run_without_camera(q, image):
 def run_with_human_capture(q,image,authorization,execution_id,human_ready):
     """Explicit R021 human camera replaces disconnected host camera; no pixels hidden as read-only."""
     repeat_mode=(authorization=='R-021' and q.get('hardware_review')=='R-020')
-    new_mode=(authorization is None and q.get('hardware_review')=='R-022' and q.get('boot_log_hold_seconds')==8)
+    new_mode=(authorization is None and q.get('hardware_review') in ('R-022','R-023','R-024') and q.get('boot_log_hold_seconds')==8)
     if (not (repeat_mode or new_mode) or not human_ready or q.get('boot_log_replay') is not True or
         q.get('trial_kind')!='native-video-route'):
-        raise ValueError('human-only capture requires exact R021 repeat or new R0228s profile and confirmed readiness')
+        raise ValueError('human-only capture requires exact R021 repeat or new R022/R0238s profile and confirmed readiness')
     approvals=json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8'))
-    review=authorization if repeat_mode else 'R-022'
+    review=authorization if repeat_mode else q['hardware_review']
     if approvals.get(review,{}).get('capture_mode')!='human-primary-only':
         raise ValueError('human-only observation arrangement not recorded')
     from run_enuma_entry_probe import require_hardware_review
     require_hardware_review(json.loads(image.with_suffix('.json').read_text()),approvals,authorization)
-    out=ROOT/'out/human-capture'/(datetime.now().strftime('%Y%m%dT%H%M%S')+('-S049' if repeat_mode else '-S050'))
+    out=ROOT/'out/human-capture'/(datetime.now().strftime('%Y%m%dT%H%M%S')+('-S049' if repeat_mode else '-S052' if review=='R-024' else '-S051' if review=='R-023' else '-S050'))
     out.mkdir(parents=True)
     report=dict(scope='explicit human-only close-up capture; host boot-clock/USB/recovery logs; no host video',
         image_sha256=q['image_sha256'],camera_used=False,host_camera_used=False,human_capture_ready=True,
@@ -275,6 +288,7 @@ def run_with_human_capture(q,image,authorization,execution_id,human_ready):
     command=[sys.executable,'-X','utf8','-u','-B',str(ROOT/'scripts/run_enuma_entry_probe.py'),
              '--image',str(image),'--label','system-transport','--boot-clock']
     if repeat_mode:command+=['--observation-repeat',authorization,'--execution-id',execution_id,'--human-camera-ready']
+    if new_mode:command+=['--execution-id',execution_id,'--human-camera-ready']
     try:
         with (out/'runner.log').open('w',encoding='utf-8') as log:
             report['device_runner_started']=True
@@ -288,7 +302,9 @@ def run_with_human_capture(q,image,authorization,execution_id,human_ready):
     finally:
         from observation_repeat import issued_for_attempt,finish
         state=json.loads((ROOT/'out/device-tests/current.local.json').read_text())
-        issued=(issued_for_attempt(state,q['image_sha256'],authorization,execution_id) if repeat_mode else state.get('candidate_sha256')==q['image_sha256'] and bool(state.get('issued_at')))
+        issued=(issued_for_attempt(state,q['image_sha256'],authorization,execution_id) if repeat_mode else
+                state.get('candidate_sha256')==q['image_sha256'] and bool(state.get('issued_at')) and
+                state.get('execution_id')==execution_id and state.get('hardware_review')==review)
         if issued:
             report['boot_issued']=True
             if repeat_mode:finish(ROOT,authorization,execution_id,state,out.relative_to(ROOT).as_posix())
@@ -303,11 +319,13 @@ def main():
     mode.add_argument('--camera-check', action='store_true')
     mode.add_argument('--execute', action='store_true')
     p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback pre-call or return qualification; defaults to full-chain report')
+    p.add_argument('--local-preparation',type=Path,help='exact frozen R-022 local runner/docs binding; no commit/push, no hardware approval implied')
     p.add_argument('--no-camera', action='store_true', help='qualified read-only native route: use ADB/fastboot and calibrated boot clock')
     p.add_argument('--observation-repeat',choices=('R-021',))
     p.add_argument('--human-camera-ready',action='store_true')
     p.add_argument('--human-camera-only',action='store_true',help='explicit R021 repeat or new R0228s human capture only; never generic no-camera pixels')
     a = p.parse_args()
+    if a.local_preparation and (not a.human_camera_only or a.observation_repeat):p.error('local preparation is only for new R-022/R-023 human capture')
     if a.human_camera_only and (a.observation_repeat not in (None,'R-021') or a.camera_check or a.no_camera):p.error('human-only mode requires an explicit approved R021/R022 capture profile')
     if a.observation_repeat and (a.camera_check or a.no_camera):p.error('observation repeat requires the full camera runner')
     if a.execute and (a.observation_repeat or a.human_camera_only) and not a.human_camera_ready:p.error('wait for explicit human capture readiness before repeat')
@@ -316,7 +334,15 @@ def main():
     if a.no_camera and a.camera_check:
         p.error('--no-camera excludes --camera-check')
     if not a.camera_check:
-        q, image = qualification(a.execute, a.qualification, a.observation_repeat)
+        q, image = qualification(a.execute, a.qualification, a.observation_repeat, a.local_preparation)
+        if a.local_preparation and not a.execute:
+            if q.get('hardware_review')=='R-024':
+                from r024_preparation import require_local_preparation
+            elif q.get('hardware_review')=='R-023':
+                from r023_preparation import require_local_preparation
+            else:
+                from r022_preparation import require_local_preparation
+            require_local_preparation(a.local_preparation,q,ROOT)
         if a.no_camera and q.get('native_route_cpu_pattern') is True:
             p.error('pixel visibility trial requires camera; read-only trials may use --no-camera')
         if not a.execute:

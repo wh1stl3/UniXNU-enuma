@@ -4,10 +4,10 @@ import sys
 import uuid
 from pathlib import Path
 
-sys.path.insert(0, '/mnt/d/Code/UniXNU-enuma/scripts')
+sys.path.insert(0, '/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts')
 from uefi_firmware.uefi import FirmwareVolume, FirmwareFile
 
-ROOT = Path('/mnt/d/Code/UniXNU-enuma')
+ROOT = Path('/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma')
 blob = (ROOT / 'out/device/xbl_a.bin').read_bytes()
 offset = 0x888b0
 length = struct.unpack_from('<Q', blob, offset + 32)[0]

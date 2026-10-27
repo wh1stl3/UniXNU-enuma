@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ADB = 'D:/Code/PortingiOS/common/tools/platform-tools/adb.exe'
-FASTBOOT = 'D:/Code/PortingiOS/common/tools/platform-tools/fastboot.exe'
+ADB = 'D:/Code/PortingiOSLegacy/common/tools/platform-tools/adb.exe'
+FASTBOOT = 'D:/Code/PortingiOSLegacy/common/tools/platform-tools/fastboot.exe'
 
 
 def require_hardware_review(meta, approvals, observation_repeat=None):
@@ -27,14 +27,21 @@ def require_hardware_review(meta, approvals, observation_repeat=None):
     review = meta.get('hardware_review')
     if review is None:
         return
-    if review not in ('R-005', 'R-017', 'R-017-MAP', 'R-017-READ', 'R-017-WARM','R-018','R-019','R-020','R-022'):
+    if review not in ('R-005', 'R-017', 'R-017-MAP', 'R-017-READ', 'R-017-WARM','R-018','R-019','R-020','R-022','R-023','R-024','R-025','R-026','R-027'):
         raise ValueError('Unknown protected hardware review')
     entry = approvals.get(review, {})
     if entry.get('status') != 'approved' or meta['image_sha256'] not in entry.get('image_sha256', []):
         raise ValueError(review + ' is not approved for this exact image; no device action')
-    if review in ('R-018','R-019','R-020','R-022'):
+    if review in ('R-018','R-019','R-020','R-022','R-023','R-024','R-025','R-026','R-027'):
         from native_pixel_scope import scope_for_review
-        SCOPE=scope_for_review(review)
+        if review=='R-027':
+            from deferred_menu_scope import SCOPE
+        elif review=='R-026':
+            from full_menu_scope import SCOPE
+        elif review=='R-025':
+            from menu_window_scope import SCOPE
+        else:
+            SCOPE=scope_for_review(review)
         if meta.get('pixel_scope')!=SCOPE or entry.get('pixel_scope')!=SCOPE:
             raise ValueError(review+' differs from exact reviewed ROI/operation scope')
     if review in ('R-017','R-017-MAP', 'R-017-READ', 'R-017-WARM') and (not entry.get('ramoops_scope') or meta.get('ramoops_scope') != entry['ramoops_scope']):
@@ -60,6 +67,12 @@ def observe_fastboot_return(present, disconnected):
     return (not present or disconnected), (present and disconnected)
 
 
+def bound_android_online(devices, serial):
+    """Inspect enumeration only; never query an unrelated attached device."""
+    return bool(serial) and [line.split()[1] for line in devices[1:]
+        if len(line.split())==2 and line.split()[0]==serial]==['device']
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', type=Path, required=True)
@@ -75,18 +88,34 @@ def main():
     if args.observation_repeat:
         from uuid import UUID
         if str(UUID(args.execution_id))!=args.execution_id:raise ValueError('invalid repeat execution identity')
-    if not args.observation_repeat and (args.execution_id or args.human_camera_ready):
-        raise ValueError('repeat-only arguments require an explicit observation repeat')
     image = args.image.resolve()
     if not image.is_relative_to((ROOT/'out').resolve()): raise ValueError('image outside own out/')
     meta = json.loads(image.with_suffix('.json').read_text())
     if hashlib.sha256(image.read_bytes()).hexdigest() != meta['image_sha256']: raise ValueError('image changed')
+    new_log_trial=meta.get('hardware_review') in ('R-022','R-023','R-024','R-025','R-026','R-027') and not args.observation_repeat
+    if new_log_trial:
+        if meta['hardware_review']=='R-027':
+            from r027_preparation import require_attempt
+        elif meta['hardware_review']=='R-026':
+            from r026_preparation import require_attempt
+        elif meta['hardware_review']=='R-025':
+            from r025_preparation import require_attempt
+        elif meta['hardware_review']=='R-024':
+            from r024_preparation import require_attempt
+        elif meta['hardware_review']=='R-023':
+            from r023_preparation import require_attempt
+        else:
+            from r022_preparation import require_attempt
+        require_attempt(ROOT,meta,args.execution_id,args.human_camera_ready)
+    elif not args.observation_repeat and (args.execution_id or args.human_camera_ready):
+        raise ValueError('capture identity requires an explicit R-021 repeat or new R-022/R-023 trial')
     if meta.get('hardware_review') is not None:
         require_hardware_review(meta, json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')), args.observation_repeat)
     previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
     if previous.get('phase') == 'manual-recovery-needed':
         raise ValueError('Previous probe is not recovered; restore and verify Android before any new trial')
-    backup_dir = Path(previous.get('recovery_backup_directory', previous['directory']))
+    from enuma_paths import evidence_path
+    backup_dir = evidence_path(previous.get('recovery_backup_directory', previous['directory']),ROOT)
     backups = previous['backups']
     for backup in backups:
         if hashlib.sha256((backup_dir/(backup['partition']+'.bin')).read_bytes()).hexdigest() != backup['sha256']:
@@ -95,11 +124,17 @@ def main():
         return subprocess.run([tool,*argv],capture_output=True,timeout=timeout)
     devices = invoke(ADB,['devices']).stdout.decode().splitlines()
     candidates = []
-    for line in devices[1:]:
-        fields = line.split()
-        if len(fields)==2 and fields[1]=='device':
-            r=invoke(ADB,['-s',fields[0],'shell','getprop ro.product.device'])
-            if r.returncode==0 and r.stdout.strip()==b'enuma': candidates.append(fields[0])
+    if meta.get('hardware_review') in ('R-023','R-024','R-025','R-026','R-027'):
+        bound=json.loads((evidence_path(previous['directory'],ROOT)/'target.local.json').read_text())['serial']
+        if not bound_android_online(devices,bound): raise ValueError('previously bound enuma is not online; other devices untouched')
+        r=invoke(ADB,['-s',bound,'shell','getprop ro.product.device'])
+        if r.returncode==0 and r.stdout.strip()==b'enuma': candidates.append(bound)
+    else:
+        for line in devices[1:]:
+            fields = line.split()
+            if len(fields)==2 and fields[1]=='device':
+                r=invoke(ADB,['-s',fields[0],'shell','getprop ro.product.device'])
+                if r.returncode==0 and r.stdout.strip()==b'enuma': candidates.append(fields[0])
     if len(candidates)!=1: raise ValueError('require exactly one online Android enuma')
     serial=candidates[0]
     if args.expected_serial is not None and serial != args.expected_serial:
@@ -123,6 +158,8 @@ def main():
            'phase':'preflight-complete','preflight_boot_completed':True,'partition_writes':False}
     if args.observation_repeat:
         state.update(observation_repeat=args.observation_repeat,execution_id=args.execution_id,human_capture_ready=True)
+    if new_log_trial:
+        state.update(hardware_review=meta['hardware_review'],execution_id=args.execution_id,human_capture_ready=True)
     def save():
         (ROOT/'out/device-tests/current.local.json').write_text(json.dumps(state,indent=2))
         (out/'result.json').write_text(json.dumps({k:v for k,v in state.items() if k not in ('directory','recovery_backup_directory')},indent=2)+'\n')
@@ -163,6 +200,8 @@ def main():
     if args.observation_repeat:
         from observation_repeat import claim
         claim(meta,json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')),args.observation_repeat,ROOT,args.execution_id)
+    if new_log_trial:
+        require_attempt(ROOT,meta,args.execution_id,args.human_camera_ready,claim=True)
     before=time.monotonic()
     state['phase']='temporary-boot-issued';state['issued_at']=time.strftime('%Y-%m-%d %H:%M:%S')
     state['issued_at_utc']=datetime.now(timezone.utc).isoformat()
@@ -176,7 +215,7 @@ def main():
     if r.returncode: raise ValueError('boot command failed; recover normally from fastboot')
     rebooted_fastboot=False
     disconnected=False
-    deadline=time.monotonic()+75
+    deadline=before+75 if meta.get('hardware_review') in ('R-023','R-024','R-025','R-026','R-027') else time.monotonic()+75
     while time.monotonic()<deadline:
         present=any(l.split() and l.split()[0]==serial for l in invoke(FASTBOOT,['devices']).stdout.decode().splitlines())
         was_disconnected=disconnected

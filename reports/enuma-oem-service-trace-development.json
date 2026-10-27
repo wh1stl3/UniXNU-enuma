@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "three transparent Boot Services wrappers; real forwarding to host test doubles, not OEM PE execution; AArch64 object only",
+  "hardware_executed": false,
+  "firmware_profile_activated": false,
+  "remaining": [
+    "exact OEM image binding and persistent private-system-table installation",
+    "observable bounded output/capture path before any hardware candidate",
+    "all nonwrapped calls including protocol methods/MMIO remain outside coverage"
+  ],
+  "milestone": "D-321",
+  "user_paused_hardware": true,
+  "qualification": "out/oem-service-trace-20261027/check3/result.json",
+  "qualification_sha256": "90a2df258a08e6ea9de6af268b8719d74695a423b5fe9b823387da9468d37837",
+  "preservation": "out/oem-service-trace-20261027/preservation.json"
+}

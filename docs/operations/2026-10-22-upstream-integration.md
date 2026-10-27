@@ -24,7 +24,7 @@ python -B scripts/check_workspace.py
 python -B -m unittest discover -s tests
 ```
 
-WSL 使用 `/mnt/d/Code/UniXNU-enuma/out/sources/UniXNU` 作为 `--unixnu` / `--source`。执行 check_enuma_drivers.py、check_reused_ufs.py、check_darwin_adt.py、check_optional_display.py 与原完整 build_enuma_firmware.py（--stop-stage 10）、audit_enuma_fd.py、prepare_enuma_boot_payload.py、package_enuma_boot.py。check_firmware_overlay.py 的 --firmware-root 仍为固定旧 uefi-sheng 参考。
+WSL 使用 `/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/sources/UniXNU` 作为 `--unixnu` / `--source`。执行 check_enuma_drivers.py、check_reused_ufs.py、check_darwin_adt.py、check_optional_display.py 与原完整 build_enuma_firmware.py（--stop-stage 10）、audit_enuma_fd.py、prepare_enuma_boot_payload.py、package_enuma_boot.py。check_firmware_overlay.py 的 --firmware-root 仍为固定旧 uefi-sheng 参考。
 
 ## 证据边界
 

@@ -18,7 +18,17 @@ LOG_SCOPE={**SCOPE,"experiment":"native-dxe-cached-return-replay-v1","width":256
 
 LONG_LOG_SCOPE={**LOG_SCOPE,"experiment":"native-dxe-cached-return-replay-8s-v1","hold_us":8000000}
 
+ATTRIBUTED_LOG_SCOPE={**LONG_LOG_SCOPE,"experiment":"native-dxe-attributed-return-inset-v1",
+    "origin_x":64,"origin_y":96,"width":320,"height":160,
+    "framebuffer_reads_max":153600,"framebuffer_writes_max":102400,
+    "rows":5,"columns":20,"sequence_bits":64,"guid_order":"canonical-hex-G0-G1"}
+
+DIAGNOSTIC_LOG_SCOPE={**ATTRIBUTED_LOG_SCOPE,"experiment":"native-dxe-severity-return-inset-v1",
+    "selection":"newest at highest retained severity","distinct_glyphs":25}
+
 def scope_for_review(review):
+    if review=="R-024": return DIAGNOSTIC_LOG_SCOPE
+    if review=="R-023": return ATTRIBUTED_LOG_SCOPE
     if review=="R-022": return LONG_LOG_SCOPE
     if review=="R-020": return LOG_SCOPE
     return TEXT_SCOPE if review=="R-019" else SCOPE

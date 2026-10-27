@@ -69,14 +69,26 @@ def main():
             raise ValueError('SimpleFb must replace the audited Display APRIORI position 33; do not guess probe ordinal')
     elif 'SimpleFbDxe' in names: raise ValueError('unqualified framebuffer provider included')
     probe_guid = 'aef8c196-230e-4e19-a306-d62e21e3d780'
-    if probe_guid not in files or uuid.UUID(probe_guid).bytes_le not in b''.join(pe_payloads['UniXNUDxe']):
-        raise ValueError('UniXNUDxe does not contain the packaged EnumaProbe boot target')
+    target_guid = probe_guid
+    if build.get('direct_menu_selected') is True:
+        defines = build.get('firmware_configuration', {}).get('defines', {})
+        if (build.get('complete') is not True or build.get('deployment_ready') is not False or
+            build.get('fd_sha256') != digest(blob) or build.get('profile') != 'stage10' or
+            defines.get('ENUMA_DIRECT_MENU') != '1' or defines.get('ENUMA_DIAG_STAGE') != '10'):
+            raise ValueError('direct menu target lacks bound development build scope')
+        target_guid = '9b665204-a133-47a2-9396-9e2b370a4e25'
+    target_pe = b''.join(pe_payloads['UniXNUDxe'])
+    if target_guid not in files or uuid.UUID(target_guid).bytes_le not in target_pe:
+        raise ValueError('UniXNUDxe does not contain the selected packaged boot target: ' + target_guid)
+    if target_guid != probe_guid and uuid.UUID(probe_guid).bytes_le in target_pe:
+        raise ValueError('direct menu registration still contains the Probe target')
     report = {'scope': 'built FD structure and byte identity; no firmware execution',
               'fd_sha256': digest(blob), 'fd_bytes': len(blob), 'file_count': len(files),
               'matched_oem_modules': matched, 'packaged_names': sorted(names),
               'diagnostic_omitted_oem_modules':sorted(omitted),
               'apriori_guids':apriori,
-              'probe_boot_target_guid': probe_guid,
+              'probe_boot_target_guid': probe_guid if target_guid == probe_guid else None,
+              'boot_target_guid': target_guid,
               'runtime_protocol_closure': 'pending hardware dispatch', 'hardware_execution': False}
     if build.get('diagnostic_pixel_preview'):
         payloads=pe_payloads.get('SimpleFbDxe',[])

@@ -48,7 +48,7 @@ def main():
     namespace = {}
     exec(compile(ast.Module(body=[node], type_ignores=[]), 'pinned-upstream-der', 'exec'), namespace)
     der = namespace['der']
-    donor = Path('/mnt/d/Code/PortingiOS/common/cache/donor-ipados17/components')
+    donor = Path('/mnt/d/Code/PortingiOSLegacy/common/cache/donor-ipados17/components')
     inputs = [('044-76040-038.dmg.trustcache', '4563bdbf6ed8f72237d45dbba3ccde432634338f95c10d79d5d4631678a97c7c'),
               ('044-76034-038.dmg.trustcache', '9742f3d566369e6c48f63b3dc0740b06c243d13c6650e25bbf44616e13d6d097')]
     modules = []

@@ -52,7 +52,7 @@ def write_report(name, data):
 def main():
     source = ROOT/'out/sources/UniXNU'
     parser_data = locked_file(source, UNIXNU, 'scripts/unixnu/ipsw.py')
-    reference = Path('D:/Code/PortingiOS/common/sources/UniXNU-sheng')
+    reference = Path('D:/Code/PortingiOSLegacy/common/sources/UniXNU-sheng')
     reference_data = locked_file(reference, SHENG, 'board.toml')
     spec = tomllib.loads(reference_data.decode())['kernel']['prelink']
     inputs = json.loads((ROOT/'reports/input-audit.json').read_text(encoding='utf-8'))
@@ -60,7 +60,7 @@ def main():
     raw = Path(component['path']).read_bytes()
     if sha(raw) != component['sha256'] or hashlib.sha384(raw).hexdigest() != component['manifest_digest']:
         raise ValueError('Donor container no longer matches audited manifest input')
-    decoder = Path('D:/Code/PortingiOS/common/tools/apfs-fuse-linux/bin/lzfse')
+    decoder = Path('D:/Code/PortingiOSLegacy/common/tools/apfs-fuse-linux/bin/lzfse')
     if sha(decoder.read_bytes()) != DECODER_SHA:
         raise ValueError('Decoder binary changed')
     sys.path.insert(0, str(source/'scripts'))

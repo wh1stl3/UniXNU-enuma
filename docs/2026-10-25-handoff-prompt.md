@@ -1,3 +1,5 @@
+> 当前接续请用 [2026-10-27 DisplayDxe prompt](2026-10-27-displaydxe-handoff-prompt.md)。下文保留历史，不构成当前实机授权。
+
 # 安全交接：D-284，S-047文字可见，旧会话结束并交出写入权
 
 2026-10-26T10:37:59+08:00。按用户已授权的安全收尾指令，本会话不再开启新实验、新实现或构建；完成最终只读恢复核验及文档提交推送后结束，交出写入权，等待管理方创建唯一接续会话。**这是会话安全交接，不是设备硬停。nuwa未改动。**
@@ -23,7 +25,7 @@ S-047设备runner和摄像头命令均已返回0，AVI完整解码，相机已�
 
 ## 固定构建与来源
 
-工作仓 `D:/Code/UniXNU-enuma`；固件源码是其 `firmware/` 子模块，不是另一份并行checkout。两仓main，禁止并行写入；nuwa、PortingiOS、参考上游只读。
+工作仓 `D:/Code/PortingiOS/enuma/UniXNU-enuma`；固件源码是其 `firmware/` 子模块，不是另一份并行checkout。两仓main，禁止并行写入；nuwa、PortingiOS、参考上游只读。
 
 归档 `out/inherited-gop/qualified-native-cpu-text-bb60fb0`；FD `9c5046669399564bbdb61028a4b579dbb7fe3b6b58fc3bb769d5c38b6827482b`；provider `e008583ad4b4190bf249983d7c3eebd85672e7231bb50052496f78b599cbf2de`；Core `a27c5b3f2f58ddfd536a9cdeda722d19482cea2f97c4dae7868e60981d9fa69f`；手工实际代码摘要 `343bc70da6a56a01c554d256b2d90b20e3484736e86ed3180a2002e0b5483422`。qualification/code报告的review_required=false；它们属于已消耗S-047，不能再次执行。
 
@@ -55,4 +57,4 @@ R-019只对上述精确镜像的一次128x32固定文字实验授权，现consum
 管理方会等待旧会话明确结束，再创建唯一接续会话；旧会话在最终回复后不再写入、不再开启操作。交接入口为本文和docs/STATUS.md，最终提交/清洁/推送状态以本轮最终核验及回复为准。
 
 
-接续工具环境：Windows Python为 `C:/Users/Administrator/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -X utf8 -B`；WSL Ubuntu-22.04的仓库路径 `/mnt/d/Code/UniXNU-enuma`，Python `out/firmware-tools/bin/python -B`，有tomli/uefi_firmware与clang/ASan/UBSan。Windows负责固定AOSP路径的Boot v3打包和相机，WSL负责固件构建/FD/资格/控制台审计；PE反汇编工具在out/reverse-tools。固件实现入口Resources/Scripts/build_enuma_firmware.py，设备仓同名脚本验证clean pin再兼容调用。不要在构建运行中恢复staging或混用不同source pin；历史资格归档保持不变。`work/save_native_route_trial.py`、`work/qualify_cpu_candidate.py`等为本地忽略辅助脚本，现有S-047字段含text=True；使用前审查，不能把旧qualification默认当新的日志候选。
+接续工具环境：Windows Python为 `C:/Users/Administrator/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -X utf8 -B`；WSL Ubuntu-22.04的仓库路径 `/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma`，Python `out/firmware-tools/bin/python -B`，有tomli/uefi_firmware与clang/ASan/UBSan。Windows负责固定AOSP路径的Boot v3打包和相机，WSL负责固件构建/FD/资格/控制台审计；PE反汇编工具在out/reverse-tools。固件实现入口Resources/Scripts/build_enuma_firmware.py，设备仓同名脚本验证clean pin再兼容调用。不要在构建运行中恢复staging或混用不同source pin；历史资格归档保持不变。`work/save_native_route_trial.py`、`work/qualify_cpu_candidate.py`等为本地忽略辅助脚本，现有S-047字段含text=True；使用前审查，不能把旧qualification默认当新的日志候选。

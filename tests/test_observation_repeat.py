@@ -97,7 +97,9 @@ class ObservationRepeatTests(unittest.TestCase):
   image=self.root/'out/new-eight.img';image.with_suffix('.json').write_text(json.dumps(meta))
   q=dict(boot_log_replay=True,boot_log_hold_seconds=8,trial_kind='native-video-route',hardware_review='R-022',image_sha256=newhash)
   def fake_run(*args,**kwargs):
-   (self.root/'out/device-tests/current.local.json').write_text(json.dumps(dict(candidate_sha256=newhash,issued_at='now',phase='recovered-android-boot-complete')))
+   command=args[0];self.assertIn('--human-camera-ready',command)
+   execution_id=command[command.index('--execution-id')+1]
+   (self.root/'out/device-tests/current.local.json').write_text(json.dumps(dict(candidate_sha256=newhash,issued_at='now',phase='recovered-android-boot-complete',execution_id=execution_id,hardware_review='R-022')))
    return SimpleNamespace(returncode=0)
   old=self.marker.read_bytes()
   with patch.object(runner,'ROOT',self.root),patch.object(entry_probe,'ROOT',self.root),patch.object(runner.subprocess,'run',side_effect=fake_run):runner.run_with_human_capture(q,image,None,str(uuid.uuid4()),True)

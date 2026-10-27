@@ -1187,3 +1187,210 @@ B：保留禁重试，做实质字形/可读性改进并重新完成源/PE/栈/�
 ## D-293：实机延后，增加主机格式反读与依赖证据
 
 2026-10-26T05:49:29.611853+00:00；前设备里程碑fafe890，固件仍8680ea7。用户要求晚间才能实机、本轮仅离线；R022 pending不自动启动。新增96组C页面/2359296像素/64bit反读与严格转录测试、6模块链接/源码顺序审计通过，固件/归档/镜像未改。当前页只能含此前已完成point13，不能归为当前provider返回；GUID/sequence未显示。详见operations/2026-10-26-offline-log-readability-and-console-readiness.md；实际值和菜单/ConOut/GOP仍未实测。
+
+
+## D-294：迁移后证据绑定与离线失败回归
+
+2026-10-26（Asia/Shanghai），接手设备仓89b609e/固件子模块8680ea7，独立固件仓74598df不混用。用户仅授权离线并禁止自动提交推送/重置清理改权限；实机暂停，R-022 pending、S-050未执行，消费与拍摄就绪门保持。新增只读审计脚本和独立out证据：118项归档/源/链接绑定、122源码锁摘要、7项负向拒绝、ASan/UBSan journal/协议/8秒故障路径/96页反读及3组转录测试通过。原资格/镜像/报告不刷新，完整FD/Arm/QEMU/实机未执行；当前固件文档脏树使构建适配器前置不满足，没有调用会修改staging的入口。完整记录见operations/2026-10-26-migrated-log-evidence-audit.md，证据out/migration-log-audit-20261026/。无新增硬件硬停，无当前恢复按键欠项；状态/交接已对齐，本轮新增未提交，未检查远端。
+
+
+## D-295：真实归因日志与晚期ConOut消费者实现
+
+2026-10-26（Asia/Shanghai），用户要求继续离线且优先代码。新增canonical GUID/sequence/phase/status日志视图、严格归因decoder及INF来源摘要、真实ConOut单行sink与Probe可选回放（默认关闭）、菜单文本依赖保护；去掉Probe的Print/DiagDraw双写、raw framebuffer cache flush及生成依赖中的直接绘字代码。run4共17项命令：ASan/UBSan故障与C→ConOut→parser、AArch64三分支对象/非法selector/依赖、旧journal/8秒事务回归通过；run2测试类型编译失败已修正且旧结果保留。未构建FD/重包/QEMU/上机，未提交推送。3份原锁定固件源码改变及3新增头不冒充8680ea7资格，旧锁/metadata不刷新；R-022原镜像/归档/报告/审批保持冻结pending，S-050未执行、消费规则不变。详见operations/2026-10-26-attributed-journal-and-console-code.md；本地证据out/journal-console-dev-20261026/。没有新硬件硬停或恢复按键欠项，实机继续暂停；全局DEBUG、GOP、实际ConOut及菜单仍分别未验收。
+
+
+## D-296：同handle GOP发布、BDS借用与QEMU实际菜单链
+
+2026-10-26（Asia/Shanghai）。用户要求继续离线且可检查实机结果时尽量一笔多推进。本轮新代码补GOP+匹配BDS路径成对发布/失败生命周期、PostGopSetup借用而不另装别名、GraphicsConsole最小尺寸预检。run8共21项命令通过：ASan/UBSan发布/借用故障、真实BDS AArch64对象、新RAM EFI实际连接AAVMF GraphicsConsole并运行固定UniXNU横竖Ui/Menu、ConOut日志、无输入超时/脚本选择/取消确认/文本回退/撤销清理；CRC绑定的截图已目视检查。17项日志/Probe/旧journal/8秒回归通过。600宽VM异常、后处理及迁移include失败保留并独立修复，不写成设备硬停。完整记录operations/2026-10-26-qemu-menu-chain-and-gop-publication.md；证据out/menu-chain-dev-20261026/。实际设备未启动，没有新完整设备FD/Boot v3资格，requirements22/alpha/SMMU/UNCACHED契约不降级；R-022/旧报告/审批冻结pending、S-050未执行。未来合并独立结果不复活consumed或替代单次放行/当前拍摄就绪。本轮没有提交推送、权限变更、旧staging修复或nuwa操作，原迁移改动保留。
+
+
+## D-297：WT／不透明GOP与部署前停点
+
+2026-10-26（Asia/Shanghai），用户要求打通实机阻塞、部署前停。实现独立WT/不透明GOP访问/发布、ARM volatile/DSB、IO/Validate首故障锁停、四类Blt与opaque clear，旧Mu入口保留且22仍拒绝；新增固定寄存器事实的保存字混合系数分析，不将数学结论当当前硬件事实。10项主机/ARM/旧Mu及131072系数验证、21项WT软件profile实际QEMU菜单链通过；初次菜单读计数断言失败保留，后用显式读回覆盖并通过。原始CRC/导出闭环，RGB输出与旧Mu一致。完整记录operations/2026-10-26-wt-opaque-gop-predeployment.md，证据out/wt-opaque-dev-20261026/。当前deployment_ready=false、无新enuma Boot v3菜单镜像；同启动blend/address/SMMU/downstream及完整新构建资格未伪造闭合。按用户要求停部署前，未上机/提交推送/改权限/清理重置/旧staging修复，R022/原报告配置/消费事实冻结保持，STATUS/HANDOFF已对齐。没有新增硬件硬停或恢复按键欠项。
+
+收尾保全：467份冻结/报告/配置文件摘要不变，最终代码与测试绑定一致。32份原迁移脏文件不变；AGENTS.md有本轮之外的单行新增说明，已保留且未改设备门禁，前后摘要见out/wt-opaque-dev-20261026/preservation-final.json。该外部差异未被回退；部署仍未执行。
+
+
+2026-10-26（Asia/Shanghai）· D-298：固定依赖的独立快照完成完整 3 MiB FD 与 stage10 开发 Boot v3，FD e8251bf1 / image 6bc685ae；80 FFS/OEM/实际宏/源码/BootShim/AOSP 回读通过，run1 缺 Brotli 失败保留、run2 通过。新增 enuma 历史路径解析、R-022 本地准备与 UUID/原子 claim/旧状态隔离，30 mock 测试通过。R-022 冻结 f684ef22、pending/未 claim，实机与录像均未开始，仍需精确单次放行和新鲜门禁。未提交推送，设备 HEAD89b609e/固件基底8680ea7 不代表脏源身份。证据 out/development-fd-20261026 与 operations/2026-10-26-development-fd-and-r022-preparation.md。
+
+
+## D-299：R-022单次放行与录像前预检
+
+用户“可以开始实机”按前述精确R-022/S-050上下文落实单次放行；18:12只读身份/root/A槽/解锁/两分区及本地备份摘要、boot-clock通过。未重启/发图/claim/拍摄，待用户确认正在录像；新媒体Media-enuma/S-050-R022。本轮不提交推送，冻结产物不改。证据out/r022-live-20261026/precheck.json、authorization.json。
+
+
+## D-300：S-050数值可读、圆角遮挡与停止追加
+
+2026-10-26 18:21 S-050/R-022单次发图，62.594秒Android完成；origin40.634..40.753唯一code5，独立Android/root/A槽/解锁/两分区与备份核验通过。照片读得ordinal0000001f、status0000000000000000、+；C页标被圆角挡住，完整页面未通过，停止追加，不重跑。原片Media-enuma/S-050-R022；reports/enuma-native-route-S-050-result.json、enuma-s050-visible-log.json。未提交推送。
+
+
+## D-301：内缩归因真实日志新候选
+
+2026-10-26，用户要求准备下一次并尽可能推进。已完成R023 replay2五行/320×160/(64,96)/8秒和严格GUID序号归因、失败测试、完整FD/FAT/Boot v3及实际PE审查；镜像360b5ec7eeb26f76858069fba78d3f69bbe90d40f125730dfcd324dbe69fbd8a。R023 pending/计划S051未发图；新原子claim/本地绑定，不复用R022或旧录像确认。最后设备证据S050 Android恢复，本轮纯离线；不提交推送，保留迁移/冻结产物/媒体，requirements22与GOP/DEBUG/菜单未提升。详见docs/operations/2026-10-26-r023-attributed-inset-log.md。
+
+
+## D-302：R-023单次放行及当前录像就绪
+
+2026-10-26T12:41:22.383347+00:00，用户明确“录像就绪 开始推送”，仅镜像360b5ec7eeb26f76858069fba78d3f69bbe90d40f125730dfcd324dbe69fbd8a一次S051临时boot。R023 approved，当前人工拍摄就绪；即时身份/备份/恢复/时钟门由原guarded runner核验，未发图前不称通过。不得自动重试，旧consumed不变，无Git推送/分区刷写。执行证据入口out/r023-live-20261026。
+
+
+## D-303：S051已恢复，内容待用户核对
+
+R023一次已consumed，20:41:44发图，Android65.062秒，原点40.729..40.802唯一code5；20:42:57独立恢复通过。原始照片五行在屏内；用户要求人工逐字核对，独立判读已保存且未查询GUID目录，当前全文验收pending，不追加实机、不提交推送。证据reports/enuma-native-route-S-051-result.json与out/r023-live-20261026/postcheck.json。
+
+
+## D-304：S051内容交叉核对及I2C归因
+
+用户提供五行人工转录，与此前独立保存的助手判读按字段上下文/hex大小写规范化后逐字一致：ordinal31、status0、sequence185、GUID04de8591-d2b3-4077-bbbe-b12070094eb6。绑定本镜像实际PE目录唯一I2C；仅证明此前I2C StartImage返回EFI_SUCCESS，不证明总线/外设功能。照片中五行完整避开圆角；S/5、O/0字形相同确有辨识缺陷，依靠标签位置区分，后续新候选改善，不覆盖冻结图。原S051结果报告保存当时pending事实；新证据reports/enuma-s051-visible-log.json关闭人工核对项。R023已consumed，不再启动，无新实机授权、无提交推送。
+
+
+## D-305：诊断日志与菜单前控制台的新完整构建
+
+2026-10-26，用户要求继续直到编译下一版。replay3故障优先归因/25独立字形、有界129行ConOut回放/首错锁存及DSC宏传递已实现；主机/ARM/QEMU真实菜单链和独立晚期Probe PE链接通过。完整FD 1179eb69f81f303c0fd6012b3aaa7597aed589366a4dc88462391a389f44d2b7，Boot v3 e789df474e05e4de37f329cc4a1dd623cb1975ede0ae48b134bcf866db9f2969。完整诊断FD保留EFI_UNSUPPORTED Probe安全入口，晚期代码只在独立console-link2模块中链接，不能混为实机菜单镜像。build1/2失败保留，build3成功。证据reports/enuma-diagnostic-log-development.json、out/diagnostic-log-20261026及docs/operations/2026-10-26-diagnostic-log-and-console-drain.md。R024仅离线未批准，无设备动作、提交推送或verified/requirements提升；旧冻结/消费证据及媒体未改。设备HEAD89b609e、固件基线8680ea7，实际源以新manifest为准。
+
+
+## D-306：R024单次批准与录像就绪，S052尚未发图
+
+用户明确“批准实机 录像已就绪”，仅D305镜像e789df474e05e4de37f329cc4a1dd623cb1975ede0ae48b134bcf866db9f2969一次临时boot，内缩(64,96)/320×160/8秒、replay3真实完成返回，仍不进正式GOP/ConOut/菜单。独立execution1元数据派生保持镜像原字节；execution-review和新R024一次性runner测试通过。S052未claim/未发图，立即执行门仍核对enuma身份/root/A槽/解锁/备份/时钟，异常停止追加并恢复。旧consumed保持，不提交推送；本地manifest绑定当前文档与脚本。执行证据out/r024-live-20261026；媒体目录D:/Code/PortingiOS/enuma/Media-enuma/S-052-R024。
+
+
+## D-307：S052真实日志核对完成与固定人工校验流程
+
+R024已单次消费，21:56:12发图，Android66.234秒，原点40.761..40.818唯一code5；21:58:12独立恢复通过。用户“能对上”确认助手先保存后展示的五行，随后查本镜像目录归因I2C StartImage返回EFI_SUCCESS（ordinal31/sequence185/GUID04de8591-d2b3-4077-bbbe-b12070094eb6）。新字形/完整页面本图可读，不称全部字形/8秒持续或正式GOP/ConOut/DEBUG/菜单通过；requirements22不清。证据reports/enuma-native-route-S-052-result.json、reports/enuma-s052-visible-log.json、out/r024-live-20261026。用户“以后都这样校验”：助手先独立读图落盘→展示五行→用户确认/纠正→精确镜像目录归因；不确定写?，不补猜，不再要求用户先盲抄。媒体本地、旧消费不复活，无追加启动/提交推送。
+
+## D-308：用户要求菜单优先，直达入口与无ConOut图形菜单验证
+
+用户明确优先最快进入真实UniXNU菜单。新增默认关闭ENUMA_DIRECT_MENU，选择真实UniXNU应用GUID，独立stage10开发构建可用--direct-menu，拒绝与旧日志实验profile混用，原诊断早停/requirements22保持。QEMU横竖实际Ui/Menu在ConOut=NULL期间绘制和模拟按键/取消/确认通过（21命令），不将其称为整个UniXNURun或物理显示/按键通过。新版本地固定16e592a已有QR AdvancedLogDxe，但当前5fdbd5d没有；QR依赖菜单/GOP及AdvancedLogger，后置而不升级框架阻塞菜单。真实UniXNURun关闭BDS watchdog，下一物理菜单候选须独立可控返回。记录docs/operations/2026-10-26-menu-first-and-qr-log.md，构建及证据out/menu-priority-20261026；无新设备动作、提交推送或冻结产物覆盖。最新完整构建状态以该目录build1/build-result.json及direct-entry.json为准。
+
+D308最终离线结果：build1完整FD c72d4e3ef72b386fccd0353d5eb59aee2c9f3552d5a7e5a28319ff29817270ae；direct-entry.json核对实际生成PCD与PE均为真实UniXNU应用。qualification3通过FD/OEM PE与DEPEX、模块/库检查和Boot v3打包反解，镜像SHA256 0808ef8b0dcb36329c927f0d5096f484a4eeac7bc9c8c45e124eff117b0292dc。qualification1/2旧审计假设失败保留，分别修复固定Probe目标和旧ConOut函数名假设；原R024实际资格元数据回归与错误direct-menu选择拒绝通过。全部仅离线，stage10早停/空ramdisk，不可直接上机进菜单。完整证据reports/enuma-menu-priority-development.json。
+
+
+## D-309：纠正自动返回前置要求
+
+用户指出nuwa菜单可手动回fastboot或Android。重新核对本仓AGENTS的设备门禁与既有人工恢复规则：要求有可用恢复路径，不要求菜单固件必须自动返回。D308及对话中“必须单独实现菜单阶段自动/受控返回”作为新增软件前置的解释撤回；它是本轮过度收紧，不是原规则。菜单可沿本机已有证据支持的人工按键恢复路径，在人在场、当前条件核对及精确新候选资格满足时验证。UniXNURun关闭BDS watchdog这一源码事实仍成立，旧探针自动复位和75秒观察窗不能冒充菜单自动返回保证。无需为此另实现自动复位功能。当前实际GOP/配置发现/实体输入仍待接通，新镜像资格与单次范围/录像条件不跳过，R024消费记录不复活；未做任何新设备动作或提交推送。nuwa本次未核验，不将其行为当enuma恢复证据。
+
+历史D308构建和报告保持原字节；其中remaining内的自动/独立返回任务由本条纠正，后续以STATUS/HANDOFF为准。
+
+## D-310：原厂DisplayDxe支线卡点复核
+
+用户要求检查第二条GOP路线。仅离线核对历史S005/006/007、实际源码和原始二进制，并重跑audit_display_handoff到独立out/oem-display-recheck-20261026/handoff-audit.json，退出0。原厂驱动/面板资源齐备；调用前可返回而直接PE返回/Exit汇合未观察到返回，嫌疑集中PE调用区间，具体函数/状态尚未定位。FD Reserved/FD_Reserved调度器发现来源缺口仍在，但缺scheduler有降级路径，关闭线程S002也未改善，不能判为根因。APRIORI绕过DEPEX，补未知GUID stub不是有效修复。当前128条Core日志不能显示闭源PE内部服务，且S052候选排除了原厂DisplayDxe/CPRDxe，不能作为原厂路线验收。完整分析docs/operations/2026-10-26-oem-display-route-recheck.md。无设备动作、原始资格覆盖、候选构建、提交推送或内存/verified变更。
+
+实机请求核对：用户最新要求“开始实机验证”。已核对当前候选，最新镜像0808ef8b仍为stage10/空ramdisk，direct-entry报告early_stop_retained=true、deployment_ready=false，不能到达菜单或验证实际GOP；因此未发送镜像、未消费新试验、未复用R024。当前阻塞为缺少已接通物理GOP的可测菜单候选，不是缺少重复口头授权。后续先实现并资格新候选，再按用户已有实机意图核对精确范围和当前拍摄/身份/备份/恢复条件。无需现在开始录像。
+
+## D-311：实现R025有界真实菜单窗口，向实机资格推进
+
+用户要求推进到实机验证。新增独立800×600/(64,96)/8秒真实UniXNU Ui/Menu窗口，使用临时PixelBltOnly GOP、RAM渲染、物理写读回和完整保存恢复；requirements22和生产GOP拒绝条件保持。host2 46组/24通道故障检查、qemu3 19命令真实菜单运行与恢复通过。完整build1因旧PixelArmProbe未使用-Werror失败，已互斥include修复，独立ARM编译通过，build2进行中。新scope/qualifier/R025一次性guard及独立human-camera runner已实现，31项R022..025准备器测试通过。无设备动作、旧授权复用、提交推送或内存/verified变更。新窗口只验证实际菜单引擎/GOP绘图/倒计时，不声称整个UniXNURun/BDS/配置发现/实体输入。新范围最终资格后需精确本次放行及当前录像条件。入口docs/operations/2026-10-26-r025-bounded-menu-window.md和out/menu-window-20261026。
+
+R025准备补充：23:47绑定设备未以授权ADB状态在线，未发图；用户确认连接并进入Android后，23:48:33独立只读预检通过enuma/Android完成/root/A槽/解锁及boot_a/vendor_boot_a与本地备份一致，current.local.json未改。证据out/menu-window-20261026/read-only-preflight2.json。build2/qualification1已通过；最终复核将退出禁止写入提前至卸载协议前，qemu4通过，新build3构建中，最终镜像及资格不能沿用build2。尚未claim/boot；当前录像确认仍未取得。
+
+D311最终资格：build3、qualification2通过；镜像 17a18ace93a002ac394ef4727148e893d7defe420496b4d3e8df7dde115be0cd，FD 275ce57a02b7c33393eeb5d63a9c9817ec527951a3dd4f2982e311a997caf46e。最终qemu4、compiled-code-review3通过；临时GOP在卸载前先禁止写入。资格1与旧code-review结果保留。物理回调584字节相同，Core.text/.data相同；新的菜单时序不套旧日志code5窗。23:48:33独立只读设备核验通过，尚未claim/boot，当前R025单次与录像确认pending。旧冻结绑定复核通过，无提交推送。原EnumaInheritedVideoAudit顶部NO GOP注释仅适用于默认/旧profile；ENUMA_BOUNDED_MENU=1通过新helper临时发布并撤销GOP，当前实现和范围以本记录为准。
+
+
+
+## D-312：R025本次单次批准和录像确认
+
+用户明确“批准 录像已经就绪”。仅R025/S053镜像17a18ace93a002ac394ef4727148e893d7defe420496b4d3e8df7dde115be0cd、(64,96)800×600真实菜单窗口一次临时boot获批准，当前录像就绪。此前D311待确认已关闭；尚未发图，即时身份/备份/恢复门由runner核对。无自动重试、分区刷写或提交推送；75秒无返回停止追加并恢复。执行授权记录out/r025-live-20261027/authorization.json。
+
+
+# D-313：S053菜单窗口已实测并恢复Android，画面待用户核对
+
+2026-10-27 00:09:34，R025精确镜像17a18ace93a002ac394ef4727148e893d7defe420496b4d3e8df7dde115be0cd仅执行一次临时fastboot boot，授权已consumed。发送返回0，ADB49.812秒，Android完成64.406秒；00:11:06开始的独立复核确认enuma/root/A槽/解锁、boot_a/vendor_boot_a和本地备份一致。用户也报告回到Android。无分区刷写、追加启动、提交推送。
+
+助手已独立查看本地视频16/21/23秒帧并保存判读：UniXNU标题、版本0.1.0、enuma - bounded GOP experiment、Return to Android和GOP window test两项清晰可见；倒计时8/3/1秒，蓝色高亮由第一项变为第二项。文字避开圆角，底部No input device提示在the后截断。此为助手画面观察，等待用户核对后关闭视觉验收，不能提前写人工核对通过。
+
+这是实际Ui/Menu经临时PixelBltOnly GOP的800×600内缩窗口显示证据；全UniXNURun/BDS/配置发现、实体输入、正式生产GOP、QR日志仍未验收。返回码未知，不套旧R024 code5时序，不从Android恢复推断窗口逐字恢复通过。requirements22保持；旧R022/R023/R024冻结产物未改。
+
+证据：reports/enuma-menu-window-S-053-result.json；out/r025-live-20261027/authorization.json、postcheck.json、independent-visual-read.json；原媒体在D:/Code/PortingiOS/enuma/Media-enuma/S-053-R025，仅本地保留。最终镜像仍为out/menu-window-20261026/qualification2，execution-review.json和preparation2保存发图前绑定；它们是历史资格，发图后文档变化不追写旧资格。
+
+下一步：向用户展示已保存判读并核对；然后离线接通完整菜单启动链、持久GOP生命周期及输入依赖。R025不得重试；新镜像另行资格和实机范围评估，不把本次批准扩张到下一次。
+
+
+D-314：用户“对的”确认S053菜单文字/高亮/倒计时独立判读。原始证据保留，增量确认reports/enuma-menu-window-S-053-confirmed.json。R025 consumed，Android独立核验已通过；无待恢复或待人工转录事项。继续完整应用入口离线工作，不启动设备。
+
+
+D-315：完整UniXNU独立应用入口离线通过，新增EnumaMenuApplication.h子系统表/GOP绑定与清理，真实磁盘TOML/UniXNURun/exit动作在application和firmware两入口通过，9种失败场景/22条命令通过。当前尚未接入板级profile、未生成新板级镜像；ConnectAll前置及GOP生命周期仍须处理。详见docs/operations/2026-10-27-full-menu-application-entry.md和reports/enuma-menu-application-development.json。S053已人工确认，R025 consumed，无设备动作、提交推送，冻结资格文件哈希一致。
+
+
+# D-316：完整UniXNU应用固件已编译，离线资格通过
+
+用户“继续推进直至编出固件”的本轮目标已完成。新full-menu完整FD及Boot v3启动镜像已生成，未上机、未提交推送。R025/S053保持consumed；S053菜单独立判读已由用户确认，设备最后经独立核验恢复Android/root/A槽/解锁且原分区摘要一致。本轮没有设备命令。
+
+## 当前产物
+
+- 镜像：out/full-menu-20261027/qualification1/image.img（103817216字节）。SHA256 d6d3d61a65d36d0194c5af6656c2e58220c64175548e155d8742f104cadcebce。
+- FD：out/full-menu-20261027/qualification1/SILICIUM_UEFI.fd（3MiB）。SHA256 9d513b79c98662977d77acdc5c4984bf131bc10f4fe2b0c89e21e688e5c56ca8。
+- build2于2026-10-27 00:58:56编译完成，完整编译2分11秒；独立工作区快照，不是干净提交构建。
+- 软件资格：out/full-menu-20261027/qualification1/qualification.json，通过，execution_ready=false。新候选范围标识R026，尚未请求/登记单次实机批准。
+
+## 本版实际运行路径
+
+保留原DXE stage13诊断入口，从固件卷加载真实UniXNU EFI，给子应用绑定私有GOP系统表和仅含exit动作的只读内存配置卷，实际运行完整UniXNURun/配置解析/菜单/动作返回。application host避免配置加载前无条件ConnectAll。GOP覆盖整个子应用执行期，退出后先关闭子应用与配置卷，再撤销GOP并释放内存；故障停止present、恢复窗口、卸载失败保留引用存储。
+
+仍是(64,96)800×600/8秒有界窗口，scale1修复底部文字截断；物理读写/屏障/MDP预算不增加，requirements22/verified/内存参数不改。不是正常BDS链完成、实体按键或生产GOP准入；尚无XNU启动或QR日志。菜单返回后沿现有Core诊断复位，自动复位不作为未来菜单的额外前置要求。
+
+## 已完成验证
+
+本次实际UniXNU PE经qemu3端到端23条命令通过，完整真实配置/菜单/exit、模拟像素恢复、读1687441/写1207441/屏障30，CRC69F91C2A。包含只读卷读/写拒绝/EOF/seek/句柄/分配失败及9种子镜像生命周期场景；host1另46组/24通道事务故障检查通过，策略及旧R025回归23项通过。FD内30个OEM PE/DEPEX一致、宏与配置实际字节正确、完整96MiB FAT和Boot v3反解一致。
+
+build1因本轮DSC CRLF导致旧LF补丁不匹配失败，修复为LF后独立build2成功，失败证据保留。新旧资格文件哈希复核一致；没有覆盖旧镜像/资格或媒体。
+
+## 下一步与边界
+
+本轮停在用户要求的编译完成点。实机之前还需针对新的完整应用路径做编译后指令/嵌套分派复核、新单次执行器和来源/文档绑定，再确认此镜像单次批准与当前录像/即时设备门禁。不得沿用R025或把本软件资格当作实机通过。不需现在按恢复键或开始录像。
+
+详细实现、失败过程和复现入口：docs/operations/2026-10-27-full-menu-firmware.md。总报告：reports/enuma-full-menu-development.json。历史完整应用单独VM验证D315和S053确认报告保持原字节。
+
+
+# D-317：R026准备完成，本次录像已开始，S054待发图
+
+R026镜像d6d3d61a65d36d0194c5af6656c2e58220c64175548e155d8742f104cadcebce，资格10d3564a3cd5d4fce35b7b597098a0de31a546d9186d5cbe74da7d9a60d77221，冻结qualification1不改。584字节物理回调与R025一致，Core.text/.data一致，子应用加载/系统表/卸载/只读拒写/首错与清理门逐条核对，删除关键指令3种变异拒绝。嵌套应用不能冒充调度驱动的ASan/UBSan检查通过；应用类型跳过Core自动连接，application host无隐式ConnectAll。60项执行器/策略/旧准备器回归通过。
+
+01:12:03独立只读核验enuma Android完成/root/A槽/解锁及设备与本地备份摘要通过。用户明确要求机器码复核、失败路径、单次绑定与构建同轮完成，只差录像时停；以后遵守此工作方式。用户随后“我开始录像了”，绑定当前R026一次临时启动与当前拍摄，授权记录out/r026-live-20261027/authorization.json。尚未claim或发图，将再做即时门禁，不自动重试。
+
+范围：真实FV UniXNU EFI→只读exit配置→完整UniXNURun→800×600内缩/scale1/8秒→应用退出、窗口恢复与原诊断终止。正常BDS、实体按键、生产GOP、XNU/QR未验收，requirements22保持。旧R025/S053 consumed，画面已确认且Android已恢复。
+
+执行绑定out/full-menu-20261027/execution-review.json；preparation1仅为空目录（首次只读验证因Windows无法读取WSL链接而退出，未发图），有效准备将写preparation2。入口scripts/run_full_menu_trial.py默认离线，显式--execute --human-camera-ready和独立UUID才启动。75秒无返回停止追加并恢复，不套旧日志code5时序。媒体D:/Code/PortingiOS/enuma/Media-enuma/S-054-R026仅本地；助手先独立保存判读再给用户核对。无提交推送、分区刷写、改槽或nuwa操作。
+
+
+# D-318：S054完整应用菜单已拍到，Android恢复通过，画面待用户核对
+
+R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af6656c2e58220c64175548e155d8742f104cadcebce，fastboot返回0/2.641秒，ADB49.797秒，Android完成66.000秒。01:28:03独立检查enuma/root/A槽/解锁、boot_a/vendor_boot_a及本地备份摘要通过。无分区刷写、追加启动、提交推送或nuwa操作。
+
+实际落地媒体为单张照片（不是完整视频）。助手已独立查看并保存判读：UniXNU标志/标题，版本0.1.0，config路径\EFI\UniXNU\unixnu.toml，第一项Return to firmware蓝色高亮，Booting Return to firmware in 1 s，完整No input device提示，drivers 0 loaded / 0 failed、kits 0、acpi 0。无圆角遮挡，底部提示未出现上一版截断。当前等待用户核对，不预写人工验收通过；单张照片不证明8秒持续或完整倒计时过程。
+
+结合精确已绑定镜像，此画面对应独立UniXNU应用的真实配置/菜单路径。底部drivers计数是UniXNU配置注入驱动统计，不是全部UEFI DXE驱动数量。当前仍为DXE早期显式应用加载+有界GOP/内存配置，非正常完整BDS；实体输入、生产GOP、XNU/QR未验收。返回码未知，不套旧R024 code5窗口，不以Android返回推断窗口每字恢复通过。
+
+用户问为何比nuwa快：当前enuma省略正常BDS/全控制器连接，未启用OEM DisplayDxe/UFSDxe，使用继承显示和私有内存配置，工作量明显不同；这是对enuma当前路径的解释，不是nuwa耗时分布已核验，也不称enuma完整固件性能领先。
+
+用户持久要求：构建、机器码复核、失败路径和单次绑定同轮完成，只差当前录像时才停，不再把离线步骤拆成多轮停点。当前单次已结束，先完成媒体人工核对，后续新软件离线继续；不得重复R026。
+
+证据：reports/enuma-full-menu-S-054-result.json；out/r026-live-20261027/authorization.json、postcheck.json、independent-visual-read.json。原媒体D:/Code/PortingiOS/enuma/Media-enuma/S-054-R026，仅本地。冻结qualification1、execution-review和preparation2保存当时绑定，不回写旧资格。剩余工作是正常入口/持续显示与输入依赖，下一次候选仍独立资格及单次/录像门禁。
+
+
+## D-319/D-320：S054人工确认与R027独立后置菜单候选
+
+用户“正确 继续推进”确认S054独立照片判读。已新增confirmed报告，保留原pending结果和独立判读字节。下一版R027/S055将实际驱动StartImage成功记录与菜单回调结果分离；全套离线构建/QEMU/失败路径/机器码/单次源与包绑定完成。镜像0db64285d13c0e2f60e68403b0b5498433b0b0c0143f6ce336c1885dad4afb5a。STATUS/HANDOFF及2026-10-27-deferred-menu-firmware.md为当前状态；不再沿用R026未确认或待发图措辞。
+
+01:48绑定enuma未以已授权ADB在线，仅做只读检查，未追加实机动作。等待连接Android/USB授权、本次明确R027单次放行和当前录像；旧R026及此前均consumed不可复用。全DXE/BDS/实体输入/生产GOP/QR仍未验收，不把后置显式应用启动称正常BDS。用户要求离线步骤全部做到录像停点，本轮已落实；按最新指令不提交推送、不重置清理、不开第二写入者、不操作nuwa。
+
+
+## D-321：用户暂停实机，原厂服务追踪离线推进
+
+用户“暂时不能实机 继续离线推进”，撤下当前录像待办，不执行R027或其他候选。R027冻结且未消费，旧准备因文档更新过期；恢复实机须重新准备和明确当前单次/录像条件。独立OEM三服务追踪、DisplayDxe私有表绑定、文本回放/严格解码已经宿主ASan/UBSan、4项Python测试及AArch64对象检查；未接入Core/profile，未执行OEM驱动，卡死时日志取证出口仍待实现。详见docs/operations/2026-10-27-oem-service-trace.md和out/oem-service-trace-20261027/check3/result.json。R022—R027冻结摘要、R027执行源码绑定保持不变；无提交推送、设备或nuwa操作。
+
+
+## D-322：先确保OEM追踪记录可信
+
+用户明确禁止把没有返回记录直接判成驱动死锁。已完成透明失败转发、嵌套配对/缺失返回/环形丢失、截断重复乱序拒绝及部分输出不推进/不重试验证；7项Python测试含320个独立模型快照，ASan/UBSan与AArch64对象检查通过。缺失返回仅称快照未观察到，不能定位为确定死锁。新证据out/oem-service-trace-20261027/trust-check2与reports/enuma-oem-trace-trust-validation.json；旧资格保留。仍暂停实机，组件未接入Core/profile，尚需可靠取证出口，无提交推送或设备操作。
+
+
+## D-323：文档归档与本地提交授权（2026-10-27）
+
+用户明确要求落地全部文档和提交，并提供分析 DisplayDxe 的接续 prompt。本轮允许本地提交，取代此前“不自动提交”的限制；不含远端推送、实机执行或旧授权复用。实机继续暂停，R027 paused-by-user/未消费，旧 preparation 已过期。
+
+最新入口：[DisplayDxe 接续 prompt](2026-10-27-displaydxe-handoff-prompt.md)。追踪可信性证据仍为 trust-check2（7 项测试、320 个模型快照、ASan/UBSan 和 AArch64 对象检查），没有新增原厂驱动执行或固件资格。代码提交不会把历史工作区快照构建变成新提交构建。全部 out、媒体、OEM 二进制、设备标识及备份不入库；本地证据需保留。
+
+提交顺序：实际 firmware 子模块源码及迁移说明，随后设备仓代码/文档/脱敏报告及子模块指针；独立 uefi-enuma 仅提交 AGENTS/README 迁移说明，其 Mu_Basecore 及嵌套依赖既有改动不纳入本轮。提交号由 git log 和最终回复给出，不写自引用哈希。远端未发布。
+
+
+提交前检查：trust-check2 全部输入摘要与当前工作树一致；暂存限定文本源码/配置/文档/报告，无产物或影音。git diff --cached --check 发现既有 CRLF/行尾空白及 EOF 空行，报告保存在 out/handoff-20261027-d323；未为格式清理改写已绑定源码，不能称 whitespace 检查通过。未重新编译或新增硬件资格。

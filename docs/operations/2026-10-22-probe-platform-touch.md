@@ -45,12 +45,12 @@ EnumaNvt 不含 Linux input/SPI 实现。接受 66-byte touch 或 80-byte pen-ex
 ## 复现入口
 
 ```powershell
-& 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/prepare_enuma_adt_fragment.py --sheng D:/Code/PortingiOS/common/sources/UniXNU-sheng --unixnu D:/Code/PortingiOS/common/sources/UniXNU
+& 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B scripts/prepare_enuma_adt_fragment.py --sheng D:/Code/PortingiOSLegacy/common/sources/UniXNU-sheng --unixnu D:/Code/PortingiOSLegacy/common/sources/UniXNU
 & 'C:/Program Files/WorkBuddy/resources/vendor/python/python.exe' -B -m unittest discover -s tests -p 'test_*.py'
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/check_enuma_drivers.py --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOS/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU
-wsl -d Ubuntu-22.04 -- /mnt/d/Code/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/UniXNU-enuma/scripts/audit_enuma_fd.py
-wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/UniXNU-enuma/scripts/check_firmware_overlay.py --unixnu /mnt/d/Code/PortingiOS/common/sources/UniXNU --firmware-root /mnt/d/Code/PortingiOS/common/sources/uefi-sheng --require-image-ready
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_enuma_drivers.py --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/build_enuma_firmware.py --reference /mnt/d/Code/PortingiOSLegacy/common/sources/mu-nuwa-firmware --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU
+wsl -d Ubuntu-22.04 -- /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/firmware-tools/bin/python -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/audit_enuma_fd.py
+wsl -d Ubuntu-22.04 -- python3 -B /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/check_firmware_overlay.py --unixnu /mnt/d/Code/PortingiOSLegacy/common/sources/UniXNU --firmware-root /mnt/d/Code/PortingiOSLegacy/common/sources/uefi-sheng --require-image-ready
 ```
 
 最初在 Windows 直接跑补丁预处理检查缺 clang，已改用 WSL 成功，没有跳过。BootShim/打包沿用上一报告脚本；新输出名不得覆盖现存候选。

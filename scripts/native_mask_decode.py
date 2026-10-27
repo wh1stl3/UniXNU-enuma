@@ -21,12 +21,12 @@ def make_plan(root):
 def make_pixel_plan(root,review="R-018"):
     plan=make_plan(root)
     # Two complete100ms-window samplers plus at most500ms hold: total0.9s.
-    if review=='R-022':
+    if review in ('R-022','R-023','R-024'):
         base=plan['baseline_envelope_seconds']
         plan['sampler_seconds']=[0,8.4]
         plan['code_windows_after_issue']=[[base[0]+d-1,base[1]+d+(0.4 if i==0 else 8.4)+1] for i,d in enumerate([2,7,12,17,22])]
         plan['code_windows_after_issue'][4]=[base[0]+22+8-1,base[1]+22+8.4+1]
-        plan.update(success_only=True,declared_profile='R-0228s hold;unique-code5-only,failures/overlap stop;preissue windows',failure_windows_may_overlap=True)
+        plan.update(success_only=True,declared_profile=review+'8s hold;unique-code5-only,failures/overlap stop;preissue windows',failure_windows_may_overlap=True)
         return plan
     duration=2.4 if review=='R-020' else .9
     plan['sampler_seconds']=[0,duration]
