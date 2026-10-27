@@ -1,0 +1,22 @@
+{
+  "scope": "oem-far-event-v8",
+  "trial_id": "a35583f7-e92d-4999-96d2-116793825026",
+  "consumed": true,
+  "boot_count": 1,
+  "partition_writes": false,
+  "image_sha256": "197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29",
+  "preparation_commit": "6c3d8de",
+  "firmware_commit": "49affe73f48f5b22dd1256efa25dd5576c438daa",
+  "boot_transport_seconds": 0.4027232720000029,
+  "boot_transport_returncode": 0,
+  "observed_return_endpoint": "android",
+  "automatic_return_human_confirmed": true,
+  "independent_android_partition_backup_check_passed": true,
+  "user_reported_log_pages": 0,
+  "independent_media_review": false,
+  "hardware_milestones_confirmed": [],
+  "no_additional_boots": true,
+  "evidence": "out/oem-far-event-live-20261028",
+  "transport_evidence": "out/device-tests/oem-a35583f7-e92d-4999-96d2-116793825026",
+  "conclusion": "One consumed boot; automatic Android return and recovery verified; no summary observed. The reproduced race fix did not resolve the reported no-page symptom; hardware execution stage remains unknown."
+}
