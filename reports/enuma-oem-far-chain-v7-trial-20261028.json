@@ -1,0 +1,22 @@
+{
+  "scope": "oem-far-chain-v7",
+  "trial_id": "61c29945-1399-49eb-8133-d11d465bb6c4",
+  "consumed": true,
+  "boot_count": 1,
+  "partition_writes": false,
+  "image_sha256": "c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d",
+  "preparation_commit": "8f31a716aee7010de3672ad7439b8f9167d61fbb",
+  "firmware_commit": "1f05eef62b62fc6f57b805e1cb346e3643457db7",
+  "boot_transport_seconds": 0.4003480659999923,
+  "boot_transport_returncode": 0,
+  "observed_return_endpoint": "android",
+  "automatic_return_human_confirmed": true,
+  "independent_android_partition_backup_check_passed": true,
+  "user_reported_log_pages": 0,
+  "independent_media_review": false,
+  "hardware_milestones_confirmed": [],
+  "no_additional_boots": true,
+  "evidence": "out/oem-far-chain-live-20261028",
+  "transport_evidence": "out/device-tests/oem-61c29945-1399-49eb-8133-d11d465bb6c4",
+  "conclusion": "Consumed once; automatic Android return and recovery verified; no summary observed by user; OEM/Core/DXE/GOP progress unknown"
+}
