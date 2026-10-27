@@ -4,7 +4,9 @@
 
 前轮已完成：生产RootWindowRead与EnumaUfsRead桥接、ARM64 Mach-O archive、失败返回与校验测试；真实目录型APFS Data seed；带Data的96MiB FAT及真实DarwinBoot解析验证。新证据out/kernel-userland-20261027-2；明细及摘要见[专项](operations/2026-10-27-root-data-offline.md)和reports/enuma-root-data-offline.json。
 
-本轮新增EnumaRamDisk易失Data后端及iOS17 ARM64归档f9f357d0…；完整512MiB读回、23处实际导入分配失败、预算/短写/并发停止验证通过。详见[后端集成边界](operations/2026-10-27-volatile-data-backend.md)，证据out/kernel-userland-20261027-3/ram2。下一节点为匹配的XNU生成头/编译记录、storage/PMGR ABI及真实IOKit服务接线。
+上轮新增EnumaRamDisk易失Data后端及iOS17 ARM64归档f9f357d0…；完整512MiB读回、23处实际导入分配失败、预算/短写/并发停止验证通过。详见[后端集成边界](operations/2026-10-27-volatile-data-backend.md)，证据out/kernel-userland-20261027-3/ram2。下一节点为匹配的XNU生成头/编译记录、storage/PMGR ABI及真实IOKit服务接线。
+
+本轮确认CI未留实际编译记录/生成头，已接入driver_inputs导出与14项负测；尚未运行macOS构建取得包。当前候选PMGR静态契约及3项篡改拒绝通过，参考地址需+2MiB，不能直接复用。见[输入与ABI依赖](operations/2026-10-27-driver-inputs-pmgr.md)，证据kernel-userland-20261027-4/pmgr4。下一步仍须真实匹配编译输入及运行期ABI，不能将静态结果填live_native_4k。
 
 内核仍是前轮30组件e879b2f0…，新archive没有接入XNU；没有IOKit/MMIO、实际Data挂载或桌面结果。下一步补UFS stream/排他/队列生命周期、同donor PMGR ABI、IOKit初始化与归档、RamBlock及Root/Owner/Data策略，再接显示/HID和用户态。不能把结构验证或原始Apple图形组件当成硬件驱动。
 

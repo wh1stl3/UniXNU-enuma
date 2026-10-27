@@ -1,0 +1,87 @@
+{
+  "real_xnu_input_bundle_created": false,
+  "exporter_tests": 14,
+  "source_hashes": {
+    "scripts/ci/platform_archives.py": "0ab6add808546069b2d1a664ebe71391ade3264bf0688f3c4e979afdedded2ac",
+    "tests/test_driver_inputs.py": "e2f24afdeb5f9922a05dc1a35d4f696a557b2a8b633e30eef961cf3230e89f46",
+    "scripts/ci/driver_inputs.py": "a5cab8037b18ebade567a8a971cded6b6c45b9c8bd3cc6f233698e31637052d7",
+    "scripts/check_enuma_pmgr_contract.py": "6daf077ada7d167869a27b39aca45cdaff4e531f2b106319076f6da7402b7820"
+  },
+  "passed": true,
+  "hardware_executed": false,
+  "kernel_rebuilt": false,
+  "exporter_log_sha256": "fdc59d0a782bf8dcac9a46a81654e06190e8d01148a872dd79d0d19665c234c0",
+  "macos_ci_executed": false,
+  "pmgr": {
+    "passed": true,
+    "reference_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+    "reference_script_sha256": "d01543174b86af5b30a6c84bdfede67e79426e7094140f50fca02249a3539ba5",
+    "adapted_script_sha256": "d90aee7ca7866b73aa772e060513a586f1bf638d0c6f7f6b8888d5446595c58d",
+    "candidate_sha256": "e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59",
+    "emitter_sha256": "a2c6aab4e49a1a4f3ed2c7b46c9ed7828d55a5200660587c273f013abdc3700b",
+    "actual_slide": "-0xe00000",
+    "reference_slide": "-0x1000000",
+    "address_translation": {
+      "0xfffffff005cfad48": "0xfffffff005efad48",
+      "0xfffffff005cfad50": "0xfffffff005efad50",
+      "0xfffffff005cfac68": "0xfffffff005efac68",
+      "0xfffffff0042dde02": "0xfffffff0044dde02",
+      "0xfffffff005cfac08": "0xfffffff005efac08",
+      "0xfffffff004a24adc": "0xfffffff004c24adc",
+      "0xfffffff005cfac10": "0xfffffff005efac10",
+      "0xfffffff004a230ec": "0xfffffff004c230ec",
+      "0xfffffff004aaeb40": "0xfffffff004caeb40",
+      "0xfffffff0049f0058": "0xfffffff004bf0058",
+      "0xfffffff005ce26d8": "0xfffffff005ee26d8",
+      "0xfffffff004a20fbc": "0xfffffff004c20fbc",
+      "0xfffffff004a20fc4": "0xfffffff004c20fc4"
+    },
+    "contract": {
+      "evidence": "static byte contract adapted from pinned UniXNU audit; not REA decompilation",
+      "candidate_sha256": "e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59",
+      "donor_sha256": "f18b4df865405f2a287b84977d7aca745e056d656d9fc9df1662970ce2969de7",
+      "original_executable_sha256": {
+        "com.apple.driver.AppleMobileFileIntegrity": "a1088aaabc259418ed503d08df29b6146470b8c962696c688122a1f60a141db6",
+        "com.apple.driver.ApplePMGR": "2c433279d004803b7ef02948e550ad6b77aa3f84b02a06a357e00fa738310a99"
+      },
+      "service_class": "ApplePMGRNub",
+      "provider_field_offset": "0x88",
+      "provider_read_vtable_byte_offset": "0xa00",
+      "provider_read_slot": 320,
+      "provider_write_vtable_byte_offset": "0xa08",
+      "provider_write_slot": 321,
+      "amfi_value_update": "32-bit read result OR 0x4, then passed to write",
+      "null_provider": "read returns 0xffffffff; write returns without an operation",
+      "target_provider": {
+        "class": "AppleT8011PMGR",
+        "original_segment_sha256": {
+          "__TEXT": "bd4be83b7c24b18d4796be180e8bdaf96a2a4670407e85101164c991cd9d408c",
+          "__TEXT_EXEC": "59d36c869db750dcde3ec1ab87d26619beef7c12d929d674e0b3d38357ad5b22",
+          "__DATA_CONST": "429c542da926dfa6376ba1dc6e622f2a3cb6afa3c0bfade43d4954c2c63a2a07"
+        },
+        "constructor_vptr": "0xfffffff006f9da90",
+        "slot_targets": [
+          "0xfffffff006a577e8",
+          "0xfffffff006a577f0"
+        ],
+        "read": "returns 0xffffffff",
+        "write": "returns immediately without MMIO",
+        "runtime_invocation_observed": false,
+        "included_in_native_candidate": false
+      },
+      "limitations": [
+        "Target constant-read/no-op-write behavior is static evidence, not runtime service qualification",
+        "No Snapdragon provider lifecycle, service matching or platform power operations qualified",
+        "The PMGRAON log is not an independent latch readback",
+        "No replacement nub, MMIO access, VM declaration or security bypass installed",
+        "No QEMU execution or hardware observation is produced by this audit"
+      ]
+    },
+    "negative_cases": 3,
+    "live_native_4k": false,
+    "private_abi_qualified": false,
+    "service_registered": false,
+    "hardware_executed": false,
+    "scope": "static same-donor relocated PMGR contract, not compiler layout or live metadata qualification"
+  }
+}

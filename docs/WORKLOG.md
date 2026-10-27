@@ -1444,3 +1444,7 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 2026-10-27 · 按官网规则继续离线：完成EnumaRootRead与生产窗口算法接线/ARM64库，139组packed差分、传输/完整性失败及5项CLI拒绝；固定Linux参考构造真实512MiB目录型APFS Data（packed 8a4483bc…），apfsck/回读通过并进入96MiB FAT 4a9c77df…。真实DarwinBoot解析通过，未重链接XNU/挂载Data/进入桌面。上次提交a791dff，本次见git log；证据out/kernel-userland-20261027-2及reports/enuma-root-data-offline.json。OEM摘要不变，R027冻结，共享主线不改，无设备/推送。
 
 2026-10-27 · 按依赖完成EnumaRamDisk易失Data块后端及iOS17 ARM64库f9f357d0…；实际512MiB APFS全量读回、23处导入分配失败、预算/写分配失败/短写/并发停止通过ASan/UBSan。未接IOKit或重链接XNU；下一步匹配XNU编译输入与storage/PMGR ABI。前次6f2f892，本次见git log。证据out/kernel-userland-20261027-3/ram2及reports/enuma-volatile-data-backend.json；OEM/R027保持，无设备/推送。
+
+2026-10-27 · 修复平台构建只保留编译记录摘要的问题：导出实际命令/源和生成头并绑定最终内核，12项宿主测试通过；未运行macOS CI。当前候选PMGR重定位契约及3项确切篡改拒绝通过，pmgr1/2失败保留，最终pmgr4。前次f0ab484，本次见git log；reports/enuma-driver-inputs-pmgr.json。未新增私有ABI资格/服务/内核，OEM/R027保留，无上机/推送。
+
+2026-10-27 · 导出器进一步支持源树内部目录链接，拒绝循环及SDK/外部逃逸；最终14项通过，保留先前12项日志，采用driver-input-tests-final.log。

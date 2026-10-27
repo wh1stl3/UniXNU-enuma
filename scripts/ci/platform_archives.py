@@ -103,6 +103,23 @@ def build(source, evidence, env, report, save):
         raise ValueError('Platform kernel lacks expected real provider symbols')
     shutil.copyfile(kernel, evidence / 'platform-kernel.macho')
     report['platform_kernel_sha256'] = sha(kernel)
+    # Retain the actual commands and generated headers, not only their hashes.
+    # No SDK bytes are redistributed and no captured command is executed here.
+    from driver_inputs import export_inputs
+    record_prefix = 'build/xnu/ios-obj/DEVELOPMENT_ARM64_BCM2837/'
+    # The platform rebuild can regenerate records with different feature flags.
+    # Keep the earlier archive-stage hashes separately, bind the final records
+    # to the final kernel rather than assuming bootstrap records are unchanged.
+    compile_inputs = {record_prefix + name: sha(source / record_prefix / name)
+                      for name in report['archive_compile_records']}
+    report['driver_compile_records'] = compile_inputs
+    sdk = subprocess.check_output(['xcrun', '--sdk', 'iphoneos', '--show-sdk-path'], text=True).strip()
+    exported = export_inputs(source, evidence / 'driver-inputs', kernel,
+                             list(compile_inputs), compile_inputs, sdk)
+    if exported['kernel_sha256'] != report['platform_kernel_sha256']:
+        raise ValueError('Kernel changed while exporting driver inputs')
+    report['driver_input_manifest_sha256'] = sha(evidence / 'driver-inputs/manifest.json')
+    report['driver_input_file_count'] = len(exported['files'])
     report['platform_build_and_link_passed'] = True
     report['enuma_kernel_link_claimed'] = True
     report['donor_prelink_generated'] = False

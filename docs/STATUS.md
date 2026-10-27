@@ -1,8 +1,14 @@
-# 当前：易失Data块后端完成离线验证，下一步接OS ABI与服务
+# 当前：PMGR静态契约通过，已补XNU编译输入留存路径
 
 2026-10-27。仅独立worktrees/enuma-oem-display可写；共享主线不改，R027冻结，不上机、不推送。按AGENTS引用的官网具体适配规则推进。
 
 ## 本轮增量
+
+确认原macOS平台产物只留编译记录摘要，未留命令/生成头。新增driver_inputs导出器并接入真实平台链接之后，绑定最终编译记录与内核；不包含SDK、不执行导出命令，14项宿主测试通过。本轮未运行macOS CI，真实输入包仍未取得。
+
+当前e879b2f0…候选的PMGR静态调用/导入契约及3项篡改拒绝通过；实际地址比参考契约高2MiB。未完成类布局/运行期元数据资格，未注册服务或重编内核。证据out/kernel-userland-20261027-4/pmgr4和reports/enuma-driver-inputs-pmgr.json，见[实现及后续依赖](operations/2026-10-27-driver-inputs-pmgr.md)。
+
+## 上轮易失Data后端
 
 EnumaRamDisk复用固定生产SparseDisk算法，实现真实seed导入、512字节块读写、显式resident预算、短复制及失败清理、同锁stop与重启。完整512MiB APFS读回匹配；23处导入分配失败、写分配失败/预算耗尽和并发stop通过ASan/UBSan。iOS17 ARM64归档f9f357d0…生成，四个入口及Mach-O平台检查通过。证据out/kernel-userland-20261027-3/ram2，见[实现与下一依赖](operations/2026-10-27-volatile-data-backend.md)。未接IOKit或链接XNU，无挂载/用户态结果。
 
