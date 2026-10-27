@@ -1414,3 +1414,7 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 ## 2026-10-27：elish/nabu分析收敛为enuma实验patch与方案
 
 已交付精确PE的MMU/SID参数单指令实验生成器和K81逐控制器契约导出器。check2的16项离线检查通过；独立PE摘要ed37a4e137cca2fcf4d5fa5718e18a319c2aa1b7a1cfab480693325bfbe2b5e3。保留构造器、面板/管线初始化及真实返回，无生产替换、打包或实机。详见operations/2026-10-27-enuma-display-application-plan.md和out/enuma-display-application-20261027-c999。用户报告ADB恢复未扩展为启动授权；R027冻结，不推送。源码与文档准备本地里程碑提交；OEM PE/公开二进制/生成产物仅留out，不入库。
+
+## 2026-10-27：单worktree双profile隔离
+
+按用户方案新建D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display（基点97ef242，detached），firmware从本地初始化11c6cf1。原主线不改。双vendor profile各102文件，仅DisplayDxe差异，8项失败验证通过；证据out/oem-profile-check2-20261027-c999/result.json。构建器尚未接线，旧设备锁8680ea79与当前固件不一致须单独审查，不绕过。未构建、部署、设备查询或推送。详见operations/2026-10-27-oem-display-worktree.md。
