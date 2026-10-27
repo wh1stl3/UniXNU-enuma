@@ -47,3 +47,10 @@ call0..4不画窗口。E01/S02为目标安装前/真实返回，严格要求call
 ## 2026-10-27 registration-v5完整文档交接
 
 用户因会话变慢要求全部文档落地、本地提交和新prompt。本轮仅文档与只读产物核验：image/FD/qualification SHA256匹配、v5账本不存在；证据out/oem-registration-20261027/handoff-audit.json。源码fd94b26、设备仓a68983a/0dd5db3已提交；当前文档、README/索引、旧prompt替代标记、审查及人工事项和最新授权同步完成，新prompt为docs/2026-10-27-oem-registration-v5-handoff-prompt.md。未上机、未重构建、未重试消费候选、未改共享主线，远端发布仍未确认。交接提交号见后续git log与回复，不写自引用。
+
+
+## 2026-10-27 21:55 接续 registration-v5：现成资格有效，发布连接失败
+
+从设备仓9f98d3e、固件fd94b26干净状态接续，完整读取prompt及适用规则。默认离线runner通过，2446项源绑定有效；image/FD/qualification摘要与交接相同，v5账本不存在。只读核验共享树R027冻结image/qualification摘要通过。未改源码、重构建、回写历史产物或查询设备；当前设备状态未知，当前手机拍摄/人在场恢复未确认。
+
+有界查询两个GitHub分支失败；显式固件URL向oem-progress-20261027非force补推亦因443连接失败，未向本地origin/main推送，未继续设备仓发布。网络恢复后先固件后设备仓并核验，之后重新协调当次现场条件，单次runner执行即时身份/备份/恢复门禁。当前准备条件未齐，不称设备硬停。源码/资格/试验范围不变；不复活v4或R027。证据out/oem-registration-takeover-20261027/takeover-audit.json、remote-before.json、firmware-publication.json。STATUS/HANDOFF、审查与人工事项已同步；本轮本地文档提交号见git log。

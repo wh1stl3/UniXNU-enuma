@@ -65,3 +65,10 @@ wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/pytho
 先向用户简述实际最大嫌疑与候选区分力，再按其最新指令推进。能独立完成的代码、失败验证、完整构建、机器码和来源绑定同轮做完；任何修改导致旧admission失效时另建资格，不回写旧产物。媒体先独立判读落盘，展示完整字符串供用户核对后再精确归因，禁止按预期补猜。原始影音/二进制/备份/设备标识/out不入Git或云端。
 
 运行环境：Windows PowerShell；构建/运行器用 WSL /usr/bin/python3、clang、llvm-objdump。Windows python是Store占位符；需原生Python时用 C:/Users/Administrator/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe，文档显式UTF-8。参照官网规则按依赖推进；上次在线重读官网403，已保存指南仍适用，不声称取得了新网页内容。主线仍可靠取证→OEM真实返回/生产GOP分别验收→DarwinBoot/EBS→XNU；不把临时菜单或自动返回当OEM/GOP/用户态成功。
+
+
+## 新会话接续增量（2026-10-27 21:55）
+
+设备仓9f98d3e/固件fd94b26起点已核验；默认离线入口及2446项源绑定通过，现成image/FD/qualification摘要和未claim状态匹配，R027冻结摘要只读复核通过。无代码修改、重新构建或设备命令，当前设备状态未知，当次手机拍摄/人在场恢复未确认。
+
+两个GitHub分支有界查询及随后显式固件URL非force补推遇连接失败，发布仍未确认；因先固件后设备仓顺序未继续设备仓推送。下一步网络可达后补齐发布及远端核验，再协调本次现场条件，不复用上一轮就绪。证据out/oem-registration-takeover-20261027；最新状态以STATUS/HANDOFF为准。此为准备条件未齐，未发生设备硬停。
