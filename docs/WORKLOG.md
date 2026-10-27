@@ -1434,3 +1434,5 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 2026-10-27 · 本地设备仓605a2bc / 固件bdfe65f已提交；最终共享主线及其子模块干净，R027原镜像摘要复核一致。当前现场准备问题已发出，尚无回复前不boot。无推送。
 
 2026-10-27 · 用户明确现在不方便，保留候选等待。保留qualification-3镜像17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08，未boot、未领取单次ledger。状态/交接/人工待办已同步，仅本地记录，不推送。
+
+2026-10-27 · 用户授权无实机继续内核/用户态/桌面开发。参考固定umi/sheng/fajita，在隔离树实现UFS SMMU规划/接管与只读SCSI准备；生成30组件实验内核e879b2f0、96MiB FAT 31a7defb、9382658048字节根卷组件文件fd43ee70。根卷输入/展开/回读摘要及生产manifest解析通过。未进入XNU/用户态，没有Data seed或IOKit硬件驱动链接。证据out/kernel-userland-20261027-1，详见operations/2026-10-27-kernel-userland-offline.md。OEM候选保留未消费、R027冻结；无设备/推送/内存或verified变更。

@@ -1,34 +1,29 @@
-# 当前：OEM运行版已完成软件资格，待当前现场准备
+# 当前：离线推进内核、根卷与用户态组件；OEM部署继续等待
 
-2026-10-27。用户已授权“继续补齐 OEM 运行版后部署”。新候选是原始OEM control首调用取证版；R027/S055仍冻结未消费。只写独立worktrees/enuma-oem-display，原共享UniXNU-enuma及firmware不改，不推送。
+2026-10-27。按用户最新要求，在无实机情况下继续开发后续内核启动、用户态与iPadOS桌面链路，参考固定umi/sheng/fajita源码。仅独立worktrees/enuma-oem-display可写；原共享主线和firmware不改，不上机、不推送，R027冻结。
 
-已生成可临时启动的Boot v3：
+## 本轮实际产物
 
-- 镜像：out/oem-runtime-qualification-20261027-3/image.img，3153920字节。
-- SHA256：17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08。
-- FD：out/oem-runtime-build-20261027-1/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。
-- FD SHA256：d08f338dc49f60eb08ecd25a14c66e0f6e8fe9e5724d19f04684ca2d1fd08345。
+- 新实验性内核：out/kernel-userland-20261027-1/prelink1/userland-components.experimental.macho，54259712字节，SHA256 e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59。真实NativePrelink输出，新增图形/HID roots，30个可执行原始组件；普通ARM64/4KiB/入口检查通过。
+- 新96MiB FAT：out/kernel-userland-20261027-1/payload2/payload/payload.img，SHA256 31a7defb9dbc63305b222fbfa236b7350f03e09fc4b0cefb1ca423e1d384fbb8。原有payload builder/完整ADT/原始trust bundle，真实FAT回读一致；未包含Data/root卷。
+- 新根卷组件文件：out/kernel-userland-20261027-1/root1/root-components.img，9382658048字节，SHA256 fd43ee7035ce185ce4215ac93fdc006fd784a54b3b7442e21457c226cbe03093。固定UDIF/LZFSE展开OS/SystemOS，输入pin、展开摘要、文件回读均通过；生产RootLayout接受实际manifest。测试GPT是上游宿主夹具，不是本机容量证明。
 
-## 本次运行行为
+这些是离线输入，不是已资格上机的完整系统。没有XNU/launchd/backboardd/SpringBoard实机结果，没有声称进入桌面或图形加速可用。
 
-Core精确匹配原厂DisplayDxe/FV/LoadedImage/重定位文本后，才绑定持久私有服务表。随机session与trial UUID对应一次首调用call0取证；320×160窗口位于(64,96)，停留8秒并恢复/读回。取证拒绝或恢复未确认时终止，不转发该原服务。事务屏蔽本CPU异步中断并直接计时，异常在格式化输出前尝试复位，返回则永久暂停。
+## 新代码与验证
 
-运行版已移除stage10派发前停止；精确目标实际CoreStartImage返回触发2秒复位，正常派发完成fallback为7秒复位。没有异步看门狗，不能保证OEM卡住时自动恢复。本CPU屏蔽不证明AP/DMA排他；相机可读性、物理恢复和OEM实际返回仍未验证。
+EnumaUfsSmmu组件移植umi双stream接管思路，加入显式stream/已分配DMA范围、完整路由表重查、写入拒绝/读回失败、单次消费与失败不放行DMA；重复拒绝也清除放行标志。EnumaUfsRead提供实际容量解析和受窗口/缓冲约束的READ(10)，无磁盘写接口。这两个模块尚未接IOKit、真实MMIO或XNU归档，调用方仍须实现队列停止和排他。
 
-## 已通过的离线检查
+最终storage3：ASan/UBSan逐点覆盖22次计划读、51次应用读、7次写拒绝等失败路径；两个AArch64对象及固定上游RootLayout/RootPublication/RootWindowRead测试通过，含2048项manifest变异。storage1失败保留；storage2修复Linux测试字面量类型；storage3额外覆盖重复拒绝清DMA标志。上游源码未修改。
 
-完整FD核对32个OEM PE/DEPEX、39项APRIORI、两份K81 RAW以及实际Core/Probe/ArmCpuDxe产物。真实C编译参数、运行身份头和异常头绑定；Core派发/返回/取证失败/中断序列20项删除负测通过，Core和ArmCpuDxe异常终止序列核对通过。Boot v3打包、官方解包回读及源码/镜像绑定通过。
+## 来源差异与下一步
 
-ASan/UBSan覆盖绑定失败和首调用取证失败不得转发；部署入口9项测试覆盖镜像/源码/范围/缺人工准备/重复领取拒绝、一次boot后恢复、boot失败不重试、错误Android身份不写入。机器码检查仅证明所检序列，不是完整控制流或实机保证。证据qualification-3、out/oem-runtime-binding-check-20261027-1及out/oem-deployment-review-20261027-1/runtime-tests.txt。
+umi同SM8250，维护者报告Hello/Setup Assistant，不是完成主屏。enuma历史FDT没有UFS iommus属性，0xe0/0x4e0仅是umi测试夹具，尚未作为enuma默认值；不借用其容量或4.75GiB窗口。sheng用于服务依赖参考，不移植SM8550硬件参数；fajita仅报告内核挂根等待，用于Linux镜像/验证方法参考。正式框架pin保持5fdbd5d，另固定16e592a的UDIF读工具，不整体升级底座。
 
-## 设备与继续条件
+继续方向：实际stream归属/IOKit UFS适配、同donor PMGR ABI与服务、根卷策略及UUID、匹配版本的可丢弃APFS Data seed、framebuffer/IOSurface和NT36523 HID，随后分别验收launchd、backboardd、SpringBoard。现有公开umi配方仍要求本地ABI/seed输入，不能用空服务或跳过Setup配置冒充用户态完成。内存和verified规则不变。
 
-本轮12:15/12:16 +08只读核验enuma Android启动完成、A槽、解锁、root，boot_a/vendor_boot_a与本地备份摘要一致。尚未发出重启、boot或分区写入；当时状态不能替代启动前即时核验。
+## 保留的设备候选
 
-只差当前录像及人在场长按恢复确认。依据AGENTS设备门禁及拍摄规则，本次有实际像素输出，必须连续录像；原始影音仅本地。确认后即时重查设备和资格，单次ledger领取，唯一一次fastboot boot；75秒无可确认返回则停止追加并优先人工恢复，不自动试MMU候选。没有当前准备回复前不启动。
+OEM qualification-3/image.img仍为17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08，用户“现在不方便，保留候选等待”，未boot、未消费单次ledger。本轮无设备查询或写入；最后设备只读状态仍是此前12:15/12:16的Android完成/A槽/root/备份一致，不是当前在线断言。部署须用户恢复现场准备后即时核验，不把本次离线开发当作恢复上机授权。
 
-源码仅本地提交，构建基点b6fe1a2加哈希开发快照，后续提交不改称干净提交构建。qualification-1因构建收尾报告未落盘提前检查而失败；-2为初步资格，-3增加机器码和ArmCpuDxe审计后为当前资格，旧证据保留。共享主线与R027资格不合并、不重写。
-
-详见[OEM运行与部署记录](operations/2026-10-27-oem-runtime-deployment.md)。生产GOP、ConOut、完整BDS、实体输入及XNU均未验收；未观察到返回不能判死锁。
-
-2026-10-27 用户最新回复：现在不方便，保留候选等待。现场准备未满足，部署暂停；不发重启或boot，不消费单次ledger，不重新构建或更换候选。待用户恢复现场条件后即时复核资格、设备、备份及录像再执行。
+详见[内核及用户态离线记录](operations/2026-10-27-kernel-userland-offline.md)和[OEM部署边界](operations/2026-10-27-oem-runtime-deployment.md)。所有大文件仅本地out，代码和脱敏记录仅本地提交。

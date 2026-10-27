@@ -1,0 +1,268 @@
+{
+  "scope": "Offline kernel, storage components and root inputs; no kernel or userland execution",
+  "prelink": {
+    "passed": true,
+    "scope": "experimental same-donor prelink emission, not kernel/userland execution",
+    "roots": [
+      "com.apple.filesystems.apfs",
+      "com.apple.driver.AppleMobileFileIntegrity",
+      "com.apple.security.AppleImage4",
+      "com.apple.kext.CoreTrust",
+      "com.apple.security.sandbox",
+      "com.apple.iokit.IOHIDFamily",
+      "com.apple.iokit.IOSurface",
+      "com.apple.iokit.IOMobileGraphicsFamily",
+      "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib",
+      "com.apple.iokit.IOGPUFamily",
+      "com.apple.iokit.IOHIDEventDriver"
+    ],
+    "added_roots": [
+      "com.apple.iokit.IOGPUFamily",
+      "com.apple.iokit.IOHIDEventDriver"
+    ],
+    "components": [
+      "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib",
+      "com.apple.driver.AppleARMPlatform",
+      "com.apple.driver.AppleARMWatchdogTimer",
+      "com.apple.driver.AppleAudioClockLibs",
+      "com.apple.driver.AppleEffaceableStorage",
+      "com.apple.driver.AppleIISController",
+      "com.apple.driver.AppleM2ScalerCSCDriver",
+      "com.apple.driver.AppleMobileFileIntegrity",
+      "com.apple.driver.ApplePMGR",
+      "com.apple.driver.IODARTFamily",
+      "com.apple.filesystems.apfs",
+      "com.apple.iokit.CoreAnalyticsFamily",
+      "com.apple.iokit.IOAVFamily",
+      "com.apple.iokit.IOAudio2Family",
+      "com.apple.iokit.IOCECFamily",
+      "com.apple.iokit.IOCryptoAcceleratorFamily",
+      "com.apple.iokit.IOGPUFamily",
+      "com.apple.iokit.IOHDCPFamily",
+      "com.apple.iokit.IOHIDFamily",
+      "com.apple.iokit.IOMobileGraphicsFamily",
+      "com.apple.iokit.IOReportFamily",
+      "com.apple.iokit.IOSlowAdaptiveClockingFamily",
+      "com.apple.iokit.IOStorageFamily",
+      "com.apple.iokit.IOSurface",
+      "com.apple.kec.Libm",
+      "com.apple.kec.corecrypto",
+      "com.apple.kext.AppleMatch",
+      "com.apple.kext.CoreTrust",
+      "com.apple.security.AppleImage4",
+      "com.apple.security.sandbox"
+    ],
+    "image_sha256": "e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59",
+    "image_bytes": 54259712,
+    "virtual_span": 68411392,
+    "source_kernel_sha256": "b940f550a70155db5c29d274dff0874216cc0d58ab030b01e2c8a93315c6052d",
+    "donor_sha256": "f18b4df865405f2a287b84977d7aca745e056d656d9fc9df1662970ce2969de7",
+    "slide": "-0xe00000",
+    "rejected_slides": [
+      {
+        "slide": "0x0",
+        "error": "Rebased component collides with native __DATA"
+      },
+      {
+        "slide": "-0x200000",
+        "error": "Rebased component collides with native __TEXT_EXEC"
+      },
+      {
+        "slide": "-0x400000",
+        "error": "Rebased component collides with native __TEXT_EXEC"
+      },
+      {
+        "slide": "-0x600000",
+        "error": "Rebased component collides with native __TEXT_EXEC"
+      },
+      {
+        "slide": "-0x800000",
+        "error": "Rebased component collides with native __TEXT_EXEC"
+      },
+      {
+        "slide": "-0xa00000",
+        "error": "Rebased component collides with native __TEXT"
+      },
+      {
+        "slide": "-0xc00000",
+        "error": "Rebased component collides with native __TEXT"
+      }
+    ],
+    "prelink_commit": "2b6ffb50117eee820b98aca9bd51b5c7dfb2970e",
+    "prelink_sources": {
+      "emit_prelink.py": "4cbd97a7ca231cb56d8d7c6a02d09b86af33b5af3d05dba41edd00e51cd3a36a",
+      "native_prelink.py": "5bd80b8c63deec29b747c28253e02308a56d5f8cdb37c9d315e7c8af7012d017",
+      "test_codeless.py": "2c4ac17ceadc75de993490e970dedb4179b5231445f30f10c1c742fe2cf0680a",
+      "test_emit_prelink.py": "69b40226cb263a744ec9be9e684f61d83885fed9badeec40bdbd18f5bbe34aea",
+      "test_native_prelink.py": "c9aba30c6790604ed77a1a1cd368f11ea04d67d8ad7820f102e98ec711d508be"
+    },
+    "peer_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+    "peer_recipe_sha256": "51ac818fadb43b19ab7d36a8190aac38e7da1807f93d3d1d656d360daad3c97a",
+    "entry_audit": {
+      "entry_va": "0xfffffff0073f9488",
+      "entry_segment": "__TEXT_EXEC",
+      "initial_tcr": "0x22a51a251a",
+      "deployment": "iOS 17.0",
+      "tg0_bytes": 4096,
+      "tg1_bytes": 4096,
+      "segment_count": 18,
+      "exported_symbols": 23367,
+      "selected_platform_symbols": {
+        "_armdt_platform_configured": true,
+        "_armcpu_registered": true,
+        "_source_pthread_status": true
+      }
+    },
+    "hardware_executed": false,
+    "runtime_qualified": false,
+    "remaining": [
+      "IOKit-linked enuma UFS and stream ownership",
+      "PMGR ABI/service integration",
+      "OS/SystemOS root volumes and disposable Data seed",
+      "framebuffer/IOSurface presentation",
+      "NT36523 HID integration",
+      "launchd and SpringBoard runtime evidence"
+    ]
+  },
+  "payload": {
+    "passed": true,
+    "payload_sha256": "31a7defb9dbc63305b222fbfa236b7350f03e09fc4b0cefb1ca423e1d384fbb8",
+    "payload_bytes": 100663296,
+    "readback": {
+      "Payloads/kernel.macho": "e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59",
+      "Payloads/kernel.macho.trustcache": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7",
+      "Payloads/kernel.macho.adt": "049ae2f614bb0d188456f3b540f56a7a6ee7e49890cf8e85cfa1f42a0bbf7959",
+      "unixnu.toml": "c5997415e8c70428e1aa948f8c885419764f0637dc0fc13be2f01fc5deb9f841"
+    },
+    "reference_bindings": {
+      "scripts/make_enuma_adt.py": "fda380bf43c04849f19d49f8dc7375a25b41984eadd4bea719071fda1d4fffe8",
+      "scripts/audit_inputs.py": "b0bbdf7adf20c2ff130ff4ce1c274d7d33b7011b53d06272da93939bd0ab177c",
+      "scripts/plan_adt.py": "7d1ed392d2bb1d5f9b9e7b2a6a9ebfa209ce4529fdb728e535204c676c7bbe3b",
+      "config/system-reuse-sources.lock.json": "f4f317653b3991454fbe5f1aaccb8c81846e18a43897681af2b75fb9fde5f7cc",
+      "out/device/live-fdt.bin": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+      "out/sources/UniXNU-umi/scripts/umi_adt.py": "8d34b7a8191f67570624fad8116da1991ebfcf47d6d06324fb651b1c0d187044"
+    },
+    "upstream_sources": {
+      "scripts/unixnu/payload.py": "05a79e171be8d0336d0125a556e90a7e0195cef138b195878102d366befb75f0",
+      "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+      "scripts/unixnu/__init__.py": "c6ae444a32411f12494607894581cc27d6bfec49c2f5712fe47a26cece5d1007",
+      "scripts/build-original-system-trust.py": "cd17f451a8bfca33476836a151a97fff44d0f0115108834a39bb3d907736264c"
+    },
+    "root_volume_included": false,
+    "data_seed_included": false,
+    "runtime_qualified": false,
+    "hardware_executed": false,
+    "scope": "real FAT component bundle, not a desktop-ready boot image"
+  },
+  "root": {
+    "passed": true,
+    "image_bytes": 9382658048,
+    "image_sha256": "fd43ee7035ce185ce4215ac93fdc006fd784a54b3b7442e21457c226cbe03093",
+    "manifest_sha256": "bc908a6cf66491055077798550660f40128bfe6dce2fdc0db56e6af96511208d",
+    "windows": [
+      {
+        "name": "OS",
+        "member": "044-76040-038.dmg",
+        "offset": 1048576,
+        "bytes": 6077580800,
+        "sha256": "e5634d04a8ac35f024845f583394e0a35deb26a04cb0c00286a8674e25a9a4f2",
+        "source_sha256": "3f99b859c9728379110b66657c7b15285bcb1925ad8b5726542e2cdcf8b1028d"
+      },
+      {
+        "name": "SystemOS",
+        "member": "044-76034-038.dmg",
+        "offset": 6079643648,
+        "bytes": 3303014400,
+        "sha256": "b4908cde41d23e6bc05e6af51a2c9eeb00cf0f863a6a18b1600c96a3fd70414f",
+        "source_sha256": "b4908cde41d23e6bc05e6af51a2c9eeb00cf0f863a6a18b1600c96a3fd70414f"
+      }
+    ],
+    "udif_commit": "16e592abee8a550dec8154ed1f38b5ebc4f16213",
+    "udif_sources": {
+      "scripts/unixnu/udif.py": "c3a2111c2188fb8a9bf0bfdf3675662520688233ba3bbf0ebf9ccb900de10e19",
+      "scripts/unixnu/util.py": "1f6efa81051d67f7225783958f1f8e86a38a7d4e538299ce6aa639b3cb4a759d",
+      "scripts/unixnu/__init__.py": "c6ae444a32411f12494607894581cc27d6bfec49c2f5712fe47a26cece5d1007",
+      "scripts/unixnu/userdata.py": "ed27beae96249889c69fde806b4fc26fd3d47ac9021f4e305eb5e9e5eac8b1d2"
+    },
+    "decoder_sha256": "f89442c9e68063b115df9fcc6defa96c9f5affedc44fa6751dc4d67d3c18c4d4",
+    "hardware_executed": false,
+    "partition_capacity_checked": false,
+    "data_seed_included": false,
+    "apfs_mounted": false,
+    "root_uuid_verified": false,
+    "scope": "local root component file; no GPT geometry, flash command or desktop readiness"
+  },
+  "storage": {
+    "passed": true,
+    "hardware_executed": false,
+    "iokit_linked": false,
+    "peer_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+    "native_ufs_commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+    "source_hashes": {
+      "package/UmiSmmuTakeover.h": "4b5aff64f6da77cf9567465878007abc19b907ee0b8e9d4aba85d2d5ddc4c5a6",
+      "NativeUfs/GccUfs.h": "1ef7030533184ecb7efebb8ad3a6fa8e155a8b5b9eea19a6a2af758027d483c3",
+      "NativeUfs/RootCommands.h": "11f88727514b42c823c166b2d8da1090189d69d797f29bdff6532498f66b86ec",
+      "NativeUfs/RootDiagnostics.h": "0ad96da909e87d161b17694e32768a9d84500da96f975dcc6913535c413fde29",
+      "NativeUfs/RootLayout.h": "3e25127486a5102cd477fcfabd62366a3b3f02bb12a0b8db2294330a4b233484",
+      "NativeUfs/RootPublication.h": "3c289b44f4d7c082b3f214eda2d4225f53860dd007f4a89402bdc910f268aeda",
+      "NativeUfs/RootQueue.h": "001d06dcc4c3c7073704cffa3105a28d11e3e97985e7fcb49b8cc107216248bf",
+      "NativeUfs/RootTransportLayout.h": "77699362f09e103ceda0d5f216d0be7749cdc1e88c6143ddd15ceb11dfd42e91",
+      "NativeUfs/RootWindowRead.h": "e8d98556290cf540204227f863b043eb09996bb87d38e1d6894b83b351c8d112",
+      "NativeUfs/SmmuTakeover.h": "54868bf0745ee6093627e73ba8cec9ac3c574446955c359463507d0f122f90a8",
+      "NativeUfs/TransferPoll.h": "742df51cdce6d06df6bf93294176f01305c9d1359c8ffdfb99daff7b76a1ece3",
+      "NativeUfs/tests/RootLayout.cpp": "e0fe37d24254847ad26e34c872f02b64a47993e0a8c77eeb0bc35a91841a9fe6",
+      "NativeUfs/tests/RootPublication.cpp": "18090bc6fad3f1de39ecd83bbb23e904a263520c22c89274b76e7e64276a5b2d",
+      "NativeUfs/tests/RootWindowRead.cpp": "93328899af9b256e4f149fab76cfcf3085fa662b0632971f2c642353ff82a1aa",
+      "host_portability_fixture": "b27a72c73ec58dd2bf69840baf91e2757c710f69d38c662e22ccfb161ca56d89"
+    },
+    "local_sources": {
+      "EnumaUfsClock.c": "88da85fa83f2f276374a1b2af4089bd6cbf823823c3aaeec9d2a93d188514d0b",
+      "EnumaUfsClock.h": "64e7b3088536197a294d570fc79f724512e4eef8b4dd7634bb6dc74e83370db3",
+      "EnumaUfsRead.c": "347ea499fea454bb1483f6d0a3cdd0eb8bceb0f60cf7f2d90b7c339ccabb9a9a",
+      "EnumaUfsRead.h": "41106a5d64303a080463787c62e03b093c62392f72ecd93382dd4b8e4686e654",
+      "EnumaUfsSmmu.c": "9f1b067377369478df5e4479df77017605881c2f963b3ba221c2707d4c2643ba",
+      "EnumaUfsSmmu.h": "f848d10581530c3df45105cb322878585c266288666e502862fedc498659cfa2"
+    },
+    "objects": {
+      "EnumaUfsRead.o": "1fb612be37e37fca1f41d9ff814314f4a3068070f1504b68387f0ed6190a889e",
+      "EnumaUfsSmmu.o": "3ad68f3757ab1d6b73fd63a92ebab1670938779dac03bd6607d2d6bfdb5edf1a"
+    },
+    "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+    "enuma_ufs_reg": [
+      30949376,
+      12288,
+      30998528,
+      32768
+    ],
+    "enuma_smmu_reg": [
+      352321536,
+      1048576,
+      353902592,
+      32
+    ],
+    "ufs_iommus_declared": false,
+    "streams_qualified": false,
+    "umi_test_streams": [
+      "0xe0",
+      "0x4e0"
+    ],
+    "limits": [
+      "no XNU service or hardware MMIO adapter yet",
+      "stream identity not established for enuma",
+      "queue stop and exclusive ownership must be implemented by caller",
+      "no disk writes or partition geometry borrowed"
+    ]
+  },
+  "root_manifest_production_parser_passed": true,
+  "root_parser_gpt": "synthetic upstream fixture, not enuma partition evidence",
+  "device_actions": false,
+  "remote_pushed": false,
+  "source_hashes": {
+    "scripts/check_enuma_storage.py": "13bcb1c6bd75b43303457e50569ff6a96a1f4e8e7d3cf0155d27b884b713300b",
+    "scripts/prepare_enuma_userland_kernel.py": "465882d907f928560cbc46b1c20cc1399e53d601a55321ac9fda09cecdacf7df",
+    "scripts/prepare_enuma_userland_payload.py": "eddbe6f1ce60931af80c676205336fe0c2763f0d3345c20e892f44f58c262af4",
+    "scripts/prepare_enuma_root_image.py": "172e081add9030d62b9a39f40364fd449608cdd0ba0c5d651ef8fc19fa0c2f52",
+    "tests/enuma_ufs_smmu.c": "e3c0538379bfd90fd722d91a0d03b179f6f34077ad7772a47137f346b80239b5",
+    "tests/enuma_ufs_read.c": "f416bc54b9a78ba52c30d08d70535277127de7d76527006fd0bdce21a9583427"
+  }
+}

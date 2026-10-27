@@ -1,0 +1,18 @@
+{
+  "license": "BSD-2-Clause-Patent; original upstream notices retained",
+  "umi_repository": "https://github.com/reAAAq/UniXNU-umi",
+  "umi_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+  "umi_smmu_path": "package/UmiSmmuTakeover.h",
+  "umi_smmu_sha256": "4b5aff64f6da77cf9567465878007abc19b907ee0b8e9d4aba85d2d5ddc4c5a6",
+  "native_ufs_commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+  "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+  "stream_ids_from_enuma_fdt": false,
+  "implementation_changes": [
+    "explicit stream/owned-DMA/mapped-range inputs",
+    "full pre-write snapshot comparison",
+    "fallible ordered writes and immediate readback",
+    "consumed attempt and DMA forbidden on any failure",
+    "READ CAPACITY(10) and read-only bounded READ(10) commands"
+  ],
+  "hardware_integrated": false
+}

@@ -9,3 +9,5 @@
 - 固定 `NativeHidInput.cpp` 的坐标映射仍写死 sheng 的 30480×20320，不能直接喂本板坐标；后续需单独接 enuma digitizer 与 ID 消失/抬手事件。实际 FWINFO 最大值、轴向及笔输入仍待设备证据。
 
 编译与测试入口：`scripts/check_enuma_drivers.py`（WSL）。来源事实、SHA256 与许可证见本目录 `sources.json` 和 `LICENSE`。常量来源需按源码结构提取核对，不能仅因测试断言相等就称硬件验证。
+
+2026-10-27新增：EnumaUfsSmmu按固定umi双stream接管算法实现显式输入、完整路由重查、失败停止及单次状态；本机FDT未声明UFS iommus，测试中的0xe0/0x4e0仅是umi夹具，不能当enuma硬件值。EnumaUfsRead解析实际READ CAPACITY(10)并生成受LUN/根窗口/DMA缓冲约束的READ(10)，不借用umi容量，不含磁盘写接口。两模块尚未接入IOKit或真实MMIO；调用方还必须实现队列静止和独占、实际DMA分配及时钟/供电路径。验证入口scripts/check_enuma_storage.py。

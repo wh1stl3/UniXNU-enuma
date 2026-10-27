@@ -1,0 +1,40 @@
+# enuma 后续内核、根卷及用户态离线开发
+
+用户要求在无实机时继续内核启动、用户态进入和iPadOS桌面开发，并参考已适配设备。工作沿独立worktrees/enuma-oem-display进行；OEM资格镜像继续保留待现场准备，R027冻结，原共享主线不改，无设备命令、推送、内存字段或verified修改。
+
+## 参考结论
+
+- umi固定3eb72578597d2ca16471b172d45eddc096a34a04，与enuma同SM8250/同iPad7,1 21H461 donor。docs/validation.json是维护者/机主报告：Hello/Setup Assistant及触控，不是完成Setup或主屏验收；home_screen_verified仍false。复用其双stream SMMU接管思路、完整ADT和图形/HID预链接根。测试profile还依赖本地PMGR/存储ABI、Data seed及身份记录，公开仓不是完整一键桌面镜像。
+- sheng本地review固定0e1f6e52638137db15905db8d775ad73757f39fa：板级选择ShengUfs、RamBlock、GopFramebuffer、HID、AppleKeyStoreState和VerifiedRoot等组件。用于识别服务闭包，SM8550 GPU/时钟/电源以及数据布局不复制到SM8250；仅配置存在不算本轮复核其桌面实测。
+- fajita固定fb8c389bd9877d4db0ef6e09170b83752dec7259：README报告到XNU挂根等待，没有可用存储驱动。它证明“内核进入”和“用户态启动”需要分开，不称已完成移植。复用其相同donor展开摘要与Linux镜像处理路线，不采用其刷system_a、清boot、改槽等操作。
+- 解码器固定UniXNU review 16e592abee8a550dec8154ed1f38b5ebc4f16213；正式enuma框架仍5fdbd5d，NativePrelink仍2b6ffb5，未更新依赖锁。
+
+## 已落地代码
+
+EnumaUfsSmmu.c/.h是可编译的存储接管组件：显式传入stream身份、已分配DMA窗口和映射长度；完整读取并复查SMR/S2CR/context；支持读取失败、写入拒绝/读回失败；单次尝试消费后不自动重试，失败不允许启动DMA。与umi原代码相比，解决了“只重查所选slot、遗漏同一context出现新外来stream”的检查缺口，并检查整个计划没有被改写。外部调用方仍须实现真正队列停止、序列化/独占和DMA生命周期。
+
+本机固定历史FDT确认UFS 0x1d84000/0x3000；apps-smmu主reg长度为0x100000。UFS节点没有iommus属性，不能据此确认umi的0xe0/0x4e0在本机适用。因此这两个ID仅用于宿主测试夹具，没有写成enuma默认配置，也未增加映射或接入真实MMIO。
+
+EnumaUfsRead.c/.h解析实际READ CAPACITY(10)回复，拒绝容量16哨兵/非4KiB根解析器几何；生成受LUN、窗口、实际容量、16位传输长度和DMA缓冲限制的READ(10)。没有磁盘写接口，不拷贝umi固定容量。它还不是IOKit块设备驱动，不能称APFS已可挂载。
+
+scripts/check_enuma_storage.py验证peer及NativeUfs源pin，编译两模块AArch64对象并运行ASan/UBSan。计划22次读、应用51次读逐点失败注入，7次写拒绝及丢写检查、路由变化/外来stream/活动context/DMA边界测试通过。固定上游RootLayout、RootPublication、RootWindowRead生产测试通过，包含2048个manifest变异。首次storage1因Linux uint64_t与0ULL类型不同编译失败；storage2只在out复制测试夹具，将0ULL显式转成uint64_t，生产头和共享源码未改。
+
+## 实际内核及载荷
+
+prepare_enuma_userland_kernel.py使用同donor平台内核和真实NativePrelink emitter，新增IOGPUFamily与IOHIDEventDriver roots，产生30个可执行组件（HID Event可有codeless/interface项，不能按root数等同可执行组件数）。普通ARM64、4KiB TCR及可执行入口检查通过；slide仍由碰撞检查求得-0xe00000。
+
+out/kernel-userland-20261027-1/prelink1/userland-components.experimental.macho：54259712字节，SHA256 e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59，虚拟跨度68411392字节。没有把Apple IOGPUFamily当成Adreno硬件实现，也没有把预链接成功当runtime_qualified。
+
+prepare_enuma_userland_payload.py复用固定上游payload.build及既有enuma ADT生成器，生成96MiB真实FAT并用mtools回读kernel/ADT/trust/config。最终payload2/payload/payload.img摘要31a7defb9dbc63305b222fbfa236b7350f03e09fc4b0cefb1ca423e1d384fbb8。保留R001的512MiB请求，没有选择物理地址；历史FDT总DRAM不是当前空闲内存。payload1保留，payload2显式禁止子进程写Python字节码缓存；ADT含新熵，因此两次FAT摘要不同。两份均不是设备启动资格，也没有组装到冻结OEM镜像。
+
+## 根卷及Data边界
+
+prepare_enuma_root_image.py仅读取本地已pin的OS/SystemOS DMG，复用固定UDIF.Image.blocks和已pin Apple参考LZFSE工具。解码时核对相同donor展开摘要，生成SHNGROOT只读窗口，再从输出文件独立回读各窗口摘要。仅生成主机文件，不输出flash命令、不假定GPT容量、卷UUID或挂载成功。
+
+OS展开6077580800字节，期望e5634d04a8ac35f024845f583394e0a35deb26a04cb0c00286a8674e25a9a4f2；SystemOS展开3303014400字节，期望b4908cde41d23e6bc05e6af51a2c9eeb00cf0f863a6a18b1600c96a3fd70414f。根文件最终校验以root1/result.json为准，未生成该报告前不得称完成。
+
+目前没有构造假的Data seed，也不通过skip-setup参数宣称激活/桌面完成。下一步是IOKit/MMIO适配和同donor PMGR ABI/服务接入、实际UFS stream归属、根卷策略/UUID与可丢弃APFS Data seed，再推进launchd→backboardd→SpringBoard。需要Mac/等价完整Apple构建环境及有效seed来源的步骤不能由宿主纯C测试替代。对用户态图形优先参考CPU framebuffer路径，GPU加速另行适配；NT36523必须接本机HID而非umi的FTS。
+
+本轮证据位于out/kernel-userland-20261027-1，旧冻结证据不覆盖。不得将当前组件文件当可直接上机或可刷userdata的完整系统。
+
+最终root1完成：9382658048字节，SHA256 fd43ee7035ce185ce4215ac93fdc006fd784a54b3b7442e21457c226cbe03093。生产RootLayout对实际manifest通过；其GPT仅是上游宿主夹具，不是enuma容量验证。最终storage3增加重复拒绝清DMA标志并重新验证；storage2为前一版证据，保持不覆盖。
