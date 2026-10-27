@@ -30,6 +30,7 @@ STATIC EFI_STATUS CoreHandleProtocol(EFI_HANDLE H,EFI_GUID *G,VOID **Out){
 STATIC EFI_BOOT_SERVICES *mOemOriginalBoot;
 STATIC BOOLEAN OemBoardSink(VOID *C,CONST CHAR8 *L,UINTN N){(void)C;(void)L;(void)N;return FALSE;}
 STATIC VOID OemCaptureTerminal(VOID *C){(void)C;Stops++;longjmp(StopJump,1);}
+STATIC BOOLEAN OemProgressPresent(UINT32 P,CONST ENUMA_SERVICE_EVENT *E,UINT64 S){(void)P;(void)E;(void)S;return FALSE;}
 #include "EnumaOemCoreBinding.h"
 STATIC EFI_TPL EFIAPI Raise(EFI_TPL T){(void)T;return TPL_APPLICATION;}
 STATIC VOID EFIAPI Restore(EFI_TPL T){(void)T;}
@@ -74,7 +75,8 @@ int main(int argc,char **argv){
   mOemCoreAttempted=FALSE;FailCrc=0;
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_SUCCESS);
   assert(Loaded.SystemTable==&mOemCoreTrace.System&&System.BootServices==&Boot&&mOemCoreTrace.Published);
-  assert(mOemCoreCapture.State==EnumaCaptureArmed&&mOemCoreCapture.Owner==&mOemCoreTrace&&mOemOriginalBoot==&Boot);
+  if(ENUMA_OEM_PROGRESS){assert(mOemProgress.Owner==&mOemCoreTrace&&mOemProgressHandle==(EFI_HANDLE)1);}
+  else{assert(mOemCoreCapture.State==EnumaCaptureArmed&&mOemCoreCapture.Owner==&mOemCoreTrace&&mOemOriginalBoot==&Boot);}
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_ALREADY_STARTED);
   if(ENUMA_OEM_RUNTIME){
     if(setjmp(StopJump)==0){mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL);assert(0);}

@@ -14,7 +14,7 @@ def check_exception(pe,mapping):
     if struct.unpack_from('<I',pe,file_offset(pe,start+16))[0]!=0x17ffffff:raise ValueError('CPU exception loop missing')
     return start
 
-def check(pe,mapping):
+def check(pe,mapping,progress=False):
     entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
     def sym(n):
         hits={a for a,name in entries if name==n}
@@ -51,8 +51,27 @@ def check(pe,mapping):
         if target(start+8)!=sym('ResetCold') or target(start+12)!=sym('CpuPause') or word(start+16)!=0x17ffffff:
             raise ValueError('exception/capture terminal missing')
         sites[name+'_reset']=start+8;sites[name+'_pause']=start+12;sites[name+'_loop']=start+16
-    unique('capture_stop',calls('OemRuntimeBeforeForward','EnumaCaptureStop'))
-    unique('capture_terminal',calls('OemRuntimeBeforeForward','OemCaptureTerminal'))
+    if progress:
+        started=unique('progress_actual_start',calls('CoreDispatcher','CoreStartImage'))
+        # Clang inlines the small handle gate into CoreDispatcher. Verify the
+        # actual linked gate and saved x0 status, not an absent source symbol.
+        observed=unique('progress_after_start',calls('CoreDispatcher','OemProgressReturned'))
+        if observed!=started+64:raise ValueError('unexpected inlined return gate extent')
+        for off,expected in {4:0xf9404288,8:0xaa0003fb,12:0xf9400b49,16:0xeb08013f,
+                             32:0xf84d6129,36:0xeb08013f,52:0x39400108,60:0xaa1b03e0}.items():
+            if word(started+off)!=expected:raise ValueError('return identity/status gate changed')
+            sites['progress_gate_'+str(off)]=started+off
+        for off,opcode in ((20,0x54000001),(40,0x54000001),(56,0x34000008)):
+            a=started+off;w=word(a);imm=(w>>5)&0x7ffff
+            if imm&0x40000:imm-=0x80000
+            if w&0xff00001f!=opcode or a+imm*4!=observed+4:raise ValueError('return gate refusal changed')
+            sites['progress_branch_'+str(off)]=a
+        unique('progress_board',calls('OemProgressPresent','OemBoardSink'))
+        for name in ('OemProgressBefore','OemProgressAfter','OemProgressEmit','OemProgressFail'):
+            sym(name)
+    else:
+        unique('capture_stop',calls('OemRuntimeBeforeForward','EnumaCaptureStop'))
+        unique('capture_terminal',calls('OemRuntimeBeforeForward','OemCaptureTerminal'))
     for name,mask,w in [('bsp',0xffffffe0,0xd53800a0),('save_daif',0xffffffe0,0xd53b4220),
                          ('mask_daif',0xffffffff,0xd5034fdf),('restore_daif',0xffffffe0,0xd51b4220)]:
         unique(name,[a for a in region('OemBoardSink') if word(a)&mask==w])
@@ -60,11 +79,11 @@ def check(pe,mapping):
     unique('hold_direct_timer',calls('OemHold','MicroSecondDelay'))
     return sites
 
-def verify_with_deletions(pe,mapping):
-    sites=check(pe,mapping)
+def verify_with_deletions(pe,mapping,progress=False):
+    sites=check(pe,mapping,progress)
     for name,a in sites.items():
         offset=file_offset(pe,a);mutated=pe[:offset]+bytes.fromhex('1f2003d5')+pe[offset+4:]
-        try:check(mutated,mapping)
+        try:check(mutated,mapping,progress)
         except ValueError:pass
         else:raise ValueError('removed instruction admitted: '+name)
     return dict(sites={n:hex(a) for n,a in sites.items()},deletion_checks=len(sites),

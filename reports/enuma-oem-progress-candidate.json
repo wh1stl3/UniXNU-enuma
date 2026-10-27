@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-27",
+  "scope": "oem-progress-v2",
+  "software_ready": true,
+  "hardware_executed": false,
+  "image": "out/oem-progress-20261027/qualification1/image.img",
+  "image_sha256": "adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f",
+  "fd_sha256": "719303e04c4a0367c9bc41cfe1f26f02fcfbb4e26bec4d08d02a41aced4e8eff",
+  "qualification_sha256": "ddc19d922c64cc26e1591df7f65dc938df6faad1fcc5f5c85994cc680547c512",
+  "firmware_commit": "3adfb77",
+  "build_provenance": "hash-bound working snapshot based on bdfe65f6; subsequent commit does not change provenance",
+  "tests": "out/oem-progress-20261027/check4/result.json",
+  "binding": "out/oem-progress-20261027/binding3/result.json",
+  "python_tests": 29,
+  "instruction_deletion_checks": 32,
+  "runtime_limits": {
+    "max_boots": 1,
+    "selected_call": 0,
+    "hold_us": 8000000,
+    "roi": [
+      64,
+      96,
+      320,
+      160
+    ],
+    "observation_seconds": 75,
+    "partition_writes": false,
+    "needs_current_camera_and_manual_recovery": true,
+    "max_windows": 5,
+    "max_total_hold_us": 40000000
+  },
+  "phases": {
+    "1": "first service before",
+    "2": "first service returned",
+    "3": "first SID LocateProtocol before",
+    "4": "first SID LocateProtocol returned",
+    "5": "actual CoreStartImage returned"
+  },
+  "limitations": [
+    "pre-forward entry is not proof original service ran",
+    "no automatic recovery guarantee for OEM hang",
+    "local interrupt masking does not prove exclusion of AP or external DMA",
+    "no GOP/BDS/input acceptance",
+    "no export if OEM hangs before the first wrapped service",
+    "SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause",
+    "each window requires inherited route still valid; refusal after OEM display changes is not OEM failure",
+    "five observations perturb timing; no independent watchdog or durable RAM recovery",
+    "phase5 Q is next trace sequence, not a synthetic service event"
+  ],
+  "old_oem_sha256": "17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08",
+  "r027_sha256": "0db64285d13c0e2f60e68403b0b5498433b0b0c0143f6ce336c1885dad4afb5a",
+  "device_actions": 0
+}

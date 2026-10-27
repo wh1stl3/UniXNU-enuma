@@ -2,6 +2,7 @@
 #define ENUMA_BOOT_LOG_REPLAY 3
 #define ENUMA_BOOT_LOG_HOLD_US 8000000
 #include "EnumaOemCapturePixel.h"
+#include "EnumaOemProgressPage.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -105,6 +106,21 @@ int main(void){
   Bind();Escape=1;if(!setjmp(Jump)){VOID *Out;Trace.Boot.AllocatePool(EfiBootServicesData,99,&Out);assert(0);}
   assert(!OriginalCalls&&Pixel.Active&&Pixel.Result==4&&Capture.State==EnumaCaptureEmitting);
   EnumaCaptureStop(&Capture);assert(Capture.State==EnumaCaptureInterrupted);
-  puts("PASS: one-window persistent-scratch pixel backend; no-write refusal, partial writes, hold/restore faults, exception latch and no retry");
+  for(UINT32 Phase=1;Phase<=5;Phase++){
+    ENUMA_SERVICE_EVENT E={0};Setup();E.Call=7;E.CallerRva=0x1bce0;E.Sequence=9;
+    E.Returned=Phase==2||Phase==4||Phase==5;E.Status=EFI_NOT_FOUND;
+    assert(OemProgressPage(&Pixel.Page,Phase,&E,0x1234));Pixel.PagePrepared=TRUE;
+    assert(Pixel.Page.Text[0][0]==(E.Returned?'S':'E'));
+    assert(Pixel.Page.Text[3][0]==(E.Returned?'S':'E')&&Pixel.Page.Text[4][0]=='G');
+    for(UINT32 Row=0;Row<5;Row++)for(UINT32 Col=0;Col<20;Col++){
+      CHAR8 Ch=Pixel.Page.Text[Row][Col];UINT32 Bits=0;
+      for(UINT32 Y=0;Y<5;Y++){Bits|=EnumaLogGlyph(Ch,Y);}assert(Ch==' '||Bits);
+    }
+    assert(EnumaCapturePixelRun(&Pixel)==5);Restored();
+    Setup();assert(OemProgressPage(&Pixel.Page,Phase,&E,1));Pixel.PagePrepared=TRUE;FailB=3;
+    assert(EnumaCapturePixelRun(&Pixel)==4);
+    assert(!OemProgressPage(&Pixel.Page,Phase,&E,0));
+  }
+  puts("PASS: pixel lifecycle failures, five progress pages with existing glyphs, restore and session validation");
   return 0;
 }

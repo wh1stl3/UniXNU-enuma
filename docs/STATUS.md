@@ -1,6 +1,12 @@
-# 当前：真实 macOS XNU 编译输入已取得并通过本地验收
+# 当前：OEM progress-v2新候选已编出，软件资格通过，暂不上机
 
 2026-10-27。用户已允许推送；本轮只推送独立 ci/enuma-driver-inputs-20261027，远端main仍89b609e。原共享UniXNU-enuma不修改；R027冻结、OEM候选继续等待，暂不上机。
+
+## 本轮OEM候选调整
+
+用户要求调整OEM候选。新镜像out/oem-progress-20261027/qualification1/image.img，SHA256 adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f。新增首个服务前/后、首次SID查找前/后、真实CoreStartImage返回五个观测点；各8秒，总等待最多40秒，逐窗重验/恢复，失败终止。完整FD、32项机器码删除负测、Boot v3往返、ASan/UBSan及29项Python测试通过。固件源码3adfb77本地提交；没有设备动作。
+
+旧OEM17d0169e6bd1和R027 0db64285…保留；旧资格因源码变化不可在当前树直接复用，未重绑或覆盖。R027不再是主线必须先跑的一关。下一次实机按取证→OEM返回/GOP→DarwinBoot/EBS/XNU独立停点；本候选只覆盖到OEM真实返回，不含GOP验证、XNU或桌面。没有独立看门狗，SID方法/MMIO未覆盖，后段出口拒绝不等于OEM失败。详见operations/2026-10-27-oem-progress-candidate.md和reports/enuma-oem-progress-candidate.json。
 
 ## 当前成果
 

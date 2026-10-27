@@ -1,3 +1,9 @@
+# 最新交接：OEM progress-v2候选已就绪，等待实机条件
+
+新镜像out/oem-progress-20261027/qualification1/image.img，SHA256 adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f。固件3adfb77本地提交，完整FD/32项机器码删除负测/Boot v3/宿主与29项Python测试通过。软件资格不代表实机成功；本轮不部署，ledger未消费。旧OEM和R027冻结、摘要不变，旧源码资格不与新版混用。运行边界及五阶段解读见operations/2026-10-27-oem-progress-candidate.md。主线下一实机优先可靠取证→OEM返回与GOP，再独立进入引导交接；本镜像尚不测GOP/XNU。
+
+以下内核输入及集成交接仍有效：
+
 # 交接：从已验收真实输入继续 storage/PMGR 服务集成
 
 2026-10-27。用户允许推送，暂不上机；R027冻结，OEM候选17d0169e6bd1继续等待。共享D:/Code/PortingiOS/enuma/UniXNU-enuma只读。

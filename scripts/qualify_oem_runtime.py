@@ -6,11 +6,20 @@ from check_oem_runtime_code import verify_with_deletions,check_exception
 from check_oem_entry_failure_code import check as check_entry
 sys.path.insert(0,str(ROOT/'firmware/Resources/Scripts'))
 from enuma_oem_identity import generate
+from oem_runtime_candidate import limits_for
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--build',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--progress-check',type=Path)
     a=p.parse_args();build=a.build.resolve();out=a.output.resolve();out.relative_to(ROOT/'out');out.mkdir(parents=True,exist_ok=False)
     base,pe=audit(build,runtime=True);b=json.loads((build/'build-result.json').read_text());config=b['oem_run_config']
+    progress=config['experiment']=='oem-progress-v2'
+    if progress:
+        if not a.progress_check:raise ValueError('progress failure tests required')
+        tests=json.loads(a.progress_check.read_text())
+        if tests.get('passed') is not True:raise ValueError('progress tests failed')
+        for name,h in tests['sources'].items():
+            if sha((ROOT/name).read_bytes())!=h:raise ValueError('progress tests stale: '+name)
     (out/'DisplayDxe.efi').write_bytes(pe);identity=generate(out/'DisplayDxe.efi',out/'identity.h',config)
     staged=build/'work/Mu_Basecore/MdeModulePkg/Core/Dxe/Dispatcher/EnumaOemBuildIdentity.h'
     if staged.read_bytes()!=(out/'identity.h').read_bytes():raise ValueError('runtime identity not staged')
@@ -19,14 +28,14 @@ def main():
     if exception.read_bytes()!=(build/'source/diagnostics/EnumaOemExceptionStop.h').read_bytes():raise ValueError('exception stop not staged')
     product=build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain/OUTPUT'
     core=(product/'DxeCore.efi').read_bytes();mapping=(product/'DxeCore.map').read_text()
-    runtime_code=verify_with_deletions(core,mapping)
+    runtime_code=verify_with_deletions(core,mapping,progress)
     cpus=list((build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64').rglob('OUTPUT/ArmCpuDxe.efi'))
     if len(cpus)!=1:raise ValueError('missing CPU exception product')
     cpu=cpus[0].read_bytes();cpu_map=cpus[0].with_suffix('.map').read_text()
     cpu_exception=check_exception(cpu,cpu_map)
     failure=check_entry(core,mapping)
     symbols={}
-    for name in ('OemRuntimeBeforeForward','OemBoardSink','EnumaTraceLocateProtocol','EnumaTraceHandleProtocol','EnumaTraceAllocatePool'):
+    for name in (('OemProgressBefore','OemProgressAfter','OemProgressReturned','OemProgressPresent') if progress else ('OemRuntimeBeforeForward',))+('OemBoardSink','EnumaTraceLocateProtocol','EnumaTraceHandleProtocol','EnumaTraceAllocatePool'):
         hits=re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+'+name+r'$',mapping,re.M)
         if len(hits)!=1:raise ValueError('missing runtime code '+name)
         symbols[name]=hits[0]
@@ -53,15 +62,23 @@ def main():
              'scripts/run_enuma_entry_probe.py','scripts/audit_oem_development_fd.py',
              'scripts/check_oem_runtime_code.py','scripts/check_oem_entry_failure_code.py','scripts/enuma_paths.py']
     sources+=['firmware/'+n for n in json.loads((build/'source-manifest.json').read_text())['original_files']]
+    if progress:sources+=['scripts/check_oem_progress.py','scripts/decode_oem_progress_page.py','tests/oem_progress.c','tests/oem_capture_pixel.c','tests/test_oem_progress_page.py']
     bindings={n:sha((ROOT/n).read_bytes()) for n in sources}
     result=dict(passed=True,software_ready=True,hardware_executed=False,scope=config['experiment'],run_config=config,
                 image_sha256=sha(image.read_bytes()),fd_sha256=b['fd_sha256'],image_bytes=image.stat().st_size,
                 build=str(build.relative_to(ROOT)),fd_audit=base,identity=identity,linked_symbols=symbols,
                 entry_failure_rva=hex(failure),runtime_code=runtime_code,cpu_exception_rva=hex(cpu_exception),
                 boot_v3=package,source_bindings=bindings,
-                runtime_limits={'max_boots':1,'selected_call':0,'hold_us':8000000,'roi':[64,96,320,160],
-                                'observation_seconds':75,'partition_writes':False,'needs_current_camera_and_manual_recovery':True},
+                runtime_limits=limits_for(config['experiment']),
                 limitations=['pre-forward entry is not proof original service ran','no automatic recovery guarantee for OEM hang',
                              'local interrupt masking does not prove exclusion of AP or external DMA','no GOP/BDS/input acceptance'])
+    if progress:
+        result['progress_tests_sha256']=sha(a.progress_check.read_bytes())
+        result['progress_phases']={1:'first service before',2:'first service returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
+        result['limitations']+=['no export if OEM hangs before the first wrapped service',
+            'SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause',
+            'each window requires inherited route still valid; refusal after OEM display changes is not OEM failure',
+            'five observations perturb timing; no independent watchdog or durable RAM recovery',
+            'phase5 Q is next trace sequence, not a synthetic service event']
     (out/'qualification.json').write_text(json.dumps(result,indent=2)+'\n');print('PASS: runtime software qualification and Boot v3 packaging')
 if __name__=='__main__':main()
