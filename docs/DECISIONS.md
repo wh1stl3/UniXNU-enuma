@@ -1586,3 +1586,5 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 2026-10-27 · 运行版最终qualification-3通过；Boot v3 17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08。20项运行序列删除负测、ArmCpuDxe异常序列、9项门禁/模拟传输测试和最终离线绑定通过。固件本地提交bdfe65f；父仓提交号见git log。当前只差此刻录像/人工恢复准备，未boot；状态与交接已更新，不推送。
 
 2026-10-27 · 用户授权无实机继续内核/用户态/桌面开发。参考固定umi/sheng/fajita，在隔离树实现UFS SMMU规划/接管与只读SCSI准备；生成30组件实验内核e879b2f0、96MiB FAT 31a7defb、9382658048字节根卷组件文件fd43ee70。根卷输入/展开/回读摘要及生产manifest解析通过。未进入XNU/用户态，没有Data seed或IOKit硬件驱动链接。证据out/kernel-userland-20261027-1，详见operations/2026-10-27-kernel-userland-offline.md。OEM候选保留未消费、R027冻结；无设备/推送/内存或verified变更。
+
+2026-10-27 · 用户要求官网作为后续开发指南。在线核对unixnu.com移植/适配/构建/启动/日志入口，新增docs/operations/official-development-guide.md并置于AGENTS前部作为持久执行规则。新方案先读对应章节、核对固定源码和本机事实；来源/集成/宿主/硬件分层记录。未改依赖、镜像、硬件或授权边界，仅本地记录。
