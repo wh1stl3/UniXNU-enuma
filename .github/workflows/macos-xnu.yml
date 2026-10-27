@@ -39,6 +39,9 @@ jobs:
         with:
           name: enuma-macos-${{ inputs.mode }}-${{ github.run_id }}
           path: out/ci/macos/evidence
+          # Exported compiler inputs retain source-relative .cache paths.
+          # Scope remains the explicit evidence directory, never the checkout.
+          include-hidden-files: true
           if-no-files-found: error
           compression-level: 6
           retention-days: 14

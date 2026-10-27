@@ -8,3 +8,5 @@
 首次平台运行40475779089在成功链接后导出失败：编译记录含不存在的EXPORT_HDRS/libsa搜索路径。修正为仅对源码范围内缺席的搜索目录记录absent_include_paths，不创建假头；强制include缺失仍拒绝。30项合成测试通过，待重新构建。
 
 下载首次真实编译记录后发现-fsanitize-ignorelist也是必要文件输入，新增采集及路径重定位、缺失拒绝测试，合计32项通过。取消运行中的40477102284，改用同时含搜索目录缺席与sanitizer输入修复的新提交构建；取消不记构建失败或通过。
+
+运行40477385983构建及导出成功，2259文件，内核59294b35a21566151f48b9fb7527769ed4e0a89497f2be5bd64af4c4fc3f1ee9；下载后验收拒绝：upload-artifact默认省略tree/.cache。仅对out/ci/macos/evidence启用include-hidden-files，保留实际源相对路径，不放宽摘要验收。该运行不能称可用输入包。
