@@ -1,6 +1,12 @@
 # 当前：DisplayDxe离线归因推进，实机暂停
 
-2026-10-27。当前设备模式未知；最后设备查询仍为D320的01:48未以已授权ADB在线，本轮没有设备查询/启动/部署、录像申请或nuwa操作。
+已收敛为enuma可应用的离线实验补丁与方案：新增prepare_enuma_mmu_experiment.py，仅将精确OEM PE的0x1994参数2改0，保留全部构造器、MDPSetupPipe/MDPPanelInit及错误检查；独立输出PE摘要ed37a4e137cca2fcf4d5fa5718e18a319c2aa1b7a1cfab480693325bfbe2b5e3。新增plan_enuma_panel_handoff.py导出本机K81两链各188条命令及原等待契约，不改原XML。16项静态/宿主检查通过，见out/enuma-display-application-20261027-c999/check2/result.json。没有固件打包或硬件成功结论；新PE尚未接Core/profile/变体认证及板级可靠出口。具体使用、接线、判别与限制见[应用方案](operations/2026-10-27-enuma-display-application-plan.md)。R027仍冻结；此实验PE不替换生产vendor目录。
+
+最新静态推进：按公开Qualcomm解释器展开K81序列，两条控制器各188条相同数据，分链11不能当冗余删除；延迟仍与Android不同。nabu参数2→0关联MMU/SID初始化位，enuma对应LocateProtocol返回RVA为0x1bce0、GUID为54b6d3b4-5d33-4f91-8600-6c41d5deb19a，后续四处协议方法调用尚不在包装器覆盖内。phase2/transport-flags-result.json记录摘要/指令检查和两项模型负例；无硬件执行或补丁应用。
+
+2026-10-27。用户最新报告实机ADB已恢复；本轮未独立查询，不将用户报告扩大为Android完成/root/原分区核验。没有设备启动/部署、录像申请或nuwa操作，R027继续冻结。
+
+新增两路公开实现分析：elish/enuma CSOT同屏有Linux补丁及MiCode来源支持；K81初始化数据归一化后188条顺序相同，XML另有一条11及不同控制/等待记录，未证明执行等价。nabu原版/补丁版DisplayDxe差分36字节；三个初始化调用角色已静态映射至enuma的0x1998、0x176c4、0x176e8。未移植补丁，不代表本机已到达这些函数。详见[两路分析](operations/2026-10-27-elish-nabu-display-paths.md)，二进制及差分仅保留独立out目录。
 
 本轮实现预选call的一次性调用前导出：真实入口记入RAM后恢复TPL，输出带session/call身份与完整性值的冻结快照，再转发原服务。失败/重入/TPL拒绝/计数耗尽/中断分开锁存，无自动重试，不改变原服务返回状态或输出。新增持久缓存的320×160/8秒像素后端，窗口恢复完成才转发；恢复未确认进入非返回Stop，不伪造驱动结果。默认无observer、无Core/profile/FV激活。
 

@@ -1282,3 +1282,5 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 ## 2026-10-27：OEM调用前单次取证出口离线实现
 
 固件11c6cf1新增默认NULL观察器、单次带身份/完整性快照、持久缓存像素后端；窗口恢复未确认时非返回Stop，不转发OEM或编造状态。final1通过host sanitizer/AArch64/6删除负测、749种文本损坏拒绝和独立进程非返回后的外部文件保存；像素测试含恢复失败、异常、24种通道排列。证据out/oem-precall-20261027-c999，报告reports/enuma-oem-precall-capture-development.json，详见operations/2026-10-27-oem-precall-capture.md。板级物理/窗口所有权/终止恢复和Core精确绑定尚未接入，无新固件构建或硬件资格。R027镜像/资格/2434源绑定保持，实机暂停、无当前人工录像/按键待办。仅本地提交，不推送；设备仓提交号由git log查询。
+
+2026-10-27应用方案更新：已生成独立MMU-only实验PE，未打包/部署。未改内存字段或verified，无新实机申请；下一实机仍依既有冻结规则及新变体资格，ADB恢复不消费R027。详见operations/2026-10-27-enuma-display-application-plan.md。
