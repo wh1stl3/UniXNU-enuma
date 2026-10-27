@@ -1658,3 +1658,7 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 ## 2026-10-28T00:04:58+08:00 far-chain-v7离线资格与镜像完成
 
 用户要求走得更远，已实现OEM期间RAM-only、目标真实返回后继续全部DXE分派及单张末端汇总，仍保留BDS前恢复出口。固件1f05eef62b62fc6f57b805e1cb346e3643457db7，设备仓前提交cacd246；镜像c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d，资格a1cdb2c1fbb1e4c7aacd0f6862db68c45275297f643e0241d092c7a622612823。ASan/UBSan/ARM64/44 Python、30+108删除与3 GUID变异、完整FD/Boot v3回读和2456绑定通过，未claim/上机。证据out/oem-far-chain-20261027、reports/enuma-oem-far-chain-v7-candidate.json。失败输出保留，R027/旧候选冻结，共享主线只读；旧录像不复用。换行规则纳入AGENTS并加构建前只读检查。固件显式GitHub URL正常推送且远端核对；设备仓发布见device-publication.json。本轮未触碰设备。
+
+## v7本次拍摄与单次准备
+
+2026-10-28 00:09 v7本次单次准备：用户明确“v7开始 正在拍摄”，按已说明的本次现场/在场恢复条件和既有恢复安排，仅新v7一次临时boot。即时只读前检enuma/Android完成/root/A槽/解锁及原双分区/备份摘要通过。未claim/发送；准备文档发布及远端核对后由runner重复即时门禁。精确镜像c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d，trial 61c29945-1399-49eb-8133-d11d465bb6c4。75秒无合格返回先恢复，不自动重试，不flash/erase/改槽；R027冻结，共享主线只读。证据out/oem-far-chain-live-20261028；媒体Media-enuma/OEM-far-chain-v7-20261028-61c29945本地保留。以下旧就绪状态不复用，实际执行/恢复随后更新。
