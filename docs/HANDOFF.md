@@ -1,3 +1,5 @@
+2026-10-27：用户明确允许progress-v2上机，并确认当前在场、连续录像及人工长按恢复准备完成。仅新镜像adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f一次临时fastboot boot；前检由绑定runner即时执行，不flash/erase/改槽，75秒无返回停止追加。R027及旧OEM冻结。
+
 # 最新交接：OEM progress-v2候选已就绪，等待实机条件
 
 新镜像out/oem-progress-20261027/qualification1/image.img，SHA256 adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f。固件3adfb77本地提交，完整FD/32项机器码删除负测/Boot v3/宿主与29项Python测试通过。软件资格不代表实机成功；本轮不部署，ledger未消费。旧OEM和R027冻结、摘要不变，旧源码资格不与新版混用。运行边界及五阶段解读见operations/2026-10-27-oem-progress-candidate.md。主线下一实机优先可靠取证→OEM返回与GOP，再独立进入引导交接；本镜像尚不测GOP/XNU。

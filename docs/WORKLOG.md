@@ -1456,3 +1456,5 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 2026-10-27 · CI分支e81f73c已发布结果，构建代码cdfb7ae，40478893674成功且2259文件/2记录下载导入通过。32宿主测试通过。首次导出失败、取消和上传过滤拒绝均保留。主开发树同步修复，main/R027/OEM不变，无设备动作。
 
 2026-10-27 · 固件3adfb77完成OEM progress-v2五阶段候选，镜像adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f。check4/binding3、29项Python、32项删除机器码负测、完整FD和Boot v3往返通过。R027/旧OEM摘要复核不变，共享树未写、没有设备动作；全部新产物在out/oem-progress-20261027。
+
+2026-10-27：用户明确允许progress-v2上机，并确认当前在场、连续录像及人工长按恢复准备完成。仅新镜像adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f一次临时fastboot boot；前检由绑定runner即时执行，不flash/erase/改槽，75秒无返回停止追加。R027及旧OEM冻结。
