@@ -1440,3 +1440,5 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 2026-10-27 · 用户要求官网作为后续开发指南。在线核对unixnu.com移植/适配/构建/启动/日志入口，新增docs/operations/official-development-guide.md并置于AGENTS前部作为持久执行规则。新方案先读对应章节、核对固定源码和本机事实；来源/集成/宿主/硬件分层记录。未改依赖、镜像、硬件或授权边界，仅本地记录。
 
 2026-10-27 · 依用户要求将官网具体适配方法落位为规则：新增operations/official-adaptation-rules.md，覆盖八阶段的接口、实施顺序、失败清理、验证及enuma差异，并由AGENTS强制引用。规则只在隔离worktree生效，待后续整合；仅文档变更，不改变已有运行结论、冻结候选或设备授权。
+
+2026-10-27 · 按官网规则继续离线：完成EnumaRootRead与生产窗口算法接线/ARM64库，139组packed差分、传输/完整性失败及5项CLI拒绝；固定Linux参考构造真实512MiB目录型APFS Data（packed 8a4483bc…），apfsck/回读通过并进入96MiB FAT 4a9c77df…。真实DarwinBoot解析通过，未重链接XNU/挂载Data/进入桌面。上次提交a791dff，本次见git log；证据out/kernel-userland-20261027-2及reports/enuma-root-data-offline.json。OEM摘要不变，R027冻结，共享主线不改，无设备/推送。

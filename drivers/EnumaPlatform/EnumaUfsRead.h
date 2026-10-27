@@ -5,6 +5,9 @@
 #include <stdint.h>
 struct enuma_ufs_geometry { uint64_t blocks;uint32_t block_bytes;uint8_t lun; };
 struct enuma_ufs_read { uint8_t cdb[10],lun;uint32_t bytes; };
+#ifdef __cplusplus
+extern "C" {
+#endif
 // 0xffffffff is the protocol's capacity16 sentinel, never a real geometry.
 int enuma_ufs_capacity10(const uint8_t *,unsigned,uint8_t,struct enuma_ufs_geometry *);
 // window_first/count are verified root-window extents on the actual LUN.
@@ -12,4 +15,7 @@ int enuma_ufs_capacity10(const uint8_t *,unsigned,uint8_t,struct enuma_ufs_geome
 int enuma_ufs_prepare_read(const struct enuma_ufs_geometry *,uint64_t window_first,
     uint64_t window_blocks,uint64_t relative_lba,uint32_t blocks,uint32_t dma_bytes,
     struct enuma_ufs_read *);
+#ifdef __cplusplus
+}
+#endif
 #endif

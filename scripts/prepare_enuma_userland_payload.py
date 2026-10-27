@@ -9,7 +9,11 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evidence-root',type=Path,required=True)
     p.add_argument('--prelink',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--data-seed',type=Path);p.add_argument('--data-seed-sha256')
     a=p.parse_args();e=a.evidence_root.resolve();out=a.output.resolve();out.relative_to(ROOT/'out');out.mkdir(parents=True,exist_ok=False)
+    if bool(a.data_seed)!=bool(a.data_seed_sha256):raise ValueError('Data seed and SHA256 must be supplied together')
+    from enuma_data_seed import inspect_seed
+    data_info=inspect_seed(a.data_seed,a.data_seed_sha256) if a.data_seed else None
     prelink=a.prelink.resolve();prelink.relative_to(ROOT/'out');r=json.loads((prelink/'result.json').read_text())
     kernel=prelink/'userland-components.experimental.macho'
     if r['passed'] is not True or r['runtime_qualified'] is not False or sha(kernel)!=r['image_sha256']:raise ValueError('prelink binding failed')
@@ -30,10 +34,10 @@ def main():
     total=sum(b['size'] for b in hardware(e/'out/device/live-fdt.bin')['memory_banks'])
     sys.path.insert(0,str(base/'scripts'));from unixnu import payload
     ctx=SimpleNamespace(tree=e,work=out,logs=out/'logs',uefi=None,
-        args=SimpleNamespace(trust_cache=trust,data_ramdisk=None,gpu_addon=None),
+        args=SimpleNamespace(trust_cache=trust,data_ramdisk=a.data_seed,gpu_addon=None),
         board={'payload':dict(dram_size=total,size_mib=96,volume='ENUMAU01',timeout=0,
             title='enuma offline graphics-HID input',kernel_args=['-v'],
-            adt=dict(tool='scripts/make_enuma_adt.py',ipad_identity=True,owned_memory_size='0x20000000'))})
+            adt=dict(tool='scripts/make_enuma_adt.py',ipad_identity=True,packed_data_ramdisk=bool(data_info),owned_memory_size='0x20000000'))})
     os.environ['PYTHONDONTWRITEBYTECODE']='1'
     image=payload.build(ctx,kernel=kernel);readback={}
     for name in ['Payloads/kernel.macho','Payloads/kernel.macho.trustcache','Payloads/kernel.macho.adt','unixnu.toml']:
@@ -41,9 +45,17 @@ def main():
         readback[name]=hashlib.sha256(content).hexdigest()
         if name.endswith('.adt') or name.endswith('.toml'):(out/Path(name).name).write_bytes(content)
     if readback['Payloads/kernel.macho']!=sha(kernel) or readback['Payloads/kernel.macho.trustcache']!=sha(trust):raise ValueError('FAT readback mismatch')
+    if data_info:
+        content=subprocess.check_output(['mtype','-i',str(image),'::/EFI/UniXNU/Payloads/scratch-data.img'])
+        readback['Payloads/scratch-data.img']=hashlib.sha256(content).hexdigest()
+        if readback['Payloads/scratch-data.img']!=data_info['encoded_sha256']:raise ValueError('Data FAT readback mismatch')
+        if inspect_seed(a.data_seed,a.data_seed_sha256)!=data_info:raise ValueError('Data input changed')
+        import tomllib
+        cfg=tomllib.loads((out/'unixnu.toml').read_text())
+        if cfg['entry'][0].get('initrd')!='Payloads/scratch-data.img':raise ValueError('Data initrd not wired')
     if any(sha(e/n)!=h for n,h in bindings.items()):raise ValueError('shared read-only input changed during generation')
     report=dict(passed=True,payload_sha256=sha(image),payload_bytes=image.stat().st_size,readback=readback,
-        reference_bindings=bindings,upstream_sources=pins,root_volume_included=False,data_seed_included=False,
+        reference_bindings=bindings,upstream_sources=pins,root_volume_included=False,data_seed_included=bool(data_info),data_seed=data_info,
         runtime_qualified=False,hardware_executed=False,scope='real FAT component bundle, not a desktop-ready boot image')
     (out/'result.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

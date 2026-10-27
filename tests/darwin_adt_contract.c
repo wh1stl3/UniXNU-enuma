@@ -85,13 +85,16 @@ static unsigned char *read_input(const char *path, size_t *size) {
     assert(fread(p, 1, *size, f) == *size && fclose(f) == 0);
     return p;
 }
-static void actual_inputs(const char *adt_path, const char *trust_path, uint64_t approved) {
+static void actual_inputs(const char *adt_path, const char *trust_path, uint64_t approved, int expect_packed) {
     size_t size, offset = 0, ramdisk = SIZE_MAX, trust = SIZE_MAX, addon = SIZE_MAX;
     uint64_t window = 0; int packed = 0;
     unsigned char *adt = read_input(adt_path, &size);
     assert(AdtNode(adt, size, &offset, 0, 3, &ramdisk, &trust, &addon, &window, &packed));
     assert(offset == size && window == approved && trust != SIZE_MAX);
-    assert(ramdisk == SIZE_MAX && addon == SIZE_MAX && !packed);
+    assert(addon == SIZE_MAX && packed == expect_packed);
+    if (expect_packed) {
+        assert(ramdisk != SIZE_MAX && U64(adt + ramdisk) == 0 && U64(adt + ramdisk + 8) == 0);
+    } else assert(ramdisk == SIZE_MAX);
     assert(U64(adt + trust) == 0 && U64(adt + trust + 8) == 0);
     for (size_t cut = 0; cut < size; ++cut) {
         offset = 0; ramdisk = trust = addon = SIZE_MAX; window = 0; packed = 0;
@@ -115,10 +118,11 @@ static void actual_inputs(const char *adt_path, const char *trust_path, uint64_t
     puts("PASS: actual FAT ADT and original trust bundle accepted by pinned DarwinBoot functions; truncations and malformed trust rejected");
 }
 int main(int argc, char **argv) {
-    assert(argc == 2 || argc == 4);
+    assert(argc == 2 || argc == 4 || argc == 5);
     char *end; uint64_t approved = strtoull(argv[1], &end, 0), window;
     assert(*end == 0 && approved == 0x20000000ULL);
-    if (argc == 4) actual_inputs(argv[2], argv[3], approved);
+    if (argc == 5) assert(!strcmp(argv[4], "packed"));
+    if (argc >= 4) actual_inputs(argv[2], argv[3], approved, argc == 5);
     fixture(approved, NORMAL);
     assert(parse(used, &window) && window == approved);
     size_t valid_size = used;

@@ -1590,3 +1590,5 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 2026-10-27 · 用户要求官网作为后续开发指南。在线核对unixnu.com移植/适配/构建/启动/日志入口，新增docs/operations/official-development-guide.md并置于AGENTS前部作为持久执行规则。新方案先读对应章节、核对固定源码和本机事实；来源/集成/宿主/硬件分层记录。未改依赖、镜像、硬件或授权边界，仅本地记录。
 
 2026-10-27 · 依用户要求将官网具体适配方法落位为规则：新增operations/official-adaptation-rules.md，覆盖八阶段的接口、实施顺序、失败清理、验证及enuma差异，并由AGENTS强制引用。规则只在隔离worktree生效，待后续整合；仅文档变更，不改变已有运行结论、冻结候选或设备授权。
+
+2026-10-27 · 采用固定fajita Linux APFS builder和umi打包器构造仅目录的可丢弃Data，排除参考偏好文件；512MiB仅主机文件系统几何，不改内存/分区。生产RootWindowRead通过明确C ABI回调接本仓SCSI准备，IOKit完成回调在解锁后执行；真实transport仍承担DMA隔离。详情operations/2026-10-27-root-data-offline.md。

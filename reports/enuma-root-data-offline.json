@@ -1,0 +1,673 @@
+{
+  "data_mounted": false,
+  "local_sources": {
+    "scripts/check_enuma_data_handoff.py": "ea0aa92f851637bbeaafeccd8e42aee7371bcbca1a4ba8728d58c78d28f19c42",
+    "drivers/EnumaPlatform/EnumaRootRead.h": "110e967e5c2058cde366b6e543990551514e601a9e0bc3a0d9e13f580ca6894f",
+    "scripts/check_enuma_root_bridge.py": "d479d60064fdd224e86d0eb9f9587740741d9f0a080bd75ca49cf5f581eff6b1",
+    "scripts/prepare_enuma_userland_payload.py": "1f34df84e7155bf4461021e9e7a2d17b34c3ba10af2717a66f8f9fc036882718",
+    "drivers/EnumaPlatform/EnumaUfsRead.h": "c1afb2e2fabba3fcaa2922b92aede604166aba02105a73635996a907bddf3003",
+    "tests/enuma_packed_seed.cpp": "b413f17d732336fb1a9f2afb8a0c0019b0a04e218ae96b7c6ae4043c76630af3",
+    "scripts/prepare_enuma_data_seed.py": "20e33885478c07d2ce38d0c0d2b8bfa888709e72f6c6e0287042712cd509c3d1",
+    "drivers/EnumaPlatform/EnumaRootRead.cpp": "8532dc9af2d1a3708f8a3028b1c3b7d046b9f6085a1e9004850d306dbb7d8642",
+    "tests/enuma_root_read.cpp": "63d3cdc00a4c3481c6bff4b52218d476a0c91822220446050074125cc26d80e3",
+    "scripts/enuma_data_seed.py": "30fd57ef64bb386ff38fee98cf8bbe533608c3c3307c9455e8f7e2c792594be2",
+    "tests/darwin_adt_contract.c": "538d5252c49872369e85b5a3c35b503918aa7f408cf743b47d0a8a36caccefd3",
+    "scripts/check_enuma_data_rejections.py": "24af32f6f767b6921550194de5554eaecee6b2fb55578689127c053893c0a102"
+  },
+  "iokit_linked": false,
+  "passed": true,
+  "desktop_started": false,
+  "hardware_executed": false,
+  "evidence": {
+    "bridge2": {
+      "path": "out/kernel-userland-20261027-2/bridge2/result.json",
+      "sha256": "1d94e97916340de5c468fd2f65dcc8e78d034b6dad82e225c17cb279879772e9",
+      "result": {
+        "passed": true,
+        "sources": {
+          "NativeUfs/RootWindowRead.h": {
+            "commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+            "sha256": "e8d98556290cf540204227f863b043eb09996bb87d38e1d6894b83b351c8d112"
+          },
+          "NativeRamBlock/SparseDisk.h": {
+            "commit": "d4d22d9819b0162eda49f6402235dddc2279410d",
+            "sha256": "5ab6516488b7daaef88e788fffef17195e7d2f74746da2206c6d9ed3a63c8c74"
+          }
+        },
+        "local_sources": {
+          "EnumaRootRead.cpp": "8532dc9af2d1a3708f8a3028b1c3b7d046b9f6085a1e9004850d306dbb7d8642",
+          "EnumaRootRead.h": "110e967e5c2058cde366b6e543990551514e601a9e0bc3a0d9e13f580ca6894f",
+          "enuma_data_seed.py": "30fd57ef64bb386ff38fee98cf8bbe533608c3c3307c9455e8f7e2c792594be2"
+        },
+        "archive_sha256": "18f609c48d2d55474561f898fd9d6cacf440af6f2139aabb5f5de406c8cdccac",
+        "objects": {
+          "EnumaUfsRead.o": "88c0d53ab8a8c5a26267699da58470e0e1de9f1d2fd359b7f91b5daf678867c6",
+          "EnumaUfsSmmu.o": "f410594f568fd6ad1543c6269111923c1bb4fe26f805db20ba5b7867a2365f9a",
+          "EnumaRootRead.o": "e99909dd8e01d406fbd1bccdfb3308618a843b33186719af1c9b3abb4d3571ba"
+        },
+        "packed_cases": 139,
+        "accepted": 11,
+        "rejected": 128,
+        "hardware_executed": false,
+        "iokit_linked": false,
+        "apfs_seed_created": false,
+        "kernel_relinked": false,
+        "scope": "Mach-O ARM64 reusable archive, production window reader and packed format differential tests"
+      }
+    },
+    "handoff1": {
+      "path": "out/kernel-userland-20261027-2/handoff1/result.json",
+      "sha256": "f7288e3a1924c1caf2ab439908ad62481e689f7de3d68542f2f21206d9d44944",
+      "result": {
+        "passed": true,
+        "sources": {
+          "DarwinBoot.c": "db189a520fb7af3decb80f6ad65e2b7ab2aa9e3e6c5ab6e2286a23df6108d8f2",
+          "WindowSize.h": "6f78303c54252eae722be7c9b33869e4e8251ee3569736511790170d499b58cb"
+        },
+        "fragment_sha256": "80e1bc5e226848bcfb0fa22b85991a9c3ee8a4c9e012cc38fad753aac252a3d9",
+        "inputs": {
+          "without_data": {
+            "payload_sha256": "7c2458ce6f946569583131b6f11318389e24337b5930464380b30774ddd0895b",
+            "adt_sha256": "4c4df7be2476c624c00133504f2c7e001e3ab4e5eea5886917a2832a45c1ce3c",
+            "trust_sha256": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7"
+          },
+          "with_data": {
+            "payload_sha256": "4a9c77df42ef50664618d62be4564bc7056f5de5f4612a35adaecd00e3a69d49",
+            "adt_sha256": "7bc02b2955c8f91ccc9474144487c89a016e8572fffa3f76d9e256d48f070a56",
+            "trust_sha256": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7"
+          }
+        },
+        "hardware_executed": false,
+        "boot_services_exited": false,
+        "data_mounted": false,
+        "scope": "real DarwinBoot ADT/trust parser, actual FAT readback, all truncations; host ASan/UBSan only"
+      }
+    },
+    "rejections1": {
+      "path": "out/kernel-userland-20261027-2/rejections1/result.json",
+      "sha256": "1e531d6a9043b5eb18d1d943f00ffb152c7e45f28cbbf8c4dc5a492630f2763a",
+      "result": {
+        "passed": true,
+        "cases": [
+          {
+            "case": "missing_hash",
+            "returncode": 1,
+            "expected_error": "supplied together",
+            "no_payload": true
+          },
+          {
+            "case": "missing_seed",
+            "returncode": 1,
+            "expected_error": "supplied together",
+            "no_payload": true
+          },
+          {
+            "case": "short_input",
+            "returncode": 1,
+            "expected_error": "size outside bound",
+            "no_payload": true
+          },
+          {
+            "case": "wrong_hash",
+            "returncode": 1,
+            "expected_error": "digest mismatch",
+            "no_payload": true
+          },
+          {
+            "case": "bad_header",
+            "returncode": 1,
+            "expected_error": "header mismatch",
+            "no_payload": true
+          }
+        ],
+        "hardware_executed": false
+      }
+    },
+    "data1": {
+      "path": "out/kernel-userland-20261027-2/data1/result.json",
+      "sha256": "a43a835964820e1351b8096dcb6980bf70ed9a04f299bb4aa7296e2cad3acdf7",
+      "result": {
+        "passed": true,
+        "sources": {
+          "scripts/make-data-seed-linux.py": {
+            "commit": "fb8c389bd9877d4db0ef6e09170b83752dec7259",
+            "sha256": "977534d326005f34d3883e35d368dd3f1945b3fcee82b171212271f77332c891"
+          },
+          "data-seed.json": {
+            "commit": "fb8c389bd9877d4db0ef6e09170b83752dec7259",
+            "sha256": "3c885a583056367024f43cb4780b75818b9fb143214dd612ec7d631ab4fb19ce"
+          },
+          "package/data-store/packed_ramdisk.py": {
+            "commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+            "sha256": "a216e05921c985d48339157146285bdddf4757bc8219cea0edf9377d16aac917"
+          }
+        },
+        "apfsprogs_commit": "1bd1c1c2140d13d1b6d2e03379316572bee70aa3",
+        "tools": {
+          "mkapfs": "49a77453e2fc50974c53d49f8b3337881327768a0d5d77bbd2cdf8e3ecdfd0f6",
+          "apfsck": "514db8ab738b63c629bd825073889fe28821127c5951a918e947c5500fa80aca"
+        },
+        "seed": {
+          "logical_bytes": 536870912,
+          "volume_name": "Data",
+          "volume_uuid": "2EAEDCB6-F878-41EF-8A0A-460053C781B8",
+          "container_uuid": "9F4310A6-CDBF-438C-8C92-FFE9E71BFC7B",
+          "role": [],
+          "role_value": "0x0",
+          "filesystem": "Case-sensitive APFS",
+          "encrypted": false,
+          "layout": "APFS container at offset 0, no partition map",
+          "raw_sha256": "b2c589db422d7160a5b130c3d7cbc907b1c8705dd7009c4d6dd6ee28e2d91089",
+          "packed_sha256": "8a4483bcc910875cbae2cc2ee1090abced93ea8297ef4c346a263ca42a9c5385",
+          "packed_bytes": 86128,
+          "packed_extents": 5,
+          "timestamp": 1793059200,
+          "root_directory": [
+            0,
+            0,
+            "0755"
+          ],
+          "directories": [
+            [
+              "Keychains",
+              64,
+              0,
+              "0755"
+            ],
+            [
+              "Managed Preferences",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "MobileAsset",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "MobileDevice",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "MobileSoftwareUpdate",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "PersonaVolumes",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "containers",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "containers/Data",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "containers/Data/System",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "containers/Data/Application",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "containers/Shared",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "containers/Shared/SystemGroup",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/dslocal",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/dslocal/nodes",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/dslocal/nodes/Default",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/dslocal/nodes/Default/users",
+              0,
+              0,
+              "0700"
+            ],
+            [
+              "db/dslocal/nodes/Default/groups",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/dslocal/nodes/Default/config",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/timezone",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "empty",
+              0,
+              0,
+              "0555"
+            ],
+            [
+              "folders",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "hardware",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "installd",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "keybags",
+              0,
+              0,
+              "0700"
+            ],
+            [
+              "keybags/backup",
+              0,
+              0,
+              "0700"
+            ],
+            [
+              "Library",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "local",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "lock",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "logs",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "log",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "log/com.apple.xpc.launchd",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/diagnostics",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "db/uuidtext",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "mobile",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Containers",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Documents",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Library",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Library/Caches",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Library/Logs",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Library/Logs/CrashReporter",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Library/Preferences",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/Media",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "mobile/tmp",
+              501,
+              501,
+              "0755"
+            ],
+            [
+              "msgs",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "networkd",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "preboot",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "preferences",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "root",
+              0,
+              0,
+              "0750"
+            ],
+            [
+              "run",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "spool",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "tmp",
+              0,
+              0,
+              "1777"
+            ],
+            [
+              "vm",
+              0,
+              0,
+              "0755"
+            ],
+            [
+              "wireless",
+              0,
+              0,
+              "0755"
+            ]
+          ],
+          "tree": "drwxr-xr-x   64    0 Keychains\ndrwxr-xr-x    0    0 Library\ndrwxr-xr-x    0    0 Managed Preferences\ndrwxr-xr-x    0    0 MobileAsset\ndrwxr-xr-x    0    0 MobileDevice\ndrwxr-xr-x    0    0 MobileSoftwareUpdate\ndrwxr-xr-x    0    0 PersonaVolumes\ndrwxr-xr-x    0    0 containers\ndrwxr-xr-x    0    0 containers/Data\ndrwxr-xr-x    0    0 containers/Data/Application\ndrwxr-xr-x    0    0 containers/Data/System\ndrwxr-xr-x    0    0 containers/Shared\ndrwxr-xr-x    0    0 containers/Shared/SystemGroup\ndrwxr-xr-x    0    0 db\ndrwxr-xr-x    0    0 db/diagnostics\ndrwxr-xr-x    0    0 db/dslocal\ndrwxr-xr-x    0    0 db/dslocal/nodes\ndrwxr-xr-x    0    0 db/dslocal/nodes/Default\ndrwxr-xr-x    0    0 db/dslocal/nodes/Default/config\ndrwxr-xr-x    0    0 db/dslocal/nodes/Default/groups\ndrwx------    0    0 db/dslocal/nodes/Default/users\ndrwxr-xr-x    0    0 db/timezone\ndrwxr-xr-x    0    0 db/uuidtext\ndr-xr-xr-x    0    0 empty\ndrwxr-xr-x    0    0 folders\ndrwxr-xr-x    0    0 hardware\ndrwxr-xr-x    0    0 installd\ndrwx------    0    0 keybags\ndrwx------    0    0 keybags/backup\ndrwxr-xr-x    0    0 local\ndrwxr-xr-x    0    0 lock\ndrwxr-xr-x    0    0 log\ndrwxr-xr-x    0    0 log/com.apple.xpc.launchd\ndrwxr-xr-x    0    0 logs\ndrwxr-xr-x  501  501 mobile\ndrwxr-xr-x  501  501 mobile/Containers\ndrwxr-xr-x  501  501 mobile/Documents\ndrwxr-xr-x  501  501 mobile/Library\ndrwxr-xr-x  501  501 mobile/Library/Caches\ndrwxr-xr-x  501  501 mobile/Library/Logs\ndrwxr-xr-x  501  501 mobile/Library/Logs/CrashReporter\ndrwxr-xr-x  501  501 mobile/Library/Preferences\ndrwxr-xr-x  501  501 mobile/Media\ndrwxr-xr-x  501  501 mobile/tmp\ndrwxr-xr-x    0    0 msgs\ndrwxr-xr-x    0    0 networkd\ndrwxr-xr-x    0    0 preboot\ndrwxr-xr-x    0    0 preferences\ndrwxr-x---    0    0 root\ndrwxr-xr-x    0    0 run\ndrwxr-xr-x    0    0 spool\ndrwxrwxrwt    0    0 tmp\ndrwxr-xr-x    0    0 vm\ndrwxr-xr-x    0    0 wireless",
+          "verified": [
+            "apfsck -cuw",
+            "python read-back",
+            "packed_ramdisk.regions == raw"
+          ],
+          "mkapfs": "mkapfs g1bd1c1c",
+          "builder": "linux-mkapfs"
+        },
+        "packed_format": {
+          "encoded_sha256": "8a4483bcc910875cbae2cc2ee1090abced93ea8297ef4c346a263ca42a9c5385",
+          "encoded_bytes": 86128,
+          "logical_bytes": 536870912,
+          "extents": 5,
+          "format": "DBRDISK1",
+          "apfs_validated": false,
+          "os_identity_validated": false,
+          "runtime_qualified": false
+        },
+        "hardware_executed": false,
+        "os_mount_tested": false,
+        "scope": "disposable directory-only APFS seed; offline filesystem validation, not userland or activation success",
+        "remaining": [
+          "Data owner UUID/OS policy integration",
+          "RamBlock archive and initialization",
+          "target OS mount and launchd",
+          "framebuffer/HID/desktop services"
+        ]
+      }
+    },
+    "payload-no-data": {
+      "path": "out/kernel-userland-20261027-2/payload-no-data/result.json",
+      "sha256": "66ea095923d117dfa5f985df37ce71845e0905cebd5e9460d4b5c133e16eddcc",
+      "result": {
+        "passed": true,
+        "payload_sha256": "7c2458ce6f946569583131b6f11318389e24337b5930464380b30774ddd0895b",
+        "payload_bytes": 100663296,
+        "readback": {
+          "Payloads/kernel.macho": "e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59",
+          "Payloads/kernel.macho.trustcache": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7",
+          "Payloads/kernel.macho.adt": "4c4df7be2476c624c00133504f2c7e001e3ab4e5eea5886917a2832a45c1ce3c",
+          "unixnu.toml": "c5997415e8c70428e1aa948f8c885419764f0637dc0fc13be2f01fc5deb9f841"
+        },
+        "reference_bindings": {
+          "scripts/make_enuma_adt.py": "fda380bf43c04849f19d49f8dc7375a25b41984eadd4bea719071fda1d4fffe8",
+          "scripts/audit_inputs.py": "b0bbdf7adf20c2ff130ff4ce1c274d7d33b7011b53d06272da93939bd0ab177c",
+          "scripts/plan_adt.py": "7d1ed392d2bb1d5f9b9e7b2a6a9ebfa209ce4529fdb728e535204c676c7bbe3b",
+          "config/system-reuse-sources.lock.json": "f4f317653b3991454fbe5f1aaccb8c81846e18a43897681af2b75fb9fde5f7cc",
+          "out/device/live-fdt.bin": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+          "out/sources/UniXNU-umi/scripts/umi_adt.py": "8d34b7a8191f67570624fad8116da1991ebfcf47d6d06324fb651b1c0d187044"
+        },
+        "upstream_sources": {
+          "scripts/unixnu/payload.py": "05a79e171be8d0336d0125a556e90a7e0195cef138b195878102d366befb75f0",
+          "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+          "scripts/unixnu/__init__.py": "c6ae444a32411f12494607894581cc27d6bfec49c2f5712fe47a26cece5d1007",
+          "scripts/build-original-system-trust.py": "cd17f451a8bfca33476836a151a97fff44d0f0115108834a39bb3d907736264c"
+        },
+        "root_volume_included": false,
+        "data_seed_included": false,
+        "data_seed": null,
+        "runtime_qualified": false,
+        "hardware_executed": false,
+        "scope": "real FAT component bundle, not a desktop-ready boot image"
+      }
+    },
+    "payload-data": {
+      "path": "out/kernel-userland-20261027-2/payload-data/result.json",
+      "sha256": "88efd318f2d344b646c2165cc41c6da957b8943d7d45a7131856351b3a9ddb30",
+      "result": {
+        "passed": true,
+        "payload_sha256": "4a9c77df42ef50664618d62be4564bc7056f5de5f4612a35adaecd00e3a69d49",
+        "payload_bytes": 100663296,
+        "readback": {
+          "Payloads/kernel.macho": "e879b2f03f995107ad5b10ea21f48430894cbbf31ead1b62143256e07a7f9e59",
+          "Payloads/kernel.macho.trustcache": "7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7",
+          "Payloads/kernel.macho.adt": "7bc02b2955c8f91ccc9474144487c89a016e8572fffa3f76d9e256d48f070a56",
+          "unixnu.toml": "94afa352510de14042a18e55d654b52458d69289ce6064bd6ae3afaa58db806b",
+          "Payloads/scratch-data.img": "8a4483bcc910875cbae2cc2ee1090abced93ea8297ef4c346a263ca42a9c5385"
+        },
+        "reference_bindings": {
+          "scripts/make_enuma_adt.py": "fda380bf43c04849f19d49f8dc7375a25b41984eadd4bea719071fda1d4fffe8",
+          "scripts/audit_inputs.py": "b0bbdf7adf20c2ff130ff4ce1c274d7d33b7011b53d06272da93939bd0ab177c",
+          "scripts/plan_adt.py": "7d1ed392d2bb1d5f9b9e7b2a6a9ebfa209ce4529fdb728e535204c676c7bbe3b",
+          "config/system-reuse-sources.lock.json": "f4f317653b3991454fbe5f1aaccb8c81846e18a43897681af2b75fb9fde5f7cc",
+          "out/device/live-fdt.bin": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+          "out/sources/UniXNU-umi/scripts/umi_adt.py": "8d34b7a8191f67570624fad8116da1991ebfcf47d6d06324fb651b1c0d187044"
+        },
+        "upstream_sources": {
+          "scripts/unixnu/payload.py": "05a79e171be8d0336d0125a556e90a7e0195cef138b195878102d366befb75f0",
+          "scripts/unixnu/util.py": "4dedbb429abb8c29008da511c5a64ec28e78da64e2e62c90c138a3cd4d410e5e",
+          "scripts/unixnu/__init__.py": "c6ae444a32411f12494607894581cc27d6bfec49c2f5712fe47a26cece5d1007",
+          "scripts/build-original-system-trust.py": "cd17f451a8bfca33476836a151a97fff44d0f0115108834a39bb3d907736264c"
+        },
+        "root_volume_included": false,
+        "data_seed_included": true,
+        "data_seed": {
+          "encoded_sha256": "8a4483bcc910875cbae2cc2ee1090abced93ea8297ef4c346a263ca42a9c5385",
+          "encoded_bytes": 86128,
+          "logical_bytes": 536870912,
+          "extents": 5,
+          "format": "DBRDISK1",
+          "apfs_validated": false,
+          "os_identity_validated": false,
+          "runtime_qualified": false
+        },
+        "runtime_qualified": false,
+        "hardware_executed": false,
+        "scope": "real FAT component bundle, not a desktop-ready boot image"
+      }
+    },
+    "storage-regression": {
+      "result": {
+        "passed": true,
+        "hardware_executed": false,
+        "iokit_linked": false,
+        "peer_commit": "3eb72578597d2ca16471b172d45eddc096a34a04",
+        "native_ufs_commit": "af785c1777161a62931425c2faaa536ce0bebd5b",
+        "source_hashes": {
+          "package/UmiSmmuTakeover.h": "4b5aff64f6da77cf9567465878007abc19b907ee0b8e9d4aba85d2d5ddc4c5a6",
+          "NativeUfs/GccUfs.h": "1ef7030533184ecb7efebb8ad3a6fa8e155a8b5b9eea19a6a2af758027d483c3",
+          "NativeUfs/RootCommands.h": "11f88727514b42c823c166b2d8da1090189d69d797f29bdff6532498f66b86ec",
+          "NativeUfs/RootDiagnostics.h": "0ad96da909e87d161b17694e32768a9d84500da96f975dcc6913535c413fde29",
+          "NativeUfs/RootLayout.h": "3e25127486a5102cd477fcfabd62366a3b3f02bb12a0b8db2294330a4b233484",
+          "NativeUfs/RootPublication.h": "3c289b44f4d7c082b3f214eda2d4225f53860dd007f4a89402bdc910f268aeda",
+          "NativeUfs/RootQueue.h": "001d06dcc4c3c7073704cffa3105a28d11e3e97985e7fcb49b8cc107216248bf",
+          "NativeUfs/RootTransportLayout.h": "77699362f09e103ceda0d5f216d0be7749cdc1e88c6143ddd15ceb11dfd42e91",
+          "NativeUfs/RootWindowRead.h": "e8d98556290cf540204227f863b043eb09996bb87d38e1d6894b83b351c8d112",
+          "NativeUfs/SmmuTakeover.h": "54868bf0745ee6093627e73ba8cec9ac3c574446955c359463507d0f122f90a8",
+          "NativeUfs/TransferPoll.h": "742df51cdce6d06df6bf93294176f01305c9d1359c8ffdfb99daff7b76a1ece3",
+          "NativeUfs/tests/RootLayout.cpp": "e0fe37d24254847ad26e34c872f02b64a47993e0a8c77eeb0bc35a91841a9fe6",
+          "NativeUfs/tests/RootPublication.cpp": "18090bc6fad3f1de39ecd83bbb23e904a263520c22c89274b76e7e64276a5b2d",
+          "NativeUfs/tests/RootWindowRead.cpp": "93328899af9b256e4f149fab76cfcf3085fa662b0632971f2c642353ff82a1aa",
+          "host_portability_fixture": "b27a72c73ec58dd2bf69840baf91e2757c710f69d38c662e22ccfb161ca56d89"
+        },
+        "local_sources": {
+          "EnumaUfsClock.c": "88da85fa83f2f276374a1b2af4089bd6cbf823823c3aaeec9d2a93d188514d0b",
+          "EnumaUfsClock.h": "64e7b3088536197a294d570fc79f724512e4eef8b4dd7634bb6dc74e83370db3",
+          "EnumaUfsRead.c": "347ea499fea454bb1483f6d0a3cdd0eb8bceb0f60cf7f2d90b7c339ccabb9a9a",
+          "EnumaUfsRead.h": "c1afb2e2fabba3fcaa2922b92aede604166aba02105a73635996a907bddf3003",
+          "EnumaUfsSmmu.c": "9f1b067377369478df5e4479df77017605881c2f963b3ba221c2707d4c2643ba",
+          "EnumaUfsSmmu.h": "f848d10581530c3df45105cb322878585c266288666e502862fedc498659cfa2"
+        },
+        "objects": {
+          "EnumaUfsRead.o": "1fb612be37e37fca1f41d9ff814314f4a3068070f1504b68387f0ed6190a889e",
+          "EnumaUfsSmmu.o": "3ad68f3757ab1d6b73fd63a92ebab1670938779dac03bd6607d2d6bfdb5edf1a"
+        },
+        "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+        "enuma_ufs_reg": [
+          30949376,
+          12288,
+          30998528,
+          32768
+        ],
+        "enuma_smmu_reg": [
+          352321536,
+          1048576,
+          353902592,
+          32
+        ],
+        "ufs_iommus_declared": false,
+        "streams_qualified": false,
+        "umi_test_streams": [
+          "0xe0",
+          "0x4e0"
+        ],
+        "limits": [
+          "no XNU service or hardware MMIO adapter yet",
+          "stream identity not established for enuma",
+          "queue stop and exclusive ownership must be implemented by caller",
+          "no disk writes or partition geometry borrowed"
+        ]
+      },
+      "path": "out/kernel-userland-20261027-2/storage-regression/result.json",
+      "sha256": "a9ef511da8a7188bcbd65afeec95ad8b76beaa765d85d223010842ba0fd55af6"
+    }
+  },
+  "kernel_relinked": false
+}
