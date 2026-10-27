@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "count": 8,
+  "checks": [
+    "oem-control copies exact bytes and binds snapshot-only derivative with stage10",
+    "oem-mmu-only copies exact bytes and binds snapshot-only derivative with stage10",
+    "CLI rejects missing pair before output creation",
+    "CLI rejects pair on old profile before output creation",
+    "CLI rejects direct menu with OEM before output creation",
+    "reject control source before staging or lock mutation",
+    "reject MMU non-patch byte before staging or lock mutation",
+    "reject panel before staging or lock mutation"
+  ],
+  "full_fd_built": false,
+  "source_sha256": {
+    "firmware/Resources/Scripts/enuma_oem_profile.py": "ecf935152d82286f9e407d1db5a291c5ccd29f97d06a7d39d2d527548f684acb",
+    "firmware/Resources/Scripts/build_enuma_development.py": "487aa02e499acc1b5a40343f0014253fc21a882d0e082461ca621de3b17e9976",
+    "scripts/check_oem_build_profiles.py": "9e7a1d84bff4c9871de08bc55df75871b4e4a2ea7125dc0ae713d5a31b4bb7c5"
+  }
+}

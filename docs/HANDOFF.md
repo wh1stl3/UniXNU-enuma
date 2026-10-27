@@ -1,5 +1,7 @@
 # 当前：DisplayDxe离线归因推进，实机暂停
 
+最新：隔离固件072251e已在build_enuma_development.py接入oem-control/oem-mmu-only显式profile及pair参数，按原vendor锁独立核对102文件，仅在导出源码快照派生MMU摘要并复制到构建独占vendor。8项helper/CLI/损坏拒绝检查通过，证据out/oem-build-profile-check-20261027-c999/result.json。沿已有开发快照机制，旧发布构建锁不改；此前“必须更新旧锁”的建议由此取代。两profile仍强制stage10派发前停止，无Core追踪激活。隔离固定依赖未齐，全FD编译/实际FV抽取未运行；原主线及R027不改。
+
 本对话现在仅在D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display写入（从97ef242建立的单个原生Git worktree）。原主线D:/Code/PortingiOS/enuma/UniXNU-enuma留给共享工作区，保持不改。这里已生成两个默认关闭的vendor profile，各102文件且只有精确DisplayDxe不同；8项实际树破坏/身份/输出拒绝检查通过。详见[隔离工作区记录](operations/2026-10-27-oem-display-worktree.md)，最终证据out/oem-profile-check2-20261027-c999/result.json。
 
 尚未接构建器/Core或完成板级出口，未打包/上机。构建锁config/uefi-source.lock.json目前指向8680ea79，固件子模块为11c6cf1；不绕过原适配器，下一步在隔离树审查并建立新的开发锁和默认关闭profile选择。当前profile暂存不是固件构建资格，R027继续冻结。
