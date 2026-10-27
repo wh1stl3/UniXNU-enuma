@@ -72,3 +72,8 @@ wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/pytho
 设备仓9f98d3e/固件fd94b26起点已核验；默认离线入口及2446项源绑定通过，现成image/FD/qualification摘要和未claim状态匹配，R027冻结摘要只读复核通过。无代码修改、重新构建或设备命令，当前设备状态未知，当次手机拍摄/人在场恢复未确认。
 
 两个GitHub分支有界查询及随后显式固件URL非force补推遇连接失败，发布仍未确认；因先固件后设备仓顺序未继续设备仓推送。下一步网络可达后补齐发布及远端核验，再协调本次现场条件，不复用上一轮就绪。证据out/oem-registration-takeover-20261027；最新状态以STATUS/HANDOFF为准。此为准备条件未齐，未发生设备硬停。
+
+
+## 2026-10-27 22:01 v5本次拍照就绪与即时前检
+
+用户“随时准备拍照 可以开始了”放行本次registration-v5精确镜像一次临时启动，沿已有在场长按恢复安排，本次就绪独立记录。网络恢复，固件fd94b26已向显式GitHub URL/oem-progress-20261027正常推送；设备仓本准备提交发布并核验远端后才发图。只读前检确认enuma/Android完成/root/A槽/解锁及原双分区和本地备份摘要通过。trial仍4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e、镜像f9bd10078db5b049e7ad0cd050300c872cdcd1d0d975b6ed3065e4b03dac650d，未claim/启动，runner仍即时复核且只boot一次。证据out/oem-registration-live-20261027/authorization.json、preflight.json、firmware-push.json。R027冻结、共享主线只读，不flash/erase/改槽；75秒无返回先恢复并记录，媒体先独立判读再人工核对。

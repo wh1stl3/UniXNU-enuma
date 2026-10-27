@@ -1604,3 +1604,8 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 从设备仓9f98d3e、固件fd94b26干净状态接续，完整读取prompt及适用规则。默认离线runner通过，2446项源绑定有效；image/FD/qualification摘要与交接相同，v5账本不存在。只读核验共享树R027冻结image/qualification摘要通过。未改源码、重构建、回写历史产物或查询设备；当前设备状态未知，当前手机拍摄/人在场恢复未确认。
 
 有界查询两个GitHub分支失败；显式固件URL向oem-progress-20261027非force补推亦因443连接失败，未向本地origin/main推送，未继续设备仓发布。网络恢复后先固件后设备仓并核验，之后重新协调当次现场条件，单次runner执行即时身份/备份/恢复门禁。当前准备条件未齐，不称设备硬停。源码/资格/试验范围不变；不复活v4或R027。证据out/oem-registration-takeover-20261027/takeover-audit.json、remote-before.json、firmware-publication.json。STATUS/HANDOFF、审查与人工事项已同步；本轮本地文档提交号见git log。
+
+
+## 2026-10-27 22:01 v5本次拍照就绪与即时前检
+
+用户“随时准备拍照 可以开始了”放行本次registration-v5精确镜像一次临时启动，沿已有在场长按恢复安排，本次就绪独立记录。网络恢复，固件fd94b26已向显式GitHub URL/oem-progress-20261027正常推送；设备仓本准备提交发布并核验远端后才发图。只读前检确认enuma/Android完成/root/A槽/解锁及原双分区和本地备份摘要通过。trial仍4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e、镜像f9bd10078db5b049e7ad0cd050300c872cdcd1d0d975b6ed3065e4b03dac650d，未claim/启动，runner仍即时复核且只boot一次。证据out/oem-registration-live-20261027/authorization.json、preflight.json、firmware-push.json。R027冻结、共享主线只读，不flash/erase/改槽；75秒无返回先恢复并记录，媒体先独立判读再人工核对。

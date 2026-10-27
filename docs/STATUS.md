@@ -1,4 +1,4 @@
-# 当前：registration-v5 接续复核通过，发布连接失败（2026-10-27）
+# 当前：registration-v5 本次拍照就绪，单次启动准备（2026-10-27）
 
 已完整读取新会话 prompt，按规则、当前状态、现成固件和资格顺序接手。设备仓起点9f98d3e，固件fd94b265d1b0112c4a60d36a058d7b91efbb250d；接手时两工作树干净。唯一写入根为本隔离工作树，共享UniXNU-enuma只读；R027及旧OEM候选冻结，v4两笔consumed不重试。
 
@@ -8,8 +8,10 @@
 
 本轮默认离线runner通过，2446项来源绑定和镜像匹配；独立核验FD/资格摘要及共享树R027冻结image/qualification摘要均通过。没有修改源码、重建或回写旧资格。构建仍是f82039e基线的工作树快照，不称提交后重编。既有31项Python、ASan/UBSan、真实Core配置表与机器码负测的历史结果保留，本轮未重复宣称重跑。
 
-本轮对两个GitHub分支做有界ls-remote，分别连接重置/443连接失败；随后显式向https://github.com/wh1stl3/uefi-enuma.git的oem-progress-20261027非force补推失败。未向固件origin、本地主线或main推送；因固件发布未确认，未继续设备仓推送。远端状态仍未确认，下一步网络恢复后先固件、后设备仓发布并核验。
+用户最新明确“随时准备拍照 可以开始了”，本次手机拍摄条件已就绪，沿已有在场长按恢复安排执行；不继承上一轮就绪。仅现成v5镜像一次临时boot，未claim/发图。网络已恢复，固件fd94b26向显式GitHub URL的oem-progress-20261027推送成功；设备仓本准备提交发布并独立核验远端后才启动，未通过不发图，不推本地固件origin或main。
 
-本轮没有ADB/fastboot命令或设备动作，当前设备在线/Android状态未知；最后设备事实仍为v4自行回Android且独立核验通过。当前手机拍摄及人在场可长按恢复均未确认，不能继承旧就绪状态。发布确认后，重新取得当次拍摄/在场条件，由单次runner即时核验enuma身份、原备份、槽位、解锁及恢复条件，再执行已有授权范围内一次临时boot。75秒无合格返回停止追加、优先恢复并同轮记录；不flash/erase/改槽，不改内存或verified。当前是准备条件未齐，未发生设备硬停。
+22:01本次只读前检通过：绑定enuma、Android完成、root、A槽、解锁、设备boot_a/vendor_boot_a与本地原备份摘要一致。单次runner在启动前再次核验即时条件；75秒无合格返回停止追加并优先恢复，随后独立核验并记录。手机最多记录E01/S02/E03/S04/S05五窗，每窗8秒；无完整画面不猜值，不以缺页判死锁。媒体先独立判读落盘、展示完整字符串，再请用户核对。不flash/erase/改槽，不改内存或verified；R027及旧v4不执行。
+
+本轮证据新增out/oem-registration-live-20261027/authorization.json、preflight.json、firmware-push.json；先前网络失败记录保留。当前未发图，最后设备状态为本次只读核验Android完成。
 
 证据：out/oem-registration-takeover-20261027/takeover-audit.json、remote-before.json、firmware-publication.json。旧证据与原媒体保持本地。接续入口仍为[registration-v5 prompt](2026-10-27-oem-registration-v5-handoff-prompt.md)，其中上一会话任务范围属于历史；本轮已继续完成接手复核及有界发布尝试。后续软件或执行器修改必须另建资格，不回写qualification3。
