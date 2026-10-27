@@ -1,6 +1,8 @@
+当前增量：输入包导入及28项合成宿主测试通过；已授权独立CI分支推送，待真实macOS构建。详见operations/2026-10-27-driver-input-import-ci.md。
+
 # 交接：继续离线storage/PMGR/RamBlock集成
 
-2026-10-27。用户明确OEM候选继续保留等待，继续离线内核/用户态/桌面开发；暂不上机、不推送。使用D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display，原共享主线只读。R027及OEM镜像17d0169e6bd1…冻结，未boot或消费ledger。
+2026-10-27。用户明确OEM候选继续保留等待，继续离线内核/用户态/桌面开发；暂不上机；用户现已允许独立CI分支推送。使用D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display，原共享主线只读。R027及OEM镜像17d0169e6bd1…冻结，未boot或消费ledger。
 
 前轮已完成：生产RootWindowRead与EnumaUfsRead桥接、ARM64 Mach-O archive、失败返回与校验测试；真实目录型APFS Data seed；带Data的96MiB FAT及真实DarwinBoot解析验证。新证据out/kernel-userland-20261027-2；明细及摘要见[专项](operations/2026-10-27-root-data-offline.md)和reports/enuma-root-data-offline.json。
 

@@ -1,6 +1,8 @@
+当前增量：输入包导入及28项合成宿主测试通过；已授权独立CI分支推送，待真实macOS构建。详见operations/2026-10-27-driver-input-import-ci.md。
+
 # 当前：PMGR静态契约通过，已补XNU编译输入留存路径
 
-2026-10-27。仅独立worktrees/enuma-oem-display可写；共享主线不改，R027冻结，不上机、不推送。按AGENTS引用的官网具体适配规则推进。
+2026-10-27。仅独立worktrees/enuma-oem-display可写；共享主线不改，R027冻结，不上机；用户现已允许独立CI分支推送。按AGENTS引用的官网具体适配规则推进。
 
 ## 本轮增量
 
