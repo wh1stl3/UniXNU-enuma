@@ -70,4 +70,16 @@ class Admission(unittest.TestCase):
             self.q['run_config']['selected_call']=wrong;self.save()
             self.assertRaises(ValueError,validate,self.root,self.out)
 
+    def test_main_entry_budget_and_selection(self):
+        from oem_runtime_candidate import MAIN_SCOPE
+        self.q['scope']=MAIN_SCOPE;self.q['run_config'].update(experiment=MAIN_SCOPE,selected_call=6)
+        self.q['identity']['runtime']=dict(self.q['run_config']);self.q['runtime_limits']=limits_for(MAIN_SCOPE);self.save()
+        validate(self.root,self.out)
+        for bad in (0,5,7,True):
+            self.q['run_config']['selected_call']=bad;self.save()
+            self.assertRaises(ValueError,validate,self.root,self.out)
+        self.q['run_config']['selected_call']=6;self.q['identity']['runtime']=dict(self.q['run_config'])
+        self.q['runtime_limits']['max_windows']=5;self.save()
+        self.assertRaises(ValueError,validate,self.root,self.out)
+
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,55 @@
+{
+  "scope": "oem-main-entry-v6",
+  "run_config": {
+    "trial_id": "cfee120a-a6a4-4b02-bcff-21b1aa82372f",
+    "session": 10505121988310854258,
+    "selected_call": 6,
+    "profile": "oem-control",
+    "experiment": "oem-main-entry-v6"
+  },
+  "image_sha256": "c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d",
+  "fd_sha256": "37126098fc7804af36cfcafe908f17454fbc9757ded55986462461f13caf4fcc",
+  "image_bytes": 3153920,
+  "runtime_limits": {
+    "max_boots": 1,
+    "selected_call": 6,
+    "hold_us": 8000000,
+    "roi": [
+      64,
+      96,
+      320,
+      160
+    ],
+    "observation_seconds": 75,
+    "partition_writes": false,
+    "needs_current_camera_and_manual_recovery": true,
+    "max_windows": 3,
+    "max_total_hold_us": 24000000,
+    "call_selection": "minimum6-and-exact-rva3608"
+  },
+  "progress_phases": {
+    "1": "first main query before (call>=6/RVA3608)",
+    "3": "first SID query before; main query returned",
+    "5": "actual CoreStartImage returned"
+  },
+  "passed": true,
+  "software_ready": true,
+  "hardware_executed": false,
+  "trial_claimed": false,
+  "qualification": "out/oem-main-entry-20261027/qualification2/qualification.json",
+  "qualification_sha256": "7d3575843a9904d4f8b63891aa9143f785cbe934949e1fa868918775daf2e486",
+  "firmware_commit": "d393211b792ff5a219224e62b26ddcaabdf4257e",
+  "build_snapshot_base": "fd94b265d1b0112c4a60d36a058d7b91efbb250d",
+  "source_binding_count": 2452,
+  "runtime_deletion_checks": 32,
+  "main_sync_deletion_checks": 77,
+  "guid_mutation_checks": 2,
+  "host_tests": "42 Python; ASan/UBSan v1-v6 and real Core sync deletion negatives; relocated exact PE and ARM64 board; ARM64 ChipInfo ABI",
+  "evidence_root": "out/oem-main-entry-20261027",
+  "media_ready": false,
+  "root_cause_proven": false,
+  "build_scope": "working-tree snapshot, not post-commit rebuild",
+  "publication_evidence": "out/oem-main-entry-20261027/publication.json",
+  "firmware_publication": "push to explicit GitHub oem-progress-20261027 succeeded",
+  "offline_admission_passed": true
+}

@@ -10,7 +10,7 @@ def main():
         '-I'+str(inc),'-I'+str(inc/'X64'),'-I'+str(ROOT/'firmware/diagnostics'),
         '-I'+str(ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib'),
         '-O1','-fsanitize=address,undefined','-fno-pie','-no-pie']
-    names=['oem_progress','oem_capture_pixel','oem_precall_capture','oem_service_trace','oem_system_table_lifetime','oem_registration']
+    names=['oem_progress','oem_capture_pixel','oem_precall_capture','oem_service_trace','oem_system_table_lifetime','oem_registration','oem_main_entry']
     result=dict(passed=False,commands=commands,hardware_executed=False)
     try:
         for name in names:

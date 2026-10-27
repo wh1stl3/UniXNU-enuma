@@ -1629,3 +1629,10 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 本轮精确PE反汇编另存新out路径。0x1470 BL 0x6ffc，0x7014尾跳0x5b64进入本注册函数；0x5cc8把x0置零，0x5ccc..5cdc恢复寄存器并RET，返回0x1474处的构造结果检查。它不是先前0x1350调用的0x5b60（该处尾跳0x5a84分配注册表）。之后才经入口后续调用走向0x1508→0x16e8；主入口在SID之前还含内存清理及0x17e0的BootServices+80间接调用，故不能把安装后至SID概括为“只剩一条SID调用”。静态路径不等于这些地址已实机执行。
 
 下一诊断应减少/隔离返回页自身影响并保留真实服务状态与后续到达证据，或提供独立的窗口收尾/出口拒绝区分；不能再用“最后可见服务内部挂住”解释本笔。本轮未生成新候选或追加设备，v5已consumed，R027冻结；新scope/输入仍须完整构建、失败/机器码及来源资格、当次现场与恢复门禁。结果reports/enuma-oem-registration-v5-media-confirmed.json；原pending转录/runner/初次结果字节保留。
+
+
+## 2026-10-27 main-entry-v6离线编译与启动链定位
+
+按用户要求编出新镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d（3153920字节），FD 37126098fc7804af36cfcafe908f17454fbc9757ded55986462461f13caf4fcc，最终qualification2 7d3575843a9904d4f8b63891aa9143f785cbe934949e1fa868918775daf2e486。固件d393211，fd94b26基线工作树快照；trial cfee120a-a6a4-4b02-bcff-21b1aa82372f未claim/上机。取消注册窗与服务返回绘制，主入口ChipInfo精确RVA3608/GUID、SID入口及真实Core返回最多三窗24秒Hold；不伪造返回或跳过原厂初始化。32+77删除/2 GUID变异负测、42 Python、ASan/UBSan真实Core负测、ARM64 ABI/绑定、完整FD及Boot header v3回读通过，2452项默认离线绑定通过。固件已正常推送指定GitHub分支，设备仓发布见publication.json。
+
+实际代码定位至ChipInfo GetChipFamily(+48)、条件协议方法及事件注册等SID前竞争位置，优先隔离返回窗收尾/出口；不称唯一根因。缩短诊断Hold是实际代码改动，不当作实测OEM/BDS/XNU成功。共享主线只读、R027及v5冻结摘要不变，本轮无设备命令。详情docs/operations/2026-10-27-oem-main-entry-v6.md、reports/enuma-oem-main-entry-v6-candidate.json、out/oem-main-entry-20261027。当前无人工/恢复欠项，未来新试验重做现场条件。

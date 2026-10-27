@@ -39,4 +39,12 @@ class Pages(unittest.TestCase):
             self.assertRaises(ValueError,decode,page.replace('5cc8','5cc4'),123,'oem-registration-v5')
             self.assertRaises(ValueError,decode,page,123,'oem-post-kernel-v4')
 
+    def test_main_entry_scope(self):
+        page=self.page(1).replace('C'+f'{7:016x}','C'+f'{6:016x}').replace('O'+f'{0x1bce0:016x}','O'+f'{0x3608:016x}')
+        self.assertEqual(decode(page,123,'oem-main-entry-v6')['event'],'main-query-before')
+        self.assertEqual(decode(page.replace('C0000000000000006','C0000000000000007'),123,'oem-main-entry-v6')['call'],7)
+        for bad in [page.replace('3608','3604'),page.replace('C0000000000000006','C0000000000000005'),self.page(2),self.page(4)]:
+            self.assertRaises(ValueError,decode,bad,123,'oem-main-entry-v6')
+        self.assertEqual(decode(self.page(5),123,'oem-main-entry-v6')['event'],'core-start-image-return')
+
 if __name__=='__main__':unittest.main()

@@ -1,3 +1,5 @@
+> 当前候选：[main-entry-v6](operations/2026-10-27-oem-main-entry-v6.md)，完整镜像/资格完成，未claim/上机。当前状态见STATUS/HANDOFF；旧v5已消费。
+
 # 当前文档入口（2026-10-27）
 
 - [新会话接续prompt](2026-10-27-oem-registration-v5-handoff-prompt.md)：工作区、候选、提交、完整字符串与下一步。

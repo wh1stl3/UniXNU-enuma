@@ -1,3 +1,5 @@
+> 2026-10-27已由后续main-entry-v6推进取代当前候选入口。v5已经消费且真实安装返回已确认；最新候选/资格/卡点/边界请先读STATUS、HANDOFF和operations/2026-10-27-oem-main-entry-v6.md。以下为保留的v5交接历史，不能据其未claim/录像状态启动。
+
 # 接续 enuma OEM DisplayDxe：registration-v5 已编出，尚未上机
 
 继续现有成果，不从零重做。首先阅读并遵守以下文件，核对 git status/log 后再行动。

@@ -1,17 +1,19 @@
-# 当前：registration-v5 已单次消费，自行回 Android，两页日志已人工确认（2026-10-27）
+# 当前：main-entry-v6 完整镜像与离线资格完成（2026-10-27）
 
-按用户“随时准备拍照 可以开始了”的本次条件执行，未复用旧录像状态。固件fd94b26及设备仓准备提交c878c8d已正常发布至各自GitHub的oem-progress-20261027，执行前ls-remote核验精确提交匹配；未向固件本地origin或main推送。即时enuma/Android完成/root/A槽/解锁、原boot_a/vendor_boot_a及本地备份摘要通过后，仅一次临时fastboot boot。
+本轮按用户要求推进至新镜像，未查询/操作设备。v5两页与现场仅两组已确认，真实InstallConfigurationTable返回EFI_SUCCESS；用户无操作自行回Android且恢复独立核验通过。v5 consumed不重试；R027和旧产物冻结，共享主线只读。
 
-registration-v5 trial 4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e已claim/consumed；镜像out/oem-registration-20261027/qualification3/image.img，3153920字节，SHA256 f9bd10078db5b049e7ad0cd050300c872cdcd1d0d975b6ed3065e4b03dac650d。fastboot boot返回0，传输调用0.394秒；观察到fastboot断开后绑定enuma Android完成。用户明确“没有操作，设备自行返回”。22:05独立核验enuma、boot_completed=1、root、A槽、解锁及原双分区/本地备份摘要全部通过。没有追加启动、flash/erase/改槽。无需恢复按键；当前没有设备硬停。
+新候选scope oem-main-entry-v6，镜像out/oem-main-entry-20261027/qualification2/image.img，3153920字节；SHA256 c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d。完整FD SHA256 37126098fc7804af36cfcafe908f17454fbc9757ded55986462461f13caf4fcc，位于out/oem-main-entry-20261027/build2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。qualification.json SHA256 7d3575843a9904d4f8b63891aa9143f785cbe934949e1fa868918775daf2e486。trial cfee120a-a6a4-4b02-bcff-21b1aa82372f，session 10505121988310854258，尚未claim/上机。Boot v3指Android镜像头格式；新诊断固件版本是v6，不是v3。
 
-本次两张照片已先独立判读落盘，再经严格解码及session匹配；用户确认完整字符串一致、现场只出现两页。E01/C5/Qa/RVA5cc8及S02/C5/Qb/RVA5cc8/status0，session d0de511b184ace49，证明真实InstallConfigurationTable已经返回EFI_SUCCESS。原厂PE与包装器实际路径复核见operations增量；不能再把“未从安装服务返回”作为本笔解释。
+最大可操作嫌疑仍为S02返回窗口收尾/包装器退出及后续出口拒绝（诊断优先级置信中等、唯一根因低）。精确原厂后段新增定位：0x1760进入0x35c8，0x3604查询ChipInfo、返回RVA3608；查询成功后0x3618调用接口+48 GetChipFamily；其后有条件协议方法及CreateEvent/Ex，SID在更后。它们都可能在SID前阻断，未将任何一处认定实机根因。解决方向与推翻条件见[main-entry-v6分析](operations/2026-10-27-oem-main-entry-v6.md)。
 
-当前最优先隔离的是S02窗口收尾/包装器退出及后续输出准入（诊断优先级置信中等、唯一根因低）；S02可见先于窗口恢复/读回完成，失败可直接复位。因此未证明已回原厂0x5cc8、SID或CoreStartImage返回，也不排除原厂后段或未包装调用执行后出口拒绝。下一软件须区分这些解释，不能只把取证点后移并凭缺页宣称死锁；当前没有新候选或追加启动。
+v6取消注册区间两窗与所有服务返回侧绘制，不更改原厂PE、服务指针/状态或GetChipFamily方法。只绘制E01（ChipInfo查询前，实际call>=6、精确RVA3608/GUID）、E03（SID查询前，主查询真实返回已记录）及S05（真实CoreStartImage返回和状态）。selected_call=6为最小序号，实际选择依精确RVA/GUID，不假定固定序号。板级拒绝其他phase/超过三窗；ROI(64,96)320×160，每窗8秒，最多Hold24秒，较v5预算少16秒，不称实测启动提速。无页/缺页仍可能是出口问题；E01不证明原始查询执行，E03不证明SID原始服务完成。
 
-原始媒体唯一当前收集目录：D:/Code/PortingiOS/enuma/Media-enuma/OEM-registration-v5-20261027-4549e5e6。先前误建的out/device-tests/.../media为空且不使用；用户已明确纠正至Media-enuma。本轮两张原图独立判读、摘要、严格解码及人工核对均已完成。媒体/out/备份/标识及二进制不上Git或云端。
+完整FD、原厂模块/RAW/编译产物审计及Boot header v3打包/解包回读通过；42项Python（含模拟传输）、check2 ASan/UBSan与真实Core配置表删除负测、path2精确PE和AArch64 ChipInfo ABI、binding3重定位/错PE拒绝及AArch64板级通过。最终机器码32处运行路径+77处主入口/转发/同步删除及2处GUID变异均拒绝。默认离线runner及2452项来源绑定通过。binding2旧夹具的固定序号停止假设失败已保留，修正测试语义后binding3通过，未为测试伪造运行逻辑。
 
-本次结果reports/enuma-oem-registration-v5-trial-20261027.json；证据out/device-tests/oem-4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e和out/oem-registration-live-20261027（authorization、publication、preflight、postcheck、human-return-confirmation）。原始runner状态保留pending-user-confirmation快照，独立human-return-confirmation关闭按键事实待办，不回写历史字节。
+固件提交d393211，已向显式GitHub URL/oem-progress-20261027正常推送；设备仓源码/文档发布以out/oem-main-entry-20261027/publication.json及git远端为准，不推固件本地origin/main。构建为fd94b26基线的工作树快照，保留manifest，不称提交后重编。qualification1保留旧绑定；最终qualification2绑定新的当前重定位/板级证据，FD/image字节相同。build1为改进选择方式在完整编译前中止，build2完整通过，历史输出不删除。
 
-共享主线只读，R027及旧候选冻结；本次v5不重试。现成FD/qualification摘要保持，2446项源绑定已核验，无源码修改或重新构建；仍是f82039e基线工作树快照。下一步按已确认媒体及精确PE归因，优先隔离第二窗收尾/后续出口并设计独立新软件；新输入必须新资格，不复用本次账本。生产GOP、ConOut、BDS、实体输入和XNU仍未验收。
+启动链按真实OEM返回→生产GOP模式/几何/显示所有权→ConOut/正常BDS/配置发现和输入→DarwinBoot/EBS→XNU推进。当前仍是目标OEM驱动后的诊断终止镜像，未验收生产GOP/ConOut/BDS/实体输入或XNU；临时菜单不替代OEM成功。官网显示/日志章节本轮在线重读成功，未升级固定依赖或复制其他设备参数。
 
-新增确认报告reports/enuma-oem-registration-v5-media-confirmed.json；证据out/oem-registration-live-20261027/media-review。先前pending报告和独立初读保持原字节，human-confirmation单独闭合人工事项。
+当前没有恢复/媒体判读欠项，也没有当前v6拍摄/在场恢复确认；不复用v5就绪。本轮最后设备证据仍是v5 Android恢复，本轮未重新观测。未来实测先核对当前发布、精确新单次绑定、即时身份/原备份/恢复与当次手机拍摄；75秒无合格返回停止追加、先恢复并同轮记录。不flash/erase/改槽，不改内存base/size或verified。
+
+总报告reports/enuma-oem-main-entry-v6-candidate.json；证据out/oem-main-entry-20261027。R027/v5冻结image/qualification摘要复核一致，旧原图和out二进制仅本地保留。

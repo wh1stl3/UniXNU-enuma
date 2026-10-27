@@ -82,8 +82,16 @@ int main(int argc,char **argv){
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_ALREADY_STARTED);
   if(ENUMA_OEM_RUNTIME){
     for(UINTN I=0;I<ENUMA_PROGRESS_CALL;I++){assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,256,NULL)==EFI_OUT_OF_RESOURCES);}
-    if(setjmp(StopJump)==0){mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL);assert(0);}
-    assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL&&mOemCoreCapture.State!=EnumaCaptureExported);
+    if(ENUMA_OEM_MAIN_ENTRY){
+      EFI_GUID Main={0xb0760469,0x970c,0x487a,{0xa4,0xb5,0x28,0xdb,0x7b,0x45,0xce,0xf1}};
+      assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL)==EFI_OUT_OF_RESOURCES);
+      assert(!Stops); // unrelated calls must not trigger the old ordinal-only stop
+      if(setjmp(StopJump)==0){EnumaTraceLocateProtocolAt((UINTN)Image+0x3608,&Main,NULL,NULL);assert(0);}
+      assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL+1);
+    }else{
+      if(setjmp(StopJump)==0){mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL);assert(0);}
+      assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL&&mOemCoreCapture.State!=EnumaCaptureExported);
+    }
   }
   free(Image);puts("PASS: relocation normalization, corrupt code/relocation, entry/size, nested handle, loaded pointer, no retry, CRC failure, private table and armed capture");return 0;
 }

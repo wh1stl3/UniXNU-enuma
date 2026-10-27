@@ -1,4 +1,4 @@
-> **2026-10-27 当前入口：** [新会话prompt](docs/2026-10-27-oem-registration-v5-handoff-prompt.md)、[STATUS](docs/STATUS.md)、[HANDOFF](docs/HANDOFF.md)。registration-v5完整固件与离线资格已完成，尚未上机；v4手机两组日志已确认。唯一写入根为独立enuma-oem-display工作树，R027冻结，共享主线只读。新提交远端发布未确认。
+> **2026-10-27 当前入口：** [STATUS](docs/STATUS.md)、[HANDOFF](docs/HANDOFF.md)、[main-entry-v6分析与镜像](docs/operations/2026-10-27-oem-main-entry-v6.md)。新v6完整固件/Boot header v3镜像与离线资格已完成，未上机；v5两页确认真实配置安装返回EFI_SUCCESS，已consumed并恢复Android。共享主线只读、R027冻结，本轮不继承旧拍摄就绪。
 >
 > 以下按历史记录阅读，不以旧“当前”段落覆盖上述入口。
 

@@ -11,16 +11,30 @@ from oem_runtime_candidate import limits_for
 def main():
     p=argparse.ArgumentParser();p.add_argument('--build',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--progress-check',type=Path)
+    p.add_argument('--main-path-check',type=Path)
+    p.add_argument('--binding-check',type=Path)
     a=p.parse_args();build=a.build.resolve();out=a.output.resolve();out.relative_to(ROOT/'out');out.mkdir(parents=True,exist_ok=False)
     base,pe=audit(build,runtime=True);b=json.loads((build/'build-result.json').read_text());config=b['oem_run_config']
-    progress=config['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5')
+    main_path=None;binding_check=None
+    if config['experiment']=='oem-main-entry-v6':
+        if not a.binding_check:raise ValueError('current relocated PE and board binding check required')
+        binding_check=json.loads(a.binding_check.read_text())
+        if binding_check.get('passed') is not True or binding_check['profiles']['oem-control']['identity']['runtime']!=config:raise ValueError('binding result differs')
+        for name,h in binding_check['source_sha256'].items():
+            if sha((ROOT/name).read_bytes())!=h:raise ValueError('binding source changed: '+name)
+        if not a.main_path_check:raise ValueError('exact main path and ABI check required')
+        main_path=json.loads(a.main_path_check.read_text())
+        if main_path.get('passed') is not True or main_path.get('pe_sha256')!=sha(pe):raise ValueError('main path differs')
+        for name,h in main_path['sources'].items():
+            if sha((ROOT/name).read_bytes())!=h:raise ValueError('main path source changed: '+name)
+    progress=config['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6')
     if progress:
         if not a.progress_check:raise ValueError('progress failure tests required')
         tests=json.loads(a.progress_check.read_text())
         if tests.get('passed') is not True:raise ValueError('progress tests failed')
         for name,h in tests['sources'].items():
             if sha((ROOT/name).read_bytes())!=h:raise ValueError('progress tests stale: '+name)
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6'):
         actual=build/'work/Mu_Basecore/MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         tested=a.progress_check.parent/'MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         # The build backend reverses Core patches after compilation. Reconstruct
@@ -42,7 +56,7 @@ def main():
     core=(product/'DxeCore.efi').read_bytes();mapping=(product/'DxeCore.map').read_text()
     runtime_code=verify_with_deletions(core,mapping,progress)
     early_code=None
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6'):
         from check_oem_early_code import verify as verify_early
         early_code=verify_early(core,mapping,config['experiment'])
     cpus=list((build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64').rglob('OUTPUT/ArmCpuDxe.efi'))
@@ -79,8 +93,9 @@ def main():
              'scripts/check_oem_runtime_code.py','scripts/check_oem_entry_failure_code.py','scripts/enuma_paths.py']
     sources+=['firmware/'+n for n in json.loads((build/'source-manifest.json').read_text())['original_files']]
     if progress:sources+=['scripts/check_oem_progress.py','scripts/decode_oem_progress_page.py','tests/oem_progress.c','tests/oem_capture_pixel.c','tests/test_oem_progress_page.py']
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):sources+=['scripts/check_oem_early_code.py']
-    if config['experiment']=='oem-registration-v5':sources+=['tests/test_oem_runtime_return.py','tests/test_oem_runtime_candidate.py']
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6'):sources+=['scripts/check_oem_early_code.py']
+    if config['experiment'] in ('oem-registration-v5','oem-main-entry-v6'):sources+=['tests/test_oem_runtime_return.py','tests/test_oem_runtime_candidate.py']
+    if config['experiment']=='oem-main-entry-v6':sources+=['scripts/check_oem_main_code.py','scripts/check_oem_main_path.py']+list(main_path['sources'])+list(binding_check['source_sha256'])+['scripts/check_oem_core_binding.py']
     if progress:sources+=list(tests['sources'])
     bindings={n:sha((ROOT/n).read_bytes()) for n in sources}
     result=dict(passed=True,software_ready=True,hardware_executed=False,scope=config['experiment'],run_config=config,
@@ -92,6 +107,7 @@ def main():
                 limitations=['pre-forward entry is not proof original service ran','no automatic recovery guarantee for OEM hang',
                              'local interrupt masking does not prove exclusion of AP or external DMA','no GOP/BDS/input acceptance'])
     if early_code:result['early_code']=early_code
+    if main_path:result['main_path']=main_path;result['binding_check_sha256']=sha(a.binding_check.read_bytes())
     if progress:
         result['progress_tests_sha256']=sha(a.progress_check.read_bytes())
         result['progress_phases']={1:'first service before',2:'first service returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
@@ -101,10 +117,12 @@ def main():
             result['progress_phases']={1:'target configuration registration before',2:'target configuration registration returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
         if config['experiment']=='oem-post-kernel-v4':
             result['progress_phases']={1:'call4 before',2:'call4 returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
+        if config['experiment']=='oem-main-entry-v6':
+            result['progress_phases']={1:'first main query before (call>=6/RVA3608)',3:'first SID query before; main query returned',5:'actual CoreStartImage returned'}
         result['limitations']+=['no export if OEM hangs before the selected wrapped service',
             'SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause',
             'each window requires inherited route still valid; refusal after OEM display changes is not OEM failure',
-            'five observations perturb timing; no independent watchdog or durable RAM recovery',
+            ('three entry/Core observations, no service-return drawing; no independent watchdog or durable RAM recovery' if config['experiment']=='oem-main-entry-v6' else 'five observations perturb timing; no independent watchdog or durable RAM recovery'),
             'phase5 Q is next trace sequence, not a synthetic service event']
     (out/'qualification.json').write_text(json.dumps(result,indent=2)+'\n');print('PASS: runtime software qualification and Boot v3 packaging')
 if __name__=='__main__':main()

@@ -3,15 +3,17 @@ import argparse,json,re
 from pathlib import Path
 NAMES={1:'first-service-before',2:'first-service-return',3:'sid-locate-before',4:'sid-locate-return',5:'core-start-image-return'}
 def decode(text,session,experiment='oem-progress-v2'):
-    if experiment not in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):raise ValueError('unknown experiment')
+    if experiment not in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6'):raise ValueError('unknown experiment')
     names=NAMES if experiment=='oem-progress-v2' else {1:'call1-before',2:'call1-return',3:'kernel-locate-before',4:'kernel-locate-return',5:'core-start-image-return'}
     if experiment=='oem-post-kernel-v4':names={1:'call4-before',2:'call4-return',3:'sid-locate-before',4:'sid-locate-return',5:'core-start-image-return'}
     if experiment=='oem-registration-v5':names={1:'registration-before',2:'registration-return',3:'sid-locate-before',4:'sid-locate-return',5:'core-start-image-return'}
+    if experiment=='oem-main-entry-v6':names={1:'main-query-before',3:'sid-locate-before',5:'core-start-image-return'}
     rows=text.splitlines()
     if len(rows)!=5 or any(len(r)!=20 for r in rows):raise ValueError('five exact 20-character rows required')
     m=re.fullmatch(r'([ES])0([1-5])(C[0-9a-f]{16}| {17})',rows[0])
     if not m:raise ValueError('bad phase row')
     phase=int(m[2]);returned=phase in (2,4,5)
+    if experiment=='oem-main-entry-v6' and (phase not in (1,3,5) or (phase==1 and (m[3]==' '*17 or int(m[3][1:],16)<6))):raise ValueError('main-entry phase or call differs')
     if experiment=='oem-early-v3' and phase in (1,2) and m[3]!='C'+f'{1:016x}':raise ValueError('early experiment requires call1')
     if experiment=='oem-post-kernel-v4' and phase in (1,2) and m[3]!='C'+f'{4:016x}':raise ValueError('post-kernel experiment requires call4')
     if experiment=='oem-registration-v5' and phase in (1,2) and m[3]!='C'+f'{5:016x}':raise ValueError('registration requires call5')
@@ -25,6 +27,7 @@ def decode(text,session,experiment='oem-progress-v2'):
     rva=None if phase==5 else value(rows[2],'O')
     if phase==5 and rows[2]!=' '*20:raise ValueError('driver return has no service caller RVA')
     if experiment=='oem-registration-v5' and phase in (1,2) and rva!=0x5cc8:raise ValueError('registration caller differs')
+    if experiment=='oem-main-entry-v6' and phase==1 and rva!=0x3608:raise ValueError('main query caller differs')
     status=value(rows[3],'S') if returned else None
     if not returned and rows[3]!='E'+' '*19:raise ValueError('entry cannot have status')
     return dict(phase=phase,event=names[phase],experiment=experiment,session=hex(token),sequence=seq,
@@ -32,6 +35,6 @@ def decode(text,session,experiment='oem-progress-v2'):
                 returned=returned,status=None if status is None else hex(status),
                 scope='transcribed screen observation only; entry is not execution completion; no GOP or BDS claim')
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('page',type=Path);p.add_argument('--session',required=True,type=lambda x:int(x,0));p.add_argument('--experiment',choices=('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5'),required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('page',type=Path);p.add_argument('--session',required=True,type=lambda x:int(x,0));p.add_argument('--experiment',choices=('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6'),required=True);a=p.parse_args()
     print(json.dumps(decode(a.page.read_text(),a.session,a.experiment),indent=2))
 if __name__=='__main__':main()
