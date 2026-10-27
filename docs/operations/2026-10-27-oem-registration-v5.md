@@ -42,3 +42,8 @@ call0..4不画窗口。E01/S02为目标安装前/真实返回，严格要求call
 固件提交fd94b26；构建是以f82039e为基线的工作树快照，保留manifest，不称提交后重编。脱敏报告reports/enuma-oem-registration-candidate.json。尚未确认本轮远端发布；最后设备状态沿上一笔Android恢复核验，本轮没有重新观测。下一实测须完成当前文档发布及即时身份/备份、当次手机拍摄与人工恢复条件；本轮任务到编出新固件，不追加实机。原始媒体仅本地，无新内存base/size、verified或分区范围变更。
 
 最终资格为qualification3：仅清理宿主测试文件尾部空行后重新绑定，FD/image字节与qualification2完全相同；WSL 31项重验通过。固件推送无进展后有界中止，远端发布尚未确认；没有设备动作。
+
+
+## 2026-10-27 registration-v5完整文档交接
+
+用户因会话变慢要求全部文档落地、本地提交和新prompt。本轮仅文档与只读产物核验：image/FD/qualification SHA256匹配、v5账本不存在；证据out/oem-registration-20261027/handoff-audit.json。源码fd94b26、设备仓a68983a/0dd5db3已提交；当前文档、README/索引、旧prompt替代标记、审查及人工事项和最新授权同步完成，新prompt为docs/2026-10-27-oem-registration-v5-handoff-prompt.md。未上机、未重构建、未重试消费候选、未改共享主线，远端发布仍未确认。交接提交号见后续git log与回复，不写自引用。

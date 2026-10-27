@@ -1,3 +1,7 @@
+> 已由 [registration-v5新会话prompt](2026-10-27-oem-registration-v5-handoff-prompt.md) 取代。当前候选已接线、构建并资格完成，v4两组照片已确认；后文“不推送/未接线/旧待办”仅为历史背景，不作为当前操作指令。先读新prompt和STATUS/HANDOFF。
+
+## 历史接续正文
+
 当前更新（2026-10-27）：独立工作区OEM运行版已完成qualification-3，用户已授权补齐后部署，只差当前录像/人工恢复准备。先读本工作区docs/STATUS.md及operations/2026-10-27-oem-runtime-deployment.md；下方旧交接是历史背景。R027继续冻结，不推送，共享主线不改。
 
 最新接续：Core追踪/板级适配器双FD已编出；先读本worktree docs/STATUS.md 和 docs/operations/2026-10-27-oem-core-trace-firmware.md。仍stage10停止、未上机。以下早期prompt仅供背景。

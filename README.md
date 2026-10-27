@@ -1,3 +1,7 @@
+> **2026-10-27 当前入口：** [新会话prompt](docs/2026-10-27-oem-registration-v5-handoff-prompt.md)、[STATUS](docs/STATUS.md)、[HANDOFF](docs/HANDOFF.md)。registration-v5完整固件与离线资格已完成，尚未上机；v4手机两组日志已确认。唯一写入根为独立enuma-oem-display工作树，R027冻结，共享主线只读。新提交远端发布未确认。
+>
+> 以下按历史记录阅读，不以旧“当前”段落覆盖上述入口。
+
 > **D-323 当前入口：** [交接](docs/HANDOFF.md)、[DisplayDxe 接续 prompt](docs/2026-10-27-displaydxe-handoff-prompt.md)。实机暂停；追踪组件离线验证通过，尚未接入原厂驱动。以下旧进度按历史阅读。
 
 # UniXNU-enuma

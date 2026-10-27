@@ -8,10 +8,15 @@
 
 新scope oem-registration-v5，trial 4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e，尚未claim或上机。只在此scope包装原厂返回地址0x5cc8的InstallConfigurationTable，其他配置表调用原样转发、不占追踪序号。call0..4不画窗；E01/S02=call5配置安装前/真实返回，E03/S04=SID前/后，S05=真实CoreStartImage返回。原厂DisplayDxe不改，私有SystemTable同步修复保留；ROI(64,96)320×160/每窗8秒/最多五窗40秒保持。
 
-完整FD、原厂模块审计、Boot v3打包/解包回读通过。31项WSL Python、check3 ASan/UBSan与真实Core扩容/通知及两处删除负测、binding1精确PE重定位/错PE拒绝和AArch64板级对象通过；最终机器码32处原运行路径+52处同步/选择/注册删除负测及一处GUID变异均拒绝。qualification1保留其旧分支布局检查失败，qualification2按实际新增指令审查后通过，未为满足检查重写FD。
+完整FD、原厂模块审计、Boot v3打包/解包回读通过。31项WSL Python、check3 ASan/UBSan与真实Core扩容/通知及两处删除负测、binding1精确PE重定位/错PE拒绝和AArch64板级对象通过；最终机器码32处原运行路径+52处同步/选择/注册删除负测及一处GUID变异均拒绝。qualification1保留其旧分支布局检查失败，qualification2按实际新增指令审查后通过；qualification3为清理宿主测试末尾空行后的最终绑定，FD/image字节不变。
 
 执行器已修复只等fastboot：观察断开后也接受绑定enuma Android完成，并完整核验root/槽/解锁/双分区摘要；直接返回、错误身份、fastboot残留模拟验证均只boot一次且无分区操作。ADB终点不推断用户是否按键，人工恢复事实继续按现场反馈记录。
 
 固件提交fd94b26；构建是以f82039e为基线的工作树快照，保留manifest，不称提交后重编。脱敏报告reports/enuma-oem-registration-candidate.json。尚未确认本轮远端发布；最后设备状态沿上一笔Android恢复核验，本轮没有重新观测。下一实测须完成当前文档发布及即时身份/备份、当次手机拍摄与人工恢复条件；本轮任务到编出新固件，不追加实机。原始媒体仅本地，无新内存base/size、verified或分区范围变更。
 
-最终资格为qualification3：仅清理宿主测试文件尾部空行后重新绑定，FD/image字节与qualification2完全相同；WSL 31项重验通过。固件推送无进展后有界中止，远端发布尚未确认；没有设备动作。
+
+## 新会话接手与提交状态
+
+用户本轮要求落地全部文档、本地提交并换会话。[新会话接续 prompt](2026-10-27-oem-registration-v5-handoff-prompt.md)是新会话直接入口，包含完整字符串、精确候选、执行器、恢复与发布边界。旧DisplayDxe prompt仅历史参考。源码已提交：固件fd94b26；设备仓功能a68983a、最终资格0dd5db3，本文档交接提交以git log为准。固件及设备仓新提交远端均未确认，不能称已发布；本轮不消耗新试验。
+
+本次交接重新核验image/FD/qualification摘要和v5账本不存在，通过；本地证据out/oem-registration-20261027/handoff-audit.json。无源码改动、无重新构建、无设备查询或操作。新会话优先复核现成候选，不从头重做。需要继续实测时，先满足当前发布及即时设备/备份、当次手机拍摄和人工恢复条件。
