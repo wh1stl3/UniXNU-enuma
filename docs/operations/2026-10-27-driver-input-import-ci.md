@@ -10,3 +10,9 @@
 下载首次真实编译记录后发现-fsanitize-ignorelist也是必要文件输入，新增采集及路径重定位、缺失拒绝测试，合计32项通过。取消运行中的40477102284，改用同时含搜索目录缺席与sanitizer输入修复的新提交构建；取消不记构建失败或通过。
 
 运行40477385983构建及导出成功，2259文件，内核59294b35a21566151f48b9fb7527769ed4e0a89497f2be5bd64af4c4fc3f1ee9；下载后验收拒绝：upload-artifact默认省略tree/.cache。仅对out/ci/macos/evidence启用include-hidden-files，保留实际源相对路径，不放宽摘要验收。该运行不能称可用输入包。
+
+## 最终结果
+
+平台40478893674成功，源码cdfb7ae；下载包本地导入通过：2259文件、2份真实编译记录、同次内核和manifest摘要绑定。内核be17abfc29241d95e40d2b7e568e84d84ab0922a03e0cf734d1757cbbec51ba7；manifest 0e590eb6835999a681f6ff98847cc10fb4b5ea67c187fa019a2b420ae1728929。报告reports/enuma-driver-input-ci.json；原始及导入证据位于本CI worktree out/ci-runs/40478893674。32项宿主测试通过。
+
+IOPMGR.h、IOService.h及生成meta_features已取得；同名IOBlockStorageDevice.h在IOKitUser，不是NativeUfs/NativeRamBlock所需IOKit/storage接口。下一步为匹配storage接口/私有ABI、真实IOKit provider及初始化链接。没有执行新驱动编译命令、挂载Data、启动用户态或桌面。R027冻结，OEM候选17d0169e6bd1不变，未上机。
