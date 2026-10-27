@@ -20,7 +20,7 @@ def export_inputs(source, destination, kernel, records, expected, sdk):
         raise ValueError('evidence must be outside source tree')
     if not sdk.is_dir():raise ValueError('SDK directory missing')
     destination.mkdir(parents=True,exist_ok=False)
-    files={};captured=[];external=[]
+    files={};captured=[];external=[];absent=[]
     def headers(directory, ancestors=()):
         real=directory.resolve(strict=True)
         if not real.is_relative_to(source) or real.is_relative_to(sdk):raise ValueError('include directory escapes source')
@@ -68,8 +68,18 @@ def export_inputs(source, destination, kernel, records, expected, sdk):
                 if arg.startswith(prefix) and len(arg)>len(prefix) and not arg.startswith(prefix+'='):
                     paths.append((prefix,absolute(arg[len(prefix):])))
             if arg.startswith(('-isystem=','--sysroot=')):paths.append((arg.split('=')[0],absolute(arg.split('=',1)[1])))
+            if arg.startswith('-fsanitize-ignorelist='):
+                paths.append(('-fsanitize-ignorelist',absolute(arg.split('=',1)[1])))
             i+=1
         for flag,path in paths:
+            if not path.exists() and flag in {'-I','-isystem','-iquote','-F','-iframework'}:
+                lexical=Path(os.path.abspath(path))
+                if not lexical.is_relative_to(source) or not lexical.resolve().is_relative_to(source):
+                    raise ValueError('absent include escapes source')
+                if any(p.is_symlink() for p in (lexical,*lexical.parents)):
+                    raise ValueError('absent include traverses symlink')
+                absent.append(dict(flag=flag,path=lexical.relative_to(source).as_posix()))
+                continue
             resolved=path.resolve(strict=True)
             if resolved.is_relative_to(sdk):
                 external.append(dict(kind='SDK',flag=flag,path=str(path)));continue
@@ -82,7 +92,7 @@ def export_inputs(source, destination, kernel, records, expected, sdk):
     for relative,digest in files.items():
         if sha(source/relative)!=digest:raise ValueError('source changed during export')
     manifest=dict(schema=1,kernel_sha256=sha(kernel),source_root=str(source),sdk_root=str(sdk),
-                  files=files,compile_records=captured,external_inputs=external,
+                  files=files,compile_records=captured,external_inputs=external,absent_include_paths=absent,
                   complete_without_sdk=False,private_storage_abi_qualified=False,
                   scope='captured real compile records and explicit source/generated include inputs; SDK/toolchain required separately')
     (destination/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

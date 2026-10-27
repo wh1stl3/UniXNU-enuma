@@ -1,17 +1,9 @@
-当前增量：输入包导入及28项合成宿主测试通过；已授权独立CI分支推送，待真实macOS构建。详见operations/2026-10-27-driver-input-import-ci.md。
+# 交接：从已验收真实输入继续 storage/PMGR 服务集成
 
-# 交接：继续离线storage/PMGR/RamBlock集成
+2026-10-27。用户允许推送，暂不上机；R027冻结，OEM候选17d0169e6bd1继续等待。共享D:/Code/PortingiOS/enuma/UniXNU-enuma只读。
 
-2026-10-27。用户明确OEM候选继续保留等待，继续离线内核/用户态/桌面开发；暂不上机；用户现已允许独立CI分支推送。使用D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display，原共享主线只读。R027及OEM镜像17d0169e6bd1…冻结，未boot或消费ledger。
-
-前轮已完成：生产RootWindowRead与EnumaUfsRead桥接、ARM64 Mach-O archive、失败返回与校验测试；真实目录型APFS Data seed；带Data的96MiB FAT及真实DarwinBoot解析验证。新证据out/kernel-userland-20261027-2；明细及摘要见[专项](operations/2026-10-27-root-data-offline.md)和reports/enuma-root-data-offline.json。
-
-上轮新增EnumaRamDisk易失Data后端及iOS17 ARM64归档f9f357d0…；完整512MiB读回、23处实际导入分配失败、预算/短写/并发停止验证通过。详见[后端集成边界](operations/2026-10-27-volatile-data-backend.md)，证据out/kernel-userland-20261027-3/ram2。下一节点为匹配的XNU生成头/编译记录、storage/PMGR ABI及真实IOKit服务接线。
-
-本轮确认CI未留实际编译记录/生成头，已接入driver_inputs导出与14项负测；尚未运行macOS构建取得包。当前候选PMGR静态契约及3项篡改拒绝通过，参考地址需+2MiB，不能直接复用。见[输入与ABI依赖](operations/2026-10-27-driver-inputs-pmgr.md)，证据kernel-userland-20261027-4/pmgr4。下一步仍须真实匹配编译输入及运行期ABI，不能将静态结果填live_native_4k。
-
-内核仍是前轮30组件e879b2f0…，新archive没有接入XNU；没有IOKit/MMIO、实际Data挂载或桌面结果。下一步补UFS stream/排他/队列生命周期、同donor PMGR ABI、IOKit初始化与归档、RamBlock及Root/Owner/Data策略，再接显示/HID和用户态。不能把结构验证或原始Apple图形组件当成硬件驱动。
-
-Linux APFS路线已实际验证，取代“必须等待Mac才能构造Data”的宽泛阻塞；seed只取参考目录，不取SetupDone/ForceNoBuddy等偏好。512MiB仅离线文件系统容量，新UUID只在产物报告，没有写board或内存字段。
-
-复现须用专项脚本并指定新out目录；旧bridge1编译失败和bridge2通过证据都保留。每项遵守[官网具体方法](operations/official-adaptation-rules.md)，区分实现/集成/运行。状态以STATUS为准，下一轮仍无设备授权恢复。
+1. 主开发树D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display保留完整离线历史。最小CI树D:/Code/PortingiOS/enuma/worktrees/enuma-xnu-input-ci，分支ci/enuma-driver-inputs-20261027已推送，最新文档e81f73c；远端main未变。
+2. 最终平台运行40478893674成功，代码cdfb7ae；原始包在CI树out/ci-runs/40478893674/enuma-macos-platform-40478893674，验收副本在同级imported。2259文件/2记录绑定通过，manifest和内核摘要见reports/enuma-driver-input-ci.json。不要重用上传缺失的40477385983，也不要覆盖旧失败证据。
+3. 已取得真实IOPMGR/IOService及生成头/命令；下一步仍须IOKit/storage接口和同donor私有ABI。IOKitUser下同名头不能替代。随后接入现有RootRead/RamDisk的provider、start/stop、注册及归档链接，验证失败生命周期。
+4. 新平台内核be17abfc…未做donor预链接或设备启动，旧e879b2f0实验内核及静态PMGR结果不自动转移。没有用户态或桌面运行证据。
+5. 32项宿主测试通过，最终真实包导入通过；详细失败/修复链见operations/2026-10-27-driver-input-import-ci.md及CI分支同名文档。按官网具体规则继续；内存/verified/分区门禁不变。

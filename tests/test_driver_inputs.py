@@ -26,6 +26,13 @@ class ExportTests(unittest.TestCase):
         self.record['arguments']+=['@hidden.rsp'];self.save();self.assertRaises(ValueError,self.export)
     def test_missing_generated(self):
         self.record['arguments']+=['-include','absent.h'];self.save();self.assertRaises(FileNotFoundError,self.export)
+    def test_absent_search_directory(self):
+        self.record['arguments']+=['-I','EXPORT_HDRS/libsa'];self.save()
+        self.assertEqual(self.export()['absent_include_paths'],[dict(flag='-I',path='EXPORT_HDRS/libsa')])
+        self.assertFalse((self.base/'output/tree/EXPORT_HDRS/libsa').exists())
+    def test_absent_external_directory(self):
+        self.record['arguments']+=['-I',str(self.base/'outside')];self.save()
+        self.assertRaisesRegex(ValueError,'escapes',self.export)
     def test_escape_symlink(self):
         (self.source/'generated/escape.h').symlink_to(self.sdk/'private.h');self.assertRaises(ValueError,self.export)
     def test_output_in_source(self):

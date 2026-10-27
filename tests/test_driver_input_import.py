@@ -85,4 +85,15 @@ class ImportTests(unittest.TestCase):
         self.record['arguments']+=['-target','arm64-apple-ios17.0','-x','c++'];self.save();self.bundle()
         self.assertEqual(self.run_import()['templates'][0]['arguments'][-4:],['-target','arm64-apple-ios17.0','-x','c++'])
 
+    def test_sanitizer_input(self):
+        (self.source/'san-ignore').write_text('src:fixture.cpp')
+        self.record['arguments']+=['-fsanitize-ignorelist='+str(self.source/'san-ignore')];self.save();self.bundle()
+        r=self.run_import()
+        self.assertIn('san-ignore',r['files'])
+        self.assertEqual(r['templates'][0]['arguments'][-1],'-fsanitize-ignorelist=${INPUTS}/san-ignore')
+
+    def test_missing_sanitizer_input(self):
+        self.record['arguments']+=['-fsanitize-ignorelist='+str(self.source/'missing')];self.save()
+        self.assertRaises(FileNotFoundError,self.bundle)
+
 if __name__=='__main__':unittest.main()
