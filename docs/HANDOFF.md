@@ -1,6 +1,6 @@
-# 当前：main-entry-v6 完整镜像与离线资格完成（2026-10-27）
+# 当前：main-entry-v6 本次拍摄/恢复就绪，单次启动准备（2026-10-27）
 
-本轮按用户要求推进至新镜像，未查询/操作设备。v5两页与现场仅两组已确认，真实InstallConfigurationTable返回EFI_SUCCESS；用户无操作自行回Android且恢复独立核验通过。v5 consumed不重试；R027和旧产物冻结，共享主线只读。
+此前离线完成新镜像；本次用户要求上机，已完成只读即时前检，尚未启动。v5两页与现场仅两组已确认，真实InstallConfigurationTable返回EFI_SUCCESS；用户无操作自行回Android且恢复独立核验通过。v5 consumed不重试；R027和旧产物冻结，共享主线只读。
 
 新候选scope oem-main-entry-v6，镜像out/oem-main-entry-20261027/qualification2/image.img，3153920字节；SHA256 c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d。完整FD SHA256 37126098fc7804af36cfcafe908f17454fbc9757ded55986462461f13caf4fcc，位于out/oem-main-entry-20261027/build2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。qualification.json SHA256 7d3575843a9904d4f8b63891aa9143f785cbe934949e1fa868918775daf2e486。trial cfee120a-a6a4-4b02-bcff-21b1aa82372f，session 10505121988310854258，尚未claim/上机。Boot v3指Android镜像头格式；新诊断固件版本是v6，不是v3。
 
@@ -14,6 +14,10 @@ v6取消注册区间两窗与所有服务返回侧绘制，不更改原厂PE、�
 
 启动链按真实OEM返回→生产GOP模式/几何/显示所有权→ConOut/正常BDS/配置发现和输入→DarwinBoot/EBS→XNU推进。当前仍是目标OEM驱动后的诊断终止镜像，未验收生产GOP/ConOut/BDS/实体输入或XNU；临时菜单不替代OEM成功。官网显示/日志章节本轮在线重读成功，未升级固定依赖或复制其他设备参数。
 
-当前没有恢复/媒体判读欠项，也没有当前v6拍摄/在场恢复确认；不复用v5就绪。本轮最后设备证据仍是v5 Android恢复，本轮未重新观测。未来实测先核对当前发布、精确新单次绑定、即时身份/原备份/恢复与当次手机拍摄；75秒无合格返回停止追加、先恢复并同轮记录。不flash/erase/改槽，不改内存base/size或verified。
+用户最新要求“上机”，并明确本次“拍摄已就绪，在场可恢复”。本次条件独立记录，不复用v5。22:58只读即时前检通过：enuma、Android完成、root、A槽、解锁、原boot_a/vendor_boot_a与本地备份摘要一致。新v6仍未claim/发图；本准备提交发布及远端核验后，由原单次runner再次即时核验并执行一次临时boot。
+
+仅main-entry-v6镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d、trial cfee120a-a6a4-4b02-bcff-21b1aa82372f；E01主入口ChipInfo查询前、E03首次SID前、S05真实Core返回，最多三窗24秒Hold。75秒无合格返回停止追加、优先恢复并同轮记录；不flash/erase/改槽，R027及旧v5不执行。当前观察不能预写OEM/GOP/BDS成功。
+
+本次媒体目录已提前创建D:/Code/PortingiOS/enuma/Media-enuma/OEM-main-entry-v6-20261027-cfee120a；原始媒体只留本地，助手先独立判读落盘、展示完整字符串再请用户核对。准备与前检证据out/oem-main-entry-live-20261027/authorization.json、preflight.json。发布前不发图，无自动重试。
 
 总报告reports/enuma-oem-main-entry-v6-candidate.json；证据out/oem-main-entry-20261027。R027/v5冻结image/qualification摘要复核一致，旧原图和out二进制仅本地保留。

@@ -1768,3 +1768,12 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 按用户要求编出新镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d（3153920字节），FD 37126098fc7804af36cfcafe908f17454fbc9757ded55986462461f13caf4fcc，最终qualification2 7d3575843a9904d4f8b63891aa9143f785cbe934949e1fa868918775daf2e486。固件d393211，fd94b26基线工作树快照；trial cfee120a-a6a4-4b02-bcff-21b1aa82372f未claim/上机。取消注册窗与服务返回绘制，主入口ChipInfo精确RVA3608/GUID、SID入口及真实Core返回最多三窗24秒Hold；不伪造返回或跳过原厂初始化。32+77删除/2 GUID变异负测、42 Python、ASan/UBSan真实Core负测、ARM64 ABI/绑定、完整FD及Boot header v3回读通过，2452项默认离线绑定通过。固件已正常推送指定GitHub分支，设备仓发布见publication.json。
 
 实际代码定位至ChipInfo GetChipFamily(+48)、条件协议方法及事件注册等SID前竞争位置，优先隔离返回窗收尾/出口；不称唯一根因。缩短诊断Hold是实际代码改动，不当作实测OEM/BDS/XNU成功。共享主线只读、R027及v5冻结摘要不变，本轮无设备命令。详情docs/operations/2026-10-27-oem-main-entry-v6.md、reports/enuma-oem-main-entry-v6-candidate.json、out/oem-main-entry-20261027。当前无人工/恢复欠项，未来新试验重做现场条件。
+
+
+## 2026-10-27 22:58 v6本次单次启动准备
+
+用户最新要求“上机”，并明确本次“拍摄已就绪，在场可恢复”。本次条件独立记录，不复用v5。22:58只读即时前检通过：enuma、Android完成、root、A槽、解锁、原boot_a/vendor_boot_a与本地备份摘要一致。新v6仍未claim/发图；本准备提交发布及远端核验后，由原单次runner再次即时核验并执行一次临时boot。
+
+仅main-entry-v6镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d、trial cfee120a-a6a4-4b02-bcff-21b1aa82372f；E01主入口ChipInfo查询前、E03首次SID前、S05真实Core返回，最多三窗24秒Hold。75秒无合格返回停止追加、优先恢复并同轮记录；不flash/erase/改槽，R027及旧v5不执行。当前观察不能预写OEM/GOP/BDS成功。
+
+本次媒体目录已提前创建D:/Code/PortingiOS/enuma/Media-enuma/OEM-main-entry-v6-20261027-cfee120a；原始媒体只留本地，助手先独立判读落盘、展示完整字符串再请用户核对。准备与前检证据out/oem-main-entry-live-20261027/authorization.json、preflight.json。发布前不发图，无自动重试。
