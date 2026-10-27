@@ -27,3 +27,6 @@ S054完整UniXNU应用照片的人工确认保持有效，证据reports/enuma-fu
 当前新增结论：解码明确deadlock_established=false；没有返回记录只代表该快照未观察到，不能判死锁。详细证据docs/operations/2026-10-27-oem-trace-trust-validation.md及reports/enuma-oem-trace-trust-validation.json。
 
 提交前检查：trust-check2 全部输入摘要与当前工作树一致；暂存限定文本源码/配置/文档/报告，无产物或影音。git diff --cached --check 发现既有 CRLF/行尾空白及 EOF 空行，报告保存在 out/handoff-20261027-d323；未为格式清理改写已绑定源码，不能称 whitespace 检查通过。未重新编译或新增硬件资格。
+
+
+D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5a50；设备仓主成果 0c4284c063b46cc5de0c1dd97111bfdd3af26068；独立固件仓迁移说明 d465e744b174f132ea275bb4265e70e5ca9a9b7b。本段是主成果之后的交接记录，所在提交由 git log 查询。R022—R027 冻结资格摘要提交后复核一致，trust-check2 输入摘要一致。未推送远端；独立固件仓 Mu_Basecore 及嵌套依赖仍有此前改动，未提交/清理；设备仓及实际 firmware 主成果已提交。原始证据、完整构建产物与媒体仅本地保留，克隆仓库不包含这些证据。
