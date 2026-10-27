@@ -23,3 +23,5 @@
 3. 已取得真实IOPMGR/IOService及生成头/命令；下一步仍须IOKit/storage接口和同donor私有ABI。IOKitUser下同名头不能替代。随后接入现有RootRead/RamDisk的provider、start/stop、注册及归档链接，验证失败生命周期。
 4. 新平台内核be17abfc…未做donor预链接或设备启动，旧e879b2f0实验内核及静态PMGR结果不自动转移。没有用户态或桌面运行证据。
 5. 32项宿主测试通过，最终真实包导入通过；详细失败/修复链见operations/2026-10-27-driver-input-import-ci.md及CI分支同名文档。按官网具体规则继续；内存/verified/分区门禁不变。
+
+2026-10-27代码归因更新：用户已确认E01/S02判读。宿主ASan/UBSan复现私有SystemTable配置表指针/数量陈旧缺陷；这是当前最强代码缺陷证据，尚未证实为本次根因。已核对首分配后的构造链与实际Core返回/清理指令，下一验证先隔离追踪器并覆盖call1/2及Kernel协议，暂不跳到SID/MMU补丁。详见operations/2026-10-27-oem-post-s02-analysis.md。新候选未生成，本轮无追加实机；7d74ce9文字取证已推送oem-progress-20261027。

@@ -38,3 +38,5 @@ RootWindowRead/EnumaUfsRead桥接与ARM64 archive、真实512MiB逻辑APFS Data 
 OEM out/oem-runtime-qualification-20261027-3/image.img复核SHA256仍17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08，未boot、未消费ledger。设备当前状态未重新探测。
 
 主开发树D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display；最小CI树D:/Code/PortingiOS/enuma/worktrees/enuma-xnu-input-ci。主开发树同步构建修复并本地提交；只CI分支推送，未合并main或触碰共享工作区。
+
+2026-10-27代码归因更新：用户已确认E01/S02判读。宿主ASan/UBSan复现私有SystemTable配置表指针/数量陈旧缺陷；这是当前最强代码缺陷证据，尚未证实为本次根因。已核对首分配后的构造链与实际Core返回/清理指令，下一验证先隔离追踪器并覆盖call1/2及Kernel协议，暂不跳到SID/MMU补丁。详见operations/2026-10-27-oem-post-s02-analysis.md。新候选未生成，本轮无追加实机；7d74ce9文字取证已推送oem-progress-20261027。

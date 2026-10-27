@@ -36,7 +36,7 @@
       }
     }
   ],
-  "human_transcription_confirmation": "pending",
+  "human_transcription_confirmation": "confirmed by user: Ò»ÖÂ",
   "service_attribution": "AllocatePool: exact OEM call 0x3ab8 BLR x8, function pointer loaded at boot table offset 0x40; return RVA 0x3abc",
   "oem_driver_return_proven": false,
   "limits": [
