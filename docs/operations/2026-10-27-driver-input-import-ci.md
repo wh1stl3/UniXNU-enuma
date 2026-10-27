@@ -5,3 +5,4 @@
 新增 scripts/import_enuma_driver_inputs.py：检查同次成功构建报告、manifest、最终编译记录、内核及文件摘要；拒绝路径越界、符号链接、未列出文件和夸大资格。生成仅数据的可重定位命令模板，不执行编译、不声明私有ABI通过。SDK仍须由匹配macOS环境提供。
 
 28项合成宿主测试通过（14导出、14导入），证据 out/kernel-userland-20261027-5/input-tests-final.log。真实XNU输入包尚未取得；下一步独立CI分支 preflight -> platform，按同次构建身份下载验收。macos-15固定Xcode16.4/iPhoneOS18.5，版本不符即失败。
+首次平台运行40475779089在成功链接后导出失败：编译记录含不存在的EXPORT_HDRS/libsa搜索路径。修正为仅对源码范围内缺席的搜索目录记录absent_include_paths，不创建假头；强制include缺失仍拒绝。30项合成测试通过，待重新构建。
