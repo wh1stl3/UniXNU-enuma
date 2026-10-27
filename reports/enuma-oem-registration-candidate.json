@@ -104,8 +104,8 @@
   "firmware_commit": "fd94b265d1b0112c4a60d36a058d7b91efbb250d",
   "build_snapshot_base": "f82039eb440fdcbeb4be9dfc453392aadd95fec5",
   "build_scope": "working-tree snapshot; original manifest preserved; not a post-commit rebuild",
-  "qualification": "out/oem-registration-20261027/qualification2/qualification.json",
-  "qualification_sha256": "9b7c50b556f9ad1ccbc2344235286b04897c748f55173ce7d77bc178a0dcbe0c",
+  "qualification": "out/oem-registration-20261027/qualification3/qualification.json",
+  "qualification_sha256": "9b532a16587cec5ce2c96f7085ec5c73aeed2aaec0a06bf23bcb4b7e739e31ed",
   "host_tests": "31 Python in WSL; check3 ASan/UBSan v2/v3/v4/v5 and real Core config-table publication with two deletion negatives; binding1 exact PE relocation and cross rejection; ARM64 board object",
   "runtime_deletion_checks": 32,
   "registration_sync_deletion_checks": 52,
@@ -114,5 +114,6 @@
   "root_cause_proven": false,
   "hardware_trial_performed": false,
   "trial_claimed": false,
-  "published": false
+  "published": false,
+  "publication_status": "firmware push interrupted after no progress; remote publication unconfirmed"
 }

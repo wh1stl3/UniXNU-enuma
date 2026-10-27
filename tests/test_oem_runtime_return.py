@@ -55,4 +55,3 @@ class ReturnEndpoints(unittest.TestCase):
  def test_stale_fastboot_presence(self):self.run_trial('no-disconnect')
 
 if __name__=='__main__':unittest.main()
-

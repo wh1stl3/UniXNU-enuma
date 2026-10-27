@@ -1590,3 +1590,5 @@ AVI写入标称10fps，但实际采集约5fps，播放时长不是现场耗时�
 执行器已修复只等fastboot：观察断开后也接受绑定enuma Android完成，并完整核验root/槽/解锁/双分区摘要；直接返回、错误身份、fastboot残留模拟验证均只boot一次且无分区操作。ADB终点不推断用户是否按键，人工恢复事实继续按现场反馈记录。
 
 固件提交fd94b26；构建是以f82039e为基线的工作树快照，保留manifest，不称提交后重编。脱敏报告reports/enuma-oem-registration-candidate.json。尚未确认本轮远端发布；最后设备状态沿上一笔Android恢复核验，本轮没有重新观测。下一实测须完成当前文档发布及即时身份/备份、当次手机拍摄与人工恢复条件；本轮任务到编出新固件，不追加实机。原始媒体仅本地，无新内存base/size、verified或分区范围变更。
+
+registration-v5最终qualification3保留qualification2历史；仅清理宿主测试尾部空行，FD/image摘要相同，31项WSL测试重验通过。主代码a68983a、固件fd94b26；固件网络推送无进展后中止，未确认发布；未上机。
