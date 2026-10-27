@@ -79,9 +79,9 @@ int main(int argc,char **argv){
   else{assert(mOemCoreCapture.State==EnumaCaptureArmed&&mOemCoreCapture.Owner==&mOemCoreTrace&&mOemOriginalBoot==&Boot);}
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_ALREADY_STARTED);
   if(ENUMA_OEM_RUNTIME){
-    if(ENUMA_OEM_EARLY){assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,256,NULL)==EFI_OUT_OF_RESOURCES);}
+    for(UINTN I=0;I<ENUMA_PROGRESS_CALL;I++){assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,256,NULL)==EFI_OUT_OF_RESOURCES);}
     if(setjmp(StopJump)==0){mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL);assert(0);}
-    assert(Stops==1&&OriginalAllocations==(ENUMA_OEM_EARLY?1U:0U)&&mOemCoreCapture.State!=EnumaCaptureExported);
+    assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL&&mOemCoreCapture.State!=EnumaCaptureExported);
   }
   free(Image);puts("PASS: relocation normalization, corrupt code/relocation, entry/size, nested handle, loaded pointer, no retry, CRC failure, private table and armed capture");return 0;
 }

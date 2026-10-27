@@ -9,7 +9,9 @@ def data_offset(pe,rva):
     s=hits[0]
     return s[3]+rva-s[1]
 
-def check(pe,mapping):
+def check(pe,mapping,experiment='oem-early-v3'):
+    if experiment not in ('oem-early-v3','oem-post-kernel-v4'):raise ValueError('unknown code scope')
+    post=experiment=='oem-post-kernel-v4'
     entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
     def sym(n):
         hits={a for a,name in entries if name==n}
@@ -44,28 +46,28 @@ def check(pe,mapping):
         sites['before_'+name]=a
     if word(calls[0]-4)!=0xf9003816:raise ValueError('new table not published before sync')
     sites['publish_new_table']=calls[0]-4
-    selects=[a for a in region('OemProgressObserve') if word(a)==0xf100069f]
-    if len(selects)!=1:raise ValueError('call1 selector missing')
+    selects=[a for a in region('OemProgressObserve') if word(a)==(0xf100129f if post else 0xf100069f)]
+    if len(selects)!=1:raise ValueError('selected-call selector missing')
     a=selects[0]
     if word(a+4)!=0x540001e1 or target(a+0x38)!=sym('OemProgressEmit'):
-        raise ValueError('call1 branch/emission changed')
-    sites['call1_compare']=a;sites['call1_branch']=a+4;sites['call1_emit']=a+0x38
+        raise ValueError('selected-call branch/emission changed')
+    sites['selected_call_compare']=a;sites['selected_call_branch']=a+4;sites['selected_call_emit']=a+0x38
     guid=sym('OemProgressObserve.Sid');off=data_offset(pe,guid)
-    if pe[off:off+16]!=bytes.fromhex('e72b06b50b17324abe21689262ff4399'):
-        raise ValueError('early Kernel GUID differs')
+    if pe[off:off+16]!=bytes.fromhex('b4d3b654335d914f86006c41d5deb19a' if post else 'e72b06b50b17324abe21689262ff4399'):
+        raise ValueError('observed protocol GUID differs')
     return sites,guid
 
-def verify(pe,mapping):
-    sites,guid=check(pe,mapping)
+def verify(pe,mapping,experiment='oem-early-v3'):
+    sites,guid=check(pe,mapping,experiment)
     for name,a in sites.items():
         off=file_offset(pe,a);mutated=pe[:off]+bytes.fromhex('1f2003d5')+pe[off+4:]
-        try:check(mutated,mapping)
+        try:check(mutated,mapping,experiment)
         except ValueError:pass
         else:raise ValueError('deleted early instruction accepted: '+name)
     off=data_offset(pe,guid);mutated=bytearray(pe);mutated[off]^=1
-    try:check(mutated,mapping)
+    try:check(mutated,mapping,experiment)
     except ValueError:pass
-    else:raise ValueError('changed Kernel GUID accepted')
-    return dict(sites={n:hex(a) for n,a in sites.items()},kernel_guid_rva=hex(guid),
+    else:raise ValueError('changed observed GUID accepted')
+    return dict(sites={n:hex(a) for n,a in sites.items()},observed_guid_rva=hex(guid),experiment=experiment,
                 deletion_checks=len(sites),guid_mutation_checks=1,
                 scope='selected linked instruction sequences; not whole-program or hardware proof')

@@ -24,4 +24,12 @@ class Pages(unittest.TestCase):
     def test_early_semantics(self):
         self.assertEqual(decode(self.page(3),123,'oem-early-v3')['event'],'kernel-locate-before')
         self.assertRaises(ValueError,decode,self.page(3),123,'unknown')
+    def test_post_scope(self):
+        for phase in (1,2):
+            page=self.page(phase).replace('C'+f'{7:016x}','C'+f'{4:016x}')
+            self.assertEqual(decode(page,123,'oem-post-kernel-v4')['call'],4)
+            self.assertRaises(ValueError,decode,page,123,'oem-early-v3')
+        self.assertEqual(decode(self.page(3),123,'oem-post-kernel-v4')['event'],'sid-locate-before')
+        self.assertEqual(decode(self.page(4),123,'oem-post-kernel-v4')['status'],'0x800000000000000e')
+
 if __name__=='__main__':unittest.main()

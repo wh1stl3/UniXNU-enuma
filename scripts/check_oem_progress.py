@@ -22,6 +22,10 @@ def main():
             r=subprocess.run(argv,capture_output=True,text=True,timeout=90)
             commands.append(dict(argv=argv,returncode=r.returncode,stdout=r.stdout,stderr=r.stderr))
             if r.returncode:raise ValueError(r.stderr+r.stdout)
+        for argv in (flags+['-DENUMA_OEM_POST_KERNEL=1',str(ROOT/'tests/oem_progress.c'),'-o',str(out/'oem_post')],[str(out/'oem_post')]):
+            r=subprocess.run(argv,capture_output=True,text=True,timeout=90)
+            commands.append(dict(argv=argv,returncode=r.returncode,stdout=r.stdout,stderr=r.stderr))
+            if r.returncode:raise ValueError(r.stderr+r.stdout)
         source=ROOT/'firmware/Mu_Basecore/MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         relative=Path('MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c')
         staged=out/relative;staged.parent.mkdir(parents=True);staged.write_text(source.read_text())

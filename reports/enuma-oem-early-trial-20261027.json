@@ -6,7 +6,7 @@
   "observation": "no qualified fastboot return within 75 seconds",
   "manual_recovery_verified": true,
   "visual": {
-    "user_confirmed": false,
+    "user_confirmed": true,
     "observations": [
       {
         "phase": 1,
@@ -66,7 +66,8 @@
       }
     ],
     "method": "independent visual transcription before user confirmation",
-    "continuous_video_received": false
+    "continuous_video_received": false,
+    "confirmation": "User confirmed all four full five-line strings."
   },
   "hardware_driver_return_proven": false,
   "root_cause_proven": false

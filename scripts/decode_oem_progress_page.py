@@ -3,14 +3,16 @@ import argparse,json,re
 from pathlib import Path
 NAMES={1:'first-service-before',2:'first-service-return',3:'sid-locate-before',4:'sid-locate-return',5:'core-start-image-return'}
 def decode(text,session,experiment='oem-progress-v2'):
-    if experiment not in ('oem-progress-v2','oem-early-v3'):raise ValueError('unknown experiment')
+    if experiment not in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4'):raise ValueError('unknown experiment')
     names=NAMES if experiment=='oem-progress-v2' else {1:'call1-before',2:'call1-return',3:'kernel-locate-before',4:'kernel-locate-return',5:'core-start-image-return'}
+    if experiment=='oem-post-kernel-v4':names={1:'call4-before',2:'call4-return',3:'sid-locate-before',4:'sid-locate-return',5:'core-start-image-return'}
     rows=text.splitlines()
     if len(rows)!=5 or any(len(r)!=20 for r in rows):raise ValueError('five exact 20-character rows required')
     m=re.fullmatch(r'([ES])0([1-5])(C[0-9a-f]{16}| {17})',rows[0])
     if not m:raise ValueError('bad phase row')
     phase=int(m[2]);returned=phase in (2,4,5)
     if experiment=='oem-early-v3' and phase in (1,2) and m[3]!='C'+f'{1:016x}':raise ValueError('early experiment requires call1')
+    if experiment=='oem-post-kernel-v4' and phase in (1,2) and m[3]!='C'+f'{4:016x}':raise ValueError('post-kernel experiment requires call4')
     if (m[1]=='S')!=returned or (phase==5)!=(m[3]==' '*17):raise ValueError('phase/call mismatch')
     def value(row,label):
         match=re.fullmatch(label+r'([0-9a-f]{16}) {3}',row)
@@ -27,6 +29,6 @@ def decode(text,session,experiment='oem-progress-v2'):
                 returned=returned,status=None if status is None else hex(status),
                 scope='transcribed screen observation only; entry is not execution completion; no GOP or BDS claim')
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('page',type=Path);p.add_argument('--session',required=True,type=lambda x:int(x,0));p.add_argument('--experiment',choices=('oem-progress-v2','oem-early-v3'),required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('page',type=Path);p.add_argument('--session',required=True,type=lambda x:int(x,0));p.add_argument('--experiment',choices=('oem-progress-v2','oem-early-v3','oem-post-kernel-v4'),required=True);a=p.parse_args()
     print(json.dumps(decode(a.page.read_text(),a.session,a.experiment),indent=2))
 if __name__=='__main__':main()
