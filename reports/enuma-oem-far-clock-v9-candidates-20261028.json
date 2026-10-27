@@ -1,0 +1,59 @@
+{
+  "software_ready": true,
+  "hardware_executed": false,
+  "clock_calibration_complete": false,
+  "firmware_commit": "edc579d9e02beb7e395f4bad680329adf07b70bb",
+  "build_snapshot_base": "49affe73f48f5b22dd1256efa25dd5576c438daa",
+  "post_commit_rebuild": false,
+  "logic_sha256": "1021406195cd88b34c4c75de499873cb944da620da4ee8eaba7eb54519efd361",
+  "candidates": {
+    "target": {
+      "scope": "oem-far-clock-v9",
+      "trial_id": "96b78e34-892b-4ac1-b84d-8d3cc74a1f82",
+      "session": 10889924087055404375,
+      "image": "out/oem-far-clock-20261028/target/qualification1/image.img",
+      "image_sha256": "3691d5989d9f50ead22f995b240644e58b579693d7f3db4f6b9d4329215f8e96",
+      "image_bytes": 3153920,
+      "qualification_sha256": "dfea3b0f95e34702129485b6ba95fbd9599c2226101410dab6e67a7769a46858",
+      "fd_sha256": "577dde36ceba29e78393ef6d1a1d34a457686592f72d4d19c4ef0ba64146018b",
+      "bound_sources": 2470,
+      "instruction_deletion_checks": 99,
+      "unclaimed": true
+    },
+    "low": {
+      "scope": "oem-far-clock-low-v9",
+      "trial_id": "d07aaceb-e633-42c3-9746-7c2304740a8b",
+      "session": 72241299989157236,
+      "image": "out/oem-far-clock-20261028/low/qualification1/image.img",
+      "image_sha256": "422139ef5b0d26bd4887c21b67e004331d3ca220c74077799cb3c77c848f6ab4",
+      "image_bytes": 3153920,
+      "qualification_sha256": "cf07716a197bc08d70dad9c5144cc5424b971686f82e8baf6c4ef13dcb56ea44",
+      "fd_sha256": "76b1659f70e1cb13f0806bc6b27ed0afc1411b768df85b76a8cf21258fc5bcb7",
+      "bound_sources": 2470,
+      "instruction_deletion_checks": 82,
+      "unclaimed": true
+    },
+    "high": {
+      "scope": "oem-far-clock-high-v9",
+      "trial_id": "0e8e88d1-faea-4829-8b8c-93ebbece2544",
+      "session": 360695613987928583,
+      "image": "out/oem-far-clock-20261028/high/qualification1/image.img",
+      "image_sha256": "b8980a2d309b42b8b9207ac63fe8e0ab7ba68d545bfa97777071ed721277ce97",
+      "image_bytes": 3153920,
+      "qualification_sha256": "3a8d1876bf807e1d4ca8845006e86809b5daf40c42ee7a380af4b65a18cc52c4",
+      "fd_sha256": "38e3113afdf34d8cc86cb3113c274039371a0d93c9966d8ca6692c6195e23889",
+      "bound_sources": 2470,
+      "instruction_deletion_checks": 90,
+      "unclaimed": true
+    }
+  },
+  "python_tests_passed": 52,
+  "device_commands_this_build_turn": 0,
+  "shared_mainline_read_only": true,
+  "r027_frozen": true,
+  "limitations": [
+    "Indirect timing inference only; fresh low/high automatic-return and independent recovery evidence required before target",
+    "No v8 filming readiness reuse",
+    "No GOP, ConOut, BDS, input or XNU acceptance"
+  ]
+}

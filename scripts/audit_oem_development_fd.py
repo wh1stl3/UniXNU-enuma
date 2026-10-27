@@ -26,6 +26,11 @@ def audit(build, runtime=False):
     manifest_path=build/'source-manifest.json'
     if sha(manifest_path.read_bytes())!=report['source_manifest_sha256']:raise ValueError('manifest mismatch')
     manifest=json.loads(manifest_path.read_text())
+    # Bind current admission to the actual exported input, never merely to the
+    # source bytes that happen to exist when packaging runs.
+    for n,h in manifest['original_files'].items():
+        p=(ROOT/'firmware'/n).resolve();p.relative_to(ROOT/'firmware')
+        if sha(p.read_bytes())!=h:raise ValueError('firmware source changed after snapshot: '+n)
     for n,h in manifest['snapshot_files'].items():
         p=(build/'source'/n).resolve();p.relative_to(build/'source')
         if sha(p.read_bytes())!=h:raise ValueError('snapshot mismatch: '+n)
@@ -40,7 +45,9 @@ def audit(build, runtime=False):
         required.update(ENUMA_DIAG_STAGE='13',ENUMA_DIAG_DETAIL_POINT='13',ENUMA_DIAG_GUID_ENABLED='1',
                         ENUMA_DIAG_GUID_ONLY='1',ENUMA_DIAG_GUID_LOW64='0x4f7906c74138022f',
                         ENUMA_DIAG_GUID_HIGH64='0xe7a411b5337e949c',ENUMA_DIAG_DISPATCH_FALLBACK='1')
-    if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8'):required['ENUMA_OEM_FAR_CHAIN']='1'
+    if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9'):required['ENUMA_OEM_FAR_CHAIN']='1'
+    if runtime and report['oem_run_config']['experiment'] in ('oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9'):
+        required.update(ENUMA_OEM_EXIT_CLOCK='1',ENUMA_OEM_CLOCK_FORCE=str({'oem-far-clock-low-v9':1,'oem-far-clock-high-v9':5}.get(report['oem_run_config']['experiment'],0)))
     defs=report['firmware_configuration']['defines']
     if any(defs.get(n)!=v for n,v in required.items()):raise ValueError('wrong profile defines')
     binding=report['oem_profile_binding']
@@ -88,7 +95,10 @@ def audit(build, runtime=False):
         response=pes[0].parent/'cc_resp.txt';text=response.read_text()
         for n in ('ENUMA_DIAG_STAGE','ENUMA_DIAG_SIMPLEFB'):
             if '-D'+n+'='+required[n] not in text.split():raise ValueError('compiler flags mismatch '+name)
-        if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8') and '-DENUMA_OEM_FAR_CHAIN=1' not in text.split():raise ValueError('far chain compiler flag missing')
+        if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9') and '-DENUMA_OEM_FAR_CHAIN=1' not in text.split():raise ValueError('far chain compiler flag missing')
+        if runtime and report['oem_run_config']['experiment'].startswith('oem-far-clock-'):
+            for n in ('ENUMA_OEM_EXIT_CLOCK','ENUMA_OEM_CLOCK_FORCE'):
+                if '-D'+n+'='+required[n] not in text.split():raise ValueError('clock compiler flag missing: '+n)
         if runtime and name=='DxeCore':
             for n in ('ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GUID_ENABLED','ENUMA_DIAG_GUID_ONLY',
                       'ENUMA_DIAG_GUID_LOW64','ENUMA_DIAG_GUID_HIGH64','ENUMA_DIAG_DISPATCH_FALLBACK'):

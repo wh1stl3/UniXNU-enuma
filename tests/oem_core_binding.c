@@ -11,7 +11,9 @@ VOID *EFIAPI CopyMem(VOID *D,CONST VOID *S,UINTN N){return memcpy(D,S,N);}
 VOID *EFIAPI ZeroMem(VOID *D,UINTN N){return memset(D,0,N);}
 INTN EFIAPI CompareMem(CONST VOID *A,CONST VOID *B,UINTN N){return memcmp(A,B,N);}
 #include "EnumaOemBuildIdentity.h"
+#if !ENUMA_OEM_EXIT_CLOCK
 #include "EnumaOemPrecallCapture.h"
+#endif
 STATIC EFI_HANDLE EnumaStartingImage;
 STATIC CONST EFI_GUID *EnumaStartingFile;
 STATIC EFI_SYSTEM_TABLE *gDxeCoreST;
@@ -28,10 +30,19 @@ STATIC EFI_STATUS CoreHandleProtocol(EFI_HANDLE H,EFI_GUID *G,VOID **Out){
 // Host tests the real Core binding/state machine; board MMIO is separately
 // compiled into the full FD, not replaced with a host success claim.
 #define ENUMA_OEM_BOARD_CAPTURE_H
+#if ENUMA_OEM_EXIT_CLOCK
+#include <Library/TimerLib.h>
+#include <Library/ResetSystemLib.h>
+#include <Library/BaseLib.h>
+UINTN EFIAPI MicroSecondDelay(UINTN N){assert(N>=2000000&&N<=22000000);return N;}
+VOID EFIAPI ResetCold(VOID){Stops++;longjmp(StopJump,1);}
+VOID EFIAPI CpuPause(VOID){abort();}
+#else
 STATIC EFI_BOOT_SERVICES *mOemOriginalBoot;
 STATIC BOOLEAN OemBoardSink(VOID *C,CONST CHAR8 *L,UINTN N){(void)C;(void)L;(void)N;return FALSE;}
 STATIC VOID OemCaptureTerminal(VOID *C){(void)C;Stops++;longjmp(StopJump,1);}
 STATIC BOOLEAN OemProgressPresent(UINT32 P,CONST ENUMA_SERVICE_EVENT *E,UINT64 S){(void)P;(void)E;(void)S;return FALSE;}
+#endif
 #include "EnumaOemCoreBinding.h"
 STATIC EFI_TPL EFIAPI Raise(EFI_TPL T){(void)T;return TPL_APPLICATION;}
 STATIC VOID EFIAPI Restore(EFI_TPL T){(void)T;}
@@ -78,7 +89,9 @@ int main(int argc,char **argv){
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_SUCCESS);
   assert(Loaded.SystemTable==&mOemCoreTrace.System&&System.BootServices==&Boot&&mOemCoreTrace.Published);
   if(ENUMA_OEM_PROGRESS){assert(mOemProgress.Owner==&mOemCoreTrace&&mOemProgressHandle==(EFI_HANDLE)1);}
+#if !ENUMA_OEM_EXIT_CLOCK
   else{assert(mOemCoreCapture.State==EnumaCaptureArmed&&mOemCoreCapture.Owner==&mOemCoreTrace&&mOemOriginalBoot==&Boot);}
+#endif
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_ALREADY_STARTED);
   if(ENUMA_OEM_RUNTIME){
     for(UINTN I=0;I<ENUMA_PROGRESS_CALL;I++){assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,256,NULL)==EFI_OUT_OF_RESOURCES);}
@@ -93,10 +106,13 @@ int main(int argc,char **argv){
       assert(!Stops); // unrelated calls must not trigger the old ordinal-only stop
       if(setjmp(StopJump)==0){EnumaTraceLocateProtocolAt((UINTN)Image+0x3608,&Main,NULL,NULL);assert(0);}
       assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL+1);
-    }else{
+    }
+#if !ENUMA_OEM_EXIT_CLOCK
+    else{
       if(setjmp(StopJump)==0){mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL);assert(0);}
       assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL&&mOemCoreCapture.State!=EnumaCaptureExported);
     }
+#endif
   }
   free(Image);puts("PASS: relocation normalization, corrupt code/relocation, entry/size, nested handle, loaded pointer, no retry, CRC failure, private table and armed capture");return 0;
 }

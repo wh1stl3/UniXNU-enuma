@@ -16,7 +16,7 @@ class ReturnEndpoints(unittest.TestCase):
     f=backup/(n+'.bin');f.write_bytes(n.encode());bindings.append(dict(partition=n,sha256=runner.sha(f)))
    previous=dict(directory=str(old),recovery_backup_directory=str(backup),slot='_a',backups=bindings,phase='android-recovered')
    (local/'current.local.json').write_text(json.dumps(previous));(old/'target.local.json').write_text(json.dumps(dict(serial='fixture-enuma')))
-   q=dict(run_config=dict(trial_id='fixture'),image_sha256=runner.sha(image))
+   q=dict(scope='oem-main-entry-v6',run_config=dict(trial_id='fixture'),image_sha256=runner.sha(image))
    issued=False;calls=[];ticks=iter(range(10000));enums=0
    def transport(argv,**kwargs):
     nonlocal issued,enums

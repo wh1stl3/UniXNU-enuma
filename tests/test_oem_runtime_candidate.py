@@ -90,4 +90,16 @@ class Admission(unittest.TestCase):
             self.q['runtime_limits']['max_windows']=3;self.save()
             self.assertRaises(ValueError,validate,self.root,self.out)
 
+    def test_clock_scope_has_no_window_and_single_boot(self):
+        from oem_runtime_candidate import CLOCK_SCOPES
+        for scope in CLOCK_SCOPES:
+            self.q['scope']=scope;self.q['run_config'].update(experiment=scope,selected_call=0)
+            self.q['identity']['runtime']=dict(self.q['run_config']);self.q['runtime_limits']=limits_for(scope);self.save()
+            validate(self.root,self.out)
+            self.assertIsNone(self.q['runtime_limits']['roi'])
+            self.assertEqual(self.q['runtime_limits']['max_windows'],0)
+            self.assertEqual(self.q['runtime_limits']['max_terminal_delay_us'],22000000)
+            self.q['runtime_limits']['max_boots']=2;self.save()
+            self.assertRaises(ValueError,validate,self.root,self.out)
+
 if __name__=='__main__':unittest.main()

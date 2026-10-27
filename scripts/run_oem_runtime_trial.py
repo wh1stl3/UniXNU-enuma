@@ -13,10 +13,16 @@ def main():
     p.add_argument('--qualification',type=Path,required=True)
     p.add_argument('--execute',action='store_true')
     p.add_argument('--human-ready',action='store_true')
+    p.add_argument('--clock-calibration',type=Path)
     a=p.parse_args();directory=a.qualification.resolve();q,image=validate(ROOT,directory)
     if not a.execute:
         print('PASS: offline candidate binding; no device commands');return
     if not a.human_ready:raise ValueError('current filming and manual recovery readiness required')
+    from oem_exit_clock import SCOPES,require_plan,logic
+    clock=q['scope'] in SCOPES
+    if q['scope']==SCOPES[0]:
+        if not a.clock_calibration:raise ValueError('fresh low/high calibration required before target execution')
+        require_plan(q,json.loads(a.clock_calibration.read_text()))
     local_state=ROOT/'out/device-tests/current.local.json'
     if local_state.exists() and json.loads(local_state.read_text()).get('phase') in (
         'manual-recovery-needed','entering-bootloader','boot-issued','fastboot-returned'):
@@ -66,8 +72,26 @@ def main():
         (ROOT/'out/device-tests/current.local.json').write_text(json.dumps(state,indent=2))
         print(phase,flush=True)
     mutated=False
+    pre_clock=None
+    def clock_after():
+        if not clock:return
+        from boot_origin import capture
+        try:
+            bound,samples=capture(lambda c:invoke('adb',['shell',c]),state['issued_monotonic'],pre_clock['boot_id_sha256'])
+        except (ValueError,subprocess.TimeoutExpired) as exc:
+            state['clock_observation_valid']=False;state['clock_observation_error']=str(exc)
+            return # Android/partition recovery passed; clock failure is not recovery failure.
+        state['clock_observation_valid']=True
+        (out/'post-boot-clock.local.json').write_text(json.dumps(samples,indent=2))
+        observation=dict(scope=q['scope'],trial_id=q['run_config']['trial_id'],image_sha256=q['image_sha256'],logic_sha256=logic(q),
+            observed_unix=time.time(),boot_id_changed=True,post_boot_clock=bound,qualification_sha256=sha(directory/'qualification.json'))
+        (out/'clock-observation.json').write_text(json.dumps(observation,indent=2))
     try:
         android_check()
+        if clock:
+            from boot_origin import capture
+            pre_clock,samples=capture(lambda c:invoke('adb',['shell',c]))
+            (out/'pre-boot-clock.local.json').write_text(json.dumps(samples,indent=2))
         q,image=claim(ROOT,directory,a.human_ready)
         save('preflight-complete')
         mutated=True;save('entering-bootloader')
@@ -81,6 +105,7 @@ def main():
         state['boot_count']=1;save('boot-issued')
         # Windows fastboot requires a Windows image path even under WSL.
         windows=subprocess.check_output(['wslpath','-w',str(image)],text=True).strip()
+        state['issued_monotonic']=time.monotonic()
         r=invoke('fastboot',['boot',windows],30)
         if r.returncode or b'FAILED' in r.stdout+r.stderr:raise ValueError('single boot transport failed; no retry')
         deadline=time.monotonic()+75;disconnected=False;returned=False;android_returned=False
@@ -100,7 +125,7 @@ def main():
                     if android_returned:break
             time.sleep(1)
         if android_returned:
-            android_check();state['observed_return_endpoint']='android';state['manual_recovery']=None;state['return_method']='pending-user-confirmation'
+            android_check();clock_after();state['observed_return_endpoint']='android';state['manual_recovery']=None;state['return_method']='pending-user-confirmation'
             save('android-recovered-visual-review-pending');return
         if not returned:raise ValueError('no observed disconnect and verified fastboot or Android return')
         if not fastboot_check():raise ValueError('return identity failed')
@@ -112,7 +137,7 @@ def main():
                 if adb('getprop sys.boot_completed')=='1':break
             except (ValueError,subprocess.TimeoutExpired):pass
             time.sleep(2)
-        android_check();save('android-recovered-visual-review-pending')
+        android_check();clock_after();save('android-recovered-visual-review-pending')
     except Exception as exc:
         state['error']=str(exc).replace(serial,'<enuma>')
         save('manual-recovery-needed' if mutated else 'preflight-rejected')

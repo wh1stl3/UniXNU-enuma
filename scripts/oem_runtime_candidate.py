@@ -15,8 +15,10 @@ REG_SCOPE='oem-registration-v5'
 MAIN_SCOPE='oem-main-entry-v6'
 FAR_SCOPE='oem-far-chain-v7'
 EVENT_SCOPE='oem-far-event-v8'
+CLOCK_SCOPES=('oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9')
 def limits_for(scope):
-    if scope in (FAR_SCOPE,EVENT_SCOPE):return dict(LIMITS,selected_call=0,max_windows=1,max_total_hold_us=8000000,call_selection='ram-only-until-dxe-complete')
+    if scope in CLOCK_SCOPES:return dict(LIMITS,hold_us=0,roi=None,max_windows=0,max_total_hold_us=0,max_terminal_delay_us=22000000,clock_requires_current_calibration=scope==CLOCK_SCOPES[0],call_selection='ram-only-no-display-clock-exit')
+    if scope in (FAR_SCOPE,EVENT_SCOPE)+CLOCK_SCOPES:return dict(LIMITS,selected_call=0,max_windows=1,max_total_hold_us=8000000,call_selection='ram-only-until-dxe-complete')
     if scope==MAIN_SCOPE:return dict(LIMITS,selected_call=6,max_windows=3,max_total_hold_us=24000000,call_selection='minimum6-and-exact-rva3608')
     if scope==REG_SCOPE:return dict(LIMITS,selected_call=5,max_windows=5,max_total_hold_us=40000000)
     if scope==SCOPE:return dict(LIMITS)
@@ -32,7 +34,7 @@ def validate(root, directory):
     root=root.resolve(); directory=directory.resolve()
     directory.relative_to(root/'out')
     q=json.loads((directory/'qualification.json').read_text())
-    if q.get('passed') is not True or q.get('software_ready') is not True or q.get('scope') not in (SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,POST_SCOPE,REG_SCOPE,MAIN_SCOPE,FAR_SCOPE,EVENT_SCOPE):
+    if q.get('passed') is not True or q.get('software_ready') is not True or q.get('scope') not in (SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,POST_SCOPE,REG_SCOPE,MAIN_SCOPE,FAR_SCOPE,EVENT_SCOPE)+CLOCK_SCOPES:
         raise ValueError('not an admitted OEM runtime candidate')
     c=q['run_config']
     if (set(c)!=set(('trial_id','session','selected_call','profile','experiment')) or

@@ -1696,3 +1696,10 @@ v8修复了宿主已复现的RestoreTPL后环尾竞态，且实际链接/资格�
 下一最大可操作方向转向末端可观测性与提前复位的分离（诊断优先级中等，唯一根因置信低）：EnumaOemFarDispatchComplete在Owner或真实Core返回位不满足时直接不绘制，completion仍沿7秒恢复；OemProgressEmit拒绝非TPL_APPLICATION；OemBoardSink还要求原继承路由、1600×2560几何、Splash范围、CPU策略和窗口恢复准入，任何拒绝都可能在显示前ResetCold。OEM/后续DXE异常入口同样直接ResetCold，仍是竞争解释。优先设计独立于晚期继承显示准入的阶段/拒绝出口，保留远端路径；不再仅凭无页细化ChipInfo，不能通过放宽像素边界、伪造EFI_SUCCESS或删除全部恢复出口来制造进度。新方案须实际代码/失败路径/机器码/完整构建及新单次资格，本图不重试。
 
 证据：reports/enuma-oem-far-event-v8-trial-20261028.json，out/device-tests/oem-a35583f7-e92d-4999-96d2-116793825026，out/oem-far-event-live-20261028（authorization、publication-verified、preflight、postcheck、human-return-confirmation）。原runner pending快照保留，由新人工确认独立闭合。生产GOP/ConOut/BDS/实体输入/XNU未验收，R027/v6/v7/v8镜像资格冻结，共享主线只读；无内存base/size、verified、flash/erase/改槽变化。媒体/out/二进制/备份/设备标识不入Git或云端。当前无恢复/字符串核对欠项，结果发布以git log及result-publication.json为准。
+
+
+## 2026-10-28 v9移除晚期显示依赖并交付三份软件候选
+
+2026-10-28当前：far-clock-v9目标及2/22秒校准镜像已完成完整build4、qualification1和离线来源校验，三trial均未claim/上机。移除诊断晚期GOP/像素出口，保留真实OEM/Core和整轮DXE路径；52项Python与最终机器码删除负测通过。实际时钟校准未完成，目标execute需新low/high报告与精确计划；v8已consumed且恢复通过，不复用旧拍摄就绪。现行STATUS/HANDOFF及operations/2026-10-28-oem-far-clock-v9.md；以下旧当前/准备文字按历史阅读。
+
+固件edc579d，设备仓前提交e1d5e62。实际五类出口2/7/12/17/22秒、独立2/22秒对照和一小时校准计划门禁已实现；保留原厂/真实状态，先整轮DXE再终止。52项Python、ARM/ASan/UBSan、真实Core绑定与同步/竞态、99/82/90链接删除负测、三份完整FD/Boot v3和每份2470绑定通过。失败构建保留，最终build4使用49affe7工作快照，不称提交后重编。证据out/oem-far-clock-20261028；精确镜像/资格/trial见STATUS与报告。本轮零设备命令，实际校准未完成，GOP等硬件阶段未验收。
