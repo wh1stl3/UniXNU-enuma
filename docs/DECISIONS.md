@@ -1580,3 +1580,7 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 
 
 2026-10-27 · 隔离固件b6fe1a2接入Core/FV/重定位文本绑定及调用前板级适配器，两个trace-build-2完整FD和最终审计通过。8项stage10删除负测、6项拒绝终止删除负测、两PE sanitizer/交叉身份测试与旧出口749种拒绝回归通过。证据reports/enuma-oem-core-trace-development.json，操作记录operations/2026-10-27-oem-core-trace-firmware.md。保留失败trace-build-1；构建基点322f427+快照，不称干净提交构建。仍stage10派发前停止，板级运行资格未有；R027/原主线不改，无设备、Boot.img或推送。设备仓上次53956f4，本次提交号见git log。
+
+2026-10-27 · 用户明确OEM运行版后部署；隔离worktree构建oem-runtime-build-20261027-1成功，FD d08f338dc49f60eb08ecd25a14c66e0f6e8fe9e5724d19f04684ca2d1fd08345。运行版加入随机会话、首调用取证拒绝终止、本CPU中断屏蔽/直接计时、异常早复位；原始OEM对照先测，不混入MMU改动。12:15/12:16只读Android/root/原槽/解锁/备份摘要核对通过，未重启或boot。最终资格与现场准备继续；旧qualification-1因构建收尾报告尚未落盘提前调用而失败，-2是初步资格，最终采用增加机器码审计的-3。不覆盖失败目录。R027/共享主线/远端保持。详见operations/2026-10-27-oem-runtime-deployment.md。
+
+2026-10-27 · 运行版最终qualification-3通过；Boot v3 17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08。20项运行序列删除负测、ArmCpuDxe异常序列、9项门禁/模拟传输测试和最终离线绑定通过。固件本地提交bdfe65f；父仓提交号见git log。当前只差此刻录像/人工恢复准备，未boot；状态与交接已更新，不推送。

@@ -13,7 +13,7 @@ DISPLAY='4138022f-06c7-4f79-9c94-7e33b511a4e7'
 def sha(b):return hashlib.sha256(b).hexdigest()
 
 
-def audit(build):
+def audit(build, runtime=False):
     build=Path(build).resolve();build.relative_to(ROOT/'out')
     report=json.loads((build/'build-result.json').read_text());profile=report.get('profile')
     if profile not in IDENTITIES or report.get('complete') is not True or report.get('deployment_ready') is not False:
@@ -32,6 +32,14 @@ def audit(build):
     required={'ENUMA_DIAG_STAGE':'10','ENUMA_DIAG_SIMPLEFB':'0','ENUMA_GOP_SELFTEST':'0',
               'ENUMA_DIAG_DISABLE_UFS':'1','ENUMA_DIRECT_MENU':'0','ENUMA_DEFERRED_MENU':'0',
               'ENUMA_FULL_MENU':'0','ENUMA_BOUNDED_MENU':'0'}
+    if runtime:
+        identity=report.get('oem_trace_identity') or {}
+        if profile!='oem-control' or not report.get('oem_trace_build') or not report.get('oem_run_config') or \
+           identity.get('stage10_gate') is not False or identity.get('trial_nonce') is not True:
+            raise ValueError('runtime trace identity absent')
+        required.update(ENUMA_DIAG_STAGE='13',ENUMA_DIAG_DETAIL_POINT='13',ENUMA_DIAG_GUID_ENABLED='1',
+                        ENUMA_DIAG_GUID_ONLY='1',ENUMA_DIAG_GUID_LOW64='0x4f7906c74138022f',
+                        ENUMA_DIAG_GUID_HIGH64='0xe7a411b5337e949c',ENUMA_DIAG_DISPATCH_FALLBACK='1')
     defs=report['firmware_configuration']['defines']
     if any(defs.get(n)!=v for n,v in required.items()):raise ValueError('wrong profile defines')
     binding=report['oem_profile_binding']
@@ -71,7 +79,7 @@ def audit(build):
         if files.get(guid,{}).get('raw')!=[binding['vendor_files'][n]]:raise ValueError('native panel RAW mismatch')
     products=build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64'
     flags={};products_verified={}
-    for name in ('DxeCore','EnumaProbe'):
+    for name in (('DxeCore','EnumaProbe','ArmCpuDxe') if runtime else ('DxeCore','EnumaProbe')):
         pes=list(products.rglob('OUTPUT/'+name+'.efi'))
         if len(pes)!=1:raise ValueError('missing/ambiguous product '+name)
         packed=[b for f in files.values() if f['name']==name for b in f['pe']]
@@ -79,6 +87,10 @@ def audit(build):
         response=pes[0].parent/'cc_resp.txt';text=response.read_text()
         for n in ('ENUMA_DIAG_STAGE','ENUMA_DIAG_SIMPLEFB'):
             if '-D'+n+'='+required[n] not in text.split():raise ValueError('compiler flags mismatch '+name)
+        if runtime and name=='DxeCore':
+            for n in ('ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GUID_ENABLED','ENUMA_DIAG_GUID_ONLY',
+                      'ENUMA_DIAG_GUID_LOW64','ENUMA_DIAG_GUID_HIGH64','ENUMA_DIAG_DISPATCH_FALLBACK'):
+                if '-D'+n+'='+required[n] not in text.split():raise ValueError('runtime compiler flag mismatch '+n)
         flags[name]=sha(response.read_bytes())
         products_verified[name]=sha(packed[0])
     return dict(passed=True,profile=profile,fd_sha256=sha(blob),display_pe_sha256=sha(files[DISPLAY]['pe'][0]),

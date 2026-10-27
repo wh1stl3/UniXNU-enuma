@@ -1288,3 +1288,9 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 固件11c6cf1新增默认NULL观察器、单次带身份/完整性快照、持久缓存像素后端；窗口恢复未确认时非返回Stop，不转发OEM或编造状态。final1通过host sanitizer/AArch64/6删除负测、749种文本损坏拒绝和独立进程非返回后的外部文件保存；像素测试含恢复失败、异常、24种通道排列。证据out/oem-precall-20261027-c999，报告reports/enuma-oem-precall-capture-development.json，详见operations/2026-10-27-oem-precall-capture.md。板级物理/窗口所有权/终止恢复和Core精确绑定尚未接入，无新固件构建或硬件资格。R027镜像/资格/2434源绑定保持，实机暂停、无当前人工录像/按键待办。仅本地提交，不推送；设备仓提交号由git log查询。
 
 2026-10-27应用方案更新：已生成独立MMU-only实验PE，未打包/部署。未改内存字段或verified，无新实机申请；下一实机仍依既有冻结规则及新变体资格，ADB恢复不消费R027。详见operations/2026-10-27-enuma-display-application-plan.md。
+
+## 2026-10-27：OEM运行版部署范围
+
+用户“可以部署了”并选择“继续补齐 OEM 运行版后部署”。允许新 OEM control 首调用候选的一次临时 fastboot boot；R027仍冻结，旧stage10样本不上机。最新不推送约束保持，历史实测前推送要求在本次由本地源码/交接提交替代。只写独立enuma-oem-display工作区。
+
+当前已编出运行FD，首调用取证失败不转发；本CPU中断屏蔽和异常早复位仅是有限防护，没有独立看门狗或全局窗口所有权证明。部署前最终软件资格、精确镜像单次绑定、即时设备/备份核验和当前录像/人工恢复准备必须完成。详见docs/operations/2026-10-27-oem-runtime-deployment.md。没有扩大为刷分区、改槽、内存/verified变更或MMU候选自动轮测。

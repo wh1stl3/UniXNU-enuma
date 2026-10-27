@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "hardware_executed": false,
+  "image_sha256": "17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08",
+  "fd_sha256": "d08f338dc49f60eb08ecd25a14c66e0f6e8fe9e5724d19f04684ca2d1fd08345",
+  "image": "out/oem-runtime-qualification-20261027-3/image.img",
+  "qualification": "out/oem-runtime-qualification-20261027-3/qualification.json",
+  "firmware_commit": "bdfe65f",
+  "build_base": "b6fe1a2 plus source-manifest snapshot",
+  "runtime_code": {
+    "sites": {
+      "dispatcher": "0x3bb0",
+      "completion_MicroSecondDelay": "0x3bbc",
+      "completion_ResetCold": "0x3bc0",
+      "completion_CpuDeadLoop": "0x3bc4",
+      "target_delay": "0xfee8",
+      "target_reset": "0xfeec",
+      "target_loop": "0xfef8",
+      "OemCaptureTerminal_reset": "0x12b1c",
+      "OemCaptureTerminal_pause": "0x12b20",
+      "OemCaptureTerminal_loop": "0x12b24",
+      "DumpCpuContext_reset": "0x12b1c",
+      "DumpCpuContext_pause": "0x12b20",
+      "DumpCpuContext_loop": "0x12b24",
+      "capture_stop": "0x12ac8",
+      "capture_terminal": "0x12ad0",
+      "bsp": "0x11e44",
+      "save_daif": "0x11e68",
+      "mask_daif": "0x11e6c",
+      "restore_daif": "0x12088",
+      "hold_direct_timer": "0x1343c"
+    },
+    "deletion_checks": 20,
+    "scope": "selected instruction sequences only; GUID predicates additionally source/flags bound; no physical recovery guarantee"
+  },
+  "entry_failure_negative_tests": 3,
+  "python_tests": 9,
+  "device_action": "read-only prechecks; no reboot or boot",
+  "pending": "current filming and manual recovery readiness",
+  "r027": "frozen and unconsumed",
+  "remote_pushed": false
+}

@@ -1,3 +1,5 @@
+当前更新（2026-10-27）：独立工作区OEM运行版已完成qualification-3，用户已授权补齐后部署，只差当前录像/人工恢复准备。先读本工作区docs/STATUS.md及operations/2026-10-27-oem-runtime-deployment.md；下方旧交接是历史背景。R027继续冻结，不推送，共享主线不改。
+
 最新接续：Core追踪/板级适配器双FD已编出；先读本worktree docs/STATUS.md 和 docs/operations/2026-10-27-oem-core-trace-firmware.md。仍stage10停止、未上机。以下早期prompt仅供背景。
 
 本worktree最新接续：先读 docs/STATUS.md 和 docs/operations/2026-10-27-oem-display-worktree.md。两组OEM stage10完整FD已构建，当前写入根为 D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display；原主线及R027保持不改。以下旧prompt保留为背景，不覆盖最新状态。
@@ -46,3 +48,4 @@ E. 能独立完成的测试、构建、机器码审核、失败路径及来源�
 保留冻结产物、媒体和历史证据原字节；不提交 OEM 二进制/备份/设备标识/out/影音，不推送远端。构建使用固定依赖；不能把干净提交与旧工作区快照资格等同。原始媒体只在本地，先独立判读保存并展示，用户确认后才做精确镜像归因。
 
 开工简报说明接手结论和最小离线方案，之后实际推进。结束同步 STATUS/HANDOFF、WORKLOG/DECISIONS、NEED-REVIEW 与人工待办，明确已做/未做、证据路径、提交状态、下一卡点。不要把未观察到返回称为已确定死锁。
+

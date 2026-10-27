@@ -1,32 +1,32 @@
-# 当前：新OEM追踪固件已编出，仍为stage10离线构建
+# 当前：OEM运行版已完成软件资格，待当前现场准备
 
-2026-10-27。本轮目标“继续推进直至编出新固件”已完成。仅写入 D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display，原共享主线及其firmware保持不改。R027冻结未消费，未查询或操作设备、未推送。
+2026-10-27。用户已授权“继续补齐 OEM 运行版后部署”。新候选是原始OEM control首调用取证版；R027/S055仍冻结未消费。只写独立worktrees/enuma-oem-display，原共享UniXNU-enuma及firmware不改，不推送。
 
-两份新3MiB固件均在本worktree：
+已生成可临时启动的Boot v3：
 
-- 原版对照：out/oem-control-trace-build-20261027-2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd，SHA256 e856368faa31690518cea62f6212d536dd13c82941910f9cf6825c9450ad1786。
-- MMU-only：out/oem-mmu-only-trace-build-20261027-2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd，SHA256 984aa8cf15f6358ce5eb5c6743a67a94a050f1dd0cfc7c3b4df9361ac5e37ef6。
+- 镜像：out/oem-runtime-qualification-20261027-3/image.img，3153920字节。
+- SHA256：17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44fea591fa73b970b82f08。
+- FD：out/oem-runtime-build-20261027-1/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。
+- FD SHA256：d08f338dc49f60eb08ecd25a14c66e0f6e8fe9e5724d19f04684ca2d1fd08345。
 
-## 实际新增
+## 本次运行行为
 
-显式--oem-trace-build把Core同句柄/FV/LoadedImage指针绑定、已重定位.text完整性指纹、持久三服务追踪、调用前快照和板级有界像素适配器接入完整FD。嵌套其他句柄透明跳过；错误目标绑定锁存失败，沿CoreExit返回实际StartImage错误，若CoreExit意外返回则停在CpuPause循环，不能冒充OEM入口执行或OEM返回。
+Core精确匹配原厂DisplayDxe/FV/LoadedImage/重定位文本后，才绑定持久私有服务表。随机session与trial UUID对应一次首调用call0取证；320×160窗口位于(64,96)，停留8秒并恢复/读回。取证拒绝或恢复未确认时终止，不转发该原服务。事务屏蔽本CPU异步中断并直接计时，异常在格式化输出前尝试复位，返回则永久暂停。
 
-运行态指纹在精确原PE基础上归一化756个DIR64文本重定位；它是诊断误配检查，不是密码学认证。nabu路线仍只改enuma DisplayDxe 0x1994的参数2→0，保留构造器和面板/管线初始化；elish路线保留原生K81双链命令与等待契约。
+运行版已移除stage10派发前停止；精确目标实际CoreStartImage返回触发2秒复位，正常派发完成fallback为7秒复位。没有异步看门狗，不能保证OEM卡住时自动恢复。本CPU屏蔽不证明AP/DMA排他；相机可读性、物理恢复和OEM实际返回仍未验证。
 
-板级适配器实际接上既有内存区检查、路由采样、EL1/整帧identity-WT检查、单次320×160/8秒事务及恢复未确认时的复位/停止路径。静态上下文跨驱动返回保留，没有把约200KiB保存区放在OEM栈上。它只显示所选事件五行摘要；CPU恢复/写读回不等于可见、相机采集或完整文本持久导出。
+## 已通过的离线检查
 
-## 验证
+完整FD核对32个OEM PE/DEPEX、39项APRIORI、两份K81 RAW以及实际Core/Probe/ArmCpuDxe产物。真实C编译参数、运行身份头和异常头绑定；Core派发/返回/取证失败/中断序列20项删除负测通过，Core和ArmCpuDxe异常终止序列核对通过。Boot v3打包、官方解包回读及源码/镜像绑定通过。
 
-两份完整构建均通过源码/快照一致性和Core补丁回退检查。最终FD审计核对各32个OEM PE/DEPEX、39项APRIORI、两份K81 RAW，实际抽取PE重算生成指纹并匹配构建头；包装器、观察器、板级sink及终止函数均在最终Core。stage10实际序列与8项删除调用负测通过；绑定失败CoreExit/Pause/回跳序列与6项删除指令负测通过。宿主ASan/UBSan覆盖重定位、损坏、错入口/大小、嵌套句柄、FV/LoadedImage身份、CRC失败、单次锁存、交叉变体拒绝；板级适配器AArch64对象编译通过。
+ASan/UBSan覆盖绑定失败和首调用取证失败不得转发；部署入口9项测试覆盖镜像/源码/范围/缺人工准备/重复领取拒绝、一次boot后恢复、boot失败不重试、错误Android身份不写入。机器码检查仅证明所检序列，不是完整控制流或实机保证。证据qualification-3、out/oem-runtime-binding-check-20261027-1及out/oem-deployment-review-20261027-1/runtime-tests.txt。
 
-原调用前出口回归通过749种损坏拒绝、宿主不返回服务后的外部快照保留、像素事务失败路径和6项旧组件机器码删除检查。修复后的构建入口8项回归通过，非OEM使用trace选项被CLI拒绝且不创建输出。总报告：[新固件证据](../reports/enuma-oem-core-trace-development.json)。
+## 设备与继续条件
 
-第一组trace-build-1因新patch未进入旧preflight清单而在编译前失败，目录保留。builder已显式复制此patch，新trace-build-2成功。组件早期check1/3是声明/include开发错误，最终check5有效。固件本地提交b6fe1a2；构建时基点322f427加本轮未提交快照，不冒充干净提交构建。设备仓本轮提交号见git log。
+本轮12:15/12:16 +08只读核验enuma Android启动完成、A槽、解锁、root，boot_a/vendor_boot_a与本地备份摘要一致。尚未发出重启、boot或分区写入；当时状态不能替代启动前即时核验。
 
-## 当前限制与下一步
+只差当前录像及人在场长按恢复确认。依据AGENTS设备门禁及拍摄规则，本次有实际像素输出，必须连续录像；原始影音仅本地。确认后即时重查设备和资格，单次ledger领取，唯一一次fastboot boot；75秒无可确认返回则停止追加并优先人工恢复，不自动试MMU候选。没有当前准备回复前不启动。
 
-两profile强制stage10派发前停止，不能执行OEM或物理回调；未生成可上机资格或Boot.img。session=1/call=0仅是编译选择，不是实机trial nonce。板级窗口独占、异常退出、可见采集及恢复路径尚未验收；普通sink拒绝保持原服务转发语义，不能据此承诺一定得到外部证据。后续须完成运行态单次选择、板级所有权/异常终止策略和独立资格，才考虑移除停止门。未观察到return仍不能判死锁。
+源码仅本地提交，构建基点b6fe1a2加哈希开发快照，后续提交不改称干净提交构建。qualification-1因构建收尾报告未落盘提前检查而失败；-2为初步资格，-3增加机器码和ArmCpuDxe审计后为当前资格，旧证据保留。共享主线与R027资格不合并、不重写。
 
-R027/S055保持paused-by-user/未消费；原镜像0db64285d13c0e2f60e68403b0b5498433b0b0c0143f6ce336c1885dad4afb5a及原始OEM摘要本轮复核一致。旧准备过期，没有当前录像或按键待办。用户此前报告ADB恢复，本轮未独立验证，不扩大为实机放行。
-
-完整实现、命令、边界：[Core追踪固件记录](operations/2026-10-27-oem-core-trace-firmware.md)。原stage10无追踪构建仍保留在上一轮目录，不覆盖；原主线和冻结资格不合入本轮代码，不推送，不改内存字段或verified。
+详见[OEM运行与部署记录](operations/2026-10-27-oem-runtime-deployment.md)。生产GOP、ConOut、完整BDS、实体输入及XNU均未验收；未观察到返回不能判死锁。

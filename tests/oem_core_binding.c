@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <setjmp.h>
 VOID *EFIAPI CopyMem(VOID *D,CONST VOID *S,UINTN N){return memcpy(D,S,N);}
 VOID *EFIAPI ZeroMem(VOID *D,UINTN N){return memset(D,0,N);}
 INTN EFIAPI CompareMem(CONST VOID *A,CONST VOID *B,UINTN N){return memcmp(A,B,N);}
@@ -17,6 +18,8 @@ EFI_GUID gEfiLoadedImageProtocolGuid;
 EFI_GUID gEfiFirmwareVolume2ProtocolGuid;
 STATIC EFI_LOADED_IMAGE_PROTOCOL *Protocol;
 STATIC unsigned CrcCalls,FailCrc;
+STATIC unsigned Stops,OriginalAllocations;
+STATIC jmp_buf StopJump;
 STATIC EFI_STATUS CoreHandleProtocol(EFI_HANDLE H,EFI_GUID *G,VOID **Out){
   if(G==&gEfiFirmwareVolume2ProtocolGuid){assert(H==(EFI_HANDLE)3);*Out=(VOID *)3;return EFI_SUCCESS;}
   assert(H==EnumaStartingImage);*Out=Protocol;return EFI_SUCCESS;
@@ -26,13 +29,14 @@ STATIC EFI_STATUS CoreHandleProtocol(EFI_HANDLE H,EFI_GUID *G,VOID **Out){
 #define ENUMA_OEM_BOARD_CAPTURE_H
 STATIC EFI_BOOT_SERVICES *mOemOriginalBoot;
 STATIC BOOLEAN OemBoardSink(VOID *C,CONST CHAR8 *L,UINTN N){(void)C;(void)L;(void)N;return FALSE;}
+STATIC VOID OemCaptureTerminal(VOID *C){(void)C;Stops++;longjmp(StopJump,1);}
 #include "EnumaOemCoreBinding.h"
 STATIC EFI_TPL EFIAPI Raise(EFI_TPL T){(void)T;return TPL_APPLICATION;}
 STATIC VOID EFIAPI Restore(EFI_TPL T){(void)T;}
 STATIC EFI_STATUS EFIAPI Crc(VOID *P,UINTN N,UINT32 *V){(void)P;(void)N;CrcCalls++;*V=0;return CrcCalls==FailCrc?EFI_DEVICE_ERROR:EFI_SUCCESS;}
 STATIC EFI_STATUS EFIAPI Locate(EFI_GUID *G,VOID *R,VOID **I){(void)G;(void)R;(void)I;return EFI_NOT_FOUND;}
 STATIC EFI_STATUS EFIAPI Handle(EFI_HANDLE H,EFI_GUID *G,VOID **I){(void)H;(void)G;(void)I;return EFI_NOT_FOUND;}
-STATIC EFI_STATUS EFIAPI Allocate(EFI_MEMORY_TYPE T,UINTN N,VOID **B){(void)T;(void)N;(void)B;return EFI_OUT_OF_RESOURCES;}
+STATIC EFI_STATUS EFIAPI Allocate(EFI_MEMORY_TYPE T,UINTN N,VOID **B){(void)T;(void)N;(void)B;OriginalAllocations++;return EFI_OUT_OF_RESOURCES;}
 int main(int argc,char **argv){
   EFI_GUID Display={0x4138022f,0x06c7,0x4f79,{0x9c,0x94,0x7e,0x33,0xb5,0x11,0xa4,0xe7}},Wrong={0};
   EFI_BOOT_SERVICES Boot={0};EFI_SYSTEM_TABLE System={0};EFI_LOADED_IMAGE_PROTOCOL Loaded={0},Other={0};
@@ -72,5 +76,9 @@ int main(int argc,char **argv){
   assert(Loaded.SystemTable==&mOemCoreTrace.System&&System.BootServices==&Boot&&mOemCoreTrace.Published);
   assert(mOemCoreCapture.State==EnumaCaptureArmed&&mOemCoreCapture.Owner==&mOemCoreTrace&&mOemOriginalBoot==&Boot);
   assert(EnumaOemCoreBeforeEntry((EFI_HANDLE)1,&Loaded,Entry)==EFI_ALREADY_STARTED);
+  if(ENUMA_OEM_RUNTIME){
+    if(setjmp(StopJump)==0){mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL);assert(0);}
+    assert(Stops==1&&OriginalAllocations==0&&mOemCoreCapture.State!=EnumaCaptureExported);
+  }
   free(Image);puts("PASS: relocation normalization, corrupt code/relocation, entry/size, nested handle, loaded pointer, no retry, CRC failure, private table and armed capture");return 0;
 }
