@@ -66,3 +66,16 @@ call0..4不画窗口。E01/S02为目标安装前/真实返回，严格要求call
 固件fd94b26/准备c878c8d已先后发布且执行前远端精确核验；本次即时身份/备份/恢复门禁通过，只boot一次，trial 4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e consumed。fastboot调用0.394秒返回0，执行器观察Android完成；用户确认没有操作、自行返回。22:05独立enuma/完成/root/A槽/解锁及双分区与本地原备份摘要通过，无追加启动/分区操作或硬停。媒体尚未判读，安装/SID/Core返回未知，不以Android终点推断OEM/GOP成功。
 
 用户纠正媒体位置，已在D:/Code/PortingiOS/enuma/Media-enuma/OEM-registration-v5-20261027-4549e5e6建目录；此前误建out/media为空且不使用。下一步原媒体独立判读落盘→展示全文→人工核对→精确代码归因。本次不重试，R027冻结、共享主线只读。结果reports/enuma-oem-registration-v5-trial-20261027.json，恢复/现场确认out/oem-registration-live-20261027；原runner状态不回写，human-return-confirmation独立关闭按键待办。
+
+
+## 2026-10-27 v5两张照片独立判读、人工确认与归因更新
+
+原图s1.jpg SHA256 7a33dc6c9175dc2ee125e10023b75dc5cf2551b1ef771dfe6124a25eef1cd68e，s2.jpg SHA256 1bf50fdeea1111006b82c10761c1c9bd30b5c571b58601c4f1c04500f8f58731。先独立保存完整五行，再严格解码与资格session匹配；用户确认“两组均一致”“只出现这两组”。s1为E01/C5/Qa/RVA5cc8，s2为S02/C5/Qb/RVA5cc8/status0；session d0de511b184ace49。完整转录、原图摘要、解码和独立人工确认在out/oem-registration-live-20261027/media-review，原始媒体仅在Media-enuma本次目录。
+
+这次证明原始InstallConfigurationTable真实返回EFI_SUCCESS：精确PE 6c6351...在0x5cc0读取BootServices+192，0x5cc4 BLR x10；包装器先调用Original->InstallConfigurationTable，再把真实Status送入EnumaServiceEnd/AfterForward，无合成返回。安装前页支持前序分配及16字节复制已经走过，返回页排除“本次一直未从该安装服务返回”。不能据此验证表中全部内容或消费者后续使用正确。
+
+新主判断是优先隔离S02返回窗口收尾/包装器退出与后续输出准入，诊断优先级置信中等，唯一根因仍低。S02在Hold/像素恢复/读回之前可见；Present返回TRUE和DAIF恢复发生在其后，失败可ResetCold并回Android。因此自行回Android不证明S02恢复成功、已回原厂0x5cc8、SID或Core返回；缺少后页也不排除后段实际执行后出口拒绝。其次检查原厂最后注册构造返回至主入口及未包装BootServices/协议调用，不把SID服务内部当已定位故障。
+
+本轮精确PE反汇编另存新out路径。0x1470 BL 0x6ffc，0x7014尾跳0x5b64进入本注册函数；0x5cc8把x0置零，0x5ccc..5cdc恢复寄存器并RET，返回0x1474处的构造结果检查。它不是先前0x1350调用的0x5b60（该处尾跳0x5a84分配注册表）。之后才经入口后续调用走向0x1508→0x16e8；主入口在SID之前还含内存清理及0x17e0的BootServices+80间接调用，故不能把安装后至SID概括为“只剩一条SID调用”。静态路径不等于这些地址已实机执行。
+
+下一诊断应减少/隔离返回页自身影响并保留真实服务状态与后续到达证据，或提供独立的窗口收尾/出口拒绝区分；不能再用“最后可见服务内部挂住”解释本笔。本轮未生成新候选或追加设备，v5已consumed，R027冻结；新scope/输入仍须完整构建、失败/机器码及来源资格、当次现场与恢复门禁。结果reports/enuma-oem-registration-v5-media-confirmed.json；原pending转录/runner/初次结果字节保留。

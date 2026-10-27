@@ -1,0 +1,51 @@
+{
+  "scope": "oem-registration-v5",
+  "trial_id": "4549e5e6-22a7-4e4d-bd8a-4ee65d8e621e",
+  "human_confirmed": true,
+  "only_two_pages_observed": true,
+  "observations": [
+    {
+      "file": "s1.jpg",
+      "decoded": {
+        "phase": 1,
+        "event": "registration-before",
+        "experiment": "oem-registration-v5",
+        "session": "0xd0de511b184ace49",
+        "sequence": 10,
+        "call": 5,
+        "caller_rva": "0x5cc8",
+        "returned": false,
+        "status": null,
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim"
+      }
+    },
+    {
+      "file": "s2.jpg",
+      "decoded": {
+        "phase": 2,
+        "event": "registration-return",
+        "experiment": "oem-registration-v5",
+        "session": "0xd0de511b184ace49",
+        "sequence": 11,
+        "call": 5,
+        "caller_rva": "0x5cc8",
+        "returned": true,
+        "status": "0x0",
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim"
+      }
+    }
+  ],
+  "original_service_returned": true,
+  "original_service": "InstallConfigurationTable",
+  "original_service_status": "EFI_SUCCESS",
+  "resume_at_oem_0x5cc8_proven": false,
+  "sid_reached_proven": false,
+  "core_start_image_return_proven": false,
+  "window_restore_proven_from_photo": false,
+  "root_cause_proven": false,
+  "automatic_android_return_user_confirmed": true,
+  "independent_android_postcheck_passed": true,
+  "next_diagnostic_priority": "Isolate S02 window cleanup/return and later output refusal before attributing a new OEM internal failure",
+  "evidence": "out/oem-registration-live-20261027/media-review",
+  "raw_media_local_only": true
+}
