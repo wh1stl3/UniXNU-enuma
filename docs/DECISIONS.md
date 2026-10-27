@@ -1777,3 +1777,12 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 仅main-entry-v6镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d、trial cfee120a-a6a4-4b02-bcff-21b1aa82372f；E01主入口ChipInfo查询前、E03首次SID前、S05真实Core返回，最多三窗24秒Hold。75秒无合格返回停止追加、优先恢复并同轮记录；不flash/erase/改槽，R027及旧v5不执行。当前观察不能预写OEM/GOP/BDS成功。
 
 本次媒体目录已提前创建D:/Code/PortingiOS/enuma/Media-enuma/OEM-main-entry-v6-20261027-cfee120a；原始媒体只留本地，助手先独立判读落盘、展示完整字符串再请用户核对。准备与前检证据out/oem-main-entry-live-20261027/authorization.json、preflight.json。发布前不发图，无自动重试。
+
+
+## 2026-10-27 23:08 v6主入口E01确认，自行回Android
+
+准备f7dc965/固件d393211发布及远端精确核验后，trial cfee120a-a6a4-4b02-bcff-21b1aa82372f仅boot一次并consumed，fastboot调用0.401秒返回0，观察到Android完成。用户确认没有操作、自行返回；23:06独立enuma/完成/root/A槽/解锁及原双分区/本地备份摘要通过，无追加启动/分区操作或硬停。
+
+一张本地照片先独立保存完整五行和摘要，再解码及人工核对；用户确认一致且现场只有一页。E01/C6/Qc/RVA3608/session91c9b0ca3369ea72，支持原厂注册后已到主入口ChipInfo查询包装入口；不证明E01窗口恢复或原始查询执行/返回，更未证明GetChipFamily/SID/Core返回。没有S02/S04是本版设计，不可作为缺失返回。下一定位优先E01收尾/转发、ChipInfo查询与+48方法、条件协议/事件至SID及出口；唯一根因未知，不凭最后可见页判死锁。结果reports/enuma-oem-main-entry-v6-trial-20261027.json，out/oem-main-entry-live-20261027保存确认/恢复/发布证据；原图SHA256 7a8f944ea3b53063c339cc34b6cdbf67c7b1fb7a5c4a5005fe176c39106f4b8d仅本地Media-enuma本次目录。R027/旧候选冻结，v6不重试，无人工欠项。
+
+直连GitHub失败后通过系统已有代理的单命令Git参数完成推送，不修改全局配置。有效独立初读为media-review/independent-read1.json，首次写入异常空文件保留；原runner/独立初读pending状态不回写，由新human确认闭合。

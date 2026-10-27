@@ -1,3 +1,5 @@
+> **2026-10-27 最新：** v6已单次消费，原厂主入口ChipInfo查询前E01已人工确认，用户无操作自行回Android且独立核验通过；原始查询/方法/SID/Core返回仍未证实。无人工欠项，不重试v6，现行状态见STATUS/HANDOFF。以下构建/未上机表述保留为历史。
+
 > 当前候选：[main-entry-v6](operations/2026-10-27-oem-main-entry-v6.md)，完整镜像/资格完成，未claim/上机。当前状态见STATUS/HANDOFF；旧v5已消费。
 
 # 当前文档入口（2026-10-27）

@@ -1,23 +1,25 @@
-# 当前：main-entry-v6 本次拍摄/恢复就绪，单次启动准备（2026-10-27）
+# 当前：v6单次已消费，主入口E01确认，自行回Android（2026-10-27）
 
-此前离线完成新镜像；本次用户要求上机，已完成只读即时前检，尚未启动。v5两页与现场仅两组已确认，真实InstallConfigurationTable返回EFI_SUCCESS；用户无操作自行回Android且恢复独立核验通过。v5 consumed不重试；R027和旧产物冻结，共享主线只读。
+用户本次“上机”并重新确认“拍摄已就绪，在场可恢复”。准备提交f7dc965及固件d393211执行前远端精确核验通过；Git直连连接失败保留，改用Windows已启用系统代理的单命令http.proxy完成推送及核验，没有改全局Git/系统代理或共享主线。即时身份/原备份/恢复门禁通过后仅一次临时fastboot boot。
 
-新候选scope oem-main-entry-v6，镜像out/oem-main-entry-20261027/qualification2/image.img，3153920字节；SHA256 c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d。完整FD SHA256 37126098fc7804af36cfcafe908f17454fbc9757ded55986462461f13caf4fcc，位于out/oem-main-entry-20261027/build2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。qualification.json SHA256 7d3575843a9904d4f8b63891aa9143f785cbe934949e1fa868918775daf2e486。trial cfee120a-a6a4-4b02-bcff-21b1aa82372f，session 10505121988310854258，尚未claim/上机。Boot v3指Android镜像头格式；新诊断固件版本是v6，不是v3。
+scope oem-main-entry-v6，trial cfee120a-a6a4-4b02-bcff-21b1aa82372f已claim/consumed，镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d（out/oem-main-entry-20261027/qualification2/image.img，3153920字节）；原资格/FD/镜像不回写。fastboot调用0.401秒返回0；执行器观察断开后Android完成。用户明确没有操作、设备自行返回；23:06独立核验enuma、boot_completed=1、root、A槽、解锁及原boot_a/vendor_boot_a和本地备份摘要全部通过。无追加启动、分区写入、改槽或恢复欠项，没有设备硬停。
 
-最大可操作嫌疑仍为S02返回窗口收尾/包装器退出及后续出口拒绝（诊断优先级置信中等、唯一根因低）。精确原厂后段新增定位：0x1760进入0x35c8，0x3604查询ChipInfo、返回RVA3608；查询成功后0x3618调用接口+48 GetChipFamily；其后有条件协议方法及CreateEvent/Ex，SID在更后。它们都可能在SID前阻断，未将任何一处认定实机根因。解决方向与推翻条件见[main-entry-v6分析](operations/2026-10-27-oem-main-entry-v6.md)。
+目录内一张原图已先独立判读保存（independent-read1.json），再严格解码和本次session绑定，用户确认五行逐字一致且现场只有这一页：
 
-v6取消注册区间两窗与所有服务返回侧绘制，不更改原厂PE、服务指针/状态或GetChipFamily方法。只绘制E01（ChipInfo查询前，实际call>=6、精确RVA3608/GUID）、E03（SID查询前，主查询真实返回已记录）及S05（真实CoreStartImage返回和状态）。selected_call=6为最小序号，实际选择依精确RVA/GUID，不假定固定序号。板级拒绝其他phase/超过三窗；ROI(64,96)320×160，每窗8秒，最多Hold24秒，较v5预算少16秒，不称实测启动提速。无页/缺页仍可能是出口问题；E01不证明原始查询执行，E03不证明SID原始服务完成。
+```text
+E01C0000000000000006
+Q000000000000000C
+O0000000000003608
+E
+G91C9B0CA3369EA72
+```
 
-完整FD、原厂模块/RAW/编译产物审计及Boot header v3打包/解包回读通过；42项Python（含模拟传输）、check2 ASan/UBSan与真实Core配置表删除负测、path2精确PE和AArch64 ChipInfo ABI、binding3重定位/错PE拒绝及AArch64板级通过。最终机器码32处运行路径+77处主入口/转发/同步删除及2处GUID变异均拒绝。默认离线runner及2452项来源绑定通过。binding2旧夹具的固定序号停止假设失败已保留，修正测试语义后binding3通过，未为测试伪造运行逻辑。
+照片SHA256 7a8f944ea3b53063c339cc34b6cdbf67c7b1fb7a5c4a5005fe176c39106f4b8d。E01/C6/Qc/RVA3608支持原厂最后注册构造返回并进入主入口ChipInfo查询包装入口；本次没有注册区间/服务返回侧绘制，不能再说本次未到主入口。E01可见先于窗口恢复/读回及原始LocateProtocol调用，所以不证明查询执行/返回、GetChipFamily、SID或CoreStartImage返回。没有S02/S04是v6设计，不是缺失返回记录。
 
-固件提交d393211，已向显式GitHub URL/oem-progress-20261027正常推送；设备仓源码/文档发布以out/oem-main-entry-20261027/publication.json及git远端为准，不推固件本地origin/main。构建为fd94b26基线的工作树快照，保留manifest，不称提交后重编。qualification1保留旧绑定；最终qualification2绑定新的当前重定位/板级证据，FD/image字节相同。build1为改进选择方式在完整编译前中止，build2完整通过，历史输出不删除。
+下一最大可操作区间为E01窗口收尾/包装器转发→ChipInfo原始查询→接口+48 GetChipFamily及条件协议方法/事件创建→SID入口和后续输出准入。唯一根因置信低，优先诊断取证收尾/出口，不能根据单页判ChipInfo/SID内部死锁。v6绕过旧v5 S02绘制并到达主入口，只支持本次路径到达；不反推v5收尾通过或把变化唯一归因为移除窗口。实际代码和后续方案依据见[main-entry-v6分析](operations/2026-10-27-oem-main-entry-v6.md)。
 
-启动链按真实OEM返回→生产GOP模式/几何/显示所有权→ConOut/正常BDS/配置发现和输入→DarwinBoot/EBS→XNU推进。当前仍是目标OEM驱动后的诊断终止镜像，未验收生产GOP/ConOut/BDS/实体输入或XNU；临时菜单不替代OEM成功。官网显示/日志章节本轮在线重读成功，未升级固定依赖或复制其他设备参数。
+当前无人工媒体/字符串/恢复欠项；v6不重试，下一新软件须独立资格、当前发布及当次拍摄/即时身份备份恢复门禁，旧就绪不复用。共享主线只读、R027及旧候选冻结；内存base/size、verified、分区边界不变。生产GOP/ConOut/BDS/实体输入/XNU仍未验收。
 
-用户最新要求“上机”，并明确本次“拍摄已就绪，在场可恢复”。本次条件独立记录，不复用v5。22:58只读即时前检通过：enuma、Android完成、root、A槽、解锁、原boot_a/vendor_boot_a与本地备份摘要一致。新v6仍未claim/发图；本准备提交发布及远端核验后，由原单次runner再次即时核验并执行一次临时boot。
+结果reports/enuma-oem-main-entry-v6-trial-20261027.json；证据out/device-tests/oem-cfee120a-a6a4-4b02-bcff-21b1aa82372f及out/oem-main-entry-live-20261027（publication-verified、preflight、postcheck、human-return-confirmation、media-review）。runner的pending-user-confirmation和独立初读pending快照保留，通过新确认文件闭合，不覆盖历史证据。independent-read.json为首次写入异常留下的空文件，有效初读为independent-read1.json。
 
-仅main-entry-v6镜像c372c5e89a25aabe8d025469364c7d160be7c034481f5cec5e0283cc3338036d、trial cfee120a-a6a4-4b02-bcff-21b1aa82372f；E01主入口ChipInfo查询前、E03首次SID前、S05真实Core返回，最多三窗24秒Hold。75秒无合格返回停止追加、优先恢复并同轮记录；不flash/erase/改槽，R027及旧v5不执行。当前观察不能预写OEM/GOP/BDS成功。
-
-本次媒体目录已提前创建D:/Code/PortingiOS/enuma/Media-enuma/OEM-main-entry-v6-20261027-cfee120a；原始媒体只留本地，助手先独立判读落盘、展示完整字符串再请用户核对。准备与前检证据out/oem-main-entry-live-20261027/authorization.json、preflight.json。发布前不发图，无自动重试。
-
-总报告reports/enuma-oem-main-entry-v6-candidate.json；证据out/oem-main-entry-20261027。R027/v5冻结image/qualification摘要复核一致，旧原图和out二进制仅本地保留。
+原始媒体只在D:/Code/PortingiOS/enuma/Media-enuma/OEM-main-entry-v6-20261027-cfee120a；原图/裁图/out/二进制/备份/设备标识不入Git或云端。本轮结果提交/发布以git log及result-publication.json为准。
