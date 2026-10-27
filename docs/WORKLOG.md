@@ -1476,3 +1476,8 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 
 
 2026-10-27代码归因更新：用户已确认E01/S02判读。宿主ASan/UBSan复现私有SystemTable配置表指针/数量陈旧缺陷；这是当前最强代码缺陷证据，尚未证实为本次根因。已核对首分配后的构造链与实际Core返回/清理指令，下一验证先隔离追踪器并覆盖call1/2及Kernel协议，暂不跳到SID/MMU补丁。详见operations/2026-10-27-oem-post-s02-analysis.md。新候选未生成，本轮无追加实机；7d74ce9文字取证已推送oem-progress-20261027。
+
+
+## 2026-10-27 OEM early-v3离线交付
+
+采用Core发布时点同步，避免仅服务返回后修复遗漏通知重入。新FD及qualification3通过，32项Python测试、真实Core生命周期测试、两处源码删除负测和23处机器指令删除/一次GUID变异拒绝。未上机；不把已复现的软件缺陷定为实机根因。来源、精确摘要、失败记录及边界见operations/2026-10-27-oem-early-v3.md和reports/enuma-oem-early-candidate.json。R027/旧候选与共享主线保持。

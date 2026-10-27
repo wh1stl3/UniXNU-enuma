@@ -1,3 +1,15 @@
+# OEM early-v3 新候选已编出（2026-10-27）
+
+已完成配置表生命周期修复、完整FD构建及qualification3离线资格。固件提交7c97dc6；构建为以3adfb77为基线的工作树快照，精确输入由source-manifest绑定，不称干净提交构建。报告见reports/enuma-oem-early-candidate.json，细节见operations/2026-10-27-oem-early-v3.md。
+
+启动镜像：out/oem-early-20261027/qualification3/image.img；SHA256 `3d263b531074c483fb96c60954ac52d139c7342b8e7bf561d31ea64f25af1628`。FD SHA256 `361c67d72b5f34ed6b4e2d7364b8fc55ab155404e5d752d4b6344160d828a5bd`。修复在旧配置表释放及通知前同步私有SystemTable指针/数量/CRC；新窗口观察call1和首次Kernel协议查询，S05仍仅代表真实CoreStartImage返回。最多五个8秒窗口，范围不扩大。
+
+32项Python测试、真实Core ASan/UBSan回归与两处同步删除负测通过；实际PE新增23处指令删除和一次GUID变异均被拒绝，原运行时检查及Boot v3封装回读通过。软件资格不证明实机根因已解决，也不代表GOP/BDS/XNU/桌面验收。
+
+本轮未连接、查询或启动设备；最后独立核验状态为progress-v2人工恢复后的Android完成。旧progress-v2仍consumed，不重试；R027及旧OEM冻结，原始媒体只在本地。下一步如进入实测，重新核对当前身份/备份/录像/人工恢复及新候选单次门禁。本轮无人工待办。共享主线未改，未合并main；源码发布状态以Git远端确认结果为准。
+
+以下为此前状态与其他依赖记录，新OEM当前状态以上文为准。
+
 # OEM progress-v2 实测结果（2026-10-27）
 
 一次临时启动已消费，75秒观察内未见合格fastboot返回，已停止追加启动。用户人工恢复Android后，独立核验enuma、boot_completed=1、root、A槽、解锁及boot_a/vendor_boot_a摘要均通过。当前设备恢复完成；不能原样重试本镜像。

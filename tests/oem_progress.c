@@ -16,7 +16,11 @@ static EFI_TPL Current;
 static unsigned Count,Original,Fail,Reenter,Hang,Phases[5];
 static UINT64 Statuses[5];
 static jmp_buf Jump;
+#if ENUMA_OEM_EARLY
+static EFI_GUID Sid={0xb5062be7,0x170b,0x4a32,{0xbe,0x21,0x68,0x92,0x62,0xff,0x43,0x99}},Other={0};
+#else
 static EFI_GUID Sid={0x54b6d3b4,0x5d33,0x4f91,{0x86,0x00,0x6c,0x41,0xd5,0xde,0xb1,0x9a}},Other={0};
+#endif
 static EFI_TPL EFIAPI Raise(EFI_TPL T){EFI_TPL Old=Current;Current=T;return Old;}
 static VOID EFIAPI Restore(EFI_TPL T){Current=T;}
 static EFI_STATUS EFIAPI Crc(VOID *P,UINTN N,UINT32 *V){(void)P;(void)N;*V=0;return EFI_SUCCESS;}
@@ -39,6 +43,11 @@ static void Setup(void){
   assert(EnumaServiceTracePrepare(&Trace,&System,0,MAX_UINTN)==EFI_SUCCESS);
   assert(OemProgressArm(&Trace,123,Present,Stop)==EFI_SUCCESS);
   assert(OemProgressArm(&Trace,123,Present,Stop)==EFI_ALREADY_STARTED);
+#if ENUMA_OEM_EARLY
+  Trace.Boot.AllocatePool(EfiBootServicesData,256,NULL);
+  assert(Count==0&&Original==1&&Trace.Log.Count==2);
+  Original=0;
+#endif
 }
 int main(void){
   Setup();assert(Trace.Boot.AllocatePool(EfiBootServicesData,9,NULL)==EFI_OUT_OF_RESOURCES);
@@ -50,7 +59,7 @@ int main(void){
   for(unsigned I=0;I<5;I++){assert(Phases[I]==I+1);}
   if(!setjmp(Jump)){OemProgressReturned(EFI_SUCCESS);assert(0);}assert(mOemProgress.Stopped);
   Setup();Hang=1;if(!setjmp(Jump)){Trace.Boot.AllocatePool(EfiBootServicesData,9,NULL);assert(0);}
-  assert(Original==1&&Count==1&&Trace.Log.Count==1); // no fabricated return
+  assert(Original==1&&Count==1&&Trace.Log.Count==(ENUMA_OEM_EARLY?3:1)); // no fabricated return
   Setup();Fail=1;if(!setjmp(Jump)){Trace.Boot.AllocatePool(EfiBootServicesData,9,NULL);assert(0);}
   assert(!Original&&Count==1&&mOemProgress.Stopped);
   Setup();Current=TPL_CALLBACK;if(!setjmp(Jump)){Trace.Boot.AllocatePool(EfiBootServicesData,9,NULL);assert(0);}

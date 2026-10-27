@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "software_ready": true,
+  "hardware_executed": false,
+  "scope": "oem-early-v3",
+  "run_config": {
+    "trial_id": "5052a582-523a-4a70-a7fd-2af21a95d496",
+    "session": 13058914309169100760,
+    "selected_call": 1,
+    "experiment": "oem-early-v3",
+    "profile": "oem-control"
+  },
+  "image_sha256": "3d263b531074c483fb96c60954ac52d139c7342b8e7bf561d31ea64f25af1628",
+  "fd_sha256": "361c67d72b5f34ed6b4e2d7364b8fc55ab155404e5d752d4b6344160d828a5bd",
+  "image_bytes": 3153920,
+  "runtime_limits": {
+    "max_boots": 1,
+    "selected_call": 1,
+    "hold_us": 8000000,
+    "roi": [
+      64,
+      96,
+      320,
+      160
+    ],
+    "observation_seconds": 75,
+    "partition_writes": false,
+    "needs_current_camera_and_manual_recovery": true,
+    "max_windows": 5,
+    "max_total_hold_us": 40000000
+  },
+  "early_code": {
+    "sites": {
+      "sync_0x10": "0x11c5c",
+      "sync_0x1c": "0x11c68",
+      "sync_0x24": "0x11c70",
+      "sync_0x28": "0x11c74",
+      "sync_0x2c": "0x11c78",
+      "sync_0x34": "0x11c80",
+      "sync_0x3c": "0x11c88",
+      "sync_0x40": "0x11c8c",
+      "sync_0x48": "0x11c94",
+      "sync_0x4c": "0x11c98",
+      "sync_0x50": "0x11c9c",
+      "sync_0x54": "0x11ca0",
+      "sync_0x58": "0x11ca4",
+      "sync_0x5c": "0x11ca8",
+      "sync_0x60": "0x11cac",
+      "sync_0x64": "0x11cb0",
+      "sync_terminal": "0x11cc0",
+      "before_CoreFreePool": "0xa7ac",
+      "before_CoreNotifySignalList": "0xa82c",
+      "publish_new_table": "0xa7a8",
+      "call1_compare": "0x12408",
+      "call1_branch": "0x1240c",
+      "call1_emit": "0x12440"
+    },
+    "kernel_guid_rva": "0x23f20",
+    "deletion_checks": 23,
+    "guid_mutation_checks": 1,
+    "scope": "selected linked instruction sequences; not whole-program or hardware proof"
+  },
+  "limitations": [
+    "pre-forward entry is not proof original service ran",
+    "no automatic recovery guarantee for OEM hang",
+    "local interrupt masking does not prove exclusion of AP or external DMA",
+    "no GOP/BDS/input acceptance",
+    "no export if OEM hangs before the selected wrapped service",
+    "SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause",
+    "each window requires inherited route still valid; refusal after OEM display changes is not OEM failure",
+    "five observations perturb timing; no independent watchdog or durable RAM recovery",
+    "phase5 Q is next trace sequence, not a synthetic service event"
+  ],
+  "firmware_commit": "7c97dc6",
+  "build_snapshot_base": "3adfb774dba84213bc229dc2253c95cb4442bea5",
+  "build_scope": "working-tree snapshot; source-manifest binds exact files",
+  "qualification": "out\\oem-early-20261027\\qualification3\\qualification.json",
+  "qualification_sha256": "21afd4be481ba3ef157feb4d34f1da0cc188d2a5baf4c4f3ddd1338361e60815",
+  "host_tests": "check4 ASan/UBSan including real Core and two sync deletion negatives; binding2; 32 Python tests",
+  "device_status": "last verified Android recovered after progress-v2; not queried this turn",
+  "frozen_candidates_unchanged": true
+}

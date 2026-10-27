@@ -17,4 +17,11 @@ class Pages(unittest.TestCase):
     def test_entry_status(self):self.assertRaises(ValueError,decode,self.page(1).replace('E'+' '*19,'S'+('0'*16)+' '*3),123)
     def test_phase_prefix(self):self.assertRaises(ValueError,decode,'E'+self.page(2)[1:],123)
     def test_driver_caller(self):self.assertRaises(ValueError,decode,self.page(5).replace('\n'+' '*20+'\n','\nO'+'0'*16+' '*3+'\n'),123)
+    def test_early_call_binding(self):
+        self.assertRaises(ValueError,decode,self.page(1),123,'oem-early-v3')
+        page=self.page(1).replace('C'+f'{7:016x}','C'+f'{1:016x}')
+        self.assertEqual(decode(page,123,'oem-early-v3')['call'],1)
+    def test_early_semantics(self):
+        self.assertEqual(decode(self.page(3),123,'oem-early-v3')['event'],'kernel-locate-before')
+        self.assertRaises(ValueError,decode,self.page(3),123,'unknown')
 if __name__=='__main__':unittest.main()

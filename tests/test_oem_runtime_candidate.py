@@ -2,7 +2,7 @@ import copy,json,sys,tempfile,unittest
 from pathlib import Path
 from uuid import uuid4
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from oem_runtime_candidate import LIMITS,SCOPE,PROGRESS_SCOPE,limits_for,validate,claim,sha
+from oem_runtime_candidate import LIMITS,SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,limits_for,validate,claim,sha
 
 class Admission(unittest.TestCase):
     def setUp(self):
@@ -46,5 +46,11 @@ class Admission(unittest.TestCase):
         for key,value in [('max_windows',6),('max_total_hold_us',48000000)]:
             self.q['runtime_limits']=limits_for(PROGRESS_SCOPE);self.q['runtime_limits'][key]=value;self.save()
             self.assertRaises(ValueError,validate,self.root,self.out)
+
+    def test_early_scope_selected_call(self):
+        self.q['scope']=EARLY_SCOPE;self.q['run_config'].update(experiment=EARLY_SCOPE,selected_call=1)
+        self.q['runtime_limits']=limits_for(EARLY_SCOPE);self.save();validate(self.root,self.out)
+        self.q['run_config']['selected_call']=0;self.save()
+        self.assertRaises(ValueError,validate,self.root,self.out)
 
 if __name__=='__main__':unittest.main()
