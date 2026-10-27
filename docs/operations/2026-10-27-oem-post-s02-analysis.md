@@ -35,3 +35,6 @@ HOB GUID是标准7739f24c-93d7-11d4-9a3a-0090273fc14d，Core源码实际安装�
 若call1/2均正常且Kernel协议前后通过，构造早期嫌疑降低；若配置表同步前后行为不同，才提升该缺陷为现场根因；若SID前有新证据，再测试SID/MMU假设。原始图像、二进制、完整反汇编仅本地out；公开只保留此说明、复现源码和脱敏报告。
 
 本地证据：out/oem-progress-20261027/media-review/oem-disassembly.txt、rva-map.json、system-table-lifetime；编译Core反汇编在qualification1/Core.disassembly.txt，符号映射在build2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain/DEBUG/DxeCore.map。
+
+
+更正：early-v3跳过call0绘图，因此上文“看到call1入口即可证明S02取证返回后继续”的表述不适用于跨版本比较。新版只能证明其自身到达call1，不能证明旧progress-v2第二窗清理成功，也不能由新版进展单独确定配置表缺陷为旧停机根因。
