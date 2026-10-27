@@ -38,3 +38,30 @@ python3 -B firmware/Resources/Scripts/build_enuma_development.py \
 另一变体单独使用全新output及--profile oem-mmu-only。上述dependency-root是待准备位置，不能把例子当作已存在依赖。当前隔离树out/sources/UniXNU、out/firmware-build的固定archives及三项固件嵌套gitlinks尚未准备，因此未运行完整FD编译；也未回退到共享缓存进行可写构建。
 
 scripts/check_oem_build_profiles.py直接执行helper与builder参数入口：两变体精确复制/快照锁衍生、stage10宏、缺pair/旧profile带pair/菜单混用、control损坏/MMU非补丁位损坏/面板损坏等8项检查通过；原锁复核未变。证据out/oem-build-profile-check-20261027-c999/result.json，摘要绑定三份实际源码，full_fd_built=false。没有把缺失依赖当作需要用户审批；后续继续准备隔离的固定依赖并构建、抽取核对，再接Core与板级出口。
+
+## 继续：两组完整FD已构建并抽取核对（2026-10-27）
+
+本节取代前文“依赖未齐/未构建”的当前状态。所有依赖从本地固定来源建立独立副本，未修改原主线依赖、权限或staging；out/prepare_local_dependencies.py保存准备命令。UniXNU固定5fdbd5d08518bc2d5c196264c56a377dd80cf5ca，Mu_Basecore固定cfb93724a06ff86ff5ba971413368a7809ee42a5。嵌套依赖由每次构建dependency-bindings.json记录；压缩包逐一按firmware-build.lock.json核对。
+
+两个build-1均在正式编译前失败：解包Mu目录没有.git，WSL Git向父目录发现Windows原生worktree gitfile并无法解析D:/路径。隔离firmware提交322f427仅给本次临时Mu目录执行git init，使补丁apply/reverse不再向上发现父仓。未修改Windows worktree的.git或原主线。失败目录及日志完整保留，使用全新build-2重跑成功。
+
+两份3MiB FD：
+
+| profile | 输出目录（本worktree out下） | FD SHA256 |
+| --- | --- | --- |
+| oem-control | oem-control-build-20261027-2 | 409edc8914a16fbafb80d497e3b48e2a87912aa38a285c3419bf24df6f593f84 |
+| oem-mmu-only | oem-mmu-only-build-20261027-2 | f4ee1be1f10ec48561c1910152d9f2fe195bd9481c0f7e0f814f3c9476c39fd6 |
+
+FD均位于各目录work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。build-result.json complete=true，deployment_ready=false，hardware_execution=false。实际源码由source-manifest绑定；base_commit为构建时072251e，包含当时未提交、后来提交为322f427的三行Git上下文修复。不能将构建称为322f427干净提交构建。
+
+新增audit_oem_development_fd.py从最终FD解码，每组核对32个OEM PE及DEPEX、39项APRIORI、两份K81 RAW，以及DxeCore/EnumaProbe与编译输出的字节一致性、实际stage10/SimpleFb0编译宏。拒绝UFSDxe、SimpleFb、GOP selftest混入及错误profile。旧通用audit/qualifier未放宽。审计输出oem-{control,mmu-only}-fd-audit-20261027-1。
+
+compare_oem_development_fds.py确认原始源码和构建配置相同，实际抽取DisplayDxe只在0x1994..0x1997改变e1031f32→01008052；不是声称整个FD仅差四字节。两份Core整PE摘要因构建产物不同而不同，实际.text摘要均为c7d1d3344beed8154bacc330add107d347728c7484894ab2e11bd95d82f7b4e6。证据oem-fd-pair-comparison-20261027-1。
+
+check_oem_stage10_code.py结合链接map与最终Core PE，核对0x3c90/94/98/9c依次调用MicroSecondDelay、ResetCold、CpuDeadLoop、CoreDispatcher，每组删除任一调用的4项负测通过。原DxeMain.obj为LTO中间文件，不能当普通机器对象反汇编；最终核对使用已链接PE。本检查只证明调用序列，不是完整控制流证明、设备复位保证或非返回OEM取证出口资格。
+
+check_oem_fd_audit.py测试错误profile、部署声明、FD摘要、manifest摘要、stage13、FD损坏，以及外层仍有效时解码后DisplayDxe损坏拒绝。初版尝试搜索压缩FD内原始PE而失败，negative-1保留为测试脚本失败证据；修正版在解码边界注入，不伪称重新压缩后的物理FD损坏。最终结果使用negative-2。两次审计之间原产物保持不变。
+
+复现工具均使用--build/--output，比较工具使用--control/--mmu/--output；输出必须为本worktree out下全新目录。源码与报告可提交，生成PE/FD及公开二进制不入库。
+
+下一阶段继续Core精确句柄/变体绑定和调用前板级出口；本次未激活追踪、未包装Boot.img、未执行OEM，R027不改。elish原生K81资源线与nabu最小MMU假设线共用一个构建框架，仍分开实验身份。没有新增设备或录像待办，不推送。

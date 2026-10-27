@@ -1,31 +1,30 @@
-# 当前：DisplayDxe离线归因推进，实机暂停
+# 当前：单 worktree 双 OEM profile 已完成完整 FD 构建与抽取审计
 
-最新：隔离固件072251e已在build_enuma_development.py接入oem-control/oem-mmu-only显式profile及pair参数，按原vendor锁独立核对102文件，仅在导出源码快照派生MMU摘要并复制到构建独占vendor。8项helper/CLI/损坏拒绝检查通过，证据out/oem-build-profile-check-20261027-c999/result.json。沿已有开发快照机制，旧发布构建锁不改；此前“必须更新旧锁”的建议由此取代。两profile仍强制stage10派发前停止，无Core追踪激活。隔离固定依赖未齐，全FD编译/实际FV抽取未运行；原主线及R027不改。
+2026-10-27。本对话仅写入 D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display（原生 Git worktree，基点97ef242）。原主线 D:/Code/PortingiOS/enuma/UniXNU-enuma 及其 firmware 保持不改；R027继续冻结。未查询设备、启动、打包Boot.img或推送。用户此前报告ADB恢复，不等于本轮核验设备状态或恢复实机授权。
 
-本对话现在仅在D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display写入（从97ef242建立的单个原生Git worktree）。原主线D:/Code/PortingiOS/enuma/UniXNU-enuma留给共享工作区，保持不改。这里已生成两个默认关闭的vendor profile，各102文件且只有精确DisplayDxe不同；8项实际树破坏/身份/输出拒绝检查通过。详见[隔离工作区记录](operations/2026-10-27-oem-display-worktree.md)，最终证据out/oem-profile-check2-20261027-c999/result.json。
+## 本轮完成
 
-尚未接构建器/Core或完成板级出口，未打包/上机。构建锁config/uefi-source.lock.json目前指向8680ea79，固件子模块为11c6cf1；不绕过原适配器，下一步在隔离树审查并建立新的开发锁和默认关闭profile选择。当前profile暂存不是固件构建资格，R027继续冻结。
+- 隔离固定依赖已从本地来源准备完毕；两个profile各使用独占vendor/source/work目录。沿开发快照manifest构建，旧发布源锁及原vendor锁不改。
+- oem-control完整3MiB FD：out/oem-control-build-20261027-2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd，SHA256 409edc8914a16fbafb80d497e3b48e2a87912aa38a285c3419bf24df6f593f84。
+- oem-mmu-only完整3MiB FD：out/oem-mmu-only-build-20261027-2/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd，SHA256 f4ee1be1f10ec48561c1910152d9f2fe195bd9481c0f7e0f814f3c9476c39fd6。
+- 最终FD抽取核对通过：每组32个OEM PE及DEPEX、39项APRIORI、两份K81 RAW；UFSDxe未包含，SimpleFb和GOP selftest未混入。实际DxeCore/EnumaProbe与编译输出一致，stage10/SimpleFb0实际编译宏已核对。证据out/oem-{control,mmu-only}-fd-audit-20261027-1/result.json。
+- Core实际调用序列为0x3c90延时、0x3c94 ResetCold、0x3c98 CpuDeadLoop、0x3c9c CoreDispatcher；每组4项删除调用负测通过，两组Core .text摘要相同。这是静态序列检查，不是完整控制流证明或硬件复位保证。证据out/oem-{control,mmu-only}-stage10-code-20261027-1。
+- 第一组build-1在编译前因WSL Git发现Windows worktree的gitfile失败，保留全部失败输出。修复仅在新构建临时Mu_Basecore执行git init；build-2通过，源码/快照摘要及Core补丁回退复核通过。构建入口修复后8项profile检查通过（out/oem-build-profile-check-20261027-2）。
 
-已收敛为enuma可应用的离线实验补丁与方案：新增prepare_enuma_mmu_experiment.py，仅将精确OEM PE的0x1994参数2改0，保留全部构造器、MDPSetupPipe/MDPPanelInit及错误检查；独立输出PE摘要ed37a4e137cca2fcf4d5fa5718e18a319c2aa1b7a1cfab480693325bfbe2b5e3。新增plan_enuma_panel_handoff.py导出本机K81两链各188条命令及原等待契约，不改原XML。16项静态/宿主检查通过，见out/enuma-display-application-20261027-c999/check2/result.json。没有固件打包或硬件成功结论；新PE尚未接Core/profile/变体认证及板级可靠出口。具体使用、接线、判别与限制见[应用方案](operations/2026-10-27-enuma-display-application-plan.md)。R027仍冻结；此实验PE不替换生产vendor目录。
+## 两条研究路线与主线边界
 
-最新静态推进：按公开Qualcomm解释器展开K81序列，两条控制器各188条相同数据，分链11不能当冗余删除；延迟仍与Android不同。nabu参数2→0关联MMU/SID初始化位，enuma对应LocateProtocol返回RVA为0x1bce0、GUID为54b6d3b4-5d33-4f91-8600-6c41d5deb19a，后续四处协议方法调用尚不在包装器覆盖内。phase2/transport-flags-result.json记录摘要/指令检查和两项模型负例；无硬件执行或补丁应用。
+nabu路线当前只移植精确enuma PE的0x1994指令参数2→0，原版摘要6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425，实验版ed37a4e137cca2fcf4d5fa5718e18a319c2aa1b7a1cfab480693325bfbe2b5e3。保留构造器、MDPSetupPipe/MDPPanelInit和错误检查。它是MMU/SID初始化假设的实验，尚非修复证明。
 
-2026-10-27。用户最新报告实机ADB已恢复；本轮未独立查询，不将用户报告扩大为Android完成/root/原分区核验。没有设备启动/部署、录像申请或nuwa操作，R027继续冻结。
+elish路线保留enuma原生K81双链各188条数据和原等待契约；没有把分链发送的11误删，也没有直接替换为Android等待值。本轮确认这些原生资源确实进入两份FD。
 
-新增两路公开实现分析：elish/enuma CSOT同屏有Linux补丁及MiCode来源支持；K81初始化数据归一化后188条顺序相同，XML另有一条11及不同控制/等待记录，未证明执行等价。nabu原版/补丁版DisplayDxe差分36字节；三个初始化调用角色已静态映射至enuma的0x1998、0x176c4、0x176e8。未移植补丁，不代表本机已到达这些函数。详见[两路分析](operations/2026-10-27-elish-nabu-display-paths.md)，二进制及差分仅保留独立out目录。
+两profile目前强制stage10派发前停止，SimpleFb=0、GOP_SELFTEST=0、菜单关闭、UFS关闭。没有激活OEM追踪，也没有执行OEM PE；本轮不是生产GOP、ConOut、BDS或实体输入验收。旧S054只证明临时私有GOP的菜单画面，不与OEM路径合并论证。
 
-本轮实现预选call的一次性调用前导出：真实入口记入RAM后恢复TPL，输出带session/call身份与完整性值的冻结快照，再转发原服务。失败/重入/TPL拒绝/计数耗尽/中断分开锁存，无自动重试，不改变原服务返回状态或输出。新增持久缓存的320×160/8秒像素后端，窗口恢复完成才转发；恢复未确认进入非返回Stop，不伪造驱动结果。默认无observer、无Core/profile/FV激活。
+## 下一步
 
-证据out/oem-precall-20261027-c999/final1/result.json：两个ASan/UBSan程序、两个AArch64对象，调用顺序及6项删除负测通过，像素函数自身栈帧112字节。宿主进程先fsync完整快照，再进入有独立见证的不返回原服务；终止进程后外部文件仍可解码。749种截断/改字/重复/错身份拒绝。像素故障覆盖写前/写后、保存/恢复/屏障/hold/所有权重验、异常和24种通道排列。原追踪5条命令（7项Python/320快照）新目录回归通过。旧证据不覆盖。
+在本worktree继续接精确CoreStartImage句柄、实际PE/FV身份和持久追踪上下文，再接调用前冻结快照与板级取证后端。重点核对LocateProtocol返回RVA0x1bce0及后续协议方法覆盖；三项Boot Services包装不能覆盖所有MMIO/SMC/锁/首次调用前失效。现有host出口已验证非返回后外部快照保留及恢复失败Stop，但尚未连接真实板级物理回调、窗口所有权和终止恢复策略。缺失return只说明快照未观察到，不能判定死锁。
 
-已消除输出必须等待原服务返回的依赖，但板级可靠出口尚未验收：像素回调仍为宿主RAM模型，尚需当前CPU/路由/独占窗口验证、物理回调、异常/非返回终止恢复策略及精确Core句柄/PE/FV接线，之后才能独立profile完整构建。result5只证明CPU事务，不证明实际可见或相机采集；像素页仅含选定事件摘要，不是完整文本快照。没有执行OEM PE、生成新板级候选或新增硬件资格。只覆盖三项Boot Services，首次服务之前/协议方法/MMIO/SMC/锁/SMP未覆盖。预转发入口不证明原服务本体执行，缺失return仍不建立死锁。
+R027/S055 paused-by-user、未消费；镜像SHA256 0db64285d13c0e2f60e68403b0b5498433b0b0c0143f6ce336c1885dad4afb5a本轮复核一致。旧准备已过期，没有当前录像或按键待办。后续可运行profile须独立完成出口与资格；当前不部署、不推送，不改内存基址/大小、verified或旧资格。
 
-上一轮精确PE的BL/BLR归因工具与Core入口源码检查保留，详见2026-10-27-oem-rva-and-entry-binding.md。新preservation.json确认R027镜像、资格及2434项执行源码绑定不变。
+详见[隔离工作区及构建记录](operations/2026-10-27-oem-display-worktree.md)、[应用方案](operations/2026-10-27-enuma-display-application-plan.md)及[调用前出口](operations/2026-10-27-oem-precall-capture.md)。源码只作本地里程碑提交，提交号以git log为准；生成产物、OEM二进制和媒体仅留out。
 
-R027/S055仍paused-by-user、未执行/未消费，冻结镜像out/deferred-menu-20261027/qualification1/image.img的SHA256复核为0db64285d13c0e2f60e68403b0b5498433b0b0c0143f6ce336c1885dad4afb5a。旧preparation已过期，未来恢复须用户明确恢复实机、本次精确单次放行和当前录像条件；没有当前录像/按键待办。R022—R026已消费，不复用。
-
-S054完整UniXNU应用单张照片人工确认保持有效；它是SimpleFb临时私有有界GOP路径，不证明OEM初始化、生产GOP、ConOut、完整BDS或实体输入。原厂嫌疑仍在构造器/主入口调用区间，未确定死锁或具体故障函数。
-
-本轮固件组件本地提交11c6cf1，设备仓提交号由git log查询；未推送。设备仓此前交接e71a86e、主成果0c4284c和firmware 7a5c920不冒充新构建资格；原始out/影音/OEM二进制/备份不入库。共享工作区未启动第二写入者，仅修改本轮三个追踪/出口头文件；旧像素事务和R027执行源未改。
-
-详细实现、复现命令和失败边界见[本轮记录](operations/2026-10-27-oem-precall-capture.md)。此前阶段记录见[追踪可信性](operations/2026-10-27-oem-trace-trust-validation.md)、[后置菜单](operations/2026-10-27-deferred-menu-firmware.md)和WORKLOG/DECISIONS。接续任务入口为[DisplayDxe交接](2026-10-27-displaydxe-handoff-prompt.md)。
+最终总报告：[OEM双FD离线检查](../reports/enuma-oem-fd-pair-development.json)。两组negative-2合计14项拒绝检查、8项Core删除调用负测、8项profile检查及双组同源比较全部通过；本地固件修复提交322f427，设备仓提交号见git log。

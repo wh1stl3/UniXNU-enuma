@@ -1574,3 +1574,6 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 按用户方案新建D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display（基点97ef242，detached），firmware从本地初始化11c6cf1。原主线不改。双vendor profile各102文件，仅DisplayDxe差异，8项失败验证通过；证据out/oem-profile-check2-20261027-c999/result.json。构建器尚未接线，旧设备锁8680ea79与当前固件不一致须单独审查，不绕过。未构建、部署、设备查询或推送。详见operations/2026-10-27-oem-display-worktree.md。
 
 2026-10-27 · 隔离固件072251e将两个OEM profile接入开发快照builder；保持原发布锁和原vendor锁。8项直接helper/CLI失败检查通过，report enuma-oem-build-profile-development.json。固定依赖尚未在隔离树准备，全FD/实际FV未验；无设备/推送。原主线保持不改。
+
+
+2026-10-27 · 隔离worktree完成OEM control/MMU-only两份3MiB FD，实际FV身份/32 OEM模块/39 APRIORI/K81资源及Core编译产物核对通过。14项审计负测、8项Core调用删除负测、8项profile检查与双组同源比较通过。固件修复提交322f427；设备仓上次提交c49623b，本轮提交号由git log查询。总报告reports/enuma-oem-fd-pair-development.json，操作记录operations/2026-10-27-oem-display-worktree.md。保留build-1和negative-1失败记录，最终build-2/negative-2不覆盖旧证据。R027与原vendor摘要复核一致，原主线干净；未查询/操作设备、打包Boot.img或推送。两FD仅stage10编译检查，Core追踪及板级出口待接，不等于OEM运行成功。

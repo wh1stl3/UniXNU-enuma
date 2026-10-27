@@ -1,3 +1,5 @@
+本worktree最新接续：先读 docs/STATUS.md 和 docs/operations/2026-10-27-oem-display-worktree.md。两组OEM stage10完整FD已构建，当前写入根为 D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display；原主线及R027保持不改。以下旧prompt保留为背景，不覆盖最新状态。
+
 # 接续 enuma：定位 OEM DisplayDxe 未观察到返回的区间
 
 继续现有成果，不从零重做。阶段目标是先取得可信、可归因、可观察的原厂驱动调用证据，再缩小 DisplayDxe 的可疑执行区间，最终推进正规显示初始化/GOP 与 UniXNU。临时 SimpleFb 菜单成功不等于原厂显示初始化成功，不伪造驱动成功返回。

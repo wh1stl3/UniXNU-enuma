@@ -1,0 +1,378 @@
+{
+  "scope": "complete offline OEM stage10 FD pair; no deployment qualification",
+  "full_fd_built": true,
+  "deployment_ready": false,
+  "hardware_executed": false,
+  "profiles": {
+    "oem-control": {
+      "audit": {
+        "passed": true,
+        "profile": "oem-control",
+        "fd_sha256": "409edc8914a16fbafb80d497e3b48e2a87912aa38a285c3419bf24df6f593f84",
+        "display_pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+        "matched_oem": [
+          "CPRDxe",
+          "ChipInfo",
+          "CipherDxe",
+          "ClockDxe",
+          "CmdDbDxe",
+          "DALSys",
+          "DALTLMM",
+          "DDRInfoDxe",
+          "DisplayDxe",
+          "EnvDxe",
+          "GpiDxe",
+          "HALIOMMU",
+          "HWIODxeDriver",
+          "HashDxe",
+          "I2C",
+          "MacDxe",
+          "NpaDxe",
+          "PdcDxe",
+          "PlatformInfoDxeDriver",
+          "PmicDxe",
+          "PwrUtilsDxe",
+          "ResetRuntimeDxe",
+          "RngDxe",
+          "RpmhDxe",
+          "SPI",
+          "SPMI",
+          "ScmDxe",
+          "ShmBridgeDxe",
+          "SmemDxe",
+          "TzDxe",
+          "ULogDxe",
+          "VcsDxe"
+        ],
+        "apriori_count": 39,
+        "panel_raw_verified": true,
+        "compiler_response_sha256": {
+          "DxeCore": "1879159e491f73094bc0e4e846863c33e1377baf478f9cf0de60f44b471aefe1",
+          "EnumaProbe": "cb8dd93071002218cbd494120b735d55935b18e92e4cc5c591c8e686589d02c5"
+        },
+        "compiled_products_sha256": {
+          "DxeCore": "69ce4d83e81723d09a3540406d3cd7fb719d38634e01959fcc26a13132d20473",
+          "EnumaProbe": "e5b610aeafab876ff38e112ab54b4575131a12afa174aeec40c383d09c1d7b76"
+        },
+        "source_manifest_sha256": "a546168add32210070530bd3b6bcda0ef95574f3ba130a858bb75656569b6d2e",
+        "auditor_sha256": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+        "deployment_ready": false,
+        "hardware_executed": false
+      },
+      "negative_checks": {
+        "passed": true,
+        "negative_checks": [
+          "wrong variant",
+          "claimed deployment",
+          "wrong FD hash",
+          "wrong manifest hash",
+          "dispatch stage enabled",
+          "FD corruption",
+          "changed decoded DisplayDxe with valid outer envelope"
+        ],
+        "count": 7,
+        "original_reverified": true,
+        "profile": "oem-control",
+        "fd_sha256": "409edc8914a16fbafb80d497e3b48e2a87912aa38a285c3419bf24df6f593f84",
+        "source_sha256": {
+          "audit_oem_development_fd.py": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+          "check_oem_fd_audit.py": "2dfb06f90bd15aa3517c25599db86b4e217ba6d451123689bd2e1829ce6faab9"
+        },
+        "hardware_executed": false
+      },
+      "code_check": {
+        "call_rvas": {
+          "MicroSecondDelay": "0x3c90",
+          "ResetCold": "0x3c94",
+          "CpuDeadLoop": "0x3c98",
+          "CoreDispatcher": "0x3c9c"
+        },
+        "symbol_rvas": {
+          "DxeMain": "0x1b38",
+          "MicroSecondDelay": "0x17e2c",
+          "ResetCold": "0x16f4",
+          "CpuDeadLoop": "0x13b8",
+          "CoreDispatcher": "0xfd04"
+        },
+        "passed": true,
+        "core_pe_sha256": "69ce4d83e81723d09a3540406d3cd7fb719d38634e01959fcc26a13132d20473",
+        "map_sha256": "bece76e6c371023b5a199fb0bba15926262d0257d453e5c415e38edd0cd0850e",
+        "text_sha256": "c7d1d3344beed8154bacc330add107d347728c7484894ab2e11bd95d82f7b4e6",
+        "removed_call_checks": [
+          "MicroSecondDelay",
+          "ResetCold",
+          "CpuDeadLoop",
+          "CoreDispatcher"
+        ],
+        "script_sha256": "30001d830429f0bf8b2d82d78e62aacd3000b90f652577518f73419cff7d0476",
+        "scope": "linked call sequence only; not full control-flow proof or physical reset guarantee"
+      },
+      "build_directory": "out/oem-control-build-20261027-2"
+    },
+    "oem-mmu-only": {
+      "audit": {
+        "passed": true,
+        "profile": "oem-mmu-only",
+        "fd_sha256": "f4ee1be1f10ec48561c1910152d9f2fe195bd9481c0f7e0f814f3c9476c39fd6",
+        "display_pe_sha256": "ed37a4e137cca2fcf4d5fa5718e18a319c2aa1b7a1cfab480693325bfbe2b5e3",
+        "matched_oem": [
+          "CPRDxe",
+          "ChipInfo",
+          "CipherDxe",
+          "ClockDxe",
+          "CmdDbDxe",
+          "DALSys",
+          "DALTLMM",
+          "DDRInfoDxe",
+          "DisplayDxe",
+          "EnvDxe",
+          "GpiDxe",
+          "HALIOMMU",
+          "HWIODxeDriver",
+          "HashDxe",
+          "I2C",
+          "MacDxe",
+          "NpaDxe",
+          "PdcDxe",
+          "PlatformInfoDxeDriver",
+          "PmicDxe",
+          "PwrUtilsDxe",
+          "ResetRuntimeDxe",
+          "RngDxe",
+          "RpmhDxe",
+          "SPI",
+          "SPMI",
+          "ScmDxe",
+          "ShmBridgeDxe",
+          "SmemDxe",
+          "TzDxe",
+          "ULogDxe",
+          "VcsDxe"
+        ],
+        "apriori_count": 39,
+        "panel_raw_verified": true,
+        "compiler_response_sha256": {
+          "DxeCore": "df741d161d5a941fb1bdcf98e122922621669d6214d581a9ac6728747ca54fb3",
+          "EnumaProbe": "18333e51d3b5c290c040873cb83b3a76a01f1ce26ba77f9d64eb716b9e9cdf92"
+        },
+        "compiled_products_sha256": {
+          "DxeCore": "b579cba592b046d96ddb30ccebd53a4b4cb899a92c83a734b05021a190a78c95",
+          "EnumaProbe": "e497ad6f164e21303efa458dac1dc03850d40b340117c6a9272f8713c00acf26"
+        },
+        "source_manifest_sha256": "55fe71fb31224bb0098eaa045678a6a7addf3547b93b5436e715cbcbfb9c3139",
+        "auditor_sha256": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+        "deployment_ready": false,
+        "hardware_executed": false
+      },
+      "negative_checks": {
+        "passed": true,
+        "negative_checks": [
+          "wrong variant",
+          "claimed deployment",
+          "wrong FD hash",
+          "wrong manifest hash",
+          "dispatch stage enabled",
+          "FD corruption",
+          "changed decoded DisplayDxe with valid outer envelope"
+        ],
+        "count": 7,
+        "original_reverified": true,
+        "profile": "oem-mmu-only",
+        "fd_sha256": "f4ee1be1f10ec48561c1910152d9f2fe195bd9481c0f7e0f814f3c9476c39fd6",
+        "source_sha256": {
+          "audit_oem_development_fd.py": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+          "check_oem_fd_audit.py": "2dfb06f90bd15aa3517c25599db86b4e217ba6d451123689bd2e1829ce6faab9"
+        },
+        "hardware_executed": false
+      },
+      "code_check": {
+        "call_rvas": {
+          "MicroSecondDelay": "0x3c90",
+          "ResetCold": "0x3c94",
+          "CpuDeadLoop": "0x3c98",
+          "CoreDispatcher": "0x3c9c"
+        },
+        "symbol_rvas": {
+          "DxeMain": "0x1b38",
+          "MicroSecondDelay": "0x17e2c",
+          "ResetCold": "0x16f4",
+          "CpuDeadLoop": "0x13b8",
+          "CoreDispatcher": "0xfd04"
+        },
+        "passed": true,
+        "core_pe_sha256": "b579cba592b046d96ddb30ccebd53a4b4cb899a92c83a734b05021a190a78c95",
+        "map_sha256": "5c4a995173ff6cdff7fdac595a18adddbc6d6f99a7a0cec7606f761abc0ec0cf",
+        "text_sha256": "c7d1d3344beed8154bacc330add107d347728c7484894ab2e11bd95d82f7b4e6",
+        "removed_call_checks": [
+          "MicroSecondDelay",
+          "ResetCold",
+          "CpuDeadLoop",
+          "CoreDispatcher"
+        ],
+        "script_sha256": "30001d830429f0bf8b2d82d78e62aacd3000b90f652577518f73419cff7d0476",
+        "scope": "linked call sequence only; not full control-flow proof or physical reset guarantee"
+      },
+      "build_directory": "out/oem-mmu-only-build-20261027-2"
+    }
+  },
+  "pair_comparison": {
+    "passed": true,
+    "control": {
+      "passed": true,
+      "profile": "oem-control",
+      "fd_sha256": "409edc8914a16fbafb80d497e3b48e2a87912aa38a285c3419bf24df6f593f84",
+      "display_pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+      "matched_oem": [
+        "CPRDxe",
+        "ChipInfo",
+        "CipherDxe",
+        "ClockDxe",
+        "CmdDbDxe",
+        "DALSys",
+        "DALTLMM",
+        "DDRInfoDxe",
+        "DisplayDxe",
+        "EnvDxe",
+        "GpiDxe",
+        "HALIOMMU",
+        "HWIODxeDriver",
+        "HashDxe",
+        "I2C",
+        "MacDxe",
+        "NpaDxe",
+        "PdcDxe",
+        "PlatformInfoDxeDriver",
+        "PmicDxe",
+        "PwrUtilsDxe",
+        "ResetRuntimeDxe",
+        "RngDxe",
+        "RpmhDxe",
+        "SPI",
+        "SPMI",
+        "ScmDxe",
+        "ShmBridgeDxe",
+        "SmemDxe",
+        "TzDxe",
+        "ULogDxe",
+        "VcsDxe"
+      ],
+      "apriori_count": 39,
+      "panel_raw_verified": true,
+      "compiler_response_sha256": {
+        "DxeCore": "1879159e491f73094bc0e4e846863c33e1377baf478f9cf0de60f44b471aefe1",
+        "EnumaProbe": "cb8dd93071002218cbd494120b735d55935b18e92e4cc5c591c8e686589d02c5"
+      },
+      "compiled_products_sha256": {
+        "DxeCore": "69ce4d83e81723d09a3540406d3cd7fb719d38634e01959fcc26a13132d20473",
+        "EnumaProbe": "e5b610aeafab876ff38e112ab54b4575131a12afa174aeec40c383d09c1d7b76"
+      },
+      "source_manifest_sha256": "a546168add32210070530bd3b6bcda0ef95574f3ba130a858bb75656569b6d2e",
+      "auditor_sha256": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+      "deployment_ready": false,
+      "hardware_executed": false
+    },
+    "mmu": {
+      "passed": true,
+      "profile": "oem-mmu-only",
+      "fd_sha256": "f4ee1be1f10ec48561c1910152d9f2fe195bd9481c0f7e0f814f3c9476c39fd6",
+      "display_pe_sha256": "ed37a4e137cca2fcf4d5fa5718e18a319c2aa1b7a1cfab480693325bfbe2b5e3",
+      "matched_oem": [
+        "CPRDxe",
+        "ChipInfo",
+        "CipherDxe",
+        "ClockDxe",
+        "CmdDbDxe",
+        "DALSys",
+        "DALTLMM",
+        "DDRInfoDxe",
+        "DisplayDxe",
+        "EnvDxe",
+        "GpiDxe",
+        "HALIOMMU",
+        "HWIODxeDriver",
+        "HashDxe",
+        "I2C",
+        "MacDxe",
+        "NpaDxe",
+        "PdcDxe",
+        "PlatformInfoDxeDriver",
+        "PmicDxe",
+        "PwrUtilsDxe",
+        "ResetRuntimeDxe",
+        "RngDxe",
+        "RpmhDxe",
+        "SPI",
+        "SPMI",
+        "ScmDxe",
+        "ShmBridgeDxe",
+        "SmemDxe",
+        "TzDxe",
+        "ULogDxe",
+        "VcsDxe"
+      ],
+      "apriori_count": 39,
+      "panel_raw_verified": true,
+      "compiler_response_sha256": {
+        "DxeCore": "df741d161d5a941fb1bdcf98e122922621669d6214d581a9ac6728747ca54fb3",
+        "EnumaProbe": "18333e51d3b5c290c040873cb83b3a76a01f1ce26ba77f9d64eb716b9e9cdf92"
+      },
+      "compiled_products_sha256": {
+        "DxeCore": "b579cba592b046d96ddb30ccebd53a4b4cb899a92c83a734b05021a190a78c95",
+        "EnumaProbe": "e497ad6f164e21303efa458dac1dc03850d40b340117c6a9272f8713c00acf26"
+      },
+      "source_manifest_sha256": "55fe71fb31224bb0098eaa045678a6a7addf3547b93b5436e715cbcbfb9c3139",
+      "auditor_sha256": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+      "deployment_ready": false,
+      "hardware_executed": false
+    },
+    "firmware_source_inputs_identical": true,
+    "build_configuration_identical": true,
+    "display_instruction_offset": "0x1994",
+    "display_before": "e1031f32",
+    "display_after": "01008052",
+    "display_changed_byte_offsets": [
+      "0x1994",
+      "0x1995",
+      "0x1996",
+      "0x1997"
+    ],
+    "script_sha256": "c8460207723df6492aeb7870712c22ca68bc10905c7ec42c001dfff0cf78ef72",
+    "scope": "static build comparison; no OEM execution or deployment qualification"
+  },
+  "build_profile_checks": {
+    "passed": true,
+    "count": 8,
+    "checks": [
+      "oem-control copies exact bytes and binds snapshot-only derivative with stage10",
+      "oem-mmu-only copies exact bytes and binds snapshot-only derivative with stage10",
+      "CLI rejects missing pair before output creation",
+      "CLI rejects pair on old profile before output creation",
+      "CLI rejects direct menu with OEM before output creation",
+      "reject control source before staging or lock mutation",
+      "reject MMU non-patch byte before staging or lock mutation",
+      "reject panel before staging or lock mutation"
+    ],
+    "full_fd_built": false,
+    "source_sha256": {
+      "firmware/Resources/Scripts/enuma_oem_profile.py": "ecf935152d82286f9e407d1db5a291c5ccd29f97d06a7d39d2d527548f684acb",
+      "firmware/Resources/Scripts/build_enuma_development.py": "bc40b61563abd69169b30e01bde02dc6208cb067d9bb77ab91dd0ed60a6a4d64",
+      "scripts/check_oem_build_profiles.py": "9e7a1d84bff4c9871de08bc55df75871b4e4a2ea7125dc0ae713d5a31b4bb7c5"
+    }
+  },
+  "source_sha256": {
+    "scripts/audit_oem_development_fd.py": "46ebe274a3dbfdabc887f40f4dbf198fe8ded1bed7f7b1d96fd0dddc32f55050",
+    "scripts/check_oem_fd_audit.py": "2dfb06f90bd15aa3517c25599db86b4e217ba6d451123689bd2e1829ce6faab9",
+    "scripts/compare_oem_development_fds.py": "c8460207723df6492aeb7870712c22ca68bc10905c7ec42c001dfff0cf78ef72",
+    "scripts/check_oem_stage10_code.py": "30001d830429f0bf8b2d82d78e62aacd3000b90f652577518f73419cff7d0476",
+    "firmware/Resources/Scripts/build_enuma_development.py": "bc40b61563abd69169b30e01bde02dc6208cb067d9bb77ab91dd0ed60a6a4d64"
+  },
+  "preservation": {
+    "out/deferred-menu-20261027/qualification1/image.img": "0db64285d13c0e2f60e68403b0b5498433b0b0c0143f6ce336c1885dad4afb5a",
+    "out/firmware-vendor/Binaries/enuma/DisplayDxe/DisplayDxe.efi": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425"
+  },
+  "remaining": [
+    "CoreStartImage exact handle and variant binding",
+    "board precall capture and termination/recovery qualification",
+    "OEM runtime evidence"
+  ]
+}
