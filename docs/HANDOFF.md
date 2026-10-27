@@ -1,14 +1,22 @@
-2026-10-27：用户明确允许progress-v2上机，并确认当前在场、连续录像及人工长按恢复准备完成。仅新镜像adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f一次临时fastboot boot；前检由绑定runner即时执行，不flash/erase/改槽，75秒无返回停止追加。R027及旧OEM冻结。
+# OEM progress-v2 实测结果（2026-10-27）
 
-# 最新交接：OEM progress-v2候选已就绪，等待实机条件
+一次临时启动已消费，75秒观察内未见合格fastboot返回，已停止追加启动。用户人工恢复Android后，独立核验enuma、boot_completed=1、root、A槽、解锁及boot_a/vendor_boot_a摘要均通过。当前设备恢复完成；不能原样重试本镜像。
 
-新镜像out/oem-progress-20261027/qualification1/image.img，SHA256 adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f。固件3adfb77本地提交，完整FD/32项机器码删除负测/Boot v3/宿主与29项Python测试通过。软件资格不代表实机成功；本轮不部署，ledger未消费。旧OEM和R027冻结、摘要不变，旧源码资格不与新版混用。运行边界及五阶段解读见operations/2026-10-27-oem-progress-candidate.md。主线下一实机优先可靠取证→OEM返回与GOP，再独立进入引导交接；本镜像尚不测GOP/XNU。
+候选SHA256：adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f。源码设备仓61eacd1、固件3adfb77；首次连接失败的前检未启动，重新连接后仅一次实际boot。单次ledger保留consumed，R027及旧OEM候选冻结。
+
+两张本地照片独立判读：E01/C0/Q0与S02/C0/Q1，均为返回RVA 0x3abc、session 0x1c2e8da897800e00；S02状态0（EFI_SUCCESS）。精确原厂PE在0x3ab8执行BLR x8，前序从表偏移0x40取函数，对应AllocatePool。0x3a8c前序不是调用，与照片B字形也不符。无符号，不能断言上层调用函数名称或分配用途。
+
+主判断：首个AllocatePool已经成功返回，优先缩小S02取证清理至后续OEM执行之间的区间。S02可见发生在等待/恢复完成之前，因此清理/复位失败仍是第一组待排除项；其次是后续服务或未包装协议/MMIO执行，另有后段显示出口因路由变化被拒绝的可能。两张静态照片不能证明E03/S04/S05从未发生，不能判定SID死锁或完整驱动返回，更未验证GOP/BDS/XNU。此排序是下一步诊断优先级，不是故障概率结论。
+
+下一软件方案：以独立有界探针观察后续选定服务调用入口/返回，并区分取证清理与OEM继续执行；不先套用MMU补丁。新镜像须重新构建/失败路径/机器码/单次绑定审核，不沿用本次ledger或在场状态。原始媒体仅本地，文字判读待用户核对。
+
+证据：reports/enuma-oem-progress-trial-20261027.json；out/oem-progress-20261027/media-review/（转录、解码、精确PE RVA映射）；out/device-tests/oem-b78f01e4-35ff-4113-890d-251a1d51d106/（transport、超时快照、恢复核验）。媒体位于D:/Code/PortingiOS/enuma/Media-enuma/OEM-progress-v2-20261027-b78f01e4。只收到stage1.jpg和stage2.jpg，未收到连续录像。
 
 以下内核输入及集成交接仍有效：
 
 # 交接：从已验收真实输入继续 storage/PMGR 服务集成
 
-2026-10-27。用户允许推送，暂不上机；R027冻结，OEM候选17d0169e6bd1继续等待。共享D:/Code/PortingiOS/enuma/UniXNU-enuma只读。
+2026-10-27。用户允许推送；本次progress-v2已消费且人工恢复，停止追加实机。R027冻结，旧OEM候选17d0169e6bd1继续保留。共享D:/Code/PortingiOS/enuma/UniXNU-enuma只读。
 
 1. 主开发树D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display保留完整离线历史。最小CI树D:/Code/PortingiOS/enuma/worktrees/enuma-xnu-input-ci，分支ci/enuma-driver-inputs-20261027已推送，最新文档e81f73c；远端main未变。
 2. 最终平台运行40478893674成功，代码cdfb7ae；原始包在CI树out/ci-runs/40478893674/enuma-macos-platform-40478893674，验收副本在同级imported。2259文件/2记录绑定通过，manifest和内核摘要见reports/enuma-driver-input-ci.json。不要重用上传缺失的40477385983，也不要覆盖旧失败证据。

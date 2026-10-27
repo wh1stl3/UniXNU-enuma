@@ -1,0 +1,48 @@
+{
+  "trial_id": "b78f01e4-35ff-4113-890d-251a1d51d106",
+  "image_sha256": "adbb2c41216bc0c934af4046fe8c0127ce40a6c22c12bfc3f2c7880eee80679f",
+  "boot_count": 1,
+  "automatic_return_observed": false,
+  "manual_recovery_verified": true,
+  "media": [
+    {
+      "file": "stage1.jpg",
+      "sha256": "c970e4552ca582faa1fc698bc372bc809f37c4187706fd988faa40133ff50534",
+      "decoded": {
+        "phase": 1,
+        "event": "first-service-before",
+        "session": "0x1c2e8da897800e00",
+        "sequence": 0,
+        "call": 0,
+        "caller_rva": "0x3abc",
+        "returned": false,
+        "status": null,
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim"
+      }
+    },
+    {
+      "file": "stage2.jpg",
+      "sha256": "699d94afce97cfc55dd6b2ab3c24e7b66069d363a00b40fce5b97eed325023eb",
+      "decoded": {
+        "phase": 2,
+        "event": "first-service-return",
+        "session": "0x1c2e8da897800e00",
+        "sequence": 1,
+        "call": 0,
+        "caller_rva": "0x3abc",
+        "returned": true,
+        "status": "0x0",
+        "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim"
+      }
+    }
+  ],
+  "human_transcription_confirmation": "pending",
+  "service_attribution": "AllocatePool: exact OEM call 0x3ab8 BLR x8, function pointer loaded at boot table offset 0x40; return RVA 0x3abc",
+  "oem_driver_return_proven": false,
+  "limits": [
+    "Two still photos, no continuous video received",
+    "S02 shows service return before capture restore completes",
+    "No proof of SID arrival or absence, full CoreStartImage return, GOP or BDS"
+  ],
+  "next_probe": "Prioritize selected next service call entry/return and distinguish capture cleanup from subsequent OEM execution; retain independent bounds and original OEM PE"
+}
