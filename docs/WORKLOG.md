@@ -1423,3 +1423,6 @@ D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5
 
 
 2026-10-27 · 隔离worktree完成OEM control/MMU-only两份3MiB FD，实际FV身份/32 OEM模块/39 APRIORI/K81资源及Core编译产物核对通过。14项审计负测、8项Core调用删除负测、8项profile检查与双组同源比较通过。固件修复提交322f427；设备仓上次提交c49623b，本轮提交号由git log查询。总报告reports/enuma-oem-fd-pair-development.json，操作记录operations/2026-10-27-oem-display-worktree.md。保留build-1和negative-1失败记录，最终build-2/negative-2不覆盖旧证据。R027与原vendor摘要复核一致，原主线干净；未查询/操作设备、打包Boot.img或推送。两FD仅stage10编译检查，Core追踪及板级出口待接，不等于OEM运行成功。
+
+
+2026-10-27 · 隔离固件b6fe1a2接入Core/FV/重定位文本绑定及调用前板级适配器，两个trace-build-2完整FD和最终审计通过。8项stage10删除负测、6项拒绝终止删除负测、两PE sanitizer/交叉身份测试与旧出口749种拒绝回归通过。证据reports/enuma-oem-core-trace-development.json，操作记录operations/2026-10-27-oem-core-trace-firmware.md。保留失败trace-build-1；构建基点322f427+快照，不称干净提交构建。仍stage10派发前停止，板级运行资格未有；R027/原主线不改，无设备、Boot.img或推送。设备仓上次53956f4，本次提交号见git log。

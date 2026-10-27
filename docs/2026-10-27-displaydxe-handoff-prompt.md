@@ -1,3 +1,5 @@
+最新接续：Core追踪/板级适配器双FD已编出；先读本worktree docs/STATUS.md 和 docs/operations/2026-10-27-oem-core-trace-firmware.md。仍stage10停止、未上机。以下早期prompt仅供背景。
+
 本worktree最新接续：先读 docs/STATUS.md 和 docs/operations/2026-10-27-oem-display-worktree.md。两组OEM stage10完整FD已构建，当前写入根为 D:/Code/PortingiOS/enuma/worktrees/enuma-oem-display；原主线及R027保持不改。以下旧prompt保留为背景，不覆盖最新状态。
 
 # 接续 enuma：定位 OEM DisplayDxe 未观察到返回的区间
