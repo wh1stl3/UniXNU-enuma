@@ -47,3 +47,19 @@ check2覆盖（增加真实顺序的Kernel NOT_FOUND前缀，确认无旧窗口�
 以下为历史记录，以本节为当前状态。
 
 精确路径静态校验在out/oem-post-kernel-20261027/path-audit.json，机器码对照在linked-comparison.json；初次对照脚本将CMP差异字节误标为指令起始偏移0x160，实际为该指令第二字节0x161，修正检查后通过，固件未改。最终宿主结果与源码绑定保留在check2/result.json。
+
+
+# 当前：v4单次已执行，自行返回Android；摄像头日志不可完整解码（2026-10-27）
+
+用户授权摄像头测试并确认当前在场可恢复。镜像233088a740b8241c4ac38ab5e67aadfef5d1ade9f5802ce670c2662df73529d7、trial f5854414-b040-49ff-9291-3007c5c3f560仅boot一次，发送/启动成功，单次consumed，不重试。源码/本次准备29301e9及固件f82039e均已推送。
+
+摄像头与ADB均观察到Android返回，用户明确未做按键恢复；独立核验enuma、boot_completed=1、root、A槽、解锁及boot_a/vendor_boot_a摘要通过。执行器只等待fastboot，误记manual-recovery-needed；原始state-before-android-reconcile.json和transport保留，追加android-return-observed.json、android-return-verification.json并纠正当前状态为已回Android、manual_recovery=false。此为观察终点缺口，不能写作设备75秒仍挂住或人工恢复，也不能由自动返回证明DisplayDxe成功。
+
+相机0 DSHOW采集1920×1080、2135帧、约428.688秒，原始MJPG视频及每秒JPEG均在out/oem-post-kernel-20261027/camera-live1。录像包含两段五行亮字窗口，但过曝/虚焦使数字连成白块，无法可靠恢复完整stage/call/status/session；未按预期值补猜，未送入严格解码器。检查低饱和候选原视频帧后仍不满足完整字符串验收。日志内容验收未通过，用户无需盲抄此糊图；原始影音仅本地。
+
+AVI写入标称10fps，但实际采集约5fps，播放时长不是现场耗时；时序以UTC状态、原始JPEG文件时间及主机transport为准，不用AVI时码推算真实窗口持续时间。电源键未保证入镜，未从手部画面推断操作，自动返回依据用户明确反馈与设备核验。
+
+当前没有新根因结论。两段文字出现与自动返回不足以验证call4/SID/真实驱动返回，仍按既有HOB/缓存/注册及取证清理竞争解释分析。后续先离线修复执行器Android终点观察，校准摄像头近拍/对焦/曝光并解决真实时间戳，再安排独立新候选；不为改善拍摄原样重启已消费v4。R027及旧候选冻结，共享主线只读，当前无按键待办。
+
+报告reports/enuma-oem-post-kernel-trial-20261027.json；设备证据out/device-tests/oem-f5854414-b040-49ff-9291-3007c5c3f560；相机判读readability.json、review-sheet、video-detail保留本地。
+

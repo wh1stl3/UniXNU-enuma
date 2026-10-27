@@ -1,0 +1,30 @@
+{
+  "trial_id": "f5854414-b040-49ff-9291-3007c5c3f560",
+  "image_sha256": "233088a740b8241c4ac38ab5e67aadfef5d1ade9f5802ce670c2662df73529d7",
+  "boot_count": 1,
+  "consumed": true,
+  "transport_boot_success": true,
+  "user_reported_automatic_return": true,
+  "manual_recovery": false,
+  "android_return_verified": true,
+  "runner_error": "fastboot-only observation did not recognize Android return",
+  "visual": {
+    "complete_hex_readable": false,
+    "independent_transcription": "not possible; unknown fields retained, no decoder admission",
+    "observed": "two five-row bright log windows in sampled sequence",
+    "limitation": "defocus and clipped highlights merge glyphs; stage/status/session not reliably recovered",
+    "candidate_frames": [
+      1558,
+      1545,
+      1535
+    ],
+    "timing": "AVI nominal 10fps differs from actual approximately 5fps; use UTC/status and original frame timestamps, not AVI duration as wall time"
+  },
+  "camera": {
+    "frames": 2135,
+    "elapsed": 428.68800000002375,
+    "utc": "2026-10-27T12:50:42.024068+00:00"
+  },
+  "media_local_only": true,
+  "driver_return_proven": false
+}
