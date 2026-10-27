@@ -1680,3 +1680,7 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 ## 2026-10-28T00:44:04.878800+08:00 v8修复追踪通知竞态并完成镜像
 
 冻结v7 RestoreTPL嵌套通知竞态已宿主复现，不认定为实机唯一根因；v8将RAM里程碑捕获移到事件记录临界区，继续保持无前段UI及整轮DXE后一次汇总。固件49affe73f48f5b22dd1256efa25dd5576c438daa；设备仓前提交5f870f9；镜像197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29，资格b42faaa664c7613f147cf16dabec5b914550c64a013661b358039c992a66e8ff。check3/race2/binding1/path1、44 Python、30+152删除/3 GUID变异、完整FD/Boot v3回读和2459绑定通过，未claim/上机，无设备命令。证据out/oem-far-event-20261028、reports/enuma-oem-far-event-v8-candidate.json；R027/v6/v7冻结摘要不变。本轮现场就绪不复用，后续仍即时门禁。
+
+## v8本次单次启动准备
+
+2026-10-28 00:47 v8本次单次准备：用户明确“v8上机，正在拍摄，我在场可以恢复”，当前拍摄/在场条件独立记录，不复用v7。即时只读enuma/Android完成/root/A槽/解锁及原双分区/备份摘要通过。镜像197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29，trial a35583f7-e92d-4999-96d2-116793825026，未claim/发送。当前准备提交发布与远端核对后，由原runner重复即时门禁，仅一次临时boot；75秒无合格返回停止追加、先恢复，不flash/erase/改槽。共享主线只读、R027冻结。证据out/oem-far-event-live-20261028；媒体Media-enuma/OEM-far-event-v8-20261028-a35583f7本地保留。v8仅修复已复现的通知竞态，不预写OEM/Core/DXE/GOP/BDS成功；无页仍有异常、返回门、末端显示拒绝等竞争解释。

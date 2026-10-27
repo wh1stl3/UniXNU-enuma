@@ -27,3 +27,7 @@ v7已consumed，用户报告FASTBOOT到Mi标之间没有日志、设备自行回
 最终check3/race2/binding1/path1通过；44 Python、30+152条删除及3 GUID变异拒绝、2459绑定、完整FD/Boot v3解包回读通过。关键链接路径EnumaServiceBegin:1375c/End:1381c调用EnumaServiceRecord，记录完成后1398c读取Recorded、13994取同一事件指针、139b8尾跳回调；1376c/13834才恢复TPL。CoreStartImage中ccc4把正确OemProgressRecord地址安装到Recorded；没有OemProgressObserve/Before/After符号。实际Core返回锁存不变，3c38末端导出→3c44七秒→3c48 ResetCold出口保持。编译后复核仅覆盖选定序列，不称全程序或硬件证明。
 
 trial a35583f7-e92d-4999-96d2-116793825026，session 4736432023589023138，未claim/未上机；软件就绪不替代当前拍摄与即时设备/恢复条件。失败check1、初期复现编译缺返回值等输出保留，冻结R027/v6/v7产物摘要复核不变。总报告reports/enuma-oem-far-event-v8-candidate.json，默认离线入口见HANDOFF。
+
+## v8本次单次启动准备
+
+2026-10-28 00:47 v8本次单次准备：用户明确“v8上机，正在拍摄，我在场可以恢复”，当前拍摄/在场条件独立记录，不复用v7。即时只读enuma/Android完成/root/A槽/解锁及原双分区/备份摘要通过。镜像197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29，trial a35583f7-e92d-4999-96d2-116793825026，未claim/发送。当前准备提交发布与远端核对后，由原runner重复即时门禁，仅一次临时boot；75秒无合格返回停止追加、先恢复，不flash/erase/改槽。共享主线只读、R027冻结。证据out/oem-far-event-live-20261028；媒体Media-enuma/OEM-far-event-v8-20261028-a35583f7本地保留。v8仅修复已复现的通知竞态，不预写OEM/Core/DXE/GOP/BDS成功；无页仍有异常、返回门、末端显示拒绝等竞争解释。

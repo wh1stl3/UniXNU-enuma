@@ -1,3 +1,5 @@
+> 2026-10-28 00:47 v8本次单次准备：用户明确“v8上机，正在拍摄，我在场可以恢复”，当前拍摄/在场条件独立记录，不复用v7。即时只读enuma/Android完成/root/A槽/解锁及原双分区/备份摘要通过。镜像197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29，trial a35583f7-e92d-4999-96d2-116793825026，未claim/发送。当前准备提交发布与远端核对后，由原runner重复即时门禁，仅一次临时boot；75秒无合格返回停止追加、先恢复，不flash/erase/改槽。共享主线只读、R027冻结。证据out/oem-far-event-live-20261028；媒体Media-enuma/OEM-far-event-v8-20261028-a35583f7本地保留。v8仅修复已复现的通知竞态，不预写OEM/Core/DXE/GOP/BDS成功；无页仍有异常、返回门、末端显示拒绝等竞争解释。
+
 > 2026-10-28当前：far-event-v8完整镜像和qualification1已完成，修复可复现的RestoreTPL后环尾串位主动复位；仅离线，未claim/上机。v7已consumed且自动回Android，无页不证明Core/DXE/GOP成功。现行STATUS/HANDOFF及operations/2026-10-28-oem-far-event-v8.md；以下旧当前/拍摄就绪均为历史。
 
 > 2026-10-28当前：v7单次已consumed，用户确认自行回Android且FASTBOOT到Mi标未见日志页，独立恢复与原分区/备份核验通过。尚无独立媒体判读，不证明Core/DXE/GOP成功，不重试；现行STATUS/HANDOFF。以下准备/未消费文字为历史。
