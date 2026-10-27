@@ -44,6 +44,12 @@ class TraceDecoder(unittest.TestCase):
   first=event(0,0,'enter','not-returned');last=event(1,0,'return','0000000000000000')
   for text in [header+first,header+first+last.replace('1234','1235'),header+first+last.replace('allocate-pool','locate-protocol'),header+first+last.replace('0000000000000063','0000000000000064'),header+first.replace('not-returned','0000000000000000')+last,header+first+last.replace('phase=return','phase=enter')]:
    with self.subTest(text=text),self.assertRaises(ValueError):decode(text)
+ def test_configuration_registration(self):
+  header='OEM cached dropped=0000000000000000 next=0000000000000002 calls=0000000000000001\n'
+  first=event(0,0,'enter','not-returned','install-configuration-table')
+  last=event(1,0,'return','8000000000000009','install-configuration-table')
+  self.assertEqual(decode(header+first+last)['events'][1]['status_hex'],'8000000000000009')
+  self.assertRaises(ValueError,decode,header+first+last.replace('install-configuration-table','allocate-pool'))
  def test_overwrite_unpaired_return_explicit(self):
   text='OEM cached dropped=0000000000000001 next=0000000000000081 calls=0000000000000081\n'
   text+=event(1,0,'return','0000000000000000')

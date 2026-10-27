@@ -13,14 +13,14 @@ def main():
     p.add_argument('--progress-check',type=Path)
     a=p.parse_args();build=a.build.resolve();out=a.output.resolve();out.relative_to(ROOT/'out');out.mkdir(parents=True,exist_ok=False)
     base,pe=audit(build,runtime=True);b=json.loads((build/'build-result.json').read_text());config=b['oem_run_config']
-    progress=config['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4')
+    progress=config['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5')
     if progress:
         if not a.progress_check:raise ValueError('progress failure tests required')
         tests=json.loads(a.progress_check.read_text())
         if tests.get('passed') is not True:raise ValueError('progress tests failed')
         for name,h in tests['sources'].items():
             if sha((ROOT/name).read_bytes())!=h:raise ValueError('progress tests stale: '+name)
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4'):
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):
         actual=build/'work/Mu_Basecore/MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         tested=a.progress_check.parent/'MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         # The build backend reverses Core patches after compilation. Reconstruct
@@ -42,7 +42,7 @@ def main():
     core=(product/'DxeCore.efi').read_bytes();mapping=(product/'DxeCore.map').read_text()
     runtime_code=verify_with_deletions(core,mapping,progress)
     early_code=None
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4'):
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):
         from check_oem_early_code import verify as verify_early
         early_code=verify_early(core,mapping,config['experiment'])
     cpus=list((build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64').rglob('OUTPUT/ArmCpuDxe.efi'))
@@ -79,7 +79,8 @@ def main():
              'scripts/check_oem_runtime_code.py','scripts/check_oem_entry_failure_code.py','scripts/enuma_paths.py']
     sources+=['firmware/'+n for n in json.loads((build/'source-manifest.json').read_text())['original_files']]
     if progress:sources+=['scripts/check_oem_progress.py','scripts/decode_oem_progress_page.py','tests/oem_progress.c','tests/oem_capture_pixel.c','tests/test_oem_progress_page.py']
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4'):sources+=['scripts/check_oem_early_code.py']
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):sources+=['scripts/check_oem_early_code.py']
+    if config['experiment']=='oem-registration-v5':sources+=['tests/test_oem_runtime_return.py','tests/test_oem_runtime_candidate.py']
     if progress:sources+=list(tests['sources'])
     bindings={n:sha((ROOT/n).read_bytes()) for n in sources}
     result=dict(passed=True,software_ready=True,hardware_executed=False,scope=config['experiment'],run_config=config,
@@ -96,6 +97,8 @@ def main():
         result['progress_phases']={1:'first service before',2:'first service returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
         if config['experiment']=='oem-early-v3':
             result['progress_phases']={1:'call1 before',2:'call1 returned',3:'first Kernel LocateProtocol before',4:'first Kernel LocateProtocol returned',5:'actual CoreStartImage returned'}
+        if config['experiment']=='oem-registration-v5':
+            result['progress_phases']={1:'target configuration registration before',2:'target configuration registration returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
         if config['experiment']=='oem-post-kernel-v4':
             result['progress_phases']={1:'call4 before',2:'call4 returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
         result['limitations']+=['no export if OEM hangs before the selected wrapped service',

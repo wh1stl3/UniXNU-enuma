@@ -32,4 +32,11 @@ class Pages(unittest.TestCase):
         self.assertEqual(decode(self.page(3),123,'oem-post-kernel-v4')['event'],'sid-locate-before')
         self.assertEqual(decode(self.page(4),123,'oem-post-kernel-v4')['status'],'0x800000000000000e')
 
+    def test_registration_scope(self):
+        for phase in (1,2):
+            page=self.page(phase).replace('C'+f'{7:016x}','C'+f'{5:016x}').replace('O'+f'{0x1bce0:016x}','O'+f'{0x5cc8:016x}')
+            self.assertEqual(decode(page,123,'oem-registration-v5')['call'],5)
+            self.assertRaises(ValueError,decode,page.replace('5cc8','5cc4'),123,'oem-registration-v5')
+            self.assertRaises(ValueError,decode,page,123,'oem-post-kernel-v4')
+
 if __name__=='__main__':unittest.main()

@@ -10,6 +10,7 @@
 VOID *EFIAPI CopyMem(VOID *D,CONST VOID *S,UINTN N){return memcpy(D,S,N);}
 VOID *EFIAPI ZeroMem(VOID *D,UINTN N){return memset(D,0,N);}
 INTN EFIAPI CompareMem(CONST VOID *A,CONST VOID *B,UINTN N){return memcmp(A,B,N);}
+#include "EnumaOemBuildIdentity.h"
 #include "EnumaOemPrecallCapture.h"
 STATIC EFI_HANDLE EnumaStartingImage;
 STATIC CONST EFI_GUID *EnumaStartingFile;
@@ -38,6 +39,7 @@ STATIC EFI_STATUS EFIAPI Crc(VOID *P,UINTN N,UINT32 *V){(void)P;(void)N;CrcCalls
 STATIC EFI_STATUS EFIAPI Locate(EFI_GUID *G,VOID *R,VOID **I){(void)G;(void)R;(void)I;return EFI_NOT_FOUND;}
 STATIC EFI_STATUS EFIAPI Handle(EFI_HANDLE H,EFI_GUID *G,VOID **I){(void)H;(void)G;(void)I;return EFI_NOT_FOUND;}
 STATIC EFI_STATUS EFIAPI Allocate(EFI_MEMORY_TYPE T,UINTN N,VOID **B){(void)T;(void)N;(void)B;OriginalAllocations++;return EFI_OUT_OF_RESOURCES;}
+STATIC EFI_STATUS EFIAPI Install(EFI_GUID *G,VOID *P){(void)G;(void)P;return EFI_SUCCESS;}
 int main(int argc,char **argv){
   EFI_GUID Display={0x4138022f,0x06c7,0x4f79,{0x9c,0x94,0x7e,0x33,0xb5,0x11,0xa4,0xe7}},Wrong={0};
   EFI_BOOT_SERVICES Boot={0};EFI_SYSTEM_TABLE System={0};EFI_LOADED_IMAGE_PROTOCOL Loaded={0},Other={0};
@@ -56,7 +58,7 @@ int main(int argc,char **argv){
   Image[0x1994]^=1;assert(!EnumaOemLoadedIdentity(&Loaded,Entry));Image[0x1994]^=1;
   Image[ENUMA_OEM_ID_TEXT_RVA+EnumaOemTextRelocs[0]]^=1;assert(!EnumaOemLoadedIdentity(&Loaded,Entry));Image[ENUMA_OEM_ID_TEXT_RVA+EnumaOemTextRelocs[0]]^=1;
   Boot.Hdr.HeaderSize=sizeof(Boot);Boot.RaiseTPL=Raise;Boot.RestoreTPL=Restore;Boot.CalculateCrc32=Crc;
-  Boot.LocateProtocol=Locate;Boot.HandleProtocol=Handle;Boot.AllocatePool=Allocate;
+  Boot.LocateProtocol=Locate;Boot.HandleProtocol=Handle;Boot.AllocatePool=Allocate;Boot.InstallConfigurationTable=Install;
   System.Hdr.HeaderSize=sizeof(System);System.BootServices=&Boot;gDxeCoreST=&System;
   Loaded.SystemTable=&System;Loaded.ImageCodeType=EfiBootServicesCode;Protocol=&Loaded;
   memcpy(Path+4,&Display,16);Path[20]=END_DEVICE_PATH_TYPE;Path[21]=END_ENTIRE_DEVICE_PATH_SUBTYPE;Path[22]=4;

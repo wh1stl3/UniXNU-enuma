@@ -10,8 +10,8 @@ def data_offset(pe,rva):
     return s[3]+rva-s[1]
 
 def check(pe,mapping,experiment='oem-early-v3'):
-    if experiment not in ('oem-early-v3','oem-post-kernel-v4'):raise ValueError('unknown code scope')
-    post=experiment=='oem-post-kernel-v4'
+    if experiment not in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):raise ValueError('unknown code scope')
+    post=experiment!='oem-early-v3';registration=experiment=='oem-registration-v5'
     entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
     def sym(n):
         hits={a for a,name in entries if name==n}
@@ -46,12 +46,38 @@ def check(pe,mapping,experiment='oem-early-v3'):
         sites['before_'+name]=a
     if word(calls[0]-4)!=0xf9003816:raise ValueError('new table not published before sync')
     sites['publish_new_table']=calls[0]-4
-    selects=[a for a in region('OemProgressObserve') if word(a)==(0xf100129f if post else 0xf100069f)]
+    selects=[a for a in region('OemProgressObserve') if word(a)==(0xf100169f if registration else 0xf100129f if post else 0xf100069f)]
     if len(selects)!=1:raise ValueError('selected-call selector missing')
     a=selects[0]
-    if word(a+4)!=0x540001e1 or target(a+0x38)!=sym('OemProgressEmit'):
+    emit_offset=0x48 if registration else 0x38
+    if word(a+4)!=(0x54000261 if registration else 0x540001e1) or target(a+emit_offset)!=sym('OemProgressEmit'):
         raise ValueError('selected-call branch/emission changed')
-    sites['selected_call_compare']=a;sites['selected_call_branch']=a+4;sites['selected_call_emit']=a+0x38
+    sites['selected_call_compare']=a;sites['selected_call_branch']=a+4;sites['selected_call_emit']=a+emit_offset
+    if registration:
+        for off,w in {8:0xb9400348,12:0x7100111f,16:0x540005e1,24:0x528b9909,
+                      28:0xf9403108,32:0xeb09011f,36:0x54000541}.items():
+            if word(a+off)!=w:raise ValueError('registration event gate differs: '+hex(off))
+            sites['registration_gate_'+hex(off)]=a+off
+        start=sym('EnumaTraceInstallConfigurationTable')
+        expected={0x24:0x528b990a,0x34:0xeb0903c9,0x38:0xfa4a2120,0x3c:0x528b9909,
+                  0x40:0xfa490100,0x44:0x54000188,0x58:0xf9406102,0x70:0xd61f0040,
+                  0x98:0x52800080,0xb4:0xaa1503e0,0xb8:0xaa1303e1,
+                  0xc0:0xf9406108,0xc4:0xd63f0100,0xc8:0xaa0003f3,
+                  0xd0:0x52800081,0xe0:0xaa1303e5,0xe8:0xaa1303e0}
+        for off,w in expected.items():
+            if word(start+off)!=w:raise ValueError('registration forwarding differs: '+hex(off))
+            sites['registration_forward_'+hex(off)]=start+off
+        for off,name in ((0xa8,'EnumaServiceBegin'),(0xe4,'EnumaServiceEnd')):
+            if target(start+off)!=sym(name):raise ValueError('registration trace order differs')
+            sites['registration_'+name]=start+off
+        hook=sym('CoreStartImage')+0x920
+        w=word(hook);add=word(hook+8)
+        if w&0x9f00001f!=0x90000009 or add&0xffc003ff!=0x91000129:raise ValueError('registration hook address sequence differs')
+        imm=((w>>5)&0x7ffff)*4+((w>>29)&3)
+        if imm&(1<<20):imm-=1<<21
+        address=(hook&~0xfff)+(imm<<12)+((add>>10)&0xfff)
+        if address!=start or word(hook+24)!=0xf9005b09:raise ValueError('registration wrapper not installed into private Boot table')
+        for off in (0,8,24):sites['registration_hook_'+str(off)]=hook+off
     guid=sym('OemProgressObserve.Sid');off=data_offset(pe,guid)
     if pe[off:off+16]!=bytes.fromhex('b4d3b654335d914f86006c41d5deb19a' if post else 'e72b06b50b17324abe21689262ff4399'):
         raise ValueError('observed protocol GUID differs')

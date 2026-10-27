@@ -10,7 +10,7 @@ def main():
         '-I'+str(inc),'-I'+str(inc/'X64'),'-I'+str(ROOT/'firmware/diagnostics'),
         '-I'+str(ROOT/'firmware/Platforms/Xiaomi/enumaPkg/Library/InheritedScanoutLib'),
         '-O1','-fsanitize=address,undefined','-fno-pie','-no-pie']
-    names=['oem_progress','oem_capture_pixel','oem_precall_capture','oem_service_trace','oem_system_table_lifetime']
+    names=['oem_progress','oem_capture_pixel','oem_precall_capture','oem_service_trace','oem_system_table_lifetime','oem_registration']
     result=dict(passed=False,commands=commands,hardware_executed=False)
     try:
         for name in names:
@@ -50,7 +50,7 @@ def main():
         result['passed']=True
     finally:
         files=['tests/oem_system_table_core.c','tests/oem_system_table_core_fixture.h','firmware/patches/oem-system-table-sync.patch','firmware/Mu_Basecore/MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c']+[f'tests/{n}.c' for n in names]+['scripts/check_oem_progress.py']
-        files += ['firmware/diagnostics/'+n for n in ('EnumaOemProgress.h','EnumaOemProgressPage.h','EnumaOemServiceTrace.h','EnumaOemPrecallCapture.h','EnumaOemCapturePixel.h','EnumaOemBoardCapture.h','EnumaOemCoreBinding.h')]
+        files += ['firmware/diagnostics/'+n for n in ('EnumaOemServiceTraceView.h','EnumaOemProgress.h','EnumaOemProgressPage.h','EnumaOemServiceTrace.h','EnumaOemPrecallCapture.h','EnumaOemCapturePixel.h','EnumaOemBoardCapture.h','EnumaOemCoreBinding.h')]
         result['sources']={n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in files}
         (out/'result.json').write_text(json.dumps(result,indent=2)+'\n')
     print('PASS: progress state machine and existing pixel/precall/service regressions under ASan/UBSan')

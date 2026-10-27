@@ -24,9 +24,10 @@ def main():
     cmd=['/usr/bin/clang','-target','aarch64-unknown-windows-msvc','-ffreestanding','-fno-stack-protector',
          '-mno-stack-arg-probe','-mno-implicit-float','-Wall','-Wextra','-Werror','-Wno-unused-function','-Os','-DMDEPKG_NDEBUG']
     if a.runtime_config:cmd.append('-DENUMA_OEM_RUNTIME=1')
-    if a.runtime_config and json.loads(a.runtime_config.read_text())['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4'):cmd.append('-DENUMA_OEM_PROGRESS=1')
+    if a.runtime_config and json.loads(a.runtime_config.read_text())['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5'):cmd.append('-DENUMA_OEM_PROGRESS=1')
     if a.runtime_config and json.loads(a.runtime_config.read_text())['experiment']=='oem-early-v3':cmd.append('-DENUMA_OEM_EARLY=1')
     if a.runtime_config and json.loads(a.runtime_config.read_text())['experiment']=='oem-post-kernel-v4':cmd.append('-DENUMA_OEM_POST_KERNEL=1')
+    if a.runtime_config and json.loads(a.runtime_config.read_text())['experiment']=='oem-registration-v5':cmd.append('-DENUMA_OEM_REGISTRATION=1')
     for path in (inc,inc/'AArch64',ROOT/'firmware/Mu_Basecore/MdeModulePkg/Include',ROOT/'firmware/Mu_Basecore/ArmPkg/Include',
                  ROOT/'firmware/Silicon/Silicium/SiliciumPkg/Include',ROOT/'firmware/diagnostics',lib,out):cmd.append('-I'+str(path))
     subprocess.run(cmd+['-c',str(ROOT/'tests/oem_board_capture_arm.c'),'-o',str(out/'board.obj')],check=True)

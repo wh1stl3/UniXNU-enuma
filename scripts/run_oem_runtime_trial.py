@@ -83,7 +83,7 @@ def main():
         windows=subprocess.check_output(['wslpath','-w',str(image)],text=True).strip()
         r=invoke('fastboot',['boot',windows],30)
         if r.returncode or b'FAILED' in r.stdout+r.stderr:raise ValueError('single boot transport failed; no retry')
-        deadline=time.monotonic()+75;disconnected=False;returned=False
+        deadline=time.monotonic()+75;disconnected=False;returned=False;android_returned=False
         while time.monotonic()<deadline:
             r=subprocess.run([str(TOOLS/'fastboot.exe'),'devices'],capture_output=True,timeout=3)
             if r.returncode:raise ValueError('USB enumeration failed')
@@ -92,8 +92,17 @@ def main():
             (out/'transport.json').write_text(json.dumps(events,indent=2))
             disconnected,returned=observe_fastboot_return(present,disconnected)
             if returned:break
+            if disconnected and time.monotonic()<deadline:
+                product=invoke('adb',['shell','getprop','ro.product.device'],2)
+                if product.returncode==0 and product.stdout.strip()==b'enuma' and time.monotonic()<deadline:
+                    completed=invoke('adb',['shell','getprop','sys.boot_completed'],2)
+                    android_returned=completed.returncode==0 and completed.stdout.strip()==b'1'
+                    if android_returned:break
             time.sleep(1)
-        if not returned:raise ValueError('no observed disconnect and verified fastboot return')
+        if android_returned:
+            android_check();state['observed_return_endpoint']='android';state['manual_recovery']=None;state['return_method']='pending-user-confirmation'
+            save('android-recovered-visual-review-pending');return
+        if not returned:raise ValueError('no observed disconnect and verified fastboot or Android return')
         if not fastboot_check():raise ValueError('return identity failed')
         save('fastboot-returned')
         if invoke('fastboot',['reboot']).returncode:raise ValueError('Android reboot failed')

@@ -11,7 +11,9 @@ LIMITS = dict(max_boots=1, selected_call=0, hold_us=8000000,
 PROGRESS_SCOPE='oem-progress-v2'
 EARLY_SCOPE='oem-early-v3'
 POST_SCOPE='oem-post-kernel-v4'
+REG_SCOPE='oem-registration-v5'
 def limits_for(scope):
+    if scope==REG_SCOPE:return dict(LIMITS,selected_call=5,max_windows=5,max_total_hold_us=40000000)
     if scope==SCOPE:return dict(LIMITS)
     if scope==POST_SCOPE:return dict(LIMITS,selected_call=4,max_windows=5,max_total_hold_us=40000000)
     if scope==EARLY_SCOPE:return dict(LIMITS,selected_call=1,max_windows=5,max_total_hold_us=40000000)
@@ -25,13 +27,13 @@ def validate(root, directory):
     root=root.resolve(); directory=directory.resolve()
     directory.relative_to(root/'out')
     q=json.loads((directory/'qualification.json').read_text())
-    if q.get('passed') is not True or q.get('software_ready') is not True or q.get('scope') not in (SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,POST_SCOPE):
+    if q.get('passed') is not True or q.get('software_ready') is not True or q.get('scope') not in (SCOPE,PROGRESS_SCOPE,EARLY_SCOPE,POST_SCOPE,REG_SCOPE):
         raise ValueError('not an admitted OEM runtime candidate')
     c=q['run_config']
     if (set(c)!=set(('trial_id','session','selected_call','profile','experiment')) or
         str(UUID(c['trial_id']))!=c['trial_id'] or type(c['session']) is not int or
         not 0<c['session']<2**64 or type(c['selected_call']) is not int or
-        c['selected_call']!=(4 if q['scope']==POST_SCOPE else 1 if q['scope']==EARLY_SCOPE else 0) or c['profile']!='oem-control' or c['experiment']!=q['scope']):
+        c['selected_call']!=(5 if q['scope']==REG_SCOPE else 4 if q['scope']==POST_SCOPE else 1 if q['scope']==EARLY_SCOPE else 0) or c['profile']!='oem-control' or c['experiment']!=q['scope']):
         raise ValueError('runtime configuration differs')
     if q['runtime_limits']!=limits_for(q['scope']) or q['identity'].get('runtime')!=c:
         raise ValueError('runtime identity or limits differ')

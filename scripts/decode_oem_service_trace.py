@@ -2,7 +2,7 @@
 import argparse,json,re,uuid
 from pathlib import Path
 HEADER=re.compile(r'OEM cached dropped=([0-9a-f]{16}) next=([0-9a-f]{16}) calls=([0-9a-f]{16})')
-EVENT=re.compile(r'OEM seq=([0-9a-f]{16}) call=([0-9a-f]{16}) svc=(locate-protocol|handle-protocol|allocate-pool) phase=(enter|return) rva=([0-9a-f]{16}|unknown) s=([0-9a-f]{16}|not-returned) guid=([0-9a-f-]{36}|-) value=([0-9a-f]{16})')
+EVENT=re.compile(r'OEM seq=([0-9a-f]{16}) call=([0-9a-f]{16}) svc=(locate-protocol|handle-protocol|allocate-pool|install-configuration-table) phase=(enter|return) rva=([0-9a-f]{16}|unknown) s=([0-9a-f]{16}|not-returned) guid=([0-9a-f-]{36}|-) value=([0-9a-f]{16})')
 def decode(text):
  rows=text.splitlines()
  if not rows or len(rows)>129:raise ValueError('complete bounded snapshot required')
@@ -37,6 +37,6 @@ def decode(text):
   assessment=dict(deadlock_established=False,missing_return='not observed in this snapshot',
    overwritten_events=dropped,recording_counter_exhausted=next_seq==2**64-1 or calls==2**64-1,
    unpaired_return_meaning='entry absent from retained window; do not invent its sequence or arguments'),
-  hardware_verified=False,limitations=['Pending means no return in this snapshot; not proof of a hang.','RVA needs the exact loaded PE and execution binding before symbol attribution.','Only three wrapped Boot Services are covered; MMIO, SMC and protocol method calls are not traced.'])
+  hardware_verified=False,limitations=['Pending means no return in this snapshot; not proof of a hang.','RVA needs the exact loaded PE and execution binding before symbol attribution.','Three general wrapped Boot Services plus the v5 target configuration registration may be covered; other configuration callers, MMIO, SMC and protocol methods are not traced.'])
 if __name__=='__main__':
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('transcript',type=Path);a=p.parse_args();print(json.dumps(decode(a.transcript.read_text(encoding='ascii')),indent=2))
