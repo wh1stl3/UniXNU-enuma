@@ -1,3 +1,9 @@
+# v4手机重试明确授权（2026-10-27）
+
+用户在已告知v4消费后明确“立刻重试”，随后指定手机拍摄并确认录像已开始、可人工恢复。此为本镜像一次明确重试授权，优先于历史不重试约束；没有复活/删除旧ledger。原trial f5854414-b040-49ff-9291-3007c5c3f560，新retry 7e4ec36d-755e-440a-8f47-3c98ae38dbdc，镜像SHA256 233088a740b8241c4ac38ab5e67aadfef5d1ade9f5802ce670c2662df73529d7，仅临时boot一次。
+
+摄像头已退出本次门禁，手机媒体目录D:/Code/PortingiOS/enuma/Media-enuma/OEM-v4-phone-retry-20261027-7e4ec36d。独立out内retry runner沿原qualification validate、身份/备份/恢复和75秒门，仅把claim改为验证明确重试授权并在独立oem-runtime-retries中独占记账。旧执行器fastboot-only限制保持，若自行回Android则独立核验纠正，不因其误报要求人工再按键。原镜像/源码绑定/旧资格未改，脚本摘要另存。最大嫌疑与解释边界沿post-kernel-v4专项，不从模糊或缺失输出猜根因。
+
 # 当前：v4单次已执行，自行返回Android；摄像头日志不可完整解码（2026-10-27）
 
 用户授权摄像头测试并确认当前在场可恢复。镜像233088a740b8241c4ac38ab5e67aadfef5d1ade9f5802ce670c2662df73529d7、trial f5854414-b040-49ff-9291-3007c5c3f560仅boot一次，发送/启动成功，单次consumed，不重试。源码/本次准备29301e9及固件f82039e均已推送。
