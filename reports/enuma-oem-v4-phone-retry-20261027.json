@@ -1,0 +1,112 @@
+{
+  "retry_id": "7e4ec36d-755e-440a-8f47-3c98ae38dbdc",
+  "original_trial": "f5854414-b040-49ff-9291-3007c5c3f560",
+  "consumed": true,
+  "boot_count": 1,
+  "image_sha256": "233088a740b8241c4ac38ab5e67aadfef5d1ade9f5802ce670c2662df73529d7",
+  "automatic_return_user_confirmed": true,
+  "recovery": {
+    "passed": true,
+    "manual_recovery_reported": false,
+    "checks": [
+      {
+        "property": "ro.product.device",
+        "actual": "enuma",
+        "expected": "enuma"
+      },
+      {
+        "property": "sys.boot_completed",
+        "actual": "1",
+        "expected": "1"
+      },
+      {
+        "property": "ro.boot.slot_suffix",
+        "actual": "_a",
+        "expected": "_a"
+      },
+      {
+        "property": "ro.boot.flash.locked",
+        "actual": "0",
+        "expected": "0"
+      },
+      {
+        "root": true
+      },
+      {
+        "partition": "boot_a",
+        "sha256": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959",
+        "expected": "8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959"
+      },
+      {
+        "partition": "vendor_boot_a",
+        "sha256": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba",
+        "expected": "3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba"
+      }
+    ]
+  },
+  "independent_read": {
+    "independent_read": true,
+    "human_confirmation": "pending",
+    "photos": [
+      {
+        "name": "s1.jpg",
+        "sha256": "b786e46c5075101526eb38b9a2436affd504e79e52f64d29325d2436a6a683fb",
+        "rows": [
+          "E01C0000000000000004",
+          "Q0000000000000008",
+          "O0000000000003ABC",
+          "E",
+          "G2DBEF5F2F2DA5EA9"
+        ]
+      },
+      {
+        "name": "s2.jpg",
+        "sha256": "dad1c77b0ea8e6ca181f6540e242f256aaa1a4734eae369a1b987182b44c9d93",
+        "rows": [
+          "S02C0000000000000004",
+          "Q0000000000000009",
+          "O0000000000003ABC",
+          "S0000000000000000",
+          "G2DBEF5F2F2DA5EA9"
+        ]
+      }
+    ]
+  },
+  "decoded": [
+    {
+      "phase": 1,
+      "event": "call4-before",
+      "experiment": "oem-post-kernel-v4",
+      "session": "0x2dbef5f2f2da5ea9",
+      "sequence": 8,
+      "call": 4,
+      "caller_rva": "0x3abc",
+      "returned": false,
+      "status": null,
+      "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim"
+    },
+    {
+      "phase": 2,
+      "event": "call4-return",
+      "experiment": "oem-post-kernel-v4",
+      "session": "0x2dbef5f2f2da5ea9",
+      "sequence": 9,
+      "call": 4,
+      "caller_rva": "0x3abc",
+      "returned": true,
+      "status": "0x0",
+      "scope": "transcribed screen observation only; entry is not execution completion; no GOP or BDS claim"
+    }
+  ],
+  "limitations": [
+    "Only two windows observed; absence of later windows does not establish a unique failure instruction",
+    "No SID or CoreStartImage-return evidence",
+    "No GOP/ConOut/BDS claim",
+    "Fastboot-only observer error reconciled with Android verification"
+  ],
+  "human_confirmation": {
+    "full_strings_confirmed": true,
+    "only_two_windows_user_reported": true,
+    "automatic_android_return_user_reported": true
+  }
+}
