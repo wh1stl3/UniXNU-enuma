@@ -29,3 +29,5 @@ OEM qualification-3/image.img仍为17d0169e6bd1447b358d1e91c6af9a8bf6ed368c6c44f
 详见[内核及用户态离线记录](operations/2026-10-27-kernel-userland-offline.md)和[OEM部署边界](operations/2026-10-27-oem-runtime-deployment.md)。所有大文件仅本地out，代码和脱敏记录仅本地提交。
 
 后续执行规则：用户指定以UniXNU官网为开发指南，见[官网开发指南](operations/official-development-guide.md)及AGENTS开头。按官方流程核对版本/依赖/分层验收；当前离线、冻结、不推送边界保持。
+
+2026-10-27规则补充：官网具体方法已由AGENTS绑定，见[执行规则](operations/official-adaptation-rules.md)。本轮仅文档，硬件与构建进度不变。
