@@ -93,3 +93,7 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 用户持久要求：构建、机器码复核、失败路径和单次绑定同轮完成，只差当前录像时才停，不再把离线步骤拆成多轮停点。当前单次已结束，先完成媒体人工核对，后续新软件离线继续；不得重复R026。
 
 证据：reports/enuma-full-menu-S-054-result.json；out/r026-live-20261027/authorization.json、postcheck.json、independent-visual-read.json。原媒体D:/Code/PortingiOS/enuma/Media-enuma/S-054-R026，仅本地。冻结qualification1、execution-review和preparation2保存当时绑定，不回写旧资格。剩余工作是正常入口/持续显示与输入依赖，下一次候选仍独立资格及单次/录像门禁。
+
+## 2026-10-27：OEM入口与返回RVA离线增量
+
+已核对Core真实EntryPoint传入Image->Info.SystemTable及同句柄LoadedImage来源；新增精确OEM PE返回RVA校验工具，6项失败/指令测试通过，原追踪5条资格命令独立重跑通过。证据out/oem-rva-20261027-session-c999；详见docs/operations/2026-10-27-oem-rva-and-entry-binding.md。未接Core/profile、未运行OEM或新建固件候选；现有同步像素窗口不能保证OEM非返回时的恢复/所有权，取证出口仍阻塞。实机暂停、R027冻结未消费，无人工录像待办；本轮新增代码/测试/文档准备本地提交，不推送。共享工作区其余文件保持。

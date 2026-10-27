@@ -1397,3 +1397,7 @@ R026/S054已单次消费。2026-10-27 01:25:32发送镜像d6d3d61a65d36d0194c5af
 
 
 D-323 本地提交落点：实际 firmware 7a5c92094ab06af271601eb6b5f90d9f90ee5a50；设备仓主成果 0c4284c063b46cc5de0c1dd97111bfdd3af26068；独立固件仓迁移说明 d465e744b174f132ea275bb4265e70e5ca9a9b7b。本段是主成果之后的交接记录，所在提交由 git log 查询。R022—R027 冻结资格摘要提交后复核一致，trust-check2 输入摘要一致。未推送远端；独立固件仓 Mu_Basecore 及嵌套依赖仍有此前改动，未提交/清理；设备仓及实际 firmware 主成果已提交。原始证据、完整构建产物与媒体仅本地保留，克隆仓库不包含这些证据。
+
+## 2026-10-27：OEM入口与返回RVA离线增量
+
+已核对Core真实EntryPoint传入Image->Info.SystemTable及同句柄LoadedImage来源；新增精确OEM PE返回RVA校验工具，6项失败/指令测试通过，原追踪5条资格命令独立重跑通过。证据out/oem-rva-20261027-session-c999；详见docs/operations/2026-10-27-oem-rva-and-entry-binding.md。未接Core/profile、未运行OEM或新建固件候选；现有同步像素窗口不能保证OEM非返回时的恢复/所有权，取证出口仍阻塞。实机暂停、R027冻结未消费，无人工录像待办；本轮新增代码/测试/文档准备本地提交，不推送。共享工作区其余文件保持。
