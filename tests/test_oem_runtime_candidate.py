@@ -83,10 +83,11 @@ class Admission(unittest.TestCase):
         self.assertRaises(ValueError,validate,self.root,self.out)
 
     def test_far_scope(self):
-        from oem_runtime_candidate import FAR_SCOPE
-        self.q['scope']=FAR_SCOPE;self.q['run_config'].update(experiment=FAR_SCOPE,selected_call=0)
-        self.q['runtime_limits']=limits_for(FAR_SCOPE);self.save();validate(self.root,self.out)
-        self.q['runtime_limits']['max_windows']=3;self.save()
-        self.assertRaises(ValueError,validate,self.root,self.out)
+        from oem_runtime_candidate import FAR_SCOPE,EVENT_SCOPE
+        for scope in (FAR_SCOPE,EVENT_SCOPE):
+            self.q['scope']=scope;self.q['run_config'].update(experiment=scope,selected_call=0)
+            self.q['runtime_limits']=limits_for(scope);self.save();validate(self.root,self.out)
+            self.q['runtime_limits']['max_windows']=3;self.save()
+            self.assertRaises(ValueError,validate,self.root,self.out)
 
 if __name__=='__main__':unittest.main()

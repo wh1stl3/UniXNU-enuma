@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "software_ready": true,
+  "hardware_executed": false,
+  "scope": "oem-far-event-v8",
+  "run_config": {
+    "trial_id": "a35583f7-e92d-4999-96d2-116793825026",
+    "session": 4736432023589023138,
+    "selected_call": 0,
+    "profile": "oem-control",
+    "experiment": "oem-far-event-v8"
+  },
+  "image": {
+    "path": "out/oem-far-event-20261028/qualification1/image.img",
+    "sha256": "197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29",
+    "bytes": 3153920
+  },
+  "qualification": {
+    "path": "out/oem-far-event-20261028/qualification1/qualification.json",
+    "sha256": "b42faaa664c7613f147cf16dabec5b914550c64a013661b358039c992a66e8ff"
+  },
+  "fd_sha256": "ade5dfcc4f3d383372f6f9a0331ab685bd6b8ceb0c5d8ac3ee0f4635b5d17936",
+  "firmware_commit": "49affe73f48f5b22dd1256efa25dd5576c438daa",
+  "build_snapshot_base": "1f05eef62b62fc6f57b805e1cb346e3643457db7",
+  "bug_reproduced": true,
+  "hardware_root_cause_proven": false,
+  "source_bindings": 2459,
+  "runtime_deletion_checks": 30,
+  "event_deletion_checks": 152,
+  "guid_mutation_checks": 3,
+  "python_tests": 44,
+  "deleted_hook_negative_rejected": true,
+  "trial_claimed": false,
+  "current_camera_ready": false,
+  "device_commands_executed": false,
+  "limitations": [
+    "pre-forward entry is not proof original service ran",
+    "no automatic recovery guarantee for OEM hang",
+    "local interrupt masking does not prove exclusion of AP or external DMA",
+    "no GOP/BDS/input acceptance",
+    "no export if OEM hangs before the selected wrapped service",
+    "SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause",
+    "each window requires inherited route still valid; refusal after OEM display changes is not OEM failure",
+    "one late DXE-complete summary; no earlier window and no independent watchdog or durable RAM recovery",
+    "phase5 Q is next trace sequence, not a synthetic service event"
+  ],
+  "evidence": "out/oem-far-event-20261028"
+}

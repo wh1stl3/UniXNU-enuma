@@ -78,4 +78,5 @@ int main(void){
  Setup();EnumaTraceLocateProtocolAt(0x4608,&Main,NULL,NULL);OemProgressReturned(EFI_ABORTED);Level=TPL_CALLBACK;
  if(!setjmp(Jump)){OemProgressFarFinish(TRUE,TRUE,TRUE);assert(0);}assert(!Phases&&mOemProgress.Stopped);
  puts("PASS: v7 RAM-only through Core return, deferred DXE completion export, real statuses, presence-only flags, no fabricated milestones or retries");
+ return 0;
 }

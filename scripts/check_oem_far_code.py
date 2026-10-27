@@ -3,7 +3,7 @@ import re,struct
 from prepare_enuma_mmu_experiment import file_offset
 from map_oem_trace_rva import sections
 
-def check_far(pe,mapping):
+def check_far(pe,mapping,event=False):
  entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
  def sym(name):
   hits={a for a,n in entries if n==name}
@@ -44,14 +44,15 @@ def check_far(pe,mapping):
  sites['far_emit']=finish+0xc4
  sequence('OemProgressReturned',0x11ed4,{0x11ee0:0xb4000109,0x11ee8:0x350000c8,
   0x11ef8:0xb27a0129,0x11efc:0xa9000109,0x11f00:0xd65f03c0})
- sequence('OemProgressObserve',0x12404,{0x12508:0xf9001708,0x12510:0x7100113f,
-  0x12518:0x340005d4,0x1251c:0x528b9909,0x12520:0xeb09011f,0x12524:0x54000561,
-  0x12530:0xb27f010a,0x12538:0xf9000f0a,0x1253c:0xb50004a9,0x12540:0x52840049,
-  0x12558:0x5286c109,0x1255c:0xeb09011f,0x12570:0x913d0021,0x1257c:0xb4000360,
-  0x1258c:0x913cc021,0x12598:0xb50001c0,0x125a4:0x52800409,0x125a8:0x5280020a,
-  0x125b8:0x340000d4,0x125c4:0xb5000069,0x125c8:0xb2750108,
-  0x125f0:0x52800109,0x125f4:0x5280008a,0x12604:0x34fffbf4,0x12610:0xb5fffb89,0x12614:0xb2740108})
- for name in ['OemProgressObserve','OemProgressReturned']:
+ if not event:
+  sequence('OemProgressObserve',0x12404,{0x12508:0xf9001708,0x12510:0x7100113f,
+   0x12518:0x340005d4,0x1251c:0x528b9909,0x12520:0xeb09011f,0x12524:0x54000561,
+   0x12530:0xb27f010a,0x12538:0xf9000f0a,0x1253c:0xb50004a9,0x12540:0x52840049,
+   0x12558:0x5286c109,0x1255c:0xeb09011f,0x12570:0x913d0021,0x1257c:0xb4000360,
+   0x1258c:0x913cc021,0x12598:0xb50001c0,0x125a4:0x52800409,0x125a8:0x5280020a,
+   0x125b8:0x340000d4,0x125c4:0xb5000069,0x125c8:0xb2750108,
+   0x125f0:0x52800109,0x125f4:0x5280008a,0x12604:0x34fffbf4,0x12610:0xb5fffb89,0x12614:0xb2740108})
+ for name in (['OemProgressRecord','OemProgressReturned'] if event else ['OemProgressObserve','OemProgressReturned']):
   if any(target(a) in [sym('OemProgressEmit'),sym('OemProgressPresent')] for a in region(name)):raise ValueError('early display reintroduced')
  sequence('OemProgressPresent',0x12214,{0x12224:0x7100141f,0x12228:0x54000841,
   0x12238:0x39559109,0x1223c:0x350007a9,0x12258:0x5280002a,0x12260:0x3915910a,
@@ -62,7 +63,7 @@ def check_far(pe,mapping):
   if target(a) in [sym('ResetCold'),sym('MicroSecondDelay'),sym('CpuDeadLoop')]:raise ValueError('target early terminal reintroduced')
  emit=sequence('OemProgressEmit',0x11d98,{0x11db8:0xf100103f,0x11dbc:0x540002c1,
   0x11dc8:0x37280269,0x11de0:0x528000a0,0x11df8:0xd63f0180,0x11e00:0x540000a0})
- for name,expected in [('OemProgressObserve.Main','690476b00c977a48a4b528db7b45cef1'),
+ for name,expected in [(('OemProgressRecord.Main' if event else 'OemProgressObserve.Main'),'690476b00c977a48a4b528db7b45cef1'),
                        ('EnumaOemFarDispatchComplete.Guid','dea94290dc23384a96fb7aded080516a')]:
   address=sym(name);section=next(s for s in sections(pe) if s[1]<=address<section_end(s))
   off=section[3]+address-section[1]

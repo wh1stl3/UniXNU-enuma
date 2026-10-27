@@ -56,5 +56,7 @@ class Pages(unittest.TestCase):
             bad=list(rows);bad[0]='S05C'+f'{flags:016x}'
             self.assertRaises(ValueError,decode,'\n'.join(bad),123,'oem-far-chain-v7')
         self.assertRaises(ValueError,decode,page,124,'oem-far-chain-v7')
+        self.assertEqual(decode(page,123,'oem-far-event-v8')['experiment'],'oem-far-event-v8')
+        self.assertRaises(ValueError,decode,page,124,'oem-far-event-v8')
 
 if __name__=='__main__':unittest.main()

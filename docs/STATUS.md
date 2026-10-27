@@ -1,13 +1,19 @@
-# 当前：v7已单次消费，自行回Android，用户未见日志页（2026-10-28）
+# 当前：far-event-v8镜像及离线资格完成，未上机（2026-10-28）
 
-用户“v7开始 正在拍摄”后，准备提交8f31a71/固件1f05eef均远端精确核验，即时enuma身份、原备份与恢复门禁通过，仅一次临时fastboot boot。trial 61c29945-1399-49eb-8133-d11d465bb6c4已claim/consumed，不重试；镜像SHA256 c02ab64cb7afa292f53823a38ea4ddcc98f3f9b0cee42fa4c32d706bbba47d5d，qualification2原字节保持。
+用户要求继续直至编出镜像。本轮已完成v8，scope oem-far-event-v8；不增加早期绘制，保留OEM期间RAM-only、真实Core返回后继续DXE、整轮分派结束才一次汇总及BDS前恢复出口。
 
-执行器观察到Android完成并核对原分区；用户确认“设备自行返回 从fastboot到Mi标之间都没有”，记录为自动返回、用户没有观察到日志页。00:16独立只读复核enuma、boot_completed=1、root、A槽、解锁、设备与本地boot_a/vendor_boot_a原摘要均通过。没有追加启动、分区写入、改槽或恢复欠项，没有设备硬停。
+本轮最大可操作嫌疑有了具体代码复现：v7的Begin/End在RestoreTPL之后再读取环尾，待处理通知可嵌套追加追踪事件，导致外层OemProgressObserve误判Call/Returned并主动ResetCold。固定Mu CoreRestoreTpl确会在返回前运行通知；冻结v7头文件/真实TPL_CALLBACK夹具复现“原始查询尚未转发即主动终止”。这是已复现的追踪缺陷，仍未证明是v7实机唯一根因。
 
-当前媒体目录D:/Code/PortingiOS/enuma/Media-enuma/OEM-far-chain-v7-20261028-61c29945为空，尚未独立逐帧核验。本次“无页”依据用户现场陈述，不能冒充助手视频判读，也不生成/解码预期S05。Android恢复仅证明恢复终点，不证明OEM/Core返回、完整DXE分派、GOP或BDS成功。
+v8在既有TPL_HIGH_LEVEL记录临界区，直接把刚完成的事件交给有界RAM观察器，不复制/验证整环、不再次Raise/RestoreTPL、不持有事件指针，无分配/协议/等待/设备访问。原始服务参数、调用者TPL、真实状态和序号保持；BeforeForward/AfterForward在新scope为空。目标point13仍保存真实日志后继续后续DXE，不合成驱动成功。下一步按真实Core状态→GOP/Mode/显示所有权→控制台连接→BDS/存储配置→DarwinBoot/EBS/XNU分层推进。
 
-实际代码的第一排查方向是无页的提前复位/末端拒绝链（诊断优先级中等，唯一根因置信低）：异常入口直接ResetCold；追踪校验/同步失败会终止；若走到DXE末端，Owner/Core返回门不满足则不绘制而走7秒恢复，TPL、路由/CPU策略或窗口准入拒绝也可在显示前复位。其次仍有OEM协议方法/直接访问及后续DXE异常。v7删除了v6 E01窗口，所以这笔不能再归因为该窗口收尾本身，但不排除其他追踪负担或出口问题。没有汇总页无法判ChipInfo/SID死锁，也不能宣称实际走得更远。
+- 镜像：out/oem-far-event-20261028/qualification1/image.img，3153920字节；SHA256 197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29。
+- FD：out/oem-far-event-20261028/build1/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd；SHA256 ade5dfcc4f3d383372f6f9a0331ab685bd6b8ceb0c5d8ac3ee0f4635b5d17936。
+- 资格：out/oem-far-event-20261028/qualification1/qualification.json；SHA256 b42faaa664c7613f147cf16dabec5b914550c64a013661b358039c992a66e8ff。
+- trial a35583f7-e92d-4999-96d2-116793825026；session 4736432023589023138；selected_call=0为配置占位，实际RAM-only直到DXE完成。未claim/未消费、hardware_executed=false。
+- 固件源码49affe73f48f5b22dd1256efa25dd5576c438daa；build1是1f05eef基线加本轮代码的工作树快照，source-manifest保留，不称提交后重编。固件已正常发布到显式GitHub URL/oem-progress-20261027；设备仓及远端精确核验以git log、out/oem-far-event-20261028/publication.json为准。
 
-下一步只做离线代码归因：优先区分真实Core返回门/后续分派与末端取证出口，并审查是否可在不增加早期UI停顿的前提下提供独立失败归因；需要原视频时先独立落盘逐帧检查，再展示可读全文供人工核对。新软件须新的完整资格和单次门禁，不复活v7，不以未校准USB时长推断执行阶段。BDS/生产GOP/ConOut/实体输入/XNU均未验收。
+验证：check3为最终ASan/UBSan真实状态、ring覆盖、无早期UI、末端TPL/sink拒绝、point13继续/completion顺序及真实Core配置表扩容/同步负测；race2为冻结v7复现、新v8通过、删除Recorded钩子拒绝。binding1精确PE重定位/错PE/ARM64板级，path1真实ChipInfo ABI与精确PE路径通过；44项Python通过。机器码30处运行路径+152处事件/后移路径删除、3处GUID变异全部拒绝，包含在RestoreTPL之前调用记录、同一事件指针/钩子地址、无旧环尾观察器、真实状态和末端恢复。完整FD OEM审计、Boot v3封包/解包回读及2459来源绑定通过。check1缺SID声明失败保留；check2后将夹具改为真实通知TPL，最终采用check3/race2。无设备命令，R027/v6/v7冻结镜像和资格摘要不变。
 
-证据：reports/enuma-oem-far-chain-v7-trial-20261028.json；out/device-tests/oem-61c29945-1399-49eb-8133-d11d465bb6c4；out/oem-far-chain-live-20261028的authorization、publication-verified、preflight、postcheck、human-return-confirmation。runner原pending状态不覆盖，由新人工确认独立闭合。共享主线只读，R027和旧镜像/资格冻结；内存base/size、verified、分区与媒体本地边界保持。当前没有恢复或字符串核对欠项；源码/文档本轮结果发布以git log及result-publication.json为准。
+若v8有汇总，仅能证明该笔真实Core与本次分派返回，GOP/Mode/ConOut位仅存在性；不能回推v7根因或生产显示/BDS通过。若仍无页，OEM/后续DXE异常提前复位、返回身份门不满足、末端GOP访问或继承路由/CPU窗口拒绝仍是竞争解释；无独立看门狗和持久日志，不判ChipInfo/SID死锁。详见[实际代码与修复依据](operations/2026-10-28-oem-far-event-v8.md)。
+
+v7已单次消费，用户报告无页且自行返回；00:16独立enuma Android完成/root/A槽/解锁与原分区/备份摘要核验通过。其原runner pending快照、原资格/镜像不回写，人工确认另存；原视频尚未独立判读。当前没有恢复或字符串核对欠项，当前在线状态未重查。本轮仅编译，不沿用v7拍摄/在场就绪；未来新试验须当前发布、精确单次、即时身份/备份/恢复及当次拍摄/在场条件，75秒无合格返回先恢复、不自动重试。共享主线只读，R027冻结，无flash/erase/改槽、内存base/size或verified变更；out/原始媒体/二进制/备份/设备标识只留本地。

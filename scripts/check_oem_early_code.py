@@ -10,7 +10,10 @@ def data_offset(pe,rva):
     return s[3]+rva-s[1]
 
 def check(pe,mapping,experiment='oem-early-v3'):
-    if experiment not in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7'):raise ValueError('unknown code scope')
+    if experiment=='oem-far-event-v8':
+        from check_oem_event_code import check_event
+        return check_event(pe,mapping)
+    if experiment not in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8'):raise ValueError('unknown code scope')
     post=experiment!='oem-early-v3';registration=experiment=='oem-registration-v5'
     entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
     def sym(n):
@@ -34,7 +37,7 @@ def check(pe,mapping,experiment='oem-early-v3'):
               0x4c:0xf9403409,0x50:0xaa0803e0,0x54:0xb900015f,
               0x58:0xf940ad6b,0x5c:0xf9002d49,0x60:0xd63f0160,
               0x64:0xb7f80060}
-    if experiment=='oem-far-chain-v7':
+    if experiment in ('oem-far-chain-v7','oem-far-event-v8'):
         # Reviewed v7 load uses the relocated source-table global at +2584.
         expected[0x24]=0xf9450d29
     for off,w in expected.items():
@@ -49,7 +52,7 @@ def check(pe,mapping,experiment='oem-early-v3'):
         sites['before_'+name]=a
     if word(calls[0]-4)!=0xf9003816:raise ValueError('new table not published before sync')
     sites['publish_new_table']=calls[0]-4
-    if experiment=='oem-far-chain-v7':
+    if experiment in ('oem-far-chain-v7','oem-far-event-v8'):
         from check_oem_far_code import check_far
         sites.update(check_far(pe,mapping))
         guid=sym('OemProgressObserve.Sid');off=data_offset(pe,guid)
@@ -110,15 +113,16 @@ def verify(pe,mapping,experiment='oem-early-v3'):
     except ValueError:pass
     else:raise ValueError('changed observed GUID accepted')
     guid_checks=1
-    if experiment in ('oem-main-entry-v6','oem-far-chain-v7'):
-        hits=re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+OemProgressObserve.Main$',mapping,re.M)
+    if experiment in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8'):
+        owner='OemProgressRecord' if experiment=='oem-far-event-v8' else 'OemProgressObserve'
+        hits=re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+'+owner+r'.Main$',mapping,re.M)
         if len(hits)!=1:raise ValueError('main GUID symbol differs')
         off=data_offset(pe,int(hits[0],16));mutated=bytearray(pe);mutated[off]^=1
         try:check(mutated,mapping,experiment)
         except ValueError:pass
         else:raise ValueError('changed ChipInfo GUID accepted')
         guid_checks+=1
-    if experiment=='oem-far-chain-v7':
+    if experiment in ('oem-far-chain-v7','oem-far-event-v8'):
         hits=re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+EnumaOemFarDispatchComplete.Guid$',mapping,re.M)
         if len(hits)!=1:raise ValueError('GOP GUID symbol differs')
         off=data_offset(pe,int(hits[0],16));mutated=bytearray(pe);mutated[off]^=1

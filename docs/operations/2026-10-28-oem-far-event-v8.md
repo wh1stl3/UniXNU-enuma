@@ -1,0 +1,29 @@
+# far-event-v8：去掉恢复TPL后的环尾竞态，继续远端DXE路径
+
+v7已consumed，用户报告FASTBOOT到Mi标之间没有日志、设备自行回Android；独立身份/完成/root/A槽/解锁及原分区/备份核验通过。没有本地原视频独立判读，不能断言Core/DXE返回或GOP存在。
+
+## 最大可操作嫌疑与复现
+
+精确v7追踪器EnumaServiceBegin/End先在TPL_HIGH_LEVEL追加事件，RestoreTPL之后调用OemProgressObserve。Observe再次RaiseTPL复制8224字节环形日志，并把当时最后一条与传入Call/Returned比较，不一致调用OemProgressFail→OemCaptureTerminal→ResetCold。固定Mu源码Event/Tpl.c的CoreRestoreTpl在返回前分派待处理通知，所以恢复TPL不是“无其他代码运行”的间隙；嵌套回调使用OEM保存的私有BootServices即可能追加另一条追踪事件。
+
+本轮以冻结v7 build2/source头文件复现：主查询入口记录后，在RestoreTPL按TPL_CALLBACK执行一次嵌套AllocatePool。嵌套调用正常记录和返回，外层观察器读到嵌套事件后主动终止，原始ChipInfo查询一次也没有转发。ASan/UBSan复现记录race2/result.json；这证明追踪器存在可触发缺陷，不证明v7实机恰好出现此嵌套通知，也不把本机根因写成已确定。
+
+## 实现与边界
+
+新scope oem-far-event-v8，FAR_CHAIN=1、RAM_EVENT=1。EnumaServiceRecord在原始TPL_HIGH_LEVEL锁内完成事件后，将同一事件同步交给OemProgressRecord；仅有界RAM字段锁存和最多两个16字节GUID比较，无分配、协议、等待、打印或设备访问。观察器不保存事件指针，不扫描整环，不二次Raise/RestoreTPL；BeforeForward/AfterForward在此scope保持NULL。原始服务仍在调用者TPL执行，参数/状态/序号保持真实，注册/主查询/SID里程碑不补写。
+
+保留v7完整后段路径：实际CoreStartImage状态只保存，目标point13不提前复位，继续后续DXE，CoreDispatcher返回后一次8秒汇总及原7秒恢复出口。本轮仍不进BDS，不扩大读写地址/预算，不改内存base/size、verified或分区。旧scope使用原接口，旧镜像/资格冻结；R027、共享主线只读。
+
+## 验证与区分力
+
+真实通知TPL的三组验证：冻结v7复现主动终止；新v8继续原始查询并正确锁存阶段；删除新钩子的变异在阶段断言失败。另覆盖日志超过128项后的里程碑保留、真实失败状态、缺失阶段不补写、末端sink/TPL拒绝、point13继续和completion顺序。check1因新观察器缺SID局部声明失败，补齐后重新跑check2；按真实通知TPL调整夹具后最终采用check3和race2，失败输出保留。板级/精确重定位PE、错PE拒绝、ARM64 ChipInfo ABI通过；44项Python通过。最终FD/机器码负测/封包回读完成后追加摘要。
+
+若新图出现汇总，支持该笔已跨过真实Core返回及后续DXE，但不证明v7失败唯一源于此次修复。若仍无页，剩余最大竞争解释是OEM/后续DXE异常提前复位、真实返回身份门未满足、末端GOP读取或继承显示路由/CPU窗口拒绝；无独立看门狗或持久日志，不根据无页认定死锁。GOP/Mode/ConOut仍是存在性而非生产显示验收。未来候选前须本次拍摄/人在场恢复、即时身份备份及当前发布门禁；本轮仅离线构建，不复用v7就绪。
+
+## 最终产物与资格（2026-10-28）
+
+镜像197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29，3153920字节；FD ade5dfcc4f3d383372f6f9a0331ab685bd6b8ceb0c5d8ac3ee0f4635b5d17936；资格b42faaa664c7613f147cf16dabec5b914550c64a013661b358039c992a66e8ff。精确路径为out/oem-far-event-20261028/qualification1/image.img及qualification.json，完整FD在build1/work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd。固件49affe73f48f5b22dd1256efa25dd5576c438daa，基线1f05eef工作树快照，未在提交后重编。
+
+最终check3/race2/binding1/path1通过；44 Python、30+152条删除及3 GUID变异拒绝、2459绑定、完整FD/Boot v3解包回读通过。关键链接路径EnumaServiceBegin:1375c/End:1381c调用EnumaServiceRecord，记录完成后1398c读取Recorded、13994取同一事件指针、139b8尾跳回调；1376c/13834才恢复TPL。CoreStartImage中ccc4把正确OemProgressRecord地址安装到Recorded；没有OemProgressObserve/Before/After符号。实际Core返回锁存不变，3c38末端导出→3c44七秒→3c48 ResetCold出口保持。编译后复核仅覆盖选定序列，不称全程序或硬件证明。
+
+trial a35583f7-e92d-4999-96d2-116793825026，session 4736432023589023138，未claim/未上机；软件就绪不替代当前拍摄与即时设备/恢复条件。失败check1、初期复现编译缺返回值等输出保留，冻结R027/v6/v7产物摘要复核不变。总报告reports/enuma-oem-far-event-v8-candidate.json，默认离线入口见HANDOFF。

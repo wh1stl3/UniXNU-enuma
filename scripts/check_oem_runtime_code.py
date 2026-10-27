@@ -14,7 +14,7 @@ def check_exception(pe,mapping):
     if struct.unpack_from('<I',pe,file_offset(pe,start+16))[0]!=0x17ffffff:raise ValueError('CPU exception loop missing')
     return start
 
-def check(pe,mapping,progress=False,far=False):
+def check(pe,mapping,progress=False,far=False,event=False):
     entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
     def sym(n):
         hits={a for a,name in entries if name==n}
@@ -79,7 +79,7 @@ def check(pe,mapping,progress=False,far=False):
             if w&0xff00001f!=opcode or a+imm*4!=observed+4:raise ValueError('return gate refusal changed')
             sites['progress_branch_'+str(off)]=a
         unique('progress_board',calls('OemProgressPresent','OemBoardSink'))
-        for name in ('OemProgressBefore','OemProgressAfter','OemProgressEmit','OemProgressFail'):
+        for name in (('OemProgressRecord','OemProgressEmit','OemProgressFail') if event else ('OemProgressBefore','OemProgressAfter','OemProgressEmit','OemProgressFail')):
             sym(name)
     else:
         unique('capture_stop',calls('OemRuntimeBeforeForward','EnumaCaptureStop'))
@@ -91,11 +91,11 @@ def check(pe,mapping,progress=False,far=False):
     unique('hold_direct_timer',calls('OemHold','MicroSecondDelay'))
     return sites
 
-def verify_with_deletions(pe,mapping,progress=False,far=False):
-    sites=check(pe,mapping,progress,far)
+def verify_with_deletions(pe,mapping,progress=False,far=False,event=False):
+    sites=check(pe,mapping,progress,far,event)
     for name,a in sites.items():
         offset=file_offset(pe,a);mutated=pe[:offset]+bytes.fromhex('1f2003d5')+pe[offset+4:]
-        try:check(mutated,mapping,progress,far)
+        try:check(mutated,mapping,progress,far,event)
         except ValueError:pass
         else:raise ValueError('removed instruction admitted: '+name)
     return dict(sites={n:hex(a) for n,a in sites.items()},deletion_checks=len(sites),

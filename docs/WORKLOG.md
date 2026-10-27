@@ -1676,3 +1676,7 @@ registration-v5最终qualification3保留qualification2历史；仅清理宿主�
 下一步只做离线代码归因：优先区分真实Core返回门/后续分派与末端取证出口，并审查是否可在不增加早期UI停顿的前提下提供独立失败归因；需要原视频时先独立落盘逐帧检查，再展示可读全文供人工核对。新软件须新的完整资格和单次门禁，不复活v7，不以未校准USB时长推断执行阶段。BDS/生产GOP/ConOut/实体输入/XNU均未验收。
 
 证据：reports/enuma-oem-far-chain-v7-trial-20261028.json；out/device-tests/oem-61c29945-1399-49eb-8133-d11d465bb6c4；out/oem-far-chain-live-20261028的authorization、publication-verified、preflight、postcheck、human-return-confirmation。runner原pending状态不覆盖，由新人工确认独立闭合。共享主线只读，R027和旧镜像/资格冻结；内存base/size、verified、分区与媒体本地边界保持。当前没有恢复或字符串核对欠项；源码/文档本轮结果发布以git log及result-publication.json为准。
+
+## 2026-10-28T00:44:04.878800+08:00 v8修复追踪通知竞态并完成镜像
+
+冻结v7 RestoreTPL嵌套通知竞态已宿主复现，不认定为实机唯一根因；v8将RAM里程碑捕获移到事件记录临界区，继续保持无前段UI及整轮DXE后一次汇总。固件49affe73f48f5b22dd1256efa25dd5576c438daa；设备仓前提交5f870f9；镜像197e44f8379189e56d1efd3518ef3f9eb8ecf88c59e019bb8f2f272553655b29，资格b42faaa664c7613f147cf16dabec5b914550c64a013661b358039c992a66e8ff。check3/race2/binding1/path1、44 Python、30+152删除/3 GUID变异、完整FD/Boot v3回读和2459绑定通过，未claim/上机，无设备命令。证据out/oem-far-event-20261028、reports/enuma-oem-far-event-v8-candidate.json；R027/v6/v7冻结摘要不变。本轮现场就绪不复用，后续仍即时门禁。
