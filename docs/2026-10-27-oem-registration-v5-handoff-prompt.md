@@ -1,3 +1,5 @@
+> 2026-10-28当前：v13已完成build1/qualification1，新增VBIF、DSI0、DSI1三独立NS_DEVICE映射，保留原厂调用和异常取证。69项Python、8组宿主、277处链接指令删除及36项映射变异检查通过；2495项来源绑定、72个FD PE镜像和SEC TE核对通过。软件就绪，新trial未消费，未上机。 现行入口docs/STATUS.md，以下旧状态为历史。
+
 > 2026-10-28当前：v12（oem-exception-dispcc-v12）已完成build2/qualification1与新来源绑定，新增DISP_CC 0x0af00000/0x20000 NS_DEVICE映射，保留真实OEM/Core/GOP与v11三页异常取证。66项Python、8组宿主验证及最终链接/FD映射检查通过；软件就绪，尚未上机，trial未消费，不能复用v11拍摄就绪。旧镜像/资格冻结，旧源码准入失效。 以下旧状态按历史阅读，现行入口docs/STATUS.md。
 
 > 2026-10-28 v11最终取证：三页已确认，E13纠正为 G04DB5DEA653024D1A；唯一归属 ClockDxe，PC=0x9a88ad58/RVA=0x11d58，ESR=0x96000007，FAR=0x0af022c0，32位读取触发同EL三级地址翻译故障。实际构建MemoryMap无覆盖该地址的描述符，本机FDT的DISP_CC为0x0af00000/0x20000。优先审查并修复显示时钟映射，保留原厂真实调用和异常取证；尚未修改固件或制作v12。v11已消费、自动返回且恢复核验通过，不重试。详见 docs/operations/2026-10-28-oem-clock-fault-analysis.md。以下旧待确认/未消费文字为历史。

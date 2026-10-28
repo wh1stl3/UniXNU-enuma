@@ -42,7 +42,7 @@ def decode(pages,session,inventory=None):
 def main():
  p=argparse.ArgumentParser();p.add_argument('--input',type=Path,required=True);p.add_argument('--qualification',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
  q=json.loads(a.qualification.read_text());data=json.loads(a.input.read_text())
- if q['scope'] not in ('oem-exception-v11','oem-exception-dispcc-v12'):raise ValueError('exception qualification required')
+ if q['scope'] not in ('oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):raise ValueError('exception qualification required')
  result=decode(data['pages'],q['run_config']['session'],q['exception_inventory'])
  with a.output.open('x',encoding='utf-8') as f:json.dump(result,f,indent=2)
  print(json.dumps(result,indent=2))

@@ -1,0 +1,132 @@
+{
+  "scope": "oem-exception-display-map-v13",
+  "software_ready": true,
+  "hardware_executed": false,
+  "trial_consumed": false,
+  "run_config": {
+    "trial_id": "e4fd7a07-b112-433b-8008-c8dee5ed1392",
+    "session": 4767413412058791164,
+    "selected_call": 0,
+    "profile": "oem-control",
+    "experiment": "oem-exception-display-map-v13"
+  },
+  "image": "out/oem-display-map-20261028/qualification1/image.img",
+  "image_sha256": "9331e0a3f1db230326c5ae49f2ed77ed443a90f89232684e43b929f8c5a854bb",
+  "image_bytes": 3153920,
+  "qualification_sha256": "5d01765a1c216e902f1c503add81bfb638d0e72d651448b21ebc2a4f88dec32b",
+  "fd_sha256": "3129d850cd63d96cb495dce7556494be50354adf757e37bfb9d3416a072ab1e7",
+  "firmware_commit": "f523e160ad7d87d00d241e840d94179c1c0b8459",
+  "build": "out/oem-display-map-20261028/build1",
+  "source_bindings": 2495,
+  "fd_images": 72,
+  "map_audit": {
+    "passed": true,
+    "regions": [
+      {
+        "name": "Display VBIF",
+        "base": "0xaeb0000",
+        "size": "0x3000",
+        "descriptor_rva": "0xe550",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      },
+      {
+        "name": "Display DSI0",
+        "base": "0xae94000",
+        "size": "0x1000",
+        "descriptor_rva": "0xe598",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      },
+      {
+        "name": "Display DSI1",
+        "base": "0xae96000",
+        "size": "0x1000",
+        "descriptor_rva": "0xe5e0",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      },
+      {
+        "name": "DISP_CC",
+        "base": "0xaf00000",
+        "size": "0x20000",
+        "descriptor_rva": "0xe628",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      }
+    ],
+    "fd_sec_exact_match": true,
+    "sec_te_relocations": 24,
+    "sec_te_sha256": "36e118ab11f7817bffdfcc98df9fa42cbe9618780032f987fe51f99abaece596",
+    "source_sha256": "867d1e9bcd123ab6a4bb6d27ea363ed899f91fb8fcac1e1a2c13c29f49159c1e",
+    "active_descriptor_count": 50,
+    "live_page_tables_verified": false
+  },
+  "python_tests": 69,
+  "host_check_groups": 8,
+  "linked_instruction_deletion_checks": 277,
+  "mapping_mutation_checks": 36,
+  "frozen_artifacts": 24,
+  "pe_resource_analysis": {
+    "pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+    "checked_instruction_words": {
+      "0x1135c": "0x52880088",
+      "0x11364": "0x72a00128",
+      "0x11374": "0x91400908",
+      "0x11390": "0xf943e949",
+      "0x11394": "0xb829691f",
+      "0x156f4": "0xf903e928",
+      "0x2b140": "0xb8154128"
+    },
+    "DSI": "0x1135c/64 constructs offset 0x94004; 0x11374 adds 0x2000 for controller1; 0x11390 loads shared display base at global RVA0x467d0; 0x11394 stores wZR to base+offset; setter0x156f4 stores caller-provided base",
+    "VBIF": "v12 exact exception at RVA0x2b140, FAR0xaeb0004",
+    "limitations": [
+      "DSI paths statically exist; not claimed executed on v12",
+      "Caller-provided base matched against local FDT, not captured live in register snapshot",
+      "REGDMA/SID/SWFUSE not added without completed PE use attribution"
+    ]
+  },
+  "limitations": [
+    "No Boot Services/GOP/formatting from exception sink; inherited route may be rejected or fault",
+    "No independent watchdog or persistent exception recovery; recursive fault resets immediately",
+    "PC owner lookup uses bounded, mapped initial firmware RAM metadata, ambiguous/busy/invalid/absent is unknown",
+    "No physical GOP/ConOut/BDS/input/XNU success; unhandled exceptions before this CPU handler are not covered"
+  ],
+  "evidence": "out/oem-display-map-20261028"
+}

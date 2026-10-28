@@ -1,27 +1,28 @@
-# v12实测交接：恢复完成，下一步审查VBIF映射
+# v13接续：三窗口映射候选已就绪
 
-2026-10-28 v12实测完成：原单次trial已消费，首次fastboot boot在30秒传输超时，用户确认仍在FASTBOOT且未按键；随后用户明确授权“你可以自行回到Android并重跑v12”。绑定设备经host fastboot reboot返回Android，身份/root/A槽/解锁及原分区、备份摘要核验通过。未把该次传输超时称固件故障。
+2026-10-28：v13已完成build1/qualification1，新增VBIF、DSI0、DSI1三独立NS_DEVICE映射，保留原厂调用和异常取证。69项Python、8组宿主、277处链接指令删除及36项映射变异检查通过；2495项来源绑定、72个FD PE镜像和SEC TE核对通过。软件就绪，新trial未消费，未上机。
 
-同一精确v12镜像另记retry1，保留原qualification及消费账本，未伪造新固件trial/session。原生Windows派生运行器保留原资格/来源/身份/备份门禁，新增独占retry1账本，保存超时部分输出；没有改写绑定源码。重跑Sending/Booting均OKAY，约0.35秒，之后设备自行回Android，独立恢复与原分区/备份核验再次通过。无flash/erase/改槽。两次尝试分别留证；传输异常原因尚未确定，原生成功不证明WSL就是根因。
+## 精确候选
 
-26.074867秒视频已落地，SHA256 42542b9e282543a7143ada13137dd55c8f5ce695b7a84e40d8e2b472420aad40。独立读取6/12/21秒三页，清晰无待确认字符，session 0x509d1d695c7e0fdc与精确镜像一致。原媒体只留Media-enuma/OEM-dispcc-v12-20261028-9da1688c。
+- 镜像：`out/oem-display-map-20261028/qualification1/image.img`，3153920字节。
+- SHA256：`9331e0a3f1db230326c5ae49f2ed77ed443a90f89232684e43b929f8c5a854bb`。
+- 资格SHA256：`5d01765a1c216e902f1c503add81bfb638d0e72d651448b21ebc2a4f88dec32b`。
+- FD SHA256：`3129d850cd63d96cb495dce7556494be50354adf757e37bfb9d3416a072ab1e7`。
+- trial：`e4fd7a07-b112-433b-8008-c8dee5ed1392`；session：`0x4229413d4b327cfc`；未claim/未启动。
+- 固件提交：`f523e160ad7d87d00d241e840d94179c1c0b8459`；构建使用逐文件绑定工作树快照，不称提交后重编。
 
-## 新故障与进度
+## 改动与证据
 
-- PC 0x9a6ff140，ESR 0x96000047，FAR 0x0aeb0004，LR 0x9a6ff120。
-- E12唯一归属：base 0x9a6d4000，RVA 0x2b140，size 0x4d000；E13 GUID 4138022f-06c7-4f79-9c94-7e33b511a4e7，与本FD原厂DisplayDxe唯一匹配。
-- 原PE摘要6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425；实际指令0xb8154128，即 `stur w8,[x9,#-172]`。ESR为同EL data abort，WnR=1，DFSC=7（L3翻译故障），FnV=0；宽度由实际指令确定为32位。
-- 本机FDT的mdss_mdp节点明确vbif_phys=0x0aeb0000/0x2008，故障为VBIF+4。构建映射Display MDP只到0x0ae85000，无描述符覆盖本次FAR。
-- LR是本函数内BL到0x2b398后的位置；helper返回后才发生写故障。不能用这个LR声称构造器/GOP方法的上层调用阶段已经确定。
+v12已实测并恢复，异常在DisplayDxe+0x2b140写0x0aeb0004，是VBIF映射缺口的强证据。本轮增加VBIF 0x0aeb0000/0x3000、DSI0 0x0ae94000/0x1000、DSI1 0x0ae96000/0x1000，后两项由原PE双控制器真实读写路径与本机FDT共同支持。REGDMA/SID/SWFUSE仍待进一步归因，不直接加入。
 
-相较v11的ClockDxe+0x11d58读取DISP_CC故障，本轮实际到达原厂DisplayDxe的VBIF写操作，是推进证据；仍未证明OEM返回、完整DXE、生产GOP、ConOut或BDS成功。未采集实时页表，运行中修改仍不能彻底排除。
+映射源除三条外与v12一致；实际SEC与最终FD TE四条描述符（含保留DISP_CC）逐字节和属性核对，50条活动描述符。24份旧镜像/资格摘要保持，R027冻结，共享主线只读。没有改RAM字段、保留区、verified、原厂PE、寄存器值或分区。
 
-## 下一步
+详见[v13操作记录](operations/2026-10-28-oem-display-map-v13.md)、[结构化报告](../reports/enuma-oem-display-map-v13-20261028.json)、[公开研究](operations/2026-10-28-oem-vbif-public-research.md)。本地证据`out/oem-display-map-20261028`。
 
-首先审查本机FDT对应VBIF最小页对齐映射0x0aeb0000/0x3000及设备属性，核对真实PE访问和相邻显示资源（regdma、sid、DSI/PHY）映射覆盖，避免只追单个字节或任意扩大整个外设空间。候选尚未制作，不自动追加实机。新补丁仍需LF检查、完整构建、最终SEC/FD核对与新资格。R027及旧镜像冻结，共享主线只读。
+## 当前状态与下一步
 
-用户当轮“可以上机”今后即表示正在录像且在场可恢复，不重复确认；仍做即时设备/备份与精确候选核验。媒体仅有无法辨认且影响结论的字符才询问。文档最后统一发布，网络不阻塞本地工作。
+本轮无设备动作。设备最近一次已知状态是v12 retry1自行返回Android且独立身份/原双分区/备份检查通过；本轮未刷新在线状态。旧v12原尝试和用户明确授权retry1都已结束，不能默认重用。
 
-证据：reports/enuma-oem-dispcc-v12-live-20261028.json；本地out/oem-dispcc-live-20261028。镜像SHA256 a14b999f39c590b1c0a43ea3f4cdb560396d713c03b5641d41c4f40fa6797e5c，trial 9da1688c-96a7-4adf-9774-f4661f5a5d13，原尝试及明确授权retry1均已结束。
+用户当轮“可以上机”即确认正在录像并在场可恢复，不重复询问；届时仍核对精确新资格、未消费账本、当前设备/备份及恢复状态，再仅一次临时boot。75秒是主机观察期限，不是固件自动返回保证。v12曾传输超时，后续原生Windows成功，但不能断定WSL根因；未来执行入口应保留超时部分输出且独立绑定，不能直接复用v12 retry脚本或账本。
 
-公开资料与本机资源逐项覆盖审查已完成，见[VBIF公开源码研究](operations/2026-10-28-oem-vbif-public-research.md)。已确认VBIF+4为CLKON；DSI0/1、REGDMA、SID等也有静态映射缺口，下一版先查原厂PE访问，再逐项补齐，避免只追一个故障字节。
+无页不证明成功；同FAR翻译故障需查实时页表，外部异常需查电源/时钟/权限，新FAR按精确PE继续归因。HAL IOMMU/DMA、VBIF握手、面板DSI仍是后续风险。OEM真实返回、全DXE、原厂GOP、ConOut、BDS仍未获实机成功证据。原媒体本地，只询问确有歧义字符。源码/文档统一发布，网络不阻塞本地工作。

@@ -19,7 +19,7 @@ def main():
     p.add_argument('--exception-check',type=Path)
     a=p.parse_args();build=a.build.resolve();out=a.output.resolve();out.relative_to(ROOT/'out');out.mkdir(parents=True,exist_ok=False)
     base,pe=audit(build,runtime=True);b=json.loads((build/'build-result.json').read_text());config=b['oem_run_config']
-    exception=config['experiment'] in ('oem-exception-v11','oem-exception-dispcc-v12')
+    exception=config['experiment'] in ('oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13')
     exception_check=None
     if exception:
         if not a.exception_check:raise ValueError('exception failure/ARM checks required')
@@ -51,7 +51,7 @@ def main():
         for name,h in event_check['sources'].items():
             if sha((ROOT/name).read_bytes())!=h:raise ValueError('event regression stale: '+name)
     main_path=None;binding_check=None
-    if config['experiment'] in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):
+    if config['experiment'] in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):
         if not a.binding_check:raise ValueError('current relocated PE and board binding check required')
         binding_check=json.loads(a.binding_check.read_text())
         if binding_check.get('passed') is not True or binding_check['profiles']['oem-control']['identity']['runtime']!=config:raise ValueError('binding result differs')
@@ -62,14 +62,14 @@ def main():
         if main_path.get('passed') is not True or main_path.get('pe_sha256')!=sha(pe):raise ValueError('main path differs')
         for name,h in main_path['sources'].items():
             if sha((ROOT/name).read_bytes())!=h:raise ValueError('main path source changed: '+name)
-    progress=config['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12')
+    progress=config['experiment'] in ('oem-progress-v2','oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13')
     if progress:
         if not a.progress_check:raise ValueError('progress failure tests required')
         tests=json.loads(a.progress_check.read_text())
         if tests.get('passed') is not True:raise ValueError('progress tests failed')
         for name,h in tests['sources'].items():
             if sha((ROOT/name).read_bytes())!=h:raise ValueError('progress tests stale: '+name)
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):
         actual=build/'work/Mu_Basecore/MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         tested=a.progress_check.parent/'MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c'
         # The build backend reverses Core patches after compilation. Reconstruct
@@ -95,9 +95,9 @@ def main():
     product=build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64/MdeModulePkg/Core/Dxe/DxeMain/OUTPUT'
     core=(product/'DxeCore.efi').read_bytes();mapping=(product/'DxeCore.map').read_text()
     event=config['experiment']=='oem-far-event-v8' or clock
-    runtime_code=None if clock else verify_with_deletions(core,mapping,progress,config['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'),event)
+    runtime_code=None if clock else verify_with_deletions(core,mapping,progress,config['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'),event)
     early_code=None
-    if not clock and config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):
+    if not clock and config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):
         from check_oem_early_code import verify as verify_early
         early_code=verify_early(core,mapping,config['experiment'])
     cpus=list((build/'work/uefi/Build/enumaPkg/DEBUG_CLANGPDB/AARCH64').rglob('OUTPUT/ArmCpuDxe.efi'))
@@ -139,9 +139,9 @@ def main():
              'scripts/check_oem_runtime_code.py','scripts/check_oem_entry_failure_code.py','scripts/enuma_paths.py']
     sources+=['firmware/'+n for n in json.loads((build/'source-manifest.json').read_text())['original_files']]
     if progress:sources+=['scripts/check_oem_progress.py','scripts/decode_oem_progress_page.py','tests/oem_progress.c','tests/oem_capture_pixel.c','tests/test_oem_progress_page.py']
-    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):sources+=['scripts/check_oem_early_code.py']
-    if config['experiment'] in ('oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):sources+=['tests/test_oem_runtime_return.py','tests/test_oem_runtime_candidate.py']
-    if config['experiment'] in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):sources+=['scripts/check_oem_main_code.py','scripts/check_oem_far_code.py','scripts/check_oem_main_path.py']+list(main_path['sources'])+list(binding_check['source_sha256'])+['scripts/check_oem_core_binding.py']
+    if config['experiment'] in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):sources+=['scripts/check_oem_early_code.py']
+    if config['experiment'] in ('oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):sources+=['tests/test_oem_runtime_return.py','tests/test_oem_runtime_candidate.py']
+    if config['experiment'] in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):sources+=['scripts/check_oem_main_code.py','scripts/check_oem_far_code.py','scripts/check_oem_main_path.py']+list(main_path['sources'])+list(binding_check['source_sha256'])+['scripts/check_oem_core_binding.py']
     if progress:sources+=list(tests['sources'])
     if event:sources+=['scripts/check_oem_event_code.py']+list(event_check['sources'])
     sources+=['scripts/oem_exit_clock.py','scripts/boot_origin.py']
@@ -150,6 +150,8 @@ def main():
     if exception:sources+=list(exception_check['sources'])+['scripts/check_oem_exception_code.py','scripts/exception_image_inventory.py','scripts/map_oem_trace_rva.py','scripts/decode_oem_exception.py','tests/test_oem_exception_page.py']
     if config['experiment']=='oem-exception-dispcc-v12':
         sources+=['scripts/check_oem_dispcc_map.py','tests/test_oem_dispcc_map.py']
+    if config['experiment']=='oem-exception-display-map-v13':
+        sources+=['scripts/check_oem_display_map.py','scripts/check_oem_dispcc_map.py','tests/test_oem_display_map.py','tests/test_oem_dispcc_map.py']
     bindings={n:sha((ROOT/n).read_bytes()) for n in sources}
     result=dict(passed=True,software_ready=True,hardware_executed=False,scope=config['experiment'],run_config=config,
                 image_sha256=sha(image.read_bytes()),fd_sha256=b['fd_sha256'],image_bytes=image.stat().st_size,
@@ -172,13 +174,13 @@ def main():
             result['progress_phases']={1:'target configuration registration before',2:'target configuration registration returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
         if config['experiment']=='oem-post-kernel-v4':
             result['progress_phases']={1:'call4 before',2:'call4 returned',3:'first SID LocateProtocol before',4:'first SID LocateProtocol returned',5:'actual CoreStartImage returned'}
-        if config['experiment'] in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):
+        if config['experiment'] in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):
             result['progress_phases']={1:'first main query before (call>=6/RVA3608)',3:'first SID query before; main query returned',5:'actual CoreStartImage returned'}
-        if config['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12'):result['progress_phases']={5:'coarse RAM summary after real Core return and full DXE dispatch completion; one late window'}
+        if config['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):result['progress_phases']={5:'coarse RAM summary after real Core return and full DXE dispatch completion; one late window'}
         result['limitations']+=['no export if OEM hangs before the selected wrapped service',
             'SID protocol methods and direct MMIO are not observed; last visible stage is not a root cause',
             'each window requires inherited route still valid; refusal after OEM display changes is not OEM failure',
-            ('one late DXE-complete summary; no earlier window and no independent watchdog or durable RAM recovery' if config['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12') else 'three entry/Core observations, no service-return drawing; no independent watchdog or durable RAM recovery' if config['experiment']=='oem-main-entry-v6' else 'five observations perturb timing; no independent watchdog or durable RAM recovery'),
+            ('one late DXE-complete summary; no earlier window and no independent watchdog or durable RAM recovery' if config['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13') else 'three entry/Core observations, no service-return drawing; no independent watchdog or durable RAM recovery' if config['experiment']=='oem-main-entry-v6' else 'five observations perturb timing; no independent watchdog or durable RAM recovery'),
             'phase5 Q is next trace sequence, not a synthetic service event']
     if clock:
         result['progress_phases']={}
