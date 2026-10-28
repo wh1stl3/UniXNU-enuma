@@ -45,10 +45,11 @@ def audit(build, runtime=False):
         required.update(ENUMA_DIAG_STAGE='13',ENUMA_DIAG_DETAIL_POINT='13',ENUMA_DIAG_GUID_ENABLED='1',
                         ENUMA_DIAG_GUID_ONLY='1',ENUMA_DIAG_GUID_LOW64='0x4f7906c74138022f',
                         ENUMA_DIAG_GUID_HIGH64='0xe7a411b5337e949c',ENUMA_DIAG_DISPATCH_FALLBACK='1')
-    if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10'):required['ENUMA_OEM_FAR_CHAIN']='1'
-    if runtime and report['oem_run_config']['experiment'] in ('oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10'):
+    if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11'):required['ENUMA_OEM_FAR_CHAIN']='1'
+    if runtime and report['oem_run_config']['experiment'] in ('oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11'):
         required.update(ENUMA_OEM_EXIT_CLOCK='1',ENUMA_OEM_CLOCK_FORCE=str({'oem-far-clock-low-v9':1,'oem-far-clock-high-v9':5,'oem-gop-mode-low-v10':1,'oem-gop-mode-high-v10':6}.get(report['oem_run_config']['experiment'],0)))
-    if runtime and report['oem_run_config']['experiment'].startswith('oem-gop-mode-'):required['ENUMA_OEM_GOP_MODE']='1'
+    if runtime and report['oem_run_config']['experiment'].startswith(('oem-gop-mode-','oem-exception-')):required['ENUMA_OEM_GOP_MODE']='1'
+    if runtime and report['oem_run_config']['experiment']=='oem-exception-v11':required['ENUMA_OEM_EXCEPTION']='1'
     defs=report['firmware_configuration']['defines']
     if any(defs.get(n)!=v for n,v in required.items()):raise ValueError('wrong profile defines')
     binding=report['oem_profile_binding']
@@ -94,16 +95,18 @@ def audit(build, runtime=False):
         packed=[b for f in files.values() if f['name']==name for b in f['pe']]
         if packed!=[pes[0].read_bytes()]:raise ValueError('compiled product differs from FD '+name)
         response=pes[0].parent/'cc_resp.txt';text=response.read_text()
+        if 'ENUMA_EXCEPTION_HOST_FIXTURE' in text:raise ValueError('host-only exception fixture in production flags')
         for n in ('ENUMA_DIAG_STAGE','ENUMA_DIAG_SIMPLEFB'):
             if '-D'+n+'='+required[n] not in text.split():raise ValueError('compiler flags mismatch '+name)
-        if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10') and '-DENUMA_OEM_FAR_CHAIN=1' not in text.split():raise ValueError('far chain compiler flag missing')
-        if runtime and report['oem_run_config']['experiment'].startswith(('oem-far-clock-','oem-gop-mode-')):
-            for n in ('ENUMA_OEM_EXIT_CLOCK','ENUMA_OEM_CLOCK_FORCE')+ (('ENUMA_OEM_GOP_MODE',) if report['oem_run_config']['experiment'].startswith('oem-gop-mode-') else ()):
+        if runtime and report['oem_run_config']['experiment'] in ('oem-far-chain-v7','oem-far-event-v8','oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11') and '-DENUMA_OEM_FAR_CHAIN=1' not in text.split():raise ValueError('far chain compiler flag missing')
+        if runtime and report['oem_run_config']['experiment'].startswith(('oem-far-clock-','oem-gop-mode-','oem-exception-')):
+            for n in ('ENUMA_OEM_EXIT_CLOCK','ENUMA_OEM_CLOCK_FORCE')+ (('ENUMA_OEM_GOP_MODE',) if report['oem_run_config']['experiment'].startswith(('oem-gop-mode-','oem-exception-')) else ()):
                 if '-D'+n+'='+required[n] not in text.split():raise ValueError('clock compiler flag missing: '+n)
         if runtime and name=='DxeCore':
             for n in ('ENUMA_DIAG_DETAIL_POINT','ENUMA_DIAG_GUID_ENABLED','ENUMA_DIAG_GUID_ONLY',
                       'ENUMA_DIAG_GUID_LOW64','ENUMA_DIAG_GUID_HIGH64','ENUMA_DIAG_DISPATCH_FALLBACK'):
                 if '-D'+n+'='+required[n] not in text.split():raise ValueError('runtime compiler flag mismatch '+n)
+        if runtime and report['oem_run_config']['experiment']=='oem-exception-v11' and '-DENUMA_OEM_EXCEPTION=1' not in text.split():raise ValueError('exception macro absent')
         flags[name]=sha(response.read_bytes())
         products_verified[name]=sha(packed[0])
     return dict(passed=True,profile=profile,fd_sha256=sha(blob),display_pe_sha256=sha(files[DISPLAY]['pe'][0]),

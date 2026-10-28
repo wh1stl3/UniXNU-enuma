@@ -1,3 +1,5 @@
+> 2026-10-28当前：exception-v11 已完成完整 build3 / qualification2、61项WSL Python回归、异常取证ASan/UBSan及严格ARM64检查、277处最终机器码删除负测、2489项来源绑定和72镜像FD清单；20份R027/旧候选镜像资格摘要保持。新trial 3ffbbf8d-21f5-4a1f-ae58-a84e56596c0f 未claim/上机，不沿用旧拍摄就绪。v10三图均已消费，仍仅间接异常证据；本轮尚无实际PC/ESR/FAR。保留真实OEM/Core及原厂GOP推进路径，异常时最多三页采集原始现场/镜像归属。详见 operations/2026-10-28-oem-exception-v11.md 和 reports/enuma-oem-exception-v11-20261028.json；源码与文档最后统一发布，不让网络阻塞本地工作。 以下旧当前/就绪文字按历史阅读。
+
 > 2026-10-28当前：gop-mode-v10目标及2/27秒对照已完成完整build1、qualification1和离线来源核验，三trial未消费。本机Clock/HAL ABI核对后未发现可确认的接口错配，保留原始方法，新增真实Core成功及整轮DXE后原厂GOP QueryMode/SetMode/读回检查。55项Python、sanitizer/ARM及224/174/182处链接删除负测通过。v9仅离线对照、不安排上机；旧源码准入已过期但镜像/资格字节冻结。没有本轮设备动作，不沿用旧拍摄/校准。 以下旧当前/准备文字按历史阅读。
 
 > 2026-10-28当前：far-clock-v9目标及2/22秒校准镜像已完成完整build4、qualification1和离线来源校验，三trial均未claim/上机。移除诊断晚期GOP/像素出口，保留真实OEM/Core和整轮DXE路径；52项Python与最终机器码删除负测通过。实际时钟校准未完成，目标execute需新low/high报告与精确计划；v8已consumed且恢复通过，不复用旧拍摄就绪。现行STATUS/HANDOFF及operations/2026-10-28-oem-far-clock-v9.md；以下旧当前/准备文字按历史阅读。

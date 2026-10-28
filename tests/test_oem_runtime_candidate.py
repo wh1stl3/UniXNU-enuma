@@ -93,6 +93,7 @@ class Admission(unittest.TestCase):
     def test_clock_scope_has_no_window_and_single_boot(self):
         from oem_runtime_candidate import CLOCK_SCOPES
         for scope in CLOCK_SCOPES:
+            if scope=='oem-exception-v11':continue
             self.q['scope']=scope;self.q['run_config'].update(experiment=scope,selected_call=0)
             self.q['identity']['runtime']=dict(self.q['run_config']);self.q['runtime_limits']=limits_for(scope);self.save()
             validate(self.root,self.out)
@@ -100,6 +101,20 @@ class Admission(unittest.TestCase):
             self.assertEqual(self.q['runtime_limits']['max_windows'],0)
             self.assertEqual(self.q['runtime_limits']['max_terminal_delay_us'],27000000 if scope.startswith('oem-gop-mode-') else 22000000)
             self.q['runtime_limits']['max_boots']=2;self.save()
+            self.assertRaises(ValueError,validate,self.root,self.out)
+
+    def test_exception_scope_budget_and_no_clock_inference(self):
+        from oem_exit_clock import SCOPES
+        scope='oem-exception-v11'
+        self.assertNotIn(scope,SCOPES)
+        self.q['scope']=scope;self.q['run_config'].update(experiment=scope,selected_call=0)
+        self.q['identity']['runtime']=dict(self.q['run_config'])
+        self.q['runtime_limits']=limits_for(scope);self.save();validate(self.root,self.out)
+        self.assertEqual(self.q['runtime_limits']['max_windows'],3)
+        self.assertEqual(self.q['runtime_limits']['max_total_hold_us'],24000000)
+        self.assertEqual(self.q['runtime_limits']['observation_seconds'],75)
+        for key,value in [('max_windows',4),('max_total_hold_us',32000000),('max_boots',2),('exception_metadata_max_images',129)]:
+            self.q['runtime_limits']=limits_for(scope);self.q['runtime_limits'][key]=value;self.save()
             self.assertRaises(ValueError,validate,self.root,self.out)
 
 if __name__=='__main__':unittest.main()

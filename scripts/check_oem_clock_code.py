@@ -51,7 +51,7 @@ class Image:
         self.mark(a, name + ':' + hex(off))
 
 
-def check(core, mapping, cpu, cpu_map, force, gop=False):
+def check(core, mapping, cpu, cpu_map, force, gop=False, exception=False):
     if force not in (0, 1, 5, 6) or (force==6 and not gop):
         raise ValueError('invalid clock force')
     c, p = Image(core, mapping), Image(cpu, cpu_map)
@@ -118,8 +118,22 @@ def check(core, mapping, cpu, cpu_map, force, gop=False):
     c.mark(s,'actual_CoreStartImage');c.mark(o,'actual_Core_return')
     for off,w in {4:0xf9404348,8:0xaa0003fb,12:0xf9400a89,16:0xeb08013f,
                   32:0xf84be129,36:0xeb08013f,52:0x39400108,60:0xaa1b03e0}.items():
+        if exception and off==32:continue
         if c.word(s+off)!=w:raise ValueError('true identity/status gate changed')
         c.mark(s+off,'return_gate_'+str(off))
+    if exception:
+        # LTO may address EnumaStartingImage relative to another data symbol.
+        # Resolve the actual ADRP/ADD/LDUR target, not an old layout displacement.
+        a=s+24;adr,add,ld=c.word(a),c.word(a+4),c.word(a+8)
+        if adr&0x9f00001f!=0x90000009 or add&0xffc003ff!=0x91000129 or ld&0xffe00fff!=0xf8400129:
+            raise ValueError('starting image identity load changed')
+        imm=((adr>>5)&0x7ffff)<<2|((adr>>29)&3)
+        if imm&(1<<20):imm-=1<<21
+        disp=(ld>>12)&511
+        if disp&256:disp-=512
+        target=(a&~4095)+(imm<<12)+((add>>10)&4095)+disp
+        if target!=c.sym('EnumaStartingImage'):raise ValueError('wrong starting image identity global')
+        for i in range(3):c.mark(a+4*i,'starting_image_address_'+str(i))
     for off,op in ((20,0x54000001),(40,0x54000001),(56,0x34000008)):
         a=s+off;w=c.word(a);v=(w>>5)&0x7ffff
         if v&0x40000:v-=0x80000
@@ -152,40 +166,45 @@ def check(core, mapping, cpu, cpu_map, force, gop=False):
     if (adr&~0xfff)+(imm<<12)+((v>>10)&0xfff)!=c.sym('OemProgressRecord'):
         raise ValueError('wrong Recorded hook')
     for a in (adr,add,store):c.mark(a,'event_hook_'+str(a-store))
-    # Real CPU handler default edge, including compiler-specialized delay body.
-    p.seq('CommonCExceptionHandler',{0x20:0xb4000282,0x2c:0xd61f0040})
-    p.call('CommonCExceptionHandler',0x70,'EnumaOemClockExit')
-    for off,n in ((8,'MicroSecondDelay'),(0xc,'ResetCold'),(0x10,'CpuPause')):
-        p.call('EnumaOemClockExit',off,n)
-    p.seq('EnumaOemClockExit',{0x14:0x17ffffff})
-    if force not in (5,6):
-        p.seq('MicroSecondDelay',{8:0x52994000,0xc:0x72a77340,
-            0x14:0x52994000,0x18:0x72a77340})
-        p.call('MicroSecondDelay',0x10,'NanoSecondDelay')
-        a=p.sym('MicroSecondDelay')+0x20
-        if p.word(a)&0xfc000000!=0x14000000 or p.target(a)!=p.sym('NanoSecondDelay'):
-            raise ValueError('second one-second tail delay missing')
-        p.mark(a,'second_second')
+    if exception:
+        from check_oem_exception_code import check_cpu
+        check_cpu(p)
     else:
-        p.seq('MicroSecondDelay',{0x10:(0x529f9813 if force==6 else 0x52963013),0x14:0x52884814,0x18:0x928847f5,
-            0x1c:(0x72a03373 if force==6 else 0x72a029f3),0x20:0x72a001f4,0x24:0xf2bffe15,0x28:0xeb14027f,
-            0x2c:0x540000c3,0x30:0x52994000,0x34:0x8b150273,
-            0x38:0x72a77340,0x40:0x17fffffa,0x50:0xd65f03c0})
-        p.call('MicroSecondDelay',0x3c,'NanoSecondDelay')
+        # Real CPU handler default edge, including compiler-specialized delay body.
+        p.seq('CommonCExceptionHandler',{0x20:0xb4000282,0x2c:0xd61f0040})
+        p.call('CommonCExceptionHandler',0x70,'EnumaOemClockExit')
+        for off,n in ((8,'MicroSecondDelay'),(0xc,'ResetCold'),(0x10,'CpuPause')):
+            p.call('EnumaOemClockExit',off,n)
+        p.seq('EnumaOemClockExit',{0x14:0x17ffffff})
+        if force not in (5,6):
+            p.seq('MicroSecondDelay',{8:0x52994000,0xc:0x72a77340,
+                0x14:0x52994000,0x18:0x72a77340})
+            p.call('MicroSecondDelay',0x10,'NanoSecondDelay')
+            a=p.sym('MicroSecondDelay')+0x20
+            if p.word(a)&0xfc000000!=0x14000000 or p.target(a)!=p.sym('NanoSecondDelay'):
+                raise ValueError('second one-second tail delay missing')
+            p.mark(a,'second_second')
+        else:
+            p.seq('MicroSecondDelay',{0x10:(0x529f9813 if force==6 else 0x52963013),0x14:0x52884814,0x18:0x928847f5,
+                0x1c:(0x72a03373 if force==6 else 0x72a029f3),0x20:0x72a001f4,0x24:0xf2bffe15,0x28:0xeb14027f,
+                0x2c:0x540000c3,0x30:0x52994000,0x34:0x8b150273,
+                0x38:0x72a77340,0x40:0x17fffffa,0x50:0xd65f03c0})
+            p.call('MicroSecondDelay',0x3c,'NanoSecondDelay')
     return c,p
 
 
-def verify(core, mapping, cpu, cpu_map, force, gop=False):
-    c,p=check(core,mapping,cpu,cpu_map,force,gop)
+def verify(core, mapping, cpu, cpu_map, force, gop=False, exception=False):
+    c,p=check(core,mapping,cpu,cpu_map,force,gop,exception)
     for which,obj in enumerate((c,p)):
         for name,a in obj.sites.items():
             blob=bytearray(obj.pe);struct.pack_into('<I',blob,file_offset(blob,a),0xd503201f)
             try:check(bytes(blob) if which==0 else core,mapping,
-                      bytes(blob) if which==1 else cpu,cpu_map,force,gop)
+                      bytes(blob) if which==1 else cpu,cpu_map,force,gop,exception)
             except ValueError:pass
             else:raise ValueError('removed clock instruction admitted: '+name)
     return dict(core_sites={n:hex(a) for n,a in c.sites.items()},
                 cpu_sites={n:hex(a) for n,a in p.sites.items()},
                 deletion_checks=len(c.sites)+len(p.sites),force=force,gop_mode=gop,
+                exception_session=getattr(p,'exception_session',None),
                 cpu_exception_rva=hex(p.sym('CommonCExceptionHandler')),
                 scope='selected linked timer/return/sync/CPU-default-exception sequences only; no hardware path proof')

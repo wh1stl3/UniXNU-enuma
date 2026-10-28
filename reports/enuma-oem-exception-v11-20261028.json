@@ -1,0 +1,73 @@
+{
+  "scope": "oem-exception-v11",
+  "software_ready": true,
+  "hardware_executed": false,
+  "consumed": false,
+  "firmware_commit": "0718922a03e0854005887c99c1a7fb3b9257e375",
+  "build": "out/oem-exception-20261028/build3",
+  "build_basis": "uncommitted snapshot based on 2c18bc6, later committed without firmware source changes; not rebuilt after commit",
+  "qualification": "out/oem-exception-20261028/qualification2",
+  "qualification_sha256": "dc6d274ccbaf798cbdd182a2a28df772700ff52f1cc2a9549a56d981ca861e19",
+  "image": "out/oem-exception-20261028/qualification2/image.img",
+  "image_sha256": "73d1327f75f9123cd13898c24cd005c5db91e8e244132dfcba1364bde1ebaaa4",
+  "image_bytes": 3153920,
+  "fd_sha256": "537aca0585c7d6d2ba91524d9faa5c03c03029c08d54269194604535ca71be0b",
+  "run_config": {
+    "trial_id": "3ffbbf8d-21f5-4a1f-ae58-a84e56596c0f",
+    "session": 8502751356019515078,
+    "selected_call": 0,
+    "profile": "oem-control",
+    "experiment": "oem-exception-v11"
+  },
+  "source_bindings": 2489,
+  "fd_images": 72,
+  "runtime_limits": {
+    "max_boots": 1,
+    "selected_call": 0,
+    "hold_us": 8000000,
+    "roi": [
+      64,
+      96,
+      320,
+      160
+    ],
+    "observation_seconds": 75,
+    "partition_writes": false,
+    "needs_current_camera_and_manual_recovery": true,
+    "max_windows": 3,
+    "max_total_hold_us": 24000000,
+    "max_terminal_delay_us": 27000000,
+    "call_selection": "unhandled-exception-context",
+    "max_gop_query_calls": 1,
+    "max_gop_set_calls": 1,
+    "max_gop_handles": 8,
+    "exception_metadata_max_images": 128,
+    "exception_metadata_max_tables": 64
+  },
+  "validation": {
+    "python_tests": 61,
+    "python_runtime": "WSL Python 3",
+    "sanitizers": [
+      "ASan",
+      "UBSan"
+    ],
+    "exception_check": "check7",
+    "linked_deletion_checks": 277,
+    "cpu_default_handler_rva": "0x6718",
+    "linked_session": 8502751356019515078,
+    "offline_admission": true,
+    "frozen_artifacts": 20
+  },
+  "limitations": [
+    "No Boot Services/GOP/formatting from exception sink; inherited route may be rejected or fault",
+    "No independent watchdog or persistent exception recovery; recursive fault resets immediately",
+    "PC owner lookup uses bounded, mapped initial firmware RAM metadata, ambiguous/busy/invalid/absent is unknown",
+    "No physical GOP/ConOut/BDS/input/XNU success; unhandled exceptions before this CPU handler are not covered"
+  ],
+  "fault_pc": null,
+  "fault_esr": null,
+  "fault_far": null,
+  "fault_owner": null,
+  "prior_v10_evidence": "Indirect instrumented-exception timing only; no direct register/owner sample",
+  "publication": "Pending final consolidated push; no image or raw media publication"
+}
