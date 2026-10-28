@@ -51,7 +51,7 @@ class Image:
         self.mark(a, name + ':' + hex(off))
 
 
-def check(core, mapping, cpu, cpu_map, force, gop=False, exception=False):
+def check(core, mapping, cpu, cpu_map, force, gop=False, exception=False, context=False):
     if force not in (0, 1, 5, 6) or (force==6 and not gop):
         raise ValueError('invalid clock force')
     c, p = Image(core, mapping), Image(cpu, cpu_map)
@@ -168,7 +168,7 @@ def check(core, mapping, cpu, cpu_map, force, gop=False, exception=False):
     for a in (adr,add,store):c.mark(a,'event_hook_'+str(a-store))
     if exception:
         from check_oem_exception_code import check_cpu
-        check_cpu(p)
+        check_cpu(p,context)
     else:
         # Real CPU handler default edge, including compiler-specialized delay body.
         p.seq('CommonCExceptionHandler',{0x20:0xb4000282,0x2c:0xd61f0040})
@@ -193,13 +193,13 @@ def check(core, mapping, cpu, cpu_map, force, gop=False, exception=False):
     return c,p
 
 
-def verify(core, mapping, cpu, cpu_map, force, gop=False, exception=False):
-    c,p=check(core,mapping,cpu,cpu_map,force,gop,exception)
+def verify(core, mapping, cpu, cpu_map, force, gop=False, exception=False, context=False):
+    c,p=check(core,mapping,cpu,cpu_map,force,gop,exception,context)
     for which,obj in enumerate((c,p)):
         for name,a in obj.sites.items():
             blob=bytearray(obj.pe);struct.pack_into('<I',blob,file_offset(blob,a),0xd503201f)
             try:check(bytes(blob) if which==0 else core,mapping,
-                      bytes(blob) if which==1 else cpu,cpu_map,force,gop,exception)
+                      bytes(blob) if which==1 else cpu,cpu_map,force,gop,exception,context)
             except ValueError:pass
             else:raise ValueError('removed clock instruction admitted: '+name)
     return dict(core_sites={n:hex(a) for n,a in c.sites.items()},

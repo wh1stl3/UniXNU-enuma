@@ -15,9 +15,10 @@ REG_SCOPE='oem-registration-v5'
 MAIN_SCOPE='oem-main-entry-v6'
 FAR_SCOPE='oem-far-chain-v7'
 EVENT_SCOPE='oem-far-event-v8'
-CLOCK_SCOPES=('oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13')
+CLOCK_SCOPES=('oem-far-clock-v9','oem-far-clock-low-v9','oem-far-clock-high-v9','oem-gop-mode-v10','oem-gop-mode-low-v10','oem-gop-mode-high-v10','oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13','oem-exception-context-v14')
 def limits_for(scope):
-    if scope in ('oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13'):return dict(LIMITS,max_windows=3,max_total_hold_us=24000000,max_terminal_delay_us=27000000,call_selection='unhandled-exception-context',max_gop_query_calls=1,max_gop_set_calls=1,max_gop_handles=8,exception_metadata_max_images=128,exception_metadata_max_tables=64)
+    if scope=='oem-exception-context-v14':return dict(limits_for('oem-exception-display-map-v13'),hold_us=4000000,max_windows=6)
+    if scope in ('oem-exception-v11','oem-exception-dispcc-v12','oem-exception-display-map-v13','oem-exception-context-v14'):return dict(LIMITS,max_windows=3,max_total_hold_us=24000000,max_terminal_delay_us=27000000,call_selection='unhandled-exception-context',max_gop_query_calls=1,max_gop_set_calls=1,max_gop_handles=8,exception_metadata_max_images=128,exception_metadata_max_tables=64)
     if scope.startswith(('oem-gop-mode-','oem-exception-')) and scope in CLOCK_SCOPES:return dict(LIMITS,hold_us=0,roi=None,max_windows=0,max_total_hold_us=0,max_terminal_delay_us=27000000,clock_requires_current_calibration=scope==CLOCK_SCOPES[3],call_selection='post-dxe-native-gop-mode0',max_gop_query_calls=1,max_gop_set_calls=1,max_gop_handles=8)
     if scope in CLOCK_SCOPES:return dict(LIMITS,hold_us=0,roi=None,max_windows=0,max_total_hold_us=0,max_terminal_delay_us=27000000 if scope.startswith(('oem-gop-mode-','oem-exception-')) else 22000000,clock_requires_current_calibration=scope in (CLOCK_SCOPES[0],CLOCK_SCOPES[3]),call_selection='ram-only-no-display-clock-exit')
     if scope in (FAR_SCOPE,EVENT_SCOPE)+CLOCK_SCOPES:return dict(LIMITS,selected_call=0,max_windows=1,max_total_hold_us=8000000,call_selection='ram-only-until-dxe-complete')
@@ -57,9 +58,13 @@ def validate(root, directory):
             m.get('negative_checks')!=['name','base','size','hob','resource','cache','type','arm','deleted'] or
             'scripts/check_oem_dispcc_map.py' not in bindings):
             raise ValueError('v12 linked DISP_CC map evidence missing')
-    if q['scope']=='oem-exception-display-map-v13':
+    if q['scope'] in ('oem-exception-display-map-v13','oem-exception-context-v14'):
         from check_oem_display_map import require_evidence
         require_evidence(q.get('fd_audit',{}).get('display_map'),bindings)
+    if q['scope']=='oem-exception-context-v14':
+        if not q.get('mmu_replay',{}).get('passed') or not q.get('parameter_path',{}).get('passed'):raise ValueError('missing context analysis')
+        for n in ('scripts/check_oem_context_code.py','scripts/check_oem_mmu_replay.py','tests/oem_mmu_replay.c','scripts/check_oem_parameter_path.py','tests/test_oem_context.py'):
+            if n not in bindings:raise ValueError('unbound context check')
     for required in ('scripts/run_oem_runtime_trial.py','scripts/oem_runtime_candidate.py',
                      'scripts/qualify_oem_runtime.py','scripts/audit_oem_development_fd.py'):
         if required not in bindings: raise ValueError('incomplete source binding')

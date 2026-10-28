@@ -22,7 +22,14 @@ def main():
   if token.lower() not in asm.lower():raise ValueError('exception path missing: '+token)
  for forbidden in ('LocateProtocol','GetMemoryMap','SerialPortWrite','AsciiSPrint','AllocatePool','HandleProtocol','LocateMemoryRegionByName'):
   if forbidden in asm:raise ValueError('unsafe exception dependency: '+forbidden)
- names=['scripts/check_oem_exception.py','tests/oem_exception_view.c','tests/oem_exception_flow.c','tests/oem_exception_arm.c']+['firmware/diagnostics/'+n for n in ('EnumaOemExceptionPage.h','EnumaOemExceptionView.h','EnumaOemExceptionDisplay.h','EnumaOemExceptionStop.h','EnumaOemCapturePixel.h')]
+ for name,args in [('flow-context',flow),('pixel-context',pixel)]:
+  command=list(args);command.insert(1,'-DENUMA_OEM_CONTEXT=1');command[-1]=out/name
+  subprocess.run(command,check=True);subprocess.run([out/name],check=True)
+ subprocess.run(arm+['-DENUMA_OEM_CONTEXT=1','-c',ROOT/'tests/oem_exception_arm.c','-o',out/'context.obj'],check=True)
+ context_asm=subprocess.check_output(['/usr/bin/llvm-objdump','-dr',out/'context.obj'],text=True);(out/'context.asm').write_text(context_asm)
+ for token in ('ExContextCapture','at\ts1e1w','TTBR0_EL1','TTBR1_EL1','TCR_EL1','SCTLR_EL1'):
+  if token.lower() not in context_asm.lower():raise ValueError('context missing '+token)
+ names=['scripts/check_oem_exception.py','tests/oem_exception_view.c','tests/oem_exception_flow.c','tests/oem_exception_arm.c']+['firmware/diagnostics/'+n for n in ('EnumaOemExceptionContext.h','EnumaOemExceptionPage.h','EnumaOemExceptionView.h','EnumaOemExceptionDisplay.h','EnumaOemExceptionStop.h','EnumaOemCapturePixel.h')]
  names+=['tests/oem_exception_pixel.c']
  result=dict(passed=True,sanitizers=['ASan','UBSan'],arm64_object_sha256=hashlib.sha256((out/'exception.obj').read_bytes()).hexdigest(),hardware_executed=False,sources={n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in names})
  (out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print('PASS: exception snapshot, bounded owner lookup failure cases and strict ARM64 sink')

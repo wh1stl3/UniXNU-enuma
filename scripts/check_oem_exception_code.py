@@ -1,5 +1,8 @@
 """Selected final CPU exception edges and real context loads; deletion negatives."""
-def check_cpu(p):
+def check_cpu(p,context=False):
+ if context:
+  from check_oem_context_code import check
+  return check(p)
  def calls(name,dest,count):
   hits=p.calls(name,dest)
   if len(hits)!=count:raise ValueError(name+' calls '+dest+' count differs')

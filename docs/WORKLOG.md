@@ -1781,3 +1781,5 @@ v8修复了宿主已复现的RestoreTPL后环尾竞态，且实际链接/资格�
 v13已完成build1/qualification1，新增VBIF、DSI0、DSI1三独立NS_DEVICE映射，保留原厂调用和异常取证。69项Python、8组宿主、277处链接指令删除及36项映射变异检查通过；2495项来源绑定、72个FD PE镜像和SEC TE核对通过。软件就绪，新trial未消费，未上机。
 
 镜像SHA256 9331e0a3f1db230326c5ae49f2ed77ed443a90f89232684e43b929f8c5a854bb；资格SHA256 5d01765a1c216e902f1c503add81bfb638d0e72d651448b21ebc2a4f88dec32b；trial e4fd7a07-b112-433b-8008-c8dee5ed1392；固件 f523e160ad7d87d00d241e840d94179c1c0b8459。未claim/未上机，源和产物完整绑定，原厂GOP仍待实机验证。
+
+- 2026-10-28 · v14 已完成 build2/qualification2：同时核对原厂参数来源和实际 MMU 建表代码，新增故障寄存器与异常后地址翻译取证。73 项 Python、8 组宿主检查、354 处链接指令删除、36 项映射变异、28 处参数指令删除和 27 个页表分配失败点检查通过。2501 项来源绑定；软件就绪，trial 未消费，尚未上机。 固件 07c9bf6c6c2bf924d9fb5c38d3231d024266adbb；本地证据 out/oem-context-20261028，操作记录 operations/2026-10-28-oem-context-v14.md。未上机，最终来源验证通过。

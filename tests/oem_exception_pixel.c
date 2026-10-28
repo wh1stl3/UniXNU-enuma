@@ -2,7 +2,11 @@
 #include <Uefi.h>
 #include <Library/BaseMemoryLib.h>
 #define ENUMA_BOOT_LOG_REPLAY 3
+#if ENUMA_OEM_CONTEXT
+#define ENUMA_BOOT_LOG_HOLD_US 4000000
+#else
 #define ENUMA_BOOT_LOG_HOLD_US 8000000
+#endif
 #define ENUMA_CAPTURE_PREPARED_ONLY 1
 #include "EnumaOemCapturePixel.h"
 #include "EnumaOemExceptionView.h"
@@ -20,7 +24,7 @@ static UINTN Index(UINT64 A){UINT64 D=A-P.Frame.Base;UINTN Y=D/P.Frame.Stride,X=
 static int Read(void *C,UINT64 A,UINT32 *V){(void)C;*V=Pixels[Index(A)];return ++Reads!=FailRead;}
 static int Write(void *C,UINT64 A,UINT32 V){(void)C;if(++Writes==FailWrite)return 0;Pixels[Index(A)]=V;return 1;}
 static int Barrier(void *C){(void)C;return ++Barriers!=FailBarrier;}
-static int Hold(void *C,UINT32 U){(void)C;assert(U==8000000&&!Holds);Holds++;return !FailHold;}
+static int Hold(void *C,UINT32 U){(void)C;assert(U==ENUMA_BOOT_LOG_HOLD_US&&!Holds);Holds++;return !FailHold;}
 static int Validate(void *C,const ENUMA_INHERITED_FRAME *F){(void)C;assert(F==&P.Frame&&Reads==51200&&!Writes);return !FailValidate;}
 static void Setup(UINT32 Page){
  memset(&P,0,sizeof(P));P.Policy=3;P.El=4;P.Read=Read;P.Write=Write;P.Barrier=Barrier;P.Hold=Hold;P.Validate=Validate;
@@ -32,7 +36,7 @@ static void Setup(UINT32 Page){
  Reads=Writes=Barriers=Holds=FailRead=FailWrite=FailBarrier=FailHold=FailValidate=0;
 }
 int main(void){
- for(UINT32 Page=1;Page<=3;Page++){
+ for(UINT32 Page=1;Page<=(ENUMA_OEM_CONTEXT?6:3);Page++){
   Setup(Page);
   for(UINT32 Y=0;Y<5;Y++)for(UINT32 X=0;X<20;X++){CHAR8 C=P.Page.Text[Y][X];UINT32 B=0;
    for(UINT32 I=0;I<5;I++)B|=EnumaLogGlyph(C,I);assert(C==' '||B);}

@@ -1,0 +1,175 @@
+{
+  "scope": "oem-exception-context-v14",
+  "software_ready": true,
+  "hardware_executed": false,
+  "trial_consumed": false,
+  "run_config": {
+    "trial_id": "4dd84d0a-d44f-4230-9747-5baae31b61be",
+    "session": 18446650326542602763,
+    "selected_call": 0,
+    "profile": "oem-control",
+    "experiment": "oem-exception-context-v14"
+  },
+  "image": "out/oem-context-20261028/qualification2/image.img",
+  "image_sha256": "2e3e6814fac86e6a7da35887f03c50abf0e6986bdf7d8d4a22949621a2961a4c",
+  "image_bytes": 3153920,
+  "qualification_sha256": "946ba1408495899bea81980fc896df487d2b81d7569d552607545496433ec067",
+  "fd_sha256": "c749df261bc12c9aba52fefb33688e68f91e0befce4da513e8708e120dfbb720",
+  "firmware_commit": "07c9bf6c6c2bf924d9fb5c38d3231d024266adbb",
+  "build": "out/oem-context-20261028/build2",
+  "source_bindings": 2501,
+  "fd_images": 72,
+  "map_audit": {
+    "passed": true,
+    "regions": [
+      {
+        "name": "Display VBIF",
+        "base": "0xaeb0000",
+        "size": "0x3000",
+        "descriptor_rva": "0xe550",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      },
+      {
+        "name": "Display DSI0",
+        "base": "0xae94000",
+        "size": "0x1000",
+        "descriptor_rva": "0xe598",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      },
+      {
+        "name": "Display DSI1",
+        "base": "0xae96000",
+        "size": "0x1000",
+        "descriptor_rva": "0xe5e0",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      },
+      {
+        "name": "DISP_CC",
+        "base": "0xaf00000",
+        "size": "0x20000",
+        "descriptor_rva": "0xe628",
+        "negative_checks": [
+          "name",
+          "base",
+          "size",
+          "hob",
+          "resource",
+          "cache",
+          "type",
+          "arm",
+          "deleted"
+        ]
+      }
+    ],
+    "fd_sec_exact_match": true,
+    "sec_te_relocations": 24,
+    "sec_te_sha256": "7620d35a1bbaf5990e12fd5734d297810118c10484a7be33cbe0d02ecfba20f9",
+    "source_sha256": "867d1e9bcd123ab6a4bb6d27ea363ed899f91fb8fcac1e1a2c13c29f49159c1e",
+    "active_descriptor_count": 50,
+    "live_page_tables_verified": false
+  },
+  "runtime_limits": {
+    "max_boots": 1,
+    "selected_call": 0,
+    "hold_us": 4000000,
+    "roi": [
+      64,
+      96,
+      320,
+      160
+    ],
+    "observation_seconds": 75,
+    "partition_writes": false,
+    "needs_current_camera_and_manual_recovery": true,
+    "max_windows": 6,
+    "max_total_hold_us": 24000000,
+    "max_terminal_delay_us": 27000000,
+    "call_selection": "unhandled-exception-context",
+    "max_gop_query_calls": 1,
+    "max_gop_set_calls": 1,
+    "max_gop_handles": 8,
+    "exception_metadata_max_images": 128,
+    "exception_metadata_max_tables": 64
+  },
+  "exception_pages": {
+    "17": "exception type/PC/ESR/FAR/session",
+    "18": "owner state/base/RVA/size/session",
+    "19": "LR/GUID halves/SPSR/session",
+    "20": "saved X0/X8/X9/X10/session",
+    "21": "TTBR0/TTBR1/TCR/SCTLR/session",
+    "22": "CurrentEL and probe validity/PAR read/PAR write/X20/session"
+  },
+  "python_tests": 73,
+  "host_check_groups": 8,
+  "linked_deletion_checks": 354,
+  "parameter_checks": {
+    "passed": true,
+    "pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+    "instruction_deletions": 28,
+    "provenance": [
+      "HWIO MapRegion(\"MDSS\") output through structure setter to global RVA 0x467d0",
+      "VBIF ID loop starts at 0, compares hardware-info count at offset72; flags=1 at direct call",
+      "base + instance_offset + 0xb0004 is the fault effective address"
+    ],
+    "limitations": [
+      "Static callers are not proof of this runtime call stack",
+      "Invalid ID returns offset0; matching FAR cannot prove individual inputs",
+      "No original firmware parameter value changed"
+    ]
+  },
+  "mmu_replay": {
+    "passed": true,
+    "hardware_executed": false,
+    "output": "PASS actual recursive mapper, all regions, VBIF omission and 27 allocation failures\n",
+    "limitations": [
+      "Real C recursion and descriptor attributes; host allocator and register/cache/TLB stubs. No proof of active hardware mapping."
+    ],
+    "sources": {
+      "out/oem-context-20261028/build2/work/Mu_Basecore/UefiCpuPkg/Library/ArmMmuLib/AArch64/ArmMmuLibCore.c": "bf3be06245f00c6d1b24b94eb0068f607387780966297070836799fea2aa3521",
+      "out/oem-context-20261028/build2/work/uefi/Platforms/Xiaomi/enumaPkg/Library/MemoryMapLib/MemoryMapLib.c": "867d1e9bcd123ab6a4bb6d27ea363ed899f91fb8fcac1e1a2c13c29f49159c1e",
+      "tests/oem_mmu_replay.c": "b43c881d0463c3189844c794af43623dbcbc9e1a6a30c093bdf6ef6d6c00868f",
+      "scripts/check_oem_mmu_replay.py": "866474e48cd77e24703532f2492563137c6b7e007cd72c1daf2bd8377685ab0a"
+    }
+  },
+  "old_artifacts_preserved": 24,
+  "limitations": [
+    "No Boot Services/GOP/formatting from exception sink; inherited route may be rejected or fault",
+    "No independent watchdog or persistent exception recovery; recursive fault resets immediately",
+    "PC owner lookup uses bounded, mapped initial firmware RAM metadata, ambiguous/busy/invalid/absent is unknown",
+    "No physical GOP/ConOut/BDS/input/XNU success; unhandled exceptions before this CPU handler are not covered",
+    "Translation probes run after the fault, before owner/display access; they do not prove the pre-fault table or TLB state",
+    "EL1 MMU enabled and HA/HD disabled required for AT probes; refusal leaves ProbeValid zero",
+    "Six restored pixel transactions of four seconds each; first failure stops subsequent pages; no target MMIO read or software page-table pointer walk"
+  ],
+  "local_evidence": "out/oem-context-20261028"
+}
