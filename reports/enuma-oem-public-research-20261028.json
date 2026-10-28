@@ -1,0 +1,177 @@
+{
+  "date": "2026-10-28",
+  "scope": "public source and exact local OEM static comparison; no new hardware evidence",
+  "source_commits": {
+    "Mu-Silicium": "4cba43c90e02cdbefbcd9fcdbda33d2328deaec0",
+    "mu_aloha_platforms": "aed1f7934ee4e0921b10c0b0a8dd7116a90a2f4b",
+    "QTI-source-mirror": "20bb8ae36c93fc16bbadda0e0a83f930c0c8a271",
+    "OpenABL": "aa949d6787b659cace7636cb1afe370c0a92456e",
+    "EDK2-SM8250": "270b09f6c0fdcb9d8a8cd2c67f768b3e577a91cb",
+    "edk2": "490feed6d804e25c16eee5d1f1145b8e92edcfdf"
+  },
+  "sources": [
+    {
+      "name": "qti-chip-types",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/Include/Protocol/EFIChipInfoTypes.h",
+      "sha256": "559c7446f6114baf241d6c4bf96b50e794949001e902d5b92a6035c2a4d0bc4c"
+    },
+    {
+      "name": "qti-display",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/Drivers/DisplayDxe/DisplayDxe.c",
+      "sha256": "26cb7613229f6b0477576eec0779e02839b385c323443c8ada10428a971b0a2c"
+    },
+    {
+      "name": "qti-mdp",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/Library/MDPLib/MDPLib.c",
+      "sha256": "1826d90376b348242a6b6339a682e50c8ea75ba8b7c82cb8ba875052b5c7a9e5"
+    },
+    {
+      "name": "qti-dec",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/QcomPkg.dec",
+      "sha256": "51693cd50eb0f09d91c006bc45a26626f90f70ca9003236dd8dedce34e04cc24"
+    },
+    {
+      "name": "qti-hal-protocol",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/Include/Protocol/EFIHALIOMMUProtocol.h",
+      "sha256": "ae6d5f3ad82513c86c1f1214366bcb27f0b83ba3e120096e47defd7342e9b010"
+    },
+    {
+      "name": "qti-hal-lib",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/Include/api/kernel/HALIOMMU/HALIOMMULib.h",
+      "sha256": "c5b91920ab481e66aca5983e470a9d26dacf4d1ce59b5354e913180503649659"
+    },
+    {
+      "name": "qti-hal-driver",
+      "url": "https://raw.githubusercontent.com/Rivko/android-firmware-qti-sdm670/20bb8ae36c93fc16bbadda0e0a83f930c0c8a271/boot_images/QcomPkg/Drivers/HALIOMMUDxe/HALIOMMUDxe.c",
+      "sha256": "9ea9d7eecdab1d99a8705afb80ccac0535aef14ac0e8317803f6f7ce538e3796"
+    },
+    {
+      "name": "silicium-clock",
+      "url": "https://raw.githubusercontent.com/Project-Silicium/Mu-Silicium/4cba43c90e02cdbefbcd9fcdbda33d2328deaec0/Silicon/Qualcomm/QcomPkg/Include/Protocol/EFIClock.h",
+      "sha256": "4a215bb2111a0ffca8cca53651ee08178b2ea7333b16bd3325bec9a898cb8cee"
+    },
+    {
+      "name": "silicium-kona-sec",
+      "url": "https://raw.githubusercontent.com/Project-Silicium/Mu-Silicium/4cba43c90e02cdbefbcd9fcdbda33d2328deaec0/Silicon/Qualcomm/KonaPkg/Library/PlatformSecLib/PlatformSec.c",
+      "sha256": "edefc16cb567dea168b2749295fc34947231364c29e08968d1903337a6ed9f9b"
+    },
+    {
+      "name": "silicium-pipa",
+      "url": "https://raw.githubusercontent.com/Project-Silicium/Mu-Silicium/4cba43c90e02cdbefbcd9fcdbda33d2328deaec0/Platforms/Xiaomi/pipaPkg/pipa.dsc",
+      "sha256": "d7d79b62e291a78cee7f450e1941a215a42711baf42ffc69c17e43b3787620d8"
+    },
+    {
+      "name": "silicium-nabu",
+      "url": "https://raw.githubusercontent.com/Project-Silicium/Mu-Silicium/4cba43c90e02cdbefbcd9fcdbda33d2328deaec0/Platforms/Xiaomi/nabuPkg/nabu.dsc",
+      "sha256": "f09941da23b4a654fde179aa0064d12a46698a8147efc926f568c6a77fca27ad"
+    },
+    {
+      "name": "silicium-nabu-apriori",
+      "url": "https://raw.githubusercontent.com/Project-Silicium/Mu-Silicium/4cba43c90e02cdbefbcd9fcdbda33d2328deaec0/Platforms/Xiaomi/nabuPkg/Include/APRIORI.inc",
+      "sha256": "82563194d6479bc92f7b6ce511b3005df8214aa6a0a0292ae57a9c19a5bc47ae"
+    },
+    {
+      "name": "silicium-reenabler",
+      "url": "https://raw.githubusercontent.com/Project-Silicium/Mu-Silicium/4cba43c90e02cdbefbcd9fcdbda33d2328deaec0/Silicon/Qualcomm/QcomPkg/Drivers/DisplayReEnablerDxe/DisplayReEnablerDxe.c",
+      "sha256": "7a74b4ec6fffa5d9546d57772f6cbaf4fb0103c0557c07851c39e6f90739baab"
+    },
+    {
+      "name": "aloha-caller",
+      "url": "https://raw.githubusercontent.com/Project-Aloha/mu_aloha_platforms/aed1f7934ee4e0921b10c0b0a8dd7116a90a2f4b/Platforms/AndromedaPkg/Driver/DisplayCallerDxe/DisplayCaller.c",
+      "sha256": "396167b4c48d7a276ffa84caafe8661c9b06071ef861ffec0f4b4629c4888d17"
+    },
+    {
+      "name": "openabl-qcom",
+      "url": "https://raw.githubusercontent.com/OpenHandheldCollective/OpenABL/aa949d6787b659cace7636cb1afe370c0a92456e/Efi/Qcom.h",
+      "sha256": "815460875c971aa4cca062431d4f41f9297ad98ff366f3ac7460464c6fd20ed8"
+    },
+    {
+      "name": "old-sm8250-simplefb",
+      "url": "https://raw.githubusercontent.com/LonelyFool/EDK2-SM8250/270b09f6c0fdcb9d8a8cd2c67f768b3e577a91cb/SM8250/SimpleFbDxe/SimpleFbDxe.c",
+      "sha256": "d11cf09fac8c4ebb4355d76068a43e7048a5ca4f58ce80dfc66cd251cdaae3e9"
+    },
+    {
+      "name": "edk2-graphics-console",
+      "url": "https://raw.githubusercontent.com/tianocore/edk2/490feed6d804e25c16eee5d1f1145b8e92edcfdf/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsole.c",
+      "sha256": "5f001fec69bf98aa4954606bb31df479646b1269139c87332c873f42f953bc5f"
+    }
+  ],
+  "local_oem_pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+  "local_selected_instructions": {
+    "0x3620": "0x7101751f",
+    "0x3640": "0xd63f0140",
+    "0x3664": "0xf940040b",
+    "0x3668": "0xd63f0160",
+    "0x3690": "0xf940080c",
+    "0x3694": "0xd63f0180",
+    "0x1bcdc": "0xd63f0100",
+    "0x1bd00": "0xf9400569",
+    "0x1bd04": "0xd63f0120",
+    "0x1bd18": "0xd63f0140",
+    "0x1bd28": "0xf940218b",
+    "0x1bd2c": "0xd63f0160",
+    "0x1bd44": "0xf94009ac",
+    "0x1bd4c": "0xd63f0180"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "fact": "Public ChipInfoTypes defines SDA865 family 93 and SM8250 alias; exact enuma DisplayDxe compares family to 93 at RVA 0x3620.",
+      "implication": "SM8250-specific clock branch is relevant when real GetChipFamily returns that value; runtime value not observed."
+    },
+    {
+      "id": "F2",
+      "fact": "Exact enuma PE locates Clock GUID 241afae6-885f-4f6c-a7ea-c28eab79c3e5 at 0x3640, then invokes GetClockID +8 at 0x3668 and EnableClock +16 at 0x3694 for gcc_disp_ahb_clk, disp_cc_mdss_rscc_ahb_clk, disp_cc_mdss_rscc_vsync_clk. Fixed EFIClock header matches fetched upstream bytes.",
+      "implication": "Concrete unwrapped method interval between last v6 entry page and later HAL IOMMU query; EnableClock result is not tested before next iteration; failure/hang is possible, not established."
+    },
+    {
+      "id": "F3",
+      "fact": "Observed SID GUID 54b6d3b4-5d33-4f91-8600-6c41d5deb19a is publicly named gEfiHalIommuProtocolGuid (older gEfiSmmuProtocolGuid). Exact enuma query at 0x1bcdc returns to 0x1bce0; then +8 protocol call yields API table, table methods +0,+64,+16 execute, with client string \\_SB_.MDP.",
+      "implication": "Public API table corresponds to domain-create, configure-bypass and attach-device. Mapping into exact enuma provider ABI still needs separate validation. Source Kona early MDP detach does not prove later OEM will not attach again."
+    },
+    {
+      "id": "F4",
+      "fact": "Public old Qualcomm DisplayDxe registers events and initializes/detects display, installs GOP with Mode UINT32_MAX, and populates framebuffer in SetMode.",
+      "implication": "Core return, GOP publication, mode selection, usable framebuffer and console connection require separate evidence; old source is structural reference, not enuma exact code."
+    },
+    {
+      "id": "F5",
+      "fact": "Mu-Silicium nabu is SM8150-AC and USE_CUSTOM_DISPLAY_DRIVER=1; pipa is SM8250-AC and USE_CUSTOM_DISPLAY_DRIVER=0. Early LonelyFool SM8250 uses PCD-derived SimpleFb with SetMode returning success without hardware initialization.",
+      "implication": "Related-device build or screen output cannot be cited as exact enuma OEM DisplayDxe success."
+    },
+    {
+      "id": "F6",
+      "fact": "Mu-Silicium DisplayReEnabler and Aloha DisplayCaller call real DisplayPowerState off/stall/on; Aloha has optional EBS display-off behavior.",
+      "implication": "Conditional later display-power workaround after real protocol/mode confirmation; not an entry-stage fix and not a reason to copy board-specific values."
+    },
+    {
+      "id": "F7",
+      "fact": "Upstream ChipInfo header GUID macro 61224fbe differs from DEC b0760469; OpenABL documents the distinction. Current enuma query uses b0760469 matching its native PE and DEC.",
+      "implication": "Not a newly found local GUID bug; do not replace current GUID from header macro alone."
+    },
+    {
+      "id": "F8",
+      "fact": "Public HALIOMMU example installs protocol before a dummy-client initialization that may return EFI_NOT_READY.",
+      "implication": "Protocol lookup alone is insufficient provider health proof; exact enuma provider return and method pointer lifetime/ABI need checking. Old example does not establish enuma follows identical behavior."
+    },
+    {
+      "id": "F9",
+      "fact": "Public EDK2 GraphicsConsoleControllerDriverStart queries supported modes and calls GOP SetMode when current mode differs; local fixed Mu code has the same relevant call sequence.",
+      "implication": "DXE module dispatch and console driver binding/controller connection are distinct. Current v9 intentionally terminates before BDS; it does not itself qualify controller connection/SetMode. A successful DXE/Core timing result must be followed by separately bounded GOP mode/console work."
+    }
+  ],
+  "next_actions": [
+    "Keep frozen v9 images, qualifiers and trials unchanged; complete fresh paired calibration before target if user requests execution.",
+    "If earlier path requires further offline attribution, verify exact ClockDxe names/EnableClock internals and HALIOMMU publication/ABI against own-device binaries, preserving real statuses.",
+    "If target supports completed DXE plus real Core success, separately qualify protocol publication, GOP initial mode/SetMode and display power/control ownership before BDS.",
+    "Do not copy external SMMU stream IDs, modify memory/verified fields, bypass real providers or fabricate successful return."
+  ],
+  "device_commands": 0,
+  "firmware_edits": 0,
+  "v9_image_edits": 0,
+  "limitations": [
+    "Public reference sources are from other platforms and revisions; no identified drop-in enuma patch or unique hardware root cause.",
+    "Some connector fetch/search requests failed transiently; pinned public raw text was fetched directly and SHA256 recorded.",
+    "Timing inference remains indirect; GOP/ConOut/BDS/XNU not accepted."
+  ]
+}

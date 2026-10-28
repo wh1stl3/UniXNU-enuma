@@ -53,3 +53,16 @@ wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/pytho
 ```
 
 详见operations/2026-10-28-oem-far-clock-v9.md及reports/enuma-oem-far-clock-v9-candidates-20261028.json；原始证据out/oem-far-clock-20261028。源码/脱敏文档按固件→设备仓顺序发布到显式GitHub URL/oem-progress-20261027；不向固件origin（共享主线）推送，不force、不改main。实际发布以git log和out/oem-far-clock-20261028/publication.json为准。
+
+
+## 2026-10-28公开源码与其他设备仓核对补充
+
+本轮只检索/静态对照，无固件修改、重编、设备命令或v9资格/镜像回写。报告reports/enuma-oem-public-research-20261028.json记录17份固定提交公开文本的URL/SHA256，原文仅留out/public-research-20261028-v9；本机原厂PE仍6c6351c3...，14处新增选定指令核对通过。
+
+新增可操作定位：公开ChipInfoTypes把family93定义为SDA865/SM8250。本机0x3620确实比较93，后续0x3640查询Clock GUID 241afae6...，0x3668/0x3694分别调用+8 GetClockID/+16 EnableClock，字符串为gcc_disp_ahb_clk、disp_cc_mdss_rscc_ahb_clk、disp_cc_mdss_rscc_vsync_clk。此为v6最后入口页到后续HAL查询前的一段未包装方法区间，实际执行/返回未知；EnableClock返回后未检查状态，不能把前面的Locate成功当三路时钟已启用。
+
+历史SID简称的54b6d3b4...由公开QcomPkg.dec对应为HAL IOMMU/SMMU。精确本机查询位于0x1bcdc（返回0x1bce0），随后调用协议+8获取函数表，再调表+0/+64/+16，带客户端\_SB_.MDP；旧公开表对应create/configure-bypass/attach，精确本机HAL提供者ABI/返回/资源仍须独立核对。当前Kona源码早期MDP detach不证明OEM后段不重新attach，不复制外机stream IDs或改MMU/内存字段。旧公开HAL样例先发布协议再执行可能失败的dummy初始化，说明Locate成功本身不足证明提供者完全就绪；不推断本机必同实现。
+
+其他仓证据边界：Mu-Silicium nabu=SM8150-AC/custom-display1，pipa=SM8250-AC/custom-display0；早期LonelyFool SM8250使用PCD SimpleFb，不能当enuma原厂DisplayDxe成功样例。公开旧版高通DisplayDxe可能发布GOP但Mode=-1，后续SetMode才填framebuffer；EDK2 GraphicsConsole在DriverBinding Start中QueryMode/SetMode，不能把DXE dispatch完成等同控制台已连接。Aloha DisplayCaller/Silicium ReEnabler有真实显示电源off/stall/on路径，是协议/模式确认后的条件方案，不是当前入口故障的现成修复。ChipInfo头宏61224fbe与DEC b0760469的差异在其他实现也有记录，当前本机原厂查询/追踪已用正确b0760469，不改GUID。
+
+判断更新：尚无唯一根因或可直接套用的enuma修复；下一重点已具体到SM8250显示前置时钟和HAL IOMMU方法链，同时保留“已走远但诊断出口拒绝”的解释。v9三图/校准门禁保持；未来新实测先当次low/high，再target，不沿用旧拍摄就绪。若取得真实Core/DXE完成的合格间接码，再独立推进GOP发布→QueryMode/SetMode→显示电源/ConOut，不把返回成功作为生产GOP验收。
