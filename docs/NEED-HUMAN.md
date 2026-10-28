@@ -1,3 +1,5 @@
+> 2026-10-28 v10本次实机准备：用户明确“可以部署实机了”，并确认“正在拍摄，在场可恢复”。本轮独立记录现场条件，按low2→恢复/人工确认→high27→恢复/人工确认→精确校准→target顺序，各一次临时boot，不自动轮测。候选尚未claim；即时身份/原备份/恢复与当前文档发布门禁通过后先发low。75秒未回合格终点停止追加、优先恢复。不flash/erase/改槽，不改内存或verified；R027冻结、共享主线只读。证据out/oem-gop-mode-live-20261028；v10原有离线资格和镜像字节保持。
+
 > 2026-10-28当前：gop-mode-v10目标及2/27秒对照已完成完整build1、qualification1和离线来源核验，三trial未消费。本机Clock/HAL ABI核对后未发现可确认的接口错配，保留原始方法，新增真实Core成功及整轮DXE后原厂GOP QueryMode/SetMode/读回检查。55项Python、sanitizer/ARM及224/174/182处链接删除负测通过。v9仅离线对照、不安排上机；旧源码准入已过期但镜像/资格字节冻结。没有本轮设备动作，不沿用旧拍摄/校准。 以下旧当前/准备文字按历史阅读。
 
 > 2026-10-28当前：far-clock-v9目标及2/22秒校准镜像已完成完整build4、qualification1和离线来源校验，三trial均未claim/上机。移除诊断晚期GOP/像素出口，保留真实OEM/Core和整轮DXE路径；52项Python与最终机器码删除负测通过。实际时钟校准未完成，目标execute需新low/high报告与精确计划；v8已consumed且恢复通过，不复用旧拍摄就绪。现行STATUS/HANDOFF及operations/2026-10-28-oem-far-clock-v9.md；以下旧当前/准备文字按历史阅读。
