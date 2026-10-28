@@ -1848,3 +1848,10 @@ v8修复了宿主已复现的RestoreTPL后环尾竞态，且实际链接/资格�
 其他仓证据边界：Mu-Silicium nabu=SM8150-AC/custom-display1，pipa=SM8250-AC/custom-display0；早期LonelyFool SM8250使用PCD SimpleFb，不能当enuma原厂DisplayDxe成功样例。公开旧版高通DisplayDxe可能发布GOP但Mode=-1，后续SetMode才填framebuffer；EDK2 GraphicsConsole在DriverBinding Start中QueryMode/SetMode，不能把DXE dispatch完成等同控制台已连接。Aloha DisplayCaller/Silicium ReEnabler有真实显示电源off/stall/on路径，是协议/模式确认后的条件方案，不是当前入口故障的现成修复。ChipInfo头宏61224fbe与DEC b0760469的差异在其他实现也有记录，当前本机原厂查询/追踪已用正确b0760469，不改GUID。
 
 判断更新：尚无唯一根因或可直接套用的enuma修复；下一重点已具体到SM8250显示前置时钟和HAL IOMMU方法链，同时保留“已走远但诊断出口拒绝”的解释。v9三图/校准门禁保持；未来新实测先当次low/high，再target，不沿用旧拍摄就绪。若取得真实Core/DXE完成的合格间接码，再独立推进GOP发布→QueryMode/SetMode→显示电源/ConOut，不把返回成功作为生产GOP验收。
+
+
+## 2026-10-28 gop-mode-v10交付
+
+2026-10-28当前：gop-mode-v10目标及2/27秒对照已完成完整build1、qualification1和离线来源核验，三trial未消费。本机Clock/HAL ABI核对后未发现可确认的接口错配，保留原始方法，新增真实Core成功及整轮DXE后原厂GOP QueryMode/SetMode/读回检查。55项Python、sanitizer/ARM及224/174/182处链接删除负测通过。v9仅离线对照、不安排上机；旧源码准入已过期但镜像/资格字节冻结。没有本轮设备动作，不沿用旧拍摄/校准。
+
+固件2c18bc6，设备仓前提交2d57059，构建edc579d工作快照，三份qualification1。每份2475绑定、55 Python、GOP sanitizer/ARM/真实Core门、224/174/182删除负测通过；无设备动作。真实Clock/HAL接口无已确认错配，保留原始路径，运行条件满足后推进原厂模式设置；code6不等于物理显示成功。修正校准观察有效期不得续期，现为新low2/high27。旧v9原字节/未消费保留且不安排上机，当前源码准入过期。精确产物见STATUS/报告，来源out/oem-gop-mode-20261028。

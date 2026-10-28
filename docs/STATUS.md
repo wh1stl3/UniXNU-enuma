@@ -1,68 +1,55 @@
-# 当前：far-clock-v9三份镜像与软件资格完成，未上机（2026-10-28）
+# 当前：gop-mode-v10三份镜像与软件资格完成，未上机（2026-10-28）
 
-2026-10-28当前：far-clock-v9目标及2/22秒校准镜像已完成完整build4、qualification1和离线来源校验，三trial均未claim/上机。移除诊断晚期GOP/像素出口，保留真实OEM/Core和整轮DXE路径；52项Python与最终机器码删除负测通过。实际时钟校准未完成，目标execute需新low/high报告与精确计划；v8已consumed且恢复通过，不复用旧拍摄就绪。现行STATUS/HANDOFF及operations/2026-10-28-oem-far-clock-v9.md；以下旧当前/准备文字按历史阅读。
+2026-10-28当前：gop-mode-v10目标及2/27秒对照已完成完整build1、qualification1和离线来源核验，三trial未消费。本机Clock/HAL ABI核对后未发现可确认的接口错配，保留原始方法，新增真实Core成功及整轮DXE后原厂GOP QueryMode/SetMode/读回检查。55项Python、sanitizer/ARM及224/174/182处链接删除负测通过。v9仅离线对照、不安排上机；旧源码准入已过期但镜像/资格字节冻结。没有本轮设备动作，不沿用旧拍摄/校准。
 
-### target — oem-far-clock-v9
+### target — oem-gop-mode-v10
 
-- 镜像：`out/oem-far-clock-20261028/target/qualification1/image.img`，3153920字节。
-- image SHA256：`3691d5989d9f50ead22f995b240644e58b579693d7f3db4f6b9d4329215f8e96`
-- qualification1 SHA256：`dfea3b0f95e34702129485b6ba95fbd9599c2226101410dab6e67a7769a46858`
-- FD SHA256：`577dde36ceba29e78393ef6d1a1d34a457686592f72d4d19c4ef0ba64146018b`
-- trial：`96b78e34-892b-4ac1-b84d-8d3cc74a1f82`；session：`10889924087055404375`；未claim。
+- 镜像：`out/oem-gop-mode-20261028/target/qualification1/image.img`，3153920字节。
+- image SHA256：`41585b244499f4405bb0050e31106480e0c039234d931ce4be83c79cab6e17c8`
+- qualification1 SHA256：`a34b0fdb1d2c11ba7584c8bad7a9d306d9d61a3dc4977648d3b153c502332909`
+- FD SHA256：`ddce655ea409c59b33ceb577cd8e59d71587b784bc694fd003d581cb82afb5e9`
+- trial：`bff01371-9799-4d1f-8f58-c5e0143f794b`；session：`10001734413525956626`；未claim。
 
-### low — oem-far-clock-low-v9
+### low — oem-gop-mode-low-v10
 
-- 镜像：`out/oem-far-clock-20261028/low/qualification1/image.img`，3153920字节。
-- image SHA256：`422139ef5b0d26bd4887c21b67e004331d3ca220c74077799cb3c77c848f6ab4`
-- qualification1 SHA256：`cf07716a197bc08d70dad9c5144cc5424b971686f82e8baf6c4ef13dcb56ea44`
-- FD SHA256：`76b1659f70e1cb13f0806bc6b27ed0afc1411b768df85b76a8cf21258fc5bcb7`
-- trial：`d07aaceb-e633-42c3-9746-7c2304740a8b`；session：`72241299989157236`；未claim。
+- 镜像：`out/oem-gop-mode-20261028/low/qualification1/image.img`，3153920字节。
+- image SHA256：`c9cb7c200ea35894e1002075102a432ac8d867c40d89291ef5da5771791ef586`
+- qualification1 SHA256：`61710da895a2eb9774a2193f3fdccdef058d6ce34556086abc95975743b55a03`
+- FD SHA256：`6e30c8eca82c6057cbfc7502988988bd55bfcd1baa2b6ae5f0066e3d85e12713`
+- trial：`2f8dcedf-588e-4e05-809a-f653c1efc25f`；session：`3837297856041383997`；未claim。
 
-### high — oem-far-clock-high-v9
+### high — oem-gop-mode-high-v10
 
-- 镜像：`out/oem-far-clock-20261028/high/qualification1/image.img`，3153920字节。
-- image SHA256：`b8980a2d309b42b8b9207ac63fe8e0ab7ba68d545bfa97777071ed721277ce97`
-- qualification1 SHA256：`3a8d1876bf807e1d4ca8845006e86809b5daf40c42ee7a380af4b65a18cc52c4`
-- FD SHA256：`38e3113afdf34d8cc86cb3113c274039371a0d93c9966d8ca6692c6195e23889`
-- trial：`0e8e88d1-faea-4829-8b8c-93ebbece2544`；session：`360695613987928583`；未claim。
+- 镜像：`out/oem-gop-mode-20261028/high/qualification1/image.img`，3153920字节。
+- image SHA256：`d581d070a30a942fb0bb6662404e875c472ad1d36ccd366b124d45237080960e`
+- qualification1 SHA256：`bb6d3f5386163875e1b583b3fbaf3078a82107492bc3f2d2fb1299e003e9a01e`
+- FD SHA256：`92579193b3f4535a68829b012b25c72ec0d250ac1ba814fcd73e682a0bc7a34a`
+- trial：`c6f3f7dc-52ed-4e9a-8dd2-721a87075cae`；session：`10631535210084727465`；未claim。
 
-## 当前改变与证据边界
+## 当前分析、行为及证据
 
-v8在修复可复现通知竞态后仍由用户报告无页并自行返回，不能继续把该竞态当唯一原因。最大可操作方向是区分末端显示拒绝、提前终止和真实DXE返回。v9保留精确原厂DisplayDxe PE、私有SystemTable同步、v8 RAM事件临界区和真实CoreStartImage状态，OEM中途不绘制/等待；整轮CoreDispatcher返回后选计时终点，BDS前复位。诊断出口不再查询晚期GOP/Mode或读取MDP/像素。
+优先级按用户要求固定为三路显示时钟→HAL IOMMU→生产GOP模式/控制台。精确本机Clock接口1e150/版本10009、GetClockID14dc、EnableClock1524与固定头一致，三路名称存在；后端依赖319f0的DAL上下文。HAL接口9098/版本1、GetAPI14cc写出函数表90b0，与DisplayDxe真实参数一致；create16b4、attach1920、configure-bypass2f10。该本机HAL入口发布后调用的15a0只是返回0，不能借公开旧平台dummy失败路径认定本机同错。原始XBL也把HAL放在Variable/Watchdog等之前，通用Arch DEPEX不构成盲目重排依据。实际方法运行状态仍未知，无新实机根因结论。
 
-目标类1/2/3/4/5分别等待2/7/12/17/22秒：受控异常、诊断terminal、DXE返回而缺少匹配Core返回、DXE返回且真实Core状态非零、DXE返回且真实Core EFI_SUCCESS。low/high强制2/22秒，只作时间对照，不能证明Core返回。不是独立看门狗；可变执行前缀和未包装复位仍会别名，时间码只能作间接推断，不能替代生产GOP/ConOut/BDS/输入/XNU验收。
+v10原厂PE、Clock/HAL提供者、私有SystemTable同步与RAM事件临界区保持。整轮CoreDispatcher返回且匹配目标Core严格EFI_SUCCESS后才进入新helper；失败状态、缺Owner/返回位、其他镜像不能启用它。枚举最多8个GOP handle，唯一候选的QueryMode/SetMode/Blt函数须位于本次已认证原厂DisplayDxe text，解引用前校验原Core内存图与RAM跨度/算术。QueryMode(0)最多一次，核对1600×2560/stride/像素格式；正常信息分配回收后最多一次真实SetMode(0)，再读回Mode0、Info及framebuffer尺寸/既有Display Reserved边界。未绘制，不Blt、不ConnectAll、不进BDS、不直接访问MDP/像素或循环显示电源，不伪造EFI_SUCCESS。
 
-三份最终FD/原厂PE及panel RAW/编译flags/Boot v3封包和解包回读通过；每份2470来源绑定，同一源码指纹。实际helper和真实Core配置表/绑定/ARM64编译及ASan/UBSan、v7竞态复现/v8修复/删hook负测通过，52项Python通过。实际链接目标/low/high逐条删除负测99/82/90处，覆盖真实返回身份/状态门、表发布同步、RestoreTPL前事件交付、Recorded回调地址、计时与CPU默认异常出口，限选定序列，不是完整控制流证明。
+新增code6等待27秒，仅对应真实Core成功后的原厂GOP API/结构检查通过；code5为真实Core成功但GOP模式未通过完整检查，code1/2/3/4保持异常/诊断终点/缺匹配返回/Core非零。新low/high强制2/27秒且保留真实GOP路径，不能从对照时长推断成功。无独立看门狗，方法内部可阻塞；75秒主机恢复观察限不变，27秒等待计入预算，不能保证自动返回。时间码仍是间接推断，不能证明物理scanout/画面、ConOut/BDS/输入/XNU。
 
-最终隔离build4基于49affe7工作树快照；固件现提交edc579d9e02beb7e395f4bad680329adf07b70bb，不称提交后重编。build1 unused-helper、build2定向中止、build3旧捕获头依赖失败原样保留；以独立无预包含/无unused抑制的真实Core绑定ARM编译补足夹具，再构建build4。新FD审计逐项核对当前firmware与实际原始快照，阻止新源码给旧编译背书。patch UTF8 LF与隔离staging git apply --check均通过。
+GOP helper ASan/UBSan与严格ARM64通过，覆盖唯一原厂候选、错误/警告、坏指针/内存类型、大小/stride/格式/帧边界、清理失败和禁止重试/禁止Blt。真实Core绑定验证错误状态/错handle/缺Owner不能进入GOP。55项Python含六码/错族/缺计划先于设备拒绝及校准到期边缘；计划到期不再由创建时间给旧观察续期，取两个控制观察的一小时上限与计划创建上限的最早者。最终PE224/174/182逐条指令删除均拒绝，覆盖Core身份/真实状态门、同步与事件、GOP原厂代码归属/实际QueryMode/SetMode/最终边界以及CPU时钟出口，仅为选定序列而非全程序证明。
 
-最后设备证据仍是v8：00:51用户确认自行回Android且无页，独立身份/完成/root/A槽/解锁和原分区/备份核验通过；没有本轮独立视频判读。本轮零设备命令，当前在线状态未刷新，无恢复欠项。R027/v6/v7/v8镜像及资格冻结摘要核验保持，唯一写入根为本worktree，D:/Code/PortingiOS/enuma/UniXNU-enuma共享主线只读。
+三份FD/原厂模块/panel RAW/真实compiler flags、Boot v3封包解包和每份2475绑定通过，同一源码logic指纹，全部未claim。固件2c18bc6；构建基于edc579d工作树快照，不能称提交后重编。有效组件证据gop1/clock2/progress1/path1/race1和各binding3；初次宿主夹具缺ZeroMem实现的链接错误已补齐夹具，不放宽真实编译条件。v9三图/旧资格及R027/v6/v7/v8冻结摘要复核通过。最后设备证据仍是v8在00:51自动回Android及独立恢复/原分区核验；本轮零设备命令，当前在线状态未刷新，无恢复欠项。
 
 ## 下一步
 
-1. 不重试已consumed的v7/v8，不从旧录像状态推断本轮就绪。新low/high/target每份均独立单次trial，无自动轮测。
-2. 沿既有临时boot授权准备本次现场，重新核对当次拍摄/人在场可恢复、即时enuma身份/原备份/原双分区/恢复路径及文档发布。先low，独立核验恢复和人工确认自动返回；再high同样处理。
-3. 只有low/high启动原点区间<=0.25秒、新boot_id、同源码、各自自动返回及独立恢复通过，扣除2/22秒后基线包络<=1秒，才生成绑定精确目标、有效一小时的计划。target execute缺计划或过期/错源/错图时在claim和任何设备命令前拒绝；不能以Android总就绪耗时直接解码。
-4. 两份完整控制报告包含automatic_android_return=true、independent_recovery_passed=true与原clock_observation。用scripts/oem_exit_clock.py --low <report> --high <report> --qualification <target/qualification1/qualification.json> --output <out/plan.json>生成计划，再按即时门禁单独执行目标。target完成后报告须同样确认自动返回与独立恢复，decode只给间接类别；漂移/歧义/人工恢复不作正向分类。
-5. 每次75秒未回合格终点先停止追加并恢复，原样保留状态；恢复后离线分析。无flash/erase/改槽、内存base/size或verified变化。原始媒体/out/二进制/备份/设备标识不得入Git或云端。
+本轮不再安排v9上机，仅保留未消费离线对照；源码升级后其旧准入不再适用于当前树。新v10按当次现场条件依次low→独立恢复/人工确认自动返回→high→同样确认→生成精确目标校准计划→target，各一次临时boot，无自动轮测。目标execute缺少/错族/错图/错源/过期校准时在claim和任何设备命令前拒绝。每次重新核对enuma、原备份/双分区、恢复路径及当次拍摄和人在场可恢复；不继承v8/v9就绪。
 
-默认离线入口（不带execute，无设备命令）：
+控制报告须automatic_android_return=true、independent_recovery_passed=true和本次clock_observation；新boot_id、原点区间<=0.25秒、扣除2/27秒后基线包络<=1秒，用固定±1秒窗口，不能用Android总就绪耗时解码。两份观察的一小时有效期不能靠晚建计划延长。目标完成后同样独立恢复并确认按键事实，再作间接分类；歧义、漂移、人工恢复不给正向类别。75秒未回合格终点停止追加并优先恢复，不自动重试；恢复后继续离线分析。
+
+若仍提前终止，按本机三路时钟DAL后端与HAL domain方法链取证；若真实Core/DXE及GOP模式的合格间接码支持推进，再独立验收物理画面、ConOut/受控控制器连接和BDS。不能硬编码family、跳过提供者或复制外机SMMU stream IDs。共享UniXNU-enuma只读、R027冻结；不改内存base/size/verified，不flash/erase/改槽。原始媒体/out/二进制/备份/标识不入Git或云端。
+
+默认离线入口，无设备命令：
 
 ```
-wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/python3 -B scripts/run_oem_runtime_trial.py --qualification out/oem-far-clock-20261028/target/qualification1
+wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/python3 -B scripts/run_oem_runtime_trial.py --qualification out/oem-gop-mode-20261028/target/qualification1
 ```
 
-详见operations/2026-10-28-oem-far-clock-v9.md及reports/enuma-oem-far-clock-v9-candidates-20261028.json；原始证据out/oem-far-clock-20261028。源码/脱敏文档按固件→设备仓顺序发布到显式GitHub URL/oem-progress-20261027；不向固件origin（共享主线）推送，不force、不改main。实际发布以git log和out/oem-far-clock-20261028/publication.json为准。
-
-
-## 2026-10-28公开源码与其他设备仓核对补充
-
-本轮只检索/静态对照，无固件修改、重编、设备命令或v9资格/镜像回写。报告reports/enuma-oem-public-research-20261028.json记录17份固定提交公开文本的URL/SHA256，原文仅留out/public-research-20261028-v9；本机原厂PE仍6c6351c3...，14处新增选定指令核对通过。
-
-新增可操作定位：公开ChipInfoTypes把family93定义为SDA865/SM8250。本机0x3620确实比较93，后续0x3640查询Clock GUID 241afae6...，0x3668/0x3694分别调用+8 GetClockID/+16 EnableClock，字符串为gcc_disp_ahb_clk、disp_cc_mdss_rscc_ahb_clk、disp_cc_mdss_rscc_vsync_clk。此为v6最后入口页到后续HAL查询前的一段未包装方法区间，实际执行/返回未知；EnableClock返回后未检查状态，不能把前面的Locate成功当三路时钟已启用。
-
-历史SID简称的54b6d3b4...由公开QcomPkg.dec对应为HAL IOMMU/SMMU。精确本机查询位于0x1bcdc（返回0x1bce0），随后调用协议+8获取函数表，再调表+0/+64/+16，带客户端\_SB_.MDP；旧公开表对应create/configure-bypass/attach，精确本机HAL提供者ABI/返回/资源仍须独立核对。当前Kona源码早期MDP detach不证明OEM后段不重新attach，不复制外机stream IDs或改MMU/内存字段。旧公开HAL样例先发布协议再执行可能失败的dummy初始化，说明Locate成功本身不足证明提供者完全就绪；不推断本机必同实现。
-
-其他仓证据边界：Mu-Silicium nabu=SM8150-AC/custom-display1，pipa=SM8250-AC/custom-display0；早期LonelyFool SM8250使用PCD SimpleFb，不能当enuma原厂DisplayDxe成功样例。公开旧版高通DisplayDxe可能发布GOP但Mode=-1，后续SetMode才填framebuffer；EDK2 GraphicsConsole在DriverBinding Start中QueryMode/SetMode，不能把DXE dispatch完成等同控制台已连接。Aloha DisplayCaller/Silicium ReEnabler有真实显示电源off/stall/on路径，是协议/模式确认后的条件方案，不是当前入口故障的现成修复。ChipInfo头宏61224fbe与DEC b0760469的差异在其他实现也有记录，当前本机原厂查询/追踪已用正确b0760469，不改GUID。
-
-判断更新：尚无唯一根因或可直接套用的enuma修复；下一重点已具体到SM8250显示前置时钟和HAL IOMMU方法链，同时保留“已走远但诊断出口拒绝”的解释。v9三图/校准门禁保持；未来新实测先当次low/high，再target，不沿用旧拍摄就绪。若取得真实Core/DXE完成的合格间接码，再独立推进GOP发布→QueryMode/SetMode→显示电源/ConOut，不把返回成功作为生产GOP验收。
+详见operations/2026-10-28-oem-gop-mode-v10.md、reports/enuma-oem-gop-mode-v10-candidates-20261028.json、reports/enuma-oem-clock-hal-static-20261028.json及out/oem-gop-mode-20261028。固件→设备仓按显式GitHub URL/oem-progress-20261027发布，不推firmware的本地origin，不force。实际发布以git log及本输出publication.json为准。

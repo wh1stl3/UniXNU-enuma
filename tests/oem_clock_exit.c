@@ -15,8 +15,8 @@ int main(void){
   assert(EnumaOemClockClass(TRUE,TRUE,EFI_SUCCESS)==5);
   assert(EnumaOemClockClass(TRUE,TRUE,EFI_ABORTED)==4);
   assert(EnumaOemClockClass(TRUE,TRUE,EFI_WARN_UNKNOWN_GLYPH)==4);
-  for(UINT32 C=0;C<7;C++){
-    UINT32 Chosen=ENUMA_OEM_CLOCK_FORCE?ENUMA_OEM_CLOCK_FORCE:(C<1||C>5?2:C);
+  for(UINT32 C=0;C<8;C++){
+    UINT32 Chosen=ENUMA_OEM_CLOCK_FORCE?ENUMA_OEM_CLOCK_FORCE:(C<1||C>ENUMA_OEM_CLOCK_MAX?2:C);
     assert(EnumaOemClockDelay(C)==2000000+5000000*(Chosen-1));
     Resets=ReturnReset=0;
     if(!setjmp(Jump)){EnumaOemClockExit(C);assert(0);}

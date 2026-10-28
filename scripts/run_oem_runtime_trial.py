@@ -18,9 +18,9 @@ def main():
     if not a.execute:
         print('PASS: offline candidate binding; no device commands');return
     if not a.human_ready:raise ValueError('current filming and manual recovery readiness required')
-    from oem_exit_clock import SCOPES,require_plan,logic
+    from oem_exit_clock import SCOPES,TARGET_SCOPES,require_plan,logic
     clock=q['scope'] in SCOPES
-    if q['scope']==SCOPES[0]:
+    if q['scope'] in TARGET_SCOPES:
         if not a.clock_calibration:raise ValueError('fresh low/high calibration required before target execution')
         require_plan(q,json.loads(a.clock_calibration.read_text()))
     local_state=ROOT/'out/device-tests/current.local.json'

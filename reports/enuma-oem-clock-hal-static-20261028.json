@@ -1,0 +1,63 @@
+{
+  "ClockDxe": {
+    "sha256": "834428700f5e034e52285e1d516b98e86e71ce4b6d7211a9b40fa87d92137cab",
+    "image": "out\\oem-far-clock-20261028\\target\\build4\\oem-vendor\\Binaries\\enuma\\ClockDxe\\ClockDxe.efi",
+    "candidate_interface_tables": [
+      {
+        "table_rva": "0x1e150",
+        "revision": "0x10009",
+        "first_methods": [
+          "0x14dc",
+          "0x1524",
+          "0x1558"
+        ]
+      }
+    ],
+    "clock_names": {
+      "gcc_disp_ahb_clk": "0x15393",
+      "disp_cc_mdss_rscc_ahb_clk": "0x15b27",
+      "disp_cc_mdss_rscc_vsync_clk": "0x15e86"
+    },
+    "dal_context_slot": "0x319f0",
+    "context_initial_raw_value": "0x0"
+  },
+  "HALIOMMU": {
+    "sha256": "36a5adbe91a796940f4c09eb53ae4ffb1632ef20d8c3085f7cceb2a706c1e306",
+    "image": "out\\oem-far-clock-20261028\\target\\build4\\oem-vendor\\Binaries\\enuma\\HALIOMMU\\HALIOMMU.efi",
+    "candidate_interface_tables": [
+      {
+        "table_rva": "0x9098",
+        "revision": "0x1",
+        "first_methods": [
+          "0x14cc",
+          "0x1500",
+          "0x16b4"
+        ]
+      }
+    ],
+    "api_table_rva": "0x90b0",
+    "get_api_output_store_rva": "0x14ec",
+    "api_selected_entries": {
+      "create": "0x16b4",
+      "attach": "0x1920",
+      "configure_bypass": "0x2f10"
+    },
+    "entry_after_publication": "0x157c calls 0x15a0, which returns zero; no public-mirror dummy initialization body in this exact binary"
+  },
+  "ChipInfo": {
+    "sha256": "fbb3aad104c7ea0d06ab932961d55ebd5b19a6548c6813476099474e91997838",
+    "image": "out\\oem-far-clock-20261028\\target\\build4\\oem-vendor\\Binaries\\enuma\\ChipInfo\\ChipInfo.efi",
+    "candidate_interface_tables": [
+      {
+        "table_rva": "0x90d0",
+        "revision": "0x10002",
+        "first_methods": [
+          "0x145c",
+          "0x149c",
+          "0x14dc"
+        ]
+      }
+    ]
+  },
+  "scope": "Exact own-device static ABI/pointer-table review; no runtime provider success proof"
+}

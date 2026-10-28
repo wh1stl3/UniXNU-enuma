@@ -51,8 +51,8 @@ class Image:
         self.mark(a, name + ':' + hex(off))
 
 
-def check(core, mapping, cpu, cpu_map, force):
-    if force not in (0, 1, 5):
+def check(core, mapping, cpu, cpu_map, force, gop=False):
+    if force not in (0, 1, 5, 6) or (force==6 and not gop):
         raise ValueError('invalid clock force')
     c, p = Image(core, mapping), Image(cpu, cpu_map)
     for _, n in c.entries:
@@ -70,7 +70,10 @@ def check(core, mapping, cpu, cpu_map, force):
     if c.word(d + 8) != 0xd4200020:
         raise ValueError('completion no-return changed')
     c.mark(d + 8, 'dispatch_noreturn')
-    if force == 0:
+    if gop:
+        from check_oem_gop_code import check_core
+        check_core(c,force)
+    elif force == 0:
         c.seq('EnumaOemFarDispatchComplete', {0xc:0x5280008b, 0x14:0xf9400109,
             0x18:0xa941a908, 0x1c:0xf100013f, 0x20:0x1a9f07e9,
             0x24:0xd3461908, 0x28:0xf100015f, 0x2c:0x1a8b156a,
@@ -155,7 +158,7 @@ def check(core, mapping, cpu, cpu_map, force):
     for off,n in ((8,'MicroSecondDelay'),(0xc,'ResetCold'),(0x10,'CpuPause')):
         p.call('EnumaOemClockExit',off,n)
     p.seq('EnumaOemClockExit',{0x14:0x17ffffff})
-    if force != 5:
+    if force not in (5,6):
         p.seq('MicroSecondDelay',{8:0x52994000,0xc:0x72a77340,
             0x14:0x52994000,0x18:0x72a77340})
         p.call('MicroSecondDelay',0x10,'NanoSecondDelay')
@@ -164,25 +167,25 @@ def check(core, mapping, cpu, cpu_map, force):
             raise ValueError('second one-second tail delay missing')
         p.mark(a,'second_second')
     else:
-        p.seq('MicroSecondDelay',{0x10:0x52963013,0x14:0x52884814,0x18:0x928847f5,
-            0x1c:0x72a029f3,0x20:0x72a001f4,0x24:0xf2bffe15,0x28:0xeb14027f,
+        p.seq('MicroSecondDelay',{0x10:(0x529f9813 if force==6 else 0x52963013),0x14:0x52884814,0x18:0x928847f5,
+            0x1c:(0x72a03373 if force==6 else 0x72a029f3),0x20:0x72a001f4,0x24:0xf2bffe15,0x28:0xeb14027f,
             0x2c:0x540000c3,0x30:0x52994000,0x34:0x8b150273,
             0x38:0x72a77340,0x40:0x17fffffa,0x50:0xd65f03c0})
         p.call('MicroSecondDelay',0x3c,'NanoSecondDelay')
     return c,p
 
 
-def verify(core, mapping, cpu, cpu_map, force):
-    c,p=check(core,mapping,cpu,cpu_map,force)
+def verify(core, mapping, cpu, cpu_map, force, gop=False):
+    c,p=check(core,mapping,cpu,cpu_map,force,gop)
     for which,obj in enumerate((c,p)):
         for name,a in obj.sites.items():
             blob=bytearray(obj.pe);struct.pack_into('<I',blob,file_offset(blob,a),0xd503201f)
             try:check(bytes(blob) if which==0 else core,mapping,
-                      bytes(blob) if which==1 else cpu,cpu_map,force)
+                      bytes(blob) if which==1 else cpu,cpu_map,force,gop)
             except ValueError:pass
             else:raise ValueError('removed clock instruction admitted: '+name)
     return dict(core_sites={n:hex(a) for n,a in c.sites.items()},
                 cpu_sites={n:hex(a) for n,a in p.sites.items()},
-                deletion_checks=len(c.sites)+len(p.sites),force=force,
+                deletion_checks=len(c.sites)+len(p.sites),force=force,gop_mode=gop,
                 cpu_exception_rva=hex(p.sym('CommonCExceptionHandler')),
                 scope='selected linked timer/return/sync/CPU-default-exception sequences only; no hardware path proof')

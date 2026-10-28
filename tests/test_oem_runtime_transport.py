@@ -12,6 +12,11 @@ class Transport(unittest.TestCase):
         with patch.object(runner,'validate',return_value=(q,Path('unused'))),patch.object(runner,'claim') as claim,patch.object(runner.subprocess,'run') as run,patch.object(sys,'argv',['trial','--qualification','unused','--execute','--human-ready']):
             with self.assertRaisesRegex(ValueError,'calibration required'):runner.main()
             claim.assert_not_called();run.assert_not_called()
+    def test_gop_target_missing_calibration_before_claim_or_device(self):
+        q=dict(scope='oem-gop-mode-v10')
+        with patch.object(runner,'validate',return_value=(q,Path('image.img'))),patch.object(runner,'claim') as claim,patch.object(runner.subprocess,'run') as run,patch.object(sys,'argv',['trial','--qualification','out','--execute','--human-ready']):
+            with self.assertRaisesRegex(ValueError,'calibration required'):runner.main()
+            claim.assert_not_called();run.assert_not_called()
     def run_case(self,boot_failure=False,bad_android=False,clock_failure=False):
         with tempfile.TemporaryDirectory() as tmp:
             base=Path(tmp);root=base/'isolated';original=base/'original';backup=original/'out/backup'

@@ -34,7 +34,7 @@ STATIC EFI_STATUS CoreHandleProtocol(EFI_HANDLE H,EFI_GUID *G,VOID **Out){
 #include <Library/TimerLib.h>
 #include <Library/ResetSystemLib.h>
 #include <Library/BaseLib.h>
-UINTN EFIAPI MicroSecondDelay(UINTN N){assert(N>=2000000&&N<=22000000);return N;}
+UINTN EFIAPI MicroSecondDelay(UINTN N){assert(N>=2000000&&N<=27000000);return N;}
 VOID EFIAPI ResetCold(VOID){Stops++;longjmp(StopJump,1);}
 VOID EFIAPI CpuPause(VOID){abort();}
 #else
@@ -100,6 +100,17 @@ int main(int argc,char **argv){
       assert(!Stops);EnumaOemCoreAfterStart((EFI_HANDLE)1,EFI_ABORTED);assert(!Stops);
       if(setjmp(StopJump)==0){EnumaOemFarDispatchComplete();assert(0);}
       assert(Stops==1&&OriginalAllocations==ENUMA_PROGRESS_CALL+1);
+#if ENUMA_OEM_GOP_MODE
+      assert(!mOemGopMode.Attempted); // failed real Core status never enters GOP
+      EnumaOemCoreAfterStart((EFI_HANDLE)2,EFI_SUCCESS);
+      assert(mOemProgress.FarStatus==EFI_ABORTED); // wrong image cannot enable it
+      ENUMA_SERVICE_TRACE *SavedOwner=mOemProgress.Owner;mOemProgress.Owner=NULL;
+      if(setjmp(StopJump)==0){EnumaOemFarDispatchComplete();assert(0);}
+      assert(!mOemGopMode.Attempted);mOemProgress.Owner=SavedOwner;
+      EnumaOemCoreAfterStart((EFI_HANDLE)1,EFI_SUCCESS);
+      if(setjmp(StopJump)==0){EnumaOemFarDispatchComplete();assert(0);}
+      assert(mOemGopMode.Attempted&&!mOemGopMode.Validated); // absent services refuse
+#endif
     }else if(ENUMA_OEM_MAIN_ENTRY){
       EFI_GUID Main={0xb0760469,0x970c,0x487a,{0xa4,0xb5,0x28,0xdb,0x7b,0x45,0xce,0xf1}};
       assert(mOemCoreTrace.Boot.AllocatePool(EfiBootServicesData,32,NULL)==EFI_OUT_OF_RESOURCES);

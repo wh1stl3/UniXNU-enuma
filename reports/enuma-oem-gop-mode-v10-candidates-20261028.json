@@ -1,0 +1,62 @@
+{
+  "software_ready": true,
+  "hardware_executed": false,
+  "clock_calibration_complete": false,
+  "build_snapshot_base": "edc579d9e02beb7e395f4bad680329adf07b70bb",
+  "post_commit_rebuild": false,
+  "logic_sha256": "1979002a5024244c4a3fd1101ae8516395c96daee6087da970e7563c4c1e378c",
+  "candidates": {
+    "target": {
+      "scope": "oem-gop-mode-v10",
+      "trial_id": "bff01371-9799-4d1f-8f58-c5e0143f794b",
+      "session": 10001734413525956626,
+      "image": "out/oem-gop-mode-20261028/target/qualification1/image.img",
+      "image_sha256": "41585b244499f4405bb0050e31106480e0c039234d931ce4be83c79cab6e17c8",
+      "image_bytes": 3153920,
+      "qualification_sha256": "a34b0fdb1d2c11ba7584c8bad7a9d306d9d61a3dc4977648d3b153c502332909",
+      "fd_sha256": "ddce655ea409c59b33ceb577cd8e59d71587b784bc694fd003d581cb82afb5e9",
+      "bound_sources": 2475,
+      "instruction_deletion_checks": 224,
+      "unclaimed": true
+    },
+    "low": {
+      "scope": "oem-gop-mode-low-v10",
+      "trial_id": "2f8dcedf-588e-4e05-809a-f653c1efc25f",
+      "session": 3837297856041383997,
+      "image": "out/oem-gop-mode-20261028/low/qualification1/image.img",
+      "image_sha256": "c9cb7c200ea35894e1002075102a432ac8d867c40d89291ef5da5771791ef586",
+      "image_bytes": 3153920,
+      "qualification_sha256": "61710da895a2eb9774a2193f3fdccdef058d6ce34556086abc95975743b55a03",
+      "fd_sha256": "6e30c8eca82c6057cbfc7502988988bd55bfcd1baa2b6ae5f0066e3d85e12713",
+      "bound_sources": 2475,
+      "instruction_deletion_checks": 174,
+      "unclaimed": true
+    },
+    "high": {
+      "scope": "oem-gop-mode-high-v10",
+      "trial_id": "c6f3f7dc-52ed-4e9a-8dd2-721a87075cae",
+      "session": 10631535210084727465,
+      "image": "out/oem-gop-mode-20261028/high/qualification1/image.img",
+      "image_sha256": "d581d070a30a942fb0bb6662404e875c472ad1d36ccd366b124d45237080960e",
+      "image_bytes": 3153920,
+      "qualification_sha256": "bb6d3f5386163875e1b583b3fbaf3078a82107492bc3f2d2fb1299e003e9a01e",
+      "fd_sha256": "92579193b3f4535a68829b012b25c72ec0d250ac1ba814fcd73e682a0bc7a34a",
+      "bound_sources": 2475,
+      "instruction_deletion_checks": 182,
+      "unclaimed": true
+    }
+  },
+  "python_tests_passed": 55,
+  "gop_helper_sanitizer_arm_passed": true,
+  "clock_mode_force_combinations": 6,
+  "frozen_hashes_rechecked": true,
+  "v9_execution": "not scheduled; frozen unclaimed offline comparison; source admission stale",
+  "device_commands_this_turn": 0,
+  "limitations": [
+    "Code6: indirect timing inference for native mode API and structure/bounds checks; no photons, scanout or ConOut acceptance",
+    "Fresh same-source low2/high27 calibration and confirmed automatic return plus independent recovery required before target",
+    "Native methods can block; 75-second host recovery limit unchanged; no asynchronous watchdog",
+    "No native Clock/HAL bypass, synthetic status, direct MDP/pixel access, ConnectAll, BDS, memory/verified changes or partition writes"
+  ],
+  "firmware_commit": "2c18bc63352f6ac424e1aa13ca364365dec7953d"
+}

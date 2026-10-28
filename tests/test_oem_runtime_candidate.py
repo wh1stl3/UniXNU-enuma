@@ -98,7 +98,7 @@ class Admission(unittest.TestCase):
             validate(self.root,self.out)
             self.assertIsNone(self.q['runtime_limits']['roi'])
             self.assertEqual(self.q['runtime_limits']['max_windows'],0)
-            self.assertEqual(self.q['runtime_limits']['max_terminal_delay_us'],22000000)
+            self.assertEqual(self.q['runtime_limits']['max_terminal_delay_us'],27000000 if scope.startswith('oem-gop-mode-') else 22000000)
             self.q['runtime_limits']['max_boots']=2;self.save()
             self.assertRaises(ValueError,validate,self.root,self.out)
 
