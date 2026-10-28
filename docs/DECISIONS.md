@@ -1875,3 +1875,9 @@ v8修复了宿主已复现的RestoreTPL后环尾竞态，且实际链接/资格�
 ## 2026-10-28 v11实际故障归因
 
 > 2026-10-28 v11最终取证：三页已确认，E13纠正为 G04DB5DEA653024D1A；唯一归属 ClockDxe，PC=0x9a88ad58/RVA=0x11d58，ESR=0x96000007，FAR=0x0af022c0，32位读取触发同EL三级地址翻译故障。实际构建MemoryMap无覆盖该地址的描述符，本机FDT的DISP_CC为0x0af00000/0x20000。优先审查并修复显示时钟映射，保留原厂真实调用和异常取证；尚未修改固件或制作v12。v11已消费、自动返回且恢复核验通过，不重试。详见 docs/operations/2026-10-28-oem-clock-fault-analysis.md。以下旧待确认/未消费文字为历史。
+
+## v12最终软件交付（2026-10-28）
+
+2026-10-28当前：v12（oem-exception-dispcc-v12）已完成build2/qualification1与新来源绑定，新增DISP_CC 0x0af00000/0x20000 NS_DEVICE映射，保留真实OEM/Core/GOP与v11三页异常取证。66项Python、8组宿主验证及最终链接/FD映射检查通过；软件就绪，尚未上机，trial未消费，不能复用v11拍摄就绪。旧镜像/资格冻结，旧源码准入失效。
+
+固件9d7b56d49faeb3bc2f5236e10b3a9970c08a9edf；镜像SHA256 `a14b999f39c590b1c0a43ea3f4cdb560396d713c03b5641d41c4f40fa6797e5c`，资格SHA256 `91cdb1afbb9779e69e0ac8a1113f6080f3fc4563d57f1058001a8f4b2ba0a761`，trial `9da1688c-96a7-4adf-9774-f4661f5a5d13`。2492项来源绑定，72个FD PE镜像，SEC TE映射独立核对。全部软件验证通过、未上机；详情现行STATUS及reports/enuma-oem-dispcc-v12-20261028.json。

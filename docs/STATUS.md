@@ -1,35 +1,29 @@
-> 2026-10-28 v11最终取证：三页已确认，E13纠正为 G04DB5DEA653024D1A；唯一归属 ClockDxe，PC=0x9a88ad58/RVA=0x11d58，ESR=0x96000007，FAR=0x0af022c0，32位读取触发同EL三级地址翻译故障。实际构建MemoryMap无覆盖该地址的描述符，本机FDT的DISP_CC为0x0af00000/0x20000。优先审查并修复显示时钟映射，保留原厂真实调用和异常取证；尚未修改固件或制作v12。v11已消费、自动返回且恢复核验通过，不重试。详见 docs/operations/2026-10-28-oem-clock-fault-analysis.md。以下旧待确认/未消费文字为历史。
+# v12 软件资格完成，待当轮实机条件
 
-> 2026-10-28T18:19:38.221827+08:00 v11已单次消费，用户确认未按键、自行返回且拍到日志页；独立身份/完成/root/A槽/解锁及原双分区和备份摘要核验通过。48.55秒原视频已落位，独立看到E11/E12/E13并保存转录，完整字符及GUID歧义等待人工核对，不预写镜像归属。不得重试同trial；原始视频只留Media-enuma，本地证据out/oem-exception-live-20261028。
+2026-10-28当前：v12（oem-exception-dispcc-v12）已完成build2/qualification1与新来源绑定，新增DISP_CC 0x0af00000/0x20000 NS_DEVICE映射，保留真实OEM/Core/GOP与v11三页异常取证。66项Python、8组宿主验证及最终链接/FD映射检查通过；软件就绪，尚未上机，trial未消费，不能复用v11拍摄就绪。旧镜像/资格冻结，旧源码准入失效。
 
-> 2026-10-28T18:05:28.519326+08:00 v11本轮已明确录像开始、在场可恢复，精确trial 3ffbbf8d-21f5-4a1f-ae58-a84e56596c0f 准备单次临时boot。即时身份/备份/分区校验通过后由原runner再次校验并执行；75秒无合格返回先恢复，不追加、不刷分区。异常现场与所属镜像仍未知，无页不能定位；v12尚未制作。文档最后统一发布，旧录像不复用。
+用户已批准制作该范围的v12；不改board.toml/bringup-plan RAM字段、verified、分区。本轮无设备命令，共享主线只读、R027冻结。v11已消费且自动回Android，独立恢复核验通过；当前在线状态未重新查询。
 
-> 2026-10-28当前：exception-v11 已完成完整 build3 / qualification2、61项WSL Python回归、异常取证ASan/UBSan及严格ARM64检查、277处最终机器码删除负测、2489项来源绑定和72镜像FD清单；20份R027/旧候选镜像资格摘要保持。新trial 3ffbbf8d-21f5-4a1f-ae58-a84e56596c0f 未claim/上机，不沿用旧拍摄就绪。v10三图均已消费，仍仅间接异常证据；本轮尚无实际PC/ESR/FAR。保留真实OEM/Core及原厂GOP推进路径，异常时最多三页采集原始现场/镜像归属。详见 operations/2026-10-28-oem-exception-v11.md 和 reports/enuma-oem-exception-v11-20261028.json；源码与文档最后统一发布，不让网络阻塞本地工作。 以下旧当前/就绪文字按历史阅读。
+## 精确候选
 
-# 当前：v10三图均已单次消费，用户确认全部未按键、自行回Android且没有新画面，独立恢复/原分区及备份核验通过。低/高校准基线6.164..6.362秒，目标原点8.127..8.261秒，间接推断code1异常出口；不是直接异常日志，未取得Core/GOP成功证据。本组三图不重试。（2026-10-28）
+- 镜像：`out/oem-dispcc-20261028/qualification1/image.img`，3153920字节。
+- 镜像SHA256：`a14b999f39c590b1c0a43ea3f4cdb560396d713c03b5641d41c4f40fa6797e5c`。
+- FD SHA256：`d927b6f738b355c630bcfd76ce707a0298b1a589ebe4235a7f6545aadbed7ecd`。
+- 资格SHA256：`91cdb1afbb9779e69e0ac8a1113f6080f3fc4563d57f1058001a8f4b2ba0a761`。
+- trial：`9da1688c-96a7-4adf-9774-f4661f5a5d13`；session：`0x509d1d695c7e0fdc`；未claim/未启动。
+- 固件提交：`9d7b56d49faeb3bc2f5236e10b3a9970c08a9edf`。build2使用工作树快照并由source-manifest逐文件绑定，不称提交后重编。
+- 2492项来源绑定，72个FD PE镜像，另独立验证SEC TE；22份旧镜像/资格摘要保持。
 
-2026-10-28T11:45:27.566337+08:00。用户本轮已确认正在拍摄、在场可恢复；本次现场条件独立记录，不沿用旧就绪。
+## 证据和下一步
 
-## 候选与证据
+v11明确故障：ClockDxe+0x11d58读取0x0af022c0，ESR0x96000007；v12修复对应平台映射缺口。生成内存表除该条外与v11相同；实际链接描述符、最终FD中SEC TE及地址/长度/属性删除变异检查通过。宿主验证包括真实异常sink的ASan/UBSan、严格ARM64、真实Core表同步、事件竞态及GOP失败清理。
 
-- low：trial `2f8dcedf-588e-4e05-809a-f653c1efc25f`；image SHA256 `c9cb7c200ea35894e1002075102a432ac8d867c40d89291ef5da5771791ef586`；已claim/消费。
-- high：trial `c6f3f7dc-52ed-4e9a-8dd2-721a87075cae`；image SHA256 `d581d070a30a942fb0bb6662404e875c472ad1d36ccd366b124d45237080960e`；已claim/消费。
-- target：trial `bff01371-9799-4d1f-8f58-c5e0143f794b`；image SHA256 `41585b244499f4405bb0050e31106480e0c039234d931ce4be83c79cab6e17c8`；已claim/消费。
+详见 [v12操作记录](operations/2026-10-28-oem-dispcc-v12.md)、[结构化报告](../reports/enuma-oem-dispcc-v12-20261028.json)、[v11故障分析](operations/2026-10-28-oem-clock-fault-analysis.md)。本地证据在out/oem-dispcc-20261028，源码/文档最后统一发布，网络不阻塞本地工作；发布receipt另记out及最终答复。
 
-完整构建与软件资格：operations/2026-10-28-oem-gop-mode-v10.md；reports/enuma-oem-gop-mode-v10-candidates-20261028.json。每份完整FD、Boot v3和2475绑定通过；固件2c18bc6，构建为edc579d工作树快照，不能称提交后重编。
+下一次仅在当轮拍摄/在场恢复、即时enuma身份/原备份/分区及精确资格门禁满足后，单次临时boot此新镜像。默认离线准入入口：
 
-本轮结果：reports/enuma-oem-gop-mode-v10-live-20261028.json；本地out/oem-gop-mode-live-20261028及out/device-tests/oem-<trial>保留原始状态/传输/时钟，人工与独立恢复另存，不改写runner历史。媒体位于D:/Code/PortingiOS/enuma/Media-enuma/OEM-gop-mode-v10-<kind>-20261028-<trial前8位>/original。
+```text
+wsl --cd /mnt/d/Code/PortingiOS/enuma/worktrees/enuma-oem-display /usr/bin/python3 -B scripts/run_oem_runtime_trial.py --qualification out/oem-dispcc-20261028/qualification1
+```
 
-## 执行与验收边界
-
-本次code1间接结果使异常现场取证成为下一优先项；先取得异常类型/ELR/ESR/FAR及镜像归属，再判断Clock/DAL、HAL或其它路径，未确认唯一根因。v10只有目标Core严格EFI_SUCCESS且整轮CoreDispatcher完成后才调用原厂GOP QueryMode(0)、最多一次SetMode(0)并读回，核对原厂函数归属、几何和内存边界；不Blt/像素绘制、不ConnectAll、不进BDS。成功间接码也不能证明物理scanout或画面。
-
-顺序low→独立恢复/人工确认→high→独立恢复/人工确认→精确校准→target，各一次。校准要求新boot_id、原点区间<=0.25秒、扣除2/27秒后基线包络<=1秒，固定±1秒窗；计划不得给旧观察续期。歧义/漂移/人工恢复不作正向分类。75秒未回合格终点停止追加并优先恢复，无独立看门狗保证。v9仅离线，R027及旧产物冻结，共享主线只读；不改内存/verified、不flash/erase/改槽。源码/脱敏文档发布至显式GitHub URL/oem-progress-20261027，不推firmware本地origin，原始媒体/out/二进制/备份/标识不上传。
-
-用户本轮明确文档可最后统一发布，不因网络问题阻塞。860e31b发布遇连接重置，46f8515已确认远端；最终结果以本地新提交及随后发布记录为准。其余运行门禁保持。
-
-## 本次代码归因与下一步
-
-目标8.127..8.261秒整体位于预定code1窗口7.164..9.362秒；2/27秒对照差异符合25秒，降低固定早复位完全遮蔽终止等待的解释优先级。实际EnumaOemExceptionStop.h在未处理异常checkpoint调用EnumaOemClockExit(1)，出口等待2秒并ResetCold；补丁把checkpoint放在AArch64异常状态输出函数开头、递归检查及文本打印之前。因此优先取得异常类型、ELR/ESR/FAR、目标镜像归属及最近服务阶段，不能继续只凭无页认定Clock/HAL死锁。
-
-当前异常hook不传入现场上下文、直接等待复位，现有报告不能恢复异常PC；异常可能出现在OEM、其它DXE、追踪器或GOP helper，尚不能认定未进入后段。下一候选应在不依赖常规屏幕打印/分配的条件下保留或有界输出异常现场，再归到实际本机指令；需独立实现/失败验证/完整构建和新单次资格，本轮没有生成或执行新候选。未直接采到异常，仍保留未插桩复位、前缀时延变化与时间码别名竞争解释。
+保留75秒主机观察期限，非固件自动返回保证；没有异常页不能视为成功。若有新PC/FAR，先归属镜像和指令；若同地址仍异常，检查实际页表及运行中修改；后续电源、权限、时钟握手、HAL IOMMU仍可能成为下一卡点。未证明OEM返回、全DXE或真实GOP成功。无时钟校准，不按返回时长分类。原始媒体本地，只有辨认困难且影响结论的字符才请用户核对。

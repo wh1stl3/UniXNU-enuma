@@ -93,7 +93,7 @@ class Admission(unittest.TestCase):
     def test_clock_scope_has_no_window_and_single_boot(self):
         from oem_runtime_candidate import CLOCK_SCOPES
         for scope in CLOCK_SCOPES:
-            if scope=='oem-exception-v11':continue
+            if scope.startswith('oem-exception-'):continue
             self.q['scope']=scope;self.q['run_config'].update(experiment=scope,selected_call=0)
             self.q['identity']['runtime']=dict(self.q['run_config']);self.q['runtime_limits']=limits_for(scope);self.save()
             validate(self.root,self.out)
@@ -102,6 +102,19 @@ class Admission(unittest.TestCase):
             self.assertEqual(self.q['runtime_limits']['max_terminal_delay_us'],27000000 if scope.startswith('oem-gop-mode-') else 22000000)
             self.q['runtime_limits']['max_boots']=2;self.save()
             self.assertRaises(ValueError,validate,self.root,self.out)
+
+    def test_v12_requires_linked_mapping_evidence(self):
+        scope='oem-exception-dispcc-v12'
+        self.q['scope']=scope;self.q['run_config']['experiment']=scope
+        self.q['runtime_limits']=limits_for(scope);self.save()
+        self.assertRaises(ValueError,validate,self.root,self.out)
+        name='scripts/check_oem_dispcc_map.py'
+        (self.root/name).write_bytes(b'checker')
+        self.q['source_bindings'][name]=sha(self.root/name)
+        self.q['fd_audit']={'dispcc_map':dict(passed=True,base='0xaf00000',size='0x20000',fd_sec_exact_match=True,negative_checks=['name','base','size','hob','resource','cache','type','arm','deleted'])}
+        self.save();validate(self.root,self.out)
+        self.q['fd_audit']['dispcc_map']['size']='0x10000';self.save()
+        self.assertRaises(ValueError,validate,self.root,self.out)
 
     def test_exception_scope_budget_and_no_clock_inference(self):
         from oem_exit_clock import SCOPES

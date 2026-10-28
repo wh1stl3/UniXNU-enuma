@@ -1,3 +1,5 @@
+> 2026-10-28当前：v12（oem-exception-dispcc-v12）已完成build2/qualification1与新来源绑定，新增DISP_CC 0x0af00000/0x20000 NS_DEVICE映射，保留真实OEM/Core/GOP与v11三页异常取证。66项Python、8组宿主验证及最终链接/FD映射检查通过；软件就绪，尚未上机，trial未消费，不能复用v11拍摄就绪。旧镜像/资格冻结，旧源码准入失效。 以下旧状态按历史阅读，现行入口docs/STATUS.md。
+
 > 2026-10-28 v11最终取证：三页已确认，E13纠正为 G04DB5DEA653024D1A；唯一归属 ClockDxe，PC=0x9a88ad58/RVA=0x11d58，ESR=0x96000007，FAR=0x0af022c0，32位读取触发同EL三级地址翻译故障。实际构建MemoryMap无覆盖该地址的描述符，本机FDT的DISP_CC为0x0af00000/0x20000。优先审查并修复显示时钟映射，保留原厂真实调用和异常取证；尚未修改固件或制作v12。v11已消费、自动返回且恢复核验通过，不重试。详见 docs/operations/2026-10-28-oem-clock-fault-analysis.md。以下旧待确认/未消费文字为历史。
 
 > 2026-10-28当前：exception-v11 已完成完整 build3 / qualification2、61项WSL Python回归、异常取证ASan/UBSan及严格ARM64检查、277处最终机器码删除负测、2489项来源绑定和72镜像FD清单；20份R027/旧候选镜像资格摘要保持。新trial 3ffbbf8d-21f5-4a1f-ae58-a84e56596c0f 未claim/上机，不沿用旧拍摄就绪。v10三图均已消费，仍仅间接异常证据；本轮尚无实际PC/ESR/FAR。保留真实OEM/Core及原厂GOP推进路径，异常时最多三页采集原始现场/镜像归属。详见 operations/2026-10-28-oem-exception-v11.md 和 reports/enuma-oem-exception-v11-20261028.json；源码与文档最后统一发布，不让网络阻塞本地工作。 以下旧当前/就绪文字按历史阅读。
