@@ -1,0 +1,133 @@
+{
+  "recorded_at": "2026-10-28T19:51:23.556572+08:00",
+  "scope": "oem-exception-dispcc-v12",
+  "trial_id": "9da1688c-96a7-4adf-9774-f4661f5a5d13",
+  "image_sha256": "a14b999f39c590b1c0a43ea3f4cdb560396d713c03b5641d41c4f40fa6797e5c",
+  "qualification_sha256": "91cdb1afbb9779e69e0ac8a1113f6080f3fc4563d57f1058001a8f4b2ba0a761",
+  "original_attempt": "consumed; boot transport timeout; candidate execution unknown; host recovery verified",
+  "retry_attempt": "9da1688c-96a7-4adf-9774-f4661f5a5d13-retry1",
+  "retry_explicitly_authorized": true,
+  "retry_transport_passed": true,
+  "automatic_android_return": true,
+  "independent_recovery_passed": true,
+  "partition_writes": false,
+  "media": {
+    "filename": "微信视频2026-10-28_194543_155.mp4",
+    "sha256": "42542b9e282543a7143ada13137dd55c8f5ce695b7a84e40d8e2b472420aad40",
+    "bytes": 67285709,
+    "duration_seconds": 26.074867
+  },
+  "independent_transcription": [
+    [
+      "E11C0000000000000000",
+      "O000000009A6FF140",
+      "S0000000096000047",
+      "C000000000AEB0004",
+      "G509D1D695C7E0FDC"
+    ],
+    [
+      "E12C0000000000000101",
+      "O000000009A6D4000",
+      "S000000000002B140",
+      "C000000000004D000",
+      "G509D1D695C7E0FDC"
+    ],
+    [
+      "E13C000000009A6FF120",
+      "G04138022F06C74F79",
+      "G19C947E33B511A4E7",
+      "S0000000020000005",
+      "G509D1D695C7E0FDC"
+    ]
+  ],
+  "analysis": {
+    "recorded_at": "2026-10-28T19:49:49.391728+08:00",
+    "decoded": {
+      "exception_type": 0,
+      "pc": "0x9a6ff140",
+      "esr": "0x96000047",
+      "far_raw": "0xaeb0004",
+      "esr_ec": "0x25",
+      "abort_fsc": "0x7",
+      "far_usable_for_abort": true,
+      "session": "0x509d1d695c7e0fdc",
+      "owner": {
+        "state": 1,
+        "base": "0x9a6d4000",
+        "rva": "0x2b140",
+        "size": 315392,
+        "guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+        "guid_available": true
+      },
+      "owner_fd_verified": true,
+      "complete": true,
+      "limitation": "Photographed exception snapshot; ELR and FAR meanings depend on exception class. No GOP/driver success or unique fault cause.",
+      "lr": "0x9a6ff120",
+      "spsr": "0x20000005",
+      "module": "DisplayDxe",
+      "module_pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+      "pc_sections": [
+        {
+          "name": ".text",
+          "rva": 4096,
+          "bytes": 249856,
+          "file_offset": 4096,
+          "executable": true
+        }
+      ]
+    },
+    "fault_word": "0xb8154128",
+    "fault_instruction": "stur w8, [x9, #-172]",
+    "access": "32-bit write",
+    "esr": {
+      "ec": 37,
+      "dfsc": 7,
+      "wnr": 1,
+      "fnv": 0,
+      "isv": 0,
+      "meaning": "same-EL data abort; level-3 translation fault; FAR valid"
+    },
+    "lr_same_image_rva": "0x2b120",
+    "lr_note": "LR points after BL at 0x2b11c to helper 0x2b398, which returned before fault; it is not proof of the higher-level caller",
+    "built_memory_map_sha256": "6afce88b9ff48bfa5987ab19ac17d6dabc09ffbeca3f11ef1ee92e95a6bb7560",
+    "covering_regions": [],
+    "fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+    "fdt_mdp_resources": [
+      {
+        "name": "mdp_phys",
+        "base": "0xae00000",
+        "bytes": "0x84208"
+      },
+      {
+        "name": "vbif_phys",
+        "base": "0xaeb0000",
+        "bytes": "0x2008"
+      },
+      {
+        "name": "regdma_phys",
+        "base": "0xaeac000",
+        "bytes": "0x214"
+      },
+      {
+        "name": "sid_phys",
+        "base": "0xae8f000",
+        "bytes": "0x2c"
+      },
+      {
+        "name": "swfuse_phys",
+        "base": "0xaf50000",
+        "bytes": "0x38"
+      }
+    ],
+    "leading_hypothesis": "Display VBIF mapping missing; current MDP range ends at 0xae85000, fault 0xaeb0004 lies outside",
+    "next_candidate": "Review page-aligned VBIF 0xaeb0000/0x3000 NS_DEVICE mapping from local FDT; audit additional display resources before building; do not expand whole peripheral space",
+    "limitations": [
+      "No live page-table dump; later mapping changes not excluded",
+      "New DisplayDxe fault is progress evidence compared with old ClockDxe fault, not proof of OEM return, complete DXE or GOP success",
+      "No full call stack or captured register x9/w8 values",
+      "First attempt transport timeout root cause unresolved; native retry success alone does not prove WSL caused it"
+    ]
+  },
+  "evidence": "out/oem-dispcc-live-20261028",
+  "old_artifacts_preserved": true
+}
