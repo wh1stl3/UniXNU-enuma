@@ -1,0 +1,78 @@
+{
+  "scope": "v13 live result",
+  "trial_consumed": true,
+  "automatic_android_return": true,
+  "recovery_checks_passed": true,
+  "media_sha256": "d98877e1848545ee69db6ba4a54c5bef7d472b863f0c0f85174a556eb27ce075",
+  "pages": [
+    [
+      "E11C0000000000000000",
+      "O000000009A6FD140",
+      "S0000000096000047",
+      "C000000000AEB0004",
+      "G4229413D4B327CFC"
+    ],
+    [
+      "E12C0000000000000101",
+      "O000000009A6D2000",
+      "S000000000002B140",
+      "C000000000004D000",
+      "G4229413D4B327CFC"
+    ],
+    [
+      "E13C000000009A6FD120",
+      "G04138022F06C74F79",
+      "G19C947E33B511A4E7",
+      "S0000000020000005",
+      "G4229413D4B327CFC"
+    ]
+  ],
+  "decoded": {
+    "exception_type": 0,
+    "pc": "0x9a6fd140",
+    "esr": "0x96000047",
+    "far_raw": "0xaeb0004",
+    "esr_ec": "0x25",
+    "abort_fsc": "0x7",
+    "far_usable_for_abort": true,
+    "session": "0x4229413d4b327cfc",
+    "owner": {
+      "state": 1,
+      "base": "0x9a6d2000",
+      "rva": "0x2b140",
+      "size": 315392,
+      "guid": "4138022f-06c7-4f79-9c94-7e33b511a4e7",
+      "guid_available": true
+    },
+    "owner_fd_verified": true,
+    "complete": true,
+    "limitation": "Photographed exception snapshot; ELR and FAR meanings depend on exception class. No GOP/driver success or unique fault cause.",
+    "lr": "0x9a6fd120",
+    "spsr": "0x20000005",
+    "module": "DisplayDxe",
+    "module_pe_sha256": "6c6351c3c770d4f698e5e22097021fe8d20d35a8d4181df05676a48c4347f425",
+    "pc_sections": [
+      {
+        "name": ".text",
+        "rva": 4096,
+        "bytes": 249856,
+        "file_offset": 4096,
+        "executable": true
+      }
+    ]
+  },
+  "comparison_to_v12": {
+    "same_module_and_pe": true,
+    "same_rva": true,
+    "same_esr": true,
+    "same_far": true,
+    "pc_shift": "-0x2000 due to image base relocation; not execution progress"
+  },
+  "conclusion": "VBIF L3 translation fault persists despite linked FD descriptors. No farther boot-chain milestone demonstrated.",
+  "next_priority": [
+    "Trace actual MemoryTable to ArmConfigureMmu mapping and repeated mappings within same 2MiB block",
+    "Check DXE page-table mutations and active TTBR/TCR/leaf descriptors at fault",
+    "Reproduce page-table builder behavior offline before changing address coverage"
+  ],
+  "hardware_success": false
+}

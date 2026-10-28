@@ -42,3 +42,9 @@ v12实际故障为原厂DisplayDxe+0x2b140向0x0aeb0004写32位，ESR0x96000047�
 v13已完成build1/qualification1，新增VBIF、DSI0、DSI1三独立NS_DEVICE映射，保留原厂调用和异常取证。69项Python、8组宿主、277处链接指令删除及36项映射变异检查通过；2495项来源绑定、72个FD PE镜像和SEC TE核对通过。软件就绪，新trial未消费，未上机。
 
 镜像SHA256 9331e0a3f1db230326c5ae49f2ed77ed443a90f89232684e43b929f8c5a854bb；资格SHA256 5d01765a1c216e902f1c503add81bfb638d0e72d651448b21ebc2a4f88dec32b；trial e4fd7a07-b112-433b-8008-c8dee5ed1392；固件 f523e160ad7d87d00d241e840d94179c1c0b8459。未claim/未上机，源和产物完整绑定，原厂GOP仍待实机验证。
+
+## 本轮实机
+
+> 2026-10-28T20:28:23.239076+08:00 v13已单次消费，Sending/Booting OKAY；用户确认自行返回Android、三页日志。独立身份/启动完成/root/A槽/解锁及原双分区和本地备份摘要核验通过。媒体目录已创建，待文件落地独立判读；不重试，不预写OEM/DXE/GOP成功。此前未消费文字仅历史。
+
+本轮使用从已绑定入口派生的独立Windows原生runner，仅调整根目录、工具/镜像路径并保留超时部分输出；资格/claim/身份/备份/恢复门禁保持，未复用v12 retry。原runner和派生runner摘要及当轮授权保存在本地 `out/oem-display-map-live-20261028/authorization.json`。三页内容待媒体独立判读。
