@@ -1,0 +1,124 @@
+{
+  "recorded_at": "2026-10-28T18:19:38.221827+08:00",
+  "scope": "oem-exception-v11",
+  "trial_id": "3ffbbf8d-21f5-4a1f-ae58-a84e56596c0f",
+  "image_sha256": "73d1327f75f9123cd13898c24cd005c5db91e8e244132dfcba1364bde1ebaaa4",
+  "consumed": true,
+  "boot_count": 1,
+  "partition_writes": false,
+  "automatic_android_return": true,
+  "independent_recovery_passed": true,
+  "media_received": true,
+  "media_sha256": "9a95bc1d3d4494ba160faf509c1b9a681b144b0503d5b91e03820ec6ab1aac0c",
+  "media_duration_seconds": 48.548833,
+  "three_pages_visible": true,
+  "transcription_human_confirmed": true,
+  "guid_character_ambiguity": null,
+  "evidence": "out/oem-exception-live-20261028",
+  "raw_runner_record_preserved": true,
+  "confirmed_pages": [
+    [
+      "E11C0000000000000000",
+      "O000000009A88AD58",
+      "S0000000096000007",
+      "C000000000AF022C0",
+      "G75FFD74F0D039EC6"
+    ],
+    [
+      "E12C0000000000000101",
+      "O000000009A879000",
+      "S0000000000011D58",
+      "C0000000000035000",
+      "G75FFD74F0D039EC6"
+    ],
+    [
+      "E13C000000009A88AA40",
+      "G04DB5DEA653024D1A",
+      "G18A82677A683B0D29",
+      "S0000000060000005",
+      "G75FFD74F0D039EC6"
+    ]
+  ],
+  "fault_analysis": {
+    "recorded_at": "2026-10-28T18:26:33.956950+08:00",
+    "decoded": {
+      "exception_type": 0,
+      "pc": "0x9a88ad58",
+      "esr": "0x96000007",
+      "far_raw": "0xaf022c0",
+      "esr_ec": "0x25",
+      "abort_fsc": "0x7",
+      "far_usable_for_abort": true,
+      "session": "0x75ffd74f0d039ec6",
+      "owner": {
+        "state": 1,
+        "base": "0x9a879000",
+        "rva": "0x11d58",
+        "size": 217088,
+        "guid": "4db5dea6-5302-4d1a-8a82-677a683b0d29",
+        "guid_available": true
+      },
+      "owner_fd_verified": true,
+      "complete": true,
+      "limitation": "Photographed exception snapshot; ELR and FAR meanings depend on exception class. No GOP/driver success or unique fault cause.",
+      "lr": "0x9a88aa40",
+      "spsr": "0x60000005",
+      "module": "ClockDxe",
+      "module_pe_sha256": "834428700f5e034e52285e1d516b98e86e71ce4b6d7211a9b40fa87d92137cab",
+      "pc_sections": [
+        {
+          "name": ".text",
+          "rva": 4096,
+          "bytes": 118784,
+          "file_offset": 4096,
+          "executable": true
+        }
+      ]
+    },
+    "pe_path": "out\\oem-exception-20261028\\build3\\oem-vendor\\Binaries\\enuma\\ClockDxe\\ClockDxe.efi",
+    "pe_sha256": "834428700f5e034e52285e1d516b98e86e71ce4b6d7211a9b40fa87d92137cab",
+    "fault_word": "0xb862490a",
+    "fault_instruction": "ldr w10, [x8, w2, uxtw]",
+    "access": "32-bit read",
+    "esr": {
+      "ec": 37,
+      "il": 1,
+      "isv": 0,
+      "wnr": 0,
+      "fnv": 0,
+      "dfsc": 7,
+      "meaning": "same-EL data abort, translation fault level 3, FAR valid; ISV=0, width/register from PE instruction"
+    },
+    "lr_same_image_rva": "0x11a40",
+    "lr_preceding_call": {
+      "rva": "0x11a3c",
+      "word": "0x940000be",
+      "target": "0x11d34"
+    },
+    "static_caller_w2": 4,
+    "inferred_x8_if_this_call_path": "0xaf022bc",
+    "built_memory_map_sha256": "5fee8940c4cee08fb3cac33f75ffe706a624fce5e7f435447141bd133ab5fba8",
+    "covering_regions": [],
+    "live_fdt_sha256": "643aa3ec450139d38f8cde9a94bca6d9e8e75e752cb7aa992685d34267434c62",
+    "live_fdt_clock_nodes": [
+      {
+        "path": "/soc/qcom,dispcc@af00000",
+        "reg": [
+          183500800,
+          131072
+        ],
+        "compatible": [
+          "qcom,kona-dispcc",
+          "syscon"
+        ]
+      }
+    ],
+    "limitations": [
+      "No live translation table snapshot; omitted build descriptor strongly supports map gap but does not exclude later page-table changes",
+      "ClockDxe fault does not establish whether its caller was DisplayDxe entry or GOP method",
+      "LR and fault PC are inside same unique image; no cross-image stack reconstruction",
+      "No new hardware action or firmware modification"
+    ]
+  },
+  "next_priority": "Audit and correct missing DISP_CC device mapping; preserve real OEM clock calls and v11 capture. v12 not built."
+}

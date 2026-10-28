@@ -61,3 +61,13 @@ owner flags 低 8 位：0 unavailable、1 unique、2 no match、3 ambiguous、4 
 - qualification1 保留失败：LTO 改变 EnumaStartingImage 相对寻址位移；改为解析 ADRP/ADD/LDUR 并核对真实符号目标，拒绝错误目标；未修改固件或放宽真实身份门控，qualification2 重验通过。
 - 20 份历史镜像/资格摘要通过；没有设备命令。本次实际故障 PC/ESR/FAR 与归属仍待新实机页，不能把 ArmCpuDxe 的处理器 RVA `0x6718` 当成故障 PC。
 - docs/STATUS、HANDOFF、原交接入口和本操作记录已统一更新。发布结果在本地 publication.json 及最终答复记录；上传范围仅源码与脱敏文档。
+
+
+## 本次实机与媒体待核对
+
+2026-10-28T18:19:38.221827+08:00 v11已单次消费，用户确认未按键、自行返回且拍到日志页；独立身份/完成/root/A槽/解锁及原双分区和备份摘要核验通过。48.55秒原视频已落位，独立看到E11/E12/E13并保存转录，完整字符及GUID歧义等待人工核对，不预写镜像归属。不得重试同trial；原始视频只留Media-enuma，本地证据out/oem-exception-live-20261028。
+
+
+## 2026-10-28 v11实际故障归因
+
+> 2026-10-28 v11最终取证：三页已确认，E13纠正为 G04DB5DEA653024D1A；唯一归属 ClockDxe，PC=0x9a88ad58/RVA=0x11d58，ESR=0x96000007，FAR=0x0af022c0，32位读取触发同EL三级地址翻译故障。实际构建MemoryMap无覆盖该地址的描述符，本机FDT的DISP_CC为0x0af00000/0x20000。优先审查并修复显示时钟映射，保留原厂真实调用和异常取证；尚未修改固件或制作v12。v11已消费、自动返回且恢复核验通过，不重试。详见 docs/operations/2026-10-28-oem-clock-fault-analysis.md。以下旧待确认/未消费文字为历史。
