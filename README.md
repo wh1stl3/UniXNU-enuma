@@ -1,3 +1,5 @@
+> 2026-10-28 v14 本次 trial 已消费：fastboot boot 停在 Sending，30 秒超时，无 Sending/Booting OKAY，未证明固件执行。用户确认无日志、未按键；主机 fastboot reboot 恢复 Android，独立身份/启动完成/root/A槽/解锁及原双分区和备份摘要核验通过。不是 v14 自行返回，不判断参数/MMU取证结果，不自动重发。镜像和资格字节保持，后续重跑须独立授权与新尝试记录。 以下旧“未消费/待测”状态仅历史；见 reports/enuma-oem-context-v14-live-20261028.json。
+
 > 2026-10-28 当前：v14 已完成 build2/qualification2：同时核对原厂参数来源和实际 MMU 建表代码，新增故障寄存器与异常后地址翻译取证。73 项 Python、8 组宿主检查、354 处链接指令删除、36 项映射变异、28 处参数指令删除和 27 个页表分配失败点检查通过。2501 项来源绑定；软件就绪，trial 未消费，尚未上机。 现行入口 docs/STATUS.md 和 docs/operations/2026-10-28-oem-context-v14.md；以下旧当前/待测文字按历史阅读。
 
 > 2026-10-28当前：gop-mode-v10目标及2/27秒对照已完成完整build1、qualification1和离线来源核验，三trial未消费。本机Clock/HAL ABI核对后未发现可确认的接口错配，保留原始方法，新增真实Core成功及整轮DXE后原厂GOP QueryMode/SetMode/读回检查。55项Python、sanitizer/ARM及224/174/182处链接删除负测通过。v9仅离线对照、不安排上机；旧源码准入已过期但镜像/资格字节冻结。没有本轮设备动作，不沿用旧拍摄/校准。 以下旧当前/准备文字按历史阅读。

@@ -59,3 +59,11 @@ build1 在补齐 DSC 编译开关传递期间触发源码变化拒绝，已保�
 用户当轮“可以上机”已定义为正在录像且在场可恢复，届时不重复询问这两项；仍核对新资格、未消费账本、设备身份/分区备份/恢复条件，仅一次临时 boot。本轮未继承任何旧现场状态。原视频只落 Media-enuma，清晰内容独立判读，仅真实歧义再问。
 
 源码和文档最后统一发布；发布状态与本地资格分开记录。公开资料的背景及限制见 [v13 页表研究](2026-10-28-oem-v13-page-table-public-research.md)。
+
+## 本次实机尝试及恢复
+
+2026-10-28 v14 本次 trial 已消费：fastboot boot 停在 Sending，30 秒超时，无 Sending/Booting OKAY，未证明固件执行。用户确认无日志、未按键；主机 fastboot reboot 恢复 Android，独立身份/启动完成/root/A槽/解锁及原双分区和备份摘要核验通过。不是 v14 自行返回，不判断参数/MMU取证结果，不自动重发。镜像和资格字节保持，后续重跑须独立授权与新尝试记录。
+
+发送超时保留部分输出，首次恢复查询曾得到空 product、后续 product=enuma，而 current-slot/unlocked 返回变量不存在；没有据此重发。只向绑定设备发送 recovery reboot，返回 OKAY，随后完整 Android 恢复复核通过。与 v12 曾有传输超时相似，但不能据此认定同一根因。无新的 PC/ESR/FAR 或 E14–E16，暂不能评价联合取证效果。
+
+本地证据 out/oem-context-live-20261028；媒体目录已建立于 D:/Code/PortingiOS/enuma/Media-enuma/OEM-context-v14-20261028-4dd84d0a。

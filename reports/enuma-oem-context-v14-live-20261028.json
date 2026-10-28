@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-28T21:35:28.399808+08:00",
+  "trial_id": "4dd84d0a-d44f-4230-9747-5baae31b61be",
+  "scope": "oem-exception-context-v14",
+  "trial_consumed": true,
+  "boot_command_attempts": 1,
+  "boot_transport_completed": false,
+  "sending_timeout_seconds": 30,
+  "booting_okay_observed": false,
+  "firmware_execution_proven": false,
+  "image_sha256": "2e3e6814fac86e6a7da35887f03c50abf0e6986bdf7d8d4a22949621a2961a4c",
+  "partition_writes": false,
+  "host_recovery": "fastboot reboot OKAY",
+  "android_recovery_verified": true,
+  "user_report": "回到Android 没有日志 没有按键",
+  "new_fault_evidence": false,
+  "local_evidence": "out/oem-context-live-20261028"
+}
