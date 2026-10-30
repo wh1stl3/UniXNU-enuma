@@ -33,12 +33,24 @@ jobs:
           test "$(git -C out/storage-provider-20261030/IOStorageFamily rev-parse HEAD)" = 0993ad6b36e85774fb0bc280e7d795f6dcbc641c
       - name: Compile provider with captured Apple flags and genuine headers
         run: |
+          python3 experiments/root-transport/test_storage_core_recipe.py
           python3 experiments/root-transport/compile_block_device.py --apple-clang "$(xcrun --find clang++)" --output out/storage-provider-20261030/apple-build
+      - name: Obtain pinned native window algorithm
+        run: |
+          git init out/storage-provider-20261030/NativeUfs
+          git -C out/storage-provider-20261030/NativeUfs remote add origin https://github.com/UniXNU/NativeUfs.git
+          git -C out/storage-provider-20261030/NativeUfs fetch --depth 1 origin af785c1777161a62931425c2faaa536ce0bebd5b
+          git -C out/storage-provider-20261030/NativeUfs checkout --detach FETCH_HEAD
+      - name: Rebuild storage core with captured C and C++ flags
+        run: |
+          python3 experiments/root-transport/compile_storage_core.py --native-ufs out/storage-provider-20261030/NativeUfs --provider out/storage-provider-20261030/apple-build --output out/storage-provider-20261030/apple-core
       - name: Save evidence including failed compilation
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: enuma-storage-provider-${{ github.run_id }}
-          path: out/storage-provider-20261030/apple-build
+          path: |
+            out/storage-provider-20261030/apple-build
+            out/storage-provider-20261030/apple-core
           if-no-files-found: error
           retention-days: 14
