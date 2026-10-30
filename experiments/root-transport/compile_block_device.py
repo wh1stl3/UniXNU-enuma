@@ -76,4 +76,16 @@ if a.apple_clang:
     (out/'symbols.txt').write_text(symbols)
     assert '_enuma_storage_publish_readonly' in symbols and 'EnumaBlockDevice' in symbols
     (out/'toolchain.txt').write_text(subprocess.check_output(['xcodebuild','-version'],text=True)+subprocess.check_output(['xcrun','--sdk','iphoneos','--show-sdk-version'],text=True))
+    reference=storage/'IOBlockStorageDevice.cpp'
+    assert reference.read_bytes()==subprocess.check_output(['git','-C',str(storage),'show','HEAD:IOBlockStorageDevice.cpp'])
+    reference_args=[str(reference) if s==str(here/'EnumaBlockDevice.cpp') else
+                    str(out/'IOBlockStorageDevice.reference.o') if s==str(out/'EnumaBlockDevice.o') else s for s in args]
+    ref=subprocess.run([compiler,*reference_args],cwd=cwd,capture_output=True,text=True)
+    (out/'reference.stdout.txt').write_text(ref.stdout);(out/'reference.stderr.txt').write_text(ref.stderr)
+    (out/'reference-command.json').write_text(json.dumps(dict(command=[compiler,*reference_args],source_sha256=sha(reference),returncode=ref.returncode),indent=2)+'\n')
+    if ref.returncode:print(ref.stderr[-4000:])
+    ref.check_returncode()
+    for name in ('IOBlockStorageDevice','IOService','OSMetaClass'):
+        dwarf=subprocess.check_output(['xcrun','dwarfdump','--name='+name,'--show-children',str(out/'IOBlockStorageDevice.reference.o')],text=True)
+        (out/(name+'.dwarf.txt')).write_text(dwarf)
 print('PASS: actual IOKit/storage header compilation; donor ABI and runtime pending')

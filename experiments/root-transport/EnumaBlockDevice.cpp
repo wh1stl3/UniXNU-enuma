@@ -3,6 +3,8 @@
 #include <IOKit/IOLib.h>
 #include <IOKit/storage/IOBlockStorageDevice.h>
 #include "EnumaBlockRequest.h"
+extern "C" IOService *enuma_storage_publish_readonly(IOService *,
+    const EnumaStorageConfig *, bool, bool);
 
 class EnumaBlockDevice : public IOBlockStorageDevice {
     OSDeclareDefaultStructors(EnumaBlockDevice)
