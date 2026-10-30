@@ -1,0 +1,43 @@
+name: Enuma storage provider ABI candidate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  provider:
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reuse the exact successful kernel input artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: wh1stl3/UniXNU-enuma
+          run-id: 41016592491
+          artifact-ids: 12959224684
+          merge-multiple: true
+          path: out/ci-single-crypto-41016592491
+      - name: Obtain pinned public storage headers
+        run: |
+          git clone --depth 1 --branch IOStorageFamily-312 https://github.com/apple-oss-distributions/IOStorageFamily.git out/storage-provider-20261030/IOStorageFamily
+          test "$(git -C out/storage-provider-20261030/IOStorageFamily rev-parse HEAD)" = 0993ad6b36e85774fb0bc280e7d795f6dcbc641c
+      - name: Compile provider with captured Apple flags and genuine headers
+        run: |
+          python3 experiments/root-transport/compile_block_device.py --apple-clang "$(xcrun --find clang++)" --output out/storage-provider-20261030/apple-build
+      - name: Save evidence including failed compilation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enuma-storage-provider-${{ github.run_id }}
+          path: out/storage-provider-20261030/apple-build
+          if-no-files-found: error
+          retention-days: 14
