@@ -48,12 +48,21 @@ args[:0]=['-I'+str(out/'include'),'-I'+str(here),'-I'+str(root/'drivers/EnumaPla
 if a.prepare_only:
     (out/'command.json').write_text(json.dumps(dict(command=[compiler,*args],cwd=str(cwd)),indent=2)+'\n')
     print('Prepared exact recorded-flag invocation; no compilation');raise SystemExit(0)
-if a.apple_clang:args+=['-Xclang','-fdump-vtable-layouts']
+sdk_header=None
+if a.apple_clang:
+    sdk=Path(subprocess.check_output(['xcrun','--sdk','iphoneos','--show-sdk-path'],text=True).strip())
+    assert subprocess.check_output(['xcrun','--sdk','iphoneos','--show-sdk-version'],text=True).strip()=='18.5'
+    sdk_header=sdk/'usr/include/TargetConditionals.h'
+    assert sdk_header.is_file()
+    # Kernel headers remain first. Genuine SDK provides TargetConditionals;
+    # never replace it with hand-written target macros or IOKitUser headers.
+    args+=['-idirafter',str(sdk/'usr/include'),'-Xclang','-fdump-vtable-layouts']
 bound=[Path(__file__),here/'EnumaBlockDevice.cpp',here/'EnumaBlockRequest.h',
     here/'EnumaStorageOwner.h',here/'EnumaLifecycle.h',here/'EnumaRootTransport.h',
     root/'drivers/EnumaPlatform/EnumaRootRead.h',root/'drivers/EnumaPlatform/EnumaUfsRead.h',
     package/'manifest.json',*headers.glob('*.h')]
 bindings={str(f):sha(f) for f in bound}
+if sdk_header:bound.append(sdk_header);bindings[str(sdk_header)]=sha(sdk_header)
 result=subprocess.run([compiler,*args],cwd=cwd,capture_output=True,text=True)
 assert bindings=={str(f):sha(f) for f in bound},'input changed during compilation'
 (out/'stdout.txt').write_text(result.stdout);(out/'stderr.txt').write_text(result.stderr)
