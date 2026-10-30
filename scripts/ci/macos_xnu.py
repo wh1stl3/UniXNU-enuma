@@ -35,12 +35,15 @@ def capture(argv, cwd=ROOT):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--mode', choices=('preflight', 'bootstrap', 'platform'), default='preflight')
+    parser.add_argument('--crypto-bootstrap', choices=('source', 'prelinked'), default='source')
     args = parser.parse_args()
+    if args.crypto_bootstrap != 'source' and args.mode != 'platform':
+        parser.error('--crypto-bootstrap=prelinked requires --mode=platform')
     if platform.system() != 'Darwin':
         raise SystemExit('Requires macOS with Xcode; local firmware builds use separate scripts')
     EVIDENCE.mkdir(parents=True, exist_ok=True)
     report = {'scope': 'toolchain qualification; optional generic bootstrap or source platform link; no prelink/boot',
-              'mode': args.mode, 'status': 'running', 'device_boot_claimed': False,
+              'mode': args.mode, 'crypto_bootstrap': args.crypto_bootstrap, 'status': 'running', 'device_boot_claimed': False,
               'enuma_kernel_link_claimed': False,
               'device_commit': capture(['git', 'rev-parse', 'HEAD']),
               'runner_image': os.environ.get('ImageVersion'),
@@ -140,8 +143,9 @@ def main():
                 from platform_archives import build as build_platform
                 from unixnu.kernel import xnu_env
                 from types import SimpleNamespace
-                platform_env = dict(env)
-                platform_env.update(xnu_env(SimpleNamespace(need_config=lambda: config, tree=source)))
+                from crypto_mode import platform_environment
+                platform_env = platform_environment(env,
+                    xnu_env(SimpleNamespace(need_config=lambda: config, tree=source)), args.crypto_bootstrap)
                 report['effective_platform_switches'] = {
                     key: value for key, value in platform_env.items() if key.startswith('XNU_')}
                 save()

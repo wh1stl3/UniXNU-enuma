@@ -8,6 +8,11 @@ on:
         type: choice
         options: [preflight, bootstrap, platform]
         default: preflight
+      crypto_bootstrap:
+        description: 'platform only: source=start source provider; prelinked=donor owns startup, source archives retained'
+        type: choice
+        options: [source, prelinked]
+        default: source
 
 permissions:
   contents: read
@@ -22,6 +27,7 @@ jobs:
       GIT_LFS_SKIP_SMUDGE: '1'
       HOMEBREW_NO_AUTO_UPDATE: '1'
       BUILD_MODE: ${{ inputs.mode }}
+      CRYPTO_BOOTSTRAP: ${{ inputs.crypto_bootstrap }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,7 +38,7 @@ jobs:
       - name: Install small build dependency
         run: brew list unifdef >/dev/null 2>&1 || brew install unifdef
       - name: Check pinned sources and compile
-        run: python3 -B scripts/ci/macos_xnu.py --mode "$BUILD_MODE"
+        run: python3 -B scripts/ci/macos_xnu.py --mode "$BUILD_MODE" --crypto-bootstrap "$CRYPTO_BOOTSTRAP"
       - name: Preserve evidence and bootstrap output
         if: always()
         uses: actions/upload-artifact@v4

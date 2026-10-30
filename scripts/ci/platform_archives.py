@@ -94,6 +94,12 @@ def build(source, evidence, env, report, save):
         print('\n'.join(logfile.read_text(errors='replace').splitlines()[-60:]), flush=True)
         raise ValueError('Platform kernel link failed')
     kernel = obj / 'mach.development.bcm2837.unstripped.noctf'
+    from crypto_mode import audit as audit_crypto
+    crypto_record = json.loads((obj / 'osfmk/DEVELOPMENT/prng_random.o.json').read_text().strip().rstrip(','))
+    # Include local symbols: the source bootstrap callback is static.
+    all_symbols = subprocess.check_output(['xcrun', 'nm', '-U', '-j', str(kernel)], text=True).splitlines()
+    report['crypto_bootstrap_audit'] = audit_crypto(env['XNU_CRYPTO_BOOTSTRAP'], crypto_record['arguments'], all_symbols)
+    save()
     subprocess.run([sys.executable, '-B', 'scripts/audit-xnu-kernel.py', str(kernel)], cwd=source, check=True)
     shutil.copyfile(source / 'build/xnu/kernel-audit.json', evidence / 'platform-kernel-audit.json')
     names = subprocess.check_output(['xcrun', 'nm', '-g', '-U', '-j', str(kernel)], text=True).splitlines()
