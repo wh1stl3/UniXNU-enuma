@@ -6,7 +6,7 @@ on:
       mode:
         description: 'preflight=SDK; bootstrap=generic 4K; platform=real archives and board feature link (no prelink/boot)'
         type: choice
-        options: [preflight, bootstrap, platform]
+        options: [preflight, bootstrap, platform, storage-provider]
         default: preflight
       crypto_bootstrap:
         description: 'platform only: source=start source provider; prelinked=donor owns startup, source archives retained'
@@ -16,9 +16,14 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
+  storage-provider:
+    if: inputs.mode == 'storage-provider'
+    uses: ./.github/workflows/enuma-storage-provider.yml
   xnu:
+    if: inputs.mode != 'storage-provider'
     runs-on: macos-15
     timeout-minutes: 120
     env:

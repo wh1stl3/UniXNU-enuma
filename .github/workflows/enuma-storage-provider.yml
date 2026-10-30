@@ -1,6 +1,7 @@
 name: Enuma storage provider ABI candidate
 on:
   workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
   actions: read
