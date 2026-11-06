@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/dts-v1/;
+/*
+ * enuma 板级设备树（官方 format 2：device:dts/enuma.dts）。
+ * 共享资源由 feeds 钉的 SM8250 共享仓 dts/sm8250.dtsi 提供（include_dirs = ["soc:dts"]）。
+ * 所有硬件值必须来自本机证据。
+ */
+/include/ "sm8250.dtsi"
+
+/ {
+	model = "Xiaomi Pad 5 Pro 5G (enuma)";
+	compatible = "xiaomi,enuma", "qcom,sm8250";
+
+	chosen {
+	};
+
+	/*
+	 * TODO: memory 与 reserved-memory 需 enuma 实测 UEFI 内存图 / 原厂 FDT /memory 逐条补入，
+	 *       当前不写任何未验证地址；[payload.adt] owned_memory_size 只是首入口预算（R-001）。
+	 * TODO: 启用 CPU（MPIDR）、UFS/PHY、显示（DPU/DSI）、触控（GENI）、SMMU 等节点。
+	 */
+};

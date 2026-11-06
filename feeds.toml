@@ -1,0 +1,9 @@
+# format 2 源码固定（官方 porting/soc-support 第 4 步）：SoC 共享仓 + 40 位 commit。
+# 该提交来自本地已建仓的首次提交（d8992df）；推送到 wh1stl3/UniXNU-sm8250-common 后即可 fetch。
+# 推送前的本地开发用 local.toml 覆盖：
+#   [[source]] kind = "soc", name = "sm8250", local = "../UniXNU-sm8250-common"
+[[source]]
+name = "sm8250"
+kind = "soc"
+git = "https://github.com/wh1stl3/UniXNU-sm8250-common"
+commit = "d8992dfb0f87d903676219c0c91b540ec62c7114"
