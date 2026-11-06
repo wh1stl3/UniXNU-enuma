@@ -13,5 +13,5 @@
 - 设备写入动作须用户当轮明确授权；ECID/序列号不入库；Apple 派生产物不上传 GitHub。
 
 ## 关联文档
-- AI 分工与调度：`../../docs/ai-orchestration-2026-11-06.md`。
+- AI 分工与路由：`../../docs/ai-orchestration-2026-11-06.md`（主模型 GPT-6 Astra Low；子 agent Luna/Terra/Astra High；外部 DeepSeek Flash/V4-Pro via MCP）。
 - 双机通用治理（本仓 AGENTS 引用同一份）：`../../docs/governance-2026-11-06.md`。
