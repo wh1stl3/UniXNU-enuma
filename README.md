@@ -10,7 +10,7 @@ Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。�
 | --- | --- | --- |
 | `UniXNU-enuma`（本仓） | 板级连接、组件选择、镜像与分区策略、记录 | 本目录 |
 | `UniXNU-sm8250-common` | kona（SM8250/SM8250-AC）共享资源、DTSI、SoC 配置与补丁 | `../UniXNU-sm8250-common`（`FFT-infra/UniXNU-sm8250-common` 的检出：origin 为本仓 fork，upstream 指 FFT-infra；`feeds.toml` 钉 `166235ec…`，alioth 实机用的是 `a6e7e36c…`） |
-| `uefi-enuma` | Mu-Silicium 固件（需建 enumaPkg 与 `Resources/Configs/enuma.toml`） | `../uefi-enuma` |
+| `uefi-enuma` | Mu-Silicium 固件（`enumaPkg` + `Resources/Configs/enuma.toml` 骨架已建，缺厂商 `Binaries/enuma` 与板级 DTB） | `../uefi-enuma` |
 | `UniXNU`（基座） | 解析器、package、DarwinBoot、组件 | `../../UniXNU` |
 
 注意：官方设备索引把 enuma 归档为 `SM8250`（系列名），本仓一律写 `SM8250-AC`。
@@ -19,7 +19,7 @@ Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。�
 
 - 基座检出：`D:/Code/PortingiOS/UniXNU`（`[package] unixnu` 指向它）。
 - Python 3.11+、git、`dtc`、`mtools`；内核与 payload 在 Linux/WSL 构建（`scripts/linux/setup-toolchain.py`）。
-- `uefi-enuma` 里尚无 `Platforms/Xiaomi/enumaPkg`，`[firmware]` 的 DSC/FD 路径在建立该包前不可构建。
+- `uefi-enuma` 的 `Platforms/Xiaomi/enumaPkg` 与 `Resources/Configs/enuma.toml` 已有骨架（派生自同 SoC 的 pipaPkg），但缺厂商 `Binaries/enuma`、板级 DTB 与真实 FD base/size；`scripts/enuma_firmware_preflight.py` 会在构建前明确列出这些缺失项。
 
 ## 构建
 
