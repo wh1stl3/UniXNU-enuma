@@ -9,7 +9,7 @@ Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。�
 | 仓 | 作用 | 位置 |
 | --- | --- | --- |
 | `UniXNU-enuma`（本仓） | 板级连接、组件选择、镜像与分区策略、记录 | 本目录 |
-| `UniXNU-sm8250-common` | SM8250-AC 共享资源、DTSI、SoC 配置与补丁 | `../UniXNU-sm8250-common`（本地已建仓，`feeds.toml` 钉首次提交；推送前用 `local.toml` 覆盖） |
+| `UniXNU-sm8250-common` | kona（SM8250/SM8250-AC）共享资源、DTSI、SoC 配置与补丁 | `../UniXNU-sm8250-common`（`FFT-infra/UniXNU-sm8250-common` 的检出：origin 为本仓 fork，upstream 指 FFT-infra；`feeds.toml` 钉 `166235ec…`，alioth 实机用的是 `a6e7e36c…`） |
 | `uefi-enuma` | Mu-Silicium 固件（需建 enumaPkg 与 `Resources/Configs/enuma.toml`） | `../uefi-enuma` |
 | `UniXNU`（基座） | 解析器、package、DarwinBoot、组件 | `../../UniXNU` |
 
