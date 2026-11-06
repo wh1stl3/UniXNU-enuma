@@ -7,10 +7,10 @@
 官方设备索引把 enuma 归档为 `SM8250`（系列名）；本仓与 board.toml 一律写 `SM8250-AC`。
 
 ## 基线
-- 基座：`D:/Code/PortingiOS/UniXNU`（上游 main e2fdae4）。
-- **已是官方 format 2 骨架**：`schema_version = 2`、`feeds.toml`（钉 `wh1stl3/UniXNU-sm8250-common@d8992df…`）、`dts/enuma.dts`、`configs/enuma_defconfig`、`patches/xnu/series`、`porting.toml`、`scripts/package.sh`、`.github/workflows/*`。
-- SoC 共享仓 `../UniXNU-sm8250-common` 为本地骨架（官方无 SM8250 仓）：`soc.toml` 的 source 字段、DTSI 资源、共享补丁均待原厂 DTS 证据；推送前在 `local.toml` 用 `local = "../UniXNU-sm8250-common"` 覆盖。
-- 未完成：`[payload]` 的 `dram_size` 与 `[userdata]` LBA 缺实测；`uefi-enuma` 无 `enumaPkg` / `Resources/Configs/enuma.toml`。
+- 基座：`D:/Code/PortingiOS/UniXNU`（上游 main `e2fdae4` + 1 个本地 submodule pin 提交 `af9d099`：ArmCpu/XnuPrelink）。
+- **已是官方 format 2**：`schema_version = 2`、`feeds.toml`（钉 `FFT-infra/UniXNU-sm8250-common@166235ec…`）、`dts/enuma.dts`、`configs/enuma_defconfig`、`patches/xnu/series`、`porting.toml`、`scripts/package.sh`、`.github/workflows/*`。
+- SoC 共享仓 `../UniXNU-sm8250-common` 是社区 `FFT-infra/UniXNU-sm8250-common`（kona：DTSI + 两条 SMP/拓扑补丁 + A650 GMU kit）的检出；origin 指本仓 fork，upstream 指 FFT-infra。同 SoC 的 alioth 已用它跑到桌面；**AC 特有的 CPU/GPU 频率档、电源票与热区仍须本板提供**。
+- 未完成：`[payload]` 的 `dram_size` 与 `[userdata]` LBA 缺实测；`uefi-enuma` 无 `enumaPkg` / `Resources/Configs/enuma.toml`；`unixnu.lock` 待 fetch 完成。
 
 ## 目录约定（官方布局）
 - 板级文件：`board.toml`、`porting.toml`、`feeds.toml`、`configs/`、`dts/`、`patches/xnu/series`、`package/`、`scripts/package.sh`、`proprietary-files.txt`、`local.toml.example`。
