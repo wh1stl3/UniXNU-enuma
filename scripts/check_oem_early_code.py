@@ -1,0 +1,135 @@
+"""Review-bound ARM64 sync and early-call sequences, with deletion negatives."""
+import re,struct
+from prepare_enuma_mmu_experiment import file_offset
+from map_oem_trace_rva import sections
+
+def data_offset(pe,rva):
+    hits=[s for s in sections(pe) if s[1]<=rva and rva+16<=s[1]+s[2]]
+    if len(hits)!=1:raise ValueError('GUID is not uniquely file-backed')
+    s=hits[0]
+    return s[3]+rva-s[1]
+
+def check(pe,mapping,experiment='oem-early-v3'):
+    if experiment=='oem-far-event-v8':
+        from check_oem_event_code import check_event
+        return check_event(pe,mapping)
+    if experiment not in ('oem-early-v3','oem-post-kernel-v4','oem-registration-v5','oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8'):raise ValueError('unknown code scope')
+    post=experiment!='oem-early-v3';registration=experiment=='oem-registration-v5'
+    entries=[(int(a,16),n) for a,n in re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+(\S+)$',mapping,re.M)]
+    def sym(n):
+        hits={a for a,name in entries if name==n}
+        if len(hits)!=1:raise ValueError('missing sync symbol '+n)
+        return hits.pop()
+    def word(a):return struct.unpack_from('<I',pe,file_offset(pe,a))[0]
+    def target(a):
+        w=word(a)
+        if w&0xfc000000!=0x94000000:return None
+        x=w&0x3ffffff
+        return a+4*(x-0x4000000 if x&0x2000000 else x)
+    def region(n):
+        start=sym(n);return range(start,min(a for a,_ in entries if a>start),4)
+    start=sym('EnumaOemCoreSyncSystemTable');sites={}
+    # Reviewed build: active/publication gates, source identity, pointer/count,
+    # CRC arguments/reset/call and actual error branch to terminal callback.
+    expected={0x10:0xb40002c8,0x1c:0x34000269,0x24:0xf944d529,
+              0x28:0xeb00013f,0x2c:0x54000221,0x34:0xf9403809,
+              0x3c:0x91004102,0x40:0x52800f01,0x48:0xf9003149,
+              0x4c:0xf9403409,0x50:0xaa0803e0,0x54:0xb900015f,
+              0x58:0xf940ad6b,0x5c:0xf9002d49,0x60:0xd63f0160,
+              0x64:0xb7f80060}
+    if experiment in ('oem-far-chain-v7','oem-far-event-v8'):
+        # Reviewed v7 load uses the relocated source-table global at +2584.
+        expected[0x24]=0xf9450d29
+    for off,w in expected.items():
+        if word(start+off)!=w:raise ValueError('sync instruction differs: '+hex(off))
+        sites['sync_'+hex(off)]=start+off
+    if target(start+0x74)!=sym('OemCaptureTerminal'):raise ValueError('sync failure not terminal')
+    sites['sync_terminal']=start+0x74
+    calls=[a for a in region('CoreInstallConfigurationTable') if target(a)==start]
+    if len(calls)!=2:raise ValueError('sync publication sites missing')
+    for a,name in zip(calls,('CoreFreePool','CoreNotifySignalList')):
+        if target(a+8)!=sym(name):raise ValueError('sync ordering differs: '+name)
+        sites['before_'+name]=a
+    if word(calls[0]-4)!=0xf9003816:raise ValueError('new table not published before sync')
+    sites['publish_new_table']=calls[0]-4
+    if experiment in ('oem-far-chain-v7','oem-far-event-v8'):
+        from check_oem_far_code import check_far
+        sites.update(check_far(pe,mapping))
+        guid=sym('OemProgressObserve.Sid');off=data_offset(pe,guid)
+        if pe[off:off+16]!=bytes.fromhex('b4d3b654335d914f86006c41d5deb19a'):raise ValueError('SID GUID differs')
+        return sites,guid
+    if experiment=='oem-main-entry-v6':
+        from check_oem_main_code import check_main
+        sites.update(check_main(pe,mapping))
+        guid=sym('OemProgressObserve.Sid');off=data_offset(pe,guid)
+        if pe[off:off+16]!=bytes.fromhex('b4d3b654335d914f86006c41d5deb19a'):raise ValueError('SID GUID differs')
+        return sites,guid
+    selects=[a for a in region('OemProgressObserve') if word(a)==(0xf100169f if registration else 0xf100129f if post else 0xf100069f)]
+    if len(selects)!=1:raise ValueError('selected-call selector missing')
+    a=selects[0]
+    emit_offset=0x48 if registration else 0x38
+    if word(a+4)!=(0x54000261 if registration else 0x540001e1) or target(a+emit_offset)!=sym('OemProgressEmit'):
+        raise ValueError('selected-call branch/emission changed')
+    sites['selected_call_compare']=a;sites['selected_call_branch']=a+4;sites['selected_call_emit']=a+emit_offset
+    if registration:
+        for off,w in {8:0xb9400348,12:0x7100111f,16:0x540005e1,24:0x528b9909,
+                      28:0xf9403108,32:0xeb09011f,36:0x54000541}.items():
+            if word(a+off)!=w:raise ValueError('registration event gate differs: '+hex(off))
+            sites['registration_gate_'+hex(off)]=a+off
+        start=sym('EnumaTraceInstallConfigurationTable')
+        expected={0x24:0x528b990a,0x34:0xeb0903c9,0x38:0xfa4a2120,0x3c:0x528b9909,
+                  0x40:0xfa490100,0x44:0x54000188,0x58:0xf9406102,0x70:0xd61f0040,
+                  0x98:0x52800080,0xb4:0xaa1503e0,0xb8:0xaa1303e1,
+                  0xc0:0xf9406108,0xc4:0xd63f0100,0xc8:0xaa0003f3,
+                  0xd0:0x52800081,0xe0:0xaa1303e5,0xe8:0xaa1303e0}
+        for off,w in expected.items():
+            if word(start+off)!=w:raise ValueError('registration forwarding differs: '+hex(off))
+            sites['registration_forward_'+hex(off)]=start+off
+        for off,name in ((0xa8,'EnumaServiceBegin'),(0xe4,'EnumaServiceEnd')):
+            if target(start+off)!=sym(name):raise ValueError('registration trace order differs')
+            sites['registration_'+name]=start+off
+        hook=sym('CoreStartImage')+0x920
+        w=word(hook);add=word(hook+8)
+        if w&0x9f00001f!=0x90000009 or add&0xffc003ff!=0x91000129:raise ValueError('registration hook address sequence differs')
+        imm=((w>>5)&0x7ffff)*4+((w>>29)&3)
+        if imm&(1<<20):imm-=1<<21
+        address=(hook&~0xfff)+(imm<<12)+((add>>10)&0xfff)
+        if address!=start or word(hook+24)!=0xf9005b09:raise ValueError('registration wrapper not installed into private Boot table')
+        for off in (0,8,24):sites['registration_hook_'+str(off)]=hook+off
+    guid=sym('OemProgressObserve.Sid');off=data_offset(pe,guid)
+    if pe[off:off+16]!=bytes.fromhex('b4d3b654335d914f86006c41d5deb19a' if post else 'e72b06b50b17324abe21689262ff4399'):
+        raise ValueError('observed protocol GUID differs')
+    return sites,guid
+
+def verify(pe,mapping,experiment='oem-early-v3'):
+    sites,guid=check(pe,mapping,experiment)
+    for name,a in sites.items():
+        off=file_offset(pe,a);mutated=pe[:off]+bytes.fromhex('1f2003d5')+pe[off+4:]
+        try:check(mutated,mapping,experiment)
+        except ValueError:pass
+        else:raise ValueError('deleted early instruction accepted: '+name)
+    off=data_offset(pe,guid);mutated=bytearray(pe);mutated[off]^=1
+    try:check(mutated,mapping,experiment)
+    except ValueError:pass
+    else:raise ValueError('changed observed GUID accepted')
+    guid_checks=1
+    if experiment in ('oem-main-entry-v6','oem-far-chain-v7','oem-far-event-v8'):
+        owner='OemProgressRecord' if experiment=='oem-far-event-v8' else 'OemProgressObserve'
+        hits=re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+'+owner+r'.Main$',mapping,re.M)
+        if len(hits)!=1:raise ValueError('main GUID symbol differs')
+        off=data_offset(pe,int(hits[0],16));mutated=bytearray(pe);mutated[off]^=1
+        try:check(mutated,mapping,experiment)
+        except ValueError:pass
+        else:raise ValueError('changed ChipInfo GUID accepted')
+        guid_checks+=1
+    if experiment in ('oem-far-chain-v7','oem-far-event-v8'):
+        hits=re.findall(r'^([0-9a-f]+)\s+00000000\s+0\s+EnumaOemFarDispatchComplete.Guid$',mapping,re.M)
+        if len(hits)!=1:raise ValueError('GOP GUID symbol differs')
+        off=data_offset(pe,int(hits[0],16));mutated=bytearray(pe);mutated[off]^=1
+        try:check(mutated,mapping,experiment)
+        except ValueError:pass
+        else:raise ValueError('changed GOP GUID accepted')
+        guid_checks+=1
+    return dict(sites={n:hex(a) for n,a in sites.items()},observed_guid_rva=hex(guid),experiment=experiment,
+                deletion_checks=len(sites),guid_mutation_checks=guid_checks,
+                scope='selected linked instruction sequences; not whole-program or hardware proof')

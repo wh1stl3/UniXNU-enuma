@@ -1,0 +1,483 @@
+"""One authorized full-input temporary boot; offline by default.
+
+Run --camera-check or --execute with the existing Python3.12 camera environment.
+No partition flash/erase/slot change. Reuses the guarded entry/recovery runner.
+"""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+import re
+import uuid
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def digest(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def write(path, data):
+    path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
+
+
+def qualification(published=False, report=None, observation_repeat=None, local_preparation=None):
+    report = (report or ROOT / 'reports/enuma-ram-payload-qualification.json').resolve()
+    if not any(report.is_relative_to(ROOT / folder) for folder in ['out', 'reports']):
+        raise ValueError('qualification must stay inside repository out/ or reports/')
+    q = json.loads(report.read_text())
+    if q.get('hardware_review')=='R-024':
+        if observation_repeat is not None: raise ValueError('R-024 is not an observation repeat')
+        from r024_preparation import qualification as diagnostic_qualification
+        return diagnostic_qualification(report,published,local_preparation,ROOT)
+    if q.get('hardware_review')=='R-023':
+        if observation_repeat is not None: raise ValueError('R-023 is not an observation repeat')
+        from r023_preparation import qualification as attributed_qualification
+        return attributed_qualification(report,published,local_preparation,ROOT)
+    if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control'):
+        control = q['trial_kind'] in ('ramoops-map-control','ramoops-header-read','ramoops-warm-control')
+        frozen = (ROOT / q['archive'] / 'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text()) != q:
+            raise ValueError('ramoops candidate differs from frozen qualification')
+        nonce = q.get('nonce', '')
+        expected = dict(base='0xB0000000', size='0x200000', marker_bytes=0 if control else 44, stage=10,
+                        delay_seconds=2, reset='cold' if control else 'warm-with-cold-fallback', pmsg_access=False)
+        if q['trial_kind']=='ramoops-header-read':expected['header_read_offsets']=[0,4,8]
+        if q['trial_kind']=='ramoops-warm-control':expected['reset']='warm-with-cold-fallback'
+        bad_nonce = nonce is not None if control else (not isinstance(nonce,str) or re.fullmatch('[0-9a-f]{32}', nonce) is None)
+        if (bad_nonce or q.get('ramoops_scope') != expected or
+            q.get('review_required') is not False or q.get('pixel_access') is not False):
+            raise ValueError('R-017 exact console scope or actual code qualification missing')
+    if q.get('trial_kind') in ('inherited-video-audit','inherited-video-entry-control'):
+        frozen=(ROOT/q['archive']/'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
+            raise ValueError('video audit differs from frozen qualification')
+        expected=0 if q['trial_kind']=='inherited-video-entry-control' else 330
+        if q.get('terminal_return')!={'pass':2,'fail':7,'completion_fallback':False}:
+            raise ValueError('video trials require symmetric terminal return; old dispatcher-fallback profiles are consumed/historical')
+        if q.get('pixel_access') is not False or q.get('gop_published') is not False or q.get('maximum_reads')!=expected:
+            raise ValueError('unsupported video audit scope')
+        query=q.get('topology_status_query',0)
+        if type(query) is not int or query not in (0,1,2) or (query and (expected!=330 or q.get('topology_status_value')!=13)):
+            raise ValueError('unsupported topology status classification')
+        target=q.get('reason_target',0);reason_query=q.get('reason_query',0)
+        if (type(target) is not int or target not in range(5) or type(reason_query) is not int or reason_query not in (0,1,2) or
+            bool(target)!=bool(reason_query) or (target and (query or expected!=330))):
+            raise ValueError('unsupported first-reason classification')
+        if expected==0 and q.get('control_actual_code',{}).get('review_required') is not False:
+            raise ValueError('actual control PE disassembly still needs review')
+    if q.get('trial_kind')=='native-display-observe':
+        frozen=(ROOT/q['archive']/'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
+            raise ValueError('native observer differs from frozen qualification')
+        control=q.get('native_control',False)
+        if (type(control) is not bool or (control and q.get('boot_clock_capture') is not True) or
+            type(q.get('native_query')) is not int or q.get('native_query') not in (1,2) or q.get('maximum_reads')!=(0 if control else 26) or
+            q.get('maximum_wait_calls')!=(0 if control else 2) or q.get('maximum_mmio_offset')!=(None if control else '0x6c26c') or
+            q.get('pixel_access') is not False or q.get('gop_published') is not False or
+            q.get('terminal_return')!={'pass':2,'fail':7,'completion_fallback':False}):
+            raise ValueError('native observer scope invalid')
+        if published:
+            review=json.loads((ROOT/'reports/enuma-native-display-code.json').read_text())
+            matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and
+                      x.get('native_query')==q['native_query'] and
+                      x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and
+                      x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
+            if q.get('review_required') is not False or review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
+                raise ValueError('native actual PE code review missing or mismatched')
+    if q.get('trial_kind') in ('native-display-mask','native-video-route'):
+        from native_mask_decode import make_plan,make_pixel_plan
+        frozen=(ROOT/q['archive']/'qualification.json').resolve()
+        if not frozen.is_relative_to((ROOT/'out').resolve()) or json.loads(frozen.read_text())!=q:
+            raise ValueError('native mask differs from frozen qualification')
+        expected={'native_query':1,'native_control':False,'boot_clock_capture':True,
+                  'maximum_reads':26,'maximum_wait_calls':2,'maximum_mmio_offset':'0x6c26c',
+                  'pixel_access':False,'gop_published':False,
+                  'terminal_return':{'code_delays_seconds':[2,7,12,17,22],'completion_fallback':False}}
+        route=q['trial_kind']=='native-video-route'
+        if route:
+            from native_route_decode import CATEGORIES,DETAIL_CATEGORIES,STAGING_CATEGORIES,LAYOUT_CATEGORIES,BLEND_CATEGORIES,STRUCTURE_CATEGORIES,GEOMETRY_CATEGORIES,GLOBAL_OUTPUT_CATEGORIES,GLOBAL_DETAIL_CATEGORIES,ALPHA_VIEW_CATEGORIES,CPU_STAGE1_CATEGORIES,CPU_ATTRIBUTE_CATEGORIES,CPU_POLICY_CATEGORIES,CPU_READ_CATEGORIES,CPU_BARRIER_CATEGORIES,CPU_ROI_CATEGORIES,CPU_PATTERN_CATEGORIES
+            detail=q.get('native_route_detail',False)
+            if type(detail) is not bool: raise ValueError('native route detail scope invalid')
+            staging=q.get('native_route_staging',False)
+            if type(staging) is not bool or (staging and not detail): raise ValueError('native staging scope invalid')
+            layout=q.get('native_route_layout',False)
+            if type(layout) is not bool or (layout and (not detail or staging)): raise ValueError('native layout scope invalid')
+            blend=q.get('native_route_blend',False)
+            if type(blend) is not bool or (blend and not layout): raise ValueError('native blend scope invalid')
+            structure=q.get('native_route_structure',False)
+            if type(structure) is not bool or (structure and (detail or staging or layout or blend)): raise ValueError('native structure scope invalid')
+            geometry=q.get('native_route_structure_detail',False)
+            if type(geometry) is not bool or (geometry and not structure): raise ValueError('native structural geometry scope invalid')
+            global_output=q.get('native_route_global_output',False)
+            if type(global_output) is not bool or (global_output and (not structure or geometry)): raise ValueError('native global output scope invalid')
+            global_detail=q.get('native_route_global_detail',False)
+            if type(global_detail) is not bool or (global_detail and not global_output): raise ValueError('native global source detail scope invalid')
+            alpha_view=q.get('native_route_alpha_view',False)
+            if type(alpha_view) is not bool or (alpha_view and (not global_output or global_detail)): raise ValueError('native alpha view scope invalid')
+            if alpha_view: expected['alpha_semantics_unproven']=True
+            cpu_stage1=q.get('native_route_cpu_stage1',False)
+            if type(cpu_stage1) is not bool or (cpu_stage1 and not alpha_view): raise ValueError('native CPU stage1 scope invalid')
+            if cpu_stage1: expected.update(maximum_translation_operations=18432,cpu_stage1_only=True,cpu_memory_data_access=False,cpu_mapping_changes=False)
+            cpu_attribute=q.get('native_route_cpu_attribute',False)
+            if type(cpu_attribute) is not bool or (cpu_attribute and not cpu_stage1): raise ValueError('native CPU attribute scope invalid')
+            cpu_policy=q.get('native_route_cpu_policy',False)
+            if type(cpu_policy) is not bool or (cpu_policy and (not cpu_stage1 or cpu_attribute)): raise ValueError('native whole-range CPU policy scope invalid')
+            cpu_read=q.get('native_route_cpu_read',False)
+            if type(cpu_read) is not bool or (cpu_read and not cpu_policy): raise ValueError('native single CPU read scope invalid')
+            if cpu_read: expected.update(pixel_access=True,cpu_stage1_only=False,cpu_memory_data_access=True,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
+            cpu_barrier=q.get('native_route_cpu_barrier',False)
+            if type(cpu_barrier) is not bool or (cpu_barrier and not cpu_read): raise ValueError('native CPU barrier scope invalid')
+            if cpu_barrier: expected.update(maximum_barriers=1,barrier_kind='dsb-sy-before-data-read')
+            cpu_roi=q.get('native_route_cpu_roi',False)
+            if type(cpu_roi) is not bool or (cpu_roi and not cpu_barrier): raise ValueError('native CPU ROI scope invalid')
+            if cpu_roi: expected.update(maximum_framebuffer_reads=1024,roi_origin_x=0,roi_origin_y=0,roi_width=128,roi_height=8,cpu_context_on_completion=True)
+            cpu_pattern=q.get('native_route_cpu_pattern',False)
+            if type(cpu_pattern) is not bool or (cpu_pattern and not cpu_roi): raise ValueError('native pixel scope invalid')
+            cpu_text=q.get('native_route_cpu_text',False)
+            if type(cpu_text) is not bool or (cpu_text and not cpu_pattern): raise ValueError('native text scope invalid')
+            expected.update(native_query=0,maximum_reads=330,native_route_audit=True,native_border_view=not staging,result_categories=CPU_PATTERN_CATEGORIES if cpu_pattern else CPU_ROI_CATEGORIES if cpu_roi else CPU_BARRIER_CATEGORIES if cpu_barrier else CPU_READ_CATEGORIES if cpu_read else CPU_POLICY_CATEGORIES if cpu_policy else CPU_ATTRIBUTE_CATEGORIES if cpu_attribute else CPU_STAGE1_CATEGORIES if cpu_stage1 else ALPHA_VIEW_CATEGORIES if alpha_view else GLOBAL_DETAIL_CATEGORIES if global_detail else GLOBAL_OUTPUT_CATEGORIES if global_output else GEOMETRY_CATEGORIES if geometry else STRUCTURE_CATEGORIES if structure else BLEND_CATEGORIES if blend else LAYOUT_CATEGORIES if layout else STAGING_CATEGORIES if staging else DETAIL_CATEGORIES if detail else CATEGORIES)
+        if route and cpu_pattern:
+            from native_pixel_scope import scope_for_review
+            review="R-022" if q.get("boot_log_replay") is True and q.get("boot_log_hold_seconds")==8 else "R-020" if q.get("boot_log_replay") is True else "R-019" if cpu_text else "R-018"
+            SCOPE=scope_for_review(review)
+            if review in ('R-020','R-022') and (q.get('boot_journal') is not True or q.get('cached_replay') is not True or q.get('global_debug') is not False or cpu_text): raise ValueError('invalid cached journal replay profile')
+            expected.update(maximum_reads=660,maximum_wait_calls=5,maximum_framebuffer_reads=SCOPE["framebuffer_reads_max"],framebuffer_writes=SCOPE["framebuffer_writes_max"],roi_height=SCOPE["height"],maximum_barriers=3,barrier_kind='dsb-sy-before-save-after-pattern-after-restore',cpu_context_on_completion=False,required_current_el=1,hold_us=SCOPE['hold_us'],roi_width=SCOPE['width'],hold_calls_max=1,hardware_review=review,pixel_scope=SCOPE,camera_required=True,execution_approval_required=True)
+        if any(type(q.get(k)) is not type(v) or q.get(k)!=v for k,v in expected.items()):
+            raise ValueError('native mask scope invalid')
+        if not route and (type(q.get('native_mask_field')) is not int or q['native_mask_field'] not in range(1,8)):
+            raise ValueError('invalid native mask field')
+        calibration=ROOT/'reports/enuma-boot-clock-calibration.json'
+        if q.get('decode_plan')!=(make_pixel_plan(ROOT,review) if route and cpu_pattern else make_plan(ROOT)) or q.get('calibration_sha256')!=digest(calibration) or json.loads(calibration.read_text()).get('calibration_passed') is not True:
+            raise ValueError('fixed boot clock calibration/plan differs')
+        if published:
+            review=json.loads((ROOT/'reports'/('enuma-native-route-code.json' if route else 'enuma-native-mask-code.json')).read_text())
+            if (q.get('review_required') is not False or review.get('review_required') is not False or
+                review.get('firmware_commit')!=q['firmware_commit'] or review.get('image_sha256')!=q['image_sha256'] or
+                review.get('provider_sha256')!=q['files']['SimpleFbDxe.efi']['sha256'] or
+                review.get('core_sha256')!=q['files']['DxeCore.efi']['sha256']):
+                raise ValueError('actual mask/Core code review missing or mismatched')
+    if 'detail_point' in q:
+        frozen_manifest = (ROOT / q['archive'] / 'qualification.json').resolve()
+        if not frozen_manifest.is_relative_to((ROOT / 'out').resolve()) or json.loads(frozen_manifest.read_text()) != q:
+            raise ValueError('boundary report differs from frozen qualification manifest')
+        fat = json.loads((ROOT / 'reports/enuma-full-payload.json').read_text())
+        if (q['detail_point'] not in (13, 15, 20, 21, 22) or q['target_guid'] != '4138022f-06c7-4f79-9c94-7e33b511a4e7'
+                or q.get('completion_fallback_enabled') is not False or q.get('ram_payload_sha256') != fat['payload_sha256']):
+            raise ValueError('boundary mode requires exact DisplayDxe pre-call/entry/return, full FAT and no fallback')
+    pin = json.loads((ROOT / 'config/uefi-source.lock.json').read_text())
+    if q['firmware_commit'] != pin['commit']:
+        raise ValueError('qualification differs from current firmware pin')
+    for name, entry in q['files'].items():
+        p = (ROOT / q['archive'] / name).resolve()
+        if not p.is_relative_to((ROOT / 'out').resolve()) or digest(p) != entry['sha256']:
+            raise ValueError('immutable archive differs: ' + name)
+    image = (ROOT / q['image']).resolve()
+    if not image.is_relative_to((ROOT / 'out').resolve()) or digest(image) != q['image_sha256']:
+        raise ValueError('candidate differs')
+    if observation_repeat:
+        from run_enuma_entry_probe import require_hardware_review
+        require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
+            json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')),observation_repeat)
+    if published:
+        if q.get('trial_kind') in ('ramoops-canary','ramoops-map-control','ramoops-header-read','ramoops-warm-control') or q.get('native_route_cpu_pattern') is True:
+            from run_enuma_entry_probe import require_hardware_review
+            require_hardware_review(json.loads(image.with_suffix('.json').read_text()),
+                json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8')),observation_repeat)
+        if q.get('reason_target'):
+            review=json.loads((ROOT/'reports/enuma-video-reason-code.json').read_text())
+            matching=[x for x in review.get('queries',[]) if x.get('image_sha256')==q['image_sha256'] and x.get('query')==q['reason_query'] and x.get('reason_target')==q['reason_target'] and x.get('provider_sha256')==q['files']['SimpleFbDxe.efi']['sha256'] and x.get('core_sha256')==q['files']['DxeCore.efi']['sha256']]
+            if review.get('review_required') is not False or review.get('firmware_commit')!=q['firmware_commit'] or len(matching)!=1:
+                raise ValueError('actual first-reason provider code review missing or mismatched')
+        if local_preparation is not None:
+            if observation_repeat is not None:
+                raise ValueError('local frozen preparation does not authorize an observation repeat')
+            from r022_preparation import require_local_preparation
+            require_local_preparation(local_preparation,q,ROOT)
+        for repo in (() if local_preparation is not None else (ROOT, ROOT / 'firmware')):
+            def git(*args):
+                return subprocess.check_output(['git','-c','safe.directory='+repo.as_posix(), '-C', str(repo), *args], text=True).strip()
+            if git('status', '--porcelain', '--ignore-submodules=all'):
+                raise ValueError('source/current documents must be clean before a trial')
+            head = git('rev-parse', 'HEAD')
+            if git('ls-remote', 'origin', 'refs/heads/main').split()[0] != head:
+                raise ValueError('source/current documents must be pushed before a trial')
+            if repo.name == 'firmware' and head != q['firmware_commit']:
+                raise ValueError('firmware checkout differs')
+        if not observation_repeat and (ROOT / 'out/device-tests' / ('consumed-' + q['image_sha256'] + '.local.json')).exists():
+            raise ValueError('candidate already issued; do not repeat a failed/consumed image')
+    return q, image
+
+
+def single_read_only_scope(q):
+    required=dict(native_route_cpu_read=True,native_route_cpu_policy=True,native_route_cpu_stage1=True,
+                  pixel_access=True,cpu_memory_data_access=True,cpu_stage1_only=False,
+                  cpu_mapping_changes=False,maximum_framebuffer_reads=1,framebuffer_writes=0,cache_maintenance=False)
+    barrier=q.get('native_route_cpu_barrier',False)
+    if type(barrier) is not bool: return False
+    if barrier: required.update(maximum_barriers=1,barrier_kind='dsb-sy-before-data-read')
+    roi=q.get('native_route_cpu_roi',False)
+    if type(roi) is not bool or (roi and not barrier): return False
+    if roi: required.update(maximum_framebuffer_reads=1024,roi_origin_x=0,roi_origin_y=0,roi_width=128,roi_height=8,cpu_context_on_completion=True)
+    return all(type(q.get(k)) is type(v) and q.get(k)==v for k,v in required.items())
+
+
+def run_without_camera(q, image):
+    """Use the same guarded runner for a qualified read-only native route probe."""
+    if (q.get('trial_kind') != 'native-video-route' or
+        (q.get('pixel_access') is not False and not single_read_only_scope(q)) or q.get('gop_published') is not False or
+        q.get('boot_clock_capture') is not True):
+        raise ValueError('camera-free mode requires read-only native route with boot clock')
+    if q.get('native_route_cpu_pattern') is True: raise ValueError('protected pixel scope requires camera')
+    out = ROOT / 'out/system-transport' / datetime.now().strftime('%Y%m%dT%H%M%S')
+    out.mkdir(parents=True)
+    report = dict(scope='qualified read-only native route; ADB/fastboot and calibrated boot clock',
+                  image_sha256=q['image_sha256'], camera_used=False, media_recorded=False,
+                  started_utc=datetime.now(timezone.utc).isoformat(),
+                  device_runner_started=False, boot_issued=False,
+                  runner_log=(out/'runner.log').relative_to(ROOT).as_posix())
+    command = [sys.executable, '-X', 'utf8', '-u', '-B',
+               str(ROOT/'scripts/run_enuma_entry_probe.py'), '--image', str(image),
+               '--label', 'system-transport', '--boot-clock']
+    try:
+        with (out/'runner.log').open('w', encoding='utf-8') as log:
+            report['device_runner_started'] = True
+            result = subprocess.run(command, cwd=ROOT, stdout=log,
+                                    stderr=subprocess.STDOUT, timeout=240)
+        report['runner_exit'] = result.returncode
+        if result.returncode:
+            raise RuntimeError('guarded runner failed; reconcile actual device state before further trial')
+        print('PASS: guarded runner returned; ADB/fastboot/boot-clock evidence saved; camera disabled')
+    except Exception as error:
+        report['error'] = str(error)
+        raise
+    finally:
+        state = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+        if state.get('candidate_sha256') == q['image_sha256'] and state.get('issued_at'):
+            report['boot_issued'] = True
+            write(ROOT/'out/device-tests'/('consumed-'+q['image_sha256']+'.local.json'),
+                  dict(image_sha256=q['image_sha256'], evidence=out.relative_to(ROOT).as_posix(), phase=state['phase']))
+        write(out/'observation.json', report)
+        write(ROOT/'reports/enuma-system-trial-observation.json', report)
+
+
+def run_with_human_capture(q,image,authorization,execution_id,human_ready):
+    """Explicit R021 human camera replaces disconnected host camera; no pixels hidden as read-only."""
+    repeat_mode=(authorization=='R-021' and q.get('hardware_review')=='R-020')
+    new_mode=(authorization is None and q.get('hardware_review') in ('R-022','R-023','R-024') and q.get('boot_log_hold_seconds')==8)
+    if (not (repeat_mode or new_mode) or not human_ready or q.get('boot_log_replay') is not True or
+        q.get('trial_kind')!='native-video-route'):
+        raise ValueError('human-only capture requires exact R021 repeat or new R022/R0238s profile and confirmed readiness')
+    approvals=json.loads((ROOT/'config/hardware-review-approvals.json').read_text(encoding='utf-8'))
+    review=authorization if repeat_mode else q['hardware_review']
+    if approvals.get(review,{}).get('capture_mode')!='human-primary-only':
+        raise ValueError('human-only observation arrangement not recorded')
+    from run_enuma_entry_probe import require_hardware_review
+    require_hardware_review(json.loads(image.with_suffix('.json').read_text()),approvals,authorization)
+    out=ROOT/'out/human-capture'/(datetime.now().strftime('%Y%m%dT%H%M%S')+('-S049' if repeat_mode else '-S052' if review=='R-024' else '-S051' if review=='R-023' else '-S050'))
+    out.mkdir(parents=True)
+    report=dict(scope='explicit human-only close-up capture; host boot-clock/USB/recovery logs; no host video',
+        image_sha256=q['image_sha256'],camera_used=False,host_camera_used=False,human_capture_ready=True,
+        human_media_pending=True,human_media_received=False,observation_channel='human-primary-only',
+        observation_repeat=authorization,execution_id=execution_id,started_utc=datetime.now(timezone.utc).isoformat(),
+        device_runner_started=False,boot_issued=False,host_audio_recorded=False,
+        runner_log=(out/'runner.log').relative_to(ROOT).as_posix())
+    command=[sys.executable,'-X','utf8','-u','-B',str(ROOT/'scripts/run_enuma_entry_probe.py'),
+             '--image',str(image),'--label','system-transport','--boot-clock']
+    if repeat_mode:command+=['--observation-repeat',authorization,'--execution-id',execution_id,'--human-camera-ready']
+    if new_mode:command+=['--execution-id',execution_id,'--human-camera-ready']
+    try:
+        with (out/'runner.log').open('w',encoding='utf-8') as log:
+            report['device_runner_started']=True
+            result=subprocess.run(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,timeout=240)
+        report['runner_exit']=result.returncode
+        if result.returncode:raise RuntimeError('guarded runner failed; stop further trials and reconcile recovery')
+        print('PASS: host runner returned; human photos/video still required, no legibility conclusion')
+    except Exception as error:
+        report['error']=str(error)
+        raise
+    finally:
+        from observation_repeat import issued_for_attempt,finish
+        state=json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+        issued=(issued_for_attempt(state,q['image_sha256'],authorization,execution_id) if repeat_mode else
+                state.get('candidate_sha256')==q['image_sha256'] and bool(state.get('issued_at')) and
+                state.get('execution_id')==execution_id and state.get('hardware_review')==review)
+        if issued:
+            report['boot_issued']=True
+            if repeat_mode:finish(ROOT,authorization,execution_id,state,out.relative_to(ROOT).as_posix())
+            else:write(ROOT/'out/device-tests'/('consumed-'+q['image_sha256']+'.local.json'),dict(image_sha256=q['image_sha256'],evidence=out.relative_to(ROOT).as_posix(),phase=state['phase']))
+        write(out/'observation.json',report)
+        write(ROOT/'reports/enuma-system-trial-observation.json',report)
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument('--camera-check', action='store_true')
+    mode.add_argument('--execute', action='store_true')
+    p.add_argument('--qualification', type=Path, help='explicit full-input/no-fallback pre-call or return qualification; defaults to full-chain report')
+    p.add_argument('--local-preparation',type=Path,help='exact frozen R-022 local runner/docs binding; no commit/push, no hardware approval implied')
+    p.add_argument('--no-camera', action='store_true', help='qualified read-only native route: use ADB/fastboot and calibrated boot clock')
+    p.add_argument('--observation-repeat',choices=('R-021',))
+    p.add_argument('--human-camera-ready',action='store_true')
+    p.add_argument('--human-camera-only',action='store_true',help='explicit R021 repeat or new R0228s human capture only; never generic no-camera pixels')
+    a = p.parse_args()
+    if a.local_preparation and (not a.human_camera_only or a.observation_repeat):p.error('local preparation is only for new R-022/R-023 human capture')
+    if a.human_camera_only and (a.observation_repeat not in (None,'R-021') or a.camera_check or a.no_camera):p.error('human-only mode requires an explicit approved R021/R022 capture profile')
+    if a.observation_repeat and (a.camera_check or a.no_camera):p.error('observation repeat requires the full camera runner')
+    if a.execute and (a.observation_repeat or a.human_camera_only) and not a.human_camera_ready:p.error('wait for explicit human capture readiness before repeat')
+    if a.human_camera_ready and not (a.observation_repeat or a.human_camera_only):p.error('human readiness flag is specific to observation repeat')
+    execution_id=str(uuid.uuid4()) if (a.observation_repeat or a.human_camera_only) else None
+    if a.no_camera and a.camera_check:
+        p.error('--no-camera excludes --camera-check')
+    if not a.camera_check:
+        q, image = qualification(a.execute, a.qualification, a.observation_repeat, a.local_preparation)
+        if a.local_preparation and not a.execute:
+            if q.get('hardware_review')=='R-024':
+                from r024_preparation import require_local_preparation
+            elif q.get('hardware_review')=='R-023':
+                from r023_preparation import require_local_preparation
+            else:
+                from r022_preparation import require_local_preparation
+            require_local_preparation(a.local_preparation,q,ROOT)
+        if a.no_camera and q.get('native_route_cpu_pattern') is True:
+            p.error('pixel visibility trial requires camera; read-only trials may use --no-camera')
+        if not a.execute:
+            print('PASS: qualified full-input candidate; offline only, no camera/device operation')
+            return
+        if a.human_camera_only:
+            run_with_human_capture(q,image,a.observation_repeat,execution_id,a.human_camera_ready)
+            return
+        if a.no_camera:
+            run_without_camera(q, image)
+            return
+    sys.path.insert(0, str(ROOT / 'out/camera-tools-py312'))
+    import cv2
+    stamp = datetime.now().strftime('%Y%m%dT%H%M%S')
+    out = ROOT / 'out/camera-capture' / (stamp + '-system-transport')
+    out.mkdir()
+    report = dict(scope='host camera preflight; device action only with --execute',
+                  started_utc=datetime.now(timezone.utc).isoformat(), camera_ready=False,
+                  camera_used=True,
+                  device_runner_started=False, boot_issued=False,observation_repeat=a.observation_repeat,execution_id=execution_id,human_capture_ready=a.human_camera_ready)
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    writer = process = log = collector = collector_log = None
+    try:
+        if not cap.isOpened(): raise RuntimeError('camera index0 DirectShow unavailable; no device command issued')
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920); cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+        for _ in range(10): ok, frame = cap.read()
+        if not ok: raise RuntimeError('no camera frame; no device command issued')
+        h, w = frame.shape[:2]
+        cv2.imwrite(str(out / 'before-raw.jpg'), frame)
+        cv2.imwrite(str(out / 'before-rotated.jpg'), cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE))
+        report.update(camera_ready=True, width=w, height=h, rotation='90 clockwise; inspect actual orientation', opencv=cv2.__version__)
+        if a.camera_check:
+            print('PASS: camera frames saved; host only, no device command')
+            return
+        video = out / 'system-transport.avi'
+        writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*'MJPG'), 5, (w, h))
+        if not writer.isOpened(): raise RuntimeError('video writer failed; no device command issued')
+        log = (out / 'runner.log').open('w', encoding='utf-8')
+        label = 'dxe-driver-return' if 'detail_point' in q else 'system-transport'
+        command = [sys.executable, '-X', 'utf8', '-u', '-B', str(ROOT / 'scripts/run_enuma_entry_probe.py'),
+                   '--image', str(image), '--label', label]
+        if a.observation_repeat:
+            command += ['--observation-repeat',a.observation_repeat,'--execution-id',execution_id,'--human-camera-ready']
+        if q.get('boot_clock_capture') is True:
+            command += ['--boot-clock']
+        if q.get('trial_kind') == 'ramoops-canary':
+            previous = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+            target = json.loads((Path(previous['directory'])/'target.local.json').read_text())
+            command += ['--expected-serial', target['serial']]
+            collector_log = (out/'collector.log').open('w', encoding='utf-8')
+            collector = subprocess.Popen([sys.executable, '-X', 'utf8', '-u', '-B',
+                str(ROOT/'scripts/collect_enuma_pstore.py'), '--adb', target['adb'],
+                '--serial', target['serial'], '--nonce', q['nonce'], '--seconds', '120',
+                '--output', str(out/'pstore')], cwd=ROOT, stdout=collector_log, stderr=subprocess.STDOUT)
+            report['pstore_collection'] = (out/'pstore').relative_to(ROOT).as_posix()
+        process = subprocess.Popen(command, cwd=ROOT,
+                                   stdout=log, stderr=subprocess.STDOUT)
+        report['device_runner_started'] = True
+        start = time.monotonic(); last = -1; finished = None; times = []
+        while time.monotonic() - start < 240:
+            ok, frame = cap.read()
+            if not ok: raise RuntimeError('camera lost; stop runner and reconcile device before any new trial')
+            now = time.monotonic() - start
+            if not times or now - times[-1] >= 0.19:
+                writer.write(frame); times.append(now)
+                second = int(now * 2)
+                if second != last:
+                    cv2.imwrite(str(out / ('frame-%04d-raw.jpg' % second)), frame)
+                    cv2.imwrite(str(out / ('frame-%04d-rotated.jpg' % second)), cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE))
+                    last = second
+            if process.poll() is not None:
+                if finished is None: finished = time.monotonic()
+                if time.monotonic() - finished >= 3 and (collector is None or collector.poll() is not None):
+                    if process.returncode == 0:
+                        break
+                    # Keep filming the user's recovery after a timeout. An
+                    # independent reconciliation updates only local state;
+                    # this camera loop issues no extra device commands.
+                    try:
+                        recovered = json.loads((ROOT/'out/device-tests/current.local.json').read_text())
+                    except (OSError,json.JSONDecodeError):
+                        recovered = {}
+                    if (recovered.get('phase')=='recovered-android-boot-complete' and
+                        recovered.get('candidate_sha256')==q['image_sha256']):
+                        break
+                    if now >= 235:
+                        break
+        else:
+            raise RuntimeError('host bound reached; no further candidate, reconcile recovery')
+        writer.release(); writer = None
+        report.update(runner_exit=process.returncode, frames=len(times), frame_timestamps_seconds=times,
+                      video=video.relative_to(ROOT).as_posix(), video_sha256=digest(video))
+        reader = cv2.VideoCapture(str(video)); decoded = 0
+        while True:
+            ok, _ = reader.read()
+            if not ok: break
+            decoded += 1
+        reader.release(); report['decoded_frames'] = decoded
+        if decoded != len(times): raise RuntimeError('camera decode mismatch; no further candidate')
+        print('Camera evidence saved; runner exit=' + str(process.returncode), flush=True)
+        if process.returncode: raise RuntimeError('runner did not complete recovery; inspect runner.log and reconcile')
+        if collector is not None:
+            report['collector_exit'] = collector.returncode
+            collection_path = out/'pstore/collection.json'
+            if collector.returncode != 0 or not collection_path.is_file():
+                raise RuntimeError('pstore collection failed; no additional trial')
+            report['pstore_marker_present'] = json.loads(collection_path.read_text())['marker_present']
+    except Exception as error:
+        report['error'] = str(error)
+        raise
+    finally:
+        if process is not None and process.poll() is None:
+            process.terminate(); process.wait(timeout=15)
+        if writer is not None: writer.release()
+        if log is not None: log.close()
+        if collector is not None and collector.poll() is None:
+            collector.terminate(); collector.wait(timeout=10)
+        if collector_log is not None: collector_log.close()
+        cap.release()
+        if report['device_runner_started']:
+            state = json.loads((ROOT / 'out/device-tests/current.local.json').read_text())
+            from observation_repeat import issued_for_attempt,finish
+            issued=(issued_for_attempt(state,q['image_sha256'],a.observation_repeat,execution_id) if a.observation_repeat else state.get('candidate_sha256') == q['image_sha256'] and state.get('issued_at'))
+            if issued:
+                report['boot_issued'] = True
+                if a.observation_repeat:
+                    finish(ROOT,a.observation_repeat,execution_id,state,out.relative_to(ROOT).as_posix())
+                else:
+                    write(ROOT / 'out/device-tests' / ('consumed-' + q['image_sha256'] + '.local.json'),
+                          dict(image_sha256=q['image_sha256'], evidence=out.relative_to(ROOT).as_posix(), phase=state['phase']))
+        write(out / 'observation.json', report)
+        write(ROOT / 'reports/enuma-system-trial-camera.json', report)
+        if a.execute:
+            write(ROOT / 'reports/enuma-system-trial-observation.json', {**report, 'image_sha256':q['image_sha256']})
+
+
+if __name__ == '__main__':
+    main()

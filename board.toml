@@ -1,0 +1,88 @@
+[board]
+name = "enuma"
+soc = "SM8250"
+description = "Xiaomi Pad 5 Pro 5G / iPadOS 17.7.11 bring-up"
+# TODO: kit requires a reviewed enuma implementation.
+
+[ipsw]
+url = "https://updates.cdn-apple.com/2025SpringFCS/fullrestores/122-77166/DCA6CFE8-90E9-4B92-880D-3DE171798E40/iPad_Pro_HFR_17.7.11_21H461_Restore.ipsw"
+product = "iPad7,1"
+version = "17.7.11"
+build = "21H461"
+device_class = "j120ap"
+chip_id = 0x8011
+board_id = 12
+fetch = ["KernelCache", "DeviceTree", "StaticTrustCache", "Cryptex1,SystemTrustCache"]
+
+[ipsw.sha256]
+"044-76040-038.dmg" = "3f99b859c9728379110b66657c7b15285bcb1925ad8b5726542e2cdcf8b1028d"
+"044-76034-038.dmg" = "b4908cde41d23e6bc05e6af51a2c9eeb00cf0f863a6a18b1600c96a3fd70414f"
+
+[kernel]
+defconfig = "enuma_defconfig"
+# TODO: archives, donor prelink, and complete link/ABI audit.
+# No sheng kernel.prelink addresses are inherited.
+
+[payload.adt]
+ipad_identity = true
+# R-001 approved 2026-10-22: first-entry budget, not observed available RAM.
+owned_memory_size = "0x20000000"
+# The pinned sheng generator gates product AND security properties with this flag.
+# A future enuma generator must preserve the reviewed donor/product contract.
+# TODO: enuma ADT tool, product node, CPU topology and platform seed.
+# Physical bases and total DRAM remain unset; allocation needs the actual UEFI map.
+# TODO: userdata layout, firmware configuration, boot-image parameters.
+
+# UEFI source is the fixed firmware/ gitlink. The wrapper materializes only
+# writable staging under out/; private inputs are checked by this preflight.
+[firmware]
+config = "enuma"
+dsc = "Platforms/Xiaomi/enumaPkg/enuma.dsc"
+fd = "Build/enumaPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
+preflight = ["scripts/enuma_firmware_preflight.py"]
+# Dependency checkouts are validated/materialized before invoking the backend.
+submodules = []
+packages = [
+  "{uefi}", "{uefi}/Platforms/Xiaomi", "{tree}/package",
+  "{tree}/drivers/DarwinBoot", "{edk2}",
+  "{uefi}/Common/Mu", "{uefi}/Common/Mu_OEM_Sample",
+  "{uefi}/Silicon/Qualcomm", "{uefi}/Silicon/Silicium",
+]
+patches = [
+  "patches/dxe-stage-checkpoints.patch", "patches/dxe-dispatch-return.patch",
+  "patches/dxe-driver-checkpoints.patch", "patches/dxe-dispatch-details.patch",
+  "patches/dispatcher-display-read.patch",
+  "Resources/MuPatches/Gic-Spurious.patch",
+]
+
+[firmware.defines]
+ENABLE_SECUREBOOT = "0"
+DEVICE_MODEL = "enuma"
+MEMORY_PROTECTION = "TRUE"
+SHIP_MODE = "FALSE"
+BUILDID_STRING = "enuma-research"
+ENUMA_DIAG_STAGE = "0"
+ENUMA_DIAG_DELAY_US = "2000000"
+ENUMA_DIAG_DISPATCH_ORDINAL = "1"
+ENUMA_DIAG_DETAIL_POINT = "13"
+ENUMA_DIAG_GUID_ENABLED = "0"
+ENUMA_DIAG_GUID_LOW64 = "0"
+ENUMA_DIAG_GUID_HIGH64 = "0"
+ENUMA_DIAG_DISABLE_UFS = "0"
+ENUMA_DIAG_SIMPLEFB = "0"
+ENUMA_DIAG_GUID_ONLY = "0"
+ENUMA_DIAG_DISPATCH_FALLBACK = "0"
+ENUMA_DIAG_GOP_QUERY = "0"
+ENUMA_DIAG_GOP_STEP = "0"
+ENUMA_PLATFORM_CONFIG = "enumaPkg/Include/PlatformConfig.inc"
+ENUMA_VENDOR_DSC = "EnumaInputs/Vendor.dsc.inc"
+ENUMA_VENDOR_DXE = "EnumaInputs/Vendor.fdf.inc"
+ENUMA_VENDOR_APRIORI = "EnumaInputs/Vendor.apriori.inc"
+ENUMA_VENDOR_RAW = "EnumaInputs/Vendor.raw.fdf.inc"
+
+# R-002 approved 2026-10-23; protection and persistence require runtime proof.
+[diagnostics.persistent_log]
+enabled = false
+source_region = "Log Buffer"
+physical_base = "0x9fff7000"
+size = "0x8000"
