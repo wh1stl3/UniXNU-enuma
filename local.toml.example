@@ -1,0 +1,13 @@
+# 复制为 local.toml（Git 忽略）后生效。命令行（--local、--local-module …）优先于本文件。
+# 每个子目录是一个模块；也可以按 [[source]] 单独覆盖某项源码。
+
+[local]
+drivers = "~/Code/dev/drivers"
+kits = "~/Code/dev/kits"
+
+# SM8250 共享仓的本地检出。该仓尚未推送，推送前必须启用本节（或传
+# --local-module soc:sm8250=../UniXNU-sm8250-common），否则 feeds.toml 的 git URL 无法解析。
+[[source]]
+kind = "soc"
+name = "sm8250"
+local = "../UniXNU-sm8250-common"

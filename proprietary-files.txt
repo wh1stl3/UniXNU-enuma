@@ -1,0 +1,50 @@
+# Required firmware inputs: relative path | source | SHA-256 | consumer
+# Fill each entry from this board's firmware package.
+# Candidate stock release: enuma OS1.0.3.0.TKZCNXM (Android 13, China).
+# Catalog: https://xmfirmwareupdater.com/hyperos/enuma/stable/OS1.0.3.0.TKZCNXM/
+# Xiaomi fastboot source:
+# https://bigota.d.miui.com/OS1.0.3.0.TKZCNXM/enuma_images_OS1.0.3.0.TKZCNXM_20240508.0000.00_13.0_cn_fc06cc99cc.tgz
+# Xiaomi recovery source:
+# https://bigota.d.miui.com/OS1.0.3.0.TKZCNXM/miui_ENUMA_OS1.0.3.0.TKZCNXM_e1128c5324_13.0.zip
+# 2026-11-07: both source HEAD requests returned HTTP 403 on this host.
+# Not downloaded or hash-pinned; filename suffixes are not SHA-256 values.
+# Import only through .cache/firmware/. Add measured package and extracted-file
+# SHA-256 records here after bytes and enuma provenance have been checked.
+#
+# 2026-11-07 read-only readback from the connected rooted enuma (scripts/enuma_live_collect.py;
+# adb exec-out su dd if=/dev/block/by-name/<name> bs=1048576, host sha256 equals the on-device
+# sha256sum for every row; no device writes). Raw images stay in the git-ignored .cache/.
+.cache/live-capture/20261107T141941555586Z/partition_xbl_a.bin | enuma device xbl_a readback (host==device sha256, 8388608 B) | 7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057 | XBL FV source for Binaries/enuma; equals the EXPECTED hash of scripts/extract_enuma_xbl.py
+.cache/live-capture/20261107T141941555586Z/partition_xbl_config_a.bin | enuma device xbl_config_a readback (host==device sha256, 8343552 B) | 8f6e198629fefc710552a89cf41688323e353806dc812c5b435e23f9c88e6756 | XBL config inventory
+.cache/live-capture/20261107T141941555586Z/partition_abl_a.bin | enuma device abl_a readback (host==device sha256, 2097152 B) | ff00cd26595d81f97673a7dacaf12e025d25053747bd3819c73dbefd02cc802a | ABL inventory
+.cache/live-capture/20261107T141941555586Z/partition_dtbo_a.bin | enuma device dtbo_a readback (host==device sha256, 33554432 B, 29 overlay entries, entry 07 = xiaomi enuma board-id 0x2e) | fb0bf91ff569d61c66b637491dfdffeff698ef9ab2212a2d5d0db6b6cbc83c75 | firmware DTB overlay source
+.cache/live-capture/20261107T141941555586Z/partition_imagefv_a.bin | enuma device imagefv_a readback (host==device sha256, 50331648 B) | 2498b3e2063729d8318c1213c633c58792f970df5bde50a80b5aa4d6670aa0fe | image FV inventory
+.cache/firmware/dtb/dtbo-entry07.dtbo | dtbo_a entry 07 (offset 3348493, 497805 B), xiaomi enuma, board-id 0x2e | ba188a895780a100fa8be3bb9622b0b5d8e1a4b6ad3821260476029251c6362f | overlay for the firmware DTB
+.cache/firmware/dtb/sm8250-xiaomi-enuma.dtb | fdtoverlay: vendor_boot DTB blob0 (kona v2.1, sha256 324049d746aaa16ada3b425ea5eed30f6d49a90c9d63d5e57ea5a632c27becb8) + dtbo entry 07 | 42d36a005024e1a7c55cb5da077a13bb17e9fb9a79dc9dfac8a61cf1e182f698 | firmware DTB candidate (enumaPkg/FdtBlob/sm8250-xiaomi-enuma.dtb); differs from the live FDT only in root board-id/model, /memory and vendor fstab status
+#
+# 2026-11-07 stock firmware package (community firmware-only repack of OS1.0.3.0.TKZCNXM):
+# https://github.com/XiaomiFirmwareUpdaterReleases/firmware_xiaomi_enuma/releases/tag/stable-21.05.2024
+# asset fw_enuma_miui_ENUMA_OS1.0.3.0.TKZCNXM_e1128c5324_13.0.zip, 140692956 B, no published digest.
+# The downloaded copy has whole-file SHA-256 A64E876A9564490B0F5930AA7C255EADDAB0D77606989020D435D67046904718
+# but firmware-update/modem.img inside it is corrupt (resumed download, zlib error), so that hash is NOT a
+# provenance pin; the members below passed their zip CRC and are pinned individually.
+# Package xbl.img does not equal the legacy device xbl_a capture (7ac67cbf...c65057), so the package
+# build is not proven to match the firmware currently on the device.
+.cache/firmware/stock-os1.0.3.0/extracted/xbl.img | stock zip firmware-update/xbl.img (CRC ok) | b82a5a00d6341161e229b56ad4affc2e3b4215543dffba3a324733a6817ba884 | XBL FV at 0x888b0 length 0x270000 - vendor DXE source for Binaries/enuma (not yet imported)
+.cache/firmware/stock-os1.0.3.0/extracted/xbl_config.img | stock zip firmware-update/xbl_config.img (CRC ok) | 74119cf2647e80c07168d13d3ae3d5b2f5b5640ed3b7aa20b7b3c637645cab0e | XBL config inventory
+.cache/firmware/stock-os1.0.3.0/extracted/abl.img | stock zip firmware-update/abl.img (CRC ok) | 5681238f451a98e68daf211e16394b781a6d324197078d7ba8fc7c8375587b4a | Android bootloader inventory
+.cache/firmware/stock-os1.0.3.0/extracted/imagefv.img | stock zip firmware-update/imagefv.img (CRC ok) | 08f3c2e41ff830468fb8aea5a2edbbde060a963e14252e09a2a2384d4a28f447 | image FV inventory
+.cache/firmware/stock-os1.0.3.0/extracted/uefisecapp.img | stock zip firmware-update/uefisecapp.img (CRC ok) | 727b30b2a38704169f6ad57b4a202056ebdd6efe5c076d8d0b39a4951dd1f96a | UEFI secure app inventory
+.cache/firmware/stock-os1.0.3.0/extracted/devcfg.img | stock zip firmware-update/devcfg.img (CRC ok) | 2d9b174439a02ad36aba10c1bff541e5b2ec71be5810f90ba9b165aa66eb957c | device config inventory
+.cache/firmware/stock-os1.0.3.0/extracted/featenabler.img | stock zip firmware-update/featenabler.img (CRC ok) | f64a65e2c172d63ec193ae6c3caea28ee32a0a322ff474c91e7e828049e77946 | feature enabler inventory
+.cache/firmware/stock-os1.0.3.0/extracted/hyp.img | stock zip firmware-update/hyp.img (CRC ok) | 1e4fa41fe3dd80f7a04828bcffbc30c47d558f969460552106b85e484f2743c6 | hypervisor image inventory
+.cache/firmware/stock-os1.0.3.0/extracted/aop.img | stock zip firmware-update/aop.img (CRC ok) | f90f8a34cc436b667933bdcd21dd9c40ddde72f117810cf02411bd2c7224ecfb | AOP image inventory
+.cache/firmware/stock-os1.0.3.0/extracted/tz.img | stock zip firmware-update/tz.img (CRC ok) | 189263121e3a74c0aca8b9ccfe1efe123112c52f8b529cac6de482e35a21b304 | TZ image inventory
+.cache/firmware/stock-os1.0.3.0/extracted/qupfw.img | stock zip firmware-update/qupfw.img (CRC ok) | 11638bf6402b550b3cb7584074e7a2da8237738033e8836eb9db47406e6381d9 | QUP firmware inventory
+#
+# 2026-11-07 device-extracted inputs (measured with scripts/enuma_firmware_inputs.py
+# stage; backup is read-only per ../docs/backup-manifest-2026-11-06.md §E). The
+# "source" column is the sanitized device extraction provenance, not a URL.
+# Raw artifacts stay in the git-ignored .cache/firmware/ tree.
+.cache/firmware/vendor_boot_a.img | backup legacy-enuma-backups/android-root/20261021T124813939334Z (adb exec-out dd if=/dev/block/by-name/vendor_boot_a bs=1048576 status=none, report.json exit 0) | 3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba | vendor_boot v3 header + 4 DTB candidates (SoC base only, board-id 0x00) - UEFI DTB provenance, not the enuma board DTB
+.cache/firmware/fdt.stdout | backup legacy-enuma-backups/cpu-capability-20261021T103822153220Z (adb exec-out cat /sys/firmware/fdt, pre-root, capture.json exit 0) | 45a04e08f47245ca5ec4145faf35346e36c014e8425b7cad470a299a98f12472 | live enuma FDT (model xiaomi enuma, msm-id 0x164/0x20001, board-id 0x2e) - board DTS reconciliation input
