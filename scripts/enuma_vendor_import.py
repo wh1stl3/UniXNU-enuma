@@ -186,11 +186,8 @@ def verify_git_safety(uefi: Path) -> None:
         raise ImportAbort(f"{BINARIES_ENUMA_REL}/ contains tracked files; refusing ({len(tracked)})")
     if not git_ignored(uefi, BINARIES_ENUMA_REL + "/"):
         raise ImportAbort(f"{BINARIES_ENUMA_REL}/ is not git-ignored; refusing to write untracked vendor binaries")
-    # EnumaInputs holds generated text that will be committed, but must not
-    # already be tracked at import time.
-    tracked_inc = git_tracked(uefi, ENUMA_INPUTS_REL)
-    if tracked_inc:
-        raise ImportAbort(f"{ENUMA_INPUTS_REL} contains tracked files; refusing ({len(tracked_inc)})")
+    # EnumaInputs holds generated text that is committed: re-import is allowed, and a
+    # differing tracked file is still refused per file unless --force.
 
 
 def raw_inc_references(uefi: Path) -> list[tuple[str, bool]]:
