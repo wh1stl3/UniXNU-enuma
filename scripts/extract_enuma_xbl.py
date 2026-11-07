@@ -13,6 +13,16 @@ EXPECTED = '7ac67cbf4c7870a972cb4ffd9cc09d5db1c96b7f4a5abc7a80c0da9cabc65057'
 # Hardware services only. Keep the new Mu core/BDS/console, not OEM equivalents.
 SELECT = set('EnvDxe SmemDxe DALSys HWIODxeDriver ChipInfo PlatformInfoDxeDriver HALIOMMU ULogDxe CmdDbDxe PwrUtilsDxe NpaDxe RpmhDxe PdcDxe VcsDxe ClockDxe SPMI ShmBridgeDxe ScmDxe TzDxe DALTLMM ResetRuntimeDxe PmicDxe DDRInfoDxe UFSDxe GpiDxe SPI I2C HashDxe CipherDxe MacDxe RngDxe'.split())
 SELECT.update(('DisplayDxe', 'CPRDxe'))
+# 2026-11-08: restore the pipa-derived hardware stack that is present in enuma's
+# own xbl_a but was previously dropped by the "hardware services only" whitelist.
+# QcomChargerDxe is named QcomChargerDxeLA and XhciPciEmulationDxe is named
+# XhciPciEmulation in this xbl_a; the XBL UI names are used verbatim so the flat
+# Binaries/enuma/<Module> layout matches the on-device firmware.
+SELECT.update(('SdccDxe', 'FeatureEnablerDxe', 'PILProxyDxe', 'PILDxe',
+               'SPSSDxe', 'AdcDxe', 'UsbPwrCtrlDxe', 'QcomChargerDxeLA',
+               'ChargerExDxe', 'UsbfnDwc3Dxe', 'XhciPciEmulation', 'XhciDxe',
+               'UsbMsdDxe', 'UsbDeviceDxe', 'UsbConfigDxe', 'UsbInitDxe',
+               'ButtonsDxe', 'TsensDxe', 'LimitsDxe'))
 RAW = ('Panel_K81_42_02_0a_dualdsi_cphy_lcd_vid.xml', 'Panel_K81_35_02_0b_dualdsi_cphy_lcd_vid.xml')
 
 
