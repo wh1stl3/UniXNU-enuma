@@ -43,6 +43,7 @@ volume = "ENUMAESP"
 size_mib = 192
 loader = "firmware"
 title = "UniXNU"
+tools = true
 kernel_args = ["-v", "serial=3"]
 # TODO: dram_size 与 [userdata] first_lba/last_lba/lba_bytes 需 enuma 实测 UEFI 内存图与 GPT 证据。
 
@@ -58,7 +59,7 @@ root_match_volume_uuid = "REQUIRED_ROOT_VOLUME_UUID"
 
 [firmware]
 config = "enuma"
-# TODO: uefi-enuma 目前只有 nuwaPkg/shengPkg，enumaPkg 与 Resources/Configs/enuma.toml 尚未建立。
+# enumaPkg 骨架已建立；原厂输入和板级内存布局仍待取证。
 dsc = "Platforms/Xiaomi/enumaPkg/enuma.dsc"
 fd = "Build/enumaPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
 preflight = ["scripts/enuma_firmware_preflight.py"]

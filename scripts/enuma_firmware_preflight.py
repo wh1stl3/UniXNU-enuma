@@ -42,6 +42,13 @@ def main():
         if not (package / required).is_file():
             problems.append(f"{PACKAGE}/{required} 缺失")
 
+    # Matching copied FD values do not constitute board evidence.
+    for source in [root / CONFIG, *package.rglob("*.c"), *package.glob("*.dsc"), *package.glob("*.fdf")]:
+        if source.is_file():
+            for number, line in enumerate(source.read_text(encoding="utf-8").splitlines(), 1):
+                if "TODO REQUIRED" in line or "REQUIRED_ENUMA_" in line:
+                    problems.append(f"{source.relative_to(root)}:{number}: 未解决的板级占位项")
+
     vendor = root / VENDOR
     if not vendor.is_dir() or not any(vendor.iterdir()):
         problems.append(
@@ -56,11 +63,17 @@ def main():
     if not config.is_file():
         problems.append(f"{CONFIG} 缺失")
     else:
-        fd = tomllib.loads(config.read_text()).get("uefi_fd", {})
+        fd = tomllib.loads(config.read_text(encoding="utf-8")).get("uefi_fd", {})
         base, size = fd.get("base"), fd.get("size")
         map_c = package / "Library/MemoryMapLib/MemoryMapLib.c"
-        if map_c.is_file() and base is not None and size is not None:
-            m = re.search(r'\{"UEFI FD",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)', map_c.read_text())
+        if not map_c.is_file():
+            problems.append("MemoryMapLib.c 缺失，无法核对 FD")
+        if type(base) is not int or type(size) is not int or base <= 0 or size <= 0:
+            problems.append(f"{CONFIG} [uefi_fd] base/size 必须为正整数")
+        elif base % 0x1000 or size % 0x1000:
+            problems.append("FD base/size 必须按 FDF 的 0x1000 块大小对齐")
+        elif map_c.is_file():
+            m = re.search(r'\{"UEFI FD",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)', map_c.read_text(encoding="utf-8"))
             if not m:
                 problems.append("MemoryMapLib.c 里没有 'UEFI FD' 行，无法与 config 对齐")
             else:
@@ -70,8 +83,6 @@ def main():
                         f"FD 不一致：{CONFIG} 为 0x{base:X}/0x{size:X}，"
                         f"MemoryMapLib.c 为 0x{fd_base:X}/0x{fd_size:X}"
                     )
-        elif base is None or size is None:
-            problems.append(f"{CONFIG} 缺少 [uefi_fd] base/size")
 
     if problems:
         fail(problems)

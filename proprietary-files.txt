@@ -1,2 +1,19 @@
 # Required firmware inputs: relative path | source | SHA-256 | consumer
 # Fill each entry from this board's firmware package.
+# Candidate stock release: enuma OS1.0.3.0.TKZCNXM (Android 13, China).
+# Catalog: https://xmfirmwareupdater.com/hyperos/enuma/stable/OS1.0.3.0.TKZCNXM/
+# Xiaomi fastboot source:
+# https://bigota.d.miui.com/OS1.0.3.0.TKZCNXM/enuma_images_OS1.0.3.0.TKZCNXM_20240508.0000.00_13.0_cn_fc06cc99cc.tgz
+# Xiaomi recovery source:
+# https://bigota.d.miui.com/OS1.0.3.0.TKZCNXM/miui_ENUMA_OS1.0.3.0.TKZCNXM_e1128c5324_13.0.zip
+# 2026-11-07: both source HEAD requests returned HTTP 403 on this host.
+# Not downloaded or hash-pinned; filename suffixes are not SHA-256 values.
+# Import only through .cache/firmware/. Add measured package and extracted-file
+# SHA-256 records here after bytes and enuma provenance have been checked.
+#
+# 2026-11-07 device-extracted inputs (measured with scripts/enuma_firmware_inputs.py
+# stage; backup is read-only per ../docs/backup-manifest-2026-11-06.md §E). The
+# "source" column is the sanitized device extraction provenance, not a URL.
+# Raw artifacts stay in the git-ignored .cache/firmware/ tree.
+.cache/firmware/vendor_boot_a.img | backup legacy-enuma-backups/android-root/20261021T124813939334Z (adb exec-out dd if=/dev/block/by-name/vendor_boot_a bs=1048576 status=none, report.json exit 0) | 3da202d0c9a5b618b61cd1923e87810536c5f70c9da7875de80075290641daba | vendor_boot v3 header + 4 DTB candidates (SoC base only, board-id 0x00) - UEFI DTB provenance, not the enuma board DTB
+.cache/firmware/fdt.stdout | backup legacy-enuma-backups/cpu-capability-20261021T103822153220Z (adb exec-out cat /sys/firmware/fdt, pre-root, capture.json exit 0) | 45a04e08f47245ca5ec4145faf35346e36c014e8425b7cad470a299a98f12472 | live enuma FDT (model xiaomi enuma, msm-id 0x164/0x20001, board-id 0x2e) - board DTS reconciliation input
