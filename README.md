@@ -6,6 +6,8 @@ Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。�
 
 **下一步**：确认本机强制重启/进回 bootloader 的方法；reviewer 复核修复后 diff；第 7 步构建 kernel/package/payload/bootimg；阶段 1–2 首次 fastboot boot（需用户当轮授权，须录像）。
 
+2026-11-08 恢复厂商模块：此前误判为「enuma XBL 无」的 19 个模块（SdccDxe/FeatureEnablerDxe/PILProxyDxe/PILDxe/SPSSDxe/AdcDxe/UsbPwrCtrlDxe/QcomChargerDxeLA/ChargerExDxe/UsbfnDwc3Dxe/XhciPciEmulation/XhciDxe/UsbMsdDxe/UsbDeviceDxe/UsbConfigDxe/UsbInitDxe/ButtonsDxe/TsensDxe/LimitsDxe）实为 enuma 自己 xbl_a 内原件（xbl_a sha256 `7ac67cbf…565057`），只是 `extract_enuma_xbl.py` 的 SELECT 白名单遗漏；已按原件导入恢复，厂商模块总数 52（含 ButtonsDxe 音量/电源键与完整 USB/SDCC/充电栈）。构建通过（FD=3145728 B，self-checked，仅 compiles，无设备证据）；ButtonsDxe 的 DEPEX 能否满足须实机观察。
+
 ## 三仓关系
 
 | 仓 | 作用 | 位置 |
