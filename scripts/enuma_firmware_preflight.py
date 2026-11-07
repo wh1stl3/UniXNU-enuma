@@ -12,7 +12,7 @@ import tomllib
 
 PACKAGE = "Platforms/Xiaomi/enumaPkg"
 CONFIG = "Resources/Configs/enuma.toml"
-DTB = f"{PACKAGE}/FdtBlob/sm8250-xiaomi-enuma.dtb"
+DTB = ".cache/firmware/dtb/sm8250-xiaomi-enuma.dtb"
 VENDOR = "Binaries/enuma"
 
 
@@ -56,8 +56,10 @@ def main():
             "结构与 pipa 包相同但必须是 enuma 自己的文件"
         )
 
-    if not (root / DTB).is_file():
-        problems.append(f"{DTB} 缺失：需要 enuma 的板级 DTB（原厂 dtbo/vendor_boot 导出后编译）")
+    # DTB 走 bootimg 的 append_dtb（pipa/alioth/sheng 的 FDF FdtBlob 均为注释），这里只检查设备仓里的候选输入存在。
+    device = os.environ.get("UNIXNU_DEVICE")
+    if not device or not (pathlib.Path(device) / DTB).is_file():
+        problems.append(f"{DTB} 缺失：bootimg 需要 enuma 的板级 DTB（原厂 dtbo/vendor_boot 叠加导出）")
 
     config = root / CONFIG
     if not config.is_file():

@@ -65,7 +65,9 @@ fd = "Build/enumaPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
 preflight = ["scripts/enuma_firmware_preflight.py"]
 # Mu-Silicium 子模块：Common/Mu 与 Mu_OEM_Sample 提供 MdePkg/MdeModulePkg，openssl 供 Silicium 的 TLS 库；
 # Mu_Basecore 通过 --edk2/UNIXNU_EDK2 指定，Binaries 是厂商二进制（不入库）。
-submodules = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
+# 这些输入当前手工放到 gitlink 固定提交（压缩包/浅取回，见 docs 复现步骤），`submodule update --init`
+# 在非空的 openssl 目录上会失败，故不声明 submodules；新环境按 gitlink 提交自行放置。
+# submodules = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
 # Mu-Silicium 的 GIC 伪中断修复：两个仓的 Resources/MuPatches 都有该补丁，sheng 同基座也在用；
 # 首次固件构建时须确认它仍能干净应用到共享 edk2 树。
 patches = ["Resources/MuPatches/Gic-Spurious.patch"]
