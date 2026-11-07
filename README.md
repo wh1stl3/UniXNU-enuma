@@ -2,9 +2,9 @@
 
 Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。目标：iPadOS 17.7.11 / 21H461，donor 身份 iPad7,1（J120AP）。
 
-**当前阶段**：官方 `porting/steps` 第 5 步——固件已可构建（含设备仓 preflight，self-checked，未经 Verifier 独立复跑）。原厂 `vendor_boot_a.img` 的 4 个 DTB 候选与 pre-root 实机 FDT 已按字节取证并记录哈希（`scripts/enuma_firmware_inputs.py`，来源见 `proprietary-files.txt`）：vendor_boot 只有 SoC 基座 DTB（board-id `0x00`），enuma 板级 DTB 由 dtbo_a entry 07（board-id `0x2e`）叠加得 `.cache/firmware/dtb/sm8250-xiaomi-enuma.dtb`（候选，UNVERIFIED）。`uefi-enuma` 已按 enuma 实机 XBL 的扁平厂商模块路径接入，`[uefi_fd]` 0x9FC00000/0x300000；厂商 `Binaries/enuma` 与板级 DTB 仍走 `.cache/firmware/`（不入库）。
+**当前阶段**：官方 `porting/steps` 第 5 步——固件已可构建（含设备仓 preflight，self-checked，未经 Verifier 独立复跑）。原厂 `vendor_boot_a.img` 的 4 个 DTB 候选与 pre-root 实机 FDT 已按字节取证并记录哈希（`scripts/enuma_firmware_inputs.py`，来源见 `proprietary-files.txt`）：vendor_boot 只有 SoC 基座 DTB（board-id `0x00`），enuma 板级 DTB 由 dtbo_a entry 07（board-id `0x2e`）叠加得 `.cache/firmware/dtb/sm8250-xiaomi-enuma.dtb`（候选，UNVERIFIED）。`uefi-enuma` 已按 enuma 实机 XBL 的扁平厂商模块路径接入，`[uefi_fd]` 0x9FC00000/0x300000；厂商 `Binaries/enuma` 与板级 DTB 仍走 `.cache/firmware/`（不入库）。2026-11-08 修复并已做 reviewer 审查（Sol，INSUFFICIENT EVIDENCE→修复→待复核）：复位槽位改回通用 ResetSystemRuntimeDxe、`EnableUfsIOC` 与 enuma cfg 一致；「写入分级」规则已修订（允许厂商固件正常启动的附带写入，不偏离 stock）。
 
-**下一步**：Verifier 独立复跑固件构建；reviewer 审最终 diff；第 7 步构建 kernel/package/payload/bootimg；阶段 1–2 首次 fastboot boot（需用户当轮授权）。
+**下一步**：确认本机强制重启/进回 bootloader 的方法；reviewer 复核修复后 diff；第 7 步构建 kernel/package/payload/bootimg；阶段 1–2 首次 fastboot boot（需用户当轮授权，须录像）。
 
 ## 三仓关系
 
