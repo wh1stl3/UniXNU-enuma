@@ -45,17 +45,20 @@ loader = "firmware"
 title = "UniXNU"
 tools = true
 kernel_args = ["-v", "serial=3"]
-# TODO: dram_size 与 [userdata] first_lba/last_lba/lba_bytes 需 enuma 实测 UEFI 内存图与 GPT 证据。
+# dram_size = 0x200000000（8 GiB）：实机 RamManagerDxe 映射 0x80000000-0x280000000（见 porting.toml memory 区）。
+dram_size = "0x200000000"
+# TODO: [userdata] first_lba/last_lba/lba_bytes 需 enuma 实测 GPT 证据（阶段 6）。
 
 [payload.adt]
 # format 2：ADT 由共享生成器从 dts/enuma.dts + OS profile 身份产出，不再声明 tool。
-# TODO: chip_id 待 donor 设备树核对。
-chip_id = "REQUIRED_CHIP_ID"
+# chip_id 为软件生成的身份值（非硬件 ECID、非 donor chip-id）：本地随机 32 位，见 porting.toml configuration 区。
+chip_id = "958bdc0f"
 # R-001 批准（2026-10-22）：首入口预算，不是实测可用 RAM。
 owned_memory_size = "0x20000000"
 ipad_identity = true
 unique_chip_id = "required"
-root_match_volume_uuid = "REQUIRED_ROOT_VOLUME_UUID"
+# root_match_volume_uuid 阶段 1-5 保持注释；阶段 6 构建 userdata 后取根卷 UUID 回填。
+# root_match_volume_uuid = "REQUIRED_ROOT_VOLUME_UUID"
 
 [firmware]
 config = "enuma"

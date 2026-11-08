@@ -15,8 +15,21 @@
 	};
 
 	/*
-	 * TODO: memory 与 reserved-memory 需 enuma 实测 UEFI 内存图 / 原厂 FDT /memory 逐条补入，
-	 *       当前不写任何未验证地址；[payload.adt] owned_memory_size 只是首入口预算（R-001）。
+	 * DRAM：实机 RamManagerDxe 映射 0x80000000-0x280000000（8 GiB 连续 span）。
+	 * ADT 生成器要求「一个启用的 memory 节点提供连续 DRAM range」（device-tree.md），
+	 * 且 [payload] dram_size 须与 reg 尺寸一致（0x200000000）。
+	 * 活 FDT /memory 为三段 0x80000000-0xBBB00000、0xC0000000-0x180000000、
+	 * 0x180000000-0x280000000，其中 0xBBB00000-0xC0000000 为保留空洞；
+	 * 本节点用单段保守表示（与 dram_size 一致），空洞见 porting.toml memory 区。
+	 */
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x0 0x80000000 0x2 0x00000000>;
+	};
+
+	/*
+	 * TODO: reserved-memory 需 enuma 实测 UEFI 内存图逐条补入；[payload.adt] owned_memory_size
+	 *       只是首入口预算（R-001）。
 	 * TODO: 启用 CPU（MPIDR）、UFS/PHY、显示（DPU/DSI）、触控（GENI）、SMMU 等节点。
 	 */
 };
