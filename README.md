@@ -4,7 +4,9 @@ Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。�
 
 **当前阶段**：官方 `porting/steps` 第 5 步**已完成**（固件可构建 + 设备仓 preflight）；第 7 步 bring-up 阶段 1–2 已实机到达 UniXNU 内置菜单。**里程碑（2026-11-08，用户当轮授权并录像）**：`fastboot boot` `stage12-simplefb/boot.img`（sha256 `ef782289…6dca`，固件源码 `1070b371`）走完 SEC→DXE→BDS→UniXNU 菜单（音量键移动、电源键确认、Tools→Advanced Logger 二维码轮播可用）；ramoops 日志通道（`0xB0000000`/4 MiB）读回固件日志，判读见 `docs/firmware-log-capture.md`；日志与视频留本地 `.cache/media`（不入库）。原厂 `vendor_boot_a.img` 的 4 个 DTB 候选与 pre-root 实机 FDT 已按字节取证并记录哈希（`scripts/enuma_firmware_inputs.py`，来源见 `proprietary-files.txt`）：vendor_boot 只有 SoC 基座 DTB（board-id `0x00`），enuma 板级 DTB 由 dtbo_a entry 07（board-id `0x2e`）叠加得 `.cache/firmware/dtb/sm8250-xiaomi-enuma.dtb`（候选 DTB 已被 ABL 接受，但内容未核）。`uefi-enuma` 已按 enuma 实机 XBL 的扁平厂商模块路径接入，`[uefi_fd]` 0x9FC00000/0x300000；厂商 `Binaries/enuma` 与板级 DTB 仍走 `.cache/firmware/`（不入库）。2026-11-08 修复并已做 reviewer 审查（Sol，INSUFFICIENT EVIDENCE→修复→待复核）：复位槽位改回通用 ResetSystemRuntimeDxe、`EnableUfsIOC` 与 enuma cfg 一致；「写入分级」规则已修订（允许厂商固件正常启动的附带写入，不偏离 stock）。
 
-**下一步**：第 7 步 kernel/package/payload（bring-up 阶段 3）；首次需要的输入见下方「阶段 3 就绪度分析」。
+**里程碑（2026-11-09，用户当轮授权并录像）**：bring-up 阶段 3 首次上机通过——`fastboot boot` `out/enuma/stage3/boot.img`（sha256 `141eaa7e…b7bb`，203505664 B，header v1，ramdisk=192 MiB FAT payload，固件源码 `1070b371`）返回 OKAY（推送 4.5 s，未刷任何分区）；ramoops 读回 `UNIXNURAMDISK: device tree at 0xA3DFE000`（980302 B）与 `UNIXNURAMDISK: initrd block device 0xA3FFF000 size 0xC000000 Success`，随后 `[Bds]Booting UniXNU` → UniXNU.efi 加载 → FAT 挂载，无 `no initrd in /chosen`、无 ASSERT、无 NO WINDOW（SPSS/SMBIOS 的 start failed 为已知无害项）。屏幕：菜单出现，**默认项 UniXNU 倒计时 3 s 走完后调用 DarwinBoot，占位内核（32 B）预期 Load Error**（无内核交接）；Tools 项因显示尺寸不可见但可选中，Advanced Logger 导出可用。ABL 已确认把 initrd 写入 `/chosen`（此前未证实项）；ramdisk 实际范围 0xA3FFF000–0xAFFFF000 整块在 Kernel 预留区 0xA0000000/0x10000000 内，与固件 FD(0x9FC00000+0x300000)、DXE Heap2(0x93200000) 无重叠、距 ramoops(0xB0000000) 4 KiB；这 192 MiB 占去 256 MiB Kernel 预留区大部分，阶段 4 DarwinBoot 窗口/`owned_memory_size` 须据此重估（待阶段 4 实机）。证据细节见 `porting.toml`（packaging/firmware/memory/configuration 四区 device 证据）。
+
+**下一步**：第 7 步 bring-up 阶段 4（DarwinBoot：Kernel 预留与 `owned_memory_size` 窗口重估）；阶段 5 起才需要真内核/prelink。
 
 2026-11-08 恢复厂商模块：此前误判为「enuma XBL 无」的 19 个模块（SdccDxe/FeatureEnablerDxe/PILProxyDxe/PILDxe/SPSSDxe/AdcDxe/UsbPwrCtrlDxe/QcomChargerDxeLA/ChargerExDxe/UsbfnDwc3Dxe/XhciPciEmulation/XhciDxe/UsbMsdDxe/UsbDeviceDxe/UsbConfigDxe/UsbInitDxe/ButtonsDxe/TsensDxe/LimitsDxe）实为 enuma 自己 xbl_a 内原件（xbl_a sha256 `7ac67cbf…565057`），只是 `extract_enuma_xbl.py` 的 SELECT 白名单遗漏；已按原件导入恢复，厂商模块总数 52（含 ButtonsDxe 音量/电源键与完整 USB/SDCC/充电栈）。构建通过（FD=3145728 B，self-checked，仅 compiles，无设备证据）；ButtonsDxe 的 DEPEX 能否满足须实机观察。
 
@@ -54,7 +56,7 @@ Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。�
 | 位置 | 内容 | 现状 |
 | --- | --- | --- |
 | OS profile 补丁 | `ipados-17.7.11-21H461` 的 `patches/xnu/series` 补丁与 TODO（`early_security_init`、`text_fixups`、`product-id`、`artwork-device-subtype`）清点 | 待读 `UniXNU/docs/zh/building` 与 `concepts/payload` 后清点 |
-| `[payload] dram_size` | 实机 `/memory` 或 SMEM 取证（当前候选 `0x200000000` = 8 GiB，**仅记录在 porting.toml memory 区域，未写入 board.toml，须用户确认**） | 候选，未取证 |
+| `[payload] dram_size` | 实机 `/memory` 或 SMEM 取证（RamManagerDxe 映射 `0x80000000-0x280000000` = 8 GiB；已写入 `0x200000000`，2026-11-09 阶段 3 上机通过 ABL 启动，但该单段 span 非连续可分配内存证明） | 已写入，阶段 3 上机通过 |
 | `[payload] kernel_args` | `native-ufs-root=1`（路线 B，见 `../../docs/launch-route-2026-11-06.md` §4） | 未加 |
 | `[userdata]` 几何 | `first_lba`/`last_lba`/`lba_bytes`（本机 GPT 的 userdata 条目；已有只读取证值，未写入 board.toml） | 未写入 |
 | `[payload.adt] root_match_volume_uuid` | 构建 userdata 后取到的 APFS 卷 UUID | 占位 |

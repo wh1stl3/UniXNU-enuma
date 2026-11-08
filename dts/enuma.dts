@@ -19,8 +19,10 @@
 	 * ADT 生成器要求「一个启用的 memory 节点提供连续 DRAM range」（device-tree.md），
 	 * 且 [payload] dram_size 须与 reg 尺寸一致（0x200000000）。
 	 * 活 FDT /memory 为三段 0x80000000-0xBBB00000、0xC0000000-0x180000000、
-	 * 0x180000000-0x280000000，其中 0xBBB00000-0xC0000000 为保留空洞；
-	 * 本节点用单段保守表示（与 dram_size 一致），空洞见 porting.toml memory 区。
+	 * 0x180000000-0x280000000，其中 0xBBB00000-0xC0000000 为保留空洞。
+	 * 注意：本节点单段 reg 0x80000000 + 0x200000000 是 8 GiB 跨度（span），
+	 * 它把 0xBBB00000-0xC0000000（约 69 MiB 空洞）包含在跨度内，
+	 * 因此它不是「连续可分配内存」的证明；空洞与保留区见 porting.toml memory 区。
 	 */
 	memory@80000000 {
 		device_type = "memory";

@@ -32,6 +32,10 @@ adb -s <enuma> shell su -c 'rm /data/local/tmp/ramoops'
 
 - **Reached the menu**: look for `[Bds]Booting UniXNU` and the menu renderer output. If the screen
   also showed the menu and the keys work, the run reached bring-up stage 2.
+- **Stage 3 (payload) reached**: look for `UNIXNURAMDISK: device tree at …` and
+  `UNIXNURAMDISK: initrd block device … Success` followed by `[Bds]Booting UniXNU` and the FAT
+  payload mount. The menu default item then counts down 3 s, calls DarwinBoot, and a placeholder
+  kernel shows `Load Error` (expected until a real kernel is built).
 - **ASSERT / crash**: look for `ASSERT [<module>] <file>(<line>)` followed by the warm-restart
   marker (the SEC PON line at the top of the next capture shows `warm`).
 - **Hang**: the last line is the driver whose entry hung (for example the vendor `DisplayDxe`).
