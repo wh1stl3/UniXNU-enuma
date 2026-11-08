@@ -17,8 +17,11 @@ include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot"]
 
 [kernel]
 defconfig = "enuma_defconfig"
-config_fragments = ["arch:configs/common.config", "soc:configs/sm8250.config"]
-patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "device:patches/xnu/series"]
+# 数组整体替换：必须写全四层片段（arch→soc→os），device defconfig 最后应用（官方 porting/migration 第 4 步）。
+config_fragments = ["arch:configs/common.config", "soc:configs/sm8250.config", "os:configs/ipados.config"]
+# 数组整体替换：os 层指向 device 本地 os-series（省略 zzz-boot-progress，保留两个 XnuPrelink ABI 补丁），
+# 详见 patches/xnu/os-series 注释与官方 device-records/sm-t970.toml。
+patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "device:patches/xnu/os-series", "device:patches/xnu/series"]
 
 [device_tree]
 source = "device:dts/enuma.dts"

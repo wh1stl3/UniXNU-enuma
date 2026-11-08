@@ -1,0 +1,7 @@
+# OS 层补丁（device-local 覆盖）：只保留 prelink 必需的两个 XnuPrelink ABI 补丁。
+# 省略 os:patches/xnu/series 里的 zzz-boot-progress.patch：它把 sheng-platform-power.patch 提供的
+# XNU_SHENG_PMGR 钩子（bsd_init.c 的 sheng_pmgr_run()）当作上下文；enuma 的
+# CONFIG_XNU_SHENG_PMGR=n 且 CONFIG_XNU_BOOT_PROGRESS=n，两个补丁都编译为空，故按官方
+# sm-t970 记录（device-records/sm-t970.toml）的做法省略 boot-progress，只保留这两个 ABI 补丁。
+component:XnuPrelink/patches/xnu-10063.141.1-security-init.patch
+component:XnuPrelink/patches/xnu-10063.141.1-sparse-index.patch
