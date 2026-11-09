@@ -42,3 +42,33 @@ differs from the source `39cecb2e…`); the source `kernel.macho` is copied, not
 
 Bisect by walking the table in order: the last checkpoint that resets is the last confirmed
 progress; the first one that does not reset is the first unconfirmed step.
+
+## Device results (user observation, filmed)
+
+- 01–03 (`_PE_init_platform`, `_arm_vm_init`, `_PE_init_printf`): **passed** (transitive — 04 reset
+  means the kernel reached `_early_random`, which is after all three).
+- 04 (`_early_random`): **passed**.
+- 05 (`_vm_mem_bootstrap`): **passed**.
+- 06 (`_sched_init`): **pending**.
+
+## Checkpoints 07–11 (larger steps)
+
+`_kernel_bootstrap` creates the first kernel thread (`_kernel_thread_create`) then switches to it via
+`_load_context` (which does not return); that thread is `_kernel_bootstrap_thread`, whose body calls
+`_sched_startup` → … → `_PE_init_iokit` → … → `_bsd_init`, and `_bsd_init` calls `_vfs_mountroot`
+(the mountroot stage where IOKit waits for a root device when there is no storage driver). All
+targets below are direct `bl` calls (verified with llvm-objdump; `_kernel_bootstrap_thread` has no
+`blr`), so `reset_after` can place the reset on them. All run after the MMU is enabled.
+
+| # | in | after (occ 1) | question it answers | image | boot.img sha256 | payload.img sha256 |
+|---|---|---|---|---|---|---|
+| 07 | `_kernel_bootstrap` | `_kernel_thread_create` | was the first kernel thread created (end of _kernel_bootstrap, just before _load_context)? | `07-kernel_thread_create` | `d2ef97caf16848bc1e7b52ef1b6457dfb0ec28b22ae67fe614aaefa0604048bb` | `b6b6e2453e6d1e9168f2ac47be67e9447fd7d281d3645dcc8857173ab67f293d` |
+| 08 | `_kernel_bootstrap_thread` | `_sched_startup` | did the scheduler start (kernel_bootstrap_thread entered)? | `08-sched_startup` | `4dba6d3bd9136ea08c2b8fb3d0cf2313c2e4c7e71e9149072eadf58e7637ea91` | `cc74955c30d2720e8e3a2bb02ff18ea181460dbbbae784f8d42230455b693451` |
+| 09 | `_kernel_bootstrap_thread` | `_PE_init_iokit` | did IOKit initialise? | `09-PE_init_iokit` | `c8bad961a1f3f7f61128ff37f76d8a438b35946f1a9af47e95c39281aa8e881f` | `b4febdc012baf4190b2f38543e013d5e6d497067784931accdc643f11130a433` |
+| 10 | `_kernel_bootstrap_thread` | `_bsd_init` | did BSD init enter? | `10-bsd_init` | `26a6e4c97cc9d19b684e5426af194e811262f40a9aec944eea3d9b497935cf1e` | `3d3d007f96dd0d2cb5bebe45938da2d85c42004f35864b468b4ca1d620859c4d` |
+| 11 | `_bsd_init` | `_vfs_mountroot` | did it reach mountroot (just before the root-device wait)? | `11-vfs_mountroot` | `6ba764382ab348846c32477b7b2957dbe32c08265704cd31e3b60f9edb5278ab` | `74c5a65536215d166873d71fca04b56c44fc96e114dfe45fcb8901df136ab91d` |
+
+Note: the PSCI reset (`smc #0`, `0x84000009`) is a synchronous trap to EL3, independent of the
+kernel's thread/exception state, and the MMU-on reset was already verified on device; the deep
+checkpoints (10/11, where interrupts and threads are fully active) are still unverified on device,
+so whether the reset still returns to fastboot there is **pending device confirmation**.
