@@ -46,6 +46,14 @@ adb -s <enuma> shell su -c 'rm /data/local/tmp/ramoops'
   does NOT prove the XNU entry executed or the MMU was enabled (that needs the entry-probe colour
   bars / reset delay, stage 5). DARWINBOOT `Print` output lands in ramoops (previously assumed
   ConOut-only).
+- **Stage 5 (entry probe / kernel entry)**: with `[payload] entry_probe_reset_delay = 6`, after the
+  green bar the screen shows a **blue** bar (kernel entry executed, MMU still off), then a **magenta**
+  bar (reached just before the MMU is turned on), then ~6 s later the device auto-resets (MMU enabled).
+  A reset into fastboot after the magenta bar, clearly under the ~20 s firmware watchdog, shows the CPU
+  got through the MMU enable. Note: once XNU has run, `/sys/fs/pstore/console-ramoops-0` is absent even
+  though `dmesg` still shows ramoops attached at `0xb0000000`/4 MiB (stages 3/4 had it); hypothesis
+  (unverified) - XNU took/zeroed the `0xB0000000` region and the ADT does not reserve it, or the reset
+  path did not retain RAM.
 - **ASSERT / crash**: look for `ASSERT [<module>] <file>(<line>)` followed by the warm-restart
   marker (the SEC PON line at the top of the next capture shows `warm`).
 - **Hang**: the last line is the driver whose entry hung (for example the vendor `DisplayDxe`).
