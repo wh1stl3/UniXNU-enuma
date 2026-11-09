@@ -215,3 +215,108 @@ the recorded temporary settings (no kernel rebuild), header/FAT/hash checks,
 `python3.11 scripts/porting-record.py check --device <host device repo>` from
 the base with the PATH above, and `git diff --check`. Integration and runtime
 acceptance remain with the parent and a separately authorized device test.
+
+## 2026-11-10: 16r observation and sole 17r after-call candidate
+
+This section supersedes the pending 16r/15r decision table above. User reports
+16r (`b5d90f6f2649bc2f43335899fbccd4f7d7876ba83fc9f2f93f107c8ebe2ac4cd`)
+showed green/blue/magenta bars then immediately auto-returned to fastboot.
+After continue, Android was normal and pstore empty. Media reference:
+`.cache/media/stage6-ramblock-cp16r-20261110T000622406`. This is **user observation**;
+whether the recording covers reset is unknown; no video verification is claimed.
+It proves reaching `_bsd_init`'s `_vfs_mountroot` call site, **before executing
+that call**, not a successful mount or launchd. 15r was not tested and need not be.
+
+### Original kernel return-value paths (read-only source/disassembly)
+
+Source kernel remains `c660a997e8d1af4093c21f405ef9aa2382f0a371556d3a2ecf0d9645f7fe7a05`.
+Using `/usr/bin/llvm-objdump --disassemble --disassemble-symbols=_bsd_init`
+against `out/enuma/ipados-17.7.11-21H461/enuma/kernel/kernel.macho` in the ext4
+base shows these paths (full disassembly saved with the candidate):
+
+```text
+fffffff0076f2f78: bl   0xfffffff0074a4218 <_vfs_mountroot>
+fffffff0076f2f7c: cbz  w0, 0xfffffff0076f2f9c <_bsd_init+0x748>
+fffffff0076f2f80: strb wzr, [x24, #528]       ; rootdevice[0] = 0
+fffffff0076f2f84: cmp  x27, x25
+fffffff0076f2f88: b.eq 0xfffffff0076f3018     ; netboot failure path
+fffffff0076f2f8c: str  x0, [sp]              ; errno printf argument
+fffffff0076f2f90: mov  x0, x21
+fffffff0076f2f94: bl   0xfffffff0072ac834 <_printf>
+fffffff0076f2f98: b    0xfffffff0076f2f20     ; retry setconf/root selection
+fffffff0076f2f9c: adrp x0, 0xfffffff007ab5000 ; success branch
+fffffff0076f2fa0: add  x0, x0, #528
+fffffff0076f2fa4: bl   0xfffffff00798adb4 <_IOSecureBSDRoot>
+fffffff0076f2fa8: adrp x8, 0xfffffff007aa1000
+fffffff0076f2fac: nop
+fffffff0076f2fb0: ldr  x20, [x8, #1672]
+fffffff0076f2fb4: ldr  w8, [x20, #112]
+fffffff0076f2fb8: orr  w8, w8, #0x4000        ; MNT_ROOTFS
+fffffff0076f2fbc: str  w8, [x20, #112]
+fffffff0076f2fc0: bl   0xfffffff0074cc79c <_vfs_context_kernel>
+fffffff0076f2fc4: mov  x19, x0
+fffffff0076f2fc8: sub  x1, x29, #104
+```
+
+Corresponding applied source:
+`out/enuma/ipados-17.7.11-21H461/enuma/tree/.cache/xnu-work/bsd/kern/bsd_init.c`
+lines 998–1028 implement `while (TRUE)`, `setconf()`,
+`if (0 == (err = vfs_mountroot())) break;`, clear rootdevice on error, hang with
+increasing `IOSleep` on netboot failure, otherwise print errno and retry.
+Lines 1030–1038 call `IOSecureBSDRoot`, set MNT_ROOTFS and call VFS_ROOT.
+Thus **returning** from mountroot is distinct from **returning zero**. The old
+stage-5 assertion that vfs_mountroot never returns is not a source-level contract.
+
+The unmodified `scripts/patch-xnu-entry-probe.py:97–118,389–406` redirects the
+call to the existing stage-4 cave: `bl callee`, wait 6 s, overwrite w0 for PSCI,
+then reset. It neither records the result nor executes the original cbz.
+17r reset would prove only that `_vfs_mountroot` returned (possibly an error),
+not that the success branch, IOSecureBSDRoot, VFS_ROOT or launchd ran. No reset
+alone would not distinguish a hang, panic, or other failure inside the call/reset path.
+No script/cave changes were made.
+
+### 17r build and necessary self-check
+
+Starting host device HEAD `43115d7e77bd358f796acd748edaaf9d127467b2`, clean worktree.
+One candidate, no kernel rebuild. Same ext4 cwd and payload/bootimg commands as
+above, tag `17r-after-vfs_mountroot`. Temporary ext4 `[payload]` settings:
+`entry_probe_reset_in="_bsd_init"`, `entry_probe_reset_after="_vfs_mountroot"`,
+`entry_probe_reset_occurrence=1`, `entry_probe_reset_delay=6`,
+`entry_probe_reset_before=false`, `panic_screen=false`. Board restored byte-for-byte
+to the host probe-free board after build. No UUID/ABI/memory/boot-argument changes.
+An initial bare python3.11 invocation failed before running the build (PATH);
+using the previously documented `/home/wh1stl3/.local/bin/python3.11` resolved it.
+Final payload exit **0**, then bootimg exit **0**; no device commands, push or merge.
+
+Full output directory:
+`D:/Code/PortingiOS/UniXNU/out/enuma/stage6-ramblock-probe/17r-after-vfs_mountroot/`
+(also retained under `/root/enuma-step10/UniXNU/out/enuma/stage6-ramblock-probe/`).
+
+| Output | Bytes | SHA256 |
+|---|---:|---|
+| boot.img | 203505664 | `c29ab3e713b31f450879c1b14796e049172b93dece1b40d35e93502d1220578c` |
+| payload.img | 201326592 | `10aaebbe2763a9ee5569f088b0b6f289f7df15715e9aba59bc9bc556cb07ea1b` |
+| contained patched kernel | 51109888 | `3cb2f73ec0a0d97301936ce7e711540c9ac8c0a4667c3db16f4f6192cacdb54d` |
+
+`payload-patch.log`:
+```text
+patched kernel.macho: stage 1 blue bar, stage 2 magenta bar, stage 4 reset after call #1 to _vfs_mountroot in _bsd_init (at 0xfffffff0076f2f78)
+```
+
+One necessary read-back self-check exited **0**: header v1, embedded ramdisk
+equals payload; gzip-decoded FD after 192-byte shim and appended DTB match the
+full pins above; five FAT files total **188576511 bytes = 93.666966%**, below 95%.
+Packed disk/trust hashes and kernel arguments match prior inputs; original kernel
+hash unchanged. `payload.json`, `boot.json`, patch/build logs, `validation.json`
+and `bsd_init.disasm.txt` accompany the images. Copies hash-match; destination
+was new, so 16r, 15r and probe-free candidate were not overwritten.
+
+No independent verifier or 17r device run occurred: **self-checked only**.
+Final `porting-record.py check` with the command below exited **0**:
+`enuma: 14 structured areas checked`; device-repo `git diff --check` exited **0**.
+Parent verifier should rerun the final payload/bootimg commands above only in a
+fresh tag directory with the stated temporary settings (no kernel rebuild),
+then header/FAT/hash checks, `python3.11 scripts/porting-record.py check --device
+/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma` from the base with the documented PATH,
+and `git diff --check` in the device repo. Final integration/acceptance belongs
+to the parent. Next device test requires fresh user authorisation and recording.
