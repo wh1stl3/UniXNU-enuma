@@ -120,3 +120,98 @@ Independent verifier should rerun the final kernel/payload/bootimg commands
 (fresh output location; do not overwrite this candidate), `porting-record.py
 check --device <device>`, `git diff --check`, and the header/FAT/hash checks above.
 Runtime acceptance belongs to a separately authorized device test.
+
+## RamBlock 探针 (host only)
+
+Status: **self-checked**, no device run, push or merge. Branch
+`feat/step10-ramblock-probe` starts at
+`8ff7f821348637b97f5b7184c889ddb0dc33da11`. No kernel rebuild: source kernel
+is the `c660a997...` candidate above. Packed restore disk, converted trust,
+FD and DTB are the same pinned inputs above. No memory, UUID, ABI or
+`-v serial=3 rd=md0-ramblock` argument changes were made.
+
+`llvm-objdump --disassemble --disassemble-symbols=_bsd_init kernel.macho`
+confirms `_bsd_init` at `fffffff0076f2854`, with direct calls:
+
+```text
+fffffff0076f2f34: 22 5c 0a 94  bl 0xfffffff007989fbc <_IOFindBSDRoot>  (+0x6e0)
+fffffff0076f2f78: a8 c4 f6 97  bl 0xfffffff0074a4218 <_vfs_mountroot>  (+0x724)
+```
+
+Both builds set `[payload] entry_probe_reset_in = "_bsd_init"`,
+`entry_probe_reset_before = true`, `entry_probe_reset_delay = 6` and
+`entry_probe_reset_after` to the respective symbol (occurrence defaults to 1).
+The delay is required to install the probe; **before=true resets immediately
+at the call site without executing the call or waiting 6 seconds**. Panic screen
+remains disabled. Temporary settings are confined to the ext4 build copy and
+restored afterward; tracked `board.toml` remains the probe-free RamBlock candidate.
+
+Build cwd `/root/enuma-step10/UniXNU`, Python 3.11 via
+`PATH=/home/wh1stl3/.local/bin:/usr/local/bin:/usr/bin:/bin`:
+
+```sh
+python3.11 ./unixnu build payload -D ../UniXNU-enuma \
+  --config ../UniXNU-enuma/.cache/stage3-build.toml \
+  --data-ramdisk out/ipsw/21H461/044-75545-038.restore.dbr \
+  --trust-cache out/ipsw/21H461/restore-trust.bundle
+# Immediately preserve payload.img, payload.json and logs/payload-patch.log per tag.
+python3.11 ./unixnu bootimg -D ../UniXNU-enuma \
+  --uefi /mnt/d/Code/PortingiOS/enuma/uefi-enuma \
+  --fd /mnt/d/Code/PortingiOS/enuma/uefi-enuma/Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd \
+  --dtb ../inputs/enuma.dtb -o out/enuma/stage6-ramblock-probe/<tag>/boot.img
+```
+
+### 判读表（待上机，不是当前观察结果）
+
+Outputs are preserved in both
+`/root/enuma-step10/UniXNU/out/enuma/stage6-ramblock-probe/` and
+`D:/Code/PortingiOS/UniXNU/out/enuma/stage6-ramblock-probe/` (no overwrite).
+Each tag contains boot.img, payload.img, payload.json, payload-patch.log,
+boot.json, build logs and validation.json. Both payload and bootimg commands
+exited 0. Each boot.img is **203505664 bytes**; each payload.img is 201326592 bytes.
+
+| Tag / boot.img | boot.img SHA256 | payload.img SHA256 |
+|---|---|---|
+| `16r-before-vfs_mountroot/boot.img` | `b5d90f6f2649bc2f43335899fbccd4f7d7876ba83fc9f2f93f107c8ebe2ac4cd` | `401b72e1d16ec055a543eb5ca51fb698d1602338abe7e99f99b724bc285a8d3d` |
+| `15r-before-IOFindBSDRoot/boot.img` | `d51917289c807dd9a9bea7253f4c0160917d5aed796d94a4e71c5daa9530393c` | `f30d061a956184a89923cd4bcc2ac547848f295e6424c068bcaadd67135e6a30` |
+
+Probe logs (one line per image):
+
+```text
+patched kernel.macho: stage 1 blue bar, stage 2 magenta bar, stage 4 reset before call #1 to _vfs_mountroot in _bsd_init (at 0xfffffff0076f2f78)
+patched kernel.macho: stage 1 blue bar, stage 2 magenta bar, stage 4 reset before call #1 to _IOFindBSDRoot in _bsd_init (at 0xfffffff0076f2f34)
+```
+
+Read-back checks: header v1, ramdisk byte-identical to the respective payload,
+decompressed kernel after 192-byte BootShim equals the FD, appended DTB equals
+the input; FD `e524988b8a05f15847ffc991170de8a5e0ead607400421e0835084497a71bf1e`,
+DTB `42d36a005024e1a7c55cb5da077a13bb17e9fb9a79dc9dfac8a61cf1e182f698`.
+All five FAT files were read back; content remains **188576511 bytes,
+93.666966% of size_mib=192**, below 95%. Contained patched kernel hashes are
+`dcdac86314cad793af81af0dafe90b453a58d8a67ea6d8676c66990d3c031769` (16r) and
+`54a8e16d0394d9f37493d438ac000b53286b57dafdbdd68cf9935e78c56b0efa` (15r), both
+different from the unchanged `c660a997...` source. Copied files were hash-compared.
+
+Final record self-check: `python3.11 scripts/porting-record.py check --device
+/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma`, cwd
+`/mnt/d/Code/PortingiOS/UniXNU`, PATH includes `/root/.local/bin` and
+`/home/wh1stl3/.local/bin`, exit 0: `enuma: 14 structured areas checked`.
+`git diff --check` in the host device repository exited 0. Parsed TOML comparison
+confirms only one packaging host evidence entry was added; historical evidence
+and all other areas are unchanged. Source kernel hash and restored board match
+their original inputs. No host build blocker remains; the runtime result is pending.
+
+先 16r；不复位再测 15r。复位只证明到达调用点，不证明挂载成功。
+
+| Observation | Interpretation / next action |
+|---|---|
+| 16r resets | IOFindBSDRoot returned and reached mountroot call site; RamBlock published a root or root selection completed → investigate mounting. This alone does not identify which service supplied the root. |
+| 16r does not reset, 15r resets | Consistent with stopping inside IOFindBSDRoot / root matching not finding the volume → inspect RamBlock start, UUID and ABI. Other intervening calls are not individually tested, so this is an inference. |
+| Neither resets | RamBlock changed earlier progress → inspect NativeRamBlock registration/matching; absence of reset alone does not establish the exact failure site. |
+
+No independent verifier was run in this task. Parent verifier should rerun the
+two final payload/bootimg commands only if needed, in fresh tag directories with
+the recorded temporary settings (no kernel rebuild), header/FAT/hash checks,
+`python3.11 scripts/porting-record.py check --device <host device repo>` from
+the base with the PATH above, and `git diff --check`. Integration and runtime
+acceptance remain with the parent and a separately authorized device test.
