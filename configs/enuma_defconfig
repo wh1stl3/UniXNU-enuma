@@ -16,3 +16,6 @@ CONFIG_XNU_NATIVE_ADRENO=n
 CONFIG_XNU_NATIVE_MOBILE_DISPLAY=n
 CONFIG_XNU_NATIVE_LEGACY_DISPLAY=n
 # Enable storage/display only after SM8250 clock/PHY/SMMU/UEFI handoff audits.
+# stage6 RamBlock 内存根（rd=md0-ramblock）：RAM 盘经 IOBlockStorageDevice->IOMedia->APFS 挂载 restore ramdisk。
+# 依赖 CONFIG_XNU_NATIVE_AES（arch 片段 common.config 已给）与 CONFIG_XNU_SOURCE_MOCKFS（OS 片段 ipados.config 已给）。
+CONFIG_XNU_NATIVE_RAM_BLOCK=y

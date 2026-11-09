@@ -13,7 +13,7 @@ kit = "enuma"
 
 [components]
 # 仅列输入已满足的组件；存储/显示/输入/GPU 待板级输入与 ABI 审查后按规范 ID（ShengUfs、GopFramebuffer…）追加。
-include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot"]
+include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot", "RamBlock"]
 
 [kernel]
 defconfig = "enuma_defconfig"
@@ -22,6 +22,10 @@ config_fragments = ["arch:configs/common.config", "soc:configs/sm8250.config", "
 # 数组整体替换：os 层指向 device 本地 os-series（省略 zzz-boot-progress，保留两个 XnuPrelink ABI 补丁），
 # 详见 patches/xnu/os-series 注释与官方 device-records/sm-t970.toml。
 patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "device:patches/xnu/os-series", "device:patches/xnu/series"]
+# RamBlock 内核态块驱动 + IOBlockStorageDevice 绝对地址绑定。build-arm-driver.py RamBlock 由组件配方
+# 自动运行（生成 libRamBlock.a）；prepare-ram-block-audit.py 把设备本地静态 interface-audit.json 装进树，
+# build-virtio-mmio-bindings.py 读它生成 original-bindings.S 并与驱动 .o 一起重归档进 libRamBlock.a。
+archives = ["prepare-ram-block-audit.py", "build-virtio-mmio-bindings.py --component RamBlock --directory build/ram-block"]
 
 [device_tree]
 source = "device:dts/enuma.dts"
@@ -47,10 +51,10 @@ size_mib = 192
 loader = "firmware"
 title = "UniXNU"
 tools = true
-kernel_args = ["-v", "serial=3"]
-# 阶段 5 入口探针：入口色条 + MMU 打开后 6 s PSCI 复位（docs/zh/guide/debugging.md 颜色条/复位）。
-# 不设 panic_screen：panic 屏幕代码 2607 B 超出本内核 __text padding 2512 B（差 95 B），探针安装会失败。
-entry_probe_reset_delay = 6
+kernel_args = ["-v", "serial=3", "rd=md0-ramblock"]
+# rd=md0-ramblock：bsd_init 跳过 sealed-root 检查并把 root-matching（IOMedia UUID）留给 IOFindBSDRoot；
+# 根卷 = IPSW restore ramdisk（044-75545-038.dmg，单 APFS 卷），经 RamBlock 发布为 IOMedia 后挂载。
+# 阶段 6 内存根验证到 launchd；不含 SpringBoard/完整用户态（fuxi-oddlylabs.md 记录）。
 # dram_size = 0x200000000（8 GiB）：实机 RamManagerDxe 映射 0x80000000-0x280000000（见 porting.toml memory 区）。
 dram_size = "0x200000000"
 # TODO: [userdata] first_lba/last_lba/lba_bytes 需 enuma 实测 GPT 证据（阶段 6）。
@@ -63,8 +67,10 @@ chip_id = "958bdc0f"
 owned_memory_size = "0x20000000"
 ipad_identity = true
 unique_chip_id = "required"
-# root_match_volume_uuid 阶段 1-5 保持注释；阶段 6 构建 userdata 后取根卷 UUID 回填。
-# root_match_volume_uuid = "REQUIRED_ROOT_VOLUME_UUID"
+# RamBlock 内存根：restore ramdisk 经 payload 的 data-ramdisk 通道（/chosen/memory-map/PackedRAMDisk）交内核。
+# root_match_volume_uuid = restore ramdisk 的 APFS 卷 UUID（fuxi-oddlylabs.md:289 记录，同 OS ipados-17.7.11-21H461）。
+packed_data_ramdisk = true
+root_match_volume_uuid = "9071148B-B025-402D-AD7A-48464D8B5FFF"
 
 [firmware]
 config = "enuma"
