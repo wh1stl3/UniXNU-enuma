@@ -120,3 +120,92 @@ Independent verifier should rerun the final kernel/payload/bootimg commands
 (fresh output location; do not overwrite this candidate), `porting-record.py
 check --device <device>`, `git diff --check`, and the header/FAT/hash checks above.
 Runtime acceptance belongs to a separately authorized device test.
+
+## Diagnostic preparation (blocked)
+
+Status: **self-checked, static inspection only**. Host device repository was clean
+at `8ff7f821348637b97f5b7184c889ddb0dc33da11` on `feat/step10-ramblock`;
+created `feat/step10-ramblock-diag` there. The ext4 device copy is still the
+previous build worktree at `e0ced004...`, with modified `board.toml` and untracked
+store source/builder. It was inspected but not reset, overwritten or synchronized.
+
+Input: `.cache/media/stage6-ramblock-20261109T232127718/console-ramoops-0.raw`,
+line 265 records DarwinBoot hand-off; the supplied photo observation is only a
+top green band. Reviewer concluded packed disk/trust checks passed before hand-off.
+Neither that observation nor compiled components establishes `NativeRamBlock::start`
+success. Zero staged kexts is not a failure criterion. UUID, 190-slot ABI/class
+sizes, boot arguments, 192 MiB payload and 512 MiB window remain unchanged.
+In particular **do not replace `rd=md0-ramblock` with `rd=md0`**.
+
+### First blocker and existing interfaces
+
+Paths below are relative to `/root/enuma-step10/UniXNU`; XNU paths are relative
+to `out/enuma/ipados-17.7.11-21H461/enuma/tree/.cache/xnu-work`.
+
+* `scripts/build-xnu-4k-baseline.sh:82-89`: enabling boot progress requires
+  native UFS, owner-root audit and source corecrypto; line 89 then invokes
+  `scripts/build-boot-progress.py`, absent from both base copy and assembled tree
+  (`ls -l` returned 2). No `BootProgress` source/header was found in that tree.
+  `.boot-progress-mode` is `0:disabled`; the device `patches/xnu/os-series`
+  intentionally excludes the boot-progress patch. Do not enable UFS to bypass it.
+* `osfmk/console/video_console.c:1231-1244`: `vcputc_options` is a gated, locked
+  scrolling text console, not a persistent positioned status API.
+  `vc_display_icon:2411-2427` requires progress enabled and a CLUT and calls
+  `vc_clean_boot_graphics`; it is not established as safe for independent status
+  redraws. No change to those locks or console ownership was attempted.
+* The legitimate geometry source already exists: `pexpert/arm/pe_init.c:428-437`
+  copies `boot_args.Video`; `video_console.c:2842-2883` owns its VM mapping and
+  `vinfo` is private to that console. Reaching hand-off does not establish that
+  this console has a usable mapped framebuffer. Do not reinterpret the physical
+  `boot_args` base as a post-VM pointer or map a board address independently.
+
+### Bounded continuation design (not implemented)
+
+First obtain a pinned, buildable, RAM-root-compatible existing display observer,
+or have reviewer_deep review a minimal interface inside the existing video console
+using its established mapping/ownership. Do not copy nuwa assets, widen the entry
+probe cave, re-enable panic_screen, add threads/locks, or add physical mappings.
+The proposed consumer is event-driven, fixed rows below the loader band, clipped
+to boot-derived geometry. A failed/missing mapping must leave instrumentation
+non-rendering. Do not claim absence of a row means absence of execution until a
+display-bound/alive row is visible.
+
+Proposed producer sites, preserving all return values/control flow:
+
+| Source / original line | Milestone / interpretation |
+|---|---|
+| `iokit/KernelConfigTables.cpp:86-93`; `iokit/bsddev/IOKitBSDInit.cpp:757-767` | Existing IOBSD personality; mark before/after resource matching, distinguish timeout from service return. Personality presence is not a start event. |
+| `drivers/RamBlock/NativeRamBlock.cpp:194-196` | Enter start, then superclass result; separates dispatch/ABI failure from input import. |
+| Same `:218-235,249-254` | Packed import completed, ready/resident snapshot, before/after registerService; import is not media/root publication. |
+| Same `:258-348` | Read requests/completions/failures; current read counters `:334-339` count serviced paths, not every submitted/rejected request. Existing failure counter `:344-345` excludes early rejection. Any future request instrumentation must account for these distinctions without changing driver locking/completion. |
+| `iokit/bsddev/IOKitBSDInit.cpp:954-987` | Root matching wait entry, service/null return and attempt count; null can lead to the existing iOS panic at 984. Do not suppress or mislabel that panic as an indefinite wait. |
+| `bsd/kern/bsd_init.c:1009-1010` | About to call vfs_mountroot: root selection returned, not mount success. |
+
+Reuse ready/resident/read/failure globals rather than inventing driver state.
+Snapshot counters at milestone changes/root-wait returns, not on every read;
+an in-flight wait can therefore display a deliberately stale snapshot. A live
+periodic counter display would require an already reviewed scheduler/observer,
+not a new thread. The prospective RamBlock source pin is
+`4be2d7eb05ef5a98126c91e0302c149140c0e3e1`; local component override support
+has **not** been qualified, so no component overlay was installed.
+
+No APFS parser was found via `command -v apfsutil/fsapfsinfo` or the standard
+`/usr/bin`, `/usr/local/bin`, `/home/wh1stl3/.local/bin` APFS filename checks.
+No volume-superblock traversal was performed; UUID remains unqualified and
+unchanged (a string occurrence is not verification).
+
+No kernel/payload/bootimg build was started: elapsed time/exit code and new
+artifact sizes/hashes are **not applicable**. No diagnostic output directory or
+candidate was created, and no old payload was repackaged. The earlier image table
+describes only the original candidate, not a diagnostic build. No device I/O,
+network access, push or merge was performed. Only documentation changed.
+Self-check: `git diff --check` in the host device repository exited 0;
+`python3 scripts/porting-record.py check --device /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma`
+from `/root/enuma-step10/UniXNU` with
+`PATH=/home/wh1stl3/.local/bin:/usr/local/bin:/usr/bin:/bin` exited 0,
+`enuma: 14 structured areas checked`. An earlier shell invocation failed before
+running Python because its expanded, unquoted Windows PATH contained parentheses;
+the explicit Linux PATH above fixes that invocation only.
+Independent verifier should rerun `git diff --check` and
+`python3 scripts/porting-record.py check --device <device>` from the base;
+there is no new build/test to rerun until the display-interface blocker is resolved.
