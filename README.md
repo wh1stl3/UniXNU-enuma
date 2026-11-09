@@ -1,14 +1,15 @@
 # UniXNU-enuma
 
 **最新诊断（2026-11-10，feat/step10-ramblock-probe，self-checked）**：用户观察
-17r 三条色带后自动回 fastboot（未报告精确时间），证明 `_vfs_mountroot` 返回，
-尚不证明返回 0。完整 CFG 核对确认成功边支配唯一 `_IOSecureBSDRoot` 调用点。
-唯一新候选 `18r-before-IOSecureBSDRoot/boot.img` 已在主机构建，未上机；若探针触发，
-证明挂载返回 0，但尚未执行 IOSecureBSDRoot 或启动 launchd。产物在本地
+18r 立即自动回 fastboot；结合 CFG，证明某次 `_vfs_mountroot` 返回 0 并到达
+IOSecureBSDRoot 调用前，不证明根认证或 launchd。主候选
+`19r-before-load_init_program` 探测 PID-1 到达加载前；必要回退
+`20r-before-bsd_utaskbootstrap` 区分 post-mount 设置与后续进程/VM/POST 路径。
+两者仅主机构建，未上机，不证明 exec/用户态执行。产物在本地
 `UniXNU/out/enuma/stage6-ramblock-probe/`，payload
 内容 93.667%，UUID/ABI/内存/参数不变，board.toml 保持无探针配置。
 完整哈希、命令、源码路径与 ABI/trust 假设见 [主机构建记录](docs/ramblock-host-build.md)。
-下一次上机须另取用户当轮授权并录像；尚未证明 APFS 根挂载或 launchd 成功。
+先测 19r，不复位再测 20r；上机须另取用户当轮授权并录像。
 
 Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。目标：iPadOS 17.7.11 / 21H461，donor 身份 iPad7,1（J120AP）。
 

@@ -422,3 +422,78 @@ push, merge or acceptance occurred. For a later independent checkpoint, rerun
 payload/bootimg only in a new tag with these temporary settings, header/FAT/hash
 checks, the record check command above and `git diff --check`; do not rebuild
 the kernel. Final integration and runtime acceptance remain with the parent.
+
+## 2026-11-10: 18r observed; 19r main and 20r fallback
+
+User reports **18r immediately auto-returned to fastboot**, SHA256
+`cb6601ad2daa02df65bf670d2a5ee30ccd33d1531cf1a542865c0abd030df03a`;
+media `.cache/media/stage6-ramblock-cp18r-20261110T003229031`. This is user
+observation, not independent video verification. With the CFG above it proves
+**some mountroot iteration returned zero and reached before IOSecureBSDRoot**,
+not authentication or launchd. Android recovery/readback belongs to another agent.
+
+### Source/CFG boundary (original c660a997 kernel, no rebuild)
+
+Applied `bsd/kern/bsd_init.c:1030–1196`: IOSecureBSDRoot → VFS_ROOT/root vnode
+setup → root-auth ioctl **unless rooted-ramdisk bypass applies** → optional
+imageboot/netboot → devfs/siginit → bsd_utaskbootstrap. Actual disassembly has
+`bl _IOSecureBSDRoot` at `...76f2fa4`, `_bsd_rooted_ramdisk`/conditional bypass
+at `...76f30f8–30fc`, ioctl/error branch at `...76f3118–311c`, and
+`bl _bsd_utaskbootstrap` at `0xfffffff0076f31dc`. Reaching bootstrap proves this
+setup did not stop, **not that the authentication check was performed**.
+`bsd_init.c:1349–1383` clones PID 1, sets AST_BSD, enables IPC and clears return
+wait. `kern_sig.c:3409–3412` invokes bsdinit_task on the first BSD AST;
+`bsd_init.c:1251–1278` does exception/MAC setup, VM pre-launchd and POST before
+the sole `bl _load_init_program` at `0xfffffff0076f33d8`.
+
+`kern_exec.c:8048–8131` copies launchd path/argv then calls execve (inlined into
+load_init_program_at_path in this binary as direct `bl ___mac_execve` at
+`0xfffffff00771fdbc`). **load_init_program can return**, but its normal returns
+follow a zero loader result (`:8218–8249`); exhaustion panics, not success.
+In the binary all zero-result edges converge on `...771fc4c–fc74`, containing
+only stack-check/epilogue and ret, no subsequent success-only direct bl.
+The exec implementation warns activation can fail past no-return yet report
+zero (`:5257–5260`); it checks signatures (`:5295`), terminates the old task and
+wakes the new exec thread (`:5441–5457`). Thus an after-loader reset is not a
+reliable user-execution marker, and generic exec cleanup/zero-only calls do not
+prove a live launchd. The new thread's eventual user-return path is
+`osfmk/arm64/locore.s:1276–1307,1550–1556` (bootstrap return → exception return,
+AST handling via `osfmk/kern/ast.c:221–224` → ERET); these common paths are not
+init-success-exclusive direct-bl sites. No return/branch/probe semantics changed.
+
+### Two candidates, priority and exact interpretation
+
+**Try 19r first; only if it does not reset, try 20r.** 19r resets immediately
+before init executable loading: proves PID-1 reached the loader after VM/POST,
+**not that loading, exec, signature acceptance or user instructions occurred**.
+20r resets immediately before process bootstrap: proves the post-mount setup
+above was crossed, not process creation. If only 20r resets, investigate process
+bootstrap/first AST/pre-launchd VM/POST; if neither resets, investigate the
+18r→20r interval (IOSecureBSDRoot/root setup/conditional auth etc.). No-reset
+alone cannot distinguish hang/panic/reset-probe failure or locate a function.
+
+Starting HEAD `1073551a77093c8d6e5aed9fb9182d2e22a0eb66`. Existing before probes:
+19r `in=_bsdinit_task, after=_load_init_program`; 20r
+`in=_bsd_init, after=_bsd_utaskbootstrap`; both **occurrence=1**, `before=true`,
+`delay=6` (no waiting in before mode), `panic_screen=false`. Full-function CFG
+enumeration confirms each unique direct bl, IOSecureBSDRoot dominates 20r,
+and POST call/zero-test precedes 19r. Same commands/inputs as above, ext4 cwd
+`/root/enuma-step10/UniXNU`; payload then bootimg **exit 0 for each**.
+
+| Tag | boot.img SHA256 (203505664 B) | payload.img SHA256 (201326592 B) |
+|---|---|---|
+| `19r-before-load_init_program` | `d8353a749b9a8e041dd1a0fe377ab6093f91093bcd8d8883d653594fb5c84a95` | `62b468d06d6e0daf587fee00bf361cf179d78a0e47c9977f984f7ccf0f11c301` |
+| `20r-before-bsd_utaskbootstrap` | `c7900f2ef436b04b7ade5b5b56a0b559158a2cb61204ece0a8d93e51ebb78cf3` | `1e315d0b588c0e0dba45eac5843ff23569de7c89ede9172610d133455a45cf0f` |
+
+Both directories are preserved under ext4 `out/enuma/stage6-ramblock-probe/`
+and `D:/Code/PortingiOS/UniXNU/out/enuma/stage6-ramblock-probe/`, no overwrite.
+Each contains payload/boot images and JSON, patch/build logs, disassemblies,
+`source-path.txt`, `control-flow.json`, `validation.json`. One necessary candidate
+self-check exit **0**: header v1/embedded payload/FD e524988b/DTB 42d36a00 match;
+five FAT files total **188576511 B = 93.666966% <95%**. Disk/trust/args/source
+kernel unchanged; parsed ADT differs from 18r only in generated random-seed.
+Host/ext4 boards match probe-free. No device commands, push, merge or kernel
+rebuild. All host results **self-checked**, no independent verifier or new runtime
+acceptance. Record/diff checks exit **0**; verifier should rerun the two final
+payload/bootimg commands only in fresh tags, candidate readback, record check
+and `git diff --check` (no kernel rebuild). Parent owns integration/acceptance.
