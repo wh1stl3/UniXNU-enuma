@@ -43,20 +43,40 @@ differs from the source `39cecb2e…`); the source `kernel.macho` is copied, not
 Bisect by walking the table in order: the last checkpoint that resets is the last confirmed
 progress; the first one that does not reset is the first unconfirmed step.
 
-## Device results (user observation, filmed)
+## Device results (user observation, filmed; the reset instant is not captured on video)
 
-- 01–03 (`_PE_init_platform`, `_arm_vm_init`, `_PE_init_printf`): **passed** (transitive — 04 reset
-  means the kernel reached `_early_random`, which is after all three).
-- 04 (`_early_random`): **passed**.
+- 01–03 (`_PE_init_platform`, `_arm_vm_init`, `_PE_init_printf`): **passed** (transitive via 04).
+- 04 (`_early_random`): **passed** (three colour bars, ~6 s auto-reset into fastboot).
 - 05 (`_vm_mem_bootstrap`): **passed**.
 - 06 (`_sched_init`): **passed**.
-- 07 (`_kernel_thread_create`), 08 (`_sched_startup`): **passed** (transitive — 09 reset means the
-  kernel reached `_PE_init_iokit`, which is after both).
-- 09 (`_PE_init_iokit`): **passed**.
-- 10 (`_bsd_init`, reset-**after**), 11 (`_vfs_mountroot`, reset-**after**): **stuck / no reset** —
-  by design they cannot pass: `reset_after` fires only after the call returns, and on a
-  storage-less board `_bsd_init` ends in `_vfs_mountroot`, which never returns. Not evidence of a
-  kernel fault. Replaced by the `reset_before` checkpoints 12–16.
+- 07 (`_kernel_thread_create`), 08 (`_sched_startup`): **passed** (transitive via 09).
+- 09 (`_PE_init_iokit`): **passed** (three colour bars, ~6 s auto-reset).
+- 10 (`_bsd_init`, reset-**after**), 11 (`_vfs_mountroot`, reset-**after**): **stuck / no reset** — by
+  design they cannot pass: `reset_after` fires only after the call returns, and on a storage-less
+  board `_bsd_init` ends in `_vfs_mountroot`, which never returns. 11 showed the three colour bars,
+  then stuck 20–30 s with no reset (not reset by the firmware watchdog; manual long-press back to
+  fastboot). Not evidence of a kernel fault.
+- 12 (`_bsd_init`), 13 (`_IOKitInitializeTime`), 14 (`_IOKitBSDInit`), all reset-**before**:
+  **passed** (transitive via 15).
+- 15 (`_IOFindBSDRoot`, reset-**before**): **passed** (three colour bars, then immediate reset into
+  fastboot).
+- 16 (`_vfs_mountroot`, reset-**before**): **stuck / no reset** (three colour bars, waited 10+ s, no
+  reset; manual long-press back to fastboot). ⇒ inferred: the kernel is stuck **inside
+  `_IOFindBSDRoot`** waiting for the root device — the expected endpoint without a storage driver.
+  Not direct evidence, as the other `bl`s between 15 and 16 were not tested individually.
+
+### Log observation
+
+After an auto (PSCI) reset into fastboot the pstore has **no `console-ramoops-0`** (checkpoints
+04/05/06/09/15); after a manual long-press back it is present (11/16, same as stages 3/4: 15732 B /
+279 lines, firmware log only, up to `DARWINBOOT: hand-off` / `Exiting boot services`). The earlier
+"XNU zeroed ramoops" hypothesis does not hold; more likely the kernel's PSCI reset path does not
+preserve that log (cause unverified).
+
+### Conclusion boundary
+
+No blocking point was found on the kernel side before the root-device wait; stage 6 (storage / root
+volume) has not started. Evidence strength = user screen observation.
 
 ## Checkpoints 07–11 (larger steps)
 
