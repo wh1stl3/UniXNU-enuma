@@ -1,15 +1,16 @@
 # UniXNU-enuma
 
 **最新诊断（2026-11-10，feat/step10-ramblock-probe，self-checked）**：用户观察
-18r 立即自动回 fastboot；结合 CFG，证明某次 `_vfs_mountroot` 返回 0 并到达
-IOSecureBSDRoot 调用前，不证明根认证或 launchd。主候选
-`19r-before-load_init_program` 探测 PID-1 到达加载前；必要回退
-`20r-before-bsd_utaskbootstrap` 区分 post-mount 设置与后续进程/VM/POST 路径。
-两者仅主机构建，未上机，不证明 exec/用户态执行。产物在本地
-`UniXNU/out/enuma/stage6-ramblock-probe/`，payload
-内容 93.667%，UUID/ABI/内存/参数不变，board.toml 保持无探针配置。
+19r 三条色带后自动回 fastboot，证明到达 `_load_init_program` 调用前，不证明 exec；
+continue 后 Android `boot_completed=1`、pstore 空。20r 未测回退已取消。
+唯一新候选 `21r-before-first-user-svc`：在 `_sleh_synchronous` 内首个
+`_current_cached_proc_cred_update` 直接调用前立即复位；阳性仅证明正常异常
+入口下 EL0 执行非 platform SVC，不证明 PID/launchd main/syscall 完成或稳定用户态。
+阴性不能排除 EL0 已执行但未 SVC；之后转一次有状态 exec 错误诊断（尚未实施）。
+21r 仅主机构建；产物在本地 `UniXNU/out/enuma/stage6-ramblock-probe/`。
+UUID/ABI/内存/参数不变，board.toml 保持无探针配置；未变 FAT 等沿用 19r 基线。
 完整哈希、命令、源码路径与 ABI/trust 假设见 [主机构建记录](docs/ramblock-host-build.md)。
-先测 19r，不复位再测 20r；上机须另取用户当轮授权并录像。
+下一步仅在另获用户当轮授权后测试 21r；本轮未执行设备命令。
 
 Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。目标：iPadOS 17.7.11 / 21H461，donor 身份 iPad7,1（J120AP）。
 

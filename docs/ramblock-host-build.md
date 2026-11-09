@@ -497,3 +497,77 @@ rebuild. All host results **self-checked**, no independent verifier or new runti
 acceptance. Record/diff checks exit **0**; verifier should rerun the two final
 payload/bootimg commands only in fresh tags, candidate readback, record check
 and `git diff --check` (no kernel rebuild). Parent owns integration/acceptance.
+
+## 2026-11-10: 19r observed; 20r cancelled; sole 21r EL0 SVC candidate
+
+Supersedes the 19r/20r test plan above. User observed **19r three colour bars then
+automatic return to fastboot**. Existing evidence (not device commands rerun here):
+`.cache/media/stage6-ramblock-cp19r-20261110-004919/host.txt:3–17` records image
+`d8353a749b9a8e041dd1a0fe377ab6093f91093bcd8d8883d653594fb5c84a95` and boot exit 0;
+`readback-19r.txt:4–19` records continue exit 0, enuma, `sys.boot_completed=1`,
+bootreason bootloader and empty pstore. This is user observation plus prior host
+readback, not video verification. It proves reaching **before** `_load_init_program`,
+not executing the loader or successful exec. **20r remains untested and is cancelled.**
+
+### Reviewed selection and actual site (self-checked)
+
+Starting clean HEAD `8e88861e562027928cf808e6da386404f913d25a`, branch
+`feat/step10-ramblock-probe`. Reviewer recommendation: PASS WITH CONDITIONS for
+the first non-platform EL0 SVC; no ERET, saved-state, MMU, exception ABI or probe
+implementation changes. Original kernel SHA256 remains `c660a997...` (full pin above).
+Applied source `out/enuma/ipados-17.7.11-21H461/enuma/tree/.cache/xnu-work/osfmk/arm64/sleh.c:761–766`
+checks SVC_64, 64-bit saved state and user mode; `:1902–1907` excludes the platform
+trap before updating cached credentials. `handle_svc` is inlined in this binary.
+
+`llvm-objdump --disassemble --disassemble-symbols=_sleh_synchronous` confirms:
+`0xfffffff00741ff58: bb 7e 0b 94  bl 0xfffffff0076ffa44 <_current_cached_proc_cred_update>`.
+Full function enumeration finds exactly **one** matching direct bl (occurrence 1).
+The switch table at `0xfffffff00700c160`, relative to `0xfffffff00741fec8`, maps
+only class `0x15` to `...741ff30`; that block rejects non-user (`w23 != 0`) and
+non-64-bit saved state (flavor != 21), then branches away for trap `0x80000000`.
+Thus actual selection matches the reviewed ordinary SVC path, not an address-order guess.
+
+Existing probe settings: `in/function="_sleh_synchronous"`,
+`after/reset-after="_current_cached_proc_cred_update"`, `occurrence=1`,
+`reset_before=true`, `delay=6`, `panic_screen=false` (the `entry_probe_reset_*` keys).
+**Before mode resets immediately, without executing the call or waiting 6 seconds.**
+Original word `0x940b7ebb` becomes `0x140009b2` (`b` to `0xfffffff007422620`);
+delta **9928 B**, aligned and within signed imm26 range. Original cave is zero;
+candidate cave equals the approved 19r immediate-reset cave, including SMC and
+terminal WFE loop. Relative to 19r, only the old and new site instructions change
+(8 bytes); the old loader site is restored. No kernel rebuild.
+
+### Outputs and incremental validation
+
+Full directories (new, no overwrite):
+`/root/enuma-step10/UniXNU/out/enuma/stage6-ramblock-probe/21r-before-first-user-svc/`
+and `D:/Code/PortingiOS/UniXNU/out/enuma/stage6-ramblock-probe/21r-before-first-user-svc/`.
+
+| Output | Bytes | SHA256 |
+|---|---:|---|
+| boot.img | 203505664 | `1b2f68ad5febafe60cc7575588812373f7319cfe4608f611a366e9cbacb67e3e` |
+| payload.img | 201326592 | `04f0fc13c60842b3dc8adcba57e79ecd6465a05da148c02a039286f097700fdb` |
+| contained patched kernel | 51109888 | `446d6cb7e4b9cef404990ab89cb40305373e18479c82af783f39f5b573286bee` |
+
+Same payload then bootimg commands as above (tag 21r), cwd
+`/root/enuma-step10/UniXNU`, wrapped by ignored host `.cache/build-21r.py`, **exit 0**.
+Retained: both images/JSON, patch/build logs, `sleh_synchronous.disasm.txt`, source
+excerpts, `site.json`, `validation.json`. Hashes match copied files. Source kernel
+unchanged; host/ext4 boards match probe-free. Boot metadata pins FD `e524988b...`
+and DTB `42d36a00...`; packed restore/trust/arguments match 19r metadata. Unchanged
+ADT/trust/FAT assembly follows 19r's valid `validation.json`, not a full re-audit:
+192 MiB payload, 512 MiB window, 8 GiB DRAM, UUID and arguments remain unchanged.
+No tracked base source, probe implementation, device command, push or merge changed.
+
+**Positive:** under normal exception entry, EL0 executed a non-platform SVC.
+Not PID identity, launchd main, syscall completion, or stable userspace. After a
+positive, reassess the stage-7 runtime/log milestone; this diagnostic is not acceptance.
+**Negative:** cannot exclude EL0 instructions executed without SVC, nor isolate
+exec failure versus hang/panic/probe failure. Next change should be **one stateful
+exec-error diagnostic**, separately scoped/reviewed; not implemented in this task.
+All new host results are **self-checked**, no independent verifier/device test.
+Record check and `git diff --check` exit 0. If the parent requests an independent
+checkpoint, rerun payload/bootimg in a fresh tag, site/cave/hash incremental checks,
+`porting-record.py check --device <host device repo>` and `git diff --check`; no
+kernel rebuild or unchanged FAT/trust re-audit needed. Parent owns integration;
+any new device start requires fresh user authorisation, regardless of recording.
