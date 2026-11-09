@@ -25,7 +25,20 @@ patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "device:pat
 # RamBlock 内核态块驱动 + IOBlockStorageDevice 绝对地址绑定。build-arm-driver.py RamBlock 由组件配方
 # 自动运行（生成 libRamBlock.a）；prepare-ram-block-audit.py 把设备本地静态 interface-audit.json 装进树，
 # build-virtio-mmio-bindings.py 读它生成 original-bindings.S 并与驱动 .o 一起重归档进 libRamBlock.a。
-archives = ["prepare-ram-block-audit.py", "build-virtio-mmio-bindings.py --component RamBlock --directory build/ram-block"]
+archives = [
+  "build-corecrypto-14.py",
+  "build-corecrypto-14.py --namespace",
+  "component:ArmDTPlatform",
+  "component:ArmCpu",
+  "component:SoftwareAES",
+  "build-software-aes-bindings.py",
+  "build-mockfs-fixture.py",
+  "build-libpthread-kernel.py",
+  "component:RamBlock",
+  "prepare-ram-block-audit.py",
+  "build-virtio-mmio-bindings.py --component RamBlock --directory build/ram-block",
+  "build-enuma-ram-block-store.py",
+]
 
 [device_tree]
 source = "device:dts/enuma.dts"
@@ -52,6 +65,9 @@ loader = "firmware"
 title = "UniXNU"
 tools = true
 kernel_args = ["-v", "serial=3", "rd=md0-ramblock"]
+# Original OS allow-list plus the restore-only v1->v2 representation adapter
+# (267 unchanged hash/type/flags entries, category/reserved=0; see prepare-restore-trust.py).
+trust_cache_sha256 = ["7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7", "8900d6a93d7a59ce1a872a5c081e559f4240a218f97e12d44d22dda46644d68f", "750b5d8ac5f5b52b8fd02d261caf96dd318db0904b3651ca05d9ae4939de488a"]
 # rd=md0-ramblock：bsd_init 跳过 sealed-root 检查并把 root-matching（IOMedia UUID）留给 IOFindBSDRoot；
 # 根卷 = IPSW restore ramdisk（044-75545-038.dmg，单 APFS 卷），经 RamBlock 发布为 IOMedia 后挂载。
 # 阶段 6 内存根验证到 launchd；不含 SpringBoard/完整用户态（fuxi-oddlylabs.md 记录）。
