@@ -320,3 +320,105 @@ then header/FAT/hash checks, `python3.11 scripts/porting-record.py check --devic
 /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma` from the base with the documented PATH,
 and `git diff --check` in the device repo. Final integration/acceptance belongs
 to the parent. Next device test requires fresh user authorisation and recording.
+
+## 2026-11-10: 17r user observation and 18r success-edge probe
+
+Supersedes the pending 17r device status above. User reports 17r SHA256
+`c29ab3e713b31f450879c1b14796e049172b93dece1b40d35e93502d1220578c`
+showed three colour bars then automatically returned to fastboot. **No exact
+time was reported.** Media reference:
+`.cache/media/stage6-ramblock-cp17r-20261110T002004772`.
+This is user observation, not video verification. It proves `_vfs_mountroot`
+returned, not that its return value was zero. No new continue/readback result
+is asserted here; another agent owns that task.
+
+### Full-function CFG check, not address-order inference
+
+Read-only original kernel SHA256 remains `c660a997...` (full pin above).
+Applied source path is the `bsd/kern/bsd_init.c` path in the preceding section:
+lines 1000–1028 contain the mount retry loop; 1010–1011 break only on zero;
+1015–1023 never exit the netboot-error sleep loop; 1030 calls IOSecureBSDRoot.
+Fresh disassembly is retained in the 18r directory as `bsd_init.disasm.txt`:
+
+* Lines 464–475: `bl _vfs_mountroot` at `0xfffffff0076f2f78`, immediately followed
+  by `cbz w0, 0xfffffff0076f2f9c`; the success block contains two argument-setup
+  instructions and the sole direct `bl _IOSecureBSDRoot` at `0xfffffff0076f2fa4`.
+* Nonzero falls through to rootdevice clearing and a netboot test. Ordinary
+  failure prints errno and unconditionally branches back to root selection
+  (`...2f98 -> ...2f20`, line 472); netboot failure branches to `...3018`
+  (line 504) and loops `...3074 -> ...3050` (line 527), never into success.
+* All 655 instructions of `_bsd_init` were parsed into an intraprocedural CFG,
+  including cold blocks and all direct conditional/unconditional branch targets.
+  The only incoming edge into `...2f9c` is that zero-test edge; removing it makes
+  `...2fa4` unreachable from function entry. There is no indirect `br`.
+  Calls (even panic) conservatively have return/fallthrough edges. Full-function
+  enumeration finds **one** matching direct call, hence **occurrence=1**.
+  `cfg.json` retains the result. This assumes ordinary call/return execution,
+  not arbitrary external entry into a block or control-flow corruption.
+
+Thus reaching this call requires a zero mount result on some iteration; it need
+not mean the first mount attempt succeeded. This probe stops **before** executing
+IOSecureBSDRoot; it cannot qualify root authentication or launchd.
+
+### Sole 18r host candidate and self-check
+
+Starting branch `feat/step10-ramblock-probe`, clean HEAD
+`20211aa270865257991525d2a985f3aaad989c36`. Reused ext4 build, raw kernel,
+packed restore, trust cache, FD and DTB; no kernel rebuild or probe-code change.
+Same payload then bootimg commands as lines 153–161, with output tag
+`18r-before-IOSecureBSDRoot`. Temporary ext4 board settings:
+`in="_bsd_init"`, `after="_IOSecureBSDRoot"`, `occurrence=1`, `before=true`,
+`delay=6`, `panic_screen=false` (using the existing `entry_probe_reset_*` keys).
+**Before=true resets immediately at the call; it does not wait 6 seconds.**
+Both build commands exited **0**. Host and ext4 boards match byte-for-byte and
+remain probe-free; UUID/ABI/memory/boot arguments are unchanged.
+
+Independent local directories (old candidates not overwritten):
+`/root/enuma-step10/UniXNU/out/enuma/stage6-ramblock-probe/18r-before-IOSecureBSDRoot/`
+and `D:/Code/PortingiOS/UniXNU/out/enuma/stage6-ramblock-probe/18r-before-IOSecureBSDRoot/`.
+
+| Output | Bytes | SHA256 |
+|---|---:|---|
+| boot.img | 203505664 | `cb6601ad2daa02df65bf670d2a5ee30ccd33d1531cf1a542865c0abd030df03a` |
+| payload.img | 201326592 | `515d1c7816353afd69ac1f3ffb090ffb797cd25aa856282b941bb668ca7e4d8c` |
+| contained patched kernel | 51109888 | `f0ba2b7c98b2c0a968486cddbb46249507fa04028f62f9e53d4e942bffbab239` |
+
+`payload-patch.log`:
+```text
+patched kernel.macho: stage 1 blue bar, stage 2 magenta bar, stage 4 reset before call #1 to _IOSecureBSDRoot in _bsd_init (at 0xfffffff0076f2fa4)
+```
+
+Header v1, embedded ramdisk equals payload, decompressed kernel after 192-byte
+shim equals FD `e524988b...`, appended DTB equals `42d36a00...` (full pins above).
+Five FAT files read back: **188576511 bytes / 192 MiB = 93.666966% <95%**;
+contained kernel, packed disk and trust hashes match metadata. Copy hashes match.
+Initial self-check `.cache/build-18r.py:86` wrongly required whole ADT equality
+with 17r and exited 1 after both successful builds. Read-only parsed-property
+comparison found only `/device-tree/chosen/random-seed` differs (automatically
+generated); every other property, including UUID/memory, is identical. Corrected
+validation only was resumed, **no rebuild**, exit 0. Images, payload/boot JSON,
+patch/build logs, CFG/disassemblies and `validation.json` are retained locally.
+
+### Two read-only next checkpoints (not built)
+
+| Function / direct call site | Information and return behavior |
+|---|---|
+| `_bsd_init` -> `_bsd_utaskbootstrap`, `0xfffffff0076f31dc`, occurrence 1 | Before: root vnode setup, any required root-auth check and devfs/signal setup passed. After: process-1 bootstrap call returned, not launchd execution. Direct `bl`; source `bsd_init.c:1191–1196,1349–1383`; callee normally returns via tail `b _task_clear_return_wait`, may fail/panic earlier. |
+| `_bsdinit_task` -> `_load_init_program`, `0xfffffff0076f33d8`, occurrence 1 | Before: init task reached executable loading after VM pre-launchd setup and POST. After: loader returned; success path prepares exec but does not prove user instructions ran. Direct `bl`; `bsd_init.c:1251–1278`; `bsd/kern/kern_exec.c:8134–8142,8174–8249` selects launchd, returns after successful exec setup, panics after exhaustion. |
+
+Original disassembly of both relevant callees is `next-points.disasm.txt`.
+No additional image was built. If 18r does not trigger, given 17r's call-return
+observation, first seek the **actual mount errno**, not another before probe:
+the stock ordinary error path already prints `cannot mount root, errno = %d`
+(`bsd_init.c:1027`, disassembly `...2f8c–...2f94`). If a usable kernel console
+cannot expose it, request a separately scoped/reviewed diagnostic that preserves
+and exposes w0 immediately after mountroot (e.g. an approved value-display probe).
+The existing after-reset cave overwrites w0 and cannot retrieve errno. No such
+new probe or branch rewrite is authorised/implemented here. No-reset alone still
+does not exclude a probe-path failure; 18r trigger would not authenticate the root.
+
+All results are **self-checked**, not independently verified. No device command,
+push, merge or acceptance occurred. For a later independent checkpoint, rerun
+payload/bootimg only in a new tag with these temporary settings, header/FAT/hash
+checks, the record check command above and `git diff --check`; do not rebuild
+the kernel. Final integration and runtime acceptance remain with the parent.
