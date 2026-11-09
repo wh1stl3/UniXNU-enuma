@@ -36,6 +36,24 @@ adb -s <enuma> shell su -c 'rm /data/local/tmp/ramoops'
   `UNIXNURAMDISK: initrd block device … Success` followed by `[Bds]Booting UniXNU` and the FAT
   payload mount. The menu default item then counts down 3 s, calls DarwinBoot, and a placeholder
   kernel shows `Load Error` (expected until a real kernel is built).
+- **Stage 4 (DarwinBoot hand-off) reached**: look for `UNIXNU: menu: timeout, booting default 0`
+  → `UNIXNU: boot: entry 'xnu' (UniXNU)` → `DARWINBOOT: hand-off to the kernel`, then the hand-off
+  block: `kernel   va <va>  pa <pa>`, `entry    pa <pa>` (with `entry words <4 hex words>`),
+  `args     pa <pa>  window <bytes> bytes`, `video    base <base>  <w>x<h>  row <stride> bytes
+  <bpp> bpp`, `CurrentEL <n>  SCTLR_EL1 <val>`, and `Exiting boot services. A green bar across
+  the top marks the loader handoff before the kernel branch.`. This proves DarwinBoot loaded the
+  kernel, allocated the owned-memory window, called ExitBootServices and drew the green bar; it
+  does NOT prove the XNU entry executed or the MMU was enabled (that needs the entry-probe colour
+  bars / reset delay, stage 5). DARWINBOOT `Print` output lands in ramoops (previously assumed
+  ConOut-only).
+- **Stage 5 (entry probe / kernel entry)**: with `[payload] entry_probe_reset_delay = 6`, after the
+  green bar the screen shows a **blue** bar (kernel entry executed, MMU still off), then a **magenta**
+  bar (reached just before the MMU is turned on), then ~6 s later the device auto-resets (MMU enabled).
+  A reset into fastboot after the magenta bar, clearly under the ~20 s firmware watchdog, shows the CPU
+  got through the MMU enable. Note: once XNU has run, `/sys/fs/pstore/console-ramoops-0` is absent even
+  though `dmesg` still shows ramoops attached at `0xb0000000`/4 MiB (stages 3/4 had it); hypothesis
+  (unverified) - XNU took/zeroed the `0xB0000000` region and the ADT does not reserve it, or the reset
+  path did not retain RAM.
 - **ASSERT / crash**: look for `ASSERT [<module>] <file>(<line>)` followed by the warm-restart
   marker (the SEC PON line at the top of the next capture shows `warm`).
 - **Hang**: the last line is the driver whose entry hung (for example the vendor `DisplayDxe`).

@@ -17,8 +17,11 @@ include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot"]
 
 [kernel]
 defconfig = "enuma_defconfig"
-config_fragments = ["arch:configs/common.config", "soc:configs/sm8250.config"]
-patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "device:patches/xnu/series"]
+# 数组整体替换：必须写全四层片段（arch→soc→os），device defconfig 最后应用（官方 porting/migration 第 4 步）。
+config_fragments = ["arch:configs/common.config", "soc:configs/sm8250.config", "os:configs/ipados.config"]
+# 数组整体替换：os 层指向 device 本地 os-series（省略 zzz-boot-progress，保留两个 XnuPrelink ABI 补丁），
+# 详见 patches/xnu/os-series 注释与官方 device-records/sm-t970.toml。
+patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "device:patches/xnu/os-series", "device:patches/xnu/series"]
 
 [device_tree]
 source = "device:dts/enuma.dts"
@@ -45,6 +48,9 @@ loader = "firmware"
 title = "UniXNU"
 tools = true
 kernel_args = ["-v", "serial=3"]
+# 阶段 5 入口探针：入口色条 + MMU 打开后 6 s PSCI 复位（docs/zh/guide/debugging.md 颜色条/复位）。
+# 不设 panic_screen：panic 屏幕代码 2607 B 超出本内核 __text padding 2512 B（差 95 B），探针安装会失败。
+entry_probe_reset_delay = 6
 # dram_size = 0x200000000（8 GiB）：实机 RamManagerDxe 映射 0x80000000-0x280000000（见 porting.toml memory 区）。
 dram_size = "0x200000000"
 # TODO: [userdata] first_lba/last_lba/lba_bytes 需 enuma 实测 GPT 证据（阶段 6）。
