@@ -49,7 +49,14 @@ progress; the first one that does not reset is the first unconfirmed step.
   means the kernel reached `_early_random`, which is after all three).
 - 04 (`_early_random`): **passed**.
 - 05 (`_vm_mem_bootstrap`): **passed**.
-- 06 (`_sched_init`): **pending**.
+- 06 (`_sched_init`): **passed**.
+- 07 (`_kernel_thread_create`), 08 (`_sched_startup`): **passed** (transitive — 09 reset means the
+  kernel reached `_PE_init_iokit`, which is after both).
+- 09 (`_PE_init_iokit`): **passed**.
+- 10 (`_bsd_init`, reset-**after**), 11 (`_vfs_mountroot`, reset-**after**): **stuck / no reset** —
+  by design they cannot pass: `reset_after` fires only after the call returns, and on a
+  storage-less board `_bsd_init` ends in `_vfs_mountroot`, which never returns. Not evidence of a
+  kernel fault. Replaced by the `reset_before` checkpoints 12–16.
 
 ## Checkpoints 07–11 (larger steps)
 
@@ -72,3 +79,27 @@ Note: the PSCI reset (`smc #0`, `0x84000009`) is a synchronous trap to EL3, inde
 kernel's thread/exception state, and the MMU-on reset was already verified on device; the deep
 checkpoints (10/11, where interrupts and threads are fully active) are still unverified on device,
 so whether the reset still returns to fastboot there is **pending device confirmation**.
+
+## `reset_before` semantics
+
+`entry_probe_reset_before = true` (used together with `entry_probe_reset_delay` and
+`entry_probe_reset_after`) redirects the Nth `bl <symbol>` in `entry_probe_reset_in` to a cave that
+issues PSCI `SYSTEM_RESET` **immediately — without executing the `bl` and without waiting the
+delay**. The delay is still required to trigger the probe and to select the reset-after path, but it
+is not waited. It answers "did the kernel reach the call site", not "did the call return", so it
+works for callees that never return (`_bsd_init`, `_vfs_mountroot`). `--reset-before` without
+`--reset-after` is refused by the probe script.
+
+## Checkpoints 12–16 (reset **before** the call)
+
+| # | in | after (occ 1, before) | question it answers | image | boot.img sha256 | payload.img sha256 |
+|---|---|---|---|---|---|---|
+| 12 | `_kernel_bootstrap_thread` | `_bsd_init` | reached the bsd_init call site? | `12-before-bsd_init` | `6d91afd12dec1bf7effe4736a8134a68a3fe17142739165771d1c9fa68a0a5a5` | `ac080c6bc35058da607c82bb3633ee1d76368212700d2760e21a8518d2d01181` |
+| 13 | `_bsd_init` | `_IOKitInitializeTime` | reached IOKitInitializeTime (+0x458)? | `13-before-IOKitInitializeTime` | `6e335251bd7079ba6b629fcec2a727a5fc35eeef1367ceea923bbbdd0f546548` | `93ab066beaf3b3d58ca5e5b6f1ece2bb2508e7a9975435b38bd23abd7b1dda32` |
+| 14 | `_bsd_init` | `_IOKitBSDInit` | reached IOKitBSDInit (+0x64c)? | `14-before-IOKitBSDInit` | `1dfc686030106bb3f73c2447076c8851c374e5abcab14af742b12897f80d3ef9` | `c29dab7f04c6e6abf67041f996e590c9c3b6ef2148f3fb8d781eeb8cdf7bdb94` |
+| 15 | `_bsd_init` | `_IOFindBSDRoot` | reached IOFindBSDRoot (+0x6e0, the root-device wait)? | `15-before-IOFindBSDRoot` | `582c241eca45c5be97aa89d951c613cc38ff0a5c48b072fe74c1a3b9df422527` | `ebd67558d419fef172c14e1fa9caea3e0bbb42f31e10970d12e3ab650e2283b8` |
+| 16 | `_bsd_init` | `_vfs_mountroot` | reached vfs_mountroot (+0x724), past IOFindBSDRoot? | `16-before-vfs_mountroot` | `4028ecc586d856cfd1bf82a8ec4d34d4958b71b21e501db35eb9ca1abd392fe3` | `74b79f4a3600d1b6560a4bc4199a34c41ba2e5f4bb6b21f958718de15832efab` |
+
+Read-out for 12–16: reset into fastboot = the kernel **reached** that call site (the call was not
+made); no reset = it stopped before that call site. If 15 resets but 16 does not, the kernel is
+stuck inside `_IOFindBSDRoot` (the root-device wait).
