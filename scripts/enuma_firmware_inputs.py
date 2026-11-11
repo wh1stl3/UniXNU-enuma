@@ -2,7 +2,7 @@
 """Stage and inspect enuma vendor_boot v3 DTBs from the proven read-only backup.
 
 Ownership: UniXNU-enuma only. The backup root is read-only per
-`../../docs/backup-manifest-2026-11-06.md` section E: files are copied one at a
+`../../docs/decisions.md` D6: files are copied one at a
 time into `.cache/firmware/` (never whole directories), nothing is written back
 to the backup, and every processing step stays inside `.cache/firmware/`.
 

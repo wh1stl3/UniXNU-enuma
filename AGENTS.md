@@ -1,6 +1,6 @@
 # AGENTS.md — UniXNU-enuma
 
-长期规则见共享治理文档：`D:/Code/PortingiOS/docs/governance-2026-11-06.md`（12 条，v2 对齐官方 format 2）。本文件只写 enuma 专属约定。
+长期规则见 `D:/Code/PortingiOS/docs/context-brief.md`；路由见 `docs/routing.md`，决策见 `docs/decisions.md`。本文件只写 enuma 专属约定。
 
 ## 目标
 小米平板 5 Pro 5G（enuma / **SM8250-AC**，骁龙 870）通过 UniXNU 运行 iPadOS 17.7.11（donor: iPad7,1 / 21H461，xnu-10063，4K）——D-002 既定路线。
@@ -30,5 +30,5 @@ UFS 24r 补充（2026-11-11）：观察形态变体、矩阵与 patch 只在临�
 `porting.toml` 是唯一权威记录：改代码同步对应区域的 findings/evidence，并跑 `python3 scripts/porting-record.py check --device .`。
 
 ## 关联文档
-- AI 分工与路由：`../../docs/ai-orchestration-2026-11-06.md`。
-- 双机通用治理：`../../docs/governance-2026-11-06.md`。
+- AI 分工与路由：`../../docs/routing.md`。
+- 双机通用治理：`../../docs/context-brief.md`。
