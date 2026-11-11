@@ -571,3 +571,48 @@ checkpoint, rerun payload/bootimg in a fresh tag, site/cave/hash incremental che
 `porting-record.py check --device <host device repo>` and `git diff --check`; no
 kernel rebuild or unchanged FAT/trust re-audit needed. Parent owns integration;
 any new device start requires fresh user authorisation, regardless of recording.
+
+## 2026-11-10: 21r single device run and user observation (self-checked)
+
+Supersedes the pending-device-test/next-action statements in the host snapshot
+above. Device repo HEAD: `7772f75fef46bfeeff899db25554f555ee27670c`, branch
+`feat/step10-ramblock-probe`; this evidence batch is **uncommitted**, not a claim
+that the records or ignored scripts were committed at that revision.
+
+Actual local evidence: ignored
+`.cache/cp21r-20261110-android-current-result.json:1–58`, cross-checked with the
+workspace handoff's enuma section. The JSON records the fixed boot at the Windows
+21r path above, **203505664 B**, SHA256
+`1b2f68ad5febafe60cc7575588812373f7319cfe4608f611a366e9cbacb67e3e`,
+matched before the run. No candidate rebuild or new hash pass was performed for
+this documentation update.
+
+Prior execution commands (sanitized, **not rerun here**):
+
+| Command / recorded action | Result |
+|---|---|
+| `pwsh -NoProfile -File UniXNU-enuma/.cache/cp21r-20261110-android-current.ps1` (cwd enuma) | wrapper exit 0 |
+| `adb devices`; targeted `adb -s <REDACTED> shell getprop ro.product.device` | each exit 0; 2 ADB devices, exactly one ready enuma |
+| `adb -s <REDACTED> reboot bootloader` | exit 0 |
+| `fastboot -s <SAME_REDACTED> getvar product`; `fastboot devices` | each exit 0; same device product=enuma |
+| `pwsh -NoProfile -File .cache/run-cp21r-once.ps1 -AuthorizeDeviceThisRound -AuthorizationRound cp21r-20261110-android-current` | existing entry invoked once, exit 0 |
+| sole `fastboot -s <REDACTED> boot D:/Code/PortingiOS/UniXNU/out/enuma/stage6-ramblock-probe/21r-before-first-user-svc/boot.img` | boot invoked/completed, exit 0 |
+
+Claim changed absent → present (`claim_before=false`, `claim_after=true`);
+`.cache/cp21r-device-attempt.claimed` is consumed: **do not delete or replay**.
+All device actions stopped; no flash, continue, Android restore or retry.
+
+User oral observation: **“三色带后立刻复位”**, no new video. Do not add a separately
+confirmed return to fastboot. The fixed candidate binding plus the existing
+static interpretation supports **normal-exception-entry EL0 non-platform SVC**.
+This does not prove PID identity, launchd main, syscall completion or stable
+userspace; boot exit 0 alone is not execution evidence. No stage-7 acceptance or
+increase in any of the 14 area completion levels.
+
+Next host task: **runtime summary log observer**, under scoped deep design review,
+**not implemented**. This task changed records only, with no code/image/build
+configuration or device operations. Self-check is limited to record check,
+`git diff --check` and document consistency; independent verifier has not rerun
+these final checks. If requested, verifier should rerun only those documentation
+checks, not the device scripts, payload/bootimg build or candidate-wide hash audit.
+Final integration and acceptance remain with the parent orchestrator.

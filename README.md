@@ -1,16 +1,56 @@
 # UniXNU-enuma
 
-**最新诊断（2026-11-10，feat/step10-ramblock-probe，self-checked）**：用户观察
+**24r observation-only实现完成 + deep静态审查（2026-11-11，self-checked，仅主机；无设备授权）**：默认0 `NATIVE_UFS_OBSERVATION_ONLY` 变体已实现（为1须 diagnostic 与 external-provider 均1，非法值/组合 `#error`；入口仅 `native-ufs-observe-reuse=1` 且 root/probe 缺席），o=1 的 `-Werror` unused 阻塞按既有条件编译块处理。官方矩阵 NEW exit0：4 默认格、4 显式 o=0 格、o=1 合法格（archive `82811fc3…`、215 undefined、旧7缺符号零引用）、3 组合拒绝、2 非法值拒绝；组件guard 54/624、host 633/639。交付 ignored `.cache/ufs-observation-only-20261111/`（source-snapshot、`increment.patch` `51c851e1…05321a`、evidence.json、SHA256SUMS）；patch 在 fix2 干净基线 apply 后逐字节重现。**实现只在临时 ShengUfs 工作树与本地 `.cache` 证据中，未进入本仓源码，也未提交/推送远端。** 全部 self-checked，未独立验证；无24r设备授权。deep `ses_e35de8053ffel32m1bGoaREoKE` 判 **CHANGES REQUIRED 仅证据/措辞，源码 completion 正确、无须改源码**：①identity/`explain_default` 只在 external=0 两格（`scripts/build-enuma-ufs-store-matrix.py:114-126`），external=1 与 observation 格仅符号集合（`scripts/build-enuma-ufs-observation-matrix.py:68-73`），不得称四格函数体等价；②o=1 准入后 `ufsReuseDiagnostic`（`NativeUfs.cpp:194-225`）noreturn，异常/摘要失败/正常摘要均经 `ufsReuseFinish`（`:188-192`）IOLog+永久 `wfe` 驻留，不 panic/reboot/正常继续，`:1848-1849` 不可达；诊断仍有 GCC/HC/SMMU `mapPhys` 与 OSSharedPtr 映射分配（`:207/213/218`），写路径是编译期不可达而非“无写代码”，单CPU驻留不阻止其他CPU/固件/DMA，watchdog 仍可能复位（`:185-187`）；③host 测试未启用 o=1，不构成动态覆盖。evidence.json 已按此收窄并重算 SHA256SUMS，源/patch 快照 hash 未变（NativeUfs `3fe914…`、RootCommands `96fe71…`、RootQueue `84d904…`、patch `51c851…`）。无 native/prelink/link-map/payload/boot、无 personality/PMGR-observer 重绑定、无24r候选/入口；不升级等级、不称上机通过。下一步独立 verifier 在 NEW ext4 输出复跑观察矩阵（不得 `--archives-from`）、组件 guard、patch apply 重现及 record/diff。下方为历史检查点。
+
+**24r此前检查点（2026-11-11，self-checked，真实链接阻塞；已由上方 observation-only 结论取代）**：已由成功23r记录定位resolved config，官方defconfig/status/archive-plan闭包完成；仅UFS编译开关变化，Virtio和owner-root仍关闭，storage补官方依赖记录后record check0。实际双宏=1 ShengUfs及PMGR archive已构建，最终native链接首缺`_boot_progress_poll`及6个正常VerifiedRoot路径符号，停止不凑stub/策略/启Virtio。11个真实输入archive强符号无重复、六store唯一EnumaRamBlockStore.o；1010对象+11archive未提供缺失符号，23r原hash不变。完整输入及限定dry-run恢复链接argv、供deep裁定的诊断专用fail-closed裁剪问题见[24r记录](docs/ufs-24r-diagnostic.md)。无新native/prelink/map/payload/boot/入口，不可上机；等待主控/deep明确方案，不升等级。下方是历史检查点。
+
+**24r部分主机准备（历史，2026-11-11，self-checked，未上机）**：设备侧仅启ufs/不启PHY的ADT等价门禁通过，原GIC物理地址/长度与CPU/中断属性保持；真实BCM2837预处理排除pe_fiq的另一GIC路径，ArmCpu从ranges+reg映射intc。ShengUfs组件/双开关wrapper及唯一观察参数已写但未构建；首次隔离准备因runner假定的已解析`.config`路径不存在，在kernel/prelink调用前停止。无24r候选/包装/单次入口，不可上机；当前board/defconfig为未完成集成，不是放行配置。首阻塞、证据与预先判读见[24r记录](docs/ufs-24r-diagnostic.md)。不改基座/pin/共享仓，不触旧claim/23r/22r，等级不升；下一步先只读确定真实配置路径，最终审查/验证及当轮设备授权仍须完成。下方是此前检查点。
+
+**最新：方案D fix2 archive/host范围完成，self-checked，待独立verifier+deep增量审。** 经主控窄许可，同一默认0开关`NATIVE_UFS_EXTERNAL_STORE_PROVIDER`条件编译六个store导出及其专用helper/state，保留RamBlock空后端和共享log/geometry，无target禁警告或transport函数体修改。最终源码四archive实际重编通过（不复用archive）；默认仍87个globals/六store，external为81个/零store，与RamBlock合并的全强符号扫描无重复。真实空后端+RamBlock guard矩阵每诊断设置64组合，633/639原诊断用例同时重跑通过；guard54/624复用未变证据。默认对象差异已精确定位为45处panic源行号MOV和DWARF路径/坐标，不误称仅ar mtime；新实测hash与完整patch `91500f6c…4cdee4d`、旧失败历史见[实现记录](docs/ufs-reuse-diagnostic-implementation.md)。未改RamBlock/archive、活动board/defconfig/DTS、基座/pin；无24r链接/候选/入口或设备操作。候选阶段最终native/prelink/map唯一性仍须另验。
+
+**实际UFS接管仍硬阻塞：INSUFFICIENT EVIDENCE（主控转述一次公开来源核对）。** HCE/doorbell/RSR为0不能据此释放旧页。三项缺口及固定来源见 [短阻塞表](docs/ufs-resource-evidence.md#takeover-hard-stop-insufficient-ownership-evidence-2026-11-11)：唯一提交所有权、完整DMA完成定义、旧资源保留/失败恢复责任。新授权只允许上方默认关闭的观察形态诊断，不改变这些接管硬条件；须可引用契约及适用deep，不靠OBSERVED结果授权接管。未联系维护者/发issue。
+
+**2026-11-11 UFS组件离线交付（独立验证PASS，主控转述；未集成）**：固定 `e2b32cc429e8cf1501161c1d8c517f8994ceb9b2` 上的最终patch `819a4be3…86f1f66` 已在git archive隔离树apply0，5文件逐字节匹配工作树；54场景/624抽取模型拒绝零硬件计数、target archive/exports、nonPIE SmmuTakeover/RootCommands及record/diff独立PASS，TransferPoll复用未变通过。两份492600B archive仅8字节ar mtime不同、成员内容相同；verifier复用构建目录，**不是fresh/clean rebuild可复现性证明**。patch可离线交付，尚未提交/发布/集成；SM8250-AC执行仍拒绝，无prelink/runtime验证。[UFS记录](docs/ufs-resource-evidence.md#component-platform-admission-2026-11-11)列完整hash/路径。Android已恢复、用户在用；无可上机候选。下一实际接管须先闭合并深审所有权，不改活动pin。旧host身份核心/QR代码及自检保留暂停，未接线、无菜单候选，非主线前置。
+
+**主线停在UFS所有权契约，不重验PMGR/启动/显示。** 可选身份工具host分支已保存暂停：注入式C核心13 sanitizer场景、snapshot v2完整性parser23测试、分页模型5测试均为此前self-checked；无DXE/BootServices/GOP接线或候选。组件guard离线交付已完成，活动pin/feeds不动，不继续身份/QR支线。历史音量/电源/Tools/QR已有实机证据可复用，A→B仅enuma DSC新增DebugLevel4、DTB相同的reviewer比对不等模块逐字节同；不增菜单独立里程碑。
+
+**历史离线资源检查点（self-checked，非当前待办）**：身份快照schema/parser此前19测试及示例解析exit0，实例全synthetic，真实UEFI身份仍UNKNOWN；另固定DALSys/HALIOMMU双hash闭合“SMMU/IORT”私有属性两条UFS raw记录，6测试及审核exit0，不称标准系统ACPI IORT已安装/运行已选库或SID/context独占。见 [UFS格式/资源摘要](docs/ufs-resource-evidence.md)。不据此继续采集方案/输出通道工具、hook/候选或启用UFS；当前以上方三项契约硬阻塞为准。Android使用不受影响。
+
+**UFSDxe/HALIOMMU静态证据（前一检查点self-checked）**：本板HALIOMMU安装/共享接口表及资源匹配算法已绑定；共享表不等0x38字节软件ctx，更不等硬件bank独占。其外部属性接口现由上方DALSys增量静态闭合，不再是未知provider。UTRL/UTMRL、SID/context独占、PA/IOVA/coherence/超时缓冲及真实UEFI-LUN仍UNKNOWN。前轮4项provider测试及旧12测试保留，不盲重跑；23r限定推论不变。
+
+**UFS离线输入证据（2026-11-11，self-checked）**：新增 `scripts/check-enuma-ufs-evidence.py`，使用现有dtc/PyYAML解析本板DT/共享DTSI、固件配置与原始GPT，输出ignored `.cache/ufs-evidence/report.json`。已核对4096B块、userdata 2686976–61880314 inclusive；资源长度/页映射、SPI/INTID及provider ID/offset分别记录。纯主机校验，不启用ShengUfs、不配置写窗口、不动设备，Android保留、存储等级不变；SID/所有权/一致性/PA-IOVA-LUN及未来根UUID仍UNKNOWN。命令与脱敏证据见 [UFS摘要](docs/ufs-resource-evidence.md)。
+
+**最新23r观察（2026-11-10，self-checked媒体整理；reviewer结论单列）**：单次boot0绑定下，照片可见launchd Early boot complete/Continuing system boot、restored_external pid3/running/Successfully spawned及NVRAM/registry/cache/ENOENT/ESRCH日志。用户“**一直停在这里**”，未报告后续panic/复位，时长不详；不判hang或稳定活性。顶部裁切未直接见stage23；reviewer据同步hook先于用户启动、唯一pmgr2及成功返回条件，推导“**mode2 publisher检查完成并返回——控制流推导；stage23文本未直接观察**”，非AMFI全部路径或完整runtime通过（22r亦曾PID3后panic）。照片ignored `.cache/media/stage7-pmgr-23r-20261110/微信图片_20261110232546_369_25.jpg`，SHA256 `065a6fec43aa856e71ab201cb7eeb3811cd842c5981306a8ed336b28a490145d`。该目录无早期完整录像；详见 [23r记录及源码引用](docs/pmgr-23r-diagnostic.md)。RAM-root为restore ramdisk，不含完整GUI；未建立UART/USB日志通道，不自动查询设备或重启取证。下一主机动作：只读UFS资源/接口证据准备，不启用驱动、不刷userdata，保留Android，不升完成等级。
+
+**23r执行前准备快照（历史self-checked，实际执行/观察以上方为准）**：冻结prelink `bf9f7e12bb05dc3a09f1a732fbcdb83d7729f6378f65ea7fbe77646514edc072` 的PMGR静态deep、observer人工及完整包装独立PASS，主机工具门禁PASS。deep许可有限诊断，mode1/3/fault仍未验证；mode2 stage23及后续AMFI是目标，不是已有结果。`stage=3`不是`stage=23`，stage23仅publisher自检。入口本轮已授权使用一次，不可重放；未改冻结manifest历史release_allowed=false或自动audit JSON。
+
+QEMU9.2工具已就绪，但原mode1在hook前AppleImage4异常、16字段全0；fixture后续两次平台拒绝无执行结果，保留原证据且不继续/绕过。当前任务仅正常文档与离线入口准备，不将QEMU前置失败或包装PASS扩为runtime/实机/显示验收。
+
+**此前主机适配检查点（历史self-checked，后续结论以上方23r记录为准）**：受guard的原版ApplePMGRNub publisher已完成实际Linux archive/native/prelink构建、340槽指针/205导入符号存在性/hook/late-init静态检查；唯一 `pmgr=2`，原22r观察器保留并重定位。205符号存在性不是完整绑定证明；必要生命周期thunk由deep另行回读。构建阶段证据见 [PMGR主机检查点](docs/pmgr-host-gate.md)，不代表硬件电源功能或阶段验收。
+
+**最新实机记录（2026-11-10，22r，self-checked记录）**：用户报告内核 panic；用户人眼和 terra 对新近照均清晰确认 `AMFI: No PMGR? @ConfigurationSettings.cpp:235`，caller 为 `0xfffffff004ac9420`，无需再拍同样近照。可见 launchd 的 `xpcproxy spawned pid3`、`Successfully spawned restored_external[3] because speculative`、`service running`；新图另见两组 persona type 6 缺失 errno 3、PID3 请求 logd/notification_center/system.logger 的 lookup error 3，仅记可见先后，不作因果结论。这不独立确认完整 exec/syscall 健康，也不证明 panic 的进程为 PID3。PID1 观察器文本未见；`Flushed74` 是 launchd 日志，不是观察器计数。等待 reviewer 最终分析，本任务未定位实现。
+
+用户授权移动的照片现位于 ignored `.cache/media/stage7-pid1-22r-20261110/微信图片_20261110202502_367_25.jpg`，SHA256 `a534193b5dc75e42de300d8c5a9cc378297c21fb04d0c611cf05a57db9c9fa27`；移动前后 hash 一致，保留原名。新近照已在同目录 `微信图片_20261110203216_368_25.jpg`，未移动，SHA256 `887fc1dcc12cc7b3514a7d23272081034eded3be56ba73115fcd86cad6b017d0`。与22r实际执行JSON/已消耗claim的绑定及边界见 [运行态记录](docs/runtime-summary-gate.md)。近照确认已完成，不再要求同样照片；不得为取证再次 boot，不重放任何 claim。
+
+**此前诊断快照（2026-11-10，feat/step10-ramblock-probe，self-checked）**：用户观察
 19r 三条色带后自动回 fastboot，证明到达 `_load_init_program` 调用前，不证明 exec；
 continue 后 Android `boot_completed=1`、pstore 空。20r 未测回退已取消。
-唯一新候选 `21r-before-first-user-svc`：在 `_sleh_synchronous` 内首个
+此前候选 `21r-before-first-user-svc`：在 `_sleh_synchronous` 内首个
 `_current_cached_proc_cred_update` 直接调用前立即复位；阳性仅证明正常异常
 入口下 EL0 执行非 platform SVC，不证明 PID/launchd main/syscall 完成或稳定用户态。
-阴性不能排除 EL0 已执行但未 SVC；之后转一次有状态 exec 错误诊断（尚未实施）。
-21r 仅主机构建；产物在本地 `UniXNU/out/enuma/stage6-ramblock-probe/`。
+本轮 21r 已获当轮授权单次上机：定向 ADB 重启、同设备 fastboot 身份查询、
+既有入口及唯一 boot 均 exit 0；用户口述“三色带后立刻复位”，无新增录像，
+不另称已确认回到 fastboot。固定 boot 为 203505664 B，SHA256
+`1b2f68ad5febafe60cc7575588812373f7319cfe4608f611a366e9cbacb67e3e`。
+候选绑定与既有静态判读支持上述 EL0 非 platform SVC 证据，boot exit 0 本身不证明执行。
+脱敏记录：ignored `.cache/cp21r-20261110-android-current-result.json`；
+产物在本地 `UniXNU/out/enuma/stage6-ramblock-probe/`。
 UUID/ABI/内存/参数不变，board.toml 保持无探针配置；未变 FAT 等沿用 19r 基线。
 完整哈希、命令、源码路径与 ABI/trust 假设见 [主机构建记录](docs/ramblock-host-build.md)。
-下一步仅在另获用户当轮授权后测试 21r；本轮未执行设备命令。
+claim 已消耗，禁止删除/重放；设备动作全部停止，未 flash/continue/恢复 Android。
+运行态 PID1 摘要 **22r-pid1-runtime-summary 主机候选交付门禁完成，已当轮授权单次 boot 后报告 panic**：deep 五项人工审核 PASS WITH CONDITIONS、verifier 机械/退出码及最终包装检查 PASS 的范围仍仅为绑定主机产物，见 [证据](docs/runtime-summary-gate.md)。自动 audit 仍为 manual-review-required/child exit 2，人工结论另存，不改写 JSON。boot SHA256 `fe9d2bcfa49270d17a20a0e70effbf2e2ad71a599a29f8b751c718dd02afada8`（203505664 B）；包内 kernel 精确匹配已审 prelink `48da5181…cb4d`。新22r入口及唯一boot均返回0，22r claim已消耗且禁止重放；boot返回0本身不证明运行成功，实机现象以上述用户/terra记录为准。
+本批记录基于 HEAD `7772f75fef46bfeeff899db25554f555ee27670c` 的未提交工作树；
+21r 口述实机现象未独立影像核验；22r 已实机报告 panic，照片有上述 launchd/restored_external 可见日志，但不证明完整 exec/syscall 健康或稳定用户态。不提升区域等级或宣布阶段 7 验收。
 
 Xiaomi Pad 5 Pro 5G（enuma，SM8250-AC / 骁龙 870）的 UniXNU 设备仓。目标：iPadOS 17.7.11 / 21H461，donor 身份 iPad7,1（J120AP）。
 
