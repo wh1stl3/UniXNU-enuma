@@ -1,4 +1,60 @@
-# Enuma one-shot Data seed — run failed before Apple download
+# Enuma one-shot Data seed — created, verified locally, artifact deleted
+
+## Successful authorized revision run, 2026-11-13 — self-checked
+
+Source-supply repair received static reviewer PASS and independent source
+verifier `ses_e2c657b95ffeAvMdY2QWHvylH3` PASS (parent-provided). The exact
+reviewed commit `dc3587648a6d8e7f69e0a94fdce0eb7910015572` was pushed once to
+the dedicated branch, triggering a new run, not rerunning the earlier failure:
+[43379610501](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/43379610501),
+attempt 1, matching that head SHA. Job `131734051684` succeeded in 9m18s.
+Push, managed watch, macOS build, receiver and artifact DELETE all exited 0.
+No further push/run or code change was made during execution.
+
+The real macOS build executed the audited source/profile/member hash checks,
+seed population/new-parent permission/source-mode/symlink assertions,
+`diskutil verifyVolume`, official DBRDISK1 packing, packed identity/APFS checks
+and CMS encryption before a successful ciphertext upload. These are actual
+job results, not the host mocks. The encrypted manifest records filesystem
+check exit 0. Its generated Data UUID remains local in that manifest, not
+copied into this public record. Original Apple inputs were temporary job files;
+no plaintext/original artifact or cache was uploaded.
+
+The unchanged audited receiver ran from the clean LF DarwinBoot clone using
+OpenSSL 3 and the local dedicated transfer key, not an owner key. It checked
+exact run/head/provenance, unique artifact/whitelist, CMS GCM authentication,
+DBRDISK1 bounds, encoded SHA-256, SHNGSEED2 identity, 3 GiB NXSB geometry and
+checksummed APSB/UUID. `receipt.json` was written before deleting only artifact
+`14016566547`; DELETE exited 0 and the run artifact API then returned count 0.
+
+| Seed measurement | Value |
+| --- | --- |
+| Logical bytes | `3221225472` (3 GiB) |
+| Packed bytes | `1171584` |
+| Packed SHA-256 | `ea4921098ea2393d8b2fa77ec59e78e0284c843cb88a90e3fca8e7532dbe478e` |
+| SHNGSEED2 identity | `6a7428859489940e17043999143031d06aa5b0f838031e5027509cdf24ce1e33` |
+
+The seed and receipt are in the original board checkout's ignored,
+ACL-restricted `out/data-seed-transfer-20261113/received-43379610501/` as
+`data.dbr`, `manifest.json` and `receipt.json`; ciphertext and local tar are
+also retained there. Preserve this exact seed for future installation builds.
+Sibling evidence: `run-43379610501-watch.exit`, `run-43379610501-receive.exit`,
+`run-43379610501-receive.log`, `run-43379610501-result.json` and
+`run-43379610501-budget-reference.json`. No private key contents are in Git.
+
+Reference payload arithmetic: 192 MiB capacity `201326592` minus the existing
+`124575744`-byte prelink gives `76750848` B before the seed. This seed fits,
+leaving `75579264` B raw or `65512934` B under the official 95% content limit.
+Production Apple trust, ADT/config/other applicable payload and FAT overhead
+still need the complete packaging budget; this is not a completed payload.
+The 3 GiB seed does not replace r3 with a 215 GiB plan, prove first-boot/runtime
+capacity, establish UFS access/ownership or complete persistence. No device,
+base modification, owner-key access or re-signing occurred.
+
+Runtime result is self-checked; the earlier source verifier is not independent
+runtime acceptance. A verifier should inspect the saved job/receipt/deletion
+evidence and rerun local seed/provenance/identity checks from the final inputs,
+not rerun either cloud job. This outcome record is committed locally only.
 
 ## Source-supply repair checkpoint — not pushed or triggered
 
