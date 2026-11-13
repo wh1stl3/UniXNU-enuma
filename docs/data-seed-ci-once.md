@@ -1,4 +1,48 @@
-# Enuma one-shot Data seed — review checkpoint, not triggered
+# Enuma one-shot Data seed — run failed before Apple download
+
+## Authorized execution result, 2026-11-13 — self-checked
+
+Reviewer `ses_e2c81eb0dffeiu4QVQVscDypRs` closed both limited changes and verifier
+`ses_e2c77b04fffeCzXpW2xGxHHwvN` independently passed the audited source HEAD
+`8fee93f8eb85c45237764bbd24853958d95a848f` (parent-provided results). That exact
+HEAD was pushed once, without force, to `ci/enuma-data-seed-20261113` in
+`wh1stl3/UniXNU-enuma`. No default branch or dirty original worktree was pushed.
+
+Run [43377485430](https://github.com/wh1stl3/UniXNU-enuma/actions/runs/43377485430),
+attempt 1, matches that head SHA. Push exit 0; managed `gh run watch --exit-status`
+exit 1. First failure is the UniXNU checkout, workflow line 22: git exit 128,
+`remote error: upload-pack: not our ref 693f5d9cae8a408dd18b39f3f9fdc4228c934241`.
+The required revision is not fetchable from that configured official remote.
+No pin/workflow edits or rerun were attempted after this failure.
+
+Apple download, APFS generation/permissions/filesystem checks, packing,
+encryption and upload were all skipped. The run artifact API returned zero
+artifacts. Receiver/decryption were not run; no seed, UUID, public seed hash or
+receipt exists, and no artifact needed deletion. Full payload fit cannot be
+assessed without the seed. r3 and its historical auto215GiB plan are unchanged.
+
+Before push, receiver prerequisites passed: OpenSSL 3.0.2, certificate validity
+and pinned fingerprint, local dedicated transfer-key/certificate public-key
+match, protected ACL limited to the local administrator and SYSTEM, and about
+706 GB local free space. The original CRLF checkout was left untouched.
+An independent local sparse Git clone under the original board's ignored
+`out/data-seed-transfer-20261113/receiver-tools/drivers/DarwinBoot` checks out
+`3c75734014cdab0acd9541e88057b7606ee7ae08`, Test directory, with autocrlf=false
+and eol=lf. Its clean raw writer blob is
+`87501abdcfb4f1abf7cc6eb0746ff26060b0b7c5`, SHA-256
+`efb5fac21ae94dcb1aecd47da2b73a7112b487e43692ac6396858552d27a0e48`.
+The audited receiver's real `--unixnu` argument can point at that receiver-tools
+root; no `--darwinboot` option or modified receiver is needed. The tool was
+imported and its exact hash gate passed from the valid LF clone's working
+directory, avoiding WSL's incompatible Windows-worktree gitdir.
+
+Local evidence stays in the original board's ignored, ACL-restricted
+`out/data-seed-transfer-20261113/`: `receiver-preflight.json`,
+`run-watch.exit`, `run-43377485430-result.json` and
+`run-43377485430-error.txt` (one bounded root-cause log line). These runtime
+results are self-checked, not independently verified by the earlier source
+verifier. No owner-key/device action occurred. This record is local only;
+execution is stopped pending a newly reviewed source-access solution.
 
 ## Authorization, 2026-11-13
 
