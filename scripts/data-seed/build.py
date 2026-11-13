@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import plistlib
+import re
 import shutil
 import stat
 import subprocess
@@ -22,11 +23,35 @@ PIN = json.loads((HERE / 'source.json').read_text())
 GIB = 1024**3
 
 
-def run(*args):
-    # hdiutil/diskutil output may contain UUIDs: keep it out of public logs.
+def failure_reason(result, args):
+    """Only bounded diagnostic lines, never successful output or a content dump."""
+    text = (result.stderr[:8192] + b'\n' + result.stdout[:8192]).decode('utf-8', 'replace')
+    # Redact whole quoted paths (including spaces), then ordinary absolute paths.
+    text = re.sub(r'''(["'])(?:/|[A-Za-z]:[\\/]).*?\1''', '<path>', text)
+    for arg in args:
+        value = str(arg)
+        if value.startswith('/') or re.match(r'^[A-Za-z]:[\\/]', value):
+            text = text.replace(value, '<path>')
+    text = re.sub(r'(?i)\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b', '<uuid>', text)
+    text = re.sub(r'''(?:[A-Za-z]:[\\/]|/)[^\s<>"']+''', '<path>', text)
+    text = re.sub(r'(?i)\bBearer\s+\S+', 'Bearer <redacted>', text)
+    text = re.sub(r'''(?i)\b(token|secret|password|passphrase|authorization|api[_-]?key)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)''',
+                  r'\1=<redacted>', text)
+    text = re.sub(r'''\b[A-Z][A-Z0-9_]*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)''',
+                  '<assignment redacted>', text)
+    diagnostic = re.compile(r'(?i)error|fail|unable|could not|cannot|denied|no space|not enough|'
+                            r'not permitted|not supported|unsupported|invalid|busy|expired|'
+                            r'unavailable|timed out|read-only|no such|incorrect|not found')
+    lines = [line.strip() for line in text.splitlines() if diagnostic.search(line)]
+    return ' | '.join(lines)[:768] or 'no diagnostic reason returned'
+
+
+def run(*args, stage=None):
+    # Success output (including plists/UUIDs) stays private to the caller.
     result = subprocess.run([str(a) for a in args], capture_output=True, check=False)
     if result.returncode:
-        raise RuntimeError(f'{Path(str(args[0])).name} {args[1]} exited {result.returncode}')
+        phase = stage or f'{Path(str(args[0])).name} {args[1]}'
+        raise RuntimeError(f'{phase} exited {result.returncode}: {failure_reason(result, args)}')
     return result.stdout
 
 
@@ -52,6 +77,57 @@ def copy_var(source, mount):
                     dirs.remove(name)
             elif src.is_file():
                 shutil.copy2(src, dst)
+
+
+def check_source_properties(source, mount):
+    """Check copied directory modes and links without recursively chmod-ing them."""
+    for current, dirs, files in os.walk(source, followlinks=False):
+        dirs[:] = [n for n in dirs if n != 'staged_system_apps']
+        relative = Path(current).relative_to(source)
+        expected = 0o1777 if relative == Path('tmp') else stat.S_IMODE(Path(current).stat().st_mode)
+        if stat.S_IMODE((mount / relative).stat().st_mode) != expected:
+            raise ValueError('seed source directory mode differs')
+        for name in list(dirs) + files:
+            src, dst = Path(current) / name, mount / relative / name
+            if src.is_symlink():
+                if not dst.is_symlink() or os.readlink(src) != os.readlink(dst):
+                    raise ValueError('seed source symlink differs')
+                if name in dirs:
+                    dirs.remove(name)
+
+
+def populate_seed(official, source, mount):
+    """Actual seed fill, including official merge's missing preference parents."""
+    previous = os.umask(0o022)
+    try:
+        copy_var(source, mount)
+        names = ('keybags', 'mobile/tmp', 'tmp', 'run', 'containers/Bundle',
+                 'containers/Data/System', 'containers/Shared/SystemGroup', 'containers/Temp')
+        # Remember only absent directories, including intermediate parents.
+        # Existing source modes and symlinks are never normalized.
+        new_dirs = set()
+        for name in (*names, 'root/Library/Preferences', 'mobile/Library/Preferences'):
+            path = mount / name
+            while path != mount and not path.exists() and not path.is_symlink():
+                new_dirs.add(path)
+                path = path.parent
+        for name in names:
+            (mount / name).mkdir(parents=True, exist_ok=True)
+        (mount / 'tmp').chmod(0o1777)
+        for home in ('root', 'mobile'):
+            for name in ('backboardd', '.GlobalPreferences'):
+                official.merge(mount, home, name, dict(CAEnableDeepFramebuffer=False,
+                    CAEnableFramebufferCompression=False, CAEnableIOSurfaceCompression=False))
+        # Executed on the real mounted seed before verifyVolume/detach/pack.
+        for path in new_dirs:
+            expected = 0o1777 if path == mount / 'tmp' else 0o755
+            if not path.is_dir() or stat.S_IMODE(path.stat().st_mode) != expected:
+                raise ValueError('new seed directory mode differs')
+        if stat.S_IMODE((mount / 'tmp').stat().st_mode) != 0o1777:
+            raise ValueError('seed tmp mode differs')
+        check_source_properties(source, mount)
+    finally:
+        os.umask(previous)
 
 
 def attach(image, mount, readonly=False):
@@ -145,19 +221,11 @@ def make_seed(base, work, os_mount):
     mount.mkdir()
     # Final-size raw image, bounded at 3 GiB even on a non-sparse filesystem.
     run('hdiutil', 'create', '-size', '3g', '-layout', 'NONE', '-fs', 'APFS',
-        '-volname', 'Data', '-type', 'UDTO', raw)
+        '-volname', 'Data', '-type', 'UDTO', raw, stage='create Data APFS')
     device, volume, info = attach(raw, mount)
     try:
-        copy_var(os_mount / 'private/var', mount)
-        for name in ('keybags', 'mobile/tmp', 'tmp', 'run', 'containers/Bundle',
-                     'containers/Data/System', 'containers/Shared/SystemGroup', 'containers/Temp'):
-            (mount / name).mkdir(parents=True, exist_ok=True)
-        (mount / 'tmp').chmod(0o1777)
-        for home in ('root', 'mobile'):
-            for name in ('backboardd', '.GlobalPreferences'):
-                official.merge(mount, home, name, dict(CAEnableDeepFramebuffer=False,
-                    CAEnableFramebufferCompression=False, CAEnableIOSurfaceCompression=False))
-        run('diskutil', 'verifyVolume', volume)
+        populate_seed(official, os_mount / 'private/var', mount)
+        run('diskutil', 'verifyVolume', volume, stage='verify Data APFS')
     finally:
         run('hdiutil', 'detach', device, '-force')
     if raw.stat().st_size != PIN['seed_bytes']:
@@ -231,7 +299,7 @@ def main():
                 tar.add(path, arcname=path.name, recursive=False)
         ciphertext = work / 'data-seed.cms'
         run(args.openssl, 'cms', '-encrypt', '-aes-256-gcm', '-binary', '-outform', 'DER',
-            '-in', archive, '-out', ciphertext, cert)
+            '-in', archive, '-out', ciphertext, cert, stage='encrypt Data CMS')
         # Publish only after CMS encryption completed; failures never upload.
         ciphertext.rename(upload / 'data-seed.cms')
     print('Pinned OS verified; 3 GiB first-install seed encrypted. No plaintext upload.')

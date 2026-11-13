@@ -140,3 +140,28 @@ certificate fingerprint, the small original BuildManifest SHA-256 and source
 pin correspondence; OpenSSL CMS GCM synthetic roundtrip **and tamper rejection**.
 Official record schema and staged ownership checks passed through the above
 Windows Git adapter. macOS execution and independent verifier remain pending.
+
+## Limited review follow-up to 755d43e (2026-11-13)
+
+Only two reviewer changes are addressed. The workflow's outer umask077 stays
+unchanged. Actual seed population (copy, generated directories and the pinned
+official `merge` calls) uses umask022 in a try/finally restoring the caller's
+umask. Before verifyVolume/detach/pack, the mounted seed checks all newly added
+parent directories are 0755, tmp is 01777, and copied source directory modes
+and symlink targets remain unchanged; no recursive chmod. Plaintext files
+outside the mounted seed are still created under the outer umask077.
+
+Failed subprocesses now report stage/exit code and at most 768 characters of
+diagnostic reason from bounded stderr/stdout windows. UUIDs, absolute paths,
+credential assignments and bearer strings are redacted; non-diagnostic content
+and successful output are not dumped. No debug artifact is added.
+
+Nine offline tests self-checked: the real make_seed population path with the
+actual pinned official merge and initially missing generated directories,
+umask077 restoration on success/failure, source mode/link preservation, three
+tool failure reasons/redaction/bounds, and main's failed encryption leaving the
+upload directory empty, plus the six original tests. APFS creation/tool calls
+are mocked locally; real macOS permission assertions remain unexecuted. The
+old independent verifier result is not acceptance of this follow-up. No push,
+cloud run, key/certificate regeneration or Apple asset changes. Same-reviewer
+limited re-review and a fresh verifier are required before push authorization.
