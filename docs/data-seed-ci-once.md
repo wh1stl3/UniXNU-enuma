@@ -1,6 +1,13 @@
 # Enuma one-shot Data seed — created, verified locally, artifact deleted
 
-## Successful authorized revision run, 2026-11-13 — self-checked
+## Successful authorized revision run, 2026-11-13 — independent receipt verification PASS
+
+Independent verifier `ses_e2c56245dffevCY9czlwOUMlHo` completed 40/40 local
+seed/receipt checks and read-only API checks; evidence is in the original board
+checkout's ignored `out/verify-data-seed-receipt-20261113/`. The run/head/job
+success and receipt association match; artifact count is 0 and its former ID
+returns HTTP 404. No CI run, Apple download/hash, decryption, signing or device
+action was repeated for this closure. UUID remains only in local materials.
 
 Source-supply repair received static reviewer PASS and independent source
 verifier `ses_e2c657b95ffeAvMdY2QWHvylH3` PASS (parent-provided). The exact
@@ -42,19 +49,26 @@ Sibling evidence: `run-43379610501-watch.exit`, `run-43379610501-receive.exit`,
 `run-43379610501-receive.log`, `run-43379610501-result.json` and
 `run-43379610501-budget-reference.json`. No private key contents are in Git.
 
-Reference payload arithmetic: 192 MiB capacity `201326592` minus the existing
-`124575744`-byte prelink gives `76750848` B before the seed. This seed fits,
-leaving `75579264` B raw or `65512934` B under the official 95% content limit.
-Production Apple trust, ADT/config/other applicable payload and FAT overhead
-still need the complete packaging budget; this is not a completed payload.
+Reference payload arithmetic: 192 MiB capacity `201326592` minus prelink
+`124575744`, seed `1171584`, diagnostic ADT `14012` and reference restore trust
+`6440` leaves **`75558812` B raw**, or **`65492482` B** under the official 95%
+content limit. The earlier `75579264`/`65512934` figures omitted ADT plus restore
+trust (20452 B) and are superseded. This is reference **restore trust**, not
+production OS trust; its actual identity/file and the complete configuration,
+other payload/FAT budget still need integration. This is not a completed payload.
 The 3 GiB seed does not replace r3 with a 215 GiB plan, prove first-boot/runtime
 capacity, establish UFS access/ownership or complete persistence. No device,
 base modification, owner-key access or re-signing occurred.
 
-Runtime result is self-checked; the earlier source verifier is not independent
-runtime acceptance. A verifier should inspect the saved job/receipt/deletion
-evidence and rerun local seed/provenance/identity checks from the final inputs,
-not rerun either cloud job. This outcome record is committed locally only.
+Independent verification covers the saved seed/receipt and read-only API,
+not a repeated decrypt or macOS run: GCM authentication comes from the original
+successful audited receiver. Specific macOS permissions/verifyVolume/packing
+checks come from the original job build result; independent API checks confirm
+step success only. The seed is a first-install 3 GiB input, not r3's 215 GiB
+plan or a persistent-store pass. Next work is production OS trust identity,
+configuration integration and full budget; GR0 is a separate unchanged blocker.
+Do not request another macOS/seed input or rerun the cloud jobs. This closure
+record is committed locally only.
 
 ## Source-supply repair checkpoint — not pushed or triggered
 
