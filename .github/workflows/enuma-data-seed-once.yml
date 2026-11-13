@@ -1,0 +1,50 @@
+name: Enuma one-shot encrypted Data seed
+on:
+  push:
+    branches: [ci/enuma-data-seed-20261113]
+    paths:
+      - .github/workflows/enuma-data-seed-once.yml
+      - scripts/data-seed/**
+permissions:
+  contents: read
+jobs:
+  seed:
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          path: device
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: UniXNU/UniXNU
+          ref: 693f5d9cae8a408dd18b39f3f9fdc4228c934241
+          persist-credentials: false
+          path: unixnu
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: UniXNU/DarwinBoot
+          ref: 3c75734014cdab0acd9541e88057b7606ee7ae08
+          persist-credentials: false
+          path: unixnu/drivers/DarwinBoot
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13'
+      - name: Check tooling, fetch pinned OS member, create and encrypt seed
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          umask 077
+          OPENSSL="$(brew --prefix openssl@3)/bin/openssl"
+          "$OPENSSL" version | grep '^OpenSSL 3\.'
+          python3 device/scripts/data-seed/build.py --unixnu unixnu --openssl "$OPENSSL"
+      - name: Upload only authenticated ciphertext
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: enuma-data-seed-encrypted-${{ github.run_id }}
+          path: ${{ runner.temp }}/enuma-seed-upload/data-seed.cms
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0

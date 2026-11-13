@@ -1,0 +1,15 @@
+{
+  "unixnu_revision": "693f5d9cae8a408dd18b39f3f9fdc4228c934241",
+  "darwinboot_revision": "3c75734014cdab0acd9541e88057b7606ee7ae08",
+  "packed_ramdisk_git_blob": "87501abdcfb4f1abf7cc6eb0746ff26060b0b7c5",
+  "manifest_sha256": "199fb5de41c26d86c080b4e8e402c40309c5f42e7bda18c210451b09bcb49bf7",
+  "archive_bytes": 6835124840,
+  "os_member": "044-76040-038.dmg",
+  "os_bytes": 5157406069,
+  "os_sha256": "3f99b859c9728379110b66657c7b15285bcb1925ad8b5726542e2cdcf8b1028d",
+  "os_header_offset": 1591987953,
+  "os_crc32": "70419908",
+  "seed_bytes": 3221225472,
+  "certificate_sha256": "fc8c2cd46a5d60ec643d73f70247b08ef91aceed21699f0f6b976ed31e8d803c",
+  "reference_revision": "Asultop/UniXNU-NX769J@2a265afdbd95d45e4a90664157e793c3bfee3755"
+}
