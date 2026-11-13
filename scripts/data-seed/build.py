@@ -62,6 +62,33 @@ def load(name, path):
     return module
 
 
+def verify_vendor(base):
+    """Verify the raw public Git-blob snapshot, not an unavailable Git checkout."""
+    vendor = HERE / 'vendor'
+    if base.resolve() != (vendor / 'unixnu').resolve():
+        raise ValueError('--unixnu must select the pinned vendor snapshot')
+    manifest = json.loads((vendor / 'SOURCES.json').read_text())
+    if manifest['schema_version'] != 1:
+        raise ValueError('unsupported vendor manifest')
+    expected = {'UniXNU/UniXNU': PIN['unixnu_revision'],
+                'UniXNU/DarwinBoot': PIN['darwinboot_revision']}
+    if {s['repository']: s['revision'] for s in manifest['sources']} != expected:
+        raise ValueError('vendor original revisions differ')
+    for source in manifest['sources']:
+        if source['license'] != 'BSD-2-Clause-Patent':
+            raise ValueError('vendor license differs')
+        for entry in source['files']:
+            raw = (vendor / entry['path']).read_bytes()
+            blob = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+            if blob != entry['git_blob'] or hashlib.sha256(raw).hexdigest() != entry['sha256']:
+                raise ValueError(f'vendor bytes differ: {entry["path"]}')
+    writer = base / 'drivers/DarwinBoot/Test/packed_ramdisk.py'
+    raw = writer.read_bytes()
+    if hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() != PIN['packed_ramdisk_git_blob']:
+        raise ValueError('packed writer differs')
+    return writer
+
+
 def copy_var(source, mount):
     """Same copy/mode/symlink policy as pinned make-data-seed.py; no setup skip."""
     for current, dirs, files in os.walk(source, followlinks=False):
@@ -251,13 +278,7 @@ def main():
     base = args.unixnu.resolve()
     if sys.platform != 'darwin':
         p.error('creation requires macOS')
-    for root, revision in ((base, PIN['unixnu_revision']),
-                           (base / 'drivers/DarwinBoot', PIN['darwinboot_revision'])):
-        if run('git', '-C', root, 'rev-parse', 'HEAD').decode().strip() != revision:
-            raise ValueError('source revision mismatch')
-    packer_path = base / 'drivers/DarwinBoot/Test/packed_ramdisk.py'
-    if run('git', 'hash-object', packer_path).decode().strip() != PIN['packed_ramdisk_git_blob']:
-        raise ValueError('packed writer differs')
+    packer_path = verify_vendor(base)
     cert = HERE / 'recipient.pem'
     fingerprint = run(args.openssl, 'x509', '-in', cert, '-outform', 'DER')
     if hashlib.sha256(fingerprint).hexdigest() != PIN['certificate_sha256']:

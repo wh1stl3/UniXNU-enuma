@@ -17,7 +17,7 @@ from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 HERE = Path(__file__).resolve().parent
-BASE = Path(os.environ.get('UNIXNU_ROOT', HERE.parents[3] / 'UniXNU'))
+BASE = HERE / 'vendor/unixnu'
 
 
 def load(name):
@@ -31,6 +31,33 @@ build, receive = load('build'), load('receive')
 
 
 class ToolsTests(unittest.TestCase):
+    def test_vendor_pins_and_import_closure(self):
+        writer = build.verify_vendor(BASE)
+        manifest = json.loads((BASE.parent / 'SOURCES.json').read_text())
+        self.assertEqual({e['path'] for s in manifest['sources'] for e in s['files']}, {
+            'unixnu/LICENSE', 'unixnu/scripts/unixnu/__init__.py',
+            'unixnu/scripts/unixnu/util.py', 'unixnu/scripts/unixnu/ipsw.py',
+            'unixnu/scripts/make-data-seed.py',
+            'unixnu/profiles/os/ipados-17.7.11-21H461/profile.toml',
+            'unixnu/drivers/DarwinBoot/LICENSE',
+            'unixnu/drivers/DarwinBoot/Test/packed_ramdisk.py'})
+        read_bytes = Path.read_bytes
+        def changed(path):
+            return b'changed fixture' if path == BASE / 'scripts/unixnu/ipsw.py' else read_bytes(path)
+        with patch.object(Path, 'read_bytes', changed):
+            with self.assertRaisesRegex(ValueError, 'vendor bytes differ'):
+                build.verify_vendor(BASE)
+        official = build.load('closure_official_make_data_seed', BASE / 'scripts/make-data-seed.py')
+        self.assertEqual(Path(official.packed_ramdisk.__file__).resolve(), writer.resolve())
+        sys.path.insert(0, str(BASE / 'scripts'))
+        from unixnu import ipsw, util
+        self.assertEqual(Path(ipsw.__file__).resolve(), (BASE / 'scripts/unixnu/ipsw.py').resolve())
+        self.assertEqual(Path(util.__file__).resolve(), (BASE / 'scripts/unixnu/util.py').resolve())
+        profile = build.tomllib.loads((BASE / 'profiles/os/ipados-17.7.11-21H461/profile.toml').read_text())
+        self.assertEqual(profile['ipsw']['sha256'][build.PIN['os_member']], build.PIN['os_sha256'])
+        self.assertTrue(callable(official.merge))
+        self.assertTrue(callable(official.packed_ramdisk.pack))
+
     def test_actual_seed_fill_under_private_umask(self):
         official = build.load('fixture_official_make_data_seed', BASE / 'scripts/make-data-seed.py')
         with tempfile.TemporaryDirectory() as td:
@@ -119,12 +146,7 @@ class ToolsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             temp = Path(td)
             def command(args, **kwargs):
-                if args[0] == 'git':
-                    if 'hash-object' in args:
-                        output = build.PIN['packed_ramdisk_git_blob']
-                    else:
-                        output = build.PIN['darwinboot_revision'] if args[2].endswith('DarwinBoot') else build.PIN['unixnu_revision']
-                    return subprocess.CompletedProcess(args, 0, output.encode(), b'')
+                self.assertNotEqual(args[0], 'git')  # No upstream checkout/revision dependency.
                 if 'cms' in args:
                     return subprocess.CompletedProcess(args, 1, b'private fixture content',
                         b'Error: unable to load recipient certificate /private/hidden/recipient.pem')

@@ -1,5 +1,36 @@
 # Enuma one-shot Data seed — run failed before Apple download
 
+## Source-supply repair checkpoint — not pushed or triggered
+
+The failed run and local result commit `6e8b7c4b0bf0580350848d16f156a0c0be844675`
+remain intact. CI now needs only the device-branch checkout: a 38,664-byte raw
+snapshot of six necessary source/configuration files and two complete licenses
+is in `scripts/data-seed/vendor`. All eight blobs are byte-identical to their
+original fixed Git revision inputs and independently matched the official
+public GitHub blob API; no local dirty/worktree bytes were exported. Both
+repositories use BSD-2-Clause-Patent, with full copyright/conditions retained.
+The manifest and closure explanation are `vendor/SOURCES.json` and
+`vendor/README.md`. No kernel/base pin is changed, and no unknown-license or
+non-public file is included.
+
+Before Apple download, build checks snapshot revision metadata, every file's
+raw Git blob and SHA-256, and the unchanged packed-writer pin. `--unixnu` now
+selects `device/scripts/data-seed/vendor/unixnu` in CI; the original Git-root
+checks are replaced only for these verified file inputs. The official
+`merge`, packed writer, IPSW identity implementation and OS profile are
+unmodified whole files. Runtime import closure is stdlib plus package init,
+ipsw/util and the packed writer; official make-data-seed main/grow is not
+called. DarwinBoot exact revision also resolves through the public commit API,
+but is vendored to remove the second checkout dependency as well.
+
+Self-checks: ten offline tests (the nine existing tests plus snapshot pin,
+tamper rejection and actual import/load closure), AST/compile, profile/source
+pins, licenses/raw Git-blob equivalence, schema/record/diff checks. No Apple
+download, second run or push. Original source.json, recipient, receive.py,
+Apple URL/member/manifest hashes, 3 GiB strategy and encryption are unchanged.
+Source-supply repair needs limited reviewer review and fresh verifier checks;
+do not rerun the known failed job as a verification task.
+
 ## Authorized execution result, 2026-11-13 — self-checked
 
 Reviewer `ses_e2c81eb0dffeiu4QVQVscDypRs` closed both limited changes and verifier

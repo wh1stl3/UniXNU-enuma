@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "export": "Raw git show REV:PATH bytes, not working-tree files; no transformations",
+  "public_blob_verification": "2026-11-13: each blob fetched from the official public GitHub blob API and byte-compared to the original fixed local revision",
+  "sources": [
+    {
+      "repository": "UniXNU/UniXNU",
+      "revision": "693f5d9cae8a408dd18b39f3f9fdc4228c934241",
+      "revision_note": "Original local base revision remains unchanged; commit is not remotely fetchable, but every listed file blob is independently available from the official public repository",
+      "license": "BSD-2-Clause-Patent",
+      "license_file": "unixnu/LICENSE",
+      "files": [
+        {
+          "path": "unixnu/LICENSE",
+          "source_path": "LICENSE",
+          "git_blob": "f63d2a6e4c80c3bf8d44b047458468289927593d",
+          "sha256": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/UniXNU/git/blobs/f63d2a6e4c80c3bf8d44b047458468289927593d"
+        },
+        {
+          "path": "unixnu/scripts/unixnu/__init__.py",
+          "source_path": "scripts/unixnu/__init__.py",
+          "git_blob": "5d24fac902ff5bfb782c1cea9c4063740080db18",
+          "sha256": "c6ae444a32411f12494607894581cc27d6bfec49c2f5712fe47a26cece5d1007",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/UniXNU/git/blobs/5d24fac902ff5bfb782c1cea9c4063740080db18"
+        },
+        {
+          "path": "unixnu/scripts/unixnu/util.py",
+          "source_path": "scripts/unixnu/util.py",
+          "git_blob": "6c51434ea17a8c714bec0eabe0a0d848ed64587f",
+          "sha256": "1f6efa81051d67f7225783958f1f8e86a38a7d4e538299ce6aa639b3cb4a759d",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/UniXNU/git/blobs/6c51434ea17a8c714bec0eabe0a0d848ed64587f"
+        },
+        {
+          "path": "unixnu/scripts/unixnu/ipsw.py",
+          "source_path": "scripts/unixnu/ipsw.py",
+          "git_blob": "527cd55425ccdb385781fbc60574306003333491",
+          "sha256": "b7d166e113329a9dbfa352864567a6f61e344efae6fbeb96e9b997fdd7bfb093",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/UniXNU/git/blobs/527cd55425ccdb385781fbc60574306003333491"
+        },
+        {
+          "path": "unixnu/scripts/make-data-seed.py",
+          "source_path": "scripts/make-data-seed.py",
+          "git_blob": "eeaf3cb563b635420da00cb7a39ea0af53f4ebc2",
+          "sha256": "a10a818ae19e2853b8a2e04ac56f9af2ea555c47ef6abaf85e0ee4da2865df0b",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/UniXNU/git/blobs/eeaf3cb563b635420da00cb7a39ea0af53f4ebc2"
+        },
+        {
+          "path": "unixnu/profiles/os/ipados-17.7.11-21H461/profile.toml",
+          "source_path": "profiles/os/ipados-17.7.11-21H461/profile.toml",
+          "git_blob": "9f1b180346e22093bee664e7bb0b6352d4d3cd9a",
+          "sha256": "6206f05d6e8e983adf84e4dd9f9cc26e1be5158c1510bfcacfeb0c530685ebdd",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/UniXNU/git/blobs/9f1b180346e22093bee664e7bb0b6352d4d3cd9a"
+        }
+      ]
+    },
+    {
+      "repository": "UniXNU/DarwinBoot",
+      "revision": "3c75734014cdab0acd9541e88057b7606ee7ae08",
+      "revision_note": "Official public commit API resolves this exact revision; vendored too so the job needs no second checkout",
+      "license": "BSD-2-Clause-Patent",
+      "license_file": "unixnu/drivers/DarwinBoot/LICENSE",
+      "files": [
+        {
+          "path": "unixnu/drivers/DarwinBoot/LICENSE",
+          "source_path": "LICENSE",
+          "git_blob": "4a71558d51ed029463a356c0824417185c106455",
+          "sha256": "513308769e962347c3b987ddac32f5f5c9849acced235e5580ab2c7ebf067900",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/DarwinBoot/git/blobs/4a71558d51ed029463a356c0824417185c106455"
+        },
+        {
+          "path": "unixnu/drivers/DarwinBoot/Test/packed_ramdisk.py",
+          "source_path": "Test/packed_ramdisk.py",
+          "git_blob": "87501abdcfb4f1abf7cc6eb0746ff26060b0b7c5",
+          "sha256": "efb5fac21ae94dcb1aecd47da2b73a7112b487e43692ac6396858552d27a0e48",
+          "public_blob_url": "https://api.github.com/repos/UniXNU/DarwinBoot/git/blobs/87501abdcfb4f1abf7cc6eb0746ff26060b0b7c5"
+        }
+      ]
+    }
+  ]
+}
