@@ -12,6 +12,7 @@
 - SoC 共享仓 `../UniXNU-sm8250-common` 是社区 `FFT-infra/UniXNU-sm8250-common`（kona：DTSI + 两条 SMP/拓扑补丁 + A650 GMU kit）的检出；origin 指本仓 fork，upstream 指 FFT-infra。同 SoC 的 alioth 已用它跑到桌面；**AC 特有的 CPU/GPU 频率档、电源票与热区仍须本板提供**。
 - 当前状态和阻塞见 `../AGENTS.md`、`README.md` 顶部进度块；21r–24r claim 已消耗，禁止访问/删除/重放。23r 单次观察及其静态门禁见 `docs/pmgr-23r-diagnostic.md`、`docs/pmgr-23r-package.md`；24r 历史过程见 `docs/ufs-24r-diagnostic.md`。这些历史门禁不是当前运行时或阶段验收。
 - 2026-11-16 GOP 生产整包 r5 主机侧封存完成：`seal.py` + manifest 重建 + `audit.py --verify` 均 exit 0（429 项，五件产物哈希未变），`self-checked`、`release_allowed=false`，未部署未实机验证；证据 `out/enuma-gop-production-20261114-r5/`（`HANDOFF.md` 2026-11-16 更新块）与 `out/enuma-gop-r5-preseal-manifest-20261116/`，细节见 `README.md` 顶部。
+- 2026-11-16 UFS warm capacity r2 单次实机观察完成（`self-checked`，仅记录）：授权一次 `fastboot boot` exit 0，claim 已消耗、不得访问/删除/重放；末屏十行命中 `DELIVERY.md:135-137` 全部判据（`IS/PREIS=0x400` 为正常 UCCS、`last` 61880319 与 61880320 差 1 为标准 0 基最大 LBA、停在预期 rootwait），三源一致（两次转录 + `vision` 独立核读裁图，无录像、图像未入库）；不证明持久根卷/Data/LU0 分区身份/SMMU 所有权/vendor DMA 退役，阶段不提升。细节见 `docs/ufs-warm-capacity-r2-diagnostic.md`。
 
 ## 目录约定（官方布局）
 - 板级文件：`board.toml`、`porting.toml`、`feeds.toml`、`configs/`、`dts/`、`patches/xnu/series`、`package/`、`scripts/package.sh`、`proprietary-files.txt`、`local.toml.example`。
