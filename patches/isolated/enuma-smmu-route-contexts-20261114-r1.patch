@@ -1,0 +1,492 @@
+--- a/NativeUfs.cpp
++++ b/NativeUfs.cpp
+@@ -40,6 +40,12 @@
+ #include "UfsObservedSmmu.h" // isolated decoder; no production caller
+ #include "UfsThreeIdDiagnostic.h"
+ #include "UfsVisibleRoutesReport.h"
++#include "UfsRouteContextsDiagnostic.h"
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
++namespace UfsActiveDiagnostic=UfsRouteContexts;
++#else
++namespace UfsActiveDiagnostic=UfsVisibleRoutes;
++#endif
+ #ifndef NATIVE_UFS_SMMU_REVIEW_CANDIDATE
+ #define NATIVE_UFS_SMMU_REVIEW_CANDIDATE 0
+ #endif
+@@ -175,7 +181,7 @@
+ };
+ static EnumaReadRetained gEnumaReadRetained = {};
+ static unsigned gEnumaReadClaim;
+-#if NATIVE_UFS_SMMU_REVIEW_CANDIDATE && !NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC
++#if NATIVE_UFS_SMMU_REVIEW_CANDIDATE && !NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC && !NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
+ // One identity for this once-only entry, independently owned by the caller.
+ static constexpr uint64_t gEnumaObservationSession=UfsObservation::threeIdSession;
+ #endif
+@@ -196,12 +202,12 @@
+   for (;;) { __asm__ volatile ("wfe" ::: "memory"); }
+ }
+ namespace { __attribute__((noreturn)) static void enumaReadExecute (const UfsEnumaRead::AdmittedContext *, UfsPlatform::Resources, uint64_t); }
+-#if NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC
++#if NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC || NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
+ #if !NATIVE_UFS_SMMU_REVIEW_CANDIDATE || NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC
+ #error VisibleRoutes requires its own isolated review branch, not ThreeId
+ #endif
+ __attribute__((noreturn)) static void enumaVisibleRoutesExecute(
+-  const UfsVisibleRoutes::Session *,const UfsObservation::Binding &);
++  const UfsActiveDiagnostic::Session *,const UfsObservation::Binding &);
+ #endif
+ #if NATIVE_UFS_SMMU_REVIEW_CANDIDATE
+ __attribute__((noreturn)) static void enumaObserveExecute(const UfsObservation::ObservationContext &);
+@@ -212,16 +218,16 @@
+     native_ufs_root_failure = "enuma read already claimed";
+     return false;
+   }
+-#if NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC
++#if NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC || NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
+   const auto resources=ufsPlatformResources(provider);
+   const auto selected=UfsReuse::validateProfileShape(resources,UfsReuse::candidateProfile());
+   auto actual=UfsObservation::binding(resources,selected.smmuBase,selected.smmuSize);
+-  actual.policyVersion=UfsVisibleRoutes::binding.policyVersion;
++  actual.policyVersion=UfsActiveDiagnostic::binding.policyVersion;
+   IORegistryEntry *root=IORegistryEntry::fromPath("IODeviceTree:/");
+-  const auto *permit=UfsVisibleRoutes::Issuer::issue(actual,UfsVisibleRoutes::session,
++  const auto *permit=UfsActiveDiagnostic::Issuer::issue(actual,UfsActiveDiagnostic::session,
+     ufsProperty(root,"compatible"),UfsReuse::candidateProfile());
+   if (root) root->release();
+-  if (!selected.valid || !permit || !permit->valid(actual,UfsVisibleRoutes::session)) {
++  if (!selected.valid || !permit || !permit->valid(actual,UfsActiveDiagnostic::session)) {
+     native_ufs_root_failure="visible routes missing isolated access policy";
+     return false;
+   }
+@@ -388,13 +394,13 @@
+   return keep ? static_cast<uintptr_t> (keep->getVirtualAddress ()) : 0;
+ }
+ 
+-#if NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC
++#if NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC || NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
+ // Preallocated cached report; no bank access, DMA or ownership capability.
+-static UfsVisibleRoutes::Cache gVisibleCache;
++static UfsActiveDiagnostic::Cache gVisibleCache;
+ static UfsVisibleRoutes::Report gVisibleReport;
+ static IOMemoryMap *gVisibleMap;
+ __attribute__((used,noinline,noreturn)) static void enumaVisibleRoutesExecute(
+-    const UfsVisibleRoutes::Session *permit,const UfsObservation::Binding &actual) {
++    const UfsActiveDiagnostic::Session *permit,const UfsObservation::Binding &actual) {
+   OSSharedPtr<IOMemoryMap> keep;
+   uintptr_t base=0;
+   auto map=[&](uint64_t phys,uint64_t size) {
+@@ -404,10 +410,10 @@
+     return base && !(base&3U);
+   };
+   auto read=[&](unsigned off,uint32_t &raw) { raw=read32(base,off); return true; };
+-  const auto result=UfsVisibleRoutes::execute(permit,actual,
+-    UfsVisibleRoutes::session,map,read,gVisibleCache);
+-  if (result==UfsVisibleRoutes::Result::Denied || result==UfsVisibleRoutes::Result::BadBinding ||
+-      result==UfsVisibleRoutes::Result::AlreadyClaimed) {
++  const auto result=UfsActiveDiagnostic::execute(permit,actual,
++    UfsActiveDiagnostic::session,map,read,gVisibleCache);
++  if (result==UfsActiveDiagnostic::Result::Denied || result==UfsActiveDiagnostic::Result::BadBinding ||
++      result==UfsActiveDiagnostic::Result::AlreadyClaimed) {
+     // A losing instance must not inspect a winner's possibly live cache.
+     IOLog("UFSVR REFUSED result=%u cached_report=NOT_AVAILABLE\n",unsigned(result));
+     IOLog("UFSVR TERMINAL no retry/no native UFS/no DMA\n");
+@@ -498,6 +504,31 @@
+     gVisibleCache.attempted,gVisibleCache.completed,gVisibleCache.validCount);
+   IOLog("UFSVR END hits e0=%u 4e0=%u\n",gVisibleReport.matchCount[0],gVisibleReport.matchCount[1]);
+   IOLog("UFSVR FINAL sequential; NOT owner/admission/unique\n");
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
++  // Separate final cached page: no reads after pagination begins.
++  IOSleep(1500);
++  IOLog("UFSCTX CACHED result=%u geom=%u route=%u mode=%u\n",
++    unsigned(result),unsigned(gVisibleCache.geometryStatus),
++    unsigned(gVisibleCache.routeStatus),unsigned(gVisibleCache.modeStatus));
++  IOLog("UFSCTX total=%u/%u max=183 context=%u/%u\n",
++    gVisibleCache.completed+gVisibleCache.contextCompleted,
++    gVisibleCache.attempted+gVisibleCache.contextAttempted,
++    gVisibleCache.contextCompleted,gVisibleCache.contextAttempted);
++  for (unsigned i=0;i<gVisibleCache.resolved.count;++i) {
++    const unsigned b=gVisibleCache.resolved.entries[i].bank;
++    const unsigned offsets[]={0x1000+4*b,0x1800+4*b,(gVisibleCache.geometry.pages+b)*4096};
++    auto records=gVisibleCache.contexts.reader();
++    for (unsigned j=0;j<3;++j) {
++      const auto w=records.lookup(offsets[j],true);
++      IOLog("UFSCTX b%u r%u addr=%08x R%u=%08x\n",b,j,0x15000000+offsets[j],
++        unsigned(w.read),w.value);
++    }
++  }
++  IOLog("UFSCTX breadcrumb off=%08x stage=%u attempted=%u completed=%u\n",
++    gVisibleCache.contextBreadcrumb.offset,gVisibleCache.contextBreadcrumb.stage,
++    gVisibleCache.contextBreadcrumb.attempted,gVisibleCache.contextBreadcrumb.completed);
++  IOLog("UFSCTX NOT owner/admission/DMA; target issuer remains absent\n");
++#endif
+   IOLog("UFSVR TERMINAL no retry/no native UFS/no DMA\n");
+   for (;;) { __asm__ volatile("wfe" ::: "memory"); }
+ }
+--- /dev/null
++++ b/RootWarmCapture.h
+@@ -0,0 +1,46 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++// Shared bounded sampler. Record/decoder remain unchanged; no SMMU write API.
++struct UfsWarmCapture {
++  ObservedSmmu::Record words[3 + 2*128 + 6] {};
++  unsigned count = 0;
++  template<class Port> bool take (Port &port, unsigned offset, bool bank) {
++    if (count == sizeof (words)/sizeof (words[0])) return false;
++    uint32_t raw = 0;
++    bool completed = port.readSmmu (offset, bank, raw);
++    words[count++] = {offset, {completed, raw}};
++    return completed; // Real synchronous abort is not a returned false.
++  }
++  ObservedSmmu::RecordReader reader () { return {words, count, 0}; }
++  template<class Port> bool table (Port &port, ObservedSmmu::Geometry &geometry,
++                                    ObservedSmmu::Table &visible) {
++    using namespace ObservedSmmu;
++    // Sequential, exactly one 32-bit read per ID before geometry-controlled reads.
++    if (!take (port, 0x20, false) || !take (port, 0x24, false) || !take (port, 0x28, false)) return false;
++    if (decodeGeometry (words[0].word, words[1].word, words[2].word,
++        port.aperture (), port.accessibleSlots (), geometry) != Status::Observed) return false;
++    for (unsigned slot=0; slot<geometry.slots; ++slot) {
++      if (!take (port, 0x800+4*slot, false)) return false;
++      if ((words[count-1].word.value & 0x80000000U) && !take (port, 0xc00+4*slot, false)) return false;
++    }
++    auto r=reader ();
++    return collectVisibleStreams (r, geometry, visible) == Status::Observed;
++  }
++  template<class Port> bool contexts (Port &port, const ObservedSmmu::Geometry &g,
++                                      const ObservedSmmu::Routes &routes) {
++    using namespace ObservedSmmu;
++    if (routes.count != 2) return false;
++    // Validate ALL derived banks/offsets before the FIRST context access.
++    for (const auto &route : routes.entries) {
++      unsigned b=route.bank;
++      if (!b || b>=g.banks || b>=128 ||
++          !inside (0x1000+4*b, g.aperture) || !inside (0x1800+4*b, g.aperture) ||
++          !inside (uint64_t(g.pages+b)*4096, g.aperture)) return false;
++    }
++    for (const auto &route : routes.entries) {
++      unsigned b=route.bank;
++      if (!take (port, 0x1000+4*b, true) || !take (port, 0x1800+4*b, true) ||
++          !take (port, (g.pages+b)*4096, true)) return false;
++    }
++    return true;
++  }
++};
+--- /dev/null
++++ b/UfsRouteContextsDiagnostic.h
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++#ifndef UFS_ROUTE_CONTEXTS_DIAGNOSTIC_H
++#define UFS_ROUTE_CONTEXTS_DIAGNOSTIC_H
++#include "UfsVisibleRoutesReport.h"
++#include "RootWarmCapture.h"
++#ifndef NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
++#define NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC 0
++#endif
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC != 0 && NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC != 1
++#error RouteContexts macro must be 0 or 1
++#endif
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC && (NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC || NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC)
++#error RouteContexts requires an independent diagnostic selection
++#endif
++#if defined(UFS_ROUTE_CONTEXTS_HOST_TEST) && (defined(__aarch64__) || defined(__arm64__) || defined(KERNEL))
++#error RouteContexts fixture is host-only, never a target permission
++#endif
++namespace UfsRouteContexts {
++constexpr uint64_t session=0x454e554d41435431ULL;
++constexpr UfsObservation::Binding binding {true,true,false,UfsPlatform::Soc::Sm8250,
++  0x1d84000,0x3000,UfsPlatform::Policy::None,0x15000000,0xd0000,0x20261114};
++constexpr unsigned maxReads=183;
++enum class Result { Denied, BadBinding, AlreadyClaimed, MapFailed, TableFailed,
++                    GeometryRejected, RoutesRejected, ContextFailed, Complete };
++struct Cache : UfsVisibleRoutes::Cache {
++  UfsWarmCapture contexts;
++  ObservedSmmu::Geometry geometry;
++  ObservedSmmu::Routes resolved;
++  ObservedSmmu::ObservedBypassIdentity identity;
++  ObservedSmmuCapture::Breadcrumb contextBreadcrumb;
++  unsigned contextAttempted, contextCompleted;
++  ObservedSmmu::Status geometryStatus, routeStatus, modeStatus;
++  Result contextResult;
++};
++class Session final {
++  friend struct Issuer;
++  constexpr Session() {}
++  Session(const Session &)=delete;
++  Session &operator=(const Session &)=delete;
++public:
++  bool valid(const UfsObservation::Binding &b,uint64_t s) const {
++    return s==session && UfsObservation::sameBinding(b,binding);
++  }
++};
++struct Issuer {
++  // No target success issuer exists, even with the diagnostic macro enabled.
++  __attribute__((noinline)) static const Session *issue(
++      const UfsObservation::Binding &,uint64_t,UfsPlatform::Bytes,
++      UfsReuse::AccessProfile) { return nullptr; }
++  static const Session *production(const UfsObservation::Binding &,uint64_t) { return nullptr; }
++#ifdef UFS_ROUTE_CONTEXTS_HOST_TEST
++  static const Session *approvedFixture() { static constexpr Session s; return &s; }
++#endif
++};
++// Independent one-shot identity. No reset or dependency on an old session claim.
++inline bool claim() {
++  static unsigned consumed;
++  return !__atomic_exchange_n(&consumed,1U,__ATOMIC_ACQ_REL);
++}
++static inline void reset(Cache &c) {
++  UfsVisibleRoutes::reset(c);
++  c.contexts.count=0;
++  for (auto &w:c.contexts.words) w={0,{false,0}};
++  c.geometry={}; c.resolved={}; c.identity={};
++  auto &b=c.contextBreadcrumb;
++  b.sample=0; b.domain=0; b.stage=0; b.offset=0; b.attempted=0; b.completed=0;
++  c.contextAttempted=0; c.contextCompleted=0;
++  c.geometryStatus=c.routeStatus=c.modeStatus=ObservedSmmu::Status::Unknown;
++  c.contextResult=Result::MapFailed;
++}
++// Only adapts the existing bounded Read32 to the unchanged contexts sampler.
++// No mapping, address policy, write, allocation or controller Port is introduced.
++template<class Read32> struct ContextReads {
++  Read32 &read; Cache &cache;
++  bool readSmmu(unsigned offset,bool bank,uint32_t &raw) {
++    ++cache.contextAttempted;
++    const bool ok=ObservedSmmuCapture::markedRead(cache.contextBreadcrumb,0,1,
++      bank?3:2,offset,raw,read);
++    if (ok) ++cache.contextCompleted;
++    return ok;
++  }
++};
++template<class Read32> __attribute__((noinline)) static void capture(Read32 &read,Cache &c) {
++  using namespace ObservedSmmu;
++  // Reuse the exact existing 3 + 87 + VALID-only capture, NOT table().
++  UfsVisibleRoutes::capture(read,c);
++  c.contextResult=Result::TableFailed;
++  if (!c.capture_complete) return;
++  c.geometryStatus=decodeGeometry(c.ids[0],c.ids[1],c.ids[2],
++    binding.smmuSize,UfsVisibleRoutes::slots,c.geometry);
++  c.contextResult=Result::GeometryRejected;
++  if (c.geometryStatus!=Status::Observed) return;
++  // Serialize only cached records for the existing offline decoder.
++  for (unsigned i=0;i<3;++i)
++    c.contexts.words[c.contexts.count++]={UfsVisibleRoutes::idOffsets[i],c.ids[i]};
++  for (unsigned i=0;i<c.table.count;++i) {
++    c.contexts.words[c.contexts.count++]={0x800+4*i,c.table.slots[i].smr};
++    if (UfsVisibleRoutes::legacyValid(c.table.slots[i].smr.value))
++      c.contexts.words[c.contexts.count++]={0xc00+4*i,c.table.slots[i].s2cr};
++  }
++  const uint32_t sids[]={0xe0,0x4e0};
++  c.routeStatus=resolveExactStreams(c.geometry,c.table,sids,2,c.resolved);
++  c.contextResult=Result::RoutesRejected;
++  if (c.routeStatus!=Status::Observed) return;
++  ContextReads<Read32> marked {read,c};
++  c.contextResult=Result::ContextFailed;
++  // contexts() prechecks all six addresses before its first take().
++  if (!c.contexts.contexts(marked,c.geometry,c.resolved)) return;
++  bool allowed[128]={};
++  for (const auto &r:c.resolved.entries) allowed[r.bank]=true;
++  auto records=c.contexts.reader();
++  c.modeStatus=collectAllowedContexts(records,c.geometry,c.resolved,allowed,128,
++    binding.smmuBase,session,c.identity);
++  c.contextResult=Result::Complete;
++}
++template<class Map,class Read32> static Result execute(const Session *permit,
++    const UfsObservation::Binding &b,uint64_t s,Map &map,Read32 &read,Cache &c) {
++  if (!permit) return Result::Denied;
++  if (!permit->valid(b,s)) return Result::BadBinding;
++  if (!claim()) return Result::AlreadyClaimed;
++  reset(c);
++  if (!map(binding.smmuBase,binding.smmuSize)) return c.contextResult;
++  capture(read,c); return c.contextResult;
++}
++}
++#endif
+--- /dev/null
++++ b/tests/route_contexts_boundaries.cpp
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++#include "UfsRouteContextsDiagnostic.h"
++#include <cassert>
++#include <initializer_list>
++struct Reads {
++  unsigned count=0;
++  bool readSmmu(unsigned,bool,uint32_t &raw) { ++count; raw=0; return true; }
++};
++int main() {
++  using namespace ObservedSmmu;
++  Geometry g{};
++  Word ids[]={{true,0x4c017e57},{true,0x6000004a},{true,0x5111}};
++  assert(decodeGeometry(ids[0],ids[1],ids[2],0xd0000,87,g)==Status::Observed);
++  assert(g.pages==128 && g.banks==74 && g.slots==87);
++  for (unsigned missing=0;missing<3;++missing) {
++    ids[missing].read=false;
++    assert(decodeGeometry(ids[0],ids[1],ids[2],0xd0000,87,g)==Status::Unknown);
++    ids[missing].read=true;
++  }
++  assert(decodeGeometry(ids[0],ids[1],ids[2],0x28,87,g)==Status::Incomplete);
++  assert(decodeGeometry(ids[0],ids[1],ids[2],0xd0000,86,g)==Status::Incomplete);
++  Word bad=ids[1]; bad.value|=1U<<31;
++  assert(decodeGeometry(ids[0],bad,ids[2],0xd0000,87,g)==Status::Failure);
++  bad=ids[2]; bad.value=(bad.value&~15U)|6U;
++  assert(decodeGeometry(ids[0],ids[1],bad,0xd0000,87,g)==Status::Failure);
++  for (unsigned bank:{0U,74U,127U,128U}) {
++    UfsWarmCapture capture; Reads r;
++    Geometry shape{87,74,128,15,{36,36,36},0xd0000};
++    Routes routes{{{0xe0,0,7,1},{0x4e0,1,bank,1}},2};
++    assert(!capture.contexts(r,shape,routes) && r.count==0 && capture.count==0);
++  }
++  // Second bank fails the last address, even though all first-bank addresses fit.
++  Geometry shape{87,74,128,15,{36,36,36},(128+11)*4096+3};
++  Routes routes{{{0xe0,0,7,1},{0x4e0,1,11,1}},2};
++  UfsWarmCapture capture; Reads r;
++  assert(!capture.contexts(r,shape,routes) && r.count==0);
++  shape.aperture++;
++  assert(capture.contexts(r,shape,routes) && r.count==6);
++  bool allow[128]={}; allow[7]=allow[11]=true;
++  RecordReader empty{nullptr,0,0}; ObservedBypassIdentity result{};
++  assert(collectAllowedContexts(empty,shape,routes,allow,128,0,0,result)==Status::Unknown);
++  assert(!UfsRouteContexts::Issuer::production(UfsRouteContexts::binding,UfsRouteContexts::session));
++  assert(!UfsRouteContexts::Issuer::issue(UfsRouteContexts::binding,UfsRouteContexts::session,
++    {nullptr,0},UfsReuse::candidateProfile()));
++}
+--- /dev/null
++++ b/tests/route_contexts_native_prefix.cpp
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++#include "UfsRouteContextsDiagnostic.h"
++namespace UfsActiveDiagnostic=UfsRouteContexts;
++#include <cassert>
++#include <cstdarg>
++#include <cstdio>
++#include <string>
++#include <vector>
++struct Terminal {};
++struct IOMemoryMap { void retain() {} };
++template<class T> struct OSSharedPtr {
++  T *p=nullptr;
++  explicit operator bool() const { return p; }
++  T *operator->() { return p; }
++};
++static std::vector<unsigned> trace,expected;
++static std::vector<std::string> output;
++static unsigned failAt=999, changeAt=999, maps=0;
++static bool mapOk=true,finished=false;
++static unsigned bank0=7,bank1=11,validCount=2;
++static std::string mode;
++static void IOLog(const char *fmt,...) {
++  assert(trace.empty() || finished);
++  char text[1024]; va_list ap; va_start(ap,fmt);
++  const int n=vsnprintf(text,sizeof(text),fmt,ap); va_end(ap);
++  assert(n>=0 && n<=80); output.emplace_back(text);
++}
++static void IOSleep(unsigned ms) { assert(ms==1500 && (trace.empty() || finished)); }
++static uintptr_t mapPhys(uint64_t base,uint64_t size,OSSharedPtr<IOMemoryMap> &keep) {
++  assert(base==0x15000000 && size==0xd0000); ++maps;
++  static IOMemoryMap m; if (!mapOk) return 0; keep.p=&m; return 0x100000;
++}
++static bool mockReadCompleted() { return trace.size()-1!=failAt; }
++static uint32_t read32(uintptr_t base,unsigned off) {
++  assert(base==0x100000 && !finished);
++  assert(trace.size()<expected.size() && expected[trace.size()]==off);
++  trace.push_back(off); finished=trace.size()==expected.size();
++  uint32_t raw=0;
++  if (off==0x20) raw=0x4c017e57;
++  else if (off==0x24) raw=0x6000004a;
++  else if (off==0x28) raw=0x5111;
++  else if (off>=0x800 && off<=0x958) {
++    unsigned i=(off-0x800)/4;
++    raw=i<validCount?0x80000120+i:0;
++    if (i==0) raw=0x800000e0;
++    if (i==1) raw=0x800004e0;
++    if (mode=="missing" && i==1) raw=0x80000121;
++    if (mode=="mask" && i==0) raw|=1U<<16;
++    if (mode=="duplicate" && i==2) raw=0x800000e0;
++  } else if (off>=0xc00 && off<=0xd58) {
++    unsigned i=(off-0xc00)/4;
++    raw=i==0?bank0:i==1?bank1:(1U<<16);
++    if (mode=="shared" && i==2) raw=bank0;
++    if (mode=="bypass" && i==0) raw|=1U<<16;
++  } else {
++    unsigned b=off==0x1000+4*bank0 || off==0x1800+4*bank0 || off==(128+bank0)*4096?bank0:bank1;
++    if (off==0x1000+4*b) raw=mode=="stage2"?0:1U<<16;
++    else if (off==0x1800+4*b) raw=mode=="va32"?0:1;
++    else { assert(off==(128+b)*4096); raw=mode=="translated"?1:0; }
++  }
++  if (trace.size()-1==changeAt) raw^=1;
++  return raw;
++}
+--- /dev/null
++++ b/tests/route_contexts_native_suffix.cpp
+@@ -0,0 +1,64 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++int main(int argc,char **argv) {
++  assert(argc==2); mode=argv[1];
++  if (mode=="all") validCount=87;
++  if (mode=="duplicate" || mode=="shared") validCount=3;
++  if (mode=="other-banks") { bank0=19; bank1=31; }
++  if (mode=="bank0") bank0=0;
++  if (mode=="bank-limit") bank1=74;
++  if (mode=="same-bank") bank1=bank0;
++  if (mode=="map-fail") mapOk=false;
++  if (mode.rfind("fail-",0)==0) failAt=std::stoul(mode.substr(5));
++  if (mode.rfind("change-",0)==0) changeAt=std::stoul(mode.substr(7));
++  expected={0x20,0x24,0x28};
++  for (unsigned i=0;i<87;++i) expected.push_back(0x800+4*i);
++  for (unsigned i=0;i<validCount;++i) expected.push_back(0xc00+4*i);
++  const bool routeBad=mode=="missing" || mode=="mask" || mode=="duplicate" ||
++    mode=="shared" || mode=="same-bank" || mode=="bypass";
++  const bool bankBad=mode=="bank0" || mode=="bank-limit";
++  if (!routeBad && !bankBad)
++    for (unsigned b:{bank0,bank1}) {
++      expected.push_back(0x1000+4*b); expected.push_back(0x1800+4*b);
++      expected.push_back((128+b)*4096);
++    }
++  if (failAt<expected.size()) expected.resize(failAt+1);
++  if (changeAt<3) expected.resize(changeAt+1);
++  const auto *permit=UfsRouteContexts::Issuer::approvedFixture();
++  if (mode=="denied") permit=nullptr;
++  auto binding=UfsRouteContexts::binding;
++  if (mode=="bad-binding") ++binding.policyVersion;
++  try { enumaVisibleRoutesExecute(permit,binding); assert(false); } catch (Terminal &) {}
++  if (mode=="denied" || mode=="bad-binding") {
++    assert(maps==0 && trace.empty()); return 0;
++  }
++  assert(maps==1 && (mapOk?trace==expected:trace.empty()));
++  auto &c=gVisibleCache;
++  assert(c.attempted+c.contextAttempted<=183);
++  assert(c.completed+c.contextCompleted+unsigned(failAt<trace.size())==trace.size());
++  if (!mapOk) { assert(c.contextResult==UfsRouteContexts::Result::MapFailed); return 0; }
++  if (failAt<trace.size() || changeAt<3) {
++    assert(!c.capture_complete || c.contextResult==UfsRouteContexts::Result::ContextFailed);
++    assert(c.modeStatus==ObservedSmmu::Status::Unknown);
++  } else if (routeBad) {
++    assert(c.contextAttempted==0 && c.contextResult==UfsRouteContexts::Result::RoutesRejected);
++  } else if (bankBad) {
++    assert(c.contextAttempted==0 && c.contextResult==UfsRouteContexts::Result::ContextFailed);
++  } else {
++    assert(c.contextAttempted==6 && c.contextCompleted==6);
++    assert(c.contextResult==UfsRouteContexts::Result::Complete);
++    const bool badMode=mode=="stage2" || mode=="va32" || mode=="translated";
++    assert(c.modeStatus==(badMode?ObservedSmmu::Status::Failure:ObservedSmmu::Status::Observed));
++  }
++  // All six derived addresses/raw/read bits, including unread suffix, are cached output.
++  if (c.resolved.count==2) {
++    unsigned rows=0;
++    for (const auto &s:output) if (s.rfind("UFSCTX b",0)==0 && s.find(" addr=")!=std::string::npos) ++rows;
++    assert(rows==6);
++  }
++  if (mode=="repeat") {
++    const auto old=trace;
++    try { enumaVisibleRoutesExecute(permit,binding); assert(false); } catch (Terminal &) {}
++    assert(maps==1 && trace==old);
++  }
++  return 0;
++}
+--- /dev/null
++++ b/tests/route_contexts_target.cpp
+@@ -0,0 +1,6 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++#include "UfsRouteContextsDiagnostic.h"
++extern "C" __attribute__((used,noinline)) bool route_context_target_refused() {
++  return UfsRouteContexts::Issuer::issue(UfsRouteContexts::binding,
++    UfsRouteContexts::session,{nullptr,0},UfsReuse::candidateProfile())==nullptr;
++}

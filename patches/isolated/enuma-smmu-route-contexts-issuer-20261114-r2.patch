@@ -1,0 +1,81 @@
+--- a/UfsRouteContextsDiagnostic.h
++++ b/UfsRouteContextsDiagnostic.h
+@@ -9,6 +9,15 @@
+ #if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC != 0 && NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC != 1
+ #error RouteContexts macro must be 0 or 1
+ #endif
++#ifndef NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_CANDIDATE
++#define NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_CANDIDATE 0
++#endif
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_CANDIDATE != 0 && NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_CANDIDATE != 1
++#error RouteContexts candidate macro must be 0 or 1
++#endif
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_CANDIDATE && !NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC
++#error RouteContexts candidate requires its separate diagnostic
++#endif
+ #if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_DIAGNOSTIC && (NATIVE_UFS_ENUMA_VISIBLE_ROUTES_DIAGNOSTIC || NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC)
+ #error RouteContexts requires an independent diagnostic selection
+ #endif
+@@ -16,9 +25,16 @@
+ #error RouteContexts fixture is host-only, never a target permission
+ #endif
+ namespace UfsRouteContexts {
+-constexpr uint64_t session=0x454e554d41435431ULL;
++constexpr uint64_t session=0x454e554d41435432ULL;
+ constexpr UfsObservation::Binding binding {true,true,false,UfsPlatform::Soc::Sm8250,
+-  0x1d84000,0x3000,UfsPlatform::Policy::None,0x15000000,0xd0000,0x20261114};
++  0x1d84000,0x3000,UfsPlatform::Policy::None,0x15000000,0xd0000,0x26111402};
++// Recipe identity, NOT a payload hash or hardware/firmware self-attestation.
++// The final external manifest binds these exact bytes to FD/payload/boot hashes.
++constexpr uint64_t candidateIdentity=0x4354583256454e44ULL;
++static const char candidateFdSha256[] __attribute__((used))=
++  "e524988b8a05f15847ffc991170de8a5e0ead607400421e0835084497a71bf1e";
++static const char payloadBindingId[] __attribute__((used))=
++  "enuma-contexts-r2-vendorfd-183-readonly-terminal";
+ constexpr unsigned maxReads=183;
+ enum class Result { Denied, BadBinding, AlreadyClaimed, MapFailed, TableFailed,
+                     GeometryRejected, RoutesRejected, ContextFailed, Complete };
+@@ -34,19 +50,38 @@
+ };
+ class Session final {
+   friend struct Issuer;
+-  constexpr Session() {}
++  const UfsObservation::Binding binding_;
++  const uint64_t session_,candidate_;
++  constexpr Session():binding_(binding),session_(session),candidate_(candidateIdentity) {}
+   Session(const Session &)=delete;
+   Session &operator=(const Session &)=delete;
+ public:
+   bool valid(const UfsObservation::Binding &b,uint64_t s) const {
+-    return s==session && UfsObservation::sameBinding(b,binding);
++    return s==session && s==session_ && candidate_==candidateIdentity &&
++      UfsObservation::sameBinding(b,binding_) && UfsObservation::sameBinding(b,binding);
+   }
+ };
+ struct Issuer {
+-  // No target success issuer exists, even with the diagnostic macro enabled.
++  // Separate candidate-only issuer, pending independent review. FD/payload
++  // authenticity is checked externally BEFORE a freshly authorized boot.
+   __attribute__((noinline)) static const Session *issue(
+-      const UfsObservation::Binding &,uint64_t,UfsPlatform::Bytes,
+-      UfsReuse::AccessProfile) { return nullptr; }
++      const UfsObservation::Binding &b,uint64_t s,UfsPlatform::Bytes board,
++      UfsReuse::AccessProfile profile) {
++#if NATIVE_UFS_ENUMA_ROUTE_CONTEXTS_CANDIDATE
++    static const char compatible[]="xiaomi,enuma\0qcom,sm8250";
++    if (!board.data || board.size!=sizeof(compatible)) return nullptr;
++    const auto *p=static_cast<const char *>(board.data);
++    for (size_t i=0;i<sizeof(compatible);++i) if (p[i]!=compatible[i]) return nullptr;
++    const UfsPlatform::Resources r {b.recognized,b.diagnosticSupported,b.takeoverSupported,
++      b.soc,b.hcBase,b.hcSize,b.policy};
++    if (s!=session || !UfsObservation::sameBinding(b,binding) ||
++        !UfsReuse::validateProfileShape(r,profile).valid) return nullptr;
++    static constexpr Session context;
++    return &context;
++#else
++    (void)board; (void)profile; return production(b,s);
++#endif
++  }
+   static const Session *production(const UfsObservation::Binding &,uint64_t) { return nullptr; }
+ #ifdef UFS_ROUTE_CONTEXTS_HOST_TEST
+   static const Session *approvedFixture() { static constexpr Session s; return &s; }

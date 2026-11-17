@@ -1,0 +1,294 @@
+--- a/NativeUfs.cpp
++++ b/NativeUfs.cpp
+@@ -38,6 +38,7 @@
+ #include "UfsReuseReport.h"
+ #include "UfsEnumaReadEntry.h"
+ #include "UfsObservedSmmu.h" // isolated decoder; no production caller
++#include "UfsThreeIdDiagnostic.h"
+ #ifndef NATIVE_UFS_SMMU_REVIEW_CANDIDATE
+ #define NATIVE_UFS_SMMU_REVIEW_CANDIDATE 0
+ #endif
+@@ -82,6 +83,9 @@
+ #endif
+ #if NATIVE_UFS_VERSION_DIAGNOSTIC && !NATIVE_UFS_OBSERVATION_ONLY
+ #error Version diagnostic requires observation-only
++#endif
++#if NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC && (!NATIVE_UFS_SMMU_REVIEW_CANDIDATE || !NATIVE_UFS_ENUMA_READ_DIAGNOSTIC || NATIVE_UFS_REUSE_DIAGNOSTIC || NATIVE_UFS_OBSERVATION_ONLY || NATIVE_UFS_VERSION_DIAGNOSTIC || NATIVE_UFS_EXTERNAL_STORE_PROVIDER)
++#error Three-ID diagnostic requires isolated candidate/read entry and excludes other diagnostic/store paths
+ #endif
+ #if NATIVE_UFS_VERSION_DIAGNOSTIC
+ #include "UfsVersionDiagnostic.h"
+@@ -170,7 +174,7 @@
+ static unsigned gEnumaReadClaim;
+ #if NATIVE_UFS_SMMU_REVIEW_CANDIDATE
+ // One identity for this once-only entry, independently owned by the caller.
+-static unsigned char gEnumaObservationSession;
++static constexpr uint64_t gEnumaObservationSession=UfsObservation::threeIdSession;
+ #endif
+ // Retain an internal target object body for review/testing even while the
+ // production provider is a compile-time MissingContract. Not an exported ABI.
+@@ -202,16 +206,25 @@
+   const UfsPlatform::Resources observationResources = ufsPlatformResources (provider);
+   const auto selected = UfsReuse::validateProfileShape(observationResources, UfsReuse::candidateProfile());
+   const auto expected = UfsObservation::binding(observationResources, selected.smmuBase, selected.smmuSize);
+-  const uint64_t currentSession = reinterpret_cast<uintptr_t>(&gEnumaObservationSession);
++  const uint64_t currentSession = gEnumaObservationSession;
+   const auto requested = UfsObservation::Level::IdsOnly;
+-  const auto observation = UfsObservation::production(expected, currentSession, requested);
++  // Registry values select only board/resources. External candidate manifest must
++  // bind the fixed FD and eventual payload; no ADT/bootarg self-attests firmware.
++  auto policyBinding=expected;
++#if NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC
++  policyBinding.policyVersion=UfsObservation::threeIdPolicyVersion;
++#endif
++  IORegistryEntry *identityRoot=IORegistryEntry::fromPath("IODeviceTree:/");
++  const auto observation=UfsObservation::ThreeIdIssuer::issue(policyBinding,currentSession,requested,
++    ufsProperty(identityRoot,"compatible"),UfsReuse::candidateProfile());
++  if (identityRoot) identityRoot->release();
+   auto logDecision = [&](const char *decision) {
+     IOLog("UFSOBS %s result=%u request=%u session=0x%llx soc=%u hc=0x%llx/0x%llx smmu=0x%llx/0x%llx policy=%u version=%u flags=%u%u%u\n",
+           decision, static_cast<unsigned>(observation.result), static_cast<unsigned>(requested),
+           static_cast<unsigned long long>(currentSession), static_cast<unsigned>(expected.soc),
+           static_cast<unsigned long long>(expected.hcBase), static_cast<unsigned long long>(expected.hcSize),
+           static_cast<unsigned long long>(expected.smmuBase), static_cast<unsigned long long>(expected.smmuSize),
+-          static_cast<unsigned>(expected.policy), expected.policyVersion, unsigned(expected.recognized),
++          static_cast<unsigned>(policyBinding.policy), policyBinding.policyVersion, unsigned(expected.recognized),
+           unsigned(expected.diagnosticSupported), unsigned(expected.takeoverSupported));
+     if (observation.result == UfsObservation::Result::Ok && observation.context)
+       IOLog("UFSOBS granted=%u issued_session=0x%llx\n", static_cast<unsigned>(observation.context->level()),
+@@ -224,21 +237,11 @@
+       "enuma observation missing bank policy" : "enuma observation missing access policy";
+     return false;
+   }
+-  if (!selected.valid || !UfsObservation::validIssuance(observation, expected, currentSession, requested)) {
++  if (!selected.valid || !UfsObservation::validIssuance(observation, policyBinding, currentSession, requested) ||
++      observation.context->level()!=UfsObservation::Level::IdsOnly ||
++      observation.context->sidCount() || observation.context->bankCount()) {
+     logDecision("REFUSED");
+     native_ufs_root_failure = "enuma observation resource/session mismatch";
+-    return false;
+-  }
+-  if (observation.context->level() >= UfsObservation::Level::VisibleRoutes &&
+-      (!observation.context->sidCount() || observation.context->sidCount()>2)) {
+-    logDecision("REFUSED");
+-    native_ufs_root_failure = "enuma observation missing stream policy";
+-    return false;
+-  }
+-  if (observation.context->level() >= UfsObservation::Level::AllowedContexts &&
+-      (!observation.context->banks() || !observation.context->bankCount())) {
+-    logDecision("REFUSED");
+-    native_ufs_root_failure = "enuma observation missing bank policy";
+     return false;
+   }
+   logDecision("GRANTED");
+@@ -367,89 +370,44 @@
+ // terminal park. This does not freeze other CPUs, producers or mappings.
+ struct EnumaObservationRetained {
+   IOMemoryMap *map;
+-  ObservedSmmuCapture::Snapshot snapshots[2];
++  UfsThreeId::Report report;
+   ObservedSmmuCapture::Breadcrumb breadcrumb;
+-  volatile unsigned result, phase, completedCount;
+-  volatile unsigned lastCompletedSample, lastCompletedStage, lastCompletedOffset;
+ };
+ static EnumaObservationRetained gEnumaObservation = {};
+-__attribute__((used, noinline)) static bool
+-enumaObservationLoad(uintptr_t base, uint64_t offset, unsigned sample,
+-                     UfsObservation::Level stage, uint32_t &value)
+-{
+-  auto load = [&](uint64_t off,uint32_t &v) {
+-    v = read32(base, static_cast<unsigned>(off)); return true;
++__attribute__((used, noinline)) static void
++enumaObservationLoad(uintptr_t base)
++{
++  auto load = [&](unsigned off) {
++    return read32(base,off);
+   };
+-  IOLog("UFSOBS BEFORE_LOAD sample=%u stage=%u offset=0x%llx raw=NOT_READ\n",
+-        sample, static_cast<unsigned>(stage), static_cast<unsigned long long>(offset));
+-  bool ok=ObservedSmmuCapture::markedRead(gEnumaObservation.breadcrumb, sample, 1, // SMMU
+-                                        static_cast<unsigned>(stage), offset, value, load);
+-  if (ok) {
+-    gEnumaObservation.completedCount=gEnumaObservation.completedCount+1;
+-    gEnumaObservation.lastCompletedSample=sample;
+-    gEnumaObservation.lastCompletedStage=static_cast<unsigned>(stage);
+-    gEnumaObservation.lastCompletedOffset=static_cast<unsigned>(offset);
+-    IOLog("UFSOBS LOAD_DONE sample=%u stage=%u offset=0x%llx raw=0x%08x\n",
+-          sample, static_cast<unsigned>(stage), static_cast<unsigned long long>(offset), value);
+-  } else {
+-    IOLog("UFSOBS LOAD_FAILED sample=%u stage=%u offset=0x%llx raw=NOT_READ\n",
+-          sample, static_cast<unsigned>(stage), static_cast<unsigned long long>(offset));
+-  }
+-  return ok;
++  UfsThreeId::read(load,gEnumaObservation.breadcrumb,gEnumaObservation.report);
+ }
+ __attribute__((used, noinline, noreturn)) static void
+ enumaObserveExecute(const UfsObservation::ObservationContext &context)
+ {
+   using namespace ObservedSmmuCapture;
+-  // An observation contract covers this CPU's permitted register set and map
+-  // lifetime, not DMA; the production issuer currently cannot issue it.
+-  Inputs in {context.size(),context.base(),context.session(),context.sids(),
+-             context.sidCount(),context.banks(),context.bankCount()};
++  // Defend the actual executor boundary too: no routes/context path exists here.
++  if (!UfsObservation::sameBinding(context.resources(),UfsObservation::threeIdBinding) ||
++      context.session()!=UfsObservation::threeIdSession || context.level()!=Level::IdsOnly ||
++      context.requested()!=Level::IdsOnly || context.sidCount() || context.bankCount()) {
++    IOLog("UFSOBS REFUSED executor binding\n");
++    for (;;) { __asm__ volatile("wfe" ::: "memory"); }
++  }
+   OSSharedPtr<IOMemoryMap> map;
+   IOLog("UFSOBS BEFORE_MAP base=0x%llx size=0x%llx\n",
+         static_cast<unsigned long long>(context.base()), static_cast<unsigned long long>(context.size()));
+   uintptr_t base=mapPhys(context.base(),context.size(),map);
+   if (map) { map->retain(); gEnumaObservation.map=map.operator->(); }
+-  Status result=Status::Failure;
+-  if (base && !(base&3) && context.session()) {
+-    for(unsigned sample=0;sample<2;++sample) {
+-      auto read=[&](Level stage,uint64_t off,uint32_t &value) {
+-        if (static_cast<unsigned>(stage)>static_cast<unsigned>(context.level()) ||
+-            !inside(off,context.size()) || (off&3)) return false;
+-        bool permitted = stage==Level::IdsOnly ? (off==0x20 || off==0x24 || off==0x28) :
+-          stage==Level::VisibleRoutes ? (off==0 || (off>=0x800 && off<0xa00) || (off>=0xc00 && off<0xe00)) :
+-          ((off>=0x1000 && off<0x1200) || (off>=0x1800 && off<0x1a00) || off>=0x2000);
+-        if (!permitted) return false;
+-        return enumaObservationLoad(base,off,sample,stage,value);
+-      };
+-      Snapshot &s=gEnumaObservation.snapshots[sample];
+-      gEnumaObservation.phase=1;
+-      result=idsOnly(read,in,s); if(result!=Status::Observed) break;
+-      if(context.level()>=Level::VisibleRoutes) {
+-        gEnumaObservation.phase=2;
+-        result=visibleRoutes(read,in,s); if(result!=Status::Observed) break;
+-      }
+-      if(context.level()>=Level::AllowedContexts) {
+-        gEnumaObservation.phase=3;
+-        result=allowedContexts(read,in,s); if(result!=Status::Observed) break;
+-      }
+-    }
+-    if(result==Status::Observed && !equal(gEnumaObservation.snapshots[0],gEnumaObservation.snapshots[1]))
+-      result=Status::Incomplete;
+-  }
+-  gEnumaObservation.result=static_cast<unsigned>(result);
+-  const auto &b=gEnumaObservation.breadcrumb;
+-  IOLog("UFSOBS TERMINAL result=%u phase=%u completed=%u attempted=%u last_completed=%u map=%s\n",
+-        static_cast<unsigned>(result), unsigned(gEnumaObservation.phase), unsigned(gEnumaObservation.completedCount),
+-        unsigned(b.attempted), unsigned(b.completed), base ? "OK" : "FAILED");
+-  if (b.attempted) IOLog("UFSOBS LAST_ATTEMPT sample=%u stage=%u offset=0x%x completed=%u\n",
+-                         unsigned(b.sample), unsigned(b.stage), unsigned(b.offset), unsigned(b.completed));
+-  else IOLog("UFSOBS LAST_ATTEMPT=NOT_READ\n");
+-  if (gEnumaObservation.completedCount)
+-    IOLog("UFSOBS LAST_COMPLETED sample=%u stage=%u offset=0x%x\n",
+-          unsigned(gEnumaObservation.lastCompletedSample), unsigned(gEnumaObservation.lastCompletedStage),
+-          unsigned(gEnumaObservation.lastCompletedOffset));
+-  else IOLog("UFSOBS LAST_COMPLETED=NOT_READ\n");
++  if (base && !(base&3)) {
++    IOLog("UFSOBS ATTEMPT addresses=15000020,15000024,15000028 width=32 reads=3\n");
++    enumaObservationLoad(base);
++    const auto &r=gEnumaObservation.report;
++    IOLog("UFSOBS COMPLETE completed_count=%u raw[0]=0x%08x raw[1]=0x%08x raw[2]=0x%08x decode_status=%u\n",
++          r.completed_count,r.raw[0],r.raw[1],r.raw[2],static_cast<unsigned>(r.decode_status));
++  } else {
++    IOLog("UFSOBS INCOMPLETE map/alignment failure completed_count=0 raw=NOT_READ decode_status=NOT_RUN\n");
++  }
++  IOLog("UFSOBS TERMINAL no retry/no native UFS/no DMA\n");
+   barrier();
+   for (;;) { __asm__ volatile("wfe" ::: "memory"); }
+ }
+--- a/UfsObservationContract.h
++++ b/UfsObservationContract.h
+@@ -38,11 +38,12 @@
+ }
+ // No public constructor, copy or claim-based producer; no bank policy exists.
+ class ObservationContext final {
++  friend struct ThreeIdIssuer;
+   const Binding binding_;
+   const uint64_t session_;
+   const Level requested_, level_;
+   const uint32_t sid_[2]; const unsigned sidCount_;
+-  ObservationContext(Binding resources, uint64_t session, Level requested, Level level,
++  constexpr ObservationContext(Binding resources, uint64_t session, Level requested, Level level,
+                      uint32_t s0, uint32_t s1, unsigned n)
+     : binding_(resources), session_(session), requested_(requested), level_(level),
+       sid_{s0,s1}, sidCount_(n) {}
+--- /dev/null
++++ b/UfsThreeIdDiagnostic.h
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: BSD-2-Clause-Patent
++#ifndef UFS_THREE_ID_DIAGNOSTIC_H
++#define UFS_THREE_ID_DIAGNOSTIC_H
++#include "UfsObservationContract.h"
++#include "UfsReuseAdmission.h"
++#include "UfsObservedSmmuCapture.h"
++#ifndef NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC
++#define NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC 0
++#endif
++#if NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC != 0 && NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC != 1
++#error NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC must be 0 or 1
++#endif
++namespace UfsObservation {
++static constexpr unsigned threeIdPolicyVersion=0x20261113;
++// Caller-owned identity, deliberately not an ObservationContext address or a claim.
++static constexpr uint64_t threeIdSession=0x454e554d41334944ULL;
++static constexpr Binding threeIdBinding {true,true,false,UfsPlatform::Soc::Sm8250,
++  0x1d84000,0x3000,UfsPlatform::Policy::None,0x15000000,0xd0000,threeIdPolicyVersion};
++// Exact board compatible list from enuma.dts. This selects hardware, NOT FD identity.
++static inline bool threeIdBoard(UfsPlatform::Bytes b) {
++  static const char compatible[]="xiaomi,enuma\0qcom,sm8250";
++  if (!b.data || b.size!=sizeof(compatible)) return false;
++  const auto *p=static_cast<const char *>(b.data);
++  for (size_t i=0;i<sizeof(compatible);++i) if (p[i]!=compatible[i]) return false;
++  return true;
++}
++struct ThreeIdIssuer final {
++  static Issuance issue(const Binding &b,uint64_t session,Level requested,
++                        UfsPlatform::Bytes board,UfsReuse::AccessProfile p) {
++#if NATIVE_UFS_ENUMA_THREE_ID_DIAGNOSTIC
++    const UfsPlatform::Resources r {b.recognized,b.diagnosticSupported,b.takeoverSupported,
++      b.soc,b.hcBase,b.hcSize,b.policy};
++    if (!threeIdBoard(board) || !sameBinding(b,threeIdBinding) ||
++        !UfsReuse::validateProfileShape(r,p).valid) return {Result::BadResource,nullptr};
++    if (session!=threeIdSession) return {Result::NoSession,nullptr};
++    if (requested!=Level::IdsOnly) return {Result::NoAccessPolicy,nullptr};
++    // One global claim in NativeUfs's sole issuer TU, across all service instances.
++    // Never reset; consumed even if the subsequent map fails.
++    static unsigned claimed;
++    if (__atomic_exchange_n(&claimed,1U,__ATOMIC_ACQ_REL)) return {Result::NoSession,nullptr};
++    static constexpr ObservationContext context(threeIdBinding,threeIdSession,
++      Level::IdsOnly,Level::IdsOnly,0,0,0);
++    return {Result::Ok,&context};
++#else
++    (void)board; (void)p;
++    return production(b,session,requested);
++#endif
++  }
++};
++}
++namespace UfsThreeId {
++// Register offset facts: Linux v6.1 arm-smmu/arm-smmu.h, local fixed copy
++// .cache/ufs-hci30-compat-20261111/ref/drivers_iommu_arm_arm-smmu_arm-smmu.h
++// lines 44-72: ARM_SMMU_GR0_ID0/ID1/ID2, architected v1/v2 GR0 IDs.
++// Applies to the selected qsmmu-v500 v2 GR0; NOT evidence of CPU access permission.
++static constexpr unsigned offsets[3]={0x20,0x24,0x28};
++struct Report {
++  unsigned completed_count=0;
++  uint32_t raw[3]={};
++  ObservedSmmu::Status decode_status=ObservedSmmu::Status::Unknown;
++};
++// No callback-failure recovery: a real MMIO abort does not return here.
++// Caller performs ALL admission and mapping before entering this bounded reader.
++template<class Load> static void read(Load &load,ObservedSmmuCapture::Breadcrumb &b,Report &r) {
++  r={0,{0,0,0},ObservedSmmu::Status::Unknown};
++  for (unsigned i=0;i<3;++i) {
++    b.completed=0; b.sample=0; b.domain=1; b.stage=1; b.offset=offsets[i]; b.attempted=1;
++    ObservedSmmuCapture::barrier();
++    r.raw[i]=load(offsets[i]);
++    ObservedSmmuCapture::barrier();
++    r.completed_count=i+1; b.completed=1; ObservedSmmuCapture::barrier();
++  }
++  ObservedSmmu::Geometry geometry {};
++  r.decode_status=ObservedSmmu::decodeGeometry({true,r.raw[0]},{true,r.raw[1]},
++    {true,r.raw[2]},0xd0000,128,geometry);
++}
++}
++#endif
