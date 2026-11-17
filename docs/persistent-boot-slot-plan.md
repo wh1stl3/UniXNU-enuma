@@ -2,7 +2,7 @@
 
 范围：只回答「把载荷放进设备、断电重启仍进系统」这条路上**现在能离线确定什么**与**必须靠设备一条只读命令确认什么**。不含选型结论，不含设备操作。全部事实给到文件 + 行号；判不出的一律进 §6。
 
-状态：`self-checked`（本文只做既有材料的交叉核对，未上机、未构建、未写设备）。
+状态：`self-checked`（§1–§3 为既有材料交叉核对；§4.1 转录 2026-11-17 一轮设备**只读**采集，本文未发起任何设备操作；未构建、未写设备）。
 
 ---
 
@@ -13,6 +13,8 @@
 3. 原厂槽位容量：`boot_a`/`boot_b` = **201,326,592 B**，`vendor_boot_a`/`vendor_boot_b` = **100,663,296 B**。当前 `boot.img` = **203,505,664 B**，比 `boot_a` 大 **2,179,072 B**，比 `vendor_boot` 大约 2 倍。
 4. `fastboot boot` 只把镜像送进内存启动一次、不写槽（官方文档 + 本板多次实机记录）；`flash` 才是写入槽位。本板 `boot_a` 在 2026-10-21 被实际刷写过一次（Magisk），回读校验通过、Android 仍可启动。
 5. 仓库自身已经把「槽位容量与持久载荷落点」标为未确认：`out/enuma-gop-production-20261114-r5/INSTALL-LAYOUT.json:136`。
+6. **容量算术（只有数字，不含选型）**：`boot.img` 203,505,664 B 仍比 `boot_a` 的 201,326,592 B 大 **2,179,072 B**；但 `boot.img` 的 ramdisk 槽是 **192 MiB 圆形分配**（`payload.img` = 201,326,592 B），2026-11-17 采集方给出的载荷内容合计为 **124,596,682 B（约 118.8 MiB）**。算术：124,596,682 + 2,179,072 = 126,775,754 ≤ 201,326,592，即把 ramdisk 从 192 MiB 圆形分配收缩到实际内容量级后，`boot.img` 总体积落进 `boot_a` 的 201,326,592 B 在算术上可行（内容合计值的出处见 §4.1 注 1）。
+7. **前提：Android `/data` 是 FBE 加密 f2fs**：`/proc/mounts` 为 `/dev/block/dm-40 /data f2fs`，`ro.crypto.state=encrypted`、`ro.crypto.type=file`；raw `userdata` 首块偏移 1024 既非 ext4 也非 f2fs 明文 magic（§4.1）。**写入自有根卷布局会覆盖 Android `/data`**，按 D2（`docs/decisions.md:18`）需用户确认数据可弃；该确认已于 2026-11-17 记录（`docs/decisions.md` D7），**不等于任何刷写授权**。
 
 ---
 
@@ -88,7 +90,7 @@
 | sde | `…/0:0:0:4` | 4 | 4,456,448 | 557,056 | 2,281,701,376 |
 | sdf | `…/0:0:0:5` | 5 | 131,072 | 16,384 | 67,108,864 |
 
-控制器 `1d84000.ufshc`、驱动 `ufshcd-qcom`、`proc_name=ufshcd`；六盘同型号 `KLUEG8UHDC-B0E1`（SAMSUNG，rev 0200）。记录另注明：**LUN1–5 未导出，其上是否有 GPT 及 CRC 状态未核**（`record.md:90`）。
+控制器 `1d84000.ufshc`、驱动 `ufshcd-qcom`、`proc_name=ufshcd`；六盘同型号 `KLUEG8UHDC-B0E1`（SAMSUNG，rev 0200）。记录另注明：**LUN1–5 未导出，其上是否有 GPT 及 CRC 状态未核**（`record.md:90`）——2026-11-17 已补 LUN4（`sde`，有完整 GPT，见 §4.1、§6-1），LUN1/LUN2/LUN3/LUN5 仍未核。
 
 ### 2.2 分区名 → 设备节点（全量 117 个分区，只读采集）
 
@@ -220,7 +222,7 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 | `boot_b`（sde37） | 201,326,592 B | **否**（同上） | 同上；覆盖的是未激活槽，但 `boot_b` 的现有内容 `ac3bd652…` 也已有备份 |
 | `vendor_boot_a`（sde25） | 100,663,296 B | **否**（约 2 倍差） | 覆盖原厂 vendor_boot（含 4 个 SoC 基座 DTB，`proprietary-files.txt:49`、`README.md:151`）；已有备份 `3da202d0…` |
 | `vendor_boot_b`（sde49） | 100,663,296 B | **否** | 同上；备份 `6e733d43…` |
-| `super`（sda29）内的逻辑分区 | 分区总量 9,126,805,504 B | 逻辑分区清单与空闲空间**未读取** | 需改 `super` 的 dynamic partition 元数据（写操作），无备份；`ABL` 是否从 super 逻辑分区取启动镜像**无任何仓库证据** |
+| `super`（sda29）内的逻辑分区 | 分区总量 9,126,805,504 B | 逻辑分区清单已知（§4.1）：7 个逻辑分区，**无 `boot`/`vendor_boot`** | 需改 `super` 的 dynamic partition 元数据（写操作），无备份；`ABL` 是否从 super 逻辑分区取启动镜像**无任何仓库证据** |
 | `misc`（sda11，4 MiB） | 4,194,304 B | 不是载荷位 | 只承载 bootloader 命令（recovery 等），非镜像容器 |
 | `rescue` / `cust` / `ffu` / `oops` / `splash` / `bk08`-`bk09`-`bk010` / `rawdump` 等 | 8 MiB–1 GiB | 体积上部分够 | **无证据**表明 ABL 或 UniXNU 会从这些 GPT 分区取启动载荷；写这些分区同样属设备写入 |
 | `uefivarstore`（sde62） | 未单独取证（LUN4 内） | 不是载荷位 | UEFI 变量存储，非镜像容器 |
@@ -239,7 +241,7 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 | 2 | adb+root | `adb -s <serial> shell 'for p in boot_a boot_b vendor_boot_a vendor_boot_b; do printf "%s " $p; su -c "blockdev --getsize64 /dev/block/by-name/$p"; done'` | 确认四个槽容量未变 | `boot_a 201326592` / `boot_b 201326592` / `vendor_boot_a 100663296` / `vendor_boot_b 100663296` | 任一 ≤ 203,505,664 即「当前 boot.img 装不进该槽」；与 §2.3 一致→旧容量可用 |
 | 3 | adb+root | `adb -s <serial> shell "su -c 'cat /proc/partitions'"` | 一次拿到六个 LUN 的边界与 LUN4 分区数 | `sda..sdf` 六个主项 + `sde1..sde65` 等子项（该文件以 1 KiB 为单位，故 `sda` 的 size 列应为 247521280） | `sda` = 247521280（1 KiB 单位 = 253,461,790,720 B）；LUN4 子项 65 个且含 `sde12`/`sde25` |
 | 4 | adb+root | `adb -s <serial> shell "su -c 'dd if=/dev/block/sde bs=4096 skip=1 count=1 2>/dev/null \| head -c 8 \| od -An -c'"` | 判断 LUN4 是否为 GPT（而非仅 QCOM ptable） | `E   F   I       P   A   R   T` | 出现 `EFI PART` → LUN4 有 GPT 头，可导出项数组核对；否则只能靠 by-name 与 ptable |
-| 5 | adb+root | `adb -s <serial> shell "su -c 'dd if=/dev/block/by-name/vendor_boot_a bs=1 count=8 2>/dev/null'"` | 确认 vendor_boot 槽当前镜像格式 | `ANDROID!` 或其它 | `ANDROID!` → 原厂 vendor_boot 是标准 boot 格式（可解析 v3 header 字段）；其它→该槽非标准容器，需先取证再谈写入 |
+| 5 | adb+root | `adb -s <serial> shell "su -c 'dd if=/dev/block/by-name/vendor_boot_a bs=1 count=8 2>/dev/null'"` | 确认 vendor_boot 槽当前镜像格式 | 原始预期（历史，**2026-11-17 实测推翻**）：`ANDROID!` 或其它 → **实测 `VNDRBOOT`（header v3）** | 已实测**不是** `ANDROID!`：`VNDRBOOT` + header_version 3，按 boot header v3 解析（§4.1、§6-4）；写入前须按 v3 布局与已解出的窗口核算 |
 | 6 | adb+root | `adb -s <serial> shell "su -c 'lpdump /dev/block/by-name/super 2>/dev/null \| head -60'"` | 只读列出 `super` 内逻辑分区与空闲 | `Metadata version`、`Partition:` 列表、`Free space` | 列表里**没有** `boot`/`vendor_boot` → super 不是槽位；有 → §3.3 该行需重写。命令不存在则记「未确认」 |
 | 7 | adb | `adb -s <serial> shell "getprop ro.boot.slot_suffix; getprop ro.boot.slot"` | 当前活动槽 | `_a`（2026-10-21 时）或 `_b` | 决定「刷哪一槽不会立刻切断 Android 启动」的事实前提，仅记录 |
 | 8 | adb | `adb -s <serial> shell "getprop ro.boot.verifiedbootstate; getprop ro.boot.flash.locked"` | AVB / 锁状态 | `orange`/`green`、`0`/`1` | `orange`+`0` → 解锁且校验已放宽；`green` → 刷写路径需另证 |
@@ -252,6 +254,78 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 | 15 | fastboot | `fastboot -s <serial> getvar all` | 一次拿全部只读变量（含 `unlocked`、`slot-count`、各 `partition-size`） | 变量列表 | 只作留档；输出含序列号——**不入库** |
 
 约束：任何一条返回异常/不支持即记为「未确认」，不重试、不改命令为写操作；全程不得出现 `flash`、`erase`、`format`、`oem`、`set_active`。
+
+执行情况（2026-11-17）：#1–#8 已在 adb 侧只读执行，结果见 §4.1；#9–#15 的 fastboot 侧 `getvar` **未执行**（当时设备在 adb 侧），故 §6 的 fastboot 相关项仍未关。
+
+### 4.1 设备侧采集结果（2026-11-17）
+
+一轮**只读**采集（`ls`/`cat`/`getprop`/`blockdev --getsize64`/`lpdump`/`dd if=…` 到 stdout），零写入、未 `reboot`、未 `flash`/`erase`/`format`/`dd of=`、未改任何分区或属性、未操作另一台 nuwa。原始材料：`enuma` 工作区根下的 **`.cache/android-slot-probe-20261117/`**（51 个文件 + `RECORD.md`，**不在本仓 `UniXNU-enuma/` 内**，路径相对本文件为 `../../.cache/android-slot-probe-20261117/`）。本节只转录结论并对可复核项抽查，不复述命令；命令、退出码、逐文件 SHA-256 见该目录 `RECORD.md`。下文 `@<file>` 指该目录下的文件名。
+
+**A. 识别与环境**
+
+| 项 | 实测值 | 文件 |
+| --- | --- | --- |
+| 型号（唯一命中） | `getprop ro.product.device` = `enuma`；`adb devices -l` → `product:enuma model:M2105K81C device:enuma` | `@00-product-device.txt`、`RECORD.md:3` |
+| `ro.boot.hardware` | **`qcom`**（不是 `kona`）⇒ 本板机型识别只能靠 `ro.product.device` | `@00-boot-hardware.txt` |
+| 活动槽 | `ro.boot.slot_suffix` = **`_a`**（两次，值一致）；`ro.boot.slot` **为空** | `@00-slot-suffix.txt`、`@09-slot-suffix.txt`、`@09-slot.txt` |
+| shell / root | shell `uid=2000`；`su -c 'id'` → `uid=0(root) … context=u:r:magisk:s0` | `@00-id-uid.txt`、`@00-su-id.txt` |
+
+**B. by-name 映射与槽容量**
+
+| 项 | 实测值 | 文件 |
+| --- | --- | --- |
+| `ls -l /dev/block/by-name` | **123 条链接 = 6 个整盘节点 + 117 个分区**；分组 sda 34 / sdb 2 / sdc 2 / sdd 4 / sde 65 / sdf 10 | `@01-by-name.txt`、`@03-proc-partitions.txt` |
+| 启动相关节点 | `boot_a→sde12`、`boot_b→sde37`、`vendor_boot_a→sde25`、`vendor_boot_b→sde49`、`vbmeta_a→sde17`、`vbmeta_b→sde42`、`dtbo_a→sde18`、`dtbo_b→sde43`、`vbmeta_system_a→sda30`、`vbmeta_system_b→sda31` | `@10-by-name-boot-vbmeta-dtbo.txt`（`@01-by-name.txt` 同值） |
+| 槽容量 | `boot_a`/`boot_b` = **201,326,592 B**；`vendor_boot_a`/`vendor_boot_b` = **100,663,296 B**（与 §2.3 的 2026-10-21 记录**逐字节一致**） | `@02-boot_a-size.txt`、`@02-boot_b-size.txt`、`@02-vendor_boot_a-size.txt`、`@02-vendor_boot_b-size.txt` |
+| `super` / `userdata` 容量 | 9,126,805,504 B / 242,455,916,544 B（与 §1.2 GPT 一致） | `@08-super-size.txt`、`@08-userdata-size.txt` |
+
+**C. LUN4（`sde`）有完整 GPT**
+
+| 项 | 实测值 | 文件 |
+| --- | --- | --- |
+| 头 | signature `EFI PART`；`header_size` 92；`current_lba` 1；`backup_lba` 557,055；`first_usable_lba` 6；`last_usable_lba` 557,050；`entries_lba` 2 | `@04-lun4-gpt-lba1-head.txt`、`@04-lun4-gpt-lba1-fullhead.txt`、`@04d-lun4-gpt-inspect.txt` |
+| CRC | `header_crc32` = **0xFFE04383**、`entries_crc32` = **0x56C9EAFF**，**本地重算均相符** | `@04d-lun4-gpt-inspect.txt`（本地 `@gpt-inspect.ps1`） |
+| 项数组 | 96 项槽 × 128 B = 12,288 B（LBA2–4）；**非空 66** = 65 个实分区 + Qualcomm 占位 `last_parti`（idx 65，LBA 525,470–557,050） | `@04b-lun4-gpt-entries-lba2-4.bin`、`@04d-lun4-gpt-inspect.txt` |
+| 盘总 | 557,056 × 4096 = **2,281,701,376 B**；`/proc/partitions` 中 `sde` = 2,228,224 KiB（同值） | `@04d-lun4-gpt-inspect.txt`、`@03-proc-partitions.txt` |
+| `boot_a` extent | LBA **145,030–194,181**（49,152 扇区 = 201,326,592 B） | `@04d-lun4-gpt-inspect.txt` |
+| `boot_b` extent | LBA 393,654–442,805（同上容量） | 同上 |
+| `vendor_boot_a` extent | LBA **224,054–248,629**（24,576 扇区 = 100,663,296 B） | 同上 |
+| `vendor_boot_b` extent | LBA 460,390–484,965（同上容量） | 同上 |
+| 与 by-name 对齐 | GPT idx N ↔ `sde(N+1)`，65 个实分区一一对应（含 idx 48 `vendor_boot_b`↔`sde49`、idx 49 `imagefv_b`↔`sde50`） | `@04d-lun4-gpt-inspect.txt`、`@01-by-name.txt` |
+
+**D. 槽内当前内容**
+
+| 项 | 实测值 | 文件 |
+| --- | --- | --- |
+| `boot_a` 头 8 B | `ANDROID!`（标准 boot 镜像头） | `@06-boot_a-head8.txt` |
+| `vendor_boot_a` 头 | `VNDRBOOT`；`header_version` **3**、`header_size` **2112**、`page_size` 4096、`kernel_addr` **0x00008000**、`ramdisk_addr` **0x01000000**、`vendor_ramdisk_size` **2230**、`tags_addr` **0x00000100**、`name` 空、`dtb_addr` **0x01F00000**、`dtb_size` **1,613,832**、`cmdline` 347 B（**无设备标识**，仅两处 `0x` 常量） | `@14-vendor_boot_a-head2048.bin`、`@14b-vendor_boot_a-head4096.bin`、`@16-analysis.txt` |
+| 按页推得镜像实占 | 4,096（头 1 页）+ 4,096（ramdisk 1 页）+ 395 × 4,096（`dtb_size` 1,613,832 B 向上取整）= **1,626,112 B**（远小于分区 100,663,296 B） | `@16-analysis.txt` |
+| 与本地 stock 比对 | 设备前 4,096 B 与 `UniXNU-enuma/.cache/firmware/vendor_boot_a.img` 前 4,096 B **逐字节相同**（两侧 SHA-256 均 `6c8dd864…69f0`）；**只证首 4,096 B，不证整分区** | `@16-analysis.txt`、`@14b-vendor_boot_a-head4096.txt` |
+| `boot_a` 前 8 MiB SHA-256 | `94a6e4723271dfd335ce1d3060f305ac16f36bfa2641074748001d7603a84d46` | `@15-boot_a-first8MiB-sha256.txt` |
+
+**E. `super`（`super` 内无 boot/vendor_boot）**
+
+| 项 | 实测值 | 文件 |
+| --- | --- | --- |
+| metadata | version **10.2**、size 2,244 B、max size 65,536 B、slot count **3**、header flags **`virtual_ab_device`** | `@07d-lpdump-full.txt`、`@07-lpdump-super.txt` |
+| 逻辑分区 | **7 个**：`system_a`、`system_ext_a`、`product_a`、`vendor_a`、`odm_a`、`mi_ext_a`、`system_a-cow` | `@07d-lpdump-full.txt` |
+| 组上限 | `qti_dynamic_partitions_a` = **9,122,611,200 B**；`default` = 0；`cow` = 0 | 同上 |
+| block device 表 | `super` first sector 2,048、size 9,126,805,504 B | 同上 |
+| 是否有 `boot`/`vendor_boot` 逻辑分区 | **无** | 同上 |
+
+**F. AVB 与 `userdata`**
+
+| 项 | 实测值 | 文件 |
+| --- | --- | --- |
+| AVB / 锁 | `ro.boot.verifiedbootstate` = **`orange`**、`ro.boot.flash.locked` = **`0`**（已解锁、校验放宽） | `@09-verifiedbootstate.txt`、`@09-flash-locked.txt` |
+| `userdata` raw 首块 | offset 1024：`u16 LE` = 0xE90E（≠ ext4 `0xEF53`）、`u32 LE` = 0x47D7E90E（≠ f2fs `0xF2F52010`）⇒ 按该判据为「其它/未知」 | `@12-userdata-first64.txt`、`@12-userdata-first64-hex.txt`、`@13-userdata-first2048.bin`、`@16-analysis.txt` |
+| 挂载态 | `/dev/block/dm-40 /data f2fs`（另多个 `/data/*` 挂载同源）；`ro.crypto.state` = **`encrypted`**、`ro.crypto.type` = **`file`**（FBE；dm 表未读，映射层级未证） | `@13b-userdata-mount.txt`、`@13c-crypto-state.txt`、`@13d-crypto-type.txt` |
+
+**注 1**：§0 第 6 条用的载荷内容合计 **124,596,682 B** 由 2026-11-17 采集轮在汇报中给出；**上述采集目录与仓库内均无对应清单文件**。本文只按该值做算术，未自行重算，也未据此做任何选型判断。
+
+**注 2**：`ro.boot.hardware` = `qcom` 不改变 `docs/context-brief.md`「设备访问」的识别规则（本板仍按 `ro.product.device` = `enuma` 唯一识别），但说明 `ro.boot.hardware` 在本板不含 SoC 名，不能用于机型判定。
+
+**注 3**：本轮的 fastboot 侧 `getvar` 全部未执行（设备停在 adb 侧）；`RECORD.md:46-48` 明记该跳过，且本机 `fastboot devices` 当时只列出无名条目，未对其下发命令。
 
 ---
 
@@ -281,26 +355,29 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 ### 5.3 其它记录在案的风险事实
 
 - 官方已记录一类已知缺陷：`fastboot boot` 送进内存的镜像与「掉电后从活动槽读」不是同一条路径，某些镜像 `fastboot boot` 失败而掉电冷启动成功，且**「板子是否运行 boot 镜像而非槽镜像」在 alioth 上未证实**（`UniXNU/docs/zh/devices/alioth.md:686,725`）。本板无同类观测记录。
-- `boot` 分区写入与 AVB：`vbmeta_a/_b` 各 131,072 B，`vbmeta_system_a/_b` 各 131,072 B（§1.2、§2.3）。2026-10-21 的 Magisk 记录里 `partition_written` 只标 `boot_a`，**未见 vbmeta 写入或校验位变化的记录**；本板当前 vbmeta 内容与校验状态未读。
+- `boot` 分区写入与 AVB：`vbmeta_a/_b` 各 131,072 B，`vbmeta_system_a/_b` 各 131,072 B（§1.2、§2.3）。2026-10-21 的 Magisk 记录里 `partition_written` 只标 `boot_a`，**未见 vbmeta 写入或校验位变化的记录**；`vbmeta_*` 分区内容仍未读（AVB/锁状态已实测 `orange` / `flash.locked=0`，见 §4.1 F、§6-7）。
 - 生产包自身把「槽位容量与持久载荷落点」列为未确认，并列出 `before_any_install` 五项（重核身份与 GPT、UEFI/native LUN 映射、warm 能力准入、重算 LBA、显式授权），`out/enuma-gop-production-20261114-r5/INSTALL-LAYOUT.json:129-136`。
 - 本文 §1 的 GPT 是 **Android/Linux 侧**读数；UEFI（ShengUfs）侧看到的 LUN 映射是否相同**未证明**（`record.md:92-94`、`INSTALL-LAYOUT.json:116` `"native_or_UEFI_mapping_proven": false`）。
+- `userdata` 当前是 Android 的 **FBE 加密 f2fs**（`/dev/block/dm-40 /data f2fs`、`ro.crypto.state=encrypted`、`ro.crypto.type=file`，§4.1 F），raw 首块不是明文 ext4/f2fs magic ⇒ **写入自有根卷布局即覆盖 Android 全部 `/data` 用户数据**，无本地恢复副本。用户已于 2026-11-17 确认数据可弃（`docs/decisions.md` D7），该确认**只是 D2 的一个前置**，不是刷写授权。
 
 ---
 
 ## 6. 未确定项
 
-1. **LUN1–5 是否有 GPT，及其 CRC**：整套六个 LUN 只导出了 LUN0 的 GPT 头与项数组；LUN4 上 `boot_a`/`vendor_boot_a` 的边界只能从 by-name 与分区容量反推，无项数组证据（`record.md:90`）。
-2. **UEFI/native 视角的 LUN 与分区映射**：未经 ShengUfs 读取证明，`INSTALL-LAYOUT.json:116` 明写 `native_or_UEFI_mapping_proven = false`。
-3. **`super` 内的逻辑分区清单、`super` 剩余可分配空间、`super` 的 metadata 版本**：从未采集（无 `lpdump` 输出）。
-4. **`vendor_boot_a` 的 header 字段值（header 版本、`vendor_ramdisk_addr`、`dtb_addr`、`ramdisk_size`）**：仓库只记录了文件内的偏移（page 4096、ramdisk 2230、dtb 1,613,832 @ 8192；`README.md:151`），没有解出加载地址与窗口，因此「本板 vendor_boot 可用窗口有多大」未定。
-5. **ABL 是否接受「boot 镜像带 192 MiB ramdisk」的常态启动**：`fastboot boot` 路径已多次接受同一类镜像，但那是内存启动路径；写入 `boot_a` 后冷启动是否同样接受，未测。
-6. **当前 `boot_a` 内容与活动槽**：2026-10-21 时 `boot_a` 回读 `8f40f0c9…`（Magisk 补丁后）、活动槽 `_a`；此后是否被改动、当前槽位，均未知。
-7. **当前 `vbmeta` / AVB 状态**（校验是否已 disabled、`flash.locked`、`verifiedbootstate`）：从未 `getvar` 或 `getprop` 采集。
-8. **`fastboot flash boot` 在本板落 `_a` 还是 `_b`**：alioth 记为落 `boot_b`，本板无证据。
-9. **`boot_a` 分区的 AVB footer 结构**：`boot_a` 头部/尾部是否有 AVB footer、刷写后是否需要同步 vbmeta，未核（`vendor_boot` 侧官方文档提到末尾 64 字节 AVB footer 会被重指向 vbmeta，`guide/boot.md:112-113`；本板未验）。
-10. **LUN4/LUN5 上分区容量是否与当前镜像一致地随固件版本变化**：现有容量取自 2026-10-21 的单次采集，之后的固件/OTA 状态未知（§4 第 2 条就是在补这一条）。
-11. **`super`/`rescue` 等非槽位分区是否可被 ABL 或 UniXNU 当作启动源**：无任何仓库证据，既不能断言可以，也不能断言不可以。
-12. **断电重启后「仍进 UniXNU」的完整链条**：槽内容 + 根卷 UUID 命中 + 载荷自举，三者都还没有任何一次实机组合验证（README 与各诊断文档一致声明不证明持久根卷）。
+状态标记：**[已关闭]** = 已被 2026-11-17 设备只读采集补齐；**[部分关闭]** = 部分已证、剩余已写明；**[仍开]** = 未采集。
+
+1. **[部分关闭] LUN1–5 是否有 GPT，及其 CRC**：LUN4（`sde`）**已有完整 GPT**——主头 `header_crc32` 0xFFE04383、项数组 `entries_crc32` 0x56C9EAFF 均本地重算相符，96 项槽 / 非空 66（65 分区 + `last_parti`），`boot_a`（LBA 145,030–194,181）与 `vendor_boot_a`（224,054–248,629）extent 与 `blockdev` 容量吻合（§4.1 C）。**剩余**：LUN1（`sdb`）、LUN2（`sdc`）、LUN3（`sdd`）、LUN5（`sdf`）仍只知 by-name 与 `/proc/partitions` 边界，GPT 与 CRC 未读（`record.md:90` 的范围据此收窄）。
+2. **[仍开] UEFI/native 视角的 LUN 与分区映射**：本轮全部读数来自 Android/Linux 侧；`INSTALL-LAYOUT.json:116` 仍为 `native_or_UEFI_mapping_proven = false`，未经 ShengUfs 读取证明。
+3. **[已关闭] `super` 内的逻辑分区清单、剩余可分配空间、metadata 版本**：`lpdump` 只读全量（185 行）给出 metadata version **10.2**、metadata size 2,244 B / max 65,536 B、slot count **3**、header flags **`virtual_ab_device`**；逻辑分区 **7 个**（`system_a`、`system_ext_a`、`product_a`、`vendor_a`、`odm_a`、`mi_ext_a`、`system_a-cow`），**无 `boot`/`vendor_boot`**；组上限 `qti_dynamic_partitions_a` = **9,122,611,200 B**，`default`/`cow` = 0；block device 表 `super` first sector 2,048、size 9,126,805,504 B（§4.1 E）。原「从未采集」作废。
+4. **[已关闭] `vendor_boot_a` 的 header 字段值**：`VNDRBOOT` / `header_version` **3** / `header_size` **2112** / `page_size` 4096 / `kernel_addr` **0x00008000** / `ramdisk_addr` **0x01000000** / `vendor_ramdisk_size` **2230** / `tags_addr` **0x00000100** / `name` 空 / `dtb_addr` **0x01F00000** / `dtb_size` **1,613,832** / `cmdline` 347 B；镜像按页实占 **1,626,112 B**（§4.1 D）。⇒ 「加载地址与窗口未定」不再成立：ramdisk 与 dtb 的地址与页边界已实测。
+5. **[仍开] ABL 是否接受「boot 镜像带 192 MiB ramdisk」的常态启动**：`fastboot boot` 路径已多次接受同类镜像，但写入槽后冷启动未测；本轮无任何 fastboot 侧动作。
+6. **[部分关闭] 当前 `boot_a` 内容身份与活动槽**：活动槽已实测 **`_a`**（`@00-slot-suffix.txt`、`@09-slot-suffix.txt`）；`boot_a` 头 8 B = `ANDROID!`，前 8 MiB SHA-256 = `94a6e472…a84d46`。**但**既有记录 `8f40f0c9…`/`759eaf09…` 是**整分区 201,326,592 B** 的哈希，范围不同**不可直接比对**，本机也无 `boot_a.img` 整分区副本 ⇒ 是否仍是 2026-10-21 的镜像**未定**；已确定的是「标准 boot 头 + 前 8 MiB 指纹」，只能作为后续比对的锚点（`@15-boot_a-first8MiB-sha256.txt`、`@16-analysis.txt`）。
+7. **[已关闭] 当前 `vbmeta` / AVB 状态**：`ro.boot.verifiedbootstate` = **`orange`**、`ro.boot.flash.locked` = **`0`**（已解锁、校验放宽；`@09-verifiedbootstate.txt`、`@09-flash-locked.txt`）。**仍注**：`vbmeta_a/_b` 的实际内容与校验位未读，刷写后是否需要同步 vbmeta 仍归 §6-9。
+8. **[仍开] `fastboot flash boot` 在本板落 `_a` 还是 `_b`**：fastboot 侧 `getvar`/flash 本轮均未执行；alioth 记落 `boot_b`，本板无证据。
+9. **[仍开] `boot_a` 分区的 AVB footer 结构**：头/尾是否带 AVB footer、刷写后是否需同步 vbmeta 未核（官方文档提到 `vendor_boot` 末尾 64 B AVB footer 会被重指向 vbmeta，`guide/boot.md:112-113`；本板未验）。本轮只读了头 8 B 与前 8 MiB。
+10. **[已关闭] 槽位容量是否随固件变化（`boot_a`/`boot_b`/`vendor_boot_a`/`vendor_boot_b`）**：2026-11-17 复测 `boot_a`/`boot_b` = 201,326,592 B、`vendor_boot_a`/`vendor_boot_b` = 100,663,296 B，与 2026-10-21 记录**逐字节一致**；LUN4 盘总 557,056 × 4096 = 2,281,701,376 B 与 `/proc/partitions` 一致，且 GPT extent 与 `blockdev` 吻合（§4.1 B、C）。⇒ §4 第 2 条已完成一次。**注**：LUN5（`sdf`）的 10 个分区容量本轮未单独读取，不在本项范围内。
+11. **[仍开] `super`/`rescue` 等非槽位分区是否可被 ABL 或 UniXNU 当作启动源**：仍无任何仓库证据；本轮只证 `super` 内**没有** `boot`/`vendor_boot` 逻辑分区。
+12. **[仍开] 断电重启后「仍进 UniXNU」的完整链条**：槽内容 + 根卷 UUID 命中 + 载荷自举，三者仍无任何一次实机组合验证；本轮为纯只读采集，不产生运行时证据。
 
 ---
 
@@ -308,6 +385,7 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 
 | 文件 | 用途 |
 | --- | --- |
+| `enuma/.cache/android-slot-probe-20261117/`（51 个文件 + `RECORD.md`，相对本文件 `../../.cache/android-slot-probe-20261117/`，**不在本仓内**） | §4.1 全部设备侧只读采集：识别、by-name、`blockdev` 容量、LUN4 GPT 头/项数组与 CRC、`vendor_boot_a` 头、`lpdump`、AVB、`userdata` 首块与挂载态；`RECORD.md` 含命令/退出码/逐文件 SHA-256 |
 | `.cache/android-ufs-identity-gpt-20261114-201917/{record.md,inspect-primary.txt,inspect-backup.txt,gpt-*.bin,gpt-inspect.ps1}` | LUN0 几何、GPT 头/项数组与 CRC、34 项分区 |
 | `.cache/live-capture/20261107T141941555586Z/by_name_links.txt` | 123 条 by-name 链接（117 个分区 + 6 个整盘）→ `/dev/block/sdXN` 映射 |
 | `.cache/android-sysfs-20261112-113131/derived.json` | userdata 几何与 LUN0 上游约束 |
@@ -318,5 +396,6 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 | `proprietary-files.txt:17-23,49` | `xbl_a`/`abl_a`/`dtbo_a`/`imagefv_a`/`vendor_boot_a` 的实机只读取回与哈希 |
 | `UniXNU/docs/zh/guide/boot.md:38-51,100-118`、`guide/requirements.md:114`、`devices/alioth.md:666,686,725` | 官方对 `fastboot boot`、boot 镜像构成、payload 进 vendor_boot 三上限、内存启动与槽启动差异的表述（`UniXNU/` 只读） |
 | `docs/decisions.md:13-20`、`docs/context-brief.md:7-11,26`、`enuma/AGENTS.md:50` | D2 刷写时机与授权、红线、验收定义 |
+| `docs/decisions.md` D7（2026-11-17） | 用户确认 enuma Android `/data` 数据可弃（D2 前置之一，非刷写授权） |
 
-状态：`self-checked`（文档内全部数值已与上表文件逐一对照；未上机、未构建、未写设备、未提交）。
+状态：`self-checked`（§1–§3 数值与上表文件逐一对照；§4.1 数值取自 2026-11-17 只读采集，本文件作者对 by-name 计数、槽容量、GPT extent、`lpdump` 组上限等项做了抽查复核；§0 第 6 条的内容合计值无仓库内文件，见 §4.1 注 1。本轮未构建、未写设备、无 fastboot 动作）。
