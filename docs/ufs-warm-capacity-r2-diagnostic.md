@@ -91,8 +91,13 @@ recorded lines:
   the post-submit value, so the bit was already set before this candidate ran;
   the snapshot was published in the record; the poison latch never tripped.
 - `RC10 observed=1 last=03b037ff bytes=4096`: the READ(10) response was observed
-  once, the last returned LBA is `0x03b037ff` = 61880319, and the requested
-  transfer length was 4096 bytes.
+  once, and the last returned LBA is `0x03b037ff` = 61880319. `bytes=4096` is
+  the **logical block size the device reported** (RC10 response bytes 4–7), not
+  a transfer length: this RC10 carried only an **8-byte** data segment
+  (`hostScsi (..., true, 8, ...)` at `RootWarmAdopt.h:143`, whose
+  `gWarmCapacity.blockBytes` comes from
+  `loadBe32 (gHost.virt + kDataOffset + 4)` at `RootWarmAdopt.h:147`). No
+  4096-byte transfer happened.
 - `GEO MATCH expected=4096x61880320`: the reported block size and block count
   match the expected geometry; 61880319 is the 0-based maximum LBA of 61880320
   blocks, so the one-count difference is the standard max-LBA/count relation,
@@ -147,8 +152,9 @@ re-read the image itself.
 - SMMU ownership, vendor DMA retirement completion, or a DMA safety proof.
 - Any formal bring-up stage promotion; the stage record is unchanged.
 - Correct behaviour of any command other than NOP and the READ(10) capacity
-  query, and any block-data read (the 4096 bytes are the requested transfer
-  length of the capacity command, not a data payload read).
+  query, and any block-data read. This CAP2 run exercised only the
+  prepare/NOP/8-byte RC10 path; it does **not** validate a 4 KiB (or any
+  multi-block) data-block DMA transfer, and `bytes=4096` must not be read as one.
 - That a repeat boot would behave the same; no retry was made.
 - Default NoAccessPolicy / NoContract: unchanged.
 
