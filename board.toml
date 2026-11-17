@@ -60,7 +60,11 @@ fetch = ["KernelCache", "DeviceTree", "StaticTrustCache", "Cryptex1,SystemTrustC
 
 [payload]
 volume = "ENUMAESP"
-size_mib = 192
+# 160 MiB = 167,772,160 B。boot.img = 2,179,072（1 头页 + 531 kernel 页）+ payload = 169,951,232 B，
+# 小于 boot_a/boot_b 的 201,326,592 B（余 31,375,360 B）；载荷内容约 118.8 MiB，占 74.3%，95% 余 34,766,527 B。
+# 192 MiB 只是圆形分配（boot.img 203,505,664 B 超出槽容量 2,179,072 B，不能 flash）。
+# 算术见 docs/payload-shrink-plan.md。只对下次构建生效；out/ 下已封存候选的 192 MiB 产物与哈希不变。
+size_mib = 160
 loader = "firmware"
 title = "UniXNU"
 tools = true
@@ -139,6 +143,9 @@ ENUMA_VENDOR_RAW = "EnumaInputs/Vendor.raw.fdf.inc"
 
 [package]
 unixnu = "../../UniXNU"
+# boot_a/boot_b 实测 201,326,592 B（192 MiB）。官方 verify 用该字段拒绝更大的 boot.img
+# （UniXNU/scripts/unixnu/pipeline.py:61-64）；单独的 bootimg 命令不校验槽容量。
+boot_partition_bytes = 201326592
 
 [package.defconfig]
 "ipados-17.7.11-21H461" = "enuma_defconfig"
