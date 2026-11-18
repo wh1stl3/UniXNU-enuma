@@ -88,7 +88,14 @@ owned_memory_size = "0x20000000"
 ipad_identity = true
 unique_chip_id = "required"
 # RamBlock 内存根：restore ramdisk 经 payload 的 data-ramdisk 通道（/chosen/memory-map/PackedRAMDisk）交内核。
-# root_match_volume_uuid = restore ramdisk 的 APFS 卷 UUID（fuxi-oddlylabs.md:289 记录，同 OS ipados-17.7.11-21H461）。
+# root_match_volume_uuid 必须是“本次构建里承载根的那个 media”的 UUID：官方生成器把此值原样写进
+# /chosen/root-matching（UniXNU/scripts/unixnu/devicetree.py:324-327），IOFindBSDRoot 只等这一个值。
+# 当前默认 recipe 的根是 restore ramdisk（rd=md0-ramblock），故这里填它的 APFS 卷 UUID
+# （fuxi-oddlylabs.md:289 记录，同 OS ipados-17.7.11-21H461；阶段 6 内存根到 launchd 时用的就是它）。
+# 根改成 native UFS 的 OS window（native-ufs-root=1）时，此值必须换成 OS 窗口签名 UUID——即官方 profile
+# [root] os_volume_uuid（out/verify-fresh-20261113/os/result.json 的 volume_uuid）；该值只从 profile/签名
+# 报告取得，不在本文件再写一份：build-enuma-owner-data.py 写出构建副本后断言，
+# audit-enuma-production-final-link.py 在最终链接审计里再断言（见 docs/root-uuid-alignment.md）。
 packed_data_ramdisk = true
 root_match_volume_uuid = "9071148B-B025-402D-AD7A-48464D8B5FFF"
 

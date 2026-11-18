@@ -205,11 +205,26 @@ def build(out):
                                       'sheng-pmgr=2': 'unchanged official host payload guard; not runtime alias'}
         board = re.sub(r'^kernel_args = .*$', 'kernel_args = ' + json.dumps(args), board, flags=re.M)
         board = re.sub(r'^trust_cache_sha256 = .*$', 'trust_cache_sha256 = ["' + TRUST_SHA + '"]', board, flags=re.M)
-        board = re.sub(r'^root_match_volume_uuid = .*$', 'root_match_volume_uuid = "' + root_uuid + '"', board, flags=re.M)
+        # The ADT root-match must name the media that carries the root. This build's root is the
+        # signed OS window, whose IOMedia UUID is the UUID inside the OS VROOT01 policy, so the
+        # restore ramdisk UUID on the default diagnostic board is not admissible here.
+        board, replaces = re.subn(r'^root_match_volume_uuid = .*$',
+                                  'root_match_volume_uuid = ' + json.dumps(root_uuid), board, flags=re.M)
+        require(replaces == 1, 'root_match_volume_uuid must occur exactly once in board.toml')
         board = board.replace('enuma_defconfig', 'enuma_owner_data_defconfig')
         board = board.replace('unixnu = "../../UniXNU"', 'unixnu = ' + json.dumps(str(BASE)))
         board += '\n[root]\nos_volume_uuid = ' + json.dumps(root_uuid) + '\nsystemos_volume_uuid = ' + json.dumps(cache_uuid) + '\n'
         (dev / 'board.toml').write_text('# OFFLINE ONLY; no hardware admission, install or deployment.\n' + board)
+        # Packaging-time gate: the official generator copies this option verbatim into
+        # /chosen/root-matching (UniXNU/scripts/unixnu/devicetree.py:324-327), and the root media's
+        # UUID is the one the OS policy signs (NativeUfsBlock::signedVolumeUuid). Declaring the
+        # restore ramdisk UUID here would make the boot wait on a UUID this image cannot carry.
+        written = tomllib.loads((dev / 'board.toml').read_text())
+        require('native-ufs-root=1' in written['payload']['kernel_args'],
+                'owner/Data build must select the native UFS root')
+        require(written['payload']['adt']['root_match_volume_uuid'] == root_uuid,
+                'board root_match_volume_uuid ' + str(written['payload']['adt']['root_match_volume_uuid']) +
+                ' must be the signed OS window UUID ' + root_uuid)
         conf = (ROOT / 'configs/enuma_defconfig').read_text()
         conf += '\n# Actual owner/Data dependency closure; UUID only in this ignored candidate.\n'
         for name in ON:

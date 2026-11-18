@@ -8,6 +8,7 @@ import re
 import struct
 import subprocess
 import sys
+import tomllib
 import uuid
 
 sys.dont_write_bytecode = True
@@ -24,6 +25,32 @@ OWNERS = {'_verified_root_key': 'provider.o', '_verified_root_policies': 'provid
 def require(ok, message):
     if not ok:
         raise ValueError(message)
+
+
+def check_root_match(out, reports):
+    """The ADT root-match UUID must name the media that carries the root.
+
+    The official generator copies board.toml [payload.adt] root_match_volume_uuid verbatim into
+    /chosen/root-matching (UniXNU/scripts/unixnu/devicetree.py:324-327), and a published native
+    UFS window waits on the UUID inside its own signed policy (NativeUfsBlock::signedVolumeUuid).
+    reports[0] is the OS window, whose volume is the root being waited for.
+    """
+    path = next((p for p in (out / 'device/board.toml', ROOT / 'board.toml') if p.is_file()), None)
+    require(path is not None, 'no device board.toml for the root-match cross-check')
+    payload = tomllib.loads(path.read_text())['payload']
+    declared = payload.get('adt', {}).get('root_match_volume_uuid')
+    native = 'native-ufs-root=1' in payload['kernel_args']
+    matches = None
+    if native:
+        require(declared is not None, 'native UFS root build declares no root_match_volume_uuid: ' + str(path))
+        require(str(uuid.UUID(declared)).upper() == reports[0]['volume_uuid'],
+                'root_match_volume_uuid ' + str(declared) + ' must be the signed OS window UUID ' +
+                reports[0]['volume_uuid'] + ', not the restore ramdisk UUID (' + str(path) + ')')
+        matches = True
+    return {'board': str(path), 'native_ufs_root': native, 'declared': declared,
+            'signed_os_volume_uuid': reports[0]['volume_uuid'], 'asserted': matches,
+            'scope': 'declared /chosen/root-matching versus the OS VROOT01 policy UUID extracted from the final image; '
+                     'restore-ramdisk-root boards are not compared'}
 
 
 def digest(blob):
@@ -141,8 +168,10 @@ def main():
     for path, identity in build['inputs'].items():
         require(digest(Path(path).read_bytes()) == identity['sha256'], 'build input changed after recording: ' + path)
     reports = [json.loads((ROOT / f'out/verify-fresh-20261113/{s}/result.json').read_text()) for s in ('os', 'systemos')]
+    root_match = check_root_match(out, reports)
     result = {'status': 'self-checked', 'runtime_protection_verified': False,
-              'validation': 'final MachO byte extraction and inherited verified-input hashes, not signature revalidation'}
+              'validation': 'final MachO byte extraction and inherited verified-input hashes, not signature revalidation',
+              'root_match': root_match}
     text = (out / 'native-link.map').read_text(errors='replace')
     owners = dict(re.findall(r'^\[\s*(\d+)\]\s+(.+)$', text, re.M))
     archive_paths = sorted({m[1] for owner in owners.values() if (m := re.match(r'(.+\.a)\(', owner))})
