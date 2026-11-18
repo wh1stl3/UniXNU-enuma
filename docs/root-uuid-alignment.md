@@ -3,6 +3,10 @@
 主机侧记录与实现；未构建、未打包、未上机。状态：新断言 `self-checked`（只跑了
 `py_compile` 与合成 board 的正/负/跳过三例），实机与真实构建均未验证。
 
+> 2026-11-18 修订：断言 B 已从审计脚本拆到独立脚本 `scripts/check-enuma-root-match.py`（见 §4），
+> `scripts/audit-enuma-production-final-link.py` 恢复成 `aa88ef2^` 的原字节（`d7fc5cf1…`）。
+> 拆分原因见 §4 B 的第一条；其余分析与结论不变。
+
 ## 0. 结论
 
 `/chosen/root-matching` 的值必须等于**本次构建里承载根的那个 media 的 UUID**，不是"某个固定对的
@@ -117,15 +121,32 @@ ADT 后处理器并自己维护 encode/decode 与 digest 链，与"官方优先"
   `root_uuid` 来自 profile `[root] os_volume_uuid`，并在 `:179-181` 已被要求等于
   `out/verify-fresh-20261113/os/result.json` 的 `volume_uuid`，即**实际签名 policy 的 UUID**。
 
-**B. `scripts/audit-enuma-production-final-link.py`**（最终链接审计，`check_root_match()` `:30-52`，
-在 `:171` 调用，结果写进 `audit.json` 的 `root_match` 键）
+**B. `scripts/check-enuma-root-match.py`**（每个候选必跑的独立检查）
 
-- 取生效 board：优先 `<build>/device/board.toml`，否则 tracked `board.toml`；
-- 仅当该 board 的 `kernel_args` 含 `native-ufs-root=1` 时才比对，要求声明值与
-  `reports[0]['volume_uuid']`（OS 窗口）逐字符相等；不等则构建失败并打印两个值与 board 路径；
-- 该 `volume_uuid` 又被 `audit_image()` 用最终 MachO 字节复核（`:108-111`），所以比对对象是**镜像里
-  实际签名 manifest 的 UUID**，不是脚本常量，也不是 profile 抄本；
-- restore 路径（无 `native-ufs-root=1`）不比对，故默认 recipe 不会误报。
+- **为什么拆分**：`scripts/audit-enuma-production-final-link.py` 是
+  `out/production-final-link-guard-20261113-r4/result.json` 记录的 1078 个输入之一，改动它会被
+  `scripts/build-enuma-owner-data.py:162` 的 r4 复用门禁直接拒绝（`r4 input changed`）；而审计脚本
+  `main():142` 又对自己的输入做 self-pin，所以"给审计脚本加断言"必然使 A 与 B **无法在同一次构建里
+  同时成立**，并破坏 r4 的 provenance。B 拆出后，审计脚本恢复 `aa88ef2^` 原字节，不再有 pin 冲突。
+- 取生效 board（按序探测候选目录）：`device/board.toml`、`self-check/packaging/device/board.toml`
+  （r2 这类候选真正的打包副本）、`self-check/device/board.toml`、`package/device/board.toml`；
+  四者都没有时退回 tracked `board.toml`（restore recipe → 只报 SKIP，不比对）；
+- 仅当该 board 的 `kernel_args` 含 `native-ufs-root=1` 时才比对，要求
+  `payload.adt.root_match_volume_uuid` 的 upper() 与 `reports[0]['volume_uuid']`（OS 窗口）逐字符相等；
+  不等则 exit 1 并打印声明值、签名值与 board 路径；
+- 比对对象仍是**镜像里实际签名 manifest 的 UUID**：`reports[0]['volume_uuid']` 由
+  `audit-enuma-production-final-link.py:audit_image()` 用最终 MachO 字节复核
+  （`blob[40:56]`，恢复后为 `:81-84`，该函数字节未变）；新脚本另给 `--macho`，用同一段逻辑自行重算一次；
+- 命令行（exit 0 = 通过或 SKIP，exit 1 = 不匹配/输入不可读）：
+
+```sh
+python3 scripts/check-enuma-root-match.py --build-dir out/<candidate>
+python3 scripts/check-enuma-root-match.py --build-dir out/<candidate> \
+        --macho <prelink.macho> --reports out/verify-fresh-20261113
+```
+
+`--build-dir` 默认是当前目录，`--reports` 默认 `out/verify-fresh-20261113`（可给单个 JSON，也可给
+含 `os/`、`systemos/` 的目录）。它只读候选 board 与已核验的报告，**不依赖 r4 构建结果**。
 
 **当前比较对象与升级点**：现在比的是"ADT 声明值 = 最终镜像里的 OS VROOT01 policy UUID"。
 若将来引入多 generation 或多 OS 窗口（不同 size 的候选 policy 并存，`configureVerification()` 按
@@ -133,8 +154,10 @@ ADT 后处理器并自己维护 encode/decode 与 digest 链，与"官方优先"
 否则可能拿错窗口的 UUID。
 
 **残留覆盖缺口（重要）**：enuma 的候选打包（如 `out/enuma-gop-production-20261114-r5/package.py:96-125`）
-直接调官方 `unixnu.payload.build`，不经过 A 或 B。若某候选既不跑 owner-data 构建也不跑 B 的审计，
-断言不会触发——mode0 r1 就是这种情形。因此 B 应作为每个候选的必跑步骤（含 ADT 提取后的复核）。
+直接调官方 `unixnu.payload.build`，既不经过 A，也不自带 B。因此 **B 是每个候选的必跑步骤**：打包后
+（ADT 提取前后都可以）跑一次上面的 `check-enuma-root-match.py --build-dir <候选目录>`，非 0 即不得
+封存/部署。mode0 r1 正是没有跑这一步、又声明了 907 的实例。r2 的 `run_packaging.py` 已在打包流程里
+调用同一函数（`assertion_b()`，结果记在该目录 `ASSERTIONS.md`）。
 
 **自检**（本轮实际执行的只有这些）：
 
@@ -167,7 +190,9 @@ digest/encode 语义——收益（同样的一致性）已经在 §4 的断言�
 ## 6. 未启用 / 未验证
 
 - A、B 两处断言**没有在真实构建里执行过**（本轮不构建、不打包）；只有 `py_compile` 与合成 board 的
-  三/四例逻辑自检。
+  三/四例逻辑自检。*2026-11-18 修订*：A 已在 owner/Data 真实构建里通过、B（现为
+  `scripts/check-enuma-root-match.py`）已在 r2 候选上正/负各跑一次，证据见
+  `out/ufs-sm8250-startroot-mode0-20261118-r2/ASSERTIONS.md`；本小节其余条目是拆分前的快照。
 - 没有读取任何 ADT 字节来核对：断言的是"声明值 = 签名 UUID"，其"= ADT 里的值"这一步建立在
   `devicetree.py:324-327` 逐字复制的静态阅读上（未执行 payload 构建）。若要字节级闭环，可复用
   `scripts/check-enuma-pid1-package.py:26-51` 的 `/chosen/root-matching` 解析方式，但那份是 22r 专用
@@ -181,12 +206,27 @@ digest/encode 语义——收益（同样的一致性）已经在 §4 的断言�
 ## 7. 复跑
 
 ```sh
-# 语法与逻辑（无需 root、无构建）
+# 语法（无需 root、无构建）
 cd /mnt/d/Code/PortingiOS/enuma/UniXNU-enuma
-/home/wh1stl3/.local/bin/python3.11 -m py_compile scripts/build-enuma-owner-data.py scripts/audit-enuma-production-final-link.py
+/home/wh1stl3/.local/bin/python3.11 -m py_compile \
+    scripts/build-enuma-owner-data.py \
+    scripts/check-enuma-root-match.py \
+    scripts/audit-enuma-production-final-link.py
 
-# 真实构建后（需要既有 r4/verify-fresh 输入，成本高；由 verifier 决定是否跑）
-python3 scripts/build-enuma-production-final-link.py --output out/<new-dir>
-python3 scripts/audit-enuma-production-final-link.py --build-json out/<new-dir>/result.json --output out/<new-dir>/audit.json
-# 期望：audit.json 的 root_match.asserted 为 true，且 declared == signed_os_volume_uuid
+# 每个候选必跑：B（只读 board + verify-fresh 报告，不依赖 r4 构建，秒级）
+python3 scripts/check-enuma-root-match.py --build-dir out/ufs-sm8250-startroot-mode0-20261118-r2
+# 期望：exit 0，打印
+#   OK: /chosen/root-matching 04769D26-2CA0-4825-B443-E2E5F88300F2 == signed OS window 04769D26-…
+# 负例：把该候选的 board 复制到临时目录、把 047 换成 9071148B-… → exit 1
+#   root-match FAILED: root_match_volume_uuid 9071148B-… must be the signed OS window UUID 04769D26-…
+
+# A 在 owner/Data 构建内自动执行（需要既有 r4/verify-fresh 输入，成本高；由 verifier 决定是否跑）
+python3 -B scripts/build-enuma-owner-data.py build --output out/<new-dir>
+
+# 最终链接审计不再包含 root-match（B 已单独跑）；此命令只要求 r4 pin 的脚本字节未变
+python3 scripts/audit-enuma-production-final-link.py \
+    --build-json out/<new-dir>/result.json --output out/<new-dir>/audit.json
 ```
+
+拆分后审计脚本与 `aa88ef2^` 必须逐字节一致：`git diff aa88ef2^ -- scripts/audit-enuma-production-final-link.py`
+为空，否则 A 的 r4 复用门禁会再次拒绝。
