@@ -35,3 +35,7 @@
 	 * TODO: 启用 CPU（MPIDR）、UFS/PHY、显示（DPU/DSI）、触控（GENI）、SMMU 等节点。
 	 */
 };
+
+&ufs {
+	status = "okay";
+};

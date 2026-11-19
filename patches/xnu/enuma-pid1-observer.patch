@@ -1,0 +1,479 @@
+diff --git a/bsd/kern/bsd_init.c b/bsd/kern/bsd_init.c
+index 37017cf..7f21b75 100644
+--- a/bsd/kern/bsd_init.c
++++ b/bsd/kern/bsd_init.c
+@@ -101,6 +101,7 @@
+ #include <sys/codesign.h>
+ 
+ #include <kern/startup.h>
++#include <kern/enuma_pid1.h>
+ #include <kern/thread.h>
+ #include <kern/task.h>
+ #include <kern/ast.h>
+@@ -1379,6 +1380,8 @@ bsd_utaskbootstrap(void)
+ 	act_set_astbsd(thread);
+ 
+ 	ipc_task_enable(get_threadtask(thread));
++	/* Retained initproc reference; immutable proc_ro uniqueid, before release. */
++	enuma_pid1_begin(proc_getpid(initproc), proc_uniqueid(initproc));
+ 
+ 	task_clear_return_wait(get_threadtask(thread), TCRW_CLEAR_ALL_WAIT);
+ }
+diff --git a/bsd/kern/kern_exit.c b/bsd/kern/kern_exit.c
+index 11a8212..0a6f590 100644
+--- a/bsd/kern/kern_exit.c
++++ b/bsd/kern/kern_exit.c
+@@ -119,6 +119,7 @@
+ #include <mach/thread_act.h>
+ 
+ #include <kern/exc_resource.h>
++#include <kern/enuma_pid1.h>
+ #include <kern/kern_types.h>
+ #include <kern/kalloc.h>
+ #include <kern/task.h>
+@@ -1608,6 +1609,12 @@ exit_with_reason(proc_t p, int rv, int *retval, boolean_t thread_can_terminate,
+ 	p->p_lflag |= P_LEXIT;
+ 	p->p_xstat = rv;
+ 	p->p_lflag |= jetsam_flags;
++	/* Selected exit thread, proc lock held. rv is wait status, NOT errno.
++	 * PID1 critical-exit panic is unchanged; display is strictly best effort. */
++	enuma_pid1_exit(proc_getpid(p), proc_uniqueid(p), rv,
++	    exit_reason != OS_REASON_NULL,
++	    exit_reason != OS_REASON_NULL ? exit_reason->osr_namespace : 0,
++	    exit_reason != OS_REASON_NULL ? exit_reason->osr_code : 0);
+ 
+ 	proc_transend(p, 1);
+ 	proc_unlock(p);
+diff --git a/osfmk/arm64/sleh.c b/osfmk/arm64/sleh.c
+index ff5296d..21197ac 100644
+--- a/osfmk/arm64/sleh.c
++++ b/osfmk/arm64/sleh.c
+@@ -39,6 +39,7 @@
+ #include <arm64/instructions.h>
+ 
+ #include <kern/debug.h>
++#include <kern/enuma_pid1.h>
+ #include <kern/restartable.h>
+ #include <kern/socd_client.h>
+ #include <kern/task.h>
+@@ -189,6 +190,10 @@ static void handle_user_trapped_instruction32(arm_saved_state_t *, uint32_t esr)
+ static void handle_simd_trap(arm_saved_state_t *, uint32_t esr) __dead2;
+ 
+ extern void current_cached_proc_cred_update(void);
++/* BSD accessor from sys/proc.h, declared like the BSD entrypoints here to avoid
++ * importing BSD sys/types clock_t into the Mach exception translation unit. */
++extern uint64_t proc_uniqueid(proc_t);
++extern int proc_getpid(proc_t); /* pid_t is int; sys/proc_internal.h declaration */
+ void   mach_syscall_trace_exit(unsigned int retval, unsigned int call_number);
+ 
+ struct proc;
+@@ -1905,6 +1910,13 @@ handle_svc(arm_saved_state_t *state)
+ 	}
+ 
+ 	current_cached_proc_cred_update();
++	/* Current thread keeps this proc valid; uniqueid is an immutable proc_ro value.
++	 * The platform SVC path above is intentionally excluded. No pointers escape. */
++	p = get_bsdthreadtask_info(thread);
++	if (p != NULL) {
++		enuma_pid1_svc(proc_getpid(p), proc_uniqueid(p), trap_no,
++		    get_saved_state_pc(state));
++	}
+ 
+ 	if (trap_no < 0) {
+ 		switch (trap_no) {
+diff --git a/osfmk/console/video_console.c b/osfmk/console/video_console.c
+index 4c1edf1..2493d5c 100644
+--- a/osfmk/console/video_console.c
++++ b/osfmk/console/video_console.c
+@@ -95,6 +95,11 @@
+ #include <kern/kalloc.h>
+ #include <kern/debug.h>
+ #include <kern/thread_call.h>
++#include <kern/enuma_pid1.h>
++#include <kern/thread.h>
++#include <kern/sched_prim.h>
++#include <kern/clock.h>
++#include <kern/misc_protos.h>
+ 
+ #include <vm/pmap.h>
+ #include <vm/vm_kern.h>
+@@ -152,6 +157,11 @@ static uint32_t gc_buffer_size;
+ LCK_GRP_DECLARE(vconsole_lck_grp, "vconsole");
+ static lck_ticket_t vcputc_lock;
+ 
++/* Permanent BSS; published numeric identities, never proc/reason/video pointers. */
++static struct ep_state enuma_pid1_state;
++static struct ep_console_gate enuma_pid1_console;
++static uint32_t enuma_pid1_lock_ready;
++
+ 
+ #define VCPUTC_LOCK_INIT()                              \
+ MACRO_BEGIN                                             \
+@@ -474,6 +484,7 @@ gc_initialize(struct vc_info * info)
+ 	if (gc_initialized == FALSE) {
+ 		/* Init our lock */
+ 		VCPUTC_LOCK_INIT();
++		__atomic_store_n(&enuma_pid1_lock_ready, 1, __ATOMIC_RELEASE);
+ 
+ 		gc_initialized = TRUE;
+ 	}
+@@ -1244,6 +1255,118 @@ vcputc_options(char c, __unused bool poll)
+ 	}
+ }
+ 
++/* Fixed rows and printable-only text avoid wrap/scroll. Each reader batch is
++ * at most 16 characters; transitions revoke and drain under this same lock.
++ * Do not call vcputc (recursive lock), allocate, sleep or retain vinfo here. */
++static void
++enuma_pid1_write(unsigned int row, const char *text)
++{
++	unsigned int length = (unsigned int)strlen(text);
++	for (unsigned int col = 0; col < 96; col += 16) {
++		VCPUTC_LOCK_LOCK();
++		if (!ep_console_can_write(&enuma_pid1_console, gc_enabled) ||
++		    vinfo.v_columns < 100 || vinfo.v_rows < 6 || gc_vt100state != ESnormal) {
++			VCPUTC_LOCK_UNLOCK();
++			return;
++		}
++		unsigned int old_x = gc_x, old_y = gc_y;
++		int old_hanging = gc_hanging_cursor;
++		gc_hide_cursor(gc_x, gc_y);
++		gc_x = col;
++		gc_y = row;
++		gc_hanging_cursor = 0;
++		for (unsigned int i = col; i < col + 16; i++) {
++			gc_putchar(i < length ? text[i] : ' ');
++		}
++		gc_x = old_x;
++		gc_y = old_y;
++		gc_hanging_cursor = old_hanging;
++		gc_show_cursor(gc_x, gc_y);
++		VCPUTC_LOCK_UNLOCK();
++	}
++}
++
++static void
++enuma_pid1_observer(void *parameter __unused, wait_result_t result __unused)
++{
++	struct ep_state *s = &enuma_pid1_state;
++	uint64_t sequence = 0;
++	for (;;) {
++		char line[96];
++		uint32_t first = __atomic_load_n(&s->first.phase, __ATOMIC_ACQUIRE);
++		uint32_t exited = __atomic_load_n(&s->exit.phase, __ATOMIC_ACQUIRE);
++		uint64_t count = __atomic_load_n(&s->svc_count, __ATOMIC_RELAXED);
++		uint32_t started = __atomic_load_n(&s->observer_start, __ATOMIC_ACQUIRE);
++		/* Refresh sequence changes even if SVC count stalls. READY fields are
++		 * immutable; WRITING is reported numerically as pending, never waited on. */
++		snprintf(line, sizeof(line), "P1 REFRESH=%llu SVC=%llu ID=%llu",
++		    (unsigned long long)++sequence, (unsigned long long)count,
++		    (unsigned long long)s->target.uniqueid);
++		enuma_pid1_write(0, line);
++		snprintf(line, sizeof(line), "FIRST=%u PID=%u UID=%llu START=%u RC=%d", first,
++		    first == EP_READY ? s->first.pid : 0,
++		    first == EP_READY ? (unsigned long long)s->first.uniqueid : 0ULL,
++		    started, started == EP_START_RUNNING || started == EP_START_FAILED ||
++		    started == EP_START_SKIPPED ? s->observer_result : 0);
++		enuma_pid1_write(1, line);
++		snprintf(line, sizeof(line), "TRAP=%d PC=%016llX",
++		    first == EP_READY ? s->first.trap : 0,
++		    first == EP_READY ? (unsigned long long)s->first.pc : 0ULL);
++		enuma_pid1_write(2, line);
++		snprintf(line, sizeof(line), "EXIT_COMMITTED=%u WAIT=%d REASON=%u NS=%u CODE=%016llX",
++		    exited, exited == EP_READY ? s->exit.wait_status : 0,
++		    exited == EP_READY ? s->exit.reason_present : 0,
++		    exited == EP_READY ? s->exit.reason_namespace : 0,
++		    exited == EP_READY ? (unsigned long long)s->exit.reason_code : 0ULL);
++		enuma_pid1_write(3, line);
++		/* No console/proc lock is held across the timed blocking wait. */
++		assert_wait_timeout((event_t)s, THREAD_UNINT, 1000, NSEC_PER_MSEC);
++		thread_block(THREAD_CONTINUE_NULL);
++	}
++}
++
++void
++enuma_pid1_begin(uint32_t pid, uint64_t uniqueid)
++{
++	thread_t observer;
++	if (!ep_begin(&enuma_pid1_state, pid, uniqueid)) {
++		return;
++	}
++	if (!__atomic_load_n(&enuma_pid1_lock_ready, __ATOMIC_ACQUIRE)) {
++		ep_start_complete(&enuma_pid1_state, EP_START_SKIPPED, 0);
++		return;
++	}
++	VCPUTC_LOCK_LOCK();
++	int draw = ep_console_start(&enuma_pid1_console, gc_initialized, gc_enabled);
++	VCPUTC_LOCK_UNLOCK();
++	if (!draw) {
++		ep_start_complete(&enuma_pid1_state, EP_START_SKIPPED, 0);
++		return;
++	}
++	__atomic_store_n(&enuma_pid1_state.observer_start, EP_STARTING, __ATOMIC_RELEASE);
++	kern_return_t kr = kernel_thread_start(enuma_pid1_observer, NULL, &observer);
++	ep_start_complete(&enuma_pid1_state,
++	    kr == KERN_SUCCESS ? EP_START_RUNNING : EP_START_FAILED, kr);
++	if (kr == KERN_SUCCESS) {
++		/* kernel_thread_start uses the normal base priority; no startup failure
++		 * changes PID1 release. Drop the returned caller reference. */
++		thread_deallocate(observer);
++	}
++}
++
++void
++enuma_pid1_svc(uint32_t pid, uint64_t uniqueid, int32_t trap, uint64_t pc)
++{
++	ep_svc(&enuma_pid1_state, pid, uniqueid, trap, pc);
++}
++
++void
++enuma_pid1_exit(uint32_t pid, uint64_t uniqueid, int32_t status,
++    uint32_t present, uint32_t ns, uint64_t code)
++{
++	ep_exit_commit(&enuma_pid1_state, pid, uniqueid, status, present, ns, code);
++}
++
+ void
+ vcputc(char c)
+ {
+@@ -2796,6 +2919,17 @@ vc_initialize(__unused struct vc_info * vinfo_p)
+ void
+ initialize_screen(PE_Video * boot_vinfo, unsigned int op)
+ {
++	/* The lock does not exist at the initial boot call. Publish its readiness
++	 * only after gc_initialize has initialized it. Before that boot is serial. */
++	int ep_lock = __atomic_load_n(&enuma_pid1_lock_ready, __ATOMIC_ACQUIRE);
++	if (ep_lock) {
++		VCPUTC_LOCK_LOCK();
++	}
++	int ep_first_mapping = ep_console_enter(&enuma_pid1_console, boot_vinfo != NULL);
++	if (ep_lock) {
++		VCPUTC_LOCK_UNLOCK();
++	}
++	int ep_boot_owned = 0;
+ 	unsigned int newMapSize = 0;
+ 	vm_offset_t newVideoVirt = 0;
+ 	boolean_t graphics_now;
+@@ -2880,6 +3014,11 @@ initialize_screen(PE_Video * boot_vinfo, unsigned int op)
+ 				newVideoVirt = ml_io_map_unmappable((vm_map_offset_t)new_vinfo.v_physaddr, newMapSize, flags);   /* Allocate address space for framebuffer */
+ 			}
+ 			new_vinfo.v_baseaddr = newVideoVirt + boot_vinfo->v_offset;                     /* Set the new framebuffer address */
++			ep_boot_owned = makeMapping && kernel_map == VM_MAP_NULL &&
++			    newVideoVirt != 0 && new_vinfo.v_baseaddr != 0 &&
++			    new_vinfo.v_depth == 32 && new_vinfo.v_width != 0 &&
++			    new_vinfo.v_height != 0 && new_vinfo.v_width <= new_vinfo.v_rowbytes / 4 &&
++			    (uint64_t)new_vinfo.v_height * new_vinfo.v_rowbytes + boot_vinfo->v_offset <= newMapSize;
+ 		}
+ 
+ #if defined(__x86_64__)
+@@ -3048,6 +3187,13 @@ initialize_screen(PE_Video * boot_vinfo, unsigned int op)
+ 	}
+ #endif
+ 	}
++	if (__atomic_load_n(&enuma_pid1_lock_ready, __ATOMIC_ACQUIRE)) {
++		VCPUTC_LOCK_LOCK();
++		ep_console_leave(&enuma_pid1_console, ep_first_mapping, ep_boot_owned);
++		VCPUTC_LOCK_UNLOCK();
++	} else {
++		ep_console_leave(&enuma_pid1_console, ep_first_mapping, ep_boot_owned);
++	}
+ }
+ 
+ void vcattach(void); /* XXX gcc 4 warning cleanup */
+diff --git a/osfmk/kern/Makefile b/osfmk/kern/Makefile
+index c61af15..4db2770 100644
+--- a/osfmk/kern/Makefile
++++ b/osfmk/kern/Makefile
+@@ -114,6 +114,7 @@ PRIVATE_EXPORT_FILES = \
+ 
+ 
+ XNU_ONLY_EXPORTS = \
++	enuma_pid1.h \
+ 	arcade.h \
+ 	btlog.h \
+ 	cpc.h \
+diff --git a/osfmk/kern/enuma_pid1.h b/osfmk/kern/enuma_pid1.h
+new file mode 100644
+index 0000000..f33c366
+--- /dev/null
++++ b/osfmk/kern/enuma_pid1.h
+@@ -0,0 +1,156 @@
++/* SPDX-License-Identifier: BSD-2-Clause */
++#ifndef ENUMA_PID1_H
++#define ENUMA_PID1_H
++#include <stdint.h>
++
++/* Device patch only: this build is an enuma RAM-root diagnostic, not acceptance. */
++#define ENUMA_PID1_DIAGNOSTIC 1
++enum { EP_EMPTY, EP_WRITING, EP_READY };
++enum { EP_START_NONE, EP_START_SKIPPED, EP_STARTING, EP_START_RUNNING, EP_START_FAILED };
++struct ep_identity { uint32_t phase, pid; uint64_t uniqueid; };
++struct ep_first {
++	uint32_t phase, pid;
++	uint64_t uniqueid, pc;
++	int32_t trap;
++};
++struct ep_exit {
++	uint32_t phase, reason_present, reason_namespace;
++	int32_t wait_status;
++	uint64_t reason_code;
++};
++struct ep_state {
++	struct ep_identity target;
++	uint32_t observer_start;
++	int32_t observer_result;
++	uint64_t svc_count;
++	struct ep_first first;
++	struct ep_exit exit;
++};
++_Static_assert(__atomic_always_lock_free(8, 0), "64-bit atomics must be inline");
++
++/* Single bootstrap writer. Completion code is immutable after a final state;
++ * readers must acquire a final state before reading it. No printf or retry. */
++static inline void
++ep_start_complete(struct ep_state *s, uint32_t status, int32_t result)
++{
++	s->observer_result = result;
++	__atomic_store_n(&s->observer_start, status, __ATOMIC_RELEASE);
++}
++
++static inline int
++ep_claim(uint32_t *phase)
++{
++	uint32_t empty = EP_EMPTY;
++	/* One attempt only: a busy writer is pending, never waited on. */
++	return __atomic_compare_exchange_n(phase, &empty, EP_WRITING, 0,
++	           __ATOMIC_RELAXED, __ATOMIC_RELAXED);
++}
++
++static inline int
++ep_begin(struct ep_state *s, uint32_t pid, uint64_t uniqueid)
++{
++	if (pid != 1 || !ep_claim(&s->target.phase)) {
++		return 0;
++	}
++	s->target.pid = pid;
++	s->target.uniqueid = uniqueid;
++	__atomic_store_n(&s->target.phase, EP_READY, __ATOMIC_RELEASE);
++	return 1;
++}
++
++static inline int
++ep_matches(const struct ep_state *s, uint32_t pid, uint64_t uniqueid)
++{
++	return __atomic_load_n(&s->target.phase, __ATOMIC_ACQUIRE) == EP_READY &&
++	       s->target.pid == pid && s->target.uniqueid == uniqueid;
++}
++
++static inline void
++ep_svc(struct ep_state *s, uint32_t pid, uint64_t uniqueid, int32_t trap, uint64_t pc)
++{
++	if (!ep_matches(s, pid, uniqueid)) {
++		return;
++	}
++	__atomic_fetch_add(&s->svc_count, 1, __ATOMIC_RELAXED);
++	if (!ep_claim(&s->first.phase)) {
++		return;
++	}
++	s->first.pid = pid;
++	s->first.uniqueid = uniqueid;
++	s->first.trap = trap;
++	s->first.pc = pc;
++	__atomic_store_n(&s->first.phase, EP_READY, __ATOMIC_RELEASE);
++}
++
++static inline void
++ep_exit_commit(struct ep_state *s, uint32_t pid, uint64_t uniqueid,
++    int32_t wait_status, uint32_t present, uint32_t ns, uint64_t code)
++{
++	if (!ep_matches(s, pid, uniqueid) || !ep_claim(&s->exit.phase)) {
++		return;
++	}
++	s->exit.wait_status = wait_status;
++	s->exit.reason_present = present;
++	s->exit.reason_namespace = ns;
++	s->exit.reason_code = code;
++	__atomic_store_n(&s->exit.phase, EP_READY, __ATOMIC_RELEASE);
++}
++
++/* All gate operations are under VCPUTC_LOCK, except pre-lock-init boot setup.
++ * No framebuffer pointer is retained here. A transition lock acquisition drains
++ * the only reader, which holds that same lock for at most 16 characters. */
++struct ep_console_gate {
++	unsigned int seen_mapping, eligible, revoked, started, transitions;
++};
++
++static inline int
++ep_console_enter(struct ep_console_gate *g, int has_info)
++{
++	int first = has_info && !g->seen_mapping;
++	if ((has_info && g->seen_mapping) || g->started) {
++		g->revoked = 1;
++		g->eligible = 0;
++	}
++	if (has_info) {
++		g->seen_mapping = 1;
++	}
++	g->transitions++;
++	return first;
++}
++
++static inline void
++ep_console_leave(struct ep_console_gate *g, int first, int boot_owned_valid)
++{
++	if (first) {
++		if (boot_owned_valid && !g->revoked) {
++			g->eligible = 1;
++		} else {
++			g->revoked = 1;
++		}
++	}
++	g->transitions--;
++}
++
++static inline int
++ep_console_start(struct ep_console_gate *g, int initialized, int enabled)
++{
++	if (!initialized || !enabled || !g->eligible || g->revoked ||
++	    g->started || g->transitions) {
++		return 0;
++	}
++	g->started = 1;
++	return 1;
++}
++
++static inline int
++ep_console_can_write(const struct ep_console_gate *g, int enabled)
++{
++	return g->started && g->eligible && !g->revoked && !g->transitions && enabled;
++}
++
++#ifndef ENUMA_PID1_HOST_TEST
++void enuma_pid1_begin(uint32_t, uint64_t);
++void enuma_pid1_svc(uint32_t, uint64_t, int32_t, uint64_t);
++void enuma_pid1_exit(uint32_t, uint64_t, int32_t, uint32_t, uint32_t, uint64_t);
++#endif
++#endif
+diff --git a/osfmk/kern/startup.c b/osfmk/kern/startup.c
+index dfa5da2..be397b4 100644
+--- a/osfmk/kern/startup.c
++++ b/osfmk/kern/startup.c
+@@ -75,6 +75,7 @@
+ #include <mach/task_special_ports.h>
+ #include <mach/vm_param.h>
+ #include <kern/assert.h>
++#include <kern/enuma_pid1.h>
+ #include <kern/mach_param.h>
+ #include <kern/misc_protos.h>
+ #include <kern/clock.h>
+@@ -713,6 +714,10 @@ kernel_bootstrap_thread(void)
+ 	/*
+ 	 * This will start displaying progress to the user, start as early as possible
+ 	 */
++#if ENUMA_PID1_DIAGNOSTIC
++	/* One-time diagnostic text mode; NULL does not touch the mapping. */
++	initialize_screen(NULL, kPETextMode);
++#endif
+ 	initialize_screen(NULL, kPEAcquireScreen);
+ 
+ 	/*

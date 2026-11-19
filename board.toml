@@ -13,7 +13,7 @@ kit = "enuma"
 
 [components]
 # 仅列输入已满足的组件；存储/显示/输入/GPU 待板级输入与 ABI 审查后按规范 ID（ShengUfs、GopFramebuffer…）追加。
-include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot", "RamBlock"]
+include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot", "RamBlock", "ShengUfs"]
 
 [kernel]
 defconfig = "enuma_defconfig"
@@ -38,6 +38,10 @@ archives = [
   "prepare-ram-block-audit.py",
   "build-virtio-mmio-bindings.py --component RamBlock --directory build/ram-block",
   "build-enuma-ram-block-store.py",
+  "component:ShengUfs",
+  "build-enuma-ufs-observe.py",
+  # Explicit local donor/reference/manifest hashes; absent inputs fail closed.
+  "build-enuma-platform-power.py --inputs build/sheng-platform-power/inputs.json",
 ]
 
 [device_tree]
@@ -68,7 +72,7 @@ size_mib = 160
 loader = "firmware"
 title = "UniXNU"
 tools = true
-kernel_args = ["-v", "serial=3", "rd=md0-ramblock"]
+kernel_args = ["-v", "serial=3", "rd=md0-ramblock", "pmgr=2", "native-ufs-observe-reuse=1"]
 # Original OS allow-list plus the restore-only v1->v2 representation adapter
 # (267 unchanged hash/type/flags entries, category/reserved=0; see prepare-restore-trust.py).
 trust_cache_sha256 = ["7416ca4f8377146626bb284e2133c76bee6cb4e3ee0af5d648b186235a7323a7", "8900d6a93d7a59ce1a872a5c081e559f4240a218f97e12d44d22dda46644d68f", "750b5d8ac5f5b52b8fd02d261caf96dd318db0904b3651ca05d9ae4939de488a"]
