@@ -152,12 +152,25 @@ hide whether the volume content or the device tree is the actual input.
 
 ### Clock advancing slower than wall time
 
-The user reports that screen timestamps advance noticeably slower than real time. A
-measurement is in progress and there is no ratio yet. If the ratio turns out to be
-significant, the first thing to check is the timebase (`timebase-frequency` in the ADT
-`/cpus` node, `devicetree.py:354`, taken from the hardware DTS `cpus` node), and only
-after that scheduler/physical-CPU throughput — i.e. distinguish "the clock runs slow" from
-"one CPU is busy keeping up". Nothing in this round establishes either.
+The user reports that screen timestamps advance noticeably slower than real time. Measured
+afterwards from the same recording (no new device run): over 157.3 s of wall time the
+**on-screen displayed timestamps** advanced 0.646 s, i.e. a **display-timestamp advance
+ratio ≈ 0.0041 (about 1/243)**. That is a statement about the displayed timestamps only —
+**not** "the XNU clock runs 243× slow". The per-segment ratio fluctuated between `0.00005`
+and `0.026`, one segment went backwards (−7.45 ms), and one `Flushed 52 logs` line carried
+a display time about 60 s ahead of its neighbours, **source and timebase undetermined**
+(the evidence does not show that user-space and kernel log lines come from different
+timebases). A second observation group — 31 µs of log time spanning about 5 s, ≈ 1/161,000
+— is three orders of magnitude off the overall ratio, so the two groups did not measure the
+same layer and must not be combined.
+
+The ADT **input** value is correct: `cpu0` is `state=running` with
+`timebase-frequency=19200000` (`0x0124F800`), the other seven CPUs are `waiting`, and
+`pe_identify_machine.c:57-82` consumes it in place of the 24 MHz default. That only rules
+out "the ADT carries the wrong frequency". The runtime callback value, `rtclock_sec_divisor`
+and the output-layer conversion were never read back, so **a timebase/conversion error is
+not excluded**, and neither is a slow scheduler/one busy CPU. Nothing in this round
+establishes which layer is wrong.
 
 ### What is verified here, and what is not
 
@@ -193,8 +206,9 @@ Device behaviour, from the transcription only:
 - **Cannot** prove persistence of any kind, nor that `ephemeral-storage` had any effect.
 - **Cannot** read the three undetermined phenomena (persona 6, bootstrap-path ENOENT,
   `decmprs` err 14) as either harmless or blocking.
-- **Cannot** make any timing claim about device speed; the clock observation is
-  user-reported and unquantified.
+- **Cannot** make any timing claim about device speed: the only number is the on-screen
+  timestamp advance ratio measured off the recording (≈ 1/243, see above), which says
+  nothing about how much work per second actually executed.
 
 Stage 6 stays **not passed**; mode 1/2 stay unauthorized; the default
 `NoAccessPolicy`/`NoContract` and the formal stage record (1–2) are unchanged.
@@ -229,7 +243,9 @@ claim is spent. What a rerun would have to capture to settle the open points:
    an explicit statement that the driver prints none on success;
 3. the `Failed to bootstrap path` set repeated verbatim with errno, so it can be compared
    against the OS's own expectations rather than guessed;
-4. the ADT `/cpus` `timebase-frequency` actually consumed by this image.
+4. the ADT `/cpus` `timebase-frequency` this image consumes **and what is derived from it
+   at runtime** (`rtclock_sec_divisor`, the output-layer conversion) — the ADT input alone
+   does not settle the layer.
 
 Status: `self-checked`, record only. Single-run observation, no independent `vision`
 read, no media retained, no stage promotion.
