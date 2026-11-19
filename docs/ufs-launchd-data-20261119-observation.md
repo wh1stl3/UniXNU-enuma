@@ -299,8 +299,9 @@ exec
 ### 3. 这是绕开，不是修好
 
 SystemOS 卷的 sealed-roothash 语义在 owner 链下**没有执行**：我们只做挂载与 union，没有走 Apple 的
-sealed volume 验证路径。本节的卷内核对也顺带确认 OS 卷里 `/usr/lib/libSystem.B.dylib` 与 `/usr/libexec`
-都存在（见第 5 条控制组），所以 11-18 的失败是「视图/路径解析缺失」，不是「卷里没有这个文件」。
+sealed volume 验证路径。本节的卷内核对也顺带看到 OS 卷 fs 树里存在 `libSystem.B.dylib`（父目录 oid
+`854`）与 `libexec`（父目录 oid `834`）两个目录项，所以 11-18 的失败更可能是「视图/路径解析缺失」，
+而不是「这颗库在卷里没有」——但父目录 oid 到完整路径的映射本轮没有解出，这一句只到目录项一级。
 
 ### 4. 阶段不提升
 
