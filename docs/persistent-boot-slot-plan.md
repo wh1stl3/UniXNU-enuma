@@ -210,7 +210,7 @@ LUN0 的 34 条在 §1.2；by-name 里 `super`→`sda29`（103）、`userdata`�
 | 官方表述 | 「传输镜像并启动一次」（`UniXNU/docs/zh/guide/boot.md:38-41`） | 「刷写会覆盖该分区」（同文件 `:22-28` 用于 userdata） |
 | 本板实机 | 2026-11-09 起多次成功，最近两次 2026-11-16（`fastboot boot` exit 0，无刷写） | 2026-10-21 对 `boot_a` 执行 1 次（`flash_attempts: 1`），回读 `8f40f0c9…` 校验通过，Android 带 root 启动成功 |
 | 依赖 | bootloader 解锁且接受自定义镜像（官方要求，`guide/requirements.md:114`） | 同上 + 分区容量与 AVB/vbmeta 接受镜像 |
-| 断电重启后 | 回原槽内容（D2：`docs/decisions.md:15`「设备自行重启会回 Android」） | 走该槽内容 |
+| 断电重启后 | 回原槽内容（D2：`docs/decisions.md:15`「设备自行重启会回 Android」；该句已按 2026-11-19 实测加注——warm/PSCI reset 回 fastboot，冷启动未测，见 `docs/enuma-fastboot-entry-and-pmgr-write.md`） | 走该槽内容 |
 
 参考（**别板**，不可当本板结论）：alioth 记录 `fastboot boot` 不写槽、`flash` 落到 `boot_b`（`UniXNU/docs/zh/devices/alioth.md:666`）。
 

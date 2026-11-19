@@ -186,6 +186,43 @@ Device behaviour, from the oral report only:
 Stage 6 stays **not passed**; the default `NoAccessPolicy`/`NoContract`, mode 1/2
 being unauthorized, and the formal stage record (1–2) are unchanged.
 
+### Why a long press of the power key lands in fastboot
+
+Asked after this run (the user held the power key on the `launchd` log screen and got
+fastboot): the cause is our own firmware's PON configuration, not anything this round
+changed.
+
+1. **The firmware programmes the PMIC PON on every run.** `SecMain` calls `RamLogReset ()`
+   unconditionally (`uefi-enuma/Silicon/Silicium/SiliciumPkg/Sec/Sec.c:136`), which calls
+   `PrepareWarmFastboot ()` (`uefi-enuma/Platforms/Xiaomi/enumaPkg/Library/RamoopsLogLib/RamoopsLogLib.c:404-413`).
+   That sets the reboot reason to `bootloader` (`:324`, `PON_SOFT_RB_SPARE`), and sets the
+   power key's and the power+volume-down combo's S2 reset **type** to warm (`:334-342`,
+   `PON_KPDPWR_S2_CTL/CTL2` and `PON_COMBO_S2_CTL/CTL2`), next to `PS_HOLD` (`:329`). The file's
+   header states the intent verbatim (`:4-5`): from SEC's first line on, the power key's long
+   press is "a warm reset with the bootloader reason".
+2. **Nothing rewrites it while our image runs.** The same file records the boundary: "Linux sets
+   its own types from the device tree when it starts" (`:260-264`). On a host `fastboot boot`,
+   Android never starts, so the configuration written by our SEC is the one in effect under XNU.
+   The same mechanism was already observed from the software side: the stage-5 PSCI
+   `SYSTEM_RESET` returned to fastboot, `bootreason=bootloader`
+   (`docs/entry-probe-bisect.md:21`).
+3. **The exclusions hold.** Nothing in `UniXNU-enuma/package/**` or
+   `uefi-enuma/Platforms/Xiaomi/enumaPkg/**` mentions `misc`/`BCB`/`bootcmd`/`set_active`, no
+   `fastboot flash` appears under `UniXNU-enuma/scripts/**`, and every `fastboot flash boot…`
+   mention in `docs/` is hypothetical; no `slot-retry-count`/`slot-successful` record exists. The
+   boot slot was never written, and `misc` was never written.
+4. **Not caused by this round's change.** r3 differs from r2 only by the ADT property
+   `vmm-present`; kernel, trust cache and boot arguments are byte-identical, and PON programming
+   is firmware code this round did not rebuild — the packaged firmware is the pre-existing
+   `SILICIUM_UEFI.fd` `e524988b…`. An ADT property cannot reach the PMIC.
+
+Full evidence table, the PMGR read-modify-write disclosure
+(`UniXNU-enuma/package/ShengPlatformPower.cpp:127-131`, gated on the `pmgr` boot argument at
+`:85`, target not derivable from source, unrelated to the fastboot entry), and the
+`docs/decisions.md:15` conflict are in
+[`enuma-fastboot-entry-and-pmgr-write.md`](enuma-fastboot-entry-and-pmgr-write.md), which is the
+authoritative detail for this mechanism.
+
 ### Claim and marker state
 
 | marker | state |
