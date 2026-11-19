@@ -118,7 +118,7 @@ Also on screen, undetermined:
 | # | Criterion fixed before the round | Result | Basis |
 | --- | --- | --- | --- |
 | 1 | no panic in the observed window | **hit** | transcript: no `panic`; several minutes of continuous output |
-| 2 | Data (scratch) volume mounted | **strong inference, not directly observed** | the r4 kernel panics on mount failure by design (`offline scratch Data mount failed: %d`); the boot reached `Early boot complete` — launchd itself running — with no such panic. No positive "mounted" line, no I/O against the volume, no volume-list line was captured |
+| 2 | Data (scratch) volume mounted | **design implication + observation, no positive log and no I/O** (recorded as "strong inference" on 11-19; upgraded by binary-level reading, see the 2026-11-20 section) | the r4 kernel panics on mount failure by design (`offline scratch Data mount failed: %d`, one of 5 `_panic` branches in `_load_init_program`); the boot reached `Early boot complete` — launchd itself running — with no such panic. Still no positive "mounted" line, no I/O against the volume, no volume-list line was captured |
 | 3 | launchd early boot (bootstrap/ondemand domains) | **established** | `Early boot complete`, `entering bootstrap mode`, `SOURCE_ATTACH` for user and system domains, `exiting bootstrap mode`/`exiting ondemand mode` |
 | 4 | service bodies stable | **not established** | `SOURCE_ATTACH, code = 0` only says launchd handed off; pid 31 → 61 says spawning continued, not that earlier services stayed up |
 | 5 | launchd initialization complete | **not established** | no launchd completion milestone in the transcript; the window ends with services still spawning |
@@ -138,10 +138,14 @@ here is one observation, not a root-cause closure.
 1. **persona type 6 (`kpersona_find_by_type` → ESRCH).** Appears in both domains and
    repeats, yet the services still get `SOURCE_ATTACH, code = 0`. Neither blocking nor
    harmless has been shown. Type 6's meaning in this OS build was not looked up this round.
+   **追加（2026-11-20 二轮离线核验）**：type 6 = `PERSONA_SYSTEM_PROXY`（`bsd/sys/persona.h:45`，
+   枚举 `:35-51`）。ESRCH 只说明内核里没有该类型的 persona；**阻塞还是无害仍未定性**。
 2. **`Failed to bootstrap path: …` (ENOENT) for `NanoLaunchDaemons`,
    `com.apple.tombf.bits_daemon.plist`, `/usr/AppleInternal/LaunchDaemons`.** These may be
    paths that legitimately do not exist on this OS/device class, or missing volume
    content. Not determined this round; no attempt was made to create them.
+   **追加（2026-11-20 二轮离线核验）**：两卷卷内都查过，三条路径都不存在，卷内也没有任何 plist
+   引用它们——按「donor 本就缺失的预期噪声」处理，见文末「二进制级判读升级」第 5 条。
 3. **`decmprs.c:1894/1922: cluster_copy_upl_data err 14`.** Printed during the run. If
    `14` is a BSD errno it would be `EFAULT`, but that was not established for this call
    site, and the failing decompression stream was not identified. Repeated failures of a
@@ -197,7 +201,10 @@ Device behaviour, from the transcription only:
   that the console showed launchd's early boot through the bootstrap/ondemand transition
   with no panic in the observed window.
 - **Cannot** prove the Data volume mounted: the inference rests on "failure panics" plus
-  "no panic", and no positive mount line or I/O was observed.
+  "no panic", and no positive mount line or I/O was observed. (2026-11-20: the binary shows
+  that these two `_mount` calls have only panic exit paths, which makes the implication
+  sound for both the SystemOS union mount and the scratch Data mount — still no I/O and no
+  positive log; see the section at the end of this file.)
 - **Cannot** prove any service is stable, that launchd finished initializing, that a
   shell/desktop exists, or that SpringBoard is running (pid 5 only *logged* about its
   exec source).
@@ -249,3 +256,105 @@ claim is spent. What a rerun would have to capture to settle the open points:
 
 Status: `self-checked`, record only. Single-run observation, no independent `vision`
 read, no media retained, no stage promotion.
+
+## 二进制级判读升级（2026-11-20，二轮离线核验）
+
+这一节是 2026-11-20 二轮离线核验的**追加判读**，不改上面 11-19 的原始转录与初判；只有两处按本节
+修正了措辞（判据表第 2 行、`Cannot` 里的 Data 一条），已在原处标注。本轮无构建、无设备动作、
+无 claim、未写 `out/`，所有核对都是主机只读。
+
+### 1. `_load_init_program` 的内联顺序（r4 内核，`0xfffffff00bd09b4c`）
+
+主控侧 reviewer 的二进制级核读（本节只记录它的结论，不重新论证）给出的顺序：
+
+```
+_native_verified_block_root_authorized
+_native_verified_block_volume_device
+_native_owner_publish_boot_manifest
+_commpage_update_dyld_flags
+_mount SystemOS 8846FE78-2910-4297-AF97-D59BB6F8FC16 -> "/"  (MNT_RDONLY|MNT_UNION)
+_mount scratch Data 62F1BC9E-4868-4CFF-BF7E-59AFCD474B4F -> "/private/var"
+_memorystatus_init_at_boot_snapshot
+exec
+```
+
+两个 `_mount` 之后没有「失败但继续」的返回路径：失败串
+`"offline owner SystemOS mount failed: %d"`（内核映像 offset 74104813）与
+`"offline scratch Data mount failed: %d"`（offset 74104860）都在，`_load_init_program`
+内共 5 处 `_panic` 分支。
+
+**因此**：r4 屏上出现 launchd 输出 ⇒ 这两次 `_mount` 都返回 0 ⇒ SystemOS 以
+`MNT_RDONLY|MNT_UNION` 挂在 `/`、scratch Data 挂在 `/private/var`。
+
+这是**设计蕴含 + 观测**，不是正向日志：仍然没有任何 "mounted"/volume-list 行，也没有任何 I/O。
+判据表第 2 行因此从「强推断」改为「设计蕴含 + 观测支持，无正向日志、无 I/O」——提升的是
+「失败必 panic」这一支的确定性，**不是** I/O 证据。
+
+### 2. 11-18 的 `Library not loaded: /usr/lib/libSystem.B.dylib` 闭环
+
+11-18 那颗内核里没有 owner 挂载代码：`_native_owner_*`（含 `_native_owner_publish_boot_manifest`）
+符号 idx 全为 -1。没有 owner 挂载就没有 SystemOS 的 union 视图，dyld 拿不到 cryptex 共享缓存，
+于是 `/usr/lib/libSystem.B.dylib` 解析失败并 panic。r4 起这段代码在、视图在，该 panic 不再出现。
+
+### 3. 这是绕开，不是修好
+
+SystemOS 卷的 sealed-roothash 语义在 owner 链下**没有执行**：我们只做挂载与 union，没有走 Apple 的
+sealed volume 验证路径。本节的卷内核对也顺带确认 OS 卷里 `/usr/lib/libSystem.B.dylib` 与 `/usr/libexec`
+都存在（见第 5 条控制组），所以 11-18 的失败是「视图/路径解析缺失」，不是「卷里没有这个文件」。
+
+### 4. 阶段不提升
+
+阶段 6 **仍不通过**。成立的是 launchd 早期启动；launchd 初始化完成、服务稳定、显示、像素输出、
+持久化均未成立；mode 1/2 未放行，默认 `NoAccessPolicy`/`NoContract` 与正式阶段记录（1–2）不变。
+
+### 5. 三条 `Failed to bootstrap path` 与 persona type 6（同轮卷内只读核对）
+
+卷字节仍在主机上，未重新下载、未重新解包：
+
+| 窗口 | 文件 | 字节 | APFS 卷 | 卷 UUID |
+| --- | --- | --- | --- | --- |
+| OS | `out/userdata-clean-20261112/OS.raw`（UDIF `044-76040-038.dmg` 展开） | 6,077,580,800 | `DawnUpdate21H461.J120J121J207J208OS` | `04769D26-2CA0-4825-B443-E2E5F88300F2` |
+| SystemOS | `out/userdata-clean-20261112/044-76034-038.dmg`（本身即 raw） | 3,303,014,400 | `DawnUpdate21H461.J120J121J207J208SystemCryptex` | `8846FE78-2910-4297-AF97-D59BB6F8FC16` |
+
+容器/卷/omap 布局沿用同目录 `apfs-check.py` 的既有解读结果（容器基址 OS `+17408` / SystemOS `0`，
+块 4096，卷 xid 418 / 14）。路径存在性用目录记录键（dir-record key）的**结构判据**在卷字节
+上直接扫：同一个偏移上必须同时成立
+
+1. `j_key` 8 字节，高半字节 = 9（`APFS_TYPE_DIR_REC`）；
+2. 紧随其后的 4 字节 `name_len_and_hash`，低 10 位 = 名字长度（允许 ±1，含 NUL 写法）；
+3. 名字字节逐个可打印 ASCII，且与目标串逐字节相等；
+4. 名字之后是 NUL。
+
+四条同时成立才计一次命中，因此文件内容里出现的同一字符串（plist 路径、二进制里的常量）不会被算成
+目录项。判据用控制组证明有效：`private-dir` 在 SystemOS 卷命中 7 处；`Applications`、`LaunchDaemons`、
+`LaunchAgents`、`libexec`、`libSystem.B.dylib` 在 OS 卷均命中（`LaunchDaemons` 的父目录 oid `18`，
+`libSystem.B.dylib` 的父目录 oid `854`）。
+
+| 路径 | OS 卷 | SystemOS 卷 | 判定 |
+| --- | --- | --- | --- |
+| `/System/Library/NanoLaunchDaemons` | 无目录项 | 无目录项 | donor 里不存在 |
+| `com.apple.tombf.bits_daemon.plist`（同时查 `com.apple.tomb.bits_daemon.plist`） | 无目录项 | 无目录项 | donor 里不存在 |
+| `/usr/AppleInternal/LaunchDaemons` | 无目录项，且 `/usr/AppleInternal` 全卷 0 次 | 无目录项，`/usr/AppleInternal` 0 次 | donor 里不存在 |
+
+引用者：卷内**没有**任何 plist（或其它文件）作为这三条路径的引用者。`/System/Library/NanoLaunchDaemons`
+作为文本只出现在 OS 卷一段长度前缀 ASCII 路径表里（offset `0x146b42d54`、`0x146b43808`、`0x146b48c27`，
+≈5.48 GB 处），而且拼写是 `NanoLaunchDaemonsAltAccount`；`/usr/AppleInternal`、`tombf`、`tomb.bits`、
+`bits_daemon` 在两卷的出现次数为 0（SystemOS 唯一一处 `tombf` 混在一段带非 ASCII 字节的数据里，
+上下文 `…ATXPrasononorC~…AutombfRide…`，不是路径或 plist 引用）。承载那段路径表的文件本轮没有解析
+（fs-tree 遍历未完成），这不影响「donor 里没有这三条路径」这一判定。
+
+判读：三条 `Failed to bootstrap path` 是 **donor 本来就缺失的预期噪声**，不是卷内容缺失、也不是 union
+视图缺陷；可以从「未定性」清单里剔除。措辞边界：屏上路径是主控转录，`tombf`/`tomb` 两种拼写都查过。
+
+persona：`kpersona_find_by_type` 的 **type 6 = `PERSONA_SYSTEM_PROXY`**
+（`bsd/sys/persona.h:45`，枚举 `:35-51`，`PERSONA_INVALID 0` … `PERSONA_ENTERPRISE 8`；副本在
+`out/root-match-assertion-20261118/source-xnu/`）。ESRCH 只说明内核里没有这一类型的 persona；
+**阻塞还是无害仍未定性**，本节不判读。
+
+### 本节不证明
+
+- 不证明 launchd 在推进（还是同一批服务 respawn）：仍缺一次带时间戳的捕获。
+- 不证明服务稳定、launchd 初始化完成、显示/像素输出、持久化。
+- 卷内核对证明的是 **donor 卷内容**（也就是写进 `userdata` 的那批字节），不证明设备侧实际 union 视图
+  的每一次查找；但三条路径在两卷都不存在，union 两侧都无从提供。
+- 反汇编与 offset 归属来自主控侧 reviewer 的核读，本轮未复跑反汇编。

@@ -15,6 +15,7 @@
 3. **方向决定（用户 2026-11-19）**：**先接显示，再开多核**。官方没要求早期多核，只把"每核进入入口并收到 IPI"列为验收项。r5 显示候选（r4 + `libEnumaGopLegacy.a` + 9 个 `offline-legacy-*` + `sheng-vsync=60`，store mode 0 不变）已构建，**结论见下条 5**；仍未经任何 review。
 4. **屏上时间戳推进比例已量测**（录像逐帧时间戳对照，非上机新增）：同一段录像 217.8 s（1080p@60、竖拍旋转），屏上最后一条完整日志行 t=60 s 为 `03:15:42.448257`、t=217 s 为 `03:15:43.094619`——**157.3 s 真实时间里屏上显示的时间戳只前进 0.646 s，屏上时间戳推进比例 ≈ 0.0041（约 1/243）**。这是**屏上显示时间戳**的推进比例，**不是「XNU 时钟慢 243 倍」**。分段在 `0.00005–0.026` 之间波动，**不恒定**。另有三条异常：① 出现一次**倒退** `42.448257` → `42.440807`（−7.45 ms）；② 一条 `03:16:43.368661 (Notice): Flushed 52 logs [limit: 20]` 的**显示时间比邻行超前约 60 s（`03:15:42.7x`），来源与时基未定**——现有证据不能证明用户态与内核日志异源；③ 无固定步长。另有一组观测 **31 µs 对应约 5 s ≈ 1/161,000**，与整体比例相差三个量级，说明**两次测的不是同一层，不能混用**。**时基结论已收窄**：ADT 的**输入值正确**（`cpu0` `state=running` 且带 `timebase-frequency=19200000`/`0x0124F800`，其余七个 cpu 为 `waiting`，`pe_identify_machine.c:57-82` 会读到它并覆盖 24 MHz 默认），但**运行时回调值、`rtclock_sec_divisor`、输出层换算均未验证**，因此**不能**据此排除时基/换算错误。**机制未定性，在查；不得据此写任何结论性归因。**
 5. **r5 显示候选构建完成，但显示调用点未编译**：`out/ufs-sm8250-launchd-display-20261119-r1/` 已构建（`boot.img` 169,951,232 B `91b1e573…`），`libEnumaGopLegacy.a` 已 `-force_load`、六符号唯一归属、零 undefined，`nm` 与 `native-link.map` 可核；**但 r4 的 `bsd_init.o`/`IOUserClient.cpo` 是 `XNU_NATIVE_LEGACY_DISPLAY=0` 编的**——反汇编里 `_native_legacy_display_probe`/`_late_probe` 调用点 **0 处**，`__GLOBAL__sub_I_NativeLegacyDisplay.cpp` **未进** `__mod_init_func`。故 **r5 上机不会产生显示动作**，等价于 r4 + 死符号。接线须按 GOP r5 `build.py:97-108` 用 `XNU_NATIVE_LEGACY_DISPLAY=1` 重编那两个启动链单元（属下一步，**未做**）。
+6. **r4 判读二轮离线升级（2026-11-20）**：`_load_init_program` 的两个 `_mount` 只有 panic 出口，故「出现 launchd ⇒ 两卷挂载返回 0」；三条 bootstrap ENOENT 经卷内核对定性为 donor 缺失的噪声；persona type 6 = `PERSONA_SYSTEM_PROXY`。细节只在 [`ufs-launchd-data-20261119-observation.md`](ufs-launchd-data-20261119-observation.md) 的「二进制级判读升级」一节，本节不复述；阶段不提升。
 
 ## claim / marker 状态（全部）
 
@@ -46,12 +47,13 @@
 
 ## 待定项（都不是阻塞，但没有结论）
 
+- **瓶颈（2026-11-20）**：launchd 究竟是「在推进」还是「同一批服务反复 respawn」，缺的是一次**带时间戳的捕获**（视频或串口，长到能看出 pid/服务名是否重复、先前服务是否还在）；缺口在**捕获侧**，不在输出侧——内核/launchd 已经在逐服务打印，内核**不需要为此改动**。
 - **时钟（已量测、机制待查）**：157.3 s 真实时间里**屏上显示的**时间戳只走 0.646 s，**屏上时间戳推进比例 ≈ 0.0041（约 1/243）**——这是显示层的比例，**不是「XNU 时钟慢 243 倍」**；分段 `0.00005–0.026` 波动、不恒定；一次 **−7.45 ms 倒退**（`42.448257` → `42.440807`）；一条 `Flush 52 logs` 行的显示时间比邻行**超前约 60 s**，**来源与时基未定**，现有证据不能证明用户态与内核日志异源；另一组观测 **31 µs 对应约 5 s ≈ 1/161,000** 与整体比例不一致，**两次测的不是同一层，不能混用**。**未排除**时基/换算：ADT 的**输入值正确**（`cpu0` `state=running` 且 `timebase-frequency=19200000`，`pe_identify_machine.c:57-82` 会读到它；其余七核 `waiting`），但**运行时回调值、`rtclock_sec_divisor`、输出层换算均未验证**，ADT 输入正确不足以排除时基/换算错误。**机制未定性**，在查，不得写成任何结论性归因；分层探针见"下一步顺序"第 2 条。
-- **persona type 6**：`kpersona_find_by_type()` 失败（ESRCH）/`Unable to find persona with type 6` 在 user/501 与 system 两域都出现，服务仍 spawn 成功；既不证明阻塞，也不证明无害。
+- **persona type 6**：`kpersona_find_by_type()` 失败（ESRCH）/`Unable to find persona with type 6` 在 user/501 与 system 两域都出现，服务仍 spawn 成功；既不证明阻塞，也不证明无害。**2026-11-20 补充（不是结论）**：type 6 = `PERSONA_SYSTEM_PROXY`（`bsd/sys/persona.h:45`，枚举 `:35-51`），ESRCH 只说明内核里没有该类型的 persona。
 - **`ephemeral-storage = 1`**：除"跳过首次迁移"之外的实际语义未验证，后续若做持久化要注意它与 store 的相互作用。
-- **三条 `Failed to bootstrap path`**（`NanoLaunchDaemons`、`com.apple.tombf.bits_daemon.plist`、`/usr/AppleInternal/LaunchDaemons`）：可能是本机型本就缺失，也可能是卷内容缺失；**不要**手工补这些路径。
+- **三条 `Failed to bootstrap path`**（`NanoLaunchDaemons`、`com.apple.tombf.bits_daemon.plist`、`/usr/AppleInternal/LaunchDaemons`）：**2026-11-20 已定性为 donor 本就缺失的预期噪声**——在两卷（OS `04769D26-…`、SystemOS `8846FE78-…`）按目录记录键结构判据扫过，三条都不存在，卷内也没有任何 plist 引用它们；`tombf`/`tomb` 两种拼写都查，`/usr/AppleInternal` 两卷 0 次。判读与判据见 [`ufs-launchd-data-20261119-observation.md`](ufs-launchd-data-20261119-observation.md) 的「二进制级判读升级」第 5 条。仍然**不要**手工补这些路径。
 - **`decmprs.c:1894/1922: cluster_copy_upl_data err 14`**：调用点与失败流未定位。
-- **11-18 的两个未解项**（`system-volume-auth-blob` ENOENT、preboot ENOENT）本轮没有追，仍无结论。
+- **11-18 的两个未解项**（`system-volume-auth-blob` ENOENT、preboot ENOENT）**本轮仍未追**，无结论。2026-11-20 的卷内核对只覆盖上一条的三条 bootstrap 路径，不覆盖这两项；它们与 r4 的 owner 挂载链是否同源也未查。
 
 ## 指针
 
