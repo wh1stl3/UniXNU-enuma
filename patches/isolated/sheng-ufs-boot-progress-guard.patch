@@ -1,0 +1,10 @@
+--- a/NativeUfs.cpp
++++ b/NativeUfs.cpp
+@@ -136,1 +136,3 @@
++#if defined(XNU_BOOT_PROGRESS) && XNU_BOOT_PROGRESS
+ void boot_progress_poll (void) __attribute__((weak));
++#endif
+@@ -1968,1 +1970,3 @@
++#if defined(XNU_BOOT_PROGRESS) && XNU_BOOT_PROGRESS
+       if (boot_progress_poll) boot_progress_poll ();
++#endif
