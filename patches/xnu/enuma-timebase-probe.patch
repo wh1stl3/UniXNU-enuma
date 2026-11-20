@@ -1,0 +1,59 @@
+diff --git a/bsd/kern/bsd_init.c b/bsd/kern/bsd_init.c
+--- a/bsd/kern/bsd_init.c
++++ b/bsd/kern/bsd_init.c
+@@ -106,6 +106,7 @@
+ #include <kern/task.h>
+ #include <kern/ast.h>
+ #include <kern/zalloc.h>
++#include <os/atomic_private.h>
+ #include <kern/ux_handler.h>            /* for ux_handler_setup() */
+ #include <kern/sched_hygiene.h>
+ 
+@@ -1253,6 +1254,37 @@
+ }
+ #endif
+ 
++/* Enuma diagnostic, derived from XNU's time and relaxed atomic interfaces.
++ * Disabled unless explicitly enabled by the isolated r7 recipe. */
++#if defined(XNU_ENUMA_TIMEBASE_PROBE) && XNU_ENUMA_TIMEBASE_PROBE
++static _Atomic uint32_t enuma_timebase_sequence;
++
++static void
++enuma_timebase_probe(void)
++{
++	uint32_t seq = os_atomic_inc_orig(&enuma_timebase_sequence, relaxed);
++	uint64_t abstime_ns, cntvct;
++	struct timeval tv;
++
++	if (seq != 0) {
++		kprintf("enuma-tb: skip seq=%u\n", seq);
++		return;
++	}
++
++	absolutetime_to_nanoseconds(mach_absolute_time(), &abstime_ns);
++	microtime(&tv);
++	__asm__ volatile("mrs %0, cntvct_el0" : "=r"(cntvct));
++	kprintf("enuma-tb: enter seq=%u cntvct=%llu abstime_ns=%llu cal=%lld.%06d\n",
++	    seq, cntvct, abstime_ns, (long long)tv.tv_sec, tv.tv_usec);
++	IOSleep(5000);
++	absolutetime_to_nanoseconds(mach_absolute_time(), &abstime_ns);
++	microtime(&tv);
++	__asm__ volatile("mrs %0, cntvct_el0" : "=r"(cntvct));
++	kprintf("enuma-tb: exit seq=%u cntvct=%llu abstime_ns=%llu cal=%lld.%06d\n",
++	    seq, cntvct, abstime_ns, (long long)tv.tv_sec, tv.tv_usec);
++}
++#endif
++
+ void
+ bsdinit_task(void)
+ {
+@@ -1279,6 +1311,9 @@
+ 
+ 	bsd_init_kprintf("bsd_do_post - done");
+ 
++#if defined(XNU_ENUMA_TIMEBASE_PROBE) && XNU_ENUMA_TIMEBASE_PROBE
++	enuma_timebase_probe();
++#endif
+ 	load_init_program(p);
+ 	lock_trace = 1;
+ }
