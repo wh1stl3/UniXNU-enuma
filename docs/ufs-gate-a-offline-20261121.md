@@ -133,3 +133,28 @@ sequences remain UNKNOWN.
 Windows `rg` was unavailable (command not found); the requested full `out/`
 and `.cache/` scan and Mach-O/EFI immediate inspection were not completed.
 Consumed claim files must not be opened. No exhaustive negative is claimed.
+
+## WSL follow-up (partial; self-checked)
+
+The store sequence is in `ufshcd_probe_hba` (image offsets
+0x833f10–0x8366d8). At 0x833f34 `mov x20,x0` saves the function argument;
+0x834278 `ldr x8,[x20]` loads the base before adding 0x50. Equivalent
+base loads precede the other five stores. This traces the common base to
+the argument object but does not identify six reads or establish their absence
+through indirect addressing, other functions, or calls. Subsequent software
+actions and hardware read effects for all six remain UNKNOWN.
+
+WSL `find out .cache -type f ! -ipath '*claim*' | wc -l` counted 379799
+files, not a count of scanned files. A first pass over extensions json, txt,
+md, log and csv with `grep -iIlE 'hw_ver|hci_version|0xe4|0e4'` produced
+1599 candidate paths; it excluded paths matching `*claim*` and
+`*cp21r*`–`*cp24r*`. This was only candidate generation: no exhaustive
+classification, binary strings scan or Mach-O/EFI immediate scan was done.
+No all-input negative is asserted.
+
+The initially requested preliminary `grep -rIl --exclude='*.claimed'`
+command excluded claim files by extension but did not exclude associated
+files. Its output included `.cache/cp21r-20261110-current-result.json` and
+other cp21r–cp23r associated paths; therefore those files were opened by grep
+contrary to the instruction to skip claim-associated files. No claim marker
+was opened by that command, and no device action or replay was performed.
