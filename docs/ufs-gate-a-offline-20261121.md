@@ -158,3 +158,38 @@ files. Its output included `.cache/cp21r-20261110-current-result.json` and
 other cp21r–cp23r associated paths; therefore those files were opened by grep
 contrary to the instruction to skip claim-associated files. No claim marker
 was opened by that command, and no device action or replay was performed.
+
+## Android userspace exposure: bounded static follow-up
+
+In the existing Android Image, `ufs_qcom_init` reads HC+0xe4 at
+0x820fcc–0x820fd4 and stores major, minor and step at private host offsets
+0x106, 0x104 and 0x102 (0x820fe0–0x820ffc). The straight-line sequence
+after the read does not format or print those values: 0x821094–0x82109c
+loads step, minor and major into w3, w2 and w1 and 0x8210a0 calls
+`ufs_qcom_phy_save_controller_version` at 0x515348 (symbol binding:
+`.cache/ufs-boot-analysis-20261111/decode.json:58-63`). Inspection of the
+callee's Image bytes with Capstone shows 0x515348 loads `[x0,#0xb8]`;
+0x51534c, 0x515350 and 0x515354 store major, minor and step at PHY-private
+offsets 0xe0, 0xe2 and 0xe4 respectively; 0x515358 returns. These PHY
+structure offsets are not HC register addresses. No format string is passed
+to this callee. This does not establish that no later logging path exists.
+
+The pre-existing bounded sysfs inventory is documented in
+`.cache/ufs-boot-offline-20261111/checkpoint.md:11-13` and
+`dynamic-attrs.md:3-20`: the qcom group includes `err_state`, `power_mode`,
+`bus_speed_mode`, `clk_status`, `err_count`; ten separately registered
+attributes and their show handlers were screened there. No identified
+attribute in that bounded analysis exposes the requested version fields.
+Indirect/dynamic registrations, debugfs, other log paths and the PHY copy's
+later consumers were not exhaustively traced; registration and Android access
+permissions are not observed. Consequently userspace exposure is UNKNOWN,
+not proven impossible, and no read command can yet be recommended.
+
+The previously captured Android live device tree is
+`.cache/device-evidence/20261109-live-dt/live.dts:12757-12798`, not an ADT:
+its `ufshc@1d84000` node provides the board controller window (see also
+`docs/ufs-hci30-compat.md:37,56`). The fixed Qualcomm reference
+`.cache/ufs-hci30-compat-20261111/ref/drivers_ufs_host_ufs-qcom.h:33-43`
+labels 0xe4 `REG_UFS_HW_VERSION` in its vendor-specific register enum. The
+reference's exact source identity with this Android Image is not proven.
+No device access or new sampling was performed.
