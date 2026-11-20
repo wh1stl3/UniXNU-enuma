@@ -81,3 +81,55 @@ show software actions but alone cannot prove absence of hardware read side
 effects. A controller-specific register specification or equivalent hardware
 evidence remains necessary for that claim. No such new finding is asserted by
 this review; whether further existing material resolves it is unknown.
+
+## Follow-up: vendor Android image dataflow (partial, self-checked)
+
+**Established in the static image:** the existing
+`.cache/ufs-boot-offline-20261111/ufs-functions.txt:2984-3011,3177-3197`
+identifies `ufs_qcom_init`: entry 0x820cf4 saves its argument in x19;
+0x820fcc loads x8 from [x19], 0x820fd0 adds 0xe4, and 0x820fd4 loads
+the word. 0x820fe0/0x820fe4 extract major/minor; 0x820ff4–0x820ffc
+store major/minor/low 16 bits in the private object. At 0x820ff0–0x821018
+major < 2 branches to 0x82103c, otherwise it sets a separate private field
+and a base+0xdc pointer. These are static image offsets, not runtime PCs.
+The host/controller-base interpretation is supported by the previously
+recorded symbol/relocation analysis in
+`.cache/ufs-boot-offline-20261111/checkpoint.md:3-9`.
+
+At 0x8216d0–0x821744 (`ufs-functions.txt:3627-3656`) a separate comparison
+branches on major == 2: 0x821720 `cmp w9,#2`, 0x821724 `b.ne 0x821748`,
+0x821728–0x821730 OR 0x20 into hba+0x108; an additional conditional path
+may OR 0x1a. The fixed reference names bit 0x20
+`BROKEN_UFS_HCI_VERSION`, but exact source-revision identity and actual
+device invocation are not established. The existing checkpoint traces the
+conditional callback and 0x200 result, without observing either at runtime.
+The input Image-current SHA-256 is
+`2b6f267ab0c3e3b262871cb44d2b0a621c10efcddf4454e427b53cbc8292d07d`;
+its boot/kernel binding is in `.cache/ufs-boot-analysis-20261111/current.json`.
+This is Android kernel evidence, not a UFSDxe result.
+
+**Strong inference:** the established reference naming and image dataflow
+support identifying this word as the Qualcomm hardware revision in this
+image; runtime controller identity and execution remain unobserved.
+
+**UNKNOWN:** this follow-up did not finish an exhaustive search of `out/`
+and `.cache/`, nor trace the six requested controller-offset reads in vendor
+code. No board HC+0xe4 raw word was found in the subset checked; this is not
+an exhaustive negative. The six reads' adjacent software writes/branches and
+hardware read side effects remain unresolved. The old gate A is not released.
+
+## Follow-up: six offset candidates (partial, self-checked)
+
+The Android image disassembly `ufs-functions.txt:23106-23146` has stores,
+not the requested reads: `0x834284`, `0x834298`, `0x8342ac`, `0x8342c0`,
+`0x834304`, `0x834314` store respectively to `[x20->base]+0x50`, `+0x54`,
+`+0x70`, `+0x74`, `+0x80`, `+0x60`. This does not establish that all vendor
+reads were found or that reading any register has no hardware side effect.
+The bounded candidate search was for add-immediates in the existing Android
+disassembly followed by manual inspection; derived offsets and other binaries
+remain unexamined. The exhaustive search and all six read-following instruction
+sequences remain UNKNOWN.
+
+Windows `rg` was unavailable (command not found); the requested full `out/`
+and `.cache/` scan and Mach-O/EFI immediate inspection were not completed.
+Consumed claim files must not be opened. No exhaustive negative is claimed.
