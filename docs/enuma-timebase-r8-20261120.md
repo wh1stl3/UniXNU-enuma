@@ -65,5 +65,75 @@ independently established. The official base HEAD remains
 `693f5d9cae8a408dd18b39f3f9fdc4228c934241`.
 
 No device run, display output, timebase behaviour or successful delay is
-established. The changed startup probe requires final deep review; independent
-verifier rerun remains pending.
+established. The independent verifier rerun remains pending.
+
+## 上机前审查留痕
+
+主控提供的审查结论：审查人 `deep_reviewer`，**PASS WITH CONDITIONS**；
+对象是 `boot.img` SHA-256
+`0797330553b8cd1e5c2833dadb70a29ae816a490ae63c172b6fd8cde00339779`。
+条件：仅限该哈希的一次临时诊断；缺行不归因于 `IOSleep`；
+屏到屏间隔不等于纯睡眠时长。审查不代替当轮设备操作授权。
+
+审查确认 `_bsdinit_task` 的调用地址：`0xfffffff00bce1568`、
+`0xfffffff00bce1570`、`0xfffffff00bce15ac`；三种格式串均以 `\n`
+结尾，且短于缓冲上限；不需要 `-enable_kprintf_spam`。r8 ADT 下
+串口路径不注册 UART，因此本候选的实际观测端只有屏幕。
+`candidate-manifest.json:2` 的 status 仍为 `Legacy-display r6`，
+是生成物残留，不手改生成物；候选身份以 boot 的完整哈希为准。
+
+## r8 单次临时诊断 runbook
+
+以下命令在 Windows PowerShell、设备仓根目录执行；仅在用户当轮
+明确授权一次临时 `fastboot boot` 后执行。不得使用已有或已消耗的
+claim；不得重试、刷写或 erase。任何检查失败立即停止，不发 boot。
+
+1. 确认候选身份。执行以下命令，哈希必须与审查对象逐字符一致：
+
+   ```powershell
+   $image = 'out/ufs-sm8250-launchd-display-20261120-r8/boot.img'
+   (Get-FileHash -Algorithm SHA256 -LiteralPath $image).Hash.ToLowerInvariant()
+   # 0797330553b8cd1e5c2833dadb70a29ae816a490ae63c172b6fd8cde00339779
+   ```
+
+2. 执行 `fastboot devices`，再对清单中每台逐一执行
+   `fastboot -s <serial> getvar product`；仅当 product 为 `enuma`
+   的设备恰好一台时继续，设 `$serial` 为该设备的 serial。
+   零台或多台 `enuma` 均停止；禁止凭连接顺序选择。此后所有
+   fastboot 设备命令都使用这个 `$serial`，不要在记录中写入序列号。
+3. 捕获优先使用串口；但此 r8 ADT 不注册 UART，故本候选按无串口
+   执行：在 boot 前开始整屏录像，确保每行可辨、覆盖
+   `enuma-tb:` 以及后续 launchd 行；记录录像和真实时间起点。
+   视频、照片及帧不入 Git，只记录结论与哈希。
+4. 确认录像已开始、目标唯一、镜像哈希正确且已获当轮授权后，
+   **紧接 boot 前**以排他新建方式创建一次性 claim；创建失败立即停止。
+   成功创建即视为已消耗，即使后续命令失败也禁止访问、删除或重放：
+
+   ```powershell
+   $claim = '.cache/ufs-timebase-r8-20261120-device-attempt.claimed'
+   $f = [System.IO.File]::Open($claim, [System.IO.FileMode]::CreateNew,
+       [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+   $f.Dispose()
+   ```
+
+5. 仅执行以下一次 boot，记录执行的真实时间及退出码，不因失败、
+   无输出或缺行重试；禁止 `flash`、`erase` 和其他设备写入：
+
+   ```powershell
+   fastboot -s $serial boot $image
+   $LASTEXITCODE
+   ```
+
+### 判读表
+
+| 观察 | 能得出 | 不能得出 |
+| --- | --- | --- |
+| enter 和 exit 均出现 | 一组采样行被观察到；可对照外部真实时间及计数器差值 | 屏到屏间隔是纯睡眠时长，或系统时钟已正确 |
+| 只有 enter | 未观察到完整采样对 | 缺 exit 必然由 `IOSleep` 阻塞造成；输出丢失、异常或后续失败均未排除 |
+| 间隔异常短 | 显示间隔异常；结合计数器及外部计时缩小范围 | 单凭屏上间隔确定睡眠或时基的根因 |
+| 连 enter 都没有 | 未观察到 enter | 探针一定未执行，或缺行由 `IOSleep` 造成 |
+
+两行之间约 5 秒且计数器差约 96000000，只与假定的 19.2 MHz
+和五秒真实时间一致，不证明时钟正确；`skip` 不构成第二次配对测量。
+将实际观察、真实时间、命令退出码、候选哈希、claim 已消耗状态和
+上述证据边界写回 `docs/`；只用于一次临时诊断，**不代表阶段提升**。
