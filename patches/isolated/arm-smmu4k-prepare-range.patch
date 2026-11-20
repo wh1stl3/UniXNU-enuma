@@ -1,0 +1,12 @@
+--- a/ArmSmmu4KProgram.c
++++ b/ArmSmmu4KProgram.c
+@@ -75,8 +75,7 @@
+     size_t pages=(size_t)1<<(((r->id1>>28)&7)+1);
+     size_t stride=(size_t)1<<shift;
+     unsigned banks=r->id1&255,s2=(r->id1>>16)&255;
+-    if(!banks || banks>pages || s2>banks || bank<s2 || bank>=banks ||
+-        io->register_bytes<2*pages*stride)return ArmSmmu4KUnsupported;
++    if(!banks || banks>pages || s2>banks || bank<s2 || bank>=banks)return ArmSmmu4KUnsupported;
+     *gr1=stride;r->context_offset=(pages+bank)*stride;
+     if(r->context_offset>io->register_bytes || io->register_bytes-r->context_offset<0x7f8 ||
+         *gr1+0x804+bank*4>io->register_bytes)return ArmSmmu4KBadRange;
