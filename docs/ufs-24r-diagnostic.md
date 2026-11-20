@@ -1,6 +1,62 @@
-# 24r UFS reuse observation — partial host preparation
+# 24r UFS reuse observation — device result and host checks
 
-## Latest: observation-only variant implemented; deep review evidence-only (self-checked)
+## Latest: 24r single boot result; host replay and HCI 3.0 check (self-checked)
+
+2026-11-11. The user authorized one 24r boot; the clean2 entry ran once and its
+single `fastboot boot` returned 0. Consumed marker `.cache/cp24r-device-attempt.claimed`
+is retained and was not opened, deleted or replayed; 21r/22r/23r claims are
+likewise consumed and inaccessible. These facts are parent-relayed except where
+this repo records them.
+
+Parent transcription of the user's photo (the vision sub-session did not
+receive the photo, so this is **not** independent visual confirmation). The
+block below is reconstructed from the transcribed fields and the reviewed
+summary format, not a literal OCR of every line:
+
+```
+UFS_REUSE BEFORE_GCC
+UFS_REUSE BEFORE_HC
+UFS_REUSE INCOMPLETE unsupported HC version
+sample=1 completed_step=1 domain=2 off=8 raw=00000300
+GCC gdsc=f822f000 axi=00000221 ahb=00000001 aggr=00000001
+HC cap=NOT_READ ver=00000300 is=NOT_READ ie=NOT_READ ...
+SMMU cr0=NOT_READ id0=NOT_READ id1=NOT_READ id2=NOT_READ
+table_reads=0/0
+... shape only; terminal CPU, no reboot requested
+```
+
+Decode against the reviewed source: stage 1, `Step::Gcc`, `Domain::Hc`,
+offset `0x08`, raw `0x300`, `Reason::Version` → `INCOMPLETE`. This is exactly
+the fail-closed first-sample stop at `UfsReuseAdmission.h:120-122`; only 4 GCC
+and 1 HC reads happened, the other 13 HC and all SMMU registers stay
+`NOT_READ`, and no second sample ran. The terminal path is
+`NativeUfs.cpp:188-192` (`IOLog` + permanent `wfe`) after
+`formatSummary` at `:222-224`; no panic or reboot was requested. Parent-relayed
+read-only reviewer `ses_e354fd98fffek0eDzs6Rk4xx16` confirmed the same and
+stated this cannot be reported as full UFS, PMGR stage23 or AMFI passing.
+
+Host-only follow-up (all self-checked, no device action):
+
+- Directed replay of the measured values in the temp ShengUfs worktree,
+  `tests/reuse_admission_test.py:160-177`: exact first-cause/sample/step/
+  domain/off/raw, 4 GCC + 1 HC reads, zero further HC/SMMU, no second sample.
+  Incremental run: `633/639` cases compiled 0/1, both exit 0; evidence
+  `.cache/ufs-reuse-replay-24r-20261111/`. The version gate and
+  `UfsReuseAdmission.h` were not changed.
+- UFSHCI 3.0 compatibility matrix and bounded options:
+  `docs/ufs-hci30-compat.md`. It is source-bound to fixed Linux
+  `830b3c68c1fb1e9176028d02ef86f3cf76aa2476` plus the local EDK2 2.0 header.
+  v6.1 has no 3.0 register branch and treats 3.0 as `>= 2.1`; the vendor glue
+  overrides the version to 2.0 for `hw_ver.major==2`. 3.0-only spec deltas are
+  UNKNOWN (JESD223D not available).
+
+Not claimed: that HCI 3.0 reads are safe here, that the controller/queue/SMMU
+is quiescent, or that any later stage passed. No device authorization remains.
+Next: reviewer judges the replay change and the HCI 3.0 options; only after an
+explicit decision may a default-off Hci30 profile be implemented. README/
+AGENTS/`porting.toml` still wait for the next single commit update.
+
+## Previous: observation-only variant implemented; deep review evidence-only (self-checked)
 
 2026-11-11. Parent-relayed deep static review `ses_e35de8053ffel32m1bGoaREoKE`
 returned **CHANGES REQUIRED on evidence/wording only**; it judged the source
