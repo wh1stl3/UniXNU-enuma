@@ -1,0 +1,133 @@
+--- /dev/null
++++ b/osfmk/arm64/AllocationFacts.h
+@@ -0,0 +1,74 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef ENUMA_ALLOCATION_FACTS_H
++#define ENUMA_ALLOCATION_FACTS_H
++
++/* Facts only. No ownership, retirement, route or execution admission bits.
++ * Little-endian ARM64/X64 ABI; no pointers, UINTN, handles or callbacks.
++ * Kind 1 is the complete UFS arena; kind 2 is the complete table allocation.
++ * IOVA is meaningful only for kind 1. Metadata allocations are NOT backing.
++ */
++#define ENUMA_FACTS_MAGIC 0x31544341464d4e45ULL
++#define ENUMA_FACTS_PROPERTY "enuma-allocation-facts"
++typedef struct {
++  unsigned int Kind;
++  unsigned int Reserved;
++  unsigned long long Physical;
++  unsigned long long Pages;
++  unsigned long long Device;
++} ENUMA_ALLOCATION_RANGE;
++typedef struct {
++  unsigned long long Magic;
++  unsigned int Version;
++  unsigned int Bytes;
++  unsigned int Count;
++  unsigned int Reserved;
++  ENUMA_ALLOCATION_RANGE Ranges[2];
++} ENUMA_ALLOCATION_FACTS;
++_Static_assert(sizeof(ENUMA_ALLOCATION_FACTS) == 88, "facts ABI");
++_Static_assert(sizeof(ENUMA_ALLOCATION_RANGE) == 32, "range ABI");
++
++static inline int EnumaRangeValid(const ENUMA_ALLOCATION_RANGE *R)
++{
++  if (R->Reserved || R->Kind < 1 || R->Kind > 2 ||
++      !R->Physical || (R->Physical & 4095) || !R->Pages ||
++      R->Pages > (~0ULL - R->Physical) / 4096) return 0;
++  if (R->Kind == 1)
++    return R->Pages == 68 && R->Device && !(R->Device & 4095) &&
++      R->Pages <= (~0ULL - R->Device) / 4096;
++  return !R->Device && R->Physical < (1ULL << 36) &&
++    R->Pages <= ((1ULL << 36) - R->Physical) / 4096;
++}
++
++static inline int EnumaFactsValid(const ENUMA_ALLOCATION_FACTS *F,
++                                  unsigned long long Bytes, int Complete)
++{
++  unsigned int I;
++  if (Bytes != sizeof(*F) || F->Magic != ENUMA_FACTS_MAGIC ||
++      F->Version != 1 || F->Bytes != sizeof(*F) || F->Reserved ||
++      !F->Count || F->Count > 2 || (Complete && F->Count != 2)) return 0;
++  for (I = 0; I < F->Count; ++I) {
++    const ENUMA_ALLOCATION_RANGE *R = &F->Ranges[I];
++    if (!EnumaRangeValid(R)) return 0;
++    if (I && (R->Kind == F->Ranges[0].Kind ||
++        (R->Physical < F->Ranges[0].Physical + F->Ranges[0].Pages * 4096 &&
++         F->Ranges[0].Physical < R->Physical + R->Pages * 4096))) return 0;
++  }
++  if (F->Count == 1) {
++    const ENUMA_ALLOCATION_RANGE *R = &F->Ranges[1];
++    if (R->Kind || R->Reserved || R->Physical || R->Pages || R->Device) return 0;
++  }
++  return 1;
++}
++
++static inline int EnumaFactsOutsideWindow(const ENUMA_ALLOCATION_FACTS *F,
++  unsigned long long Base, unsigned long long Bytes)
++{
++  unsigned int I;
++  if (!Bytes || (Base & 4095) || (Bytes & 4095) || Bytes > ~0ULL - Base ||
++      !EnumaFactsValid(F, sizeof(*F), 1)) return 0;
++  for (I = 0; I < F->Count; ++I)
++    if (F->Ranges[I].Physical < Base + Bytes &&
++        Base < F->Ranges[I].Physical + F->Ranges[I].Pages * 4096) return 0;
++  return 1;
++}
++#endif
+--- /dev/null
++++ b/osfmk/arm64/XnuAllocationFacts.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef XNU_ENUMA_ALLOCATION_FACTS_H
++#define XNU_ENUMA_ALLOCATION_FACTS_H
++#include "AllocationFacts.h"
++
++/* Ordinary static kernel storage: no external PA is dereferenced or mapped.
++ * Set only at boot, never published as a device/DMA ownership contract. */
++static volatile ENUMA_ALLOCATION_FACTS enuma_allocation_facts;
++static volatile unsigned int enuma_allocation_facts_consumed;
++
++static void
++enuma_consume_allocation_facts(unsigned long long Base, unsigned long long Bytes)
++{
++  DTEntry Root;
++  void const *Data;
++  unsigned int Length;
++  ENUMA_ALLOCATION_FACTS Snapshot;
++  /* Absent on the normal profile. Presence makes strict validation mandatory. */
++  if (SecureDTLookupEntry(NULL, "/", &Root) != kSuccess)
++    panic("enuma facts: missing ADT root");
++  if (SecureDTGetProperty(Root, ENUMA_FACTS_PROPERTY, &Data, &Length) != kSuccess)
++    return;
++  if (Length != sizeof(Snapshot))
++    panic("enuma facts: length");
++  __builtin_memcpy(&Snapshot,Data,sizeof(Snapshot));
++  if (!EnumaFactsOutsideWindow(&Snapshot,Base,Bytes))
++    panic("enuma facts: invalid or window overlap");
++  enuma_allocation_facts = Snapshot;
++  /* Observable retained copy and explicit consumption; NOT an admission bit. */
++  enuma_allocation_facts_consumed = 1;
++}
++#endif
+--- a/osfmk/arm64/arm_vm_init.c
++++ b/osfmk/arm64/arm_vm_init.c
+@@ -1817,6 +1817,8 @@
+ #define ARM64_PHYSMAP_SLIDE_RANGE (1ULL << 30) // 1 GB
+ #define ARM64_PHYSMAP_SLIDE_MASK  (ARM64_PHYSMAP_SLIDE_RANGE - 1)
+ 
++#include "XnuAllocationFacts.h"
++
+ void
+ arm_vm_init(uint64_t memory_size, boot_args * args)
+ {
+@@ -1829,6 +1831,9 @@
+ 	uint64_t         mem_segments;
+ 	vm_offset_t      ptpage_vaddr;
+ 	vm_map_address_t dynamic_memory_begin;
++
++	/* Facts only. Do not map, free, or add external allocations to VM. */
++	enuma_consume_allocation_facts(args->physBase, args->memSize);
+ 
+ 	/*
+ 	 * Get the virtual and physical kernel-managed memory base from boot_args.

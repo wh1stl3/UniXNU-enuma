@@ -1,0 +1,215 @@
+--- /dev/null
++++ b/Include/AllocationFacts.h
+@@ -0,0 +1,74 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef ENUMA_ALLOCATION_FACTS_H
++#define ENUMA_ALLOCATION_FACTS_H
++
++/* Facts only. No ownership, retirement, route or execution admission bits.
++ * Little-endian ARM64/X64 ABI; no pointers, UINTN, handles or callbacks.
++ * Kind 1 is the complete UFS arena; kind 2 is the complete table allocation.
++ * IOVA is meaningful only for kind 1. Metadata allocations are NOT backing.
++ */
++#define ENUMA_FACTS_MAGIC 0x31544341464d4e45ULL
++#define ENUMA_FACTS_PROPERTY "enuma-allocation-facts"
++typedef struct {
++  unsigned int Kind;
++  unsigned int Reserved;
++  unsigned long long Physical;
++  unsigned long long Pages;
++  unsigned long long Device;
++} ENUMA_ALLOCATION_RANGE;
++typedef struct {
++  unsigned long long Magic;
++  unsigned int Version;
++  unsigned int Bytes;
++  unsigned int Count;
++  unsigned int Reserved;
++  ENUMA_ALLOCATION_RANGE Ranges[2];
++} ENUMA_ALLOCATION_FACTS;
++_Static_assert(sizeof(ENUMA_ALLOCATION_FACTS) == 88, "facts ABI");
++_Static_assert(sizeof(ENUMA_ALLOCATION_RANGE) == 32, "range ABI");
++
++static inline int EnumaRangeValid(const ENUMA_ALLOCATION_RANGE *R)
++{
++  if (R->Reserved || R->Kind < 1 || R->Kind > 2 ||
++      !R->Physical || (R->Physical & 4095) || !R->Pages ||
++      R->Pages > (~0ULL - R->Physical) / 4096) return 0;
++  if (R->Kind == 1)
++    return R->Pages == 68 && R->Device && !(R->Device & 4095) &&
++      R->Pages <= (~0ULL - R->Device) / 4096;
++  return !R->Device && R->Physical < (1ULL << 36) &&
++    R->Pages <= ((1ULL << 36) - R->Physical) / 4096;
++}
++
++static inline int EnumaFactsValid(const ENUMA_ALLOCATION_FACTS *F,
++                                  unsigned long long Bytes, int Complete)
++{
++  unsigned int I;
++  if (Bytes != sizeof(*F) || F->Magic != ENUMA_FACTS_MAGIC ||
++      F->Version != 1 || F->Bytes != sizeof(*F) || F->Reserved ||
++      !F->Count || F->Count > 2 || (Complete && F->Count != 2)) return 0;
++  for (I = 0; I < F->Count; ++I) {
++    const ENUMA_ALLOCATION_RANGE *R = &F->Ranges[I];
++    if (!EnumaRangeValid(R)) return 0;
++    if (I && (R->Kind == F->Ranges[0].Kind ||
++        (R->Physical < F->Ranges[0].Physical + F->Ranges[0].Pages * 4096 &&
++         F->Ranges[0].Physical < R->Physical + R->Pages * 4096))) return 0;
++  }
++  if (F->Count == 1) {
++    const ENUMA_ALLOCATION_RANGE *R = &F->Ranges[1];
++    if (R->Kind || R->Reserved || R->Physical || R->Pages || R->Device) return 0;
++  }
++  return 1;
++}
++
++static inline int EnumaFactsOutsideWindow(const ENUMA_ALLOCATION_FACTS *F,
++  unsigned long long Base, unsigned long long Bytes)
++{
++  unsigned int I;
++  if (!Bytes || (Base & 4095) || (Bytes & 4095) || Bytes > ~0ULL - Base ||
++      !EnumaFactsValid(F, sizeof(*F), 1)) return 0;
++  for (I = 0; I < F->Count; ++I)
++    if (F->Ranges[I].Physical < Base + Bytes &&
++        Base < F->Ranges[I].Physical + F->Ranges[I].Pages * 4096) return 0;
++  return 1;
++}
++#endif
+--- /dev/null
++++ b/Include/AllocationFactsUefi.h
+@@ -0,0 +1,101 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef ENUMA_ALLOCATION_FACTS_UEFI_H
++#define ENUMA_ALLOCATION_FACTS_UEFI_H
++#include <Uefi.h>
++#include <Library/BaseLib.h>
++#include <Library/BaseMemoryLib.h>
++#include <Library/UefiBootServicesTableLib.h>
++#include "AllocationFacts.h"
++
++/* Private enuma facts GUID, not an ownership/handoff protocol. */
++static EFI_GUID mEnumaFactsGuid =
++  {0x7d94ad23,0xe4da,0x43b4,{0x91,0xa2,0x38,0xf0,0x11,0x57,0x56,0xc1}};
++
++static inline ENUMA_ALLOCATION_FACTS *EnumaFindFacts(VOID)
++{
++  UINTN I;
++  for (I = 0; I < gST->NumberOfTableEntries; ++I)
++    if (CompareMem(&gST->ConfigurationTable[I].VendorGuid,
++                   &mEnumaFactsGuid, sizeof(EFI_GUID)) == 0)
++      return gST->ConfigurationTable[I].VendorTable;
++  return NULL;
++}
++
++/* Every covering descriptor must be BSData. No GCD shortcut, no first-page
++ * test. Map is a current BS snapshot supplied by GetMemoryMap. */
++static inline BOOLEAN EnumaBsCovered(CONST VOID *Map, UINTN Size, UINTN Stride,
++                                     UINT64 Base, UINT64 Bytes)
++{
++  UINT64 Cursor = Base, End;
++  UINTN Offset;
++  if (Stride < sizeof(EFI_MEMORY_DESCRIPTOR) || Size % Stride ||
++      Bytes == 0 || Bytes > MAX_UINT64 - Base) return FALSE;
++  End = Base + Bytes;
++  while (Cursor < End) {
++    UINT64 Next = Cursor;
++    for (Offset = 0; Offset < Size; Offset += Stride) {
++      CONST EFI_MEMORY_DESCRIPTOR *D = (CONST VOID *)((CONST UINT8 *)Map + Offset);
++      UINT64 DBytes;
++      if ((D->PhysicalStart & 4095) ||
++          D->NumberOfPages > (MAX_UINT64 - D->PhysicalStart) / 4096) return FALSE;
++      DBytes = D->NumberOfPages * 4096;
++      if (D->Type == EfiBootServicesData && D->PhysicalStart <= Cursor &&
++          Cursor - D->PhysicalStart < DBytes)
++        Next = D->PhysicalStart + DBytes;
++    }
++    if (Next == Cursor) return FALSE;
++    Cursor = Next;
++  }
++  return TRUE;
++}
++
++static inline BOOLEAN EnumaFactsCovered(CONST ENUMA_ALLOCATION_FACTS *F,
++  CONST VOID *Map, UINTN Size, UINTN Stride, UINT64 Window, UINT64 WindowBytes)
++{
++  UINTN I;
++  if (!EnumaFactsOutsideWindow(F, Window, WindowBytes)) return FALSE;
++  for (I = 0; I < F->Count; ++I)
++    if (!EnumaBsCovered(Map,Size,Stride,F->Ranges[I].Physical,
++                        F->Ranges[I].Pages * 4096)) return FALSE;
++  return TRUE;
++}
++
++/* BSP synchronous BS profile already required by these producers. Each
++ * successful publication is an immutable page-backed snapshot. Old snapshots
++ * are deliberately retained too: no cached configuration-table pointer can
++ * become stale. Successful backing is pinned by the respective caller BEFORE
++ * publication and must never subsequently be freed. No cross-EBS callback.
++ */
++static inline EFI_STATUS EnumaPublishAllocation(UINT32 Kind, UINT64 Physical,
++                                                UINT64 Pages, UINT64 Device)
++{
++  ENUMA_ALLOCATION_FACTS Next = {0}, *Old = EnumaFindFacts();
++  ENUMA_ALLOCATION_RANGE R = {Kind,0,Physical,Pages,Device};
++  EFI_PHYSICAL_ADDRESS Address = 0;
++  EFI_STATUS Status;
++  UINTN I;
++  if (!EnumaRangeValid(&R)) return EFI_INVALID_PARAMETER;
++  if (Old != NULL) {
++    if (!EnumaFactsValid(Old,sizeof(*Old),0)) return EFI_COMPROMISED_DATA;
++    if (Old->Count == 2) return EFI_ALREADY_STARTED;
++    for (I = 0; I < Old->Count; ++I)
++      if (Old->Ranges[I].Kind == Kind) return EFI_ALREADY_STARTED;
++    CopyMem(&Next,Old,sizeof(Next));
++  } else {
++    Next.Magic = ENUMA_FACTS_MAGIC;
++    Next.Version = 1;
++    Next.Bytes = sizeof(Next);
++  }
++  Next.Ranges[Next.Count++] = R;
++  if (!EnumaFactsValid(&Next,sizeof(Next),0)) return EFI_INVALID_PARAMETER;
++  Status = gBS->AllocatePages(AllocateAnyPages,EfiBootServicesData,1,&Address);
++  if (EFI_ERROR(Status)) return Status;
++  CopyMem((VOID *)(UINTN)Address,&Next,sizeof(Next));
++  Status = gBS->InstallConfigurationTable(&mEnumaFactsGuid,(VOID *)(UINTN)Address);
++  if (EFI_ERROR(Status)) {
++    EFI_STATUS Cleanup = gBS->FreePages(Address,1);
++    return EFI_ERROR(Cleanup) ? Cleanup : Status;
++  }
++  return EFI_SUCCESS;
++}
++#endif
+--- a/Library/EnumaSmmu4KTableLib/EnumaSmmu4KTableLib.c
++++ b/Library/EnumaSmmu4KTableLib/EnumaSmmu4KTableLib.c
+@@ -1,5 +1,6 @@
+ /* SPDX-License-Identifier: MIT */
+ #include "EnumaSmmu4KTableLib.h"
++#include "../../Include/AllocationFactsUefi.h"
+ 
+ #include <PiDxe.h>
+ #include <Library/BaseMemoryLib.h>
+@@ -120,7 +121,11 @@
+    */
+   WriteBackDataCacheRange ((VOID *)(UINTN)Base, Bytes);
+   if (ArmSmmu4KBindTableMemory (Memory, Io) == ArmSmmu4KSuccess) {
+-    return EFI_SUCCESS;
++    /* Entire allocation, not the allocator's Used prefix. On success this
++     * candidate retains it permanently; only unpublished failure may clean up. */
++    Status = EnumaPublishAllocation (2, Base, Pages, 0);
++    if (!EFI_ERROR (Status)) { return EFI_SUCCESS; }
++    goto Cleanup;
+   }
+   Status = EFI_UNSUPPORTED;
+ 
+--- a/Library/EnumaSmmu4KTableLib/EnumaSmmu4KTableLib.h
++++ b/Library/EnumaSmmu4KTableLib/EnumaSmmu4KTableLib.h
+@@ -13,6 +13,9 @@
+  * MemoryInitPei's identity map must remain in force. This does not remap pages,
+  * establish a post-EBS lifetime, or authorize device access.
+  *
++ * Candidate delta: success also publishes an immutable allocation-facts
++ * snapshot. Retain the ENTIRE allocation through final Boot Services and
++ * thereafter; never free on Io retirement. This is not an owner-success flag.
+  * Success: Memory describes one owned contiguous pool. Failure: Io is invalid;
+  * Memory is empty unless FreePages failed, in which case Memory retains the
+  * complete allocation handle (physical, pages) for caller cleanup and the

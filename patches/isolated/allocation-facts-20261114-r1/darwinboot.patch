@@ -1,0 +1,349 @@
+--- /dev/null
++++ b/DarwinBootPkg/Driver/AllocationFacts.h
+@@ -0,0 +1,74 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef ENUMA_ALLOCATION_FACTS_H
++#define ENUMA_ALLOCATION_FACTS_H
++
++/* Facts only. No ownership, retirement, route or execution admission bits.
++ * Little-endian ARM64/X64 ABI; no pointers, UINTN, handles or callbacks.
++ * Kind 1 is the complete UFS arena; kind 2 is the complete table allocation.
++ * IOVA is meaningful only for kind 1. Metadata allocations are NOT backing.
++ */
++#define ENUMA_FACTS_MAGIC 0x31544341464d4e45ULL
++#define ENUMA_FACTS_PROPERTY "enuma-allocation-facts"
++typedef struct {
++  unsigned int Kind;
++  unsigned int Reserved;
++  unsigned long long Physical;
++  unsigned long long Pages;
++  unsigned long long Device;
++} ENUMA_ALLOCATION_RANGE;
++typedef struct {
++  unsigned long long Magic;
++  unsigned int Version;
++  unsigned int Bytes;
++  unsigned int Count;
++  unsigned int Reserved;
++  ENUMA_ALLOCATION_RANGE Ranges[2];
++} ENUMA_ALLOCATION_FACTS;
++_Static_assert(sizeof(ENUMA_ALLOCATION_FACTS) == 88, "facts ABI");
++_Static_assert(sizeof(ENUMA_ALLOCATION_RANGE) == 32, "range ABI");
++
++static inline int EnumaRangeValid(const ENUMA_ALLOCATION_RANGE *R)
++{
++  if (R->Reserved || R->Kind < 1 || R->Kind > 2 ||
++      !R->Physical || (R->Physical & 4095) || !R->Pages ||
++      R->Pages > (~0ULL - R->Physical) / 4096) return 0;
++  if (R->Kind == 1)
++    return R->Pages == 68 && R->Device && !(R->Device & 4095) &&
++      R->Pages <= (~0ULL - R->Device) / 4096;
++  return !R->Device && R->Physical < (1ULL << 36) &&
++    R->Pages <= ((1ULL << 36) - R->Physical) / 4096;
++}
++
++static inline int EnumaFactsValid(const ENUMA_ALLOCATION_FACTS *F,
++                                  unsigned long long Bytes, int Complete)
++{
++  unsigned int I;
++  if (Bytes != sizeof(*F) || F->Magic != ENUMA_FACTS_MAGIC ||
++      F->Version != 1 || F->Bytes != sizeof(*F) || F->Reserved ||
++      !F->Count || F->Count > 2 || (Complete && F->Count != 2)) return 0;
++  for (I = 0; I < F->Count; ++I) {
++    const ENUMA_ALLOCATION_RANGE *R = &F->Ranges[I];
++    if (!EnumaRangeValid(R)) return 0;
++    if (I && (R->Kind == F->Ranges[0].Kind ||
++        (R->Physical < F->Ranges[0].Physical + F->Ranges[0].Pages * 4096 &&
++         F->Ranges[0].Physical < R->Physical + R->Pages * 4096))) return 0;
++  }
++  if (F->Count == 1) {
++    const ENUMA_ALLOCATION_RANGE *R = &F->Ranges[1];
++    if (R->Kind || R->Reserved || R->Physical || R->Pages || R->Device) return 0;
++  }
++  return 1;
++}
++
++static inline int EnumaFactsOutsideWindow(const ENUMA_ALLOCATION_FACTS *F,
++  unsigned long long Base, unsigned long long Bytes)
++{
++  unsigned int I;
++  if (!Bytes || (Base & 4095) || (Bytes & 4095) || Bytes > ~0ULL - Base ||
++      !EnumaFactsValid(F, sizeof(*F), 1)) return 0;
++  for (I = 0; I < F->Count; ++I)
++    if (F->Ranges[I].Physical < Base + Bytes &&
++        Base < F->Ranges[I].Physical + F->Ranges[I].Pages * 4096) return 0;
++  return 1;
++}
++#endif
+--- /dev/null
++++ b/DarwinBootPkg/Driver/AllocationFactsUefi.h
+@@ -0,0 +1,101 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef ENUMA_ALLOCATION_FACTS_UEFI_H
++#define ENUMA_ALLOCATION_FACTS_UEFI_H
++#include <Uefi.h>
++#include <Library/BaseLib.h>
++#include <Library/BaseMemoryLib.h>
++#include <Library/UefiBootServicesTableLib.h>
++#include "AllocationFacts.h"
++
++/* Private enuma facts GUID, not an ownership/handoff protocol. */
++static EFI_GUID mEnumaFactsGuid =
++  {0x7d94ad23,0xe4da,0x43b4,{0x91,0xa2,0x38,0xf0,0x11,0x57,0x56,0xc1}};
++
++static inline ENUMA_ALLOCATION_FACTS *EnumaFindFacts(VOID)
++{
++  UINTN I;
++  for (I = 0; I < gST->NumberOfTableEntries; ++I)
++    if (CompareMem(&gST->ConfigurationTable[I].VendorGuid,
++                   &mEnumaFactsGuid, sizeof(EFI_GUID)) == 0)
++      return gST->ConfigurationTable[I].VendorTable;
++  return NULL;
++}
++
++/* Every covering descriptor must be BSData. No GCD shortcut, no first-page
++ * test. Map is a current BS snapshot supplied by GetMemoryMap. */
++static inline BOOLEAN EnumaBsCovered(CONST VOID *Map, UINTN Size, UINTN Stride,
++                                     UINT64 Base, UINT64 Bytes)
++{
++  UINT64 Cursor = Base, End;
++  UINTN Offset;
++  if (Stride < sizeof(EFI_MEMORY_DESCRIPTOR) || Size % Stride ||
++      Bytes == 0 || Bytes > MAX_UINT64 - Base) return FALSE;
++  End = Base + Bytes;
++  while (Cursor < End) {
++    UINT64 Next = Cursor;
++    for (Offset = 0; Offset < Size; Offset += Stride) {
++      CONST EFI_MEMORY_DESCRIPTOR *D = (CONST VOID *)((CONST UINT8 *)Map + Offset);
++      UINT64 DBytes;
++      if ((D->PhysicalStart & 4095) ||
++          D->NumberOfPages > (MAX_UINT64 - D->PhysicalStart) / 4096) return FALSE;
++      DBytes = D->NumberOfPages * 4096;
++      if (D->Type == EfiBootServicesData && D->PhysicalStart <= Cursor &&
++          Cursor - D->PhysicalStart < DBytes)
++        Next = D->PhysicalStart + DBytes;
++    }
++    if (Next == Cursor) return FALSE;
++    Cursor = Next;
++  }
++  return TRUE;
++}
++
++static inline BOOLEAN EnumaFactsCovered(CONST ENUMA_ALLOCATION_FACTS *F,
++  CONST VOID *Map, UINTN Size, UINTN Stride, UINT64 Window, UINT64 WindowBytes)
++{
++  UINTN I;
++  if (!EnumaFactsOutsideWindow(F, Window, WindowBytes)) return FALSE;
++  for (I = 0; I < F->Count; ++I)
++    if (!EnumaBsCovered(Map,Size,Stride,F->Ranges[I].Physical,
++                        F->Ranges[I].Pages * 4096)) return FALSE;
++  return TRUE;
++}
++
++/* BSP synchronous BS profile already required by these producers. Each
++ * successful publication is an immutable page-backed snapshot. Old snapshots
++ * are deliberately retained too: no cached configuration-table pointer can
++ * become stale. Successful backing is pinned by the respective caller BEFORE
++ * publication and must never subsequently be freed. No cross-EBS callback.
++ */
++static inline EFI_STATUS EnumaPublishAllocation(UINT32 Kind, UINT64 Physical,
++                                                UINT64 Pages, UINT64 Device)
++{
++  ENUMA_ALLOCATION_FACTS Next = {0}, *Old = EnumaFindFacts();
++  ENUMA_ALLOCATION_RANGE R = {Kind,0,Physical,Pages,Device};
++  EFI_PHYSICAL_ADDRESS Address = 0;
++  EFI_STATUS Status;
++  UINTN I;
++  if (!EnumaRangeValid(&R)) return EFI_INVALID_PARAMETER;
++  if (Old != NULL) {
++    if (!EnumaFactsValid(Old,sizeof(*Old),0)) return EFI_COMPROMISED_DATA;
++    if (Old->Count == 2) return EFI_ALREADY_STARTED;
++    for (I = 0; I < Old->Count; ++I)
++      if (Old->Ranges[I].Kind == Kind) return EFI_ALREADY_STARTED;
++    CopyMem(&Next,Old,sizeof(Next));
++  } else {
++    Next.Magic = ENUMA_FACTS_MAGIC;
++    Next.Version = 1;
++    Next.Bytes = sizeof(Next);
++  }
++  Next.Ranges[Next.Count++] = R;
++  if (!EnumaFactsValid(&Next,sizeof(Next),0)) return EFI_INVALID_PARAMETER;
++  Status = gBS->AllocatePages(AllocateAnyPages,EfiBootServicesData,1,&Address);
++  if (EFI_ERROR(Status)) return Status;
++  CopyMem((VOID *)(UINTN)Address,&Next,sizeof(Next));
++  Status = gBS->InstallConfigurationTable(&mEnumaFactsGuid,(VOID *)(UINTN)Address);
++  if (EFI_ERROR(Status)) {
++    EFI_STATUS Cleanup = gBS->FreePages(Address,1);
++    return EFI_ERROR(Cleanup) ? Cleanup : Status;
++  }
++  return EFI_SUCCESS;
++}
++#endif
+--- /dev/null
++++ b/DarwinBootPkg/Driver/DarwinAllocationFacts.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: MIT */
++#ifndef DARWIN_ALLOCATION_FACTS_H
++#define DARWIN_ALLOCATION_FACTS_H
++#include "AllocationFactsUefi.h"
++
++/* Called only after the original strict ADT parser. Append a root property,
++ * not a chosen/memory-map loader range: XNU must never free this backing.
++ * The caller allocates Size+124 bytes, copies the complete old ADT first.
++ */
++static inline EFI_STATUS EnumaAdtInsert(VOID *Tree, UINTN Size,
++                                        CONST ENUMA_ALLOCATION_FACTS *Facts)
++{
++  UINT8 *P = Tree;
++  UINT32 Count;
++  if (Size < 8 || !EnumaFactsValid(Facts,sizeof(*Facts),1))
++    return EFI_COMPROMISED_DATA;
++  CopyMem(&Count,P,4);
++  if (Count == MAX_UINT32) return EFI_COMPROMISED_DATA;
++  /* Insert before old root properties, preserving every child and offset. */
++  CopyMem(P + 8 + 124,P + 8,Size - 8);
++  ZeroMem(P + 8,36);
++  CopyMem(P + 8,ENUMA_FACTS_PROPERTY,sizeof(ENUMA_FACTS_PROPERTY));
++  WriteUnaligned32((UINT32 *)(P + 40),sizeof(*Facts));
++  CopyMem(P + 44,Facts,sizeof(*Facts));
++  WriteUnaligned32((UINT32 *)P,Count + 1);
++  return EFI_SUCCESS;
++}
++
++/* Copy source bytes only after the ENTIRE fixed-size source is BSData.
++ * There is no firmware source pointer in the ADT or returned snapshot. */
++static inline EFI_STATUS EnumaFactsSnapshot(ENUMA_ALLOCATION_FACTS *Out,
++  CONST VOID *Map, UINTN Size, UINTN Stride)
++{
++  CONST ENUMA_ALLOCATION_FACTS *Source = EnumaFindFacts();
++  if (Source == NULL) return EFI_NOT_FOUND;
++  if (!EnumaBsCovered(Map,Size,Stride,(UINTN)Source,sizeof(*Source)))
++    return EFI_COMPROMISED_DATA;
++  CopyMem(Out,Source,sizeof(*Out));
++  return EnumaFactsValid(Out,sizeof(*Out),1) ? EFI_SUCCESS : EFI_COMPROMISED_DATA;
++}
++#endif
+--- a/DarwinBootPkg/Driver/DarwinBoot.c
++++ b/DarwinBootPkg/Driver/DarwinBoot.c
+@@ -15,7 +15,8 @@
+ #include "BootArgs.h"
+ #include "BootVideo.h"
+ #include "PackedRamdisk.h"
+-#include "WindowSize.h"
++#include "WindowSize.h"
++#include "DarwinAllocationFacts.h"
+ 
+ #define WINDOW_SIZE  SIZE_256MB
+ #define BLOCK_SIZE   SIZE_2MB
+@@ -297,8 +298,10 @@
+   for (Index = 0; Index < Properties; Index++) {
+     if (Size - *Offset < 36) { return FALSE; }
+     if (ScanMem8 (Data + *Offset, 32, 0) == NULL) { return FALSE; }
+-    Length = U32 (Data + *Offset + 32);
+-    *Offset += 36;
++    Length = U32 (Data + *Offset + 32);
++    *Offset += 36;
++    /* Runtime facts cannot be supplied by a disk ADT or duplicated. */
++    if (AsciiStrCmp ((CONST CHAR8 *)(Data + *Offset - 36), ENUMA_FACTS_PROPERTY) == 0) { return FALSE; }
+     if (Length > Size - *Offset) { return FALSE; }
+     if (AsciiStrCmp ((CONST CHAR8 *)(Data + *Offset - 36), "name") == 0) {
+       if (Name != NULL) { return FALSE; }
+@@ -492,7 +495,8 @@
+ 
+ STATIC
+ EFI_STATUS
+-AllocateWindow (KERNEL *Kernel, UINT64 WindowSize, EFI_PHYSICAL_ADDRESS *Address)
++AllocateWindow (KERNEL *Kernel, UINT64 WindowSize, EFI_PHYSICAL_ADDRESS *Address,
++                CONST ENUMA_ALLOCATION_FACTS *Facts)
+ {
+   EFI_MEMORY_DESCRIPTOR *Map;
+   EFI_MEMORY_DESCRIPTOR *Descriptor;
+@@ -524,7 +528,8 @@
+     RunBytes = End - Descriptor->PhysicalStart;
+     if (RunBytes > BestBytes) { BestBytes = RunBytes; BestStart = Descriptor->PhysicalStart; }
+     Candidate = ALIGN_VALUE (Descriptor->PhysicalStart, BLOCK_SIZE) + (Kernel->Base & (BLOCK_SIZE - 1));
+-    if ((Candidate < Descriptor->PhysicalStart) || (End < Candidate) || (End - Candidate < WindowSize)) { continue; }
++    if ((Candidate < Descriptor->PhysicalStart) || (End < Candidate) || (End - Candidate < WindowSize)) { continue; }
++    if ((Facts != NULL) && !EnumaFactsOutsideWindow (Facts, Candidate, WindowSize)) { continue; }
+     Status = gBS->AllocatePages (AllocateAddress, EfiLoaderCode, EFI_SIZE_TO_PAGES (WindowSize), &Candidate);
+     if (!EFI_ERROR (Status)) { *Address = Candidate; break; }
+   }
+@@ -598,7 +603,10 @@
+   UINT32                          Version;
+   UINTN                           Attempt;
+   CHAR8                           CommandLine[1024];
+-  UINT64                          Video[6];
++  UINT64                          Video[6];
++  ENUMA_ALLOCATION_FACTS          AllocationFacts;
++  BOOLEAN                        HasAllocationFacts = FALSE;
++  VOID                           *ExpandedTree;
+ 
+   (VOID)This;
+   if ((Request == NULL) || (Request->Volume == NULL) || (Request->KernelPath == NULL)) { return EFI_INVALID_PARAMETER; }
+@@ -717,9 +725,35 @@
+     Status = EFI_COMPROMISED_DATA;
+     goto Fail;
+   }
+-  Status = ReadBootVideo (Video);
+-  if (EFI_ERROR (Status)) { goto Fail; }
+-  Status = AllocateWindow (&Kernel, WindowSize, &Address);
++  Status = ReadBootVideo (Video);
++  if (EFI_ERROR (Status)) { goto Fail; }
++  if (EnumaFindFacts () != NULL) {
++    Status = GetMap (&Map, &Capacity, &MapSize, &Key, &Stride);
++    if (EFI_ERROR (Status)) { goto Fail; }
++    Status = EnumaFactsSnapshot (&AllocationFacts, Map, MapSize, Stride);
++    if (EFI_ERROR (Status)) { goto Fail; }
++    for (Index = 0; Index < AllocationFacts.Count; ++Index) {
++      if (!EnumaBsCovered (Map, MapSize, Stride,
++          AllocationFacts.Ranges[Index].Physical, AllocationFacts.Ranges[Index].Pages * 4096)) {
++        Status = EFI_COMPROMISED_DATA; goto Fail;
++      }
++    }
++    ExpandedTree = AllocatePool (TreeSize + 124);
++    if (ExpandedTree == NULL) { Status = EFI_OUT_OF_RESOURCES; goto Fail; }
++    CopyMem (ExpandedTree, Tree, TreeSize);
++    Status = EnumaAdtInsert (ExpandedTree, TreeSize, &AllocationFacts);
++    if (EFI_ERROR (Status)) { FreePool (ExpandedTree); goto Fail; }
++    FreePool (Tree);
++    Tree = ExpandedTree;
++    TreeSize += 124;
++    if (RamdiskOffset != MAX_UINTN) { RamdiskOffset += 124; }
++    if (TrustCacheOffset != MAX_UINTN) { TrustCacheOffset += 124; }
++    if (AddonOffset != MAX_UINTN) { AddonOffset += 124; }
++    if (PolicyOffset != MAX_UINTN) { PolicyOffset += 124; }
++    HasAllocationFacts = TRUE;
++  }
++  Status = AllocateWindow (&Kernel, WindowSize, &Address,
++                          HasAllocationFacts ? &AllocationFacts : NULL);
+   if (EFI_ERROR (Status)) { goto Fail; }
+   ArgsAddress = ALIGN_VALUE (Address + Kernel.End - Kernel.Base, SIZE_16KB);
+   TreeAddress = ArgsAddress + EFI_PAGE_SIZE;
+@@ -780,8 +814,11 @@
+   FreePool (Tree); Tree = NULL;
+   FreePool (TreePath); TreePath = NULL;
+   Root->Close (Root); Root = NULL;
+-  Status = GetMap (&Map, &Capacity, &MapSize, &Key, &Stride);
+-  if (EFI_ERROR (Status)) { goto Fail; }
++  Status = GetMap (&Map, &Capacity, &MapSize, &Key, &Stride);
++  if (EFI_ERROR (Status)) { goto Fail; }
++  if (HasAllocationFacts && !EnumaFactsCovered (&AllocationFacts, Map, MapSize, Stride, Address, WindowSize)) {
++    Status = EFI_COMPROMISED_DATA; goto Fail;
++  }
+   Print (L"DARWINBOOT: ARM64 va=0x%lx pa=0x%lx args=0x%lx entry=0x%lx owned=0x%lx\n",
+          Kernel.Base, Address, ArgsAddress, Address + Kernel.Entry - Kernel.Base, (UINT64)WindowSize);
+   Print (L"DARWINBOOT: video base=0x%lx display=%lu row=%lu width=%lu height=%lu depth=%lu\n",
+@@ -816,7 +853,12 @@
+       if (Attempt == 0) { goto Fail; }
+       CpuDeadLoop ();
+     }
+-    Status = gBS->ExitBootServices (mImage, Key);
++    if (HasAllocationFacts &&
++        !EnumaFactsCovered (&AllocationFacts, Map, MapSize, Stride, Address, WindowSize)) {
++      if (Attempt == 0) { Status = EFI_COMPROMISED_DATA; goto Fail; }
++      CpuDeadLoop ();
++    }
++    Status = gBS->ExitBootServices (mImage, Key);
+     if (!EFI_ERROR (Status)) {
+       DarwinEnter (ArgsAddress, Address + Kernel.Entry - Kernel.Base, Address, WindowSize, Video[0], Video[2] * Video[4]);
+       CpuDeadLoop ();
