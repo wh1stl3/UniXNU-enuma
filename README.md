@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r8 第二次上机（2026-11-21，`self-checked`）**：两次板内时基差值可重复，服务持续 spawn；SpringBoard 是否运行与 GUI swap 未知，阶段不提升。见 [观察记录](docs/enuma-r8-device-20261121.md#第二次上机完整取景1504-s)。
+
 **r8 单次实机观察（2026-11-21，`self-checked`）**：探针返回、legacy 非 IOD 分支及 bootstrap 进入/退出已观察；真实等待、GUI swap、用户态稳定性及持久化仍未知，阶段不提升。详见 [r8 观察](docs/enuma-r8-device-20261121.md)。
 
 **r4 单次实机观察（2026-11-19，`self-checked`，仅记录；Data 挂载为强推断、阶段 6/7 不通过）**：一次 `fastboot boot` `out/ufs-sm8250-launchd-data-20261119-r1/boot.img`（169,951,232 B `202597ce…1e6900`，22:09:26，exit 0，单次无重试/刷写；claim `.cache/ufs-launchd-data-r4-20261119.claimed` 已消耗、禁止访问/删除/重放）。r4 = r3 + `XNU_OWNER_DATA_MOUNT=1` + 生成的内核 Data UUID 绑 seed 卷 UUID `62F1BC9E-…` + initrd `Payloads/scratch-data.img`，boot-args 与 store mode 0 不变。屏上（主控转录，无 `vision` 核读、无影像入库）无 `offline scratch Data mount failed`，出现 `Early boot complete`、`entering bootstrap mode`、user/501 与 system 两域服务逐个 `SOURCE_ATTACH, code = 0`（pid 31→61）、`exiting bootstrap mode`，数分钟无 panic，11-18 的 `libSystem` panic 未出现。判读：**Data 挂载只有强推断**（失败按设计 panic、本次无该 panic，但无正向挂载行、无卷 I/O 证据）；launchd 早期启动成立；服务稳定、launchd 初始化完成、显示与持久化均未成立；**不归因**到 vmm-present/DATA_MOUNT/seed 中任何一项。见 [r4 观察](docs/ufs-launchd-data-20261119-observation.md)。
