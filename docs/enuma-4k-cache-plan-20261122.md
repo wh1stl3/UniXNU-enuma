@@ -52,3 +52,11 @@ python3 /mnt/d/Code/PortingiOS/UniXNU/scripts/audit-native-cache-slide.py
 另确认固定 SystemOS 挂载路径和 `.cache/xnu-work` 均不存在。**架构、全部 mapping 的 address/size/fileOffset 及对齐、slide 版本和页粒度、镜像数量、缓存总大小与完整 subcache 集合均未判定**。先前 `docs/enuma-dyld-cache-layout-20261122.md` 的原始字节扫描发现 arm64 候选头和编号文件名，但未解析 APFS 活动 inode，不能作为实际 donor 活动缓存的字段或完整性证据。结论：**无法判定是否满足 4 KiB 内核消费条件**；缺经身份确认的完整活动缓存及可运行的隔离审计环境，签名/真实消费路径也未验证。
 
 可选取出方式：在 macOS 将现有 SystemOS 镜像用 `hdiutil attach -readonly -nobrowse` 只读挂载，确认活动卷和来源后读取/复制完整缓存及 subcache 至本地 `out/`；官方 `scripts/build-boot-runtime.py:34-57` 已有只读 `hdiutil` 挂载模式，但不是 SystemOS 缓存提取 CLI，不能声称其直接提取。也可取得可信的已解出完整缓存及身份记录。随后在独立可写的官方仓副本中准备原脚本规定的固定路径、源码和 macOS 环境；先对完整文件集逐项核查，不能靠 glob、计数或脚本通过推定 subcache 完整。未找到官方现成的 DMG→缓存独立提取脚本；本轮未挂载、未提取、未转换。
+
+## 7. 子模块检出后复审
+
+`self-checked`：标题为计划步骤，实际**未能检出子模块**。UniXNU 基座 `693f5d9cae8a408dd18b39f3f9fdc4228c934241` 的 `.gitmodules` 没有 `refer/dyld` 或 `refer/xnu` 条目；`git ls-tree HEAD refer/dyld refer/xnu` 无输出，不存在这两个路径的 gitlink pin。WSL 在 UniXNU 目录执行 `git submodule update --init --depth 1 refer/dyld refer/xnu` 返回 1，首个错误 `error: pathspec 'refer/dyld' did not match any file(s) known to git`；`refer/xnu` 同样报 pathspec 错误。并非网络错误，未用 Windows git 重试，未初始化任何子模块。两个路径均不存在，实际 commit 无法读取、无法与不存在的 UniXNU 子模块 pin 比对；脚本自身要求的 dyld 和 XNU 源码 commit 分别为 `a571176e8e00c47e95b95e3156820ebec0cbd5e6` 和 `d8b80295118ef25ac3a784134bcf95cd8e88109f`，它们是脚本检查值而非 gitlink。
+
+WSL 原样重跑 `python3 scripts/audit-target-dyld-cache.py` 和 `python3 scripts/audit-native-cache-slide.py` 均 exit 1，分别在第 15 行和第 13 行因上述源码目录不存在而失败，未读取 donor。故 arch、每个 mapping 的 address/size/fileOffset 和 4096 整除性、slide 版本/页粒度、镜像数量、缓存总大小及 subcache 集合仍未知；**无法判定 donor 能否以 4K 页消费**。脚本期望的是固定 SystemOS 挂载目录内的实际缓存文件，而非 OS.raw 或 DMG，取法与额外环境要求见上节。
+
+拟用替代方式：另获明确授权后，在独立可写副本按脚本要求取得并核对两个源码 revision，准备只读挂载或经身份核实的完整缓存集合，再执行原脚本；先确认 macOS arm64 构建执行环境及 slide 脚本固定四个 mapping 的适用性。该替代不是子模块初始化，本轮未执行。
