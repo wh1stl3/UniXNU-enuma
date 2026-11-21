@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r9 单次观察（2026-11-21，`self-checked`）**：exec 前路径和空间探针结果及判读边界见 [r9 记录](docs/enuma-r9-device-20261121.md)；阶段不提升。
+
 **r8 第二次上机（2026-11-21，`self-checked`）**：两次板内时基差值可重复，服务持续 spawn；SpringBoard 是否运行与 GUI swap 未知，阶段不提升。见 [观察记录](docs/enuma-r8-device-20261121.md#第二次上机完整取景1504-s)。
 
 **r8 单次实机观察（2026-11-21，`self-checked`）**：探针返回、legacy 非 IOD 分支及 bootstrap 进入/退出已观察；真实等待、GUI swap、用户态稳定性及持久化仍未知，阶段不提升。详见 [r8 观察](docs/enuma-r8-device-20261121.md)。
