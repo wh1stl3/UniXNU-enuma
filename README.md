@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r13 单次观察（2026-11-21，`self-checked`）**：控制台批次耗时与 launchd 共享区报错见 [r13 记录](docs/enuma-r13-device-20261122.md)；机制未定，阶段不提升。
+
 **r9 单次观察（2026-11-21，`self-checked`）**：exec 前路径和空间探针结果及判读边界见 [r9 记录](docs/enuma-r9-device-20261121.md)；阶段不提升。
 
 **r8 第二次上机（2026-11-21，`self-checked`）**：两次板内时基差值可重复，服务持续 spawn；SpringBoard 是否运行与 GUI swap 未知，阶段不提升。见 [观察记录](docs/enuma-r8-device-20261121.md#第二次上机完整取景1504-s)。
