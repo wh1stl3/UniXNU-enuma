@@ -1,0 +1,57 @@
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -8241,6 +8241,45 @@
+ 	printf("enuma-con: lines=5 chars=90 ns=%llu\n", (unsigned long long)ns);
+ }
+-
++
++#define ENUMA_CPU_BYTES (8U * 1024U * 1024U)
++#define ENUMA_CPU_ITERS 100000000U
++
++static unsigned char enuma_cpu_src[ENUMA_CPU_BYTES] __attribute__((aligned(64)));
++static unsigned char enuma_cpu_dst[ENUMA_CPU_BYTES] __attribute__((aligned(64)));
++
++static __attribute__((noinline)) void
++enuma_cpu_probe(void)
++{
++	uint64_t start, copy_ticks, loop_ticks, copy_ns, loop_ns;
++	uint64_t value = 1;
++	unsigned int count = ENUMA_CPU_ITERS;
++
++	/* Touch both ranges outside the timed interval; retain the whole copy. */
++	memset(enuma_cpu_src, 0x5a, sizeof(enuma_cpu_src));
++	memset(enuma_cpu_dst, 0xa5, sizeof(enuma_cpu_dst));
++	__asm__ volatile("" : : "r"(enuma_cpu_src), "r"(enuma_cpu_dst) : "memory");
++	start = mach_absolute_time();
++	memcpy(enuma_cpu_dst, enuma_cpu_src, sizeof(enuma_cpu_src));
++	__asm__ volatile("" : : "r"(enuma_cpu_dst) : "memory");
++	copy_ticks = mach_absolute_time() - start;
++
++	start = mach_absolute_time();
++	/* Two dependent integer operations per iteration, plus loop control. */
++	__asm__ volatile("1: add %x[value], %x[value], #1\n\t"
++	    "ror %x[value], %x[value], #7\n\t"
++	    "subs %w[count], %w[count], #1\n\t"
++	    "b.ne 1b"
++	    : [value] "+&r"(value), [count] "+r"(count) : : "cc", "memory");
++	loop_ticks = mach_absolute_time() - start;
++
++	absolutetime_to_nanoseconds(copy_ticks, &copy_ns);
++	absolutetime_to_nanoseconds(loop_ticks, &loop_ns);
++	printf("enuma-cpu: memcpy %u ns=%llu mbps=%llu\n", ENUMA_CPU_BYTES,
++	    (unsigned long long)copy_ns, copy_ns ? 1000ULL * ENUMA_CPU_BYTES / copy_ns : 0);
++	printf("enuma-cpu: loop %u ns=%llu mops=%llu\n", ENUMA_CPU_ITERS,
++	    (unsigned long long)loop_ns, loop_ns ? 2000ULL * ENUMA_CPU_ITERS / loop_ns : 0);
++}
++
+ static void
+ enuma_path_probe(void)
+ {
+@@ -8265,6 +8304,7 @@
+ 	enuma_fs_probe("/private/var");
+ 	printf("enuma-fs: maxvnodes %d\n", desiredvnodes);
+ 	enuma_console_probe();
++	enuma_cpu_probe();
+ }
+ #undef ENUMAVN
+ #undef ENUMAVN_LABEL
