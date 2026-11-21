@@ -1,0 +1,40 @@
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -8218,6 +8218,29 @@
+ 
+ #define ENUMAVN(path) ENUMAVN_LABEL(path, path)
+ 
++static __attribute__((noinline)) void
++enuma_console_probe(void)
++{
++	uint64_t ns, start;
++
++	/* 78 bytes per row including LF: 11 + 4 + 1 + 61 + 1. */
++	start = mach_absolute_time();
++	for (unsigned int i = 1; i <= 20; ++i) {
++		printf("enuma-con: %04u "
++		    "AAAAAAAAAAAAAAAAAAAA" "AAAAAAAAAAAAAAAAAAAA" "AAAAAAAAAAAAAAAAAAAA" "A\n", i);
++	}
++	absolutetime_to_nanoseconds(mach_absolute_time() - start, &ns);
++	printf("enuma-con: lines=20 chars=1560 ns=%llu ns_per_line=%llu ns_per_char=%llu\n",
++	    (unsigned long long)ns, (unsigned long long)(ns / 20), (unsigned long long)(ns / 1560));
++
++	start = mach_absolute_time();
++	for (unsigned int i = 1; i <= 5; ++i) {
++		printf("enuma-con: %04u B\n", i);
++	}
++	absolutetime_to_nanoseconds(mach_absolute_time() - start, &ns);
++	printf("enuma-con: lines=5 chars=90 ns=%llu\n", (unsigned long long)ns);
++}
++
+ static void
+ enuma_path_probe(void)
+ {
+@@ -8239,6 +8262,7 @@
+ 	enuma_fs_probe("/");
+ 	enuma_fs_probe("/private/var");
+ 	printf("enuma-fs: maxvnodes %d\n", desiredvnodes);
++	enuma_console_probe();
+ }
+ #undef ENUMAVN
+ #undef ENUMAVN_LABEL
