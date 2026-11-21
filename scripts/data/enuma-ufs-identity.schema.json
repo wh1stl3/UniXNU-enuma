@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "enuma host-only cached UEFI identity snapshot input v2",
+  "description": "Data only, not a collector or activation contract. Raw identities and outputs remain ignored. Existing provenance requires separately authorized capture; all current examples are synthetic.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "provenance", "envelope", "records"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "envelope": {"$ref": "#/$defs/envelope"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "records": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/record"}},
+    "gpt_reference": {"$ref": "#/$defs/gpt"},
+    "legal_target_luns": {"type": "array", "maxItems": 64, "items": {"type": "object", "additionalProperties": false, "required": ["target_hex", "lun"], "properties": {"target_hex": {"type": "string", "pattern": "^(?:[0-9a-fA-F]{2}){1,16}$"}, "lun": {"$ref": "#/$defs/u64"}}}},
+    "public_evidence": {"type": "object", "additionalProperties": false, "properties": {"selector": {"$ref": "#/$defs/u32"}, "iort_route_reference": {"type": "string"}}}
+  },
+  "$defs": {
+    "envelope": {"type": "object", "additionalProperties": false, "required": ["candidate_id", "capture_complete", "reported_handles", "handle_limit", "truncated", "incomplete_reason"], "properties": {"candidate_id": {"type": "string", "pattern": "^[a-zA-Z0-9_-]{1,64}$"}, "capture_complete": {"type": "boolean"}, "reported_handles": {"$ref": "#/$defs/u32"}, "handle_limit": {"const": 64}, "truncated": {"type": "boolean"}, "incomplete_reason": {"type": "string"}}},
+    "u32": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+    "u64": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "path": {"type": "string", "pattern": "^(?:[0-9a-fA-F]{2}){4,16384}$"},
+    "signature": {"type": "string", "pattern": "^[0-9a-fA-F]{32}$"},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["kind", "source"], "properties": {"kind": {"enum": ["synthetic", "existing"]}, "source": {"type": "string", "minLength": 1}}},
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "status", "reason", "truncated"],
+      "allOf": [{"if": {"properties": {"status": {"const": "ok"}}}, "then": {"required": ["block_io_revision", "media", "device_path_hex"]}}],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-zA-Z0-9_-]{1,40}$"},
+        "status": {"enum": ["ok", "unread", "null", "range", "read_failed", "revision", "path", "unsupported", "pointer_changed", "truncated", "describe_failed"]},
+        "reason": {"type": "string"}, "truncated": {"type": "boolean"},
+        "block_io_revision": {"enum": [65536, 131073, 131103]},
+        "media": {"$ref": "#/$defs/media"},
+        "device_path_hex": {"$ref": "#/$defs/path", "description": "Complete existing path including all controller/parent prefix nodes and End Entire, not a standalone node. Parser compares every supplied byte, not suffixes."}
+      }
+    },
+    "media": {
+      "type": "object", "additionalProperties": false,
+      "required": ["MediaId", "RemovableMedia", "MediaPresent", "LogicalPartition", "ReadOnly", "WriteCaching", "BlockSize", "IoAlign", "LastBlock"],
+      "properties": {
+        "MediaId": {"$ref": "#/$defs/u32"}, "RemovableMedia": {"type": "boolean"},
+        "MediaPresent": {"type": "boolean"}, "LogicalPartition": {"type": "boolean"},
+        "ReadOnly": {"type": "boolean"}, "WriteCaching": {"type": "boolean"},
+        "BlockSize": {"type": "integer", "minimum": 1, "maximum": 4294967295},
+        "IoAlign": {"$ref": "#/$defs/u32"}, "LastBlock": {"$ref": "#/$defs/u64"},
+        "LowestAlignedLba": {"$ref": "#/$defs/u64"},
+        "LogicalBlocksPerPhysicalBlock": {"$ref": "#/$defs/u32"},
+        "OptimalTransferLengthGranularity": {"$ref": "#/$defs/u32"}
+      },
+      "$comment": "Semantic parser rejects revision2 fields below0x20001 and revision3 field below0x2001f. Missing optional cached fields remain UNKNOWN, not zero."
+    },
+    "gpt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence_ref", "logical_block_bytes", "first_lba", "last_lba_inclusive"],
+      "properties": {
+        "evidence_ref": {"type": "string", "minLength": 1},
+        "logical_block_bytes": {"const": 4096},
+        "first_lba": {"$ref": "#/$defs/u64"}, "last_lba_inclusive": {"$ref": "#/$defs/u64"},
+        "total_bytes": {"$ref": "#/$defs/u64"}, "partition_number": {"$ref": "#/$defs/u32"},
+        "partition_signature_hex": {"$ref": "#/$defs/signature"},
+        "partition_name": {"const": "userdata"},
+        "input_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "$comment": "Independent historical GPT identity has NO UEFI parent path field. Parent association must come from the same complete snapshot, never be copied back into this reference. GPT LBA4096 B versus Linux sectors512 B. Capacity not unique. Raw unique partition GUID bytes, not disk GUID or text byte order."
+    }
+  }
+}
