@@ -1,0 +1,24 @@
+--- a/bsd/kern/kern_exit.c
++++ b/bsd/kern/kern_exit.c
+@@ -2557,7 +2557,8 @@
+ 	 * Notify parent that we're gone.
+ 	 */
+ 	pp = proc_parent(p);
+-	if (proc_is_shadow(p)) {
++	bool enuma_shadow = proc_is_shadow(p);
++	if (enuma_shadow) {
+ 		/* kernel can reap this one, no need to move it to launchd */
+ 		proc_list_lock();
+ 		p->p_listflag |= P_LIST_DEADPARENT;
+@@ -2672,6 +2673,11 @@
+ 	}
+ 
+ 	proc_rele(pp);
++	/* p may already be reaped; use only the values saved above. */
++	if (!enuma_shadow) {
++		printf("enuma-exit: pid=%d st=%d sig=%d\n", pid, exitval,
++		    WIFSIGNALED(exitval) ? WTERMSIG(exitval) : 0);
++	}
+ #if DEVELOPMENT || DEBUG
+ 	proc_exit_lpexit_check(pid, PELS_POS_END);
+ #endif
