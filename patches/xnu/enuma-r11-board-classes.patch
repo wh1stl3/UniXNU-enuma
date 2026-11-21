@@ -1,0 +1,41 @@
+From rootstockos/UniXNU-asteroids@6370e66c patches/xnu/zzyg-board-class-registration.patch
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+Adaptation: always finish the registration transaction on this XNU base.
+preModLoad() leaves the class lock held on allocation failure, and
+postModLoad(NULL) runs the cleanup path; preserve the allocation error.
+
+diff --git a/libkern/c++/OSKext.cpp b/libkern/c++/OSKext.cpp
+--- a/libkern/c++/OSKext.cpp
++++ b/libkern/c++/OSKext.cpp
+@@ -1715,6 +1715,30 @@ OSKextResetAfterUserspaceReboot(void)
+ 	OSKext::resetAfterUserspaceReboot();
+ }
+ 
++/*
++ * Register classes built into the kernel's kmod in the same lock order
++ * as OSKext::load. postModLoad can look up the kext under sKextLock
++ * while it still owns the OSMetaClass lock.
++ */
++extern "C" OSReturn OSKextRegisterBoardClasses(const char *kextIdentifier, void (*constructors)(void));
++extern "C" OSReturn
++OSKextRegisterBoardClasses(const char *kextIdentifier, void (*constructors)(void))
++{
++	if (sKextLock) {
++		IORecursiveLockLock(sKextLock);
++	}
++	void *handle = OSMetaClass::preModLoad(kextIdentifier);
++	if (handle) {
++		constructors();
++	}
++	// On this XNU, even a NULL handle still owns the class lock.
++	const OSReturn result = OSMetaClass::postModLoad(handle);
++	if (sKextLock) {
++		IORecursiveLockUnlock(sKextLock);
++	}
++	return handle ? result : kOSKextReturnNoMemory;
++}
++
+ /*
+  * Remove daemon exit requests from sKernelRequests
+  *
