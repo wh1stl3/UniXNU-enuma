@@ -1,0 +1,89 @@
+diff --git a/bsd/kern/kern_exec.c b/bsd/kern/kern_exec.c
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -8170,5 +8170,79 @@
+  * 4		3		1		/sbin/launchd
+  */
++#if defined(XNU_ENUMA_PATH_PROBE) && XNU_ENUMA_PATH_PROBE
++static _Atomic uint32_t enuma_path_sequence;
++
++static void
++enuma_fs_probe(const char *path)
++{
++	vnode_t vp = NULLVP;
++	struct vfs_attr va;
++	vfs_context_t ctx = vfs_context_current();
++	int error = vnode_lookup(path, 0, &vp, ctx);
++	if (error == 0) {
++		VFSATTR_INIT(&va);
++		VFSATTR_WANTED(&va, f_bsize);
++		VFSATTR_WANTED(&va, f_blocks);
++		VFSATTR_WANTED(&va, f_bavail);
++		error = vfs_getattr(vnode_mount(vp), &va, ctx);
++		if (!error && VFSATTR_IS_SUPPORTED(&va, f_bsize) &&
++		    VFSATTR_IS_SUPPORTED(&va, f_blocks) &&
++		    VFSATTR_IS_SUPPORTED(&va, f_bavail)) {
++			uint64_t total = va.f_blocks * (uint64_t)va.f_bsize / 1024;
++			uint64_t avail = va.f_bavail * (uint64_t)va.f_bsize / 1024;
++			printf("enuma-fs: %s %llu %llu\n", path, total, avail);
++			if (!strcmp(path, "/private/var") && avail < 1024) {
++				printf("enuma-fs: var-critical\n");
++			}
++		} else {
++			printf("enuma-fs: %s error %d\n", path, error);
++		}
++		vnode_put(vp);
++	} else {
++		printf("enuma-fs: %s error %d\n", path, error);
++	}
++}
++
++#define ENUMAVN_LABEL(path, label) do { \
++	vnode_t vp = NULLVP; \
++	int error = vnode_lookup(path, 0, &vp, vfs_context_current()); \
++	const char *type = "-"; \
++	if (!error) { \
++		type = vnode_vtype(vp) == VREG ? "REG" : \
++		    vnode_vtype(vp) == VDIR ? "DIR" : "OTHER"; \
++		vnode_put(vp); \
++	} \
++	printf("enuma-vn: %d %s %s\n", error, type, label); \
++} while (0)
++
++#define ENUMAVN(path) ENUMAVN_LABEL(path, path)
++
++static void
++enuma_path_probe(void)
++{
++	if (os_atomic_inc_orig(&enuma_path_sequence, relaxed) != 0) {
++		return;
++	}
++	ENUMAVN("/System/Library/LaunchDaemons");
++	ENUMAVN("/System/Library/LaunchDaemons/com.apple.CommCenter.plist");
++	ENUMAVN("/System/Library/LaunchDaemons/com.apple.SpringBoard.plist");
++	ENUMAVN("/usr/libexec/xpcproxy");
++	ENUMAVN("/System/Library/dyld");
++	ENUMAVN("/System/Library/Caches/com.apple.dyld");
++	ENUMAVN("/System/Library/CoreServices/SpringBoard.app");
++	ENUMAVN_LABEL("/System/Library/CoreServices/SpringBoard.app/SpringBoard", ".../CoreServices/SpringBoard.app/SpringBoard");
++	ENUMAVN("/usr/libexec/CommCenter");
++	ENUMAVN("/System/Cryptexes/OS/System/Library/dyld");
++	ENUMAVN_LABEL("/System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e", ".../Cryptexes/OS/.../dyld/dyld_shared_cache_arm64e");
++	ENUMAVN_LABEL("/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm64e", ".../Caches/com.apple.dyld/dyld_shared_cache_arm64e");
++	enuma_fs_probe("/");
++	enuma_fs_probe("/private/var");
++	printf("enuma-fs: maxvnodes %d\n", desiredvnodes);
++}
++#undef ENUMAVN
++#undef ENUMAVN_LABEL
++#endif
++
+ void
+ load_init_program(proc_t p)
+ {
+@@ -8191,2 +8265,5 @@
+ #endif
++#if defined(XNU_ENUMA_PATH_PROBE) && XNU_ENUMA_PATH_PROBE
++	enuma_path_probe();
++#endif
+ #if CONFIG_MEMORYSTATUS
