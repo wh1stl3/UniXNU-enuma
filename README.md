@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r15 单次观察（2026-11-21，`self-checked`）**：共享区映射调用成功且查询见首映射，但调用者与区域未绑定；详见 [r15 记录](docs/enuma-r15-device-20261122.md)，阶段不提升。
+
 **r14 单次观察（2026-11-21，`self-checked`）**：传统 arm64 cache 路径在探针视图中可解析；映射及共享区失败机制未知。见 [r14 记录](docs/enuma-r14-device-20261122.md)，阶段不提升。
 
 **r13 单次观察（2026-11-21，`self-checked`）**：控制台批次耗时与 launchd 共享区报错见 [r13 记录](docs/enuma-r13-device-20261122.md)；机制未定，阶段不提升。
