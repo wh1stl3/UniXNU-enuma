@@ -1,0 +1,97 @@
+--- a/bsd/vm/vm_unix.c
++++ b/bsd/vm/vm_unix.c
+@@ -2089,6 +2089,28 @@
+  * ENOMEM	shared region is empty
+  * EFAULT	bad address for "start_address"
+  */
++__attribute__((noinline))
++static void
++enuma_sr_check(int error, bool first)
++{
++	/* One boot-wide stream; -1 makes the first snapshot visible. */
++	static int last = -1;
++	int state = error * 2 + first;
++	if (os_atomic_xchg(&last, state, relaxed) != state) {
++		printf("enuma-sr: check ret=%d first=%u\n", error, (unsigned int)first);
++	}
++}
++
++__attribute__((noinline))
++static void
++enuma_sr_call(uint64_t size, bool slide, int kr)
++{
++	static unsigned int completed;
++	unsigned int n = os_atomic_inc(&completed, relaxed);
++	printf("enuma-sr: call=%u size=0x%llx slide=%u kr=%d\n",
++	    n, (unsigned long long)size, (unsigned int)slide, kr);
++}
++
+ int
+ shared_region_check_np(
+ 	__unused struct proc                    *p,
+@@ -2099,6 +2121,7 @@
+ 	mach_vm_offset_t        start_address = 0;
+ 	int                     error = 0;
+ 	kern_return_t           kr;
++	bool                    first = false;
+ 	task_t                  task = current_task();
+ 
+ 	SHARED_REGION_TRACE_DEBUG(
+@@ -2130,6 +2153,8 @@
+ 		} else {
+ 			/* retrieve address of its first mapping... */
+ 			kr = vm_shared_region_start_address(shared_region, &start_address, task);
++			/* This is the result of the existing locked first-mapping snapshot. */
++			first = kr == KERN_SUCCESS;
+ 			if (kr != KERN_SUCCESS) {
+ 				SHARED_REGION_TRACE_ERROR(("shared_region: %p [%d(%s)] "
+ 				    "check_np(0x%llx) "
+@@ -2185,6 +2210,9 @@
+ 		proc_getpid(p), p->p_comm,
+ 		(uint64_t)uap->start_address, (uint64_t)start_address, error));
+ 
++	if (uap->start_address != 0) {
++		enuma_sr_check(error, first);
++	}
+ 	return error;
+ }
+ 
+@@ -2969,6 +2997,8 @@
+ 	unsigned int                  mappings_count;
+ 	struct shared_file_mapping_slide_np *mappings = NULL;
+ 	kern_return_t                 kr = KERN_SUCCESS;
++	uint64_t                      requested_size = 0;
++	bool                          slid = false;
+ 
+ 	files_count = uap->files_count;
+ 	mappings_count = uap->mappings_count;
+@@ -3033,6 +3063,13 @@
+ 		goto done;
+ 	}
+ 
++	/* Sum the copied request, before any mapping can change the descriptors. */
++	for (unsigned int i = 0; i < mappings_count; i++) {
++		if (__builtin_add_overflow(requested_size, mappings[i].sms_size, &requested_size)) {
++			requested_size = UINT64_MAX;
++			break;
++		}
++	}
+ 	uint32_t max_slide = shared_files[0].sf_slide;
+ 	uint32_t random_val;
+ 	uint32_t slide_amount;
+@@ -3049,6 +3086,7 @@
+ 		slide_amount = 0;
+ 	}
+ #endif /* DEVELOPMENT || DEBUG */
++	slid = slide_amount != 0;
+ 
+ 	/*
+ 	 * Fix up the mappings to reflect the desired slide.
+@@ -3079,6 +3117,7 @@
+ done:
+ 	kfree_data(shared_files, files_count * sizeof(shared_files[0]));
+ 	kfree_data(mappings, mappings_count * sizeof(mappings[0]));
++	enuma_sr_call(requested_size, slid, kr);
+ 	return kr;
+ }
+ 
