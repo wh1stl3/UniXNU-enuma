@@ -1,0 +1,22 @@
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -8251,14 +8251,16 @@
+ 	ENUMAVN("/System/Library/LaunchDaemons/com.apple.CommCenter.plist");
+ 	ENUMAVN("/System/Library/LaunchDaemons/com.apple.SpringBoard.plist");
+ 	ENUMAVN("/usr/libexec/xpcproxy");
+-	ENUMAVN("/System/Library/dyld");
+-	ENUMAVN("/System/Library/Caches/com.apple.dyld");
+ 	ENUMAVN("/System/Library/CoreServices/SpringBoard.app");
+ 	ENUMAVN_LABEL("/System/Library/CoreServices/SpringBoard.app/SpringBoard", ".../CoreServices/SpringBoard.app/SpringBoard");
+ 	ENUMAVN("/usr/libexec/CommCenter");
++	ENUMAVN("/System/Cryptexes/OS");
++	ENUMAVN("/System/Cryptexes/OS/System/Library");
+ 	ENUMAVN("/System/Cryptexes/OS/System/Library/dyld");
++	ENUMAVN_LABEL("/System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64", ".../Cryptexes/OS/.../dyld/dyld_shared_cache_arm64");
++	ENUMAVN_LABEL("/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm64", ".../Caches/com.apple.dyld/dyld_shared_cache_arm64");
++	ENUMAVN_LABEL("/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm64.symbols", ".../Caches/com.apple.dyld/dyld_shared_cache_arm64.symbols");
+ 	ENUMAVN_LABEL("/System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e", ".../Cryptexes/OS/.../dyld/dyld_shared_cache_arm64e");
+-	ENUMAVN_LABEL("/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm64e", ".../Caches/com.apple.dyld/dyld_shared_cache_arm64e");
+ 	enuma_fs_probe("/");
+ 	enuma_fs_probe("/private/var");
+ 	printf("enuma-fs: maxvnodes %d\n", desiredvnodes);
