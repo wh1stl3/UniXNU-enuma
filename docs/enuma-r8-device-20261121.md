@@ -51,3 +51,24 @@ enuma-tb: exit seq=0 cntvct=2864277864946 abstime_ns=149181138798854 cal=149181.
 - **UNKNOWN**：真实等待精确时长、日志迟缓所在层、`tccd` 是否循环重启、失败路径身份、首个 GUI swap、用户态稳定性、持久 Data 与断电后可交互。
 
 阶段不提升；本次记录无需 `decider` 或 `deep_reviewer`。
+
+## 高帧率复扫（2 fps，480–764 s）
+
+### 方法
+
+主控提供的复扫结果：同一录像在 480–764 秒区间按 2 fps 重抽 568 帧至临时目录，不入库；分两段各 12 帧、每 12 秒一帧抽样核读，另对 537–542 秒六帧逐帧核读。本次仅整理转述，未重复抽帧或核读。
+
+### 结果
+
+- 24 个抽样帧与 537–542 秒六帧均未读到 `exited` 行；`exits` 出现在其它进程的 DYLD shared-region 行，不是服务退出。
+- `tccd[17]` 系误读，已撤回：537–542 秒六帧稳定显示两条 `tccd[222] triggered unnest of range 0x204000000->0x204200000`、`0x204200000->0x209600000 of DYLD shared region in VM map 0x6c9`，位置六帧不变，属静止旧内容。已确认序列从 `tccd[77]` 起，依次可见 206 → 222 → 272 → 285 → 315 → 344。
+- 672 秒，`(user/501/com.apple.SpringBoard)` 有 `service state: spawn scheduled` → `service state: spawning` → `Launching: system support`；同帧 `(user/501/com.apple.assistantd)` 同样有三段。用户域服务启动流程已推进。
+- 684 秒，`(user/501/com.apple.assistantd [41]) xpcproxy spawned with pid 4…`，表明实际 fork；行尾截断，完整 pid 不清。
+- 708 秒 `runningboardd [61] xpcproxy spawned with pid …`，720 秒 `mediaserverd [77] xpcproxy spawned with pid …`；两行行尾均截断。
+- SpringBoard 仅读到 `spawning` 与 `Launching: system support`，未见其 `spawned with pid`，也未见退出行；右边缘截断与屏幕快速滚动使「卡在启动中」与「已起来但 pid 未入画」无法区分。
+
+### 判读边界更新
+
+- **已确证**：launchd 已推进到 `user/501` 域用户态服务启动；SpringBoard、assistantd、runningboardd、mediaserverd 均有 spawn 记录，后两者为系统服务；assistantd 实际 fork 出子进程。
+- **强推断**：同一启动中 `tccd` 至少出现 7 个不同 pid（77/206/222/272/285/315/344），存在重复启动；未捕获 `exited`，不能写成 respawn 环。
+- **UNKNOWN**：SpringBoard 是否成功运行；`tccd` 是否循环崩溃；`Failed to bootstrap path` 目标路径（右侧截断）；首个 GUI swap。阶段不提升。
