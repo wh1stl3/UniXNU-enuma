@@ -33,3 +33,22 @@ Windows 对设备仓 `out/`、`.cache/` 递归按 `dyld_shared_cache*` 搜索独
 未找到能证实完成同类 16K→4K dyld 缓存转换的第三方项目。相关但不等价：[keith/dyld-shared-cache-extractor](https://github.com/keith/dyld-shared-cache-extractor) 提取库供逆向，不是转换器；[blacktop/ipsw](https://blacktop.github.io/ipsw/docs/guides/dyld) 解析/提取，不证明输出可启动缓存；[xVanTuring/UniXNU-qemu](https://github.com/xVanTuring/UniXNU-qemu) 的 4K 运行记录见上述官方文档，但不证明转换或 donor 相同。未下载这些项目。
 
 结论：先只读解析本 donor 的现有缓存头、所有 mapping、slide 版本/页粒度及签名，并确认路径与身份；若原缓存已满足 4K，避免转换。当前不证明共享区失败原因。
+
+## 6. donor 缓存审计实测
+
+`self-checked`，未访问设备或修改卷；未取得 donor 缓存的有效审计结果。活动 UniXNU 为 `693f5d9cae8a408dd18b39f3f9fdc4228c934241`。输入 `out/userdata-clean-20261112/OS.raw` 为 6,077,580,800 B，`044-76034-038.dmg` 为 3,303,014,400 B；文件存在不独立验证其 donor 身份。
+
+两个脚本均无容器或路径参数。`audit-target-dyld-cache.py:14-35` 固定 dyld 源码 revision `a571176e8e00c47e95b95e3156820ebec0cbd5e6`、macOS `xcrun clang++` 和 `UniXNU/.cache/firmware/target-volumes/systemos-mount/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm64*`，排除 `.symbols`；严格要求 magic `dyld_v1   arm64`，arm64e 会拒绝，扫描 mapping、slide 和原始 CodeDirectory，但不输出总文件大小或镜像数量。脚本会向 UniXNU 的 `build/target-userspace` 写辅助代码和结果。`audit-native-cache-slide.py:12-52,80-89,134-145` 需固定 XNU revision `d8b80295118ef25ac3a784134bcf95cd8e88109f`、本地 `.cache/xnu-work`、前一脚本 JSON、同一挂载、macOS arm64 编译运行环境，且硬编码恰好四个 v2 slide mapping 和 32 个样本；不同 donor 布局不能将其失败直接判为不兼容。它也写 UniXNU 构建目录。故不能直接把 IPSW、DMG 或 OS.raw 传给脚本，本轮也不能越过 UniXNU 只读约束去补齐其写入路径。
+
+WSL 原样运行（两个均在创建输出前失败）：
+
+```
+python3 /mnt/d/Code/PortingiOS/UniXNU/scripts/audit-target-dyld-cache.py
+# exit 1: line 15: git -C .../UniXNU/refer/dyld rev-parse HEAD 返回 128，目录不存在
+python3 /mnt/d/Code/PortingiOS/UniXNU/scripts/audit-native-cache-slide.py
+# exit 1: line 13: git -C .../UniXNU/refer/xnu rev-parse HEAD 返回 128，目录不存在
+```
+
+另确认固定 SystemOS 挂载路径和 `.cache/xnu-work` 均不存在。**架构、全部 mapping 的 address/size/fileOffset 及对齐、slide 版本和页粒度、镜像数量、缓存总大小与完整 subcache 集合均未判定**。先前 `docs/enuma-dyld-cache-layout-20261122.md` 的原始字节扫描发现 arm64 候选头和编号文件名，但未解析 APFS 活动 inode，不能作为实际 donor 活动缓存的字段或完整性证据。结论：**无法判定是否满足 4 KiB 内核消费条件**；缺经身份确认的完整活动缓存及可运行的隔离审计环境，签名/真实消费路径也未验证。
+
+可选取出方式：在 macOS 将现有 SystemOS 镜像用 `hdiutil attach -readonly -nobrowse` 只读挂载，确认活动卷和来源后读取/复制完整缓存及 subcache 至本地 `out/`；官方 `scripts/build-boot-runtime.py:34-57` 已有只读 `hdiutil` 挂载模式，但不是 SystemOS 缓存提取 CLI，不能声称其直接提取。也可取得可信的已解出完整缓存及身份记录。随后在独立可写的官方仓副本中准备原脚本规定的固定路径、源码和 macOS 环境；先对完整文件集逐项核查，不能靠 glob、计数或脚本通过推定 subcache 完整。未找到官方现成的 DMG→缓存独立提取脚本；本轮未挂载、未提取、未转换。
