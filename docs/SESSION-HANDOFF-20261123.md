@@ -15,9 +15,9 @@
 - r24：`out/ufs-sm8250-launchd-hid-20261122-r24/boot.img`
 - r26：`out/ufs-sm8250-launchd-fbcount-20261122-r26/boot.img`
 - r28：`out/ufs-sm8250-launchd-fbcount-20261123-r28/boot.img`
-- 原始备份：路径未确认；历史 `8f40f0c9…` 记录及缺整分区副本的边界见 [槽位计划](persistent-boot-slot-plan.md)。不得猜路径。
+- 原始 boot 备份：`.cache/ufs-boot-analysis-20261111/boot-execout-fixed.img`，201,326,592 B，SHA-256 `8f40f0c93cbc8b183f6296b427522e1155eb9ba1ff32065f09f6bc98cf972959`；早前从该机 `boot_a` 经 adb 读取，记录见 `.cache/ufs-boot-analysis-20261111/`；**能否恢复 Android 未经实测**。
 
-回刷命令模板（仅记录，须当轮授权并按型号重新识别目标、确认槽位及镜像）：`fastboot -s <enuma-serial> flash boot_b <已核验镜像路径>`，随后 `fastboot -s <enuma-serial> reboot`。不自动执行。
+原始备份回刷命令模板：`fastboot -s <serial> flash boot_a <该文件>`；若当前活动槽为 `b`，需确认目标槽再执行。这是**分区写入**，须当轮授权，并按型号重新识别目标、确认镜像；不自动执行。
 
 ## 下一步
 
