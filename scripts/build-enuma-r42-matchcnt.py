@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-"""Replay the isolated r40 (r42) or r42 (r43) recipe with two replacements."""
+"""Replay the isolated r42/r43/r44 diagnostic builds with two replacements."""
 import argparse
 import hashlib
 import json
@@ -18,18 +18,24 @@ device = Path(__file__).resolve().parents[1]
 base = device.parents[1] / 'UniXNU'
 r40 = device / 'out/ufs-sm8250-storegeom-20261123-r40'
 r42 = device / 'out/ufs-sm8250-matchcnt-20261123-r42'
+r43 = device / 'out/ufs-sm8250-matchcnt2-20261123-r43'
 r34 = device / 'out/ufs-sm8250-launchd-ipc-20261123-r34'
 r21 = device / 'out/ufs-sm8250-launchd-keystore-20261122-r21'
 r10 = device / 'out/ufs-sm8250-launchd-display-20261121-r10/self-check/build-final'
 args = argparse.ArgumentParser()
-args.add_argument('--r43', action='store_true')
+mode = args.add_mutually_exclusive_group()
+mode.add_argument('--r43', action='store_true')
+mode.add_argument('--r44', action='store_true')
 args.add_argument('--out', type=Path)
 options = args.parse_args()
-baseline = r42 if options.r43 else r40
-default_out = device / 'out/ufs-sm8250-matchcnt2-20261123-r43' if options.r43 else r42
+baseline = r43 if options.r44 else r42 if options.r43 else r40
+default_out = (device / 'out/ufs-sm8250-matchcnt2fx-20261123-r44' if options.r44 else
+               r43 if options.r43 else r42)
 out = (options.out or default_out).resolve()
 assert out.parent == device / 'out' and not out.exists(), out
-fragment = device / 'package' / ('EnumaMatchCount2.inc' if options.r43 else 'EnumaMatchCount.inc')
+extended = options.r43 or options.r44
+fragment = device / 'package' / ('EnumaMatchCount2.inc' if extended else 'EnumaMatchCount.inc')
+fx_fragment = device / 'package/EnumaFixupReport.inc'
 helpers = runpy.run_path(str(device / 'scripts/build-enuma-r23-hid-standin.py'))
 digest, snapshot, read_member, fat_tree = (
     helpers['R'][k] for k in ('digest', 'snapshot', 'read_member', 'fat_tree'))
@@ -62,12 +68,14 @@ frozen = snapshot(frozen_paths)
 recipe = read_json(baseline / 'commands.json')
 paths = [Path(x) for x in (baseline / 'link.filelist').read_text().splitlines()]
 units = ('IOUserClient.cpo', 'kern_exec.o')
-old_obj_dir = (r42 if options.r43 else r34) / 'objects'
-for unit in units:
-    assert [p for p in paths if p.name == unit] == [old_obj_dir / unit], unit
-if options.r43:
-    assert all(digest(old_obj_dir / unit) == prior['objects'][unit]['new'] for unit in units)
-    uc_recipe, exec_recipe = (recipe['compile-' + unit] for unit in units)
+old_uc, = (p for p in paths if p.name == 'IOUserClient.cpo')
+old_exec, = (p for p in paths if p.name == 'kern_exec.o')
+old_obj_dir = (baseline if extended else r34) / 'objects'
+assert (old_uc, old_exec) == tuple(old_obj_dir / unit for unit in units)
+tree = Path(recipe['link']['cwd']).parents[3]
+if extended:
+    assert all(digest(p) == prior['objects'][p.name]['new'] for p in (old_uc, old_exec))
+    uc_recipe, exec_recipe = (recipe['compile-' + obj.name] for obj in (old_uc, old_exec))
 else:
     steps = {s['tag']: s for s in
              read_json(r21 / 'self-check/build-final/kernel-build-result.json')['r13_delta']['steps']}
@@ -78,6 +86,28 @@ direct = sorted({Path(a.rsplit(',', 1)[-1]) for a in recipe['link']['argv'] if a
 prelink_args = recipe['prelink']['argv']
 donor = Path(prelink_args[prelink_args.index('--prelinked') + 1])
 inputs = snapshot([*paths, *direct, donor])
+if options.r44:
+    props = helpers['R']['read_properties']((r43 / 'kernel.macho.adt').read_bytes())
+    table, = (v for k, v in props.items() if k[-2:] == ('chosen', 'text-fixups'))
+    assert table.endswith(b'\0')
+    fx_records = [v.decode().split(',')[:2] for v in table.rstrip(b'\0').split(b'\0')]
+    assert fx_records == [['dyld_shared_cache_arm64.15', '421e8bc'],
+                          ['dyld_shared_cache_arm64.13', '1b05bec'],
+                          ['dyld_shared_cache_arm64.13', '1b05b08'],
+                          ['BTAudioHALPlugin', '38bec']], fx_records
+    assert not any(re.search(rb'\btext-fixup[0-7]=', val) for key, val in props.items()
+                   if key[-2:] == ('chosen', 'boot-args'))
+    assert not re.search(rb'\btext-fixup[0-7]=', read_member(r43 / 'payload.img', 'unixnu.toml'))
+    old_ubc, = (p for p in paths if p.name == 'ubc_subr.o')
+    ubc_src = tree / '.cache/xnu-work/bsd/kern/ubc_subr.c'
+    assert digest(ubc_src) == '484882286fa438f52eeabf38af199538201152b5d067746fd0d44cd6509945d8'
+    assert inputs[str(old_ubc)] == '3b3256855e3992e4e5c68098ec90f7740e3834c0e3b13dcd86fa9869cea3faa7'
+    ubc_command = Path(str(old_ubc) + '.json')
+    cc = json.loads(ubc_command.read_text().strip().removesuffix(','))
+    assert Path(cc['directory']) / cc['output'] == old_ubc
+    ubc_recipe = {'argv': cc['arguments'], 'cwd': cc['directory']}
+    frozen_paths += [ubc_src, ubc_command]
+    frozen.update(snapshot([ubc_src, ubc_command]))
 
 sys.path.insert(0, str(base / 'scripts'))
 from unixnu import bootimg, payload as payload_step
@@ -88,7 +118,6 @@ from unixnu.kernel import linux_env
 out.mkdir()
 for name in ('objects', 'logs', 'tmp'):
     (out / name).mkdir()
-tree = Path(recipe['link']['cwd']).parents[3]
 env = {**os.environ, **linux_env(SimpleNamespace(tree=tree)), 'PYTHONDONTWRITEBYTECODE': '1',
        'TMPDIR': str(out / 'tmp')}
 env['PATH'] = '/home/wh1stl3/.local/bin:' + env['PATH']
@@ -110,13 +139,31 @@ def call(tag, argv, cwd=out):
 
 source = out / 'source'
 source.mkdir()
-old_sources = (r42 if options.r43 else r34) / 'source'
+old_sources = (baseline if extended else r34) / 'source'
 bsd = source / 'bsd/kern'
 shutil.copytree(old_sources / 'bsd/kern', bsd)
-shutil.copyfile(fragment, bsd / fragment.name)
+if not options.r44:
+    shutil.copyfile(fragment, bsd / fragment.name)
 fb = bsd / 'EnumaBbScan.inc'
 text = fb.read_text()
-if options.r43:
+if options.r44:
+    text = replace_once(text, '#include "EnumaMatchCount2.inc"',
+                        '#include "EnumaMatchCount2.inc"\nextern void enuma_fixup_report(void);')
+    text = replace_once(text, '\t\tenuma_matchcnt_dump();\n',
+                        '\t\tenuma_matchcnt_dump();\n\t\tenuma_fixup_report();\n')
+    shutil.copyfile(fx_fragment, bsd / fx_fragment.name)
+    ubc = bsd / 'ubc_subr.c'
+    text_ubc = replace_once(ubc_src.read_text(), 'uint32_t cs_text_fixup_applied;',
+                            'uint32_t cs_text_fixup_applied;\n#include "EnumaFixupReport.inc"')
+    text_ubc = replace_once(text_ubc,
+        '\t\tif (os_atomic_inc(&cs_text_fixup_applied, relaxed) <= 16) {',
+        '''		uint32_t applied = os_atomic_inc(&cs_text_fixup_applied, relaxed);
+		if (i < 8) {
+			os_atomic_or(&enuma_fx_bits, (uint8_t)(1u << i), release);
+		}
+		if (applied <= 16) {''')
+    ubc.write_text(text_ubc)
+elif options.r43:
     text = replace_once(text, '#include "EnumaMatchCount.inc"', '#include "EnumaMatchCount2.inc"')
     text = replace_once(text, '\t\tenuma_matchcnt_dump();\n', '')
     text = replace_once(text,
@@ -160,7 +207,11 @@ hooks = {'internal_io_service_get_matching_services': 0,
          'internal_io_service_get_matching_service': 0,
          'internal_io_service_add_notification': 1,
          'is_io_service_open_extended': 2}
-if options.r43:
+if options.r44:
+    hooks.update({'internal_io_service_match_property_table': 3,
+                  'internal_io_service_add_interest_notification': 4})
+    added_hooks = {}
+elif options.r43:
     added_hooks = {'internal_io_service_match_property_table': 3,
                    'internal_io_service_add_interest_notification': 4}
 else:
@@ -180,19 +231,21 @@ for name, kind in hooks.items():
     locations[name] = text.count('\n', 0, match.end()) + 1
 
 changes = {}
-for unit, step, src in ((units[0], uc_recipe, uc),
-                        (units[1], exec_recipe, bsd / 'kern_exec.c')):
+builds = [(old_exec, exec_recipe, bsd / 'kern_exec.c')]
+builds.insert(0, (old_ubc, ubc_recipe, ubc) if options.r44 else (old_uc, uc_recipe, uc))
+for old_obj, step, src in builds:
+    unit = old_obj.name
     obj = out / 'objects' / unit
     argv = step['argv'].copy()
     assert Path(argv[2]).name == src.name and argv[3] == '-o'
-    if unit == units[0] and not options.r43:
+    if unit == old_uc.name and not extended:
         argv += ['-iquote', str(Path(argv[2]).parent)]
     argv[2], argv[4] = src, obj
     if '-MF' in argv:
         argv[argv.index('-MF') + 1] = obj.with_suffix('.d')
     assert not {'-MJ', '-serialize-diagnostics'} & set(argv)
     call('compile-' + unit, argv, step['cwd'])
-    changes[old_obj_dir / unit] = obj
+    changes[old_obj] = obj
 
 
 def delta(old, new):
@@ -210,14 +263,18 @@ for tag in ('link', 'prelink'):
         argv = [a.replace(str(baseline / name), str(out / name)) for a in argv]
     call(tag, argv, out if tag == 'prelink' else step['cwd'])
 
-formats = re.findall(r'"(enuma-mt: [^"]+)"', fragment.read_text())
-assert len(formats) == len(set(formats)) == (6 if options.r43 else 4)
+format_source = (bsd / 'EnumaMatchCount2.inc') if options.r44 else fragment
+formats = re.findall(r'"(enuma-mt: [^"]+)"', format_source.read_text())
+assert len(formats) == len(set(formats)) == (6 if extended else 4)
+fx_formats = re.findall(r'"(enuma-fx: [^"]+)"', fx_fragment.read_text()) if options.r44 else []
+assert len(fx_formats) == len(set(fx_formats)) == (3 if options.r44 else 0)
 calls = {}
 for name in ('native.macho', 'prelink.macho'):
     path = out / name
     assert not call('undefined-' + name, ['llvm-nm', '-u', path]).strip()
     blob = path.read_bytes()
-    assert all(blob.count(s.replace(r'\n', '\n').encode() + b'\0') == 1 for s in formats)
+    assert all(blob.count(s.replace(r'\n', '\n').encode() + b'\0') == 1
+               for s in formats + fx_formats)
     del blob
     # Inspect raw nlist as well so that weak undefined symbols cannot be omitted.
     blob = path.read_bytes()
@@ -230,6 +287,8 @@ for name in ('native.macho', 'prelink.macho'):
                  'match_property_table', 'add_interest_notification')
     entries = [s for s in symbols if (s.startswith('_is_io_service_') or s.startswith('__Z')) and
                any(k in s for k in endpoints)]
+    if options.r44:
+        entries += ['_enuma_fixup_report', '_cs_text_fixup_page']
     report = call('calls-' + name, ['llvm-objdump', '-d', '--disassemble-symbols=' +
                   ','.join(['_enuma_fb_arm', '_enuma_fb_dump', '_enuma_matchcnt_dump',
                             '_enuma_matchcnt_record', *entries]), path])
@@ -241,14 +300,20 @@ for name in ('native.macho', 'prelink.macho'):
             owner = sym[1]
         for target in ('_enuma_matchcnt_record', '_enuma_matchcnt_dump', '_printf',
                        '_thread_call_enter1_delayed', '_thread_call_enter_delayed',
-                       '_thread_call_free'):
+                       '_thread_call_free', '_enuma_fixup_report'):
             if f'<{target}>' in line and re.search(r'\bb(?:l)?\s+0x', line):
                 owners.setdefault(owner, []).append(target)
     assert owners.get('_enuma_fb_dump', []).count('_enuma_matchcnt_dump') == 1, owners
     # r42 unrolls the four fixed rows and shares the printf within each top pair.
-    assert owners.get('_enuma_matchcnt_dump', []).count('_printf') == (6 if options.r43 else 8), owners
+    assert owners.get('_enuma_matchcnt_dump', []).count('_printf') == (6 if extended else 8), owners
+    if options.r44:
+        seq = owners['_enuma_fb_dump']
+        assert seq.count('_enuma_fixup_report') == 1
+        mt = seq.index('_enuma_matchcnt_dump')
+        assert seq[mt:mt + 3] == ['_enuma_matchcnt_dump', '_enuma_fixup_report', '_thread_call_free']
+        assert owners['_enuma_fixup_report'].count('_printf') in (2, 3)
     recorders = [s for s, targets in owners.items() if '_enuma_matchcnt_record' in targets]
-    if options.r43:
+    if extended:
         assert owners['_enuma_fb_arm'].count('_thread_call_enter1_delayed') == 1, owners
         assert owners['_enuma_fb_arm'].count('_thread_call_enter_delayed') == 1, owners
         assert len(recorders) == len(hooks), recorders
@@ -301,5 +366,7 @@ result.update(objects=objects, unchanged_filelist_inputs=len(paths) - len(change
               changed_payload_members=changed, formats=formats, hook_lines=locations,
               call_sites=calls, zero_undefined=True, frozen=frozen,
               boot_metadata=read_json(out / 'boot.json'))
+if options.r44:
+    result.update(fixup_formats=fx_formats, fixup_adt_order=fx_records)
 (out / 'candidate-manifest.json').write_text(json.dumps(result, indent=2) + '\n')
 print('candidate manifest written', flush=True)
