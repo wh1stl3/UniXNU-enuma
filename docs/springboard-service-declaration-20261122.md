@@ -29,3 +29,20 @@
 AXSpringBoardServer 是否由 SpringBoard 的 MachServices 声明、backboardd 是否声明 display 服务均未知。即使 plist 确有声明，某次 lookup 失败也不能单独证明进程自身未注册：还要核对 lookup 所在 bootstrap 域、服务发布/查入机制、加载与权限状态及失败时点。
 
 两次 exec 和 lookup 失败与「注册前卡住」相容，但静态证据**无法判定**是否卡住或服务何时注册。缺两份实际 plist、相关域内服务注册/lookup 和进程运行栈或等价运行时状态；也不能用 exec 证明进程持续正常运行。见 `docs/enuma-r24-census-20261122.md:27-32,40-44`。
+
+## 全命中字节上下文（2026-11-22）
+
+`self-checked`：对上列 180 个偏移逐一只读前 512 字节、命中 19 字节及后 512 字节，并核对每个命中内容。分类是局部字节判读，不代表活动文件、文件路径或快照；相邻命中的窗口可重叠。
+
+| 镜像 | XML plist | 二进制 plist 已确认 | 二进制 plist 候选 | 代码/符号/路径字符串样 | 文件系统目录记录样 | 未定 | 合计 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| OS.raw | 0 | 2 | 2 | 0 | 3 | 0 | 7 |
+| 044-76034-038.dmg | 0 | 0 | 0 | 172 | 0 | 1 | 173 |
+
+- 两镜像所有窗口均无 `<key>`、`<dict>`、`<string>` 或 `MachServices` 明文字节；因此没有可抄录的 XML 键/值。原始扫描不能覆盖压缩、编码或不连续内容。
+- OS.raw 偏移 `378217078`、`378217296` 在同一二进制 plist 内：头在 `378216573`，额外向前扩至该头，以 Python `plistlib.loads` 解出长度 899 字节的完整字典。分别是值 `AXSpringBoardServerInstance` 与 `com.apple.accessibility.AXSpringBoardServerInstance`；结构化解析给出 `CFBundleName` 和 `CFBundleExecutable` 均为前者、`CFBundleIdentifier` 为后者，另有 `NSPrincipalClass = AXSpringBoardSettingsLoader`、`CFBundlePackageType = FMWK`。对象表顺序不是键值相邻顺序；该字典没有 `MachServices`。
+- OS.raw 偏移 `5481829264`、`5481829302` 在同一框架路径 `/System/Library/PrivateFrameworks/AXSpringBoardServerInstance.framework/AXSpringBoardServerInstance` 内；前缀 `5f 10 63` 是二进制 plist 长 ASCII 字符串的类型和长度编码，周围为同样编码的框架路径，故为二进制 plist 候选。窗口及额外前后约 2 KiB 内无 `bplist00`，未解析完整对象或邻近键，不能确认父字典及用途。
+- OS.raw 偏移 `295200427`、`391321195`、`378224479` 是 NUL 结尾的 `AXSpringBoardServerInstance.framework` 目录记录样内容，周围是其他框架或文件名。`378224479` 后 219 字节另有 `bplist00`，但命中位于该头之前，不能因此将它归为 plist 内容。
+- DMG 的未定项是 `3135386492`：命中附近有破碎的 `-[AXSpringBoardServerHeper ...]` 方法样字符串与非文本字节，不能确认结构；其余 172 个偏移即上表原始列表去除此项，局部为 NUL 分隔路径、Objective-C 类/方法/类型编码或 Swift 符号等代码字符串样。此分类不声称已完成 Mach-O 段或文件边界映射。例：`319757608` 是 NUL 分隔字符串 `com.apple.accessibility.AXSpringBoardServer`，邻有 `AXBackBoardServer` 和 `AXCarouselServer`；`2566966922` 附近有 `__LINKEDIT` 与框架路径。字符串本身不是服务声明。
+
+**结论：不能据此确认该服务由任何 plist 的 `MachServices` 声明。** 已解出的 plist 是框架 bundle 元数据，而不是该服务的 launchd 声明；plist 候选的父结构和其余未覆盖内容仍未知。未操作设备、修改镜像或验证运行时注册。
