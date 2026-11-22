@@ -1,0 +1,47 @@
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -1188,3 +1188,5 @@
+  */
++#include "EnumaFbOpenCount.inc"
++
+ static int
+ exec_mach_imgact(struct image_params *imgp)
+@@ -2126,3 +2128,4 @@
+ 	}
++	enuma_fb_arm(p->p_comm, proc_getpid(p));
+ 	goto done;
+ 
+--- a/iokit/Kernel/IOUserClient.cpp
++++ b/iokit/Kernel/IOUserClient.cpp
+@@ -71,6 +71,22 @@
+ #include "IOServicePrivate.h"
+ #include "IOKitKernelInternal.h"
+ 
++extern "C" void enuma_fb_record_open(void);
++
++static bool
++enuma_fb_service(const IOService *service)
++{
++	for (auto meta = service->getMetaClass(); meta; meta = meta->getSuperClass()) {
++		const char *name = meta->getClassName();
++		if (strcmp(name, "IOMobileFramebufferLegacy") == 0 ||
++		    strcmp(name, "IOMobileFramebuffer") == 0 ||
++		    strcmp(name, "IOFramebuffer") == 0) {
++			return true;
++		}
++	}
++	return false;
++}
++
+ #define SCALAR64(x) ((io_user_scalar_t)((unsigned int)x))
+ #define SCALAR32(x) ((uint32_t )x)
+ #define ARG32(x)    ((void *)(uintptr_t)SCALAR32(x))
+@@ -4427,4 +4443,8 @@
+ #endif
++		// Count requests reaching the virtual dispatch, not successful opens.
++		if (enuma_fb_service(service)) {
++			enuma_fb_record_open();
++		}
+ 		res = service->newUserClient( owningTask, (void *) owningTask,
+ 		    connect_type, propertiesDict, &client );
+ 
