@@ -21,6 +21,8 @@
 
 ## 下一步
 
+- 全程复盘与排序后的下一步见 [sonnet_analyzer 复盘](retrospective-20261123.md)（仅静态审查 / INSUFFICIENT EVIDENCE）。
+
 以下均为 **sonnet_analyzer 推断，需实测**；字段名、接口和判读须实施前核实，不能将相关性直接当成确定因果。
 
 1. **观测 A（首选）**：周期 dump 打印 backboardd（按 pid 34 或 comm）的 task 计数 `messages_sent`/`messages_received`/`faults`/`pageins`/`syscalls_mach`/`syscalls_unix`，各线程状态与等待原因，同次列出全部进程 pid/comm。计数全不动且线程等待，候选为用户态 mach/XPC 阻塞；`faults`/`pageins` 增长而 `messages` 不动，候选为 dyld/页入问题；`messages` 增长但 `calls=0`，候选为启动极慢；同 dump 进程清单辅助排除 comm 未命中。字段名尚未源码核对；单次清单不能排除整个观察期内的身份变化。
