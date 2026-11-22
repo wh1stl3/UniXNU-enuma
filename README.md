@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r40 单次观察（2026-11-22，`self-checked`）**：既有主 GPT 与候选 store 窗口快照见 [r40 记录](docs/enuma-r40-device-20261123.md)；备份 GPT、容量和写入准入未证，阶段不提升。
+
 **r30 单次观察（2026-11-22，`self-checked`）**：user-client 分派点有阳性对照，`backboardd` 精确 comm 计数为零；窗口与身份限制见 [r30 记录](docs/enuma-r30-device-20261123.md)，阶段不提升。
 
 **r29 单次观察（2026-11-22，`self-checked`）**：backboardd 分派计数 `calls=0`，边界与审查见 [r29 记录](docs/enuma-r29-device-20261123.md)；阶段不提升。
