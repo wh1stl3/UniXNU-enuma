@@ -59,3 +59,36 @@ sheng **未见记录**：`text-fixup-20261123.md:39-50` 已检查现有历史转
 | `vm_protos.h` 声明 hunk | 声明 `cs_text_fixup_page` | 相同 | 无行为差异。 |
 
 `UniXNU@477e530a8689af4a09eacb4eb9bdb878c737d8b6` 另改 `native-4k-signature-hash-cache.patch`：大于 32 MiB 的签名输入用 `IO_NOCACHE` 分块读取并生成 4K 验证 hash；这不是 `cs_text_fixup_page` 的 cache 专用 hook，也不证明 r44 某目标页的 fast/slow 状态。后续 sheng `c8f92b208068eeaa4cd2b0f592671f04ee70076e:patches/xnu/series` 只列 audio、CPU idle、AMP 三个板级补丁，不含 text-fixup 专项；不能据此证明它的共同补丁闭包或历史机器行为。现有 sheng parsed/applied 仍无运行输出。
+
+## 2026-11-23 补充：tainted 假设与修复比较
+
+**判定：证据不足。** 静态代码证明被 taint 的 slow 校验结果会跳过 fixup；没有 r44 的目标页 `validated`、`tainted`、`cs_blob`、fast/slow 或页访问记录，不能把 SystemOS 的 `system-volume-auth-blob` ENOENT、`Need authenticator (81)`、`failed to find named root snapshot` 推导为这几个页的 hash mismatch 或 taint。卷/快照认证、CodeDirectory 签名信任与页内容哈希是不同层；没有观察到它们在本次目标页上的因果链。r44 `bits=0x08` 仅说明第四条采样前至少一次被写入，不证明它的完整信任链，也不证明缓存签名状态。
+
+以下 `ubc_subr.c` 行号指 r44 局部构建源码；`vm_fault.c` / `kern_codesigning.c` 指上文所列的基线构建树当前副本，复用对象与该副本的精确对应仍以此前限制为准。`commands.json:370` 显示 r44 重编 `ubc_subr.o` 带 `XNU_NATIVE_CS_HASH_CACHE=1`，不是仅凭补丁文件存在推定启用。
+
+### taint 的赋值链与条件
+
+* slow 局部变量：`vm_fault.c:7787-7805` 的 `validated = 0; tainted = 0; nx = 0; cs_validate_page(..., &validated, &tainted, &nx); page->vmp_cs_tainted |= tainted;`。slow 自己不直接构造非零局部 taint，而是接收 `cs_validate_page` 的结果；hook 判断的是**这次局部变量**，不是只看原先的 `page->vmp_cs_tainted`。
+* 签名 hash 不等：r44 `ubc_subr.c:6043-6056`：`if (bcmp(expected_hash, actual_hash, hashtype->cs_size) != 0) ... *tainted |= CS_VALIDATE_TAINTED;`，`:6065` 即便不等仍 `validated = TRUE`。`:6374-6379,6386-6397,6405-6413` 的 `cs_validate_page` 把 `CS_VALIDATE_TAINTED` 转换为 `*tainted_p = VMP_CS_ALL_TRUE` 或按 4K chunk OR 相应 bit，故传回 slow 后被 taint 门禁挡住。
+* 4K 派生 hash 元数据不合格：`ubc_subr.c:5952-5962` 在 4K kernel / 16K 签名 hash 分支检查对齐、codeLimit、缓存指针及索引/长度，失败时 `*bytes_processed = PAGE_SIZE; *tainted = CS_VALIDATE_TAINTED; return FALSE;`；这同时导致 validated 不满足和 taint，不等同于已证明签名 hash 不匹配。
+* 先前写映射：`vm_fault.c:7702-7710` 的 `page->vmp_wpmapped && !VMP_CS_TAINTED(...)` 执行 `VMP_CS_SET_VALIDATED(..., TRUE); VMP_CS_SET_TAINTED(..., TRUE);`。随后 `:7721-7723` 检查已验证或已 taint 就 `return TRUE`，该次走 fast 而根本不调用 slow/hook。这是页状态 taint，不是 slow 局部 taint 的赋值。
+* 缺 blob / 无覆盖 hash：`ubc_subr.c:6331-6339` 取 blob（可选 supplemental），`:5920-5933` 无覆盖或 blob 数据释放则跳过，`:5985-6001` 无 hash 时 `validated = FALSE; *tainted = 0;`；`:6362-6384` 默认未验证、无 taint，零处理字节则跳过该 chunk。缺 blob **不是自动置 tainted**，但可因 `validated` 不全跳过 hook；签名未装载/页无签名也可能使对象在更早路径不具备 `code_signed`。`:6008-6013,6395-6396` 末段不完整置 `CS_VALIDATE_NX`，由 `nx_p` 接收，**不是 tainted**。
+* 非 Apple 信任 / cryptex 未认证：这些可以影响签名 blob 准入、卷挂载、映射或执行，但上述 `cs_validate_hash` 的 taint 赋值没有检查“Apple/非 Apple”或 `system-volume-auth-blob` 的条件。`bsd/vm/vm_unix.c:2474-2479` 有 `mac_file_check_mmap`，`:2484-2498` 的 trust-cache/ownership 分支明确受 `XNU_TARGET_OS_OSX && __arm64__` 条件约束，不能当成此 iPadOS 路径的实测行为。缺少具体失败与签名记录，因此这些条件不能直接判为 r44 页 taint。
+
+### 补丁、配置与 fast/slow
+
+* `UniXNU/patches/xnu/native-4k-signature-hash-cache.patch:71-75,97-104,107-113,250-251` 在 blob 发布前准备 hash，对原始 16K 块验证后生成 4K 摘要；准备失败可拒绝 blob，运行时缓存元数据失败显式置 tainted。对应 r44 `ubc_subr.c:4877-4882,5848-5868,5952-5966`。该补丁改变签名数据和拒绝路径，**不是把所有页标成已验证**；上述检查均不能证明某目标页实际失败。
+* `native-text-fixup.patch:192-201` 的签名后 hook 已链接；本身不把页预先置 validated。静态搜索 UniXNU `patches/xnu/*.patch` 与 enuma `patches/` 的 `vm_page_validate_cs`、`vmp_cs_validated`、`CS_CONFIG_INTEGRITY_SKIP`、`cs_validate_page`、`cs_native4k_prepare`、`cs_enforcement`、`cs_observe`，直接涉及的主要是上述两条；搜索范围不是最终复用对象的完整补丁闭包证明。
+* 上游已有 DEVELOPMENT/DEBUG 特例 `ubc_subr.c:6343-6359`：`if (cs_config & CS_CONFIG_INTEGRITY_SKIP) { *validated_p = VMP_CS_ALL_TRUE; *tainted_p = VMP_CS_ALL_FALSE; ... return; }`，会在 slow **跳过计算 hash 但让本次 hook 门禁通过**，并不直接令当前调用改走 fast；以后的页状态可影响 fast。基线 `kern_codesigning.c:252-256,292-295` 通过 `cs_integrity_skip` 参数设置该 flag。r44 候选 `device/board.toml` 的 kernel_args 含 `amfi_get_out_of_my_way=1`、不含 `cs_integrity_skip`；前者在 `kern_codesigning.c:283-289` 对应 `CS_CONFIG_GET_OUT_OF_MY_WAY`，与后者的 `CS_CONFIG_INTEGRITY_SKIP` 是不同标志。此处仅核对冻结配置和源码，不证明实际运行配置或原版 AMFI 消费行为。
+* `zzyc-owner-skip-launch-constraints.patch:23-27` 有 `sheng-no-lc` 门控的 launch-constraints 返回 0，与页 hash 不同；本轮未证实它进入 r44 实际对象，候选参数也未列 `sheng-no-lc`。不能由该补丁或 `amfi_get_out_of_my_way` 推断目标页 `tainted=0`。
+* shared-region 标准源码链见上文：`vm_shared_region_pager.c:651-655` 对 signed 来源页调用 `vm_page_validate_cs_mapped`，其 `vm_fault.c:7822-7829` **先 fast 后可选 slow**；未访问、已验证、已 tainted、可选 bitmap 命中或 pager 终止均可不进 slow。`.13` 两目标属于同一个 4K 页，若只访问其中任一处且该页进入成功 matcher，理论上循环会尝试同页两条，但实际页访问和运行字节均未证实。
+
+### 假设若成立：三个候选
+
+| 方案 | 改动量及签名影响 | 安全模型 | 离线验证 |
+|---|---|---|---|
+| A：放宽 tainted 门禁 | 表面上改一处条件，但已 tainted 页的目标字节即使匹配也不能证明整页可信；不必改变 hash 计算，但在失败结果上写页，可能仍被执行策略拒绝或污染其他使用者 | 明确破坏“只修改验证通过页”的边界；不推荐 | 合成页和门禁状态可测；无法离线证明设备 taint 成因或安全后果 |
+| B：共享区映射/页路径单独处理 | 多于单行：须选择真实文件源页、偏移、生命周期、签名状态和 I-cache 同步；映射时没有保证物理页已 fault。严格保留签名门禁本身不放宽 hash，但**不能修复真正 tainted 的页** | 若绕过 taint 仍与 A 一样削弱；若保持门禁则不降低该边界 | 可用源码路径和模拟页测试，无法离线证明实际映射/访问成功 |
+| C：早期直接改文件 | 修改镜像/文件及后续签名或信任链，涉及只读卷、持久性、签名和缓存一致性；不调用现有页校验不是保持原签名 | 原签名会因修改失效；若靠关闭校验或额外信任绕过，会削弱模型 | 副本字节、签名失效及镜像结构可离线检查；设备效果不可离线证明 |
+
+**建议：不实施 A/B/C 的绕过。** 若必须选探索方向，选 **B 的受限诊断/已验证页版本**，先证实 fast 绕过或页到达后保留签名门禁；若真正是 tainted，应先定位并修复合法信任/签名或数据完整性前置，再考虑 B，不能声称 B 单独治好 taint。涉及 VM fault/共享区生命周期和并发的实现须明确 brief、`deep_reviewer` 与独立 verifier；本轮无代码变更。
