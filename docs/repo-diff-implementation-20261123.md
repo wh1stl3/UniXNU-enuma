@@ -77,3 +77,85 @@ enuma 还在 display attach 后 probe 并显式注册，不能把旧版类相同
 
 仍需完成七项的逐 hunk、六符号版本比对及各子类完整方法表。
 现有材料不足以排序哪一项最可能解释 backboardd 未打开 IOKit 或无渲染。
+
+## `0ebf192` provider 改动及 r42 判读（仅静态审查）
+
+来源：`UniXNU/UniXNU-sheng@0ebf192adac51ad951c3afb7b375fd8c6c5930b4`，
+父提交 `197106bcd703bcf4124d3cf132ae6e48e9f3a503`。
+`git show --stat`：17 文件，817 增、36 删；以下是 provider 相关全部 hunk，
+其余改动按文件摘要，完整 patch 可在上述 commit 查阅。
+
+```diff
+@@ -517,7 +527,8 @@ void native_legacy_display_late_probe(void) {
+         // A real firmware framebuffer resource, with addresses and extent
+         // obtained from the actual GOP handoff. It has no invented compatible,
+         // display list, panel timing, GPU/fence completion or vendor registers.
+-        native_legacy_stage=4;IOPlatformDevice *nub=new IOPlatformDevice;
++        // A plain service: an IOPlatformDevice expects the platform expert as its provider (compareName calls it), not the resources.
++        native_legacy_stage=4;IOService *nub=new IOService;
+         native_legacy_nub=(uintptr_t)nub;bool nubAttached=false,nubStarted=false,attached=false,started=false;
+         IORegistryEntry *displayTreeParent=nullptr;bool dtAttached=false;
+         IOService *parent=IOService::getResourceService();
+@@ -530,7 +541,7 @@ void native_legacy_display_late_probe(void) {
+                 unsigned phase=0;PE_parse_boot_argn("offline-legacy-phase",&phase,sizeof(phase));
+                 if(phase==4) {
+                     // This is the actually implemented GOP display subsystem,
+-                    // attached to its real IOPlatformDevice memory resource.
++                    // attached to its real firmware framebuffer memory resource.
+                     // No Apple/vendor compatible or panel timing is supplied.
+                     displayTreeParent=IORegistryEntry::fromPath("/arm-io",gIODTPlane);
+                     const char type[]="display-subsystem";OSData *data=OSData::withBytes(type,sizeof(type));
+```
+
+其他 hunk：`LegacyDisplayProbe.cpp` 增加 GPU offer format 参数、frame/copy 日志、
+ptrauth 环境禁用 client vtable interpose；`BootLog.c` 扩展 telemetry/输出；
+`BootProcessWorker.c` 新增进程 worker；`BootUiTraceCore.h` 和
+`BootUiTraceProbe.c` 扩展 trace；`GpuPowerProbe.cpp` 增加 walk coherence
+探测及相关调整；`SourceRootBinding.cpp`、`SourceRootPolicies.cpp`、
+`SourceStorage.cpp` 为新源文件；`AdspProbe.cpp`、`AppleARMBacklight.cpp`、
+`AudioProbe.cpp`、`BootFaultProbe.c`、`HidInputProbe.cpp`、`WifiNet.cpp`、
+`WifiProbe.cpp` 及 `audit-adreno-platform.py` 有各自局部更改。
+这些不等于一项隔离的 provider 修复实验。
+
+注释指 **nub 对象的 `IOPlatformDevice::compareName`**，其 `getProvider()`
+期待 `IOPlatformExpert`；这里实际 service-plane parent 是
+`IOService::getResourceService()`，不是 platform expert。不是指 display 对象的
+`compareName`。`0ebf192` 不改变该段 attach/start/register 顺序、属性或
+parent，也未增加 provider fallback；只换类并更正关联注释。
+
+| 项 | sheng 父提交 | sheng `0ebf192` | enuma 历史候选 |
+|---|---|---|---|
+| 类 / service parent | `IOPlatformDevice` / resource | `IOService` / resource | `IOPlatformDevice` / resource，`EnumaLegacyDisplay.cpp:76,84,92` |
+| nub | init、memory、`NativeGOPFramebuffer`、attach、start | 同左 | init、memory、`EnumaGOPFramebuffer`、attach、start，`:84–93` |
+| DT plane | phase 4：`device_type=display-subsystem`、`gop-display` 挂 `/arm-io` | 同左 | 必须设置同一 device_type、`enuma-gop-display` 挂 `/arm-io`，`:95–105` |
+| display | probe → attach → start；phase 3 则 presenter | 同左 | attach → probe → start → 显式 display `registerService()`，`:104–115` |
+| 显式注册 | 该源文件无 `registerService` 调用 | 同左 | display 显式注册；不是 nub 显式注册 |
+
+enuma 候选源码无 `compareName` 处理或注释。此处文件为
+`out/enuma-gop-legacy-20261114-r2/package/EnumaLegacyDisplay.cpp`；未在本节
+核对 r40 实际链接对象与该文件逐字节对应，不能以此冒称 r40 二进制来源。
+
+Apple 开源 [xnu-10063.121.3 `IOPlatformExpert.cpp:2302–2307`](https://github.com/apple-oss-distributions/xnu/blob/xnu-10063.121.3/iokit/Kernel/IOPlatformExpert.cpp#L2302-L2307)
+将 nub 的 `getProvider()` 以 C 风格强转为 `IOPlatformExpert *`，再调用
+`compareNubName(this,name,matched)`；没有动态类型检查、告警或失败分支。
+因此若确实对该 nub 调用此路径且 provider 不是该类，这是不满足调用契约的
+错误类型虚调用，不能从源码保证只是不匹配、只告警或 attach 失败，也不能
+预言具体崩溃/返回值。这里引用的是同系列公开源码，未核最终内核机器码。
+
+历史 r28 两个客户端 `newUserClient` override `ret=0`（见
+`enuma-r28-device-20261123.md:39`）与该潜在缺陷**不矛盾**：它们成功到达
+display 对象的 open 路径，而风险条件是对其 **parent nub** 执行名字比较；
+手工 attach/probe/start 和 display 显式注册可使路径分离。没有追踪这两个
+客户端完整 matching 字典与调用栈，不能断言它们绝对从未触发 nub compareName。
+两个成功 open 也不证明 backboardd、渲染或所有 name matching 成功。
+
+`r42` 现有 `M/N/O` 是按 PID 的查询、通知和 open **入口计数**，不是结果、
+matching 字典、类名或 `compareName` 调用计数（见
+`enuma-r42-matchcnt-host-20261123.md:9–14,57–68`）。同一次 r42 可在有效
+身份/时序/阳性对照下判断 bb 是否进入受测入口，并同时延续观察已注册
+display 的 open；**不能**仅据这些计数判断 nub 的 compareName 是否调用或
+IOService 替换是否修复。若将来经授权做隔离 A/B，保持其他输入不变，分别
+观察 nub 的类、service parent、针对 nub 的 IONameMatch 结果及 compareName
+调用/返回或异常，同时检查 display 注册与两类 open；必须有第二版本或
+独立对照，一次未修改的 r42 无法证明换类的反事实。
+缺报告不等于零，所有设备操作仍须另获授权。
