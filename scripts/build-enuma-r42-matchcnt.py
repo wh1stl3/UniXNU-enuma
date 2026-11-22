@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-"""Replay the isolated r42/r43/r44 diagnostic builds with two replacements."""
+"""Replay the isolated r42–r45 diagnostic builds."""
 import argparse
 import hashlib
 import json
@@ -19,6 +19,7 @@ base = device.parents[1] / 'UniXNU'
 r40 = device / 'out/ufs-sm8250-storegeom-20261123-r40'
 r42 = device / 'out/ufs-sm8250-matchcnt-20261123-r42'
 r43 = device / 'out/ufs-sm8250-matchcnt2-20261123-r43'
+r44 = device / 'out/ufs-sm8250-matchcnt2fx-20261123-r44'
 r34 = device / 'out/ufs-sm8250-launchd-ipc-20261123-r34'
 r21 = device / 'out/ufs-sm8250-launchd-keystore-20261122-r21'
 r10 = device / 'out/ufs-sm8250-launchd-display-20261121-r10/self-check/build-final'
@@ -26,16 +27,19 @@ args = argparse.ArgumentParser()
 mode = args.add_mutually_exclusive_group()
 mode.add_argument('--r43', action='store_true')
 mode.add_argument('--r44', action='store_true')
+mode.add_argument('--r45', action='store_true')
 args.add_argument('--out', type=Path)
 options = args.parse_args()
-baseline = r43 if options.r44 else r42 if options.r43 else r40
-default_out = (device / 'out/ufs-sm8250-matchcnt2fx-20261123-r44' if options.r44 else
+baseline = r44 if options.r45 else r43 if options.r44 else r42 if options.r43 else r40
+default_out = (device / 'out/ufs-sm8250-ps-20261123-r45' if options.r45 else r44 if options.r44 else
                r43 if options.r43 else r42)
 out = (options.out or default_out).resolve()
 assert out.parent == device / 'out' and not out.exists(), out
-extended = options.r43 or options.r44
+extended = options.r43 or options.r44 or options.r45
+has_fixup = options.r44 or options.r45
 fragment = device / 'package' / ('EnumaMatchCount2.inc' if extended else 'EnumaMatchCount.inc')
 fx_fragment = device / 'package/EnumaFixupReport.inc'
+ps_fragment = device / 'package/EnumaProcExecReport.inc'
 helpers = runpy.run_path(str(device / 'scripts/build-enuma-r23-hid-standin.py'))
 digest, snapshot, read_member, fat_tree = (
     helpers['R'][k] for k in ('digest', 'snapshot', 'read_member', 'fat_tree'))
@@ -71,9 +75,14 @@ units = ('IOUserClient.cpo', 'kern_exec.o')
 old_uc, = (p for p in paths if p.name == 'IOUserClient.cpo')
 old_exec, = (p for p in paths if p.name == 'kern_exec.o')
 old_obj_dir = (baseline if extended else r34) / 'objects'
-assert (old_uc, old_exec) == tuple(old_obj_dir / unit for unit in units)
+assert old_exec == old_obj_dir / 'kern_exec.o'
+if not options.r45:
+    assert old_uc == old_obj_dir / 'IOUserClient.cpo'
 tree = Path(recipe['link']['cwd']).parents[3]
-if extended:
+if options.r45:
+    assert digest(old_exec) == prior['objects']['kern_exec.o']['new']
+    exec_recipe = recipe['compile-kern_exec.o']
+elif extended:
     assert all(digest(p) == prior['objects'][p.name]['new'] for p in (old_uc, old_exec))
     uc_recipe, exec_recipe = (recipe['compile-' + obj.name] for obj in (old_uc, old_exec))
 else:
@@ -142,11 +151,86 @@ source.mkdir()
 old_sources = (baseline if extended else r34) / 'source'
 bsd = source / 'bsd/kern'
 shutil.copytree(old_sources / 'bsd/kern', bsd)
-if not options.r44:
+if not has_fixup:
     shutil.copyfile(fragment, bsd / fragment.name)
 fb = bsd / 'EnumaBbScan.inc'
 text = fb.read_text()
-if options.r44:
+if options.r45:
+    text = replace_once(text, 'extern void enuma_fixup_report(void);',
+                        'extern void enuma_fixup_report(void);\n#include "EnumaProcExecReport.inc"')
+    text = replace_once(text, '\t\tenuma_fixup_report();\n',
+                        '\t\tenuma_fixup_report();\n\t\tenuma_ps_dump();\n\t\tenuma_ex_dump();\n'
+                        '\t\tos_atomic_store(&enuma_ex_report_done, 1, release);\n')
+    shutil.copyfile(ps_fragment, bsd / ps_fragment.name)
+    exec_source = bsd / 'kern_exec.c'
+    e = exec_source.read_text()
+    e = replace_once(e, 'struct image_params;    /* Forward */',
+                     'struct image_params;    /* Forward */\nstruct enuma_exec_observation;')
+    e = replace_once(e, 'exec_activate_image(struct image_params *imgp);',
+                     'exec_activate_image(struct image_params *imgp, struct enuma_exec_observation *obs);')
+    e = replace_once(e, 'exec_activate_image(struct image_params *imgp)\n',
+                     'exec_activate_image(struct image_params *imgp, struct enuma_exec_observation *obs)\n')
+    for activator in ('exec_shell_imgact', 'exec_fat_imgact', 'exec_mach_imgact'):
+        unused = ' __unused' if activator != 'exec_mach_imgact' else ''
+        e = replace_once(e, activator + '(struct image_params *imgp)\n',
+            activator + f'(struct image_params *imgp, struct enuma_exec_observation *obs{unused})\n')
+    e = replace_once(e, 'int(*const ex_imgact)(struct image_params *);',
+                     'int(*const ex_imgact)(struct image_params *, struct enuma_exec_observation *);')
+    e = replace_once(e, '(*execsw[i].ex_imgact)(imgp)', '(*execsw[i].ex_imgact)(imgp, obs)')
+    e = replace_once(e, '''	{
+		char comm[17];
+		int pid = proc_getpid(p);
+		strlcpy(comm, p->p_comm, sizeof(comm));
+		printf("enuma-exec: pid=%d comm=%s\\n", pid, comm);
+	}
+''', '''	obs->reached = true;
+	if (!os_atomic_load(&enuma_ex_report_done, acquire)) {
+		char comm[17];
+		int pid = proc_getpid(p);
+		strlcpy(comm, p->p_comm, sizeof(comm));
+		printf("enuma-exec: pid=%d comm=%s\\n", pid, comm);
+	}
+''')
+    e = replace_once(e, 'badtoolate:\n',
+        '''badtoolate:
+	enuma_ex_failure(obs, exec_failure_reason, error, imgp->ip_ndp->ni_cnd.cn_nameptr,
+	    imgp->ip_ndp->ni_cnd.cn_namelen);
+''')
+    e = replace_once(e, 'bad_notrans:\n', '''bad_notrans:
+	if (error) {
+		struct componentname *cn = imgp->ip_ndp ? &imgp->ip_ndp->ni_cnd : NULL;
+		enuma_ex_failure(obs, imgp->ip_cs_error, error, cn ? cn->cn_nameptr : NULL,
+		    cn ? cn->cn_namelen : 0);
+	}
+''')
+    e = replace_once(e, 'process_signature(proc_t, struct image_params *);',
+                     'process_signature(proc_t, struct image_params *, struct enuma_exec_observation *);')
+    e = replace_once(e, 'process_signature(proc_t p, struct image_params *imgp)\n',
+        'process_signature(proc_t p, struct image_params *imgp, struct enuma_exec_observation *obs)\n')
+    e = replace_once(e, '\t\t/* make very sure execution fails */',
+        '\t\tenuma_ex_failure(obs, signature_failure_reason, error, p->p_comm, sizeof(p->p_comm));\n'
+        '\t\t/* make very sure execution fails */')
+    for head, tail, anchor, reason in (
+        ('\nposix_spawn(proc_t ap,', '\n\treturn error;\n}', '\tif (exec_failure_reason && !spawn_no_exec) {',
+         'exec_failure_reason'),
+        ('\n__mac_execve(proc_t p,', '\n\treturn error;\n}', 'exit_with_error:\n', 'OS_REASON_NULL'),
+    ):
+        start = e.index(head)
+        end = e.index(tail, start) + len(tail)
+        fn = e[start:end]
+        fn = replace_once(fn, '\n{\n', '\n{\n\tstruct enuma_exec_observation obs = {0};\n')
+        fn = replace_once(fn, 'exec_activate_image(imgp);', 'exec_activate_image(imgp, &obs);')
+        fn = replace_once(fn, 'process_signature(p, imgp);', 'process_signature(p, imgp, &obs);')
+        finish = f'''	if (error) {{
+		enuma_ex_failure(&obs, {reason}, error, obs.reached ? p->p_comm : NULL,
+		    obs.reached ? sizeof(p->p_comm) : 0);
+	}}
+	enuma_ex_finish(&obs);
+'''
+        fn = replace_once(fn, anchor, anchor + finish if anchor.endswith('\n') else finish + anchor)
+        e = e[:start] + fn + e[end:]
+    exec_source.write_text(e)
+elif options.r44:
     text = replace_once(text, '#include "EnumaMatchCount2.inc"',
                         '#include "EnumaMatchCount2.inc"\nextern void enuma_fixup_report(void);')
     text = replace_once(text, '\t\tenuma_matchcnt_dump();\n',
@@ -207,7 +291,7 @@ hooks = {'internal_io_service_get_matching_services': 0,
          'internal_io_service_get_matching_service': 0,
          'internal_io_service_add_notification': 1,
          'is_io_service_open_extended': 2}
-if options.r44:
+if has_fixup:
     hooks.update({'internal_io_service_match_property_table': 3,
                   'internal_io_service_add_interest_notification': 4})
     added_hooks = {}
@@ -232,7 +316,8 @@ for name, kind in hooks.items():
 
 changes = {}
 builds = [(old_exec, exec_recipe, bsd / 'kern_exec.c')]
-builds.insert(0, (old_ubc, ubc_recipe, ubc) if options.r44 else (old_uc, uc_recipe, uc))
+if not options.r45:
+    builds.insert(0, (old_ubc, ubc_recipe, ubc) if options.r44 else (old_uc, uc_recipe, uc))
 for old_obj, step, src in builds:
     unit = old_obj.name
     obj = out / 'objects' / unit
@@ -263,18 +348,21 @@ for tag in ('link', 'prelink'):
         argv = [a.replace(str(baseline / name), str(out / name)) for a in argv]
     call(tag, argv, out if tag == 'prelink' else step['cwd'])
 
-format_source = (bsd / 'EnumaMatchCount2.inc') if options.r44 else fragment
+format_source = (bsd / 'EnumaMatchCount2.inc') if has_fixup else fragment
 formats = re.findall(r'"(enuma-mt: [^"]+)"', format_source.read_text())
 assert len(formats) == len(set(formats)) == (6 if extended else 4)
-fx_formats = re.findall(r'"(enuma-fx: [^"]+)"', fx_fragment.read_text()) if options.r44 else []
-assert len(fx_formats) == len(set(fx_formats)) == (3 if options.r44 else 0)
+fx_source = (bsd / fx_fragment.name) if options.r45 else fx_fragment
+fx_formats = re.findall(r'"(enuma-fx: [^"]+)"', fx_source.read_text()) if has_fixup else []
+assert len(fx_formats) == len(set(fx_formats)) == (3 if has_fixup else 0)
+ps_formats = re.findall(r'"(enuma-(?:ps|ex): [^"]+)"', ps_fragment.read_text()) if options.r45 else []
+assert len(ps_formats) == len(set(ps_formats)) == (6 if options.r45 else 0)
 calls = {}
 for name in ('native.macho', 'prelink.macho'):
     path = out / name
     assert not call('undefined-' + name, ['llvm-nm', '-u', path]).strip()
     blob = path.read_bytes()
     assert all(blob.count(s.replace(r'\n', '\n').encode() + b'\0') == 1
-               for s in formats + fx_formats)
+               for s in formats + fx_formats + ps_formats)
     del blob
     # Inspect raw nlist as well so that weak undefined symbols cannot be omitted.
     blob = path.read_bytes()
@@ -287,8 +375,11 @@ for name in ('native.macho', 'prelink.macho'):
                  'match_property_table', 'add_interest_notification')
     entries = [s for s in symbols if (s.startswith('_is_io_service_') or s.startswith('__Z')) and
                any(k in s for k in endpoints)]
-    if options.r44:
+    if has_fixup:
         entries += ['_enuma_fixup_report', '_cs_text_fixup_page']
+    if options.r45:
+        entries += ['_enuma_ps_dump', '_enuma_ex_dump', '_enuma_ex_finish',
+                    '_posix_spawn', '___mac_execve']
     report = call('calls-' + name, ['llvm-objdump', '-d', '--disassemble-symbols=' +
                   ','.join(['_enuma_fb_arm', '_enuma_fb_dump', '_enuma_matchcnt_dump',
                             '_enuma_matchcnt_record', *entries]), path])
@@ -300,18 +391,33 @@ for name in ('native.macho', 'prelink.macho'):
             owner = sym[1]
         for target in ('_enuma_matchcnt_record', '_enuma_matchcnt_dump', '_printf',
                        '_thread_call_enter1_delayed', '_thread_call_enter_delayed',
-                       '_thread_call_free', '_enuma_fixup_report'):
+                       '_thread_call_free', '_enuma_fixup_report', '_enuma_ps_dump',
+                       '_enuma_ex_dump', '_enuma_ex_finish', '_proc_list_lock', '_proc_list_unlock'):
             if f'<{target}>' in line and re.search(r'\bb(?:l)?\s+0x', line):
                 owners.setdefault(owner, []).append(target)
     assert owners.get('_enuma_fb_dump', []).count('_enuma_matchcnt_dump') == 1, owners
     # r42 unrolls the four fixed rows and shares the printf within each top pair.
     assert owners.get('_enuma_matchcnt_dump', []).count('_printf') == (6 if extended else 8), owners
-    if options.r44:
+    if has_fixup:
         seq = owners['_enuma_fb_dump']
         assert seq.count('_enuma_fixup_report') == 1
         mt = seq.index('_enuma_matchcnt_dump')
-        assert seq[mt:mt + 3] == ['_enuma_matchcnt_dump', '_enuma_fixup_report', '_thread_call_free']
+        ordered = ['_enuma_matchcnt_dump', '_enuma_fixup_report']
+        if options.r45:
+            ordered += ['_enuma_ps_dump', '_enuma_ex_dump']
+        ordered += ['_thread_call_free']
+        assert seq[mt:mt + len(ordered)] == ordered, seq
         assert owners['_enuma_fixup_report'].count('_printf') in (2, 3)
+    if options.r45:
+        assert owners['_enuma_fb_dump'].count('_enuma_ps_dump') == 1
+        assert owners['_enuma_fb_dump'].count('_enuma_ex_dump') == 1
+        proc_calls = owners['_enuma_ps_dump']
+        # The optimizer splits the empty-list exit into a separate unlock block.
+        assert proc_calls in (['_proc_list_lock'] + ['_proc_list_unlock'] * n + ['_printf'] * 3
+                              for n in (1, 2)), proc_calls
+        assert owners['_enuma_ex_dump'].count('_printf') == 3
+        for fn in ('_posix_spawn', '___mac_execve'):
+            assert owners[fn].count('_enuma_ex_finish') == 1
     recorders = [s for s, targets in owners.items() if '_enuma_matchcnt_record' in targets]
     if extended:
         assert owners['_enuma_fb_arm'].count('_thread_call_enter1_delayed') == 1, owners
@@ -368,5 +474,7 @@ result.update(objects=objects, unchanged_filelist_inputs=len(paths) - len(change
               boot_metadata=read_json(out / 'boot.json'))
 if options.r44:
     result.update(fixup_formats=fx_formats, fixup_adt_order=fx_records)
+if options.r45:
+    result.update(fixup_formats=fx_formats, proc_exec_formats=ps_formats)
 (out / 'candidate-manifest.json').write_text(json.dumps(result, indent=2) + '\n')
 print('candidate manifest written', flush=True)
