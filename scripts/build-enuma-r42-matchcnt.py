@@ -20,6 +20,7 @@ r40 = device / 'out/ufs-sm8250-storegeom-20261123-r40'
 r42 = device / 'out/ufs-sm8250-matchcnt-20261123-r42'
 r43 = device / 'out/ufs-sm8250-matchcnt2-20261123-r43'
 r44 = device / 'out/ufs-sm8250-matchcnt2fx-20261123-r44'
+r45 = device / 'out/ufs-sm8250-ps-20261123-r45'
 r34 = device / 'out/ufs-sm8250-launchd-ipc-20261123-r34'
 r21 = device / 'out/ufs-sm8250-launchd-keystore-20261122-r21'
 r10 = device / 'out/ufs-sm8250-launchd-display-20261121-r10/self-check/build-final'
@@ -28,15 +29,16 @@ mode = args.add_mutually_exclusive_group()
 mode.add_argument('--r43', action='store_true')
 mode.add_argument('--r44', action='store_true')
 mode.add_argument('--r45', action='store_true')
+mode.add_argument('--r46', action='store_true')
 args.add_argument('--out', type=Path)
 options = args.parse_args()
-baseline = r44 if options.r45 else r43 if options.r44 else r42 if options.r43 else r40
-default_out = (device / 'out/ufs-sm8250-ps-20261123-r45' if options.r45 else r44 if options.r44 else
+baseline = r45 if options.r46 else r44 if options.r45 else r43 if options.r44 else r42 if options.r43 else r40
+default_out = (device / 'out/ufs-sm8250-bp-20261123-r46' if options.r46 else r45 if options.r45 else r44 if options.r44 else
                r43 if options.r43 else r42)
 out = (options.out or default_out).resolve()
 assert out.parent == device / 'out' and not out.exists(), out
-extended = options.r43 or options.r44 or options.r45
-has_fixup = options.r44 or options.r45
+extended = options.r43 or options.r44 or options.r45 or options.r46
+has_fixup = options.r44 or options.r45 or options.r46
 fragment = device / 'package' / ('EnumaMatchCount2.inc' if extended else 'EnumaMatchCount.inc')
 fx_fragment = device / 'package/EnumaFixupReport.inc'
 ps_fragment = device / 'package/EnumaProcExecReport.inc'
@@ -76,10 +78,10 @@ old_uc, = (p for p in paths if p.name == 'IOUserClient.cpo')
 old_exec, = (p for p in paths if p.name == 'kern_exec.o')
 old_obj_dir = (baseline if extended else r34) / 'objects'
 assert old_exec == old_obj_dir / 'kern_exec.o'
-if not options.r45:
+if not (options.r45 or options.r46):
     assert old_uc == old_obj_dir / 'IOUserClient.cpo'
 tree = Path(recipe['link']['cwd']).parents[3]
-if options.r45:
+if options.r45 or options.r46:
     assert digest(old_exec) == prior['objects']['kern_exec.o']['new']
     exec_recipe = recipe['compile-kern_exec.o']
 elif extended:
@@ -155,7 +157,14 @@ if not has_fixup:
     shutil.copyfile(fragment, bsd / fragment.name)
 fb = bsd / 'EnumaBbScan.inc'
 text = fb.read_text()
-if options.r45:
+if options.r46:
+    text = replace_once(text, '#include "EnumaProcExecReport.inc"',
+                        '#include "EnumaProcExecReport.inc"\n#include "EnumaBootProgress.inc"')
+    text = replace_once(text, '\t\tos_atomic_store(&enuma_ex_report_done, 1, release);\n',
+                        '\t\tos_atomic_store(&enuma_ex_report_done, 1, release);\n'
+                        '\t\tenuma_bp_print();\n')
+    shutil.copyfile(device / 'package/EnumaBootProgress.inc', bsd / 'EnumaBootProgress.inc')
+elif options.r45:
     text = replace_once(text, 'extern void enuma_fixup_report(void);',
                         'extern void enuma_fixup_report(void);\n#include "EnumaProcExecReport.inc"')
     text = replace_once(text, '\t\tenuma_fixup_report();\n',
@@ -316,7 +325,7 @@ for name, kind in hooks.items():
 
 changes = {}
 builds = [(old_exec, exec_recipe, bsd / 'kern_exec.c')]
-if not options.r45:
+if not (options.r45 or options.r46):
     builds.insert(0, (old_ubc, ubc_recipe, ubc) if options.r44 else (old_uc, uc_recipe, uc))
 for old_obj, step, src in builds:
     unit = old_obj.name
@@ -351,18 +360,19 @@ for tag in ('link', 'prelink'):
 format_source = (bsd / 'EnumaMatchCount2.inc') if has_fixup else fragment
 formats = re.findall(r'"(enuma-mt: [^"]+)"', format_source.read_text())
 assert len(formats) == len(set(formats)) == (6 if extended else 4)
-fx_source = (bsd / fx_fragment.name) if options.r45 else fx_fragment
+fx_source = (bsd / fx_fragment.name) if (options.r45 or options.r46) else fx_fragment
 fx_formats = re.findall(r'"(enuma-fx: [^"]+)"', fx_source.read_text()) if has_fixup else []
 assert len(fx_formats) == len(set(fx_formats)) == (3 if has_fixup else 0)
-ps_formats = re.findall(r'"(enuma-(?:ps|ex): [^"]+)"', ps_fragment.read_text()) if options.r45 else []
-assert len(ps_formats) == len(set(ps_formats)) == (6 if options.r45 else 0)
+ps_formats = re.findall(r'"(enuma-(?:ps|ex): [^"]+)"', ps_fragment.read_text()) if (options.r45 or options.r46) else []
+assert len(ps_formats) == len(set(ps_formats)) == (6 if (options.r45 or options.r46) else 0)
+bp_formats = [r'enuma bp r46 t=%lu\n'] if options.r46 else []
 calls = {}
 for name in ('native.macho', 'prelink.macho'):
     path = out / name
     assert not call('undefined-' + name, ['llvm-nm', '-u', path]).strip()
     blob = path.read_bytes()
     assert all(blob.count(s.replace(r'\n', '\n').encode() + b'\0') == 1
-               for s in formats + fx_formats + ps_formats)
+               for s in formats + fx_formats + ps_formats + bp_formats)
     del blob
     # Inspect raw nlist as well so that weak undefined symbols cannot be omitted.
     blob = path.read_bytes()
@@ -377,9 +387,11 @@ for name in ('native.macho', 'prelink.macho'):
                any(k in s for k in endpoints)]
     if has_fixup:
         entries += ['_enuma_fixup_report', '_cs_text_fixup_page']
-    if options.r45:
+    if options.r45 or options.r46:
         entries += ['_enuma_ps_dump', '_enuma_ex_dump', '_enuma_ex_finish',
                     '_posix_spawn', '___mac_execve']
+    if options.r46:
+        entries += ['_enuma_bp_print']
     report = call('calls-' + name, ['llvm-objdump', '-d', '--disassemble-symbols=' +
                   ','.join(['_enuma_fb_arm', '_enuma_fb_dump', '_enuma_matchcnt_dump',
                             '_enuma_matchcnt_record', *entries]), path])
@@ -392,7 +404,8 @@ for name in ('native.macho', 'prelink.macho'):
         for target in ('_enuma_matchcnt_record', '_enuma_matchcnt_dump', '_printf',
                        '_thread_call_enter1_delayed', '_thread_call_enter_delayed',
                        '_thread_call_free', '_enuma_fixup_report', '_enuma_ps_dump',
-                       '_enuma_ex_dump', '_enuma_ex_finish', '_proc_list_lock', '_proc_list_unlock'):
+                       '_enuma_ex_dump', '_enuma_ex_finish', '_proc_list_lock', '_proc_list_unlock',
+                       '_enuma_bp_print'):
             if f'<{target}>' in line and re.search(r'\bb(?:l)?\s+0x', line):
                 owners.setdefault(owner, []).append(target)
     assert owners.get('_enuma_fb_dump', []).count('_enuma_matchcnt_dump') == 1, owners
@@ -403,12 +416,14 @@ for name in ('native.macho', 'prelink.macho'):
         assert seq.count('_enuma_fixup_report') == 1
         mt = seq.index('_enuma_matchcnt_dump')
         ordered = ['_enuma_matchcnt_dump', '_enuma_fixup_report']
-        if options.r45:
+        if options.r45 or options.r46:
             ordered += ['_enuma_ps_dump', '_enuma_ex_dump']
+        if options.r46:
+            ordered += ['_enuma_bp_print']
         ordered += ['_thread_call_free']
         assert seq[mt:mt + len(ordered)] == ordered, seq
         assert owners['_enuma_fixup_report'].count('_printf') in (2, 3)
-    if options.r45:
+    if options.r45 or options.r46:
         assert owners['_enuma_fb_dump'].count('_enuma_ps_dump') == 1
         assert owners['_enuma_fb_dump'].count('_enuma_ex_dump') == 1
         proc_calls = owners['_enuma_ps_dump']
@@ -418,6 +433,11 @@ for name in ('native.macho', 'prelink.macho'):
         assert owners['_enuma_ex_dump'].count('_printf') == 3
         for fn in ('_posix_spawn', '___mac_execve'):
             assert owners[fn].count('_enuma_ex_finish') == 1
+    if options.r46:
+        assert owners['_enuma_fb_dump'].count('_enuma_bp_print') == 1
+        assert [x for x in owners['_enuma_bp_print'] if x in
+                ('_enuma_matchcnt_dump', '_enuma_fixup_report', '_enuma_ps_dump', '_enuma_ex_dump')] == [
+                    '_enuma_matchcnt_dump', '_enuma_fixup_report', '_enuma_ps_dump', '_enuma_ex_dump']
     recorders = [s for s, targets in owners.items() if '_enuma_matchcnt_record' in targets]
     if extended:
         assert owners['_enuma_fb_arm'].count('_thread_call_enter1_delayed') == 1, owners
@@ -474,7 +494,9 @@ result.update(objects=objects, unchanged_filelist_inputs=len(paths) - len(change
               boot_metadata=read_json(out / 'boot.json'))
 if options.r44:
     result.update(fixup_formats=fx_formats, fixup_adt_order=fx_records)
-if options.r45:
+if options.r45 or options.r46:
     result.update(fixup_formats=fx_formats, proc_exec_formats=ps_formats)
+if options.r46:
+    result.update(bp_formats=bp_formats)
 (out / 'candidate-manifest.json').write_text(json.dumps(result, indent=2) + '\n')
 print('candidate manifest written', flush=True)
