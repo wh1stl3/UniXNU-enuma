@@ -87,8 +87,8 @@ dram_size = "0x200000000"
 # format 2：ADT 由共享生成器从 dts/enuma.dts + OS profile 身份产出，不再声明 tool。
 # chip_id 为软件生成的身份值（非硬件 ECID、非 donor chip-id）：本地随机 32 位，见 porting.toml configuration 区。
 chip_id = "958bdc0f"
-# R-001 批准（2026-10-22）：首入口预算，不是实测可用 RAM。
-owned_memory_size = "0x20000000"
+# r22 诊断：连续窗口请求 2720 MiB，不是实测可用 RAM。
+owned_memory_size = "0xaa000000"
 ipad_identity = true
 unique_chip_id = "required"
 # RamBlock 内存根：restore ramdisk 经 payload 的 data-ramdisk 通道（/chosen/memory-map/PackedRAMDisk）交内核。
@@ -102,6 +102,9 @@ unique_chip_id = "required"
 # audit-enuma-production-final-link.py 在最终链接审计里再断言（见 docs/root-uuid-alignment.md）。
 packed_data_ramdisk = true
 root_match_volume_uuid = "9071148B-B025-402D-AD7A-48464D8B5FFF"
+
+[adt.defaults.u32]
+sleep-disabled = 1
 
 [firmware]
 config = "enuma"
