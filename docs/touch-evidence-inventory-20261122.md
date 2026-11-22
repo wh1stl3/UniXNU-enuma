@@ -46,3 +46,15 @@ adb -s <serial> shell getevent -lt /dev/input/<eventN>
 # 只列候选固件文件，不读取或修改内容
 adb -s <serial> shell 'ls -l /vendor/firmware/novatek* /vendor/firmware/*nt36523* /odm/firmware/*nt36523* 2>/dev/null'
 ```
+
+## 5. TWRP 只读采集清单（未执行）
+
+所有命令均为只读；先按项目设备识别规则确认唯一目标型号 `enuma`，再替换 `<serial>`。TWRP 通常无 `getevent`；轴数值范围需通过 ioctl 获取，暂以面板分辨率代替，不视为实际输入轴范围。
+
+```sh
+adb devices -l
+adb -s <serial> shell 'cat /proc/bus/input/devices'
+adb -s <serial> shell 'for d in /sys/class/input/event*; do echo "=== $d"; cat $d/device/name 2>/dev/null; cat $d/device/capabilities/abs 2>/dev/null; echo; readlink -f $d/device; done'
+adb -s <serial> shell 'for d in /sys/bus/spi/devices/*; do echo "=== $d"; readlink -f $d/driver; cat $d/modalias 2>/dev/null; done'
+adb -s <serial> shell 'ls -l /vendor/firmware/*nt36523* /odm/firmware/*nt36523* 2>/dev/null'
+```
