@@ -1,6 +1,6 @@
 # enuma 触摸证据清单（2026-11-22）
 
-状态：`self-checked`；第 1–5 节为采集前离线调查，第 6 节记录主控提供的 TWRP 采集结果。本次整理未访问设备。路径相对于设备仓；`.cache` 是本地证据，不作为入库资产。
+状态：`self-checked`；第 1–5 节为采集前离线调查，第 6–7 节记录主控提供的 TWRP 采集结果。本次整理未访问设备。路径相对于设备仓；`.cache` 是本地证据，不作为入库资产。
 
 ## 1. 已有证据
 
@@ -82,3 +82,21 @@ adb -s <serial> shell 'ls -l /vendor/firmware/*nt36523* /odm/firmware/*nt36523* 
 - 已确证触摸控制器经 **SPI**（`spi0.0`）绑定 `NVT-ts` 驱动，输入设备为 DIRECT 且带 BTN_TOUCH；存在独立笔设备。
 - **未定**：`ABS=661800000000000` 的精确位解码。当前按位解出未包含 `ABS_MT_POSITION_X/Y`，与常规触摸实现不符；可能是位序解释问题或该驱动把坐标放在 `ABS_X/ABS_Y`，**不得据此断言坐标轴缺失**。
 - 未取得坐标范围（需 ioctl/EVIOCGABS）、触点数、固件本体。以上为主控提供的采集结果，整理时未独立复采。
+
+## 7. TWRP getevent 采集结果（2026-11-22，设备仍在 recovery）
+
+- 设备：`model: Xiaomi_Pad_5_Pro_5G`、`device: enuma`、`product: enuma`。
+- `NVTCapacitiveTouchScreen`（`/dev/input/event4`）：
+  - `ABS_MT_POSITION_X` min 0 / max **1599**；`ABS_MT_POSITION_Y` min 0 / max **2559**。
+  - `ABS_MT_SLOT` max 9，即 **10 个触点槽**；`ABS_MT_PRESSURE` 0–1000、`ABS_MT_TOUCH_MAJOR` 0–255、`ABS_MT_TRACKING_ID` 0–65535。
+  - 按键 `BTN_TOUCH`、`KEY_POWER`、`KEY_WAKEUP`；`INPUT_PROP_DIRECT`。
+- `NVTCapacitivePen`（`/dev/input/event5`）：`ABS_X` 0–12799、`ABS_Y` 0–20479、`ABS_PRESSURE` 0–4095、`ABS_DISTANCE` 0–1、`ABS_TILT_X/Y` ±60；按键 `BTN_DIGI`、`BTN_TOUCH`、`BTN_STYLUS`、`BTN_STYLUS2`；`INPUT_PROP_DIRECT`。
+- 其余设备：`xiaomi-touch`（virtual）、`uinput-goodix`（virtual）、`gpio-keys`（含 `SW_LID`、`SW_TABLET_MODE`）、`qpnp_pon`。
+- 15 秒空闲 `getevent -lt /dev/input/event4` 无事件；exit 124 为预期超时结束。
+- 原始输出存于忽略目录 `.cache/enuma-getevent-20261122-cmd1..5.txt`，不入库。以上为主控提供的结果，本次未独立复采。
+
+### 判读
+
+- 触摸坐标范围与 1600×2560 竖屏面板尺寸 1:1 对应；空闲采样没有动作事件，尚未验证方向及实际触点与像素位置的映射。
+- Linux 输入能力已给出真实触摸驱动报告所需的坐标范围、槽数、压力、接触面积和按键字段；这不是控制器原始帧格式。仍缺 NT36523 SPI 协议和固件本体。
+- 第 6 节的轴范围和槽数缺口由本节补充；第 6 节的原始 ABS 位图解码疑问不影响本节 getevent 对多点坐标轴的直接列示。
