@@ -19,8 +19,12 @@
 `com.apple.backboardd.plist`，编码父键低 60 位 `0xfffffff0002f274`；同一编码
 父键还命中 `com.apple.logd.plist` 和 `com.apple.mediasetupd.plist`。这只是原始
 字节的候选记录；未完成活动 APFS 树、父目录路径及快照归属解析，不能认定它在
-LaunchDaemons 或 LaunchAgents，也不能认定运行时使用该记录。扫描未完成，不可
-据此断言其他名称或 SystemOS 中不存在。
+LaunchDaemons 或 LaunchAgents，也不能认定运行时使用该记录。
+
+扫描已完成，SystemOS 没有符合上述结构判据的匹配；OS 没有命中精确名称
+`com.apple.SpringBoard.plist`，但有其他含 SpringBoard / Setup 的候选名称。
+这是原始记录扫描结果，不是活动树遍历或文件内容解析，不据此断言任一完整路径
+不存在；尤其不能用扫描未命中否定上述 r9 设备侧路径查找。
 
 ## 内容与条件
 
