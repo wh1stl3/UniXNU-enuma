@@ -18,7 +18,8 @@ findings = ["2026-11-23 r36 matching counters host-only; see docs/enuma-r36-matc
 completion = ["All source pins resolve; every selected component has a record; status shows the intended overrides and patch order."]
 limits = ["Board DTS has no verified memory or peripheral wiring; shared kona resources do not establish enuma reservations or AC power policy."]
 next_action = ["Extract enuma vendor DTS and reconcile board memory and wiring before extending dts/enuma.dts."]
-evidence = [{ kind = "source", reference = "docs/nuwa-dbr-recipe-20261123.md", result = "Self-checked read-only cross-device seed comparison: 56 logical pages differ; SystemGroup changes and user-reported later no-crash observation do not establish causal mechanism or an equivalent enuma fault." },
+evidence = [{ kind = "source", reference = "docs/bootprogress-mechanisms-compared-20261123.md", result = "Self-checked source comparison: nuwa intercepts console characters and renders diagnostic text directly into the existing framebuffer, with periodic pixel refresh; it is not console-only periodic printf. Sheng upstream exact source was not obtained." },
+  { kind = "source", reference = "docs/nuwa-dbr-recipe-20261123.md", result = "Self-checked read-only cross-device seed comparison: 56 logical pages differ; SystemGroup changes and user-reported later no-crash observation do not establish causal mechanism or an equivalent enuma fault." },
   { kind = "source", reference = "docs/sharedcache-fixup-gap-20261123.md", result = "Self-checked source and read-only donor volume analysis: r44 cache entries were not observed applied at sampling; exact skipped gate is unknown, and no sheng application record was found." },
   { kind = "source", reference = "docs/enuma-r45-ps-host-20261123.md", result = "The diagnostic build script adds an isolated r45 replay mode; it does not change tracked board configuration or the default recipe." },
  { kind = "source", reference = "docs/text-fixup-20261123.md", revision = "da9fab96aea0b5dcdb3bef730b10397276514dac", result = "Self-checked: r40 links text fixups and its ADT already contains the same 21H461 AW entry; runtime application and enuma deadlock remain unobserved." },
@@ -390,3 +391,17 @@ completion = ["Independent policy authentication, Data and hardware gates and a 
 limits = ["NoContract and NoAccessPolicy remain; neither this offline recipe nor a file's presence authorizes hardware access or proves a signature."]
 next_action = ["Use the existing independently verified local3GiB seed; establish production OS trust identity/actual input, integrate configuration and complete the payload budget. Isolated final link is separately verified; GR0/persistent UFS gates remain independent. Do not request another macOS/seed or extend the historical fixed blocked framework; r3 stays unchanged."]
 evidence = [{ kind = "source", reference = "scripts/enuma-production-recipe.py", result = "Offline fixed snapshot; orchestrator reports reviewer ses_e2d5bad70ffeCIX5urEcqUYob2 static PASS and verifier ses_e2d471ec8ffewoO68938dtarf0 mechanical PASS, scoped to out/verify-r3-20261113 and out/production-recipe-r3; not input readiness or hardware admission." }]
+
+[[area]]
+id = "console-page-precedent"
+status = "planned"
+components = []
+paths = ["docs/console-page-precedent-20261123.md"]
+inputs = ["UniXNU-sheng c8f92b208068eeaa4cd2b0f592671f04ee70076e and UniXNU 693f5d9cae8a408dd18b39f3f9fdc4228c934241 source."]
+configuration = ["Offline source comparison only."]
+procedure = ["Inspect the diagnostic renderer, console hooks and optional panic screen."]
+findings = ["Sheng redirects console characters into a bounded recorder and independently paints the framebuffer; no normal-console restore is established."]
+completion = ["Documented source-level precedent and limits."]
+limits = ["No build, hardware test or validation of the proposed enuma console page."]
+next_action = ["Assess panic visibility and restoration before proposing console suppression."]
+evidence = [{ kind = "source", reference = "docs/console-page-precedent-20261123.md", revision = "c8f92b208068eeaa4cd2b0f592671f04ee70076e", result = "Self-checked static comparison; console interception is not direct-console page rendering, and optional panic framebuffer is separate." }]
