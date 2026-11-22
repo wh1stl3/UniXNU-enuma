@@ -33,7 +33,7 @@ enuma_bp_repeat(__unused thread_call_param_t arg, thread_call_param_t self)
 	}
 }
 
-static void
+static __attribute__((noinline)) void
 enuma_bp_start(void)
 {
 	int enabled = 0;
