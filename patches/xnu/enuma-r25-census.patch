@@ -1,0 +1,37 @@
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -1188,3 +1188,5 @@
+  */
++#include "EnumaProcessCensus.inc"
++
+ static int
+ exec_mach_imgact(struct image_params *imgp)
+@@ -2121,7 +2123,2 @@
+-	{
+-		char comm[17];
+-		int pid = proc_getpid(p);
+-		strlcpy(comm, p->p_comm, sizeof(comm));
+-		printf("enuma-exec: pid=%d comm=%s\n", pid, comm);
+-	}
++	enuma_census_record_exec(p->p_comm, proc_getpid(p));
+ 	goto done;
+--- a/bsd/kern/kern_exit.c
++++ b/bsd/kern/kern_exit.c
+@@ -1885,4 +1885,6 @@
+ 
++#include "EnumaProcessCensus.h"
++
+ void
+ proc_prepareexit(proc_t p, int rv, boolean_t perf_notify)
+ {
+@@ -1901,9 +1903,3 @@
+ 	if (!proc_is_shadow(p)) {
+-		char comm[17];
+-		int pid = proc_getpid(p);
+-		int status = rv;
+-		int sig = WIFSIGNALED(status) ? WTERMSIG(status) : 0;
+-		strlcpy(comm, p->p_comm, sizeof(comm));
+-		printf("enuma-exit: pid=%d st=%d sig=%d comm=%s\n",
+-		    pid, status, sig, comm);
++		enuma_census_record_exit(p->p_comm, rv);
+ 	}
