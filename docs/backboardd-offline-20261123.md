@@ -119,3 +119,98 @@ r40 prelink/ADT 的已有本地复核命令、组件清单与证据边界见 `do
 | XPC/launchd | XPC import，donor job 声明服务 | enuma 是否成功注册和通信未知 | 方向及等待目标未证 |
 
 `entry_bb=0` 仅说明采样窗口没有观察到该进程进入 `is_io_service_open_extended`；它不排除用户态更早失败、等待、未执行、调用其他路径或匹配未成功。用户提供的 IPC 25/25 也不标识消息目的与阻塞目标。**没有足够依据给出最可能缺失项（置信度：无法评定）**；缺 backboardd 当前线程 PC/栈或能将实际请求关联到服务名、返回值及等待点的证据。下一步唯一优先项是离线追踪入口直接调用及初始化器/框架的调用链以定位可识别的首次服务请求；仍不能以静态调用链替代运行时等待证据。
+
+## 追加：导入符号与调用边界（self-checked）
+
+### 全量导入与框架归属
+
+```
+llvm-nm -u out/bb-offline-20261123/backboardd > out/bb-offline-20261123/imports.txt
+wc -l out/bb-offline-20261123/imports.txt
+# 746
+grep '^_IO' out/bb-offline-20261123/imports.txt
+llvm-nm -m out/bb-offline-20261123/backboardd | grep 'undefined.* _IO'
+```
+
+符号导入证明该二进制可链接引用，不证明执行、调用顺序或实际发生 open；动态查找、被依赖框架内部调用不包含在此清单。按 `nm -m` 两级命名空间归属，以下是全部 `_IO` 前缀导入，逐项列出（前导下划线省略）：
+
+| 来源 | 全部导入 | r40 对账 |
+|---|---|---|
+| IOKit | IOConnectCallScalarMethod、IOIteratorNext、IOMainPort、IOObjectConformsTo、IOObjectRelease | 通用连接/迭代/对象接口，不指定一个内核类；实际连接类、运行时发布未确定 |
+| IOKit | IORegistryEntryFromPath、IORegistryEntryGetParentEntry、IORegistryEntrySearchCFProperty、IORegistryEntrySetCFProperty | 通用 registry 操作，不指定类；具体路径/对象未确定 |
+| IOKit | IOServiceGetMatchingService、IOServiceGetMatchingServices、IOServiceMatching、IOServiceOpen | 通用匹配/打开，类由调用参数决定；不能逐项归属于特定 kext。`IOServiceAddMatchingNotification`、`IOServiceWaitQuiet` **未直接导入** |
+| IOKit | IOPMAssertionCreateWithName、IOPMAssertionDeclareSystemActivity、IOPMAssertionRelease | 电源管理用户态接口，不等同某单个内核类；r40 服务及请求路径未核 |
+| IOKit | IOHIDEventAppendEvent、IOHIDEventConformsTo、IOHIDEventCreate、IOHIDEventCreateButtonEvent、IOHIDEventCreateCopy、IOHIDEventCreateData、IOHIDEventCreateDeviceOrientationEventWithUsage、IOHIDEventCreateDigitizerEvent、IOHIDEventCreateKeyboardEvent、IOHIDEventCreateProximtyEvent、IOHIDEventCreateRotationEvent、IOHIDEventCreateScaleEvent、IOHIDEventCreateScrollEvent、IOHIDEventCreateTranslationEvent | 用户态事件对象 API；不能映射为同名内核服务。r40 `IOHIDFamily` 有实体、`IOHIDEventDriver` codeless；无运行时发布证明 |
+| IOKit | IOHIDEventGetChildren、IOHIDEventGetDataValue、IOHIDEventGetEventFlags、IOHIDEventGetFloatValue、IOHIDEventGetIntegerValue、IOHIDEventGetPhase、IOHIDEventGetSenderID、IOHIDEventGetTimeStamp、IOHIDEventGetType、IOHIDEventGetTypeString、IOHIDEventGetVendorDefinedData、IOHIDEventSetEventFlags、IOHIDEventSetFloatValue、IOHIDEventSetIntegerValue、IOHIDEventSetPhase、IOHIDEventSetSenderID、IOHIDEventTypeGetName | 同上：事件对象访问，不是内核类存在性证据 |
+| IOMobileFramebuffer | IOMobileFramebufferOpen、IOMobileFramebufferSetDebugFlags | 用户态框架 API，不是内核类；r40 是否被此进程匹配/open 未证 |
+| IOSurface | IOSurfaceCreate、IOSurfaceGetAllocSize、IOSurfaceGetBaseAddress、IOSurfaceGetBytesPerRow、IOSurfaceGetHeight、IOSurfaceGetWidth、IOSurfaceLock、IOSurfaceUnlock | 用户态框架 API；不能从导入推出 `IOSurfaceRoot` 存在或运行时发布 |
+
+未直接导入 `_IOHIDEventSystemClientCreate*`、任何其他 `_IOHIDEventSystemClient*` 或 `_IOAccelerator*`。本文件的 donor plist 声明 `com.apple.iohideventsystem` 服务端，签名含 server entitlement；直接导入 HID event 创建/读写 API 只证明事件处理能力。**角色：有服务端声明；本可执行文件无直接 event-system client 导入，不能排除通过框架间接充当客户端或运行时注册失败。**不能仅凭符号宣称两者都已运行。
+
+### 潜在等待点
+
+`grep -E '_(mach_msg|bootstrap_look_up|xpc_connection_create_mach_service|dispatch_sync|dispatch_semaphore_wait|pthread_cond_wait|notify_register|dispatch_main_queue_callback_4CF)' out/bb-offline-20261123/imports.txt`：
+
+```
+_dispatch_mach_msg_get_msg
+_dispatch_sync
+_mach_msg
+_mach_msg_destroy
+_notify_register_check
+_notify_register_dispatch
+_voucher_mach_msg_set
+_xpc_connection_create_mach_service
+```
+
+`mach_msg` 是否等待及有无超时由每个调用点的 options/timeout 决定；`dispatch_sync` 可等待目标队列。`xpc_connection_create_mach_service` 是连接对象创建候选，不等于必定同步等待服务；`notify_register_check/dispatch` 是注册 API，不能单凭导入断言阻塞。其他命中是消息辅助操作，不自动构成等待。列表中 `mach_msg_overwrite`、`bootstrap_look_up{,2}`、`dispatch_semaphore_wait`、`pthread_cond_wait`、`mach_msg_send`、`mach_msg_receive`、`_dispatch_main_queue_callback_4CF` 均无直接导入；框架内部和动态解析仍可能使用它们。
+
+### 入口、初始化器及局部代码
+
+`llvm-nm "$b" | grep -E '(^| )_main$'` 无命中；`LC_MAIN` 定位到 VA `0x100022aac`，符号被剥离，不能仅凭局部线性扫描界定完整 main 的控制流。`llvm-objdump --macho --section-headers "$b" | grep -E '__mod_init_func|__init_offsets'` 无命中；这不排除 ObjC、依赖 dylib 或 dyld 的初始化。
+
+`llvm-objdump -d --start-address=0x100022aac --stop-address=0x1000232f0 "$b"`：线性范围至首个 `ret`（`0x1000232ec`）未见对上述五个候选 stub 的直接 `bl`；内部函数、间接调用、跳转及其他线程仍未知，因此**不能定位实际第一个候选调用**。仅作独立局部示例，而不是 main 首次调用，范围 `0x100023bcc..0x100023c08`：
+
+```
+100023be0 adr x0, #669700
+100023be8 mov x1, #0
+100023bec mov w2, #2
+100023bf0 bl  0x100097cec
+100023bf4 cbz x0, 0x100023c38
+```
+
+`llvm-objdump --macho --indirect-symbols "$b" | grep 100097cec` 映射该 stub 为 `_xpc_connection_create_mach_service`；此处名字实参及从入口可达性未解析，不证明等待或先后。
+
+### donor plist 全量相关键
+
+上轮只读 `plistlib.load` 输出：`ProgramArguments=['/usr/libexec/backboardd']`，`POSIXSpawnType='Interactive'`，`RunAtLoad=True`，`KeepAlive=True`，`UserName='mobile'`，`HighPriorityIO=True`，`_Conclave='com.apple.backboardd.conclave'`，`Label='com.apple.backboardd'`。输出中无 `EnvironmentVariables`、`LimitLoadToSessionType`、`EnableTransactions`、`RequireRunAtLoad`、`WaitForDebugger` 键（不把缺省值推断为 true/false）。
+
+全部 `MachServices`：
+
+```
+com.apple.accessibility.gax.backboard = true
+com.apple.backboard.watchdog = true
+com.apple.AttentionAwareness = true
+com.apple.iohideventsystem = {ResetAtClose=true}
+com.apple.backboard.oswatchdog = true
+com.apple.libEDR.Notification = true
+com.apple.backboard.altsysapp = true
+com.apple.backboard.hid.services = {ResetAtClose=true}
+com.apple.hid.PencilHaptics = true
+com.apple.backboardd.virtualframebuffer = true
+com.apple.backboard.hid-services.xpc = true
+PurpleWorkspacePort = {ResetAtClose=true}
+PurpleSystemEventPort = {ResetAtClose=true}
+com.apple.backboard.display.services = {ResetAtClose=true}
+com.apple.backboard.system-app-server = true
+com.apple.accessibility.AXBackBoardServer = true
+com.apple.backboard.TouchDeliveryPolicyServer = true
+com.apple.iphone.axserver-systemwide = true
+com.apple.backlightd = true
+com.apple.CARenderServer = {ResetAtClose=true}
+```
+
+这些是此 job 对 launchd 声明的服务名称，不能因名称像其他服务就认作它要先等待的外部服务；此 plist 未给出上述键形式的外部服务前置。`RunAtLoad`/`KeepAlive` 是运行策略，`mobile` 是进程用户，不证明运行时前置全部满足。
+
+### 结论
+
+没有证据将 `entry_bb=0` 归因于某个特定导入调用（强度：无法评定）。缺设备运行时 backboardd 的线程栈/PC 及消息或匹配参数；静态清单只能缩小候选而无法证明等待。无新设备操作，本轮只读未构建。`imports.txt` 与二进制仍在 `.gitignore` 的 `/out/`；`git status --porcelain -- out/bb-offline-20261123` 和 `git ls-files` 均无输出。
