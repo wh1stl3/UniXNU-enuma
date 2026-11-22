@@ -46,3 +46,22 @@ hash.final(cached);
 ## 5. 卡点判断
 
 身份缺失是该 stand-in 的 wrap/unwrap/bag UUID 的确定性前置缺失（源码强证据）；它**可能**影响 SpringBoard/backboardd（跨设备先例及 keychain 机制，弱至中等证据）。缺 enuma 用户态相关 selector 的实际调用、返回与等待链，不能断言这是当前 GUI 卡点，更不能断言补身份即可出图。最小诊断输入是一段跨启动稳定的固定非空字节串；只足以排除 `deviceKey()` 的零长度分支，其他参数、已有 blob、服务和显示链仍未验证。
+
+## 6. 固定版本逐家对照（续查）
+
+| 项目和固定版本 | 回调来源与长度 | 补身份后的行为记录 | 许可 |
+|---|---|---|---|
+| 官方组件 `AppleKeyStoreState@8c70daf8` | 板级回调写入最多 32 B，返回实际长度；0 不可用；组件自身 SHA-256 派生 | 无板级补身份的对照 | BSD-2-Clause-Patent |
+| enuma `012e956` | 固定返回长度 0，不写字节 | 无 | 本仓许可未核 |
+| sheng `c8f92b20` | `/chosen/unique-chip-id` 原始数据，长度 8 至 capacity，至少一字节非零，通常 8 B | 未找到单独补身份的前后对照 | 文件 SPDX BSD-2-Clause-Patent |
+| nuwa 本地 `ce0339a8` | 原始 ADT：优先 8 B `unique-chip-id`，否则 4 B `chip-id`，容量不足时截断 | 本轮未找到单独补身份的前后对照 | 该文件及仓库许可未核 |
+| Orange Pi 5 `729ba25f` | 两个 ADT 属性依次拼接，任一可单独存在；通常 12 B，最多 16 B | 未找到单独补身份的前后对照 | 文件 SPDX BSD-2-Clause-Patent |
+| asteroids `6370e66c` | `package/KeyStoreProbe.cpp` **没有定义该回调**，其他文件/链接输入未完整搜索，来源和长度未知 | T28/T29 是 stand-in 整体差异，不是补 ID 的隔离实验 | 文件 SPDX BSD-2-Clause-Patent |
+| HuajiFruit sirius `ac0c9004` | `package/KeyStoreProbe.cpp` 无该回调，其他输入未完整搜索，来源和长度未知 | 未找到隔离对照 | 文件 SPDX BSD-2-Clause-Patent |
+| 57UU sirius `f269452` | GitHub 递归 tree 的 `package/` 无 `KeyStoreProbe.cpp`；其他文件未全文搜索，来源和长度未知 | 未找到隔离对照 | 仓库许可未核 |
+
+sheng 源码 `KeyStoreProbe.cpp:67-79` 要点：`getProperty("unique-chip-id")`，`getLength() >= 8 && getLength() <= capacity`，复制后仅在 `nonzero` 时返回长度。nuwa `package/nuwa-aks/nuwa_aks.c:210-236` 要点：`length == 8` 优先，`else if ... length == 4`，再 `n = capacity` 截断。Orange Pi 5 的 [源码](https://github.com/Ken-u/UniXNU-orangepi5/blob/729ba25f4d67225ff3853ba1e435b95af97e59e3/package/KeyStoreProbe.cpp#L147-L181) 用 `names[] = {"unique-chip-id", "chip-id"}` 依序复制。sirius 新版 [probe](https://github.com/HuajiFruit/UniXNU-sirius/blob/ac0c900485f3c0cd18de9707579a1cdcd3365503/package/KeyStoreProbe.cpp) 只有状态、计数和注册逻辑；旧版 [tree](https://api.github.com/repos/57UU/UniXNU-sirius/git/trees/f269452c36eceb7f91446fccc4c3bed175aaa98e?recursive=1) 的文件名清单不能证明没有其他定义。
+
+**选择**：条件成熟时采用 sheng 式只读取固定的 `/chosen/unique-chip-id`，缺失即失败关闭；先确认 enuma 构建注入的种子和运行时 8 B 属性存在、备份及跨重建/重启一致。官方生成器能提供输入不是本板已具备该输入的证据。不要静默回退普通 `chip-id`：它未证逐机唯一，且属性恢复时会改变身份；不采用全设备公共常量或额外派生流程作为长期身份。纯隔离诊断可用固定非空字节，但其写出的数据不应视为可迁移到最终身份。
+
+**迁移边界**：相同组件版本、相同身份字节和长度才能得到相同软件设备密钥；不同来源、拼接规则、长度或种子均会使旧 stand-in blob 的校验/解封失败，除非旧密钥可用并有明确迁移方案。不同设备共享身份会得到相同密钥，缺少设备隔离；软件身份可从载荷提取，不是 SEP 硬件秘密。这里证明的是该组件的 keychain 封装兼容性，不等于证明整个 APFS Data 卷能否发现、挂载或识别；原 Apple SEP 保护材料也不能据此解开。
