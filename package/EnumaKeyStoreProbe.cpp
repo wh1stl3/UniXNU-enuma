@@ -3,6 +3,7 @@
 // Copyright (c) 2026, rootstockos contributors. All rights reserved.
 // Adapted from rootstockos/UniXNU-asteroids@6370e66c package/KeyStoreProbe.cpp.
 #include <IOKit/IOLib.h>
+#include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/IOService.h>
 #include <libkern/OSReturn.h>
 #include <libkern/c++/OSSymbol.h>
@@ -27,9 +28,28 @@ extern "C" void native_keyevents_open_refused(void) {}
 extern "C" void native_aks_opened(void) {}
 extern "C" void native_aks_call(uint32_t, int32_t) {}
 
-// No board identity was provisioned for the scratch state fixture. Return
-// the unavailable sentinel, not a shared synthetic key derivation input.
-extern "C" size_t native_aks_device_id(uint8_t *, size_t) { return 0; }
+// Prefer the provisioned platform seed; chip-id is a diagnostic fallback.
+extern "C" size_t native_aks_device_id(uint8_t *out, size_t capacity)
+{
+    IORegistryEntry *chosen = IORegistryEntry::fromPath("/chosen", gIODTPlane);
+    if (!chosen) return 0;
+    const char *names[] = {"unique-chip-id", "chip-id"};
+    const size_t sizes[] = {8, 4};
+    size_t result = 0;
+    for (size_t i = 0; i < 2; ++i) {
+        OSData *data = OSDynamicCast(OSData, chosen->getProperty(names[i]));
+        if (!data || data->getLength() < sizes[i]) continue;
+        const uint8_t *bytes = static_cast<const uint8_t *>(data->getBytesNoCopy());
+        bool nonzero = false;
+        for (size_t j = 0; j < sizes[i]; ++j) nonzero |= bytes[j] != 0;
+        if (!nonzero) continue;
+        result = capacity < sizes[i] ? capacity : sizes[i];
+        memcpy(out, bytes, result);
+        break;
+    }
+    chosen->release();
+    return result;
+}
 
 extern "C" void enuma_keystore_probe(void)
 {
