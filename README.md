@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r44 单次观察（2026-11-22，`self-checked`）**：受测入口阳性对照成立，两个目标进程五项为零；三条共享缓存 fixup 未命中，详见 [r44 记录](docs/enuma-r44-device-20261123.md)，阶段不提升。
+
 **r40 单次观察（2026-11-22，`self-checked`）**：既有主 GPT 与候选 store 窗口快照见 [r40 记录](docs/enuma-r40-device-20261123.md)；备份 GPT、容量和写入准入未证，阶段不提升。
 
 **r30 单次观察（2026-11-22，`self-checked`）**：user-client 分派点有阳性对照，`backboardd` 精确 comm 计数为零；窗口与身份限制见 [r30 记录](docs/enuma-r30-device-20261123.md)，阶段不提升。
