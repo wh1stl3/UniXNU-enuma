@@ -1,6 +1,6 @@
 # enuma 触摸证据清单（2026-11-22）
 
-状态：`self-checked`，离线证据调查；本轮未访问设备。路径相对于设备仓；`.cache` 是本地证据，不作为入库资产。
+状态：`self-checked`；第 1–5 节为采集前离线调查，第 6 节记录主控提供的 TWRP 采集结果。本次整理未访问设备。路径相对于设备仓；`.cache` 是本地证据，不作为入库资产。
 
 ## 1. 已有证据
 
@@ -47,7 +47,7 @@ adb -s <serial> shell getevent -lt /dev/input/<eventN>
 adb -s <serial> shell 'ls -l /vendor/firmware/novatek* /vendor/firmware/*nt36523* /odm/firmware/*nt36523* 2>/dev/null'
 ```
 
-## 5. TWRP 只读采集清单（未执行）
+## 5. TWRP 只读采集清单（采集前快照）
 
 所有命令均为只读；先按项目设备识别规则确认唯一目标型号 `enuma`，再替换 `<serial>`。TWRP 通常无 `getevent`；轴数值范围需通过 ioctl 获取，暂以面板分辨率代替，不视为实际输入轴范围。
 
@@ -58,3 +58,27 @@ adb -s <serial> shell 'for d in /sys/class/input/event*; do echo "=== $d"; cat $
 adb -s <serial> shell 'for d in /sys/bus/spi/devices/*; do echo "=== $d"; readlink -f $d/driver; cat $d/modalias 2>/dev/null; done'
 adb -s <serial> shell 'ls -l /vendor/firmware/*nt36523* /odm/firmware/*nt36523* 2>/dev/null'
 ```
+
+## 6. TWRP 只读采集结果（2026-11-22）
+
+### 操作
+
+- TWRP 镜像 `D:\Download\ChromeDownload\boot_enuma.img`：134,217,728 B，SHA-256 `69a4dd4379c1834fb51524cf2cf0587a3ba93aa1ca1771dd5903dfc2b82ff0e0`，`ANDROID!` header v3，ramdisk 为 `twrp_enuma`。
+- 15:32:41 创建 `.cache/enuma-twrp-touch-20261122.claimed`；单次 `fastboot boot` 报 `Sending OKAY (3.173s)`，但 `Booting FAILED (usb_read failed …(31))`，exit 1；随后设备自行进入 recovery，adb 可用。原始输出为 `.cache/enuma-twrp-touch-20261122-cmd1..5.txt`。claim 已消耗，不访问、删除或重放。
+- 采集全程只读；TWRP 保持运行，未 reboot、wipe 或以写方式 mount。
+
+### 采集结果
+
+1. `/proc/bus/input/devices` 列出六台设备：`xiaomi-touch`（virtual）、`qpnp_pon`、`uinput-goodix`（virtual）、`gpio-keys`、`NVTCapacitiveTouchScreen`、`NVTCapacitivePen`。
+   - `NVTCapacitiveTouchScreen`：`Bus=001c`（SPI）、`PROP=2`（DIRECT）、`EV=b`、`KEY=400`（含 BTN_TOUCH）、`ABS=661800000000000`、`Phys=input/ts`、`Sysfs=/devices/virtual/input/input4`。
+   - `NVTCapacitivePen`：`EV=b`、`KEY=1c01`、`ABS=f000003`、`Phys=input/pen`。
+2. sysfs：`event4` 对应 `NVTCapacitiveTouchScreen`（abs 位图同上），`event5` 对应 `NVTCapacitivePen`；device 路径均为 `/sys/devices/virtual/input/inputN`，是虚拟输入层。
+3. SPI 绑定：`/sys/bus/spi/devices/spi0.0` 的 driver 为 `/sys/bus/spi/drivers/NVT-ts`，`modalias = spi:NVT-ts-spi`，与 DT 的 `novatek,NVT-ts-spi` 一致。
+4. 固件路径查询为空；TWRP 下 `/vendor/firmware` 可能未挂载，**不代表固件不存在**。
+5. cmdline 摘录：`androidboot.hwversion=B.9.0`、`androidboot.cert=M2105K81C`、`androidboot.baseband=mdm`、`msm_drm.dsi_display0=qcom,mdss_dsi_k81_42_02_0a_dual_cphy_video`、`androidboot.slot_suffix=_b`、`androidboot.verifiedbootstate=orange`；内核 `4.19.157-perf-gf8cf95f4dc15`。
+
+### 判读
+
+- 已确证触摸控制器经 **SPI**（`spi0.0`）绑定 `NVT-ts` 驱动，输入设备为 DIRECT 且带 BTN_TOUCH；存在独立笔设备。
+- **未定**：`ABS=661800000000000` 的精确位解码。当前按位解出未包含 `ABS_MT_POSITION_X/Y`，与常规触摸实现不符；可能是位序解释问题或该驱动把坐标放在 `ABS_X/ABS_Y`，**不得据此断言坐标轴缺失**。
+- 未取得坐标范围（需 ioctl/EVIOCGABS）、触点数、固件本体。以上为主控提供的采集结果，整理时未独立复采。
