@@ -1,12 +1,14 @@
 # UniXNU-enuma
 
+**r29 单次观察（2026-11-22，`self-checked`）**：backboardd 分派计数 `calls=0`，边界与审查见 [r29 记录](docs/enuma-r29-device-20261123.md)；阶段不提升。
+
 **r28 单次观察（2026-11-22，`self-checked`）**：两条板级 framebuffer 打开表项及零 swap 校验计数见 [r28 记录](docs/enuma-r28-device-20261123.md)；阶段不提升。
 
 **r26 单次观察（2026-11-22，`self-checked`）**：framebuffer 打开尝试计数 2、板级 swap 校验计数 0；打开结果未知。见 [r26 记录](docs/enuma-r26-device-20261123.md)，阶段不提升。
 
 **r24/r23 对照（2026-11-22，`self-checked`）**：两版均见 backboardd exec，r23 旧核读为漏读；因果未定。见 [对照记录](docs/enuma-r24-census-20261122.md)，阶段不提升。
 
-**r23 实机观察（2026-11-22，`self-checked`）**：HID 占位属性日志与 SpringBoard exec 可见；bootstrap、backboardd 与 GUI 状态未定。见 [观察记录](docs/enuma-r23-hid-device-20261122.md)，阶段不提升。
+**r23 实机观察（2026-11-22，`self-checked`）**：HID 占位属性日志与 SpringBoard、backboardd exec 可见；GUI 状态未定。见 [观察记录](docs/enuma-r23-hid-device-20261122.md)，阶段不提升。
 
 **r22 刷写及单次观察（2026-11-22，`self-checked`）**：采样帧未见 `sig=9`、多个服务有 exec；GUI 与稳定性未知，阶段不提升。详见 [r22 记录](docs/enuma-r22-device-20261122.md)。
 
