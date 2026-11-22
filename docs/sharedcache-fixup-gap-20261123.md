@@ -1,6 +1,6 @@
 # r44 共享缓存 text-fixup 缺口
 
-`self-checked`，只读源码和本地镜像；无设备操作或构建。**失败点只能定位到采样前未完成目标页替换，不能定位到某一个静默分支。** r44 的 `parsed=4 applied=1`、`bits=0x08` 表明采样时前三个位未报告成功，第四位已成功；报告非事务快照，且采样后可能仍发生应用（见 `enuma-r44-matchcnt2fx-host-20261123.md:30-55`）。缺少逐条目标页到达、签名和名称计数，不能断言共享缓存未加载、签名失败或路径不可见。
+`self-checked`，只读源码和本地镜像；无设备操作或构建。**共享缓存的标准映射链允许目标页进入同一签名验证 hook，但不保证该页被访问或走 slow；不能由 r44 总计数定位静默门禁。** 三个目标在本地 donor 的可执行文件映射内，原字节均匹配。r44 的 `parsed=4 applied=1`、`bits=0x08` 表明采样时前三个位未报告成功，第四位已成功；报告非事务快照，且采样后可能仍发生应用（见 `enuma-r44-matchcnt2fx-host-20261123.md:30-55`）。
 
 ## 机制、位置和时序
 
@@ -19,8 +19,8 @@
 | 位 | 目标 | 采样结果与原因边界 |
 |---|---|---|
 | 0 | `.15+0x421e8bc` | 未报告写入；本地 SystemOS 同名、原字节匹配降低离线条目错误可能，但不证明设备运行页相同。目标页未到 slow hook、签名不合格、vnode 名不同或运行字节不同均未排除。 |
-| 1 | `.13+0x1b05bec` | 未报告写入；未核查该文件及原字节，实际页是否访问和各静默门禁均未知。 |
-| 2 | `.13+0x1b05b08` | 未报告写入；同上，不能将 bit 0 的离线字节证据推广到本条。 |
+| 1 | `.13+0x1b05bec` | 未报告写入；本地 donor 原字节 `44008052` 和条目一致，实际页是否访问及各门禁仍需运行时证据。 |
+| 2 | `.13+0x1b05b08` | 未报告写入；本地 donor 原字节 `44008052` 和条目一致，同属 `.13` 可执行映射，与 bit 1 处于同一 4K 页 `0x1b05000`。 |
 | 3 | `BTAudioHALPlugin+0x38bec` | 已观察至少一次写入；该次页已通过 hook 的签名、偏移、名称与字节判断，但不证明替换指令已执行。 |
 
 ## sheng 对照和最小候选
@@ -29,3 +29,33 @@ sheng **未见记录**：`text-fixup-20261123.md:39-50` 已检查现有历史转
 
 1. 首选先做仅诊断的逐目标页计数：分别记录目标 basename/偏移页是否到达验证、fast/slow、validated/tainted、vnode 匹配和原字节比较；须保证计数与采样语义并审查并发。代价是少量隔离插桩；风险是页故障热路径与日志时序扰动。确认本机失败分支需要另获授权后一次新上机，离线源码不足以决定。
 2. 只有若证实目标页因 fast 路径绕过 hook，才考虑在已验证页合适位置补同等受控应用；需保持签名、原字节、页生命周期及指令缓存一致性，不放宽校验。代价为改 VM 启动链/并发敏感路径，须 `deep_reviewer` 审查及独立构建验证，运行效果需要另获授权上机；当前未证实该路径是根因，不实施。
+
+## 2026-11-23 补充：函数与完整调用链
+
+1. **计数不在同一个函数**。r44 `ubc_subr.c:6166-6206` 是 `static void cs_text_fixup_init(void)`：`:6205` 的 `cs_text_fixup_parsed = cs_text_fixup_count;` 保存解析后的有效条数，`:6207` 用 `STARTUP(EARLY_BOOT, STARTUP_RANK_MIDDLE, cs_text_fixup_init)` 注册。`:6097-6098` 是两个全局变量定义，不在函数内。`ubc_subr.c:6213-6240` 是 `uint32_t cs_text_fixup_page(...)`；函数头 `:6209-6211` 原文为 “Applies the fixups that fall in this validated page of vp. kva is a writable kernel address of the page. Returns the number of fixups written, so the caller makes the instruction cache coherent.” `:6229-6233` 为 `memcpy(at, f->replacement, f->length); written++; ... os_atomic_inc(&cs_text_fixup_applied, relaxed); ... os_atomic_or(&enuma_fx_bits, ...)`，`:6239` 返回 `written`。
+
+2. **直接调用者只有一个**：在基线构建树 `bsd/`、`osfmk/` 搜索 `cs_text_fixup_page(`，只得到其定义、`osfmk/vm/vm_protos.h:542` 声明和 `osfmk/vm/vm_fault.c:7805-7807` 调用：`validated == VMP_CS_ALL_TRUE && tainted == VMP_CS_ALL_FALSE && cs_text_fixup_page(vnode, mo_offset, ...) != 0` 后 `cache_sync_page(...)`。调用者 `vm_page_validate_cs_mapped_slow` 为页签名验证完成后，不是 exec 或 mmap syscall 直接调用。其两个直接上游为 `vm_fault.c:7822-7829` 的 `vm_page_validate_cs_mapped`（fast 返回 false 才 slow），以及 `:7834-7882` 的 `vm_page_map_and_validate_cs`（直接 slow）；后者由 `vm_page_validate_cs` 在 `:7912-7915` fast 不通过时调用，也由 `revalidate_text_page` 在 `:8425-8484` 致命进程错误文本页重验时调用。`vm_page_validate_cs_mapped` 还由 `vm_dyld_pager.c:945-946`、`vm_shared_region_pager.c:654-655`、`vm_apple_protect.c:504-505` 对有签名的来源页调用。共享缓存和普通文件可由各自的页访问触发，不能把建立映射等同于每页已经校验。
+
+3. **共享缓存并非在源码中被一概排除**。`osfmk/vm/vm_shared_region.c:55-64` 注释称 exec 先 `vm_shared_region_enter()`，随后 dyld 调用 `shared_region_check_np()` 和 `shared_region_map_and_slide_2_np()` 填充对应 cache。`bsd/kern/syscalls.master:848` 定义后者 syscall 536；`bsd/vm/vm_unix.c:2962,3078` 调用 `_shared_region_map_and_slide(...)`，`:2449-2478` 获取传入 fd 对应 regular vnode、执行 `mac_file_check_mmap`，`:2813-2822` setup 后调用 `vm_shared_region_map_file(...)`。`vm_shared_region.c:1698-1705,1752-1757,1823-1833` 对 file-backed 项使用文件 pager 和 `sms_file_offset` 调用 `vm_map_enter_mem_object`；按 `:1760-1764` 带 `VM_PROT_SLIDE` 的项另交 sliding pager，`vm_shared_region_pager.c:651-655` 同样对已签名源页调用 `vm_page_validate_cs_mapped`。`vm_dyld_pager.c:943-952` 的 `if (src_page_object->code_signed) vm_page_validate_cs_mapped(src_page, PAGE_SIZE, 0, ...)` 明确对该 pager 的 signed 源页使用同套验证，并复制验证状态。普通 file-backed text 页也能经 VM 页校验路径进入相同 slow hook；以上静态可达不是 r44 已执行该 syscall 或目标页命中的证明，也不能把 dyld pager 与所有 cache mapping 等同。
+
+4. **为何不能指定本次失败门禁**：`vm_fault.c:7719-7723,7728-7738,7742-7747` 中已验证、tainted、可选 validation bitmap 命中或 object 终止等均可让 fast 返回 TRUE 而绕过 slow；`:7805` 又要求整页验证成功且不 tainted；`ubc_subr.c:6219-6227` 依次检查目标文件偏移是否在本页、basename 和原字节，任一 `continue`。表项遍历没有“只处理首个页”的条件。r44 未记录哪条条件触发，也未证明目标页在采样前发生 fault、运行时文件与 donor 相同或选用 shared-region 路径；不能将结果归因于特定条件，亦不能据此断言接错位置。
+
+### 新增直接镜像检查
+
+以同一 `sgan81/apfs-fuse@66b86bd525e8cb90f9012543be89b1f092b75cf3` 对 SystemOS donor `044-76034-038.dmg` 使用 `-o ro` 挂载，用 `od` 读取两个实际 inode 的 cache header 和目标字节后卸载。`mappingOffset=0x200, mappingCount=1`；按 `enuma-cache-pagesize-20261122.md:9-13` 的 dyld mapping 格式，`.13` 的唯一 mapping 为 `(address=0x1a67c8000, size=0x6c60000, fileOffset=0, maxProt=5, initProt=5)`，`.15` 为 `(address=0x1ad480000, size=0x6394000, fileOffset=0, maxProt=5, initProt=5)`；三偏移均落在对应映射的文件区间，权限 5 为读/执行。`od -j 28335084 -N 4` 和 `-j 28334856 -N 4` 分别在 `.13` 读得 `44 00 80 52`，与 `UniXNU/profiles/os/ipados-17.7.11-21H461/profile.toml:41` 两条 `44008052` 一致。`.15` 的匹配记录见上。映射表只证明 donor 静态范围，不证明运行时已映射或访问这些页。
+
+### sheng 对照：逐 hunk
+
+参考 `UniXNU/UniXNU-sheng@da9fab96aea0b5dcdb3bef730b10397276514dac` 的树：`patches/` 只有 `.gitkeep`，不是含独立 native-text-fixup 的设备补丁；其 parent `8a2dd99a9af7540cc13b06a586f6133d1aba5866` 到该提交的 diff 仅 `board.toml:190-192` 增 `text-fixup0=dyld_shared_cache_arm64.15,421e8bc,28ad1bb0008544f9,c0035fd6008544f9` 和 `package/BootLog.c:25-26,478-483` 增 parsed/applied 输出。历史 sheng 实际构建所用 UniXNU commit 未钉住，因此无法断言该次最终链接二进制的实现。
+
+可取得的同作者上游共同补丁早期版本 `UniXNU@1bcc447ccf4a05c720f5d96c59278749710c27d0:patches/xnu/native-text-fixup.patch`，时间比上述 sheng commit 早 22 秒；与 enuma 基座 `UniXNU@693f5d9cae8a408dd18b39f3f9fdc4228c934241` 的同路径做 `git diff 1bcc447 693f5d9 -- patches/xnu/native-text-fixup.patch`。这是可复现的上游版本对照，不是历史构建 pin 证据：
+
+| 补丁 hunk | 上游早期版本 / sheng 相关 | enuma 基座及 r44 | 影响 |
+|---|---|---|---|
+| `ubc_subr.c` 声明/解析 hunk | 原版 8 条 boot-arg，`CS_TEXT_FIXUP_MAX 8` | 最多 32 条，先读 `/chosen/text-fixups` 再读 8 boot-arg；r44 额外引入 bitmap 报告 | 输入来源和上限不同；r44 `parsed=4` 已确认四条解析，不能证明后续页命中。 |
+| 同一 hunk 的 page matcher | 页范围、`v_name`、`memcmp`，成功后 `memcpy` 和 applied 计数 | 匹配与写入逻辑相同，r44 在成功后增加 bit | 无额外 cache 特判或改变门禁；bitmap 是观测差异。 |
+| `vm_fault.c` include hunk | arm64 include `arm/caches_internal.h` | 相同 | 无额外 cache 路径。 |
+| `vm_fault.c` slow validation hunk | `validated == VMP_CS_ALL_TRUE && tainted == VMP_CS_ALL_FALSE` 后调用 `cs_text_fixup_page`，然后同步 cache | 相同 | hook 位置和签名门禁相同；无共享缓存专用补丁。 |
+| `vm_protos.h` 声明 hunk | 声明 `cs_text_fixup_page` | 相同 | 无行为差异。 |
+
+`UniXNU@477e530a8689af4a09eacb4eb9bdb878c737d8b6` 另改 `native-4k-signature-hash-cache.patch`：大于 32 MiB 的签名输入用 `IO_NOCACHE` 分块读取并生成 4K 验证 hash；这不是 `cs_text_fixup_page` 的 cache 专用 hook，也不证明 r44 某目标页的 fast/slow 状态。后续 sheng `c8f92b208068eeaa4cd2b0f592671f04ee70076e:patches/xnu/series` 只列 audio、CPU idle、AMP 三个板级补丁，不含 text-fixup 专项；不能据此证明它的共同补丁闭包或历史机器行为。现有 sheng parsed/applied 仍无运行输出。
