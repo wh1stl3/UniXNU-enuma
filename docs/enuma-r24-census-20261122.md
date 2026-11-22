@@ -21,14 +21,24 @@
 ## r23 复核
 
 - 快刷段 130–220 s，30 fps 抽取 1,800 帧，去重为 155 帧后分 6 批逐张核读；未见 `enuma-exec: … comm=backboardd`，也未见 `comm=SpringBoard`。
-- 此前全片 0–334 s、阈值 12 的 116 张唯一帧核读，同样未见 backboardd；此前已观察到 64.5 s 的 SpringBoard exec，见 [r23 记录](enuma-r23-hid-device-20261122.md)。
-- 两次去重以整块区域平均差判定，可能丢弃仅新增一行的帧。因此结论仅为**已核读帧集合中未出现**，不能确证 r23 从未 exec backboardd。
+- 此前全片 0–334 s、阈值 12 的 116 张唯一帧核读报未见 backboardd；此结论因读图漏读被下方更正推翻。此前已观察到 64.5 s 的 SpringBoard exec，见 [r23 记录](enuma-r23-hid-device-20261122.md)。
+- 两次去重以整块区域平均差判定，可能丢弃仅新增一行的帧；但本次 79.5 秒帧曾入选，旧「已核读帧集合中未出现」属于漏读，见下方更正。
 
 ## 判读边界
 
-- **已观察**：r24 已核读帧中出现 backboardd exec，r23 已核读帧中未出现；两版均观察到 SpringBoard exec，也都出现 `AXSpringBoardServer` lookup 失败。lookup 失败不证明服务从未注册或两版的全部时间均不可用。
-- **待证假设**：r23 legacy 显示适配器可能影响 backboardd 启动；r24 虽观察到 backboardd exec，仍有 `AXSpringBoardServer` lookup 失败。这些帧不能证明适配器阻止启动、SpringBoard 未注册 XMP 服务或其因果。
+- **已观察**：r23 与 r24 均出现 backboardd、SpringBoard exec，也都出现 `AXSpringBoardServer` lookup 失败；原先 r23 未读到 backboardd 的结论见下方更正。lookup 失败不证明服务从未注册或两版的全部时间均不可用。
+- **已撤回**：r23 legacy 显示适配器阻止 backboardd 启动的推断，见下方更正；这些帧也不能证明 SpringBoard 未注册 XMP 服务或其因果。
 - **共同边界**：目前没有两版已具备可用图形显示服务的证据；SpringBoard 等待 framebuffer 是候选解释，未观察到具体阻塞调用，不能定论。
-- **UNKNOWN**：SpringBoard 究竟阻塞在哪个调用；r23 的 backboardd 是否曾在未核读或被去重帧中 exec；显示适配器是否影响它及其机制；GUI 与用户态稳定性。
+- **UNKNOWN**：SpringBoard 究竟阻塞在哪个调用；显示适配器的运行时效果；GUI 与用户态稳定性。
 
 阶段不提升。
+
+## 更正：r23 backboardd 读图漏读
+
+用户提供第一次启动录像 `VID_20261122_154135.mp4` 的 79.8 秒截图（时间码 `00:01:19.824`），明确可见 `enuma-exec: pid=34 comm=backboardd`。此前 116 张唯一帧包含 79.5 秒那张却报「无」，这是**读图漏读，不是抽样漏帧**。截图未入库，本次按用户提供信息记录，未独立复核。
+
+因此撤回「r23 未启动 backboardd」「显示适配器阻止 backboardd」「窗口大小与 backboardd 相关」三条推断。修正后的对照：r23 与 r24 **都有** SpringBoard exec 和 backboardd exec，两版均持续出现 `AXSpringBoardServer` lookup 失败。
+
+当前稳定可见的共同现象是 SpringBoard exec 后该服务 lookup 失败；仅凭 lookup 失败不能确证服务从未注册。两版未证明有 GUI 像素输出，显示相关阻塞可作为候选，但不是已证明或唯一的解释。
+
+方法教训：`vision` 对唯一帧也会漏读，单次「未见」不得作为「未发生」的证据；关键结论需用户侧或第二种方法交叉确认。阶段不提升。

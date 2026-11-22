@@ -1,6 +1,6 @@
 # UniXNU-enuma
 
-**r24/r23 对照（2026-11-22，`self-checked`）**：r24 已核读帧见 backboardd exec，r23 已核读帧未见；因果未定。见 [对照记录](docs/enuma-r24-census-20261122.md)，阶段不提升。
+**r24/r23 对照（2026-11-22，`self-checked`）**：两版均见 backboardd exec，r23 旧核读为漏读；因果未定。见 [对照记录](docs/enuma-r24-census-20261122.md)，阶段不提升。
 
 **r23 实机观察（2026-11-22，`self-checked`）**：HID 占位属性日志与 SpringBoard exec 可见；bootstrap、backboardd 与 GUI 状态未定。见 [观察记录](docs/enuma-r23-hid-device-20261122.md)，阶段不提升。
 
