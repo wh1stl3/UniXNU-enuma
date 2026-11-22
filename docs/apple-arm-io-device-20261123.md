@@ -5,11 +5,10 @@ parent-provided transcription, not independently read from an image.
 
 ## Crucial spelling
 
-The supplied wait dictionary says `AppleARMIODDevice` (two consecutive D
-characters after IO); the supplied log uses the same spelling. The actual r39
-prelinked binary says `%s: provider was not AppleARMIODevice.` (one D).
-These are different class names. The exact wait spelling needs confirmation
-against the original image before attributing it to a real class or client.
+Correction: the user confirmed the screen's wait dictionary names
+`AppleARMIODevice`. The earlier parent transcription added a spurious D;
+the previously stated need to confirm that spelling is withdrawn. The actual
+r39 prelinked binary says `%s: provider was not AppleARMIODevice.`.
 
 From the repository root, with WSL GNU grep and llvm-nm:
 
@@ -78,8 +77,71 @@ properties have not been verified. Do not substitute a fabricated provider.
 The exact waited-for client, remaining dictionary fields, and its relation to
 display or SpringBoard are unknown. The non-IOD branch alone does not prove
 the wait is blocking the GUI. The smallest justified action is to verify the
-complete dictionary and the caller/class spelling before proposing any code
+complete dictionary and the caller before proposing any code
 change; no provider change is justified by current evidence.
 
-The requested sheng/sirius/Orange Pi 5 provider comparison was not established;
-no claim that those systems pass this same wait is supported here.
+## Follow-up: load, allocation and comparisons
+
+`llvm-objdump --macho --private-headers` on r39 `prelink.macho` shows
+`__PRELINK_TEXT` at VM `0xfffffff00427c000`, file offset 91910144, and
+`__PRELINK_INFO,__info` at file offset 124268544. The AppleARMPlatform
+metadata dictionary at file offset 124281545 contains:
+
+```
+CFBundleIdentifier           com.apple.driver.AppleARMPlatform
+CFBundleVersion              1.0.2
+_PrelinkExecutableLoadAddr   0xfffffff004286080
+_PrelinkExecutableSourceAddr 0xfffffff004286080
+_PrelinkExecutableSize       0xfc2b
+_PrelinkKmodInfo             0xfffffff006add500
+_PrelinkBundlePath            /System/Library/Extensions/AppleARMPlatform.kext
+```
+
+The executable address falls inside `__PRELINK_TEXT`; `llvm-objdump
+--macho --section-headers` also shows `__mod_init_func` sections, but these
+are not attributed to AppleARMPlatform. This establishes an executable and
+kmod metadata in the artifact, not that the kext was started or that this
+class's metaclass was registered. Searching r39's build logs for
+`AppleARMPlatform` returned no lines; those are host build logs, not a full
+device startup log. Neither runtime load state nor publication of an instance
+is established. A waiting service match cannot distinguish an unregistered
+class from a registered class with no matching published service.
+
+In the local XNU source, `libkern/c++/OSMetaClass.cpp:1285-1297,1314-1319`,
+`allocClassWithName` looks up the metaclass and invokes `meta->alloc()`;
+absence or a failed allocation returns null. The r39 symbol scan and class-name
+strings do not identify a usable metaclass table entry, allocator implementation,
+or runtime registration. The actual AppleARMPlatform implementation was not
+found in inspected sources. Thus the `AppleARMIODevice` allocation result,
+its abstract/concrete status, caller access, initialization, and required
+`reg`/interrupts/parent resources are unknown; neither the existence nor
+necessity of those specific properties is established.
+
+Pinned public source comparisons (BSD-2-Clause-Patent on the cited files):
+
+* [UniXNU/UniXNU-sheng@5ae8b4876a378a5104330a5ae514ec9d6deae373,
+  package/LegacyDisplayProbe.cpp:663-707](https://github.com/UniXNU/UniXNU-sheng/blob/5ae8b4876a378a5104330a5ae514ec9d6deae373/package/LegacyDisplayProbe.cpp#L663-L707):
+  `new IOService` (:666), framebuffer memory (:673), then manually attaches
+  and starts the display (:706-707); the comment explains why it uses a
+  plain service rather than IOPlatformDevice under the resource service.
+* [HuajiFruit/UniXNU-sirius@ac0c900485f3c0cd18de9707579a1cdcd3365503,
+  package/LegacyDisplayProbe.cpp:605-652](https://github.com/HuajiFruit/UniXNU-sirius/blob/ac0c900485f3c0cd18de9707579a1cdcd3365503/package/LegacyDisplayProbe.cpp#L605-L652):
+  `new IOPlatformDevice` (:605), attaches and starts display (:649-652).
+* [Ken-u/UniXNU-orangepi5@729ba25f4d67225ff3853ba1e435b95af97e59e3,
+  package/LegacyDisplayProbe.cpp:836-868](https://github.com/Ken-u/UniXNU-orangepi5/blob/729ba25f4d67225ff3853ba1e435b95af97e59e3/package/LegacyDisplayProbe.cpp#L836-L868):
+  `new IOPlatformDevice` (:836), attaches and starts display (:867-868).
+
+These manually attached display paths do not themselves require matching an
+AppleARMIODevice before calling display start. They do not establish that the
+unknown r39 waiter is a display client, nor that an equivalent waiter never
+appears on those devices. The separate Orange Pi device record at that pinned
+revision reports SpringBoard and scanout; the Sirius record reports display
+registration and black frames. Neither explains the identity of r39's waiter.
+
+If allocation cannot be used, a targeted alternative is to change the
+identified waiter's match only if its implementation can safely consume the
+existing service and its full matching constraints are known. That is a
+conditional possibility, not an established fix: a client may depend on
+AppleARMIODevice methods or real hardware semantics. Merely publishing a
+generic provider or changing its ordinary class properties will not satisfy
+the normal class match. No fake resources or class spoofing are justified.
