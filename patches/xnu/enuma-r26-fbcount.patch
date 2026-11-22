@@ -1,0 +1,38 @@
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -1188,3 +1188,5 @@
+  */
++#include "EnumaFbCount.inc"
++
+ static int
+ exec_mach_imgact(struct image_params *imgp)
+@@ -2126,3 +2128,4 @@
+ 	}
++	enuma_fb_arm(p->p_comm, proc_getpid(p));
+ 	goto done;
+ 
+--- a/display/NativeLegacyDisplay.cpp
++++ b/display/NativeLegacyDisplay.cpp
+@@ -20,4 +20,7 @@
+ #include <libkern/c++/OSNumber.h>
+ #include <pexpert/pexpert.h>
++extern "C" void enuma_fb_record_start(void);
++extern "C" void enuma_fb_record_client(void);
++extern "C" void enuma_fb_record_swap(void);
+ extern "C" __attribute__((noreturn)) void native_legacy_backend_guard(unsigned,void *,void *);
+ extern "C" IOService *native_legacy_display_allocate(void);
+@@ -473,3 +476,4 @@
+     bool startDisplay(IOService *provider) {
++        enuma_fb_record_start();
+         if(!IOMobileFramebufferLegacy::start(provider))return false;
+         if(!native_legacy_ring) {
+@@ -756,3 +760,4 @@
+     bool validateSwap(const OriginalLegacySwapRequest *request) override {
++        enuma_fb_record_swap();
+         // Qualified original request fields are packed; use memcpy for each
+         // access. Accept only one full-frame, untransformed, nonplanar BGRA
+@@ -828,3 +833,4 @@
+     IOReturn newUserClient(task_t task,void *security,UInt32 type,IOUserClient **client) override {
++        enuma_fb_record_client();
+         native_legacy_client_enter(task,type);
+         IOReturn status=IOMobileFramebufferLegacy::newUserClient(task,security,type,client);
