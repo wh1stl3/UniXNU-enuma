@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r30 单次观察（2026-11-22，`self-checked`）**：user-client 分派点有阳性对照，`backboardd` 精确 comm 计数为零；窗口与身份限制见 [r30 记录](docs/enuma-r30-device-20261123.md)，阶段不提升。
+
 **r29 单次观察（2026-11-22，`self-checked`）**：backboardd 分派计数 `calls=0`，边界与审查见 [r29 记录](docs/enuma-r29-device-20261123.md)；阶段不提升。
 
 **r28 单次观察（2026-11-22，`self-checked`）**：两条板级 framebuffer 打开表项及零 swap 校验计数见 [r28 记录](docs/enuma-r28-device-20261123.md)；阶段不提升。
