@@ -137,3 +137,45 @@ nub attach/start 和 DT attach 的接收者均为 nub；display attach/probe/sta
 7. **是否真的不同：是，按上述两份源码**。nub 均先 attach 再 start；display 则 pipa probe→attach→start，enuma attach→probe→start→显式 register。两边都要求 probe 返回原对象后才 start；enuma attach 失败走 failure 12，probe/start 失败走 failure 13。register 调用点差异不等于最终可见性必然不同：pipa 可能由继承代码注册，须核目标 family 和运行时状态。
 8. 若实际链接源码确认相同，需把 display probe 移到 attach 前并调整失败及清理标记，保留 nub 生命周期和 DT 条件；此时 display 尚无 attach 建立的 provider，若 probe 调用 `getProvider()` 可能改变结果，须先读实际 probe 实现。probe 失败不应 detach 未附着对象，start 失败仍须按契约清理；不能推断调整能解决 backboardd 零 open。本轮不实施启动链改动。
 9. 可观测：分别记录 display probe 返回指针、score、attach/start 返回、register 前后 registry 名称/类、`IOServiceMatching` 命中和目标服务 open；命中不证明 open 成功。r43 `docs/enuma-r43-matchcnt2-host-20261123.md:8-18,62-74` 的 M/N/O/P/I 分别覆盖匹配查询、通知、open、属性匹配、interest，均为入口计数而非成功计数；全零需同轮身份、时序和全局阳性对照。注册及特定类匹配需额外测量，不能从聚合计数倒推。缺 r40 对象链与运行时对照，优先补证，不建议仅凭 pipa 顺序改动。
+
+## 六项 job 精确对照及 watchdog 策略（补证）
+
+**纠正上节的配置级判读**：r40 虽无 pipa 同名 `sheng-disable-jobs` 参数，但 `sheng-lite=1` 展开后已包含前四项；不能说六项均未禁。pipa `board.toml:197-198` 配置 boot-arg，`package/BootWatchdogPolicy.c:43-49,60-75,81-83,103-111` 将列表和 watchdog 按条件写入 launchd 的 `/private/var/db/com.apple.xpc.launchd/disabled.plist` 并创建 `disabled.migrated`；不是 ADT、也不是 sed。pipa `:17-21` 描述 identityservicesd/contextstored/locationd 同步 XPC 等待环；`board.toml:193-195` 称它是 SpringBoard wait cycle 的隔离手段。这是**间接依赖**，并非证明 identityservicesd 是图形驱动。
+
+| pipa 禁用的完整 job | 公开资料所示作用 / 停用后果 | r40 策略 |
+|---|---|---|
+| `com.apple.identityservicesd` | IDS 为 iMessage/FaceTime 提供身份与通信协议；停止会使这些服务受影响。[Apple Wiki Identity Services](https://theapplewiki.com/wiki/Identity_Services)；pipa 报告其处于等待环，可能间接影响 SpringBoard。 | `sheng-lite` 包含 |
+| `com.apple.locationd` | 地理定位及授权；停用后定位及其授权服务受影响。[服务 man 页汇编](https://gist.github.com/dmattera/883a4457b67534df795cdd0fa1651a26) | `sheng-lite` 包含 |
+| `com.apple.CommCenter` | 蜂窝无线电服务；停用后蜂窝功能受影响。[Apple Wiki Services](https://theapplewiki.com/wiki/Services) | `sheng-lite` 包含 |
+| `com.apple.bluetoothd` | 蓝牙连接、SDP 与密钥管理；停用后蓝牙连接受影响。[服务 man 页汇编](https://gist.github.com/dmattera/883a4457b67534df795cdd0fa1651a26) | `sheng-lite` 包含 |
+| `com.apple.PerfPowerServices` | 公开 macOS man 页称管理电源/性能结构化日志，停用影响此类日志；iPadOS 17 精确实现及额外后果未查证。[服务 man 页汇编](https://gist.github.com/dmattera/883a4457b67534df795cdd0fa1651a26) | 不在 `lite_jobs`；该策略未禁 |
+| `com.apple.iomfb_fdr_loader` | **作用及停用后果未查证**。名称与 IOMFB 相关只是线索，不能由名称证明直接图形依赖、FDR 用途或禁用能出画面；pipa 显式禁用使其值得优先做静态依赖核查。 | 不在 `lite_jobs`；该策略未禁 |
+
+以上 r40 是**策略配置**而非对 Data 中生效状态的实测：`out/ufs-sm8250-storegeom-20261123-r40/device/board.toml:72` 同时启用 `sheng-lite=1` 和 `sheng-disable-watchdogd=1`。r40 `commands.json:990` 链接 r19 的 `libEnumaBootWatchdogPolicy.a`；r19 `delta-vs-r17.json` 的 policy source SHA-256 为 `1fddc75922263674bdbb5091ec1f29c0b25c60f2495bff6d22963985262fef31`，与当前 `package/BootWatchdogPolicy.c` 相同。后者 `:19-24,56-71` 指定 21 项固定 lite 列表、分别门控 watchdogd 和 lite；`:76-77,136` 写相同覆盖路径和迁移标记。r19 对象中的字符串也含上述列表。pipa 则接受经字符校验的可配置 `sheng-disable-jobs`（`BootWatchdogPolicy.c:46-49,63-70`），watchdog 单独要求值 1；两者都使用 disabled plist，不等同于关闭硬件 watchdog。此处没有直接证据将六项中任何一项绑定到 backboardd/HID/keybag；pipa 自述的 identityservicesd→SpringBoard 是间接关系，iomfb 名称也仅为候选。
+
+## r40 显示链接来源（补证）
+
+**结论：是，r40 链接的 `EnumaLegacyDisplay.o` 对应此前留存的 attach→probe→start→registerService 源码**，纠正上节“未建立哈希链”的限制；这是主机静态 self-check，不代表运行时实际执行成功。
+
+完整链条：
+
+1. `out/ufs-sm8250-storegeom-20261123-r40/commands.json:988` force-load `/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/ufs-sm8250-launchd-ipc-20261123-r34/objects/libEnumaGopLegacy.a`；r40 `native-link.map:1043,71474` 把 `_native_legacy_display_late_probe` 地址 `0xFFFFFFF00BFE2BB0` 归于该 archive 的 `EnumaLegacyDisplay.o`。
+2. `ar p` 分别读取 r34 该 archive 的成员和 `out/enuma-gop-production-20261114-r5/display/libEnumaGopLegacy.a` 的同名成员，SHA-256 均为 `612b2f98bfd89669066b365391159c6bcba89372f4f0208e5321259b34847101`；两目录保留的同名 `.o` 也均为此哈希。r34 `candidate-manifest.json:25-34` 记录 old/new 一致。
+3. r5 `build.json:4740-4743,6466-6471` 将 `/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/out/enuma-gop-legacy-20261114-r2/package/EnumaLegacyDisplay.cpp` 编译到 r5 的 `display/EnumaLegacyDisplay.o`，记录源码 SHA-256 `04b8fbfd5d932ed1e78cd6e2ee5bc2a00f933ad0afe671f13bd93cd970fe04a2`；当前该源码与 r5 `patch-replay/out/enuma-gop-legacy-20261114-r2/package/EnumaLegacyDisplay.cpp` 均为此哈希。
+
+该源码实际调用逐行如下（省略其他无关行；分号内两次调用按短路顺序）：
+
+```cpp
+// :92 nub 接收者：attach(resource)，成功后 start(resource)
+if (!(nubAttached = nub->attach(resource)) || !(nubStarted = nub->start(resource))) {
+// :103-105 nub 接收者：DT attachToParent；成功后 displayObject 接收者：attach(nub)
+nub->setName("enuma-gop-display", gIODTPlane);
+if (!(dtAttached = nub->attachToParent(parentDT, gIODTPlane)) ||
+    !(displayAttached = displayObject->attach(nub))) { failure(12); goto finish; }
+// :108 displayObject 接收者：probe(nub)，返回自身后 start(nub)
+if (displayObject->probe(nub, &score) != displayObject || !displayObject->start(nub)) {
+// :115 displayObject 接收者：registerService()
+displayObject->registerService();
+```
+
+上面哈希链和链接 map 足以确认源码归属；若还要核证机器码行为，可独立反汇编 r40 的该符号并按虚调用槽对照 probe/attach/start/register；本轮未做反汇编。
