@@ -472,6 +472,20 @@ next_action = ["Parent integration: arrange any independent verification or devi
 evidence = [{ kind = "host", reference = "docs/enuma-r56-thsnap-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r56-thsnap.py --r56", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked compile, relink, embedded argument readback, baseline integrity and zero undefined including weak. Independent verification and device runtime pending." }, { kind = "source", reference = "docs/pc-resolve-r56-20261123.md", result = "Self-checked offline donor cache and XNU analysis: saved PCs match mach_msg2_trap and workq_kernreturn; zero and nonzero wait events are consistent with respective receive and worker parking paths, not proof of present stacks or deadlock." }]
 
 [[area]]
+id = "r57-mach-send-peer"
+status = "planned"
+components = []
+paths = ["package/EnumaTxPeer57.inc", "scripts/build-enuma-r57-txpeer.py", "docs/enuma-r57-txpeer-host-20261123.md"]
+inputs = ["Frozen r56 artifacts and compile/link commands, r54 input provenance, and pinned XNU IPC source."]
+configuration = ["r56 arguments plus enuma-txpeer=1; the inherited enuma-th=1 worker dumps both PID rings at BP round 2."]
+procedure = ["Build with scripts/build-enuma-r57-txpeer.py --r57 under WSL from the device repository."]
+findings = ["The hook observes send attempts, not delivery. It records the header ID and remote port address, without owner lookup or a claim that any send caused the sampled wait."]
+completion = ["Compare embedded arguments, link inputs and callsites, baseline hashes, and ADT bytes; review the lock-free ring before device use."]
+limits = ["No thread association, owner attribution, or device/runtime verification. The two rings and thread rows are not one atomic snapshot."]
+next_action = ["Parent integration: deep review of the ring and independent verifier replay."]
+evidence = [{ kind = "host", reference = "docs/enuma-r57-txpeer-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r57", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked compile/relink, callsites and unique formats, zero undefined including weak, baseline integrity, byte-identical ADT and embedded argument readback. No device runtime result." }]
+
+[[area]]
 id = "documentation-inventory"
 status = "planned"
 components = []
