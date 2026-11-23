@@ -10,9 +10,14 @@ static void
 enuma_fb_fill_step(void)
 {
 	int arg = 0;
-	if (enuma_fbfill_done ||
-	    !PE_parse_boot_argn("enuma-fb-fill", &arg, sizeof(arg)) || arg != 1 ||
-	    !ep_console_can_write(&enuma_pid1_console, gc_enabled) ||
+	if (enuma_fbfill_done) {
+		return;
+	}
+	if (!PE_parse_boot_argn("enuma-fb-fill", &arg, sizeof(arg)) || arg != 1) {
+		enuma_fbfill_done = 1;
+		return;
+	}
+	if (!ep_console_can_write(&enuma_pid1_console, gc_enabled) ||
 	    lastVideoMapSize == 0) {
 		return;
 	}
