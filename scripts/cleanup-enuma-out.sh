@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# DISABLED: manual user action required; agents must not run cleanup scripts.
+exit 1
 # Manual use only. Stop builds and verify backups before applying.
 set -euo pipefail
 export LC_ALL=C

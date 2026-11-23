@@ -6,6 +6,8 @@ from pathlib import Path
 import re
 import shutil
 
+# DISABLED: manual user action required; agents must not run cleanup scripts.
+raise SystemExit(1)
 OUT = Path("out")
 LIST = Path("/mnt/c/Users/Administrator/AppData/Local/Temp/opencode/disk-cleanup-final-list.md")
 PREFIX = r"D:\Code\PortingiOS\enuma\UniXNU-enuma\out" + "\\"

@@ -1,3 +1,5 @@
+# DISABLED: manual user action required; agents must not run cleanup scripts.
+exit 1
 # Dry-run only. Snapshot sizes are logical bytes from WizTree, not free space.
 # First complete and verify Step 0A/0B and inspect reparse points for EVERY target.
 # Usage: pwsh -File scripts/prepare-cleanup-enuma-out.ps1 [--prune-b]
