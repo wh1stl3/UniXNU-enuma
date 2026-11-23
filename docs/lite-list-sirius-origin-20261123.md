@@ -4,7 +4,7 @@
 
 ## 逐项对照
 
-enuma `package/BootWatchdogPolicy.c:2-3` 明确标注直接来源为 sirius 指定 commit 的同名文件；`:19-24` 与 sirius `package/BootWatchdogPolicy.c:24-32` 的 lite_jobs 逐项、顺序完全一致，均 21 项。下表前缀均为 `com.apple.`；差集双向均为空。
+enuma 已提交基线 `d5075ca60e0bf757d37b63f8a0dc6ec2499a98c0` 的 `package/BootWatchdogPolicy.c:2-3` 明确标注直接来源为 sirius 指定 commit 的同名文件；`:19-24` 与 sirius `package/BootWatchdogPolicy.c:24-32` 的 lite_jobs 逐项、顺序完全一致，均 21 项。下表前缀均为 `com.apple.`；差集双向均为空。调查期间该文件出现并发、尚未提交的工作树改动：当前仅保留前四项，与 sirius 的差集为后 17 项；下表 enuma 行号仅适用于上述已提交基线，不代表当前工作树。
 
 | label 后缀 | sirius 行 | enuma 行 |
 |---|---:|---:|
