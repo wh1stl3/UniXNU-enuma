@@ -564,3 +564,43 @@ WizTree 同一快照的 50 项文件长度总计 54,559,760,410 B（50.812737 Gi
 5. `ufs-sm8250-fxdiag-20261123-r47/prelink.macho`
 
 脚本 `--prune-b` 只枚举 B 内白名单文件，保留命名受保护文件及 `-----BEGIN` 开头文件；保留空目录以避免间接删除保护内容。缺失顶层 `boot.img` 或发现任意 reparse point 时整项跳过。当前 dry-run 跳过 24 个含 reparse point 的 B 目录，实际列出 **4.885808 GiB**，与 A 快照合计 **11.048424 GiB**；这是当前文件长度而非 CSV 上界，仍需人工核对。`--apply` 只供用户手动执行并逐项确认；本次未删除。文件内容和目录可在扫描后变化，执行前仍须停止构建并人工复核。独立 verifier 尚未复跑。
+
+## WSL 手动清理替代方案（2026-11-24，self-checked）
+
+本节取代上述 PowerShell 删除建议：PowerShell 脚本已废弃删除逻辑，仅可 dry-run 统计。WSL 脚本只由用户手动执行；agent 未执行删除。默认 dry-run，`--apply` 先列总项数和逻辑字节，且要求 `CLEANUP_CONFIRM=YES`。待删路径自身是链接则跳过，24 项全排除；B 类新增发现链接也跳过整个根，保留 boot.img、镜像、文档、签名材料及 BEGIN 文件。Linux `rm -rf` 不跟随目录树内符号链接；应用时须停止构建避免扫描与执行间路径变化。A 为整目录删除，故其内容保护依赖事先备份；自由文本引用仍会失效。B 清理后逐根检查 boot.img 和空目录。
+
+用户先完成 Step 0A/0B 备份及逐个 SHA-256 核验、人工复核目标与引用，停止构建；预览 `bash scripts/cleanup-enuma-out.sh`，再由用户自行决定是否执行 `CLEANUP_CONFIRM=YES bash scripts/cleanup-enuma-out.sh --apply`。脚本不操作 .cache。未实际执行删除，未运行独立 verifier。
+
+CSV 文件行快照沿用上节：A 全部 6.162616 GiB；排除下列 24 项后 B 总量 13.612576 GiB，B-prune 不超过整个剩余 B，故 A+B-prune 文件逻辑大小保守估计 **0–19.775192 GiB**。零下界体现快照过时、保护项与执行时跳过；这是宽泛上界而不是已验证的实际回收。此前 11.048424 GiB 是旧 live dry-run 估算，不是 CSV 精算且不能保证当前可释放量。CSV 不反映稀疏文件、硬链接、压缩和实际分配；实际磁盘可释放空间无法由此给出可靠区间。24 项合计是整目录逻辑大小，不是放弃的 B-prune 空间。
+
+### 排除的 24 项（CSV 文件逻辑字节）
+
+| out 下目录 | 字节 |
+|---|---:|
+| ufs-sm8250-launchd-keystore-20261122-r21 | 1570372646 |
+| ufs-sm8250-launchd-keystore-20261122-r20 | 1575592653 |
+| ufs-sm8250-launchd-keystore-20261122-r19 | 1575612504 |
+| ufs-sm8250-launchd-keystore-20261122-r17 | 1569306951 |
+| ufs-sm8250-launchd-keystore-20261122-r16 | 1574695161 |
+| ufs-sm8250-launchd-keystore-20261122-r15 | 1563004431 |
+| ufs-sm8250-launchd-keystore-20261122-r14 | 1568323343 |
+| ufs-sm8250-launchd-keystore-20261122-r13 | 1576625404 |
+| ufs-sm8250-launchd-keystore-20261121-r11 | 2320091474 |
+| ufs-sm8250-launchd-display-20261121-r10 | 2867858443 |
+| ufs-sm8250-launchd-display-20261121-r9 | 3089257695 |
+| ufs-sm8250-launchd-display-20261120-r8 | 1667452576 |
+| ufs-sm8250-launchd-display-20261120-r7 | 2301741908 |
+| ufs-sm8250-launchd-display-20261119-r6 | 1324746491 |
+| ufs-sm8250-launchd-cache-20261119-r3 | 1187366414 |
+| ufs-sm8250-policy-20261118-r3 | 970759816 |
+| ufs-sm8250-launchd-cache-20261119-r2 | 1311975409 |
+| ufs-sm8250-policy-20261117-r2 | 1635790934 |
+| ufs-sm8250-startroot-mode0-20261118-r2 | 1095943875 |
+| ufs-sm8250-launchd-cache-20261119-r1 | 1466449050 |
+| ufs-sm8250-launchd-data-20261119-r1 | 1567504085 |
+| ufs-sm8250-launchd-display-20261119-r1 | 1318471323 |
+| ufs-sm8250-policy-20261116-r1 | 1634745337 |
+| ufs-sm8250-startroot-mode0-20261118-r1 | 1609680220 |
+| 合计 | 39943368143 |
+
+合计 **37.200160 GiB**（39943368143 B）。

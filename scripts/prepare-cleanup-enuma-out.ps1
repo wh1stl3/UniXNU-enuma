@@ -1,7 +1,8 @@
-# Manual execution only. Snapshot sizes are logical bytes from WizTree, not free space.
+# Dry-run only. Snapshot sizes are logical bytes from WizTree, not free space.
 # First complete and verify Step 0A/0B and inspect reparse points for EVERY target.
-# Usage: pwsh -File scripts/prepare-cleanup-enuma-out.ps1 [--apply] [--prune-b]
+# Usage: pwsh -File scripts/prepare-cleanup-enuma-out.ps1 [--prune-b]
 $ErrorActionPreference = 'Stop'
+if ($args -contains '--apply') { throw 'Deletion disabled; use the WSL script manually.' }
 if (@($args | Where-Object { $_ -notin @('--apply', '--prune-b') }).Count -or @($args | Select-Object -Unique).Count -ne $args.Count) { throw 'Only --apply and --prune-b are accepted, once each' }
 $apply = $args -contains '--apply'
 $pruneB = $args -contains '--prune-b'
@@ -143,31 +144,4 @@ foreach ($item in $bCandidates) {
     Write-Host ("B-prune  {0}  {1:N0} B" -f $item.Path, $item.Bytes)
 }
 Write-Host ("SUMMARY: A={0:N6} GiB (snapshot); B-prune={1:N6} GiB (live); total={2:N6} GiB; mode={3}" -f ($total / 1GB), ($bTotal / 1GB), (($total + $bTotal) / 1GB), $(if ($apply) { 'APPLY' } else { 'DRY-RUN' }))
-if (-not $apply) { return }
-Write-Host 'Manual prerequisite: no active builds; Step 0A and 0B completed and SHA-256 verified for each directory; inspect links and references.'
-foreach ($item in $items) {
-    $answer = Read-Host ("Type DELETE to confirm prerequisites and delete exactly: " + $item.Path)
-    if ($answer -cne 'DELETE') { Write-Host 'Skipped'; continue }
-    if (-not (Test-Path -LiteralPath $item.Path -PathType Container)) { Write-Host 'Missing; skipped'; continue }
-    Write-Host ("A  {0}  {1:N0} B (snapshot)" -f $item.Path, $item.Bytes)
-    Remove-Item -LiteralPath $item.Path -Recurse -Force -ErrorAction Stop
-}
-foreach ($item in $bCandidates) {
-    if (-not (Test-Path -LiteralPath (Join-Path $item.Root 'boot.img') -PathType Leaf)) { Write-Warning "B-prune skipped (boot.img missing): $($item.Root)"; continue }
-    $answer = Read-Host ("Type DELETE to confirm prerequisites and delete exactly: " + $item.Path)
-    if ($answer -cne 'DELETE') { Write-Host 'Skipped'; continue }
-    $current = Get-Item -LiteralPath $item.Path -Force -ErrorAction Stop
-    $parent = $current
-    while ($parent.FullName -ne $item.Root) {
-        if ($parent.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw "Reparse point appeared: $($parent.FullName)" }
-        $parent = $parent.Parent
-    }
-    if ($parent.Attributes -band [IO.FileAttributes]::ReparsePoint -or $current.PSIsContainer) { throw "Unsafe candidate: $($item.Path)" }
-    $stream = [IO.File]::Open($item.Path, 'Open', 'Read', 'Read')
-    try {
-        $header = [byte[]]::new(10)
-        if ($stream.Read($header, 0, 10) -eq 10 -and [Text.Encoding]::ASCII.GetString($header) -ceq '-----BEGIN') { Write-Warning "Protected BEGIN file: $($item.Path)"; continue }
-    } finally { $stream.Dispose() }
-    Write-Host ("B-prune  {0}  {1:N0} B" -f $item.Path, $current.Length)
-    Remove-Item -LiteralPath $item.Path -Force -ErrorAction Stop
-}
+return # Dry-run only.
