@@ -504,6 +504,7 @@ id = "documentation-inventory"
 status = "planned"
 components = []
 paths = [
+  "docs/bootstrap-mig-ids-20261123.md",
   "docs/smp-readiness-20261123.md",
   "docs/hid-standin-equivalence-20261123.md",
   "docs/hid-device-candidate-design-20261123.md",
@@ -637,6 +638,7 @@ completion = ["Documentation files have an owner area and evidence reference."]
 limits = ["Registration does not independently verify document claims."]
 next_action = ["Register future documentation in its relevant owner area."]
 evidence = [
+  { kind = "source", reference = "docs/bootstrap-mig-ids-20261123.md", result = "Static historical launchd MIG comparison; donor message ID mapping and launchd wait cause remain unknown." },
   { kind = "source", reference = "docs/smp-readiness-20261123.md", result = "Static SMP readiness assessment; runtime topology, IPI, exact r54 ADT and secondary reset patch remain unverified." },
   { kind = "source", reference = "docs/sirius-display-chain-port-eval-20261123.md", result = "Self-checked offline comparison of sirius and enuma GOP display chains; no claim that a port causes clients to submit swaps." },
   { kind = "source", reference = "docs/hid-standin-equivalence-20261123.md", result = "Document inventory: enuma and nuwa HID stand-in equivalence comparison, self-checked." },
