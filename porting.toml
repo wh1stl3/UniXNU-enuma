@@ -21,6 +21,7 @@ next_action = ["Extract enuma vendor DTS and reconcile board memory and wiring b
 evidence = [{ kind = "source", reference = "docs/nuwa-smp-status-20261123.md", result = "Self-checked nuwa records: r16-r35 single-core evidence; later logo-run online CPU count unproven. No build or device operation." },
  { kind = "host", reference = "docs/missing-bootargs-and-fdrloader-20261123.md", command = "Read donor OS.raw with apfs-fuse -o ro, plistlib, strings and llvm-objdump; compare pinned source and r54 argument readback", revision = "635f762cecb7c83196975af9d58c78187f8cc376", result = "Self-checked static comparison and donor loader disassembly; runtime CPU count, FDR effects and disable safety remain unverified." },
  { kind = "host", reference = "docs/offline-codesign-and-plists-20261123.md", command = "Read donor APFS volumes with apfs-fuse -o ro; parse signatures and plists with Python plistlib and struct; search r45 OCR", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked offline donor signature headers, launchd declarations and r45 OCR; runtime preparation and service providers remain unverified." },
+  { kind = "host", reference = "docs/enuma-r55-dk0-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r55-dk0.py --r55", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked r54 payload repack with only dk=0 appended; runtime and independent verification pending, inherited r54 deep concurrency review remains required." },
   { kind = "host", reference = "docs/enuma-r54-fbfill3-host-20261123.md", command = "python3 scripts/build-enuma-r54-fbfill3.py --r54", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked row-stepped framebuffer fill; deep concurrency review, independent verification and device runtime pending." },
  { kind = "host", reference = "docs/enuma-r53-fbfill2-host-20261123.md", command = "python3 scripts/build-enuma-r53-fbfill2.py --r53", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked host build; deep reviewer rejected the 131072-write lock hold; no device execution." },
  { kind = "host", reference = "docs/enuma-r52-fbfill-host-20261123.md", command = "python3 scripts/build-enuma-r52-fbfill.py --r52", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked host build; deep reviewer rejected the full-frame lock hold; no device execution." },
@@ -461,6 +462,7 @@ id = "documentation-inventory"
 status = "planned"
 components = []
 paths = [
+  "docs/smp-readiness-20261123.md",
   "docs/hid-standin-equivalence-20261123.md",
   "docs/hid-device-candidate-design-20261123.md",
   "docs/sheng-ipados17-impl-diff-20261123.md",
@@ -593,6 +595,7 @@ completion = ["Documentation files have an owner area and evidence reference."]
 limits = ["Registration does not independently verify document claims."]
 next_action = ["Register future documentation in its relevant owner area."]
 evidence = [
+  { kind = "source", reference = "docs/smp-readiness-20261123.md", result = "Static SMP readiness assessment; runtime topology, IPI, exact r54 ADT and secondary reset patch remain unverified." },
   { kind = "source", reference = "docs/sirius-display-chain-port-eval-20261123.md", result = "Self-checked offline comparison of sirius and enuma GOP display chains; no claim that a port causes clients to submit swaps." },
   { kind = "source", reference = "docs/hid-standin-equivalence-20261123.md", result = "Document inventory: enuma and nuwa HID stand-in equivalence comparison, self-checked." },
   { kind = "source", reference = "docs/hid-device-candidate-design-20261123.md", result = "Document inventory: enuma 软件 HID 设备候选设计（2026-11-23）" },
