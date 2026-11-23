@@ -458,6 +458,20 @@ next_action = ["Obtain missing historical configuration and sheng runtime artifa
 evidence = [{ kind = "source", reference = "docs/sheng-ipados17-full-diff-20261123.md", revision = "da9fab96aea0b5dcdb3bef730b10397276514dac", result = "Self-checked partial comparison only; no UI causation or complete baseline established." }]
 
 [[area]]
+id = "r56-thread-snapshot"
+status = "planned"
+components = []
+paths = ["package/EnumaThreadSnapshot56.c", "package/EnumaThreadSnapshot56Bsd.inc", "scripts/build-enuma-r56-thsnap.py", "docs/enuma-r56-thsnap-host-20261123.md"]
+inputs = ["Frozen enuma r55 boot artifacts, r54 native link provenance, and the pinned XNU BSD and OSFMK compilation recipes."]
+configuration = ["Isolated r56 only: r55 payload arguments plus enuma-th=1; submit once at BP round 2."]
+procedure = ["Build with scripts/build-enuma-r56-thsnap.py --r56 from the enuma device repository under WSL."]
+findings = ["Host-only r55 derivative: one independent BP-triggered worker, task/thread-ref sampling for backboardd and SpringBoard, best-effort non-atomic saved ARM64 user state, no runtime result or stage promotion."]
+completion = ["Build the isolated image and verify embedded arguments, linked callsites, inherited inputs and ADT equality."]
+limits = ["Runtime scheduling, console visibility, actual thread states and saved addresses are unverified. The inherited r54 framebuffer review condition remains."]
+next_action = ["Parent integration: arrange any independent verification or device observation separately."]
+evidence = [{ kind = "host", reference = "docs/enuma-r56-thsnap-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r56-thsnap.py --r56", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked compile, relink, embedded argument readback, baseline integrity and zero undefined including weak. Independent verification and device runtime pending." }]
+
+[[area]]
 id = "documentation-inventory"
 status = "planned"
 components = []
