@@ -698,6 +698,7 @@ evidence = [
   { kind = "source", reference = "docs/pipa-reference-20261123.md", result = "Document inventory: pipa iPadOS 17 参考调查" },
   { kind = "source", reference = "docs/pmgr-23r-diagnostic.md", result = "Document inventory: 23r first controlled PMGR diagnosis: preparation and observation record" },
   { kind = "source", reference = "docs/pmgr-23r-package.md", result = "Document inventory: 23r guarded PMGR package and real-kernel harness (2026-11-10)" },
+  { kind = "source", reference = "docs/wait-event-semantics-20261123.md", result = "Document inventory: r56 wait-event semantics and owner probe feasibility; static analysis only" },
   { kind = "source", reference = "docs/pmgr-host-gate.md", result = "Document inventory: enuma guarded original-PMGR host checkpoint (2026-11-10)" },
   { kind = "source", reference = "docs/pmgr-qemu-environment.md", result = "Document inventory: Bounded QEMU tool discovery (2026-11-10, self-checked)" },
   { kind = "source", reference = "docs/porting-provenance-20261123.md", result = "Document inventory: enuma 显示 provider 溯源裁定" },
