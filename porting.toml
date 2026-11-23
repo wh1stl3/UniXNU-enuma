@@ -586,6 +586,7 @@ completion = ["Documentation files have an owner area and evidence reference."]
 limits = ["Registration does not independently verify document claims."]
 next_action = ["Register future documentation in its relevant owner area."]
 evidence = [
+  { kind = "source", reference = "docs/sirius-display-chain-port-eval-20261123.md", result = "Self-checked offline comparison of sirius and enuma GOP display chains; no claim that a port causes clients to submit swaps." },
   { kind = "source", reference = "docs/hid-standin-equivalence-20261123.md", result = "Document inventory: enuma and nuwa HID stand-in equivalence comparison, self-checked." },
   { kind = "source", reference = "docs/hid-device-candidate-design-20261123.md", result = "Document inventory: enuma 软件 HID 设备候选设计（2026-11-23）" },
   { kind = "source", reference = "docs/sheng-ipados17-impl-diff-20261123.md", result = "Document inventory: sheng iPadOS 17 实现对照：未完成（2026-11-23）" },
