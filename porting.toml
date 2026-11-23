@@ -486,6 +486,20 @@ next_action = ["Parent integration: deep review of the ring and independent veri
 evidence = [{ kind = "host", reference = "docs/enuma-r57-txpeer-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r57", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked compile/relink, callsites and unique formats, zero undefined including weak, baseline integrity, byte-identical ADT and embedded argument readback. No device runtime result." }]
 
 [[area]]
+id = "r58-mach-receiver-pid"
+status = "planned"
+components = []
+paths = ["package/EnumaTxPeer58.inc", "scripts/build-enuma-r57-txpeer.py", "docs/enuma-r58-rxpid-host-20261123.md"]
+inputs = ["Frozen r57 payload and link recipe, pinned XNU IPC source, and inherited r56/r54 link-input provenance."]
+configuration = ["Isolated r58 candidate with byte-identical r57 boot arguments; no new tunable or default recipe change."]
+procedure = ["Build with /home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r58 under WSL from the device repository."]
+findings = ["Sample the destination receive-right holder's PID with the existing port lock, without retaining task pointers. Publish the PID, message ID, port token and ticket in one atomic slot; use enuma-ps or same-boot exec history for offline name correlation."]
+completion = ["Host relink and package, prove binary inputs and boot arguments, verify linked callsites and byte-identical ADT."]
+limits = ["No inference of delivery, reply, service identity or causation from a sampled PID. Runtime timing, PID attribution, output visibility and lock dwell unverified."]
+next_action = ["Parent integration: deep review of the locked capture and atomic publication, with independent verifier replay before device observation."]
+evidence = [{ kind = "host", reference = "docs/enuma-r58-rxpid-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r58", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked isolated ipc_kmsg.o rebuild, unchanged remaining link inputs and r57 hashes, embedded arguments, ADT equality, linked formats/callsites and zero undefined including weak. No device runtime result." }]
+
+[[area]]
 id = "documentation-inventory"
 status = "planned"
 components = []
