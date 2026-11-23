@@ -35,16 +35,29 @@ enuma_fb_fill_once(void)
 	}
 	static const uint32_t colors[4] = { 0xffffffffu, 0xffff0000u, 0xff00ff00u, 0xff0000ffu };
 	uint32_t w = vinfo.v_width, h = vinfo.v_height, rb = vinfo.v_rowbytes;
+	const uint32_t bw = 256, bh = 128;
+	uint32_t x0 = w / 8;
+	if (x0 + bw > w || h < bh) {
+		g_enuma_fbfill_state = 0;
+		enuma_fbfill_done = 1;
+		return;
+	}
 	for (uint32_t b = 0; b < 4; b++) {
-		uint32_t y0 = (uint64_t)h * b / 4, y1 = (uint64_t)h * (b + 1) / 4;
-		for (uint32_t y = y0; y < y1; y++) {
-			if ((uint64_t)y * rb + (uint64_t)w * 4u > avail) {
-				g_enuma_fbfill_state = 0;
-				enuma_fbfill_done = 1;
-				return;
-			}
+		uint64_t center = (uint64_t)h * (2 * b + 1) / 8;
+		if (center < bh / 2 || center + bh / 2 > h) {
+			g_enuma_fbfill_state = 0;
+			enuma_fbfill_done = 1;
+			return;
+		}
+		uint32_t y0 = (uint32_t)center - bh / 2;
+		if ((uint64_t)(y0 + bh) * rb + (uint64_t)(x0 + bw) * 4 > avail) {
+			g_enuma_fbfill_state = 0;
+			enuma_fbfill_done = 1;
+			return;
+		}
+		for (uint32_t y = y0; y < y0 + bh; y++) {
 			volatile uint32_t *row = (volatile uint32_t *)(base + (uint64_t)y * rb);
-			for (uint32_t x = 0; x < w; x++) {
+			for (uint32_t x = x0; x < x0 + bw; x++) {
 				row[x] = colors[b];
 			}
 		}

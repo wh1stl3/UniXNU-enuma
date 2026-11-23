@@ -63,7 +63,7 @@ marker = '\\t\\tVCPUTC_LOCK_LOCK();\\n\\t\\tif (gc_enabled) {'
 assert code.count(marker) == 1
 code = code.replace(marker, '\\t\\tVCPUTC_LOCK_LOCK();\\n\\t\\tenuma_fb_fill_once();\\n\\t\\tif (gc_enabled) {')
 video.write_text(code)
-shutil.copyfile(device / 'package/EnumaFbFill52.inc', video.parent / 'EnumaFbFill52.inc')
+shutil.copyfile(device / 'package/EnumaFbFill52Full.inc', video.parent / 'EnumaFbFill52.inc')
 video_obj = out / 'objects/video_console.o'
 argv = cc['arguments'].copy()
 assert argv[1] == '-xc' and argv[2] == cc['file'] and argv[3] == '-o'
