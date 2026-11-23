@@ -166,3 +166,4 @@ An all-strings comparison and preserved call sites do not prove behavior of
 rebuilt code is instruction-identical to r63.
 Callout execution, lock/reference behavior, live PC matching and on-device
 output remain unverified. Deep review and independent verification were not run.
+这 64 个字可能含非代码数据；目标线程或同一 map 的其他写者可在复制期间修改栈，即使前后 PC/SP 相同，输出也可能混合不同时刻的值，不能作为调用链证明。
