@@ -1,9 +1,10 @@
 # Manual execution only. Snapshot sizes are logical bytes from WizTree, not free space.
 # First complete and verify Step 0A/0B and inspect reparse points for EVERY target.
-# Usage: pwsh -File scripts/prepare-cleanup-enuma-out.ps1 [--apply]
+# Usage: pwsh -File scripts/prepare-cleanup-enuma-out.ps1 [--apply] [--prune-b]
 $ErrorActionPreference = 'Stop'
-if ($args.Count -gt 1 -or ($args.Count -eq 1 -and $args[0] -ne '--apply')) { throw 'Only --apply is accepted' }
-$apply = $args.Count -eq 1
+if (@($args | Where-Object { $_ -notin @('--apply', '--prune-b') }).Count -or @($args | Select-Object -Unique).Count -ne $args.Count) { throw 'Only --apply and --prune-b are accepted, once each' }
+$apply = $args -contains '--apply'
+$pruneB = $args -contains '--prune-b'
 $items = @(
     @{ Path = 'D:\Code\PortingiOS\enuma\UniXNU-enuma\out\ufs-sm8250-fbfill2-20261123-r53-selfcheck'; Bytes = 580657322 }
     @{ Path = 'D:\Code\PortingiOS\enuma\UniXNU-enuma\out\ufs-sm8250-fbfill-20261123-r52-failed1'; Bytes = 879155 }
@@ -86,14 +87,87 @@ $items = @(
 $total = [long]0
 foreach ($item in $items) {
     $total += [long]$item.Bytes
-    Write-Host ("{0}  {1:N6} GiB (snapshot)" -f $item.Path, ($item.Bytes / 1GB))
+    Write-Host ("A  {0}  {1:N0} B (snapshot)" -f $item.Path, $item.Bytes)
 }
-Write-Host ("TOTAL: {0:N6} GiB; {1} directories; mode={2}" -f ($total / 1GB), $items.Count, $(if ($apply) { 'APPLY' } else { 'DRY-RUN' }))
+$bCandidates = [System.Collections.Generic.List[object]]::new()
+if ($pruneB) {
+    # The reviewed classification table is the explicit 50-directory allowlist.
+    $report = Join-Path $PSScriptRoot '../docs/disk-cleanup-review-20261123.md'
+    $lines = Get-Content -LiteralPath $report -Encoding UTF8
+    $names = @($lines | Where-Object { $_ -match '^\| `([^`\\]+)` \| B \| \d+ \|$' } | ForEach-Object {
+        if ($_ -match '^\| `([^`\\]+)` \| B \| \d+ \|$') { $Matches[1] }
+    })
+    if ($names.Count -ne 50 -or @($names | Select-Object -Unique).Count -ne 50) { throw 'B allowlist must contain exactly 50 distinct directories' }
+    $out = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../out'))
+    foreach ($name in $names) {
+        $root = Join-Path $out $name
+        $boot = Join-Path $root 'boot.img'
+        if (-not (Test-Path -LiteralPath $boot -PathType Leaf)) { Write-Warning "B-prune skipped (boot.img missing): $root"; continue }
+        $rootItem = Get-Item -LiteralPath $root -Force
+        if ($rootItem.Attributes -band [IO.FileAttributes]::ReparsePoint) { Write-Warning "B-prune skipped (reparse root): $root"; continue }
+        $pending = [System.Collections.Generic.Stack[object]]::new()
+        $pending.Push(@($rootItem, $false))
+        $local = [System.Collections.Generic.List[object]]::new()
+        $unsafe = $false
+        while ($pending.Count) {
+            $entry = $pending.Pop()
+            $dir = $entry[0]
+            $selected = [bool]$entry[1]
+            foreach ($child in @(Get-ChildItem -LiteralPath $dir.FullName -Force -ErrorAction Stop)) {
+                if ($child.Attributes -band [IO.FileAttributes]::ReparsePoint) { $unsafe = $true; continue }
+                if ($child.PSIsContainer) {
+                    if ($child.Name -ieq '.git') { continue }
+                    $matchDir = ($dir.FullName -ieq $root -and ($child.Name -in @('self-check','build','objects','obj','source') -or $child.Name -like '*-selfcheck')) -or $child.Name -like '*.dSYM'
+                    $pending.Push(@($child, ($selected -or $matchDir)))
+                } else {
+                    $n = $child.Name
+                    if ($n -like 'manifest*' -or $n -match '(?i)\.(img|raw|dmg|md|json|toml|trustcache|key|pem|p12|cer|module)$') { continue }
+                    if (-not ($selected -or $n -like '*.o' -or $n -like '*.macho' -or $n -like 'prelink.*' -or $n -like '*.prelink')) { continue }
+                    $stream = [IO.File]::Open($child.FullName, 'Open', 'Read', 'Read')
+                    try {
+                        $header = [byte[]]::new(10)
+                        $read = $stream.Read($header, 0, 10)
+                        if ($read -eq 10 -and [Text.Encoding]::ASCII.GetString($header) -ceq '-----BEGIN') { continue }
+                    } finally { $stream.Dispose() }
+                    $local.Add([pscustomobject]@{ Path = $child.FullName; Bytes = [long]$child.Length; Root = $root })
+                }
+            }
+        }
+        if ($unsafe) { Write-Warning "B-prune skipped (reparse point): $root"; continue }
+        foreach ($candidate in $local) { $bCandidates.Add($candidate) }
+    }
+}
+$bTotal = [long]0
+foreach ($item in $bCandidates) {
+    $bTotal += $item.Bytes
+    Write-Host ("B-prune  {0}  {1:N0} B" -f $item.Path, $item.Bytes)
+}
+Write-Host ("SUMMARY: A={0:N6} GiB (snapshot); B-prune={1:N6} GiB (live); total={2:N6} GiB; mode={3}" -f ($total / 1GB), ($bTotal / 1GB), (($total + $bTotal) / 1GB), $(if ($apply) { 'APPLY' } else { 'DRY-RUN' }))
 if (-not $apply) { return }
 Write-Host 'Manual prerequisite: no active builds; Step 0A and 0B completed and SHA-256 verified for each directory; inspect links and references.'
 foreach ($item in $items) {
     $answer = Read-Host ("Type DELETE to confirm prerequisites and delete exactly: " + $item.Path)
     if ($answer -cne 'DELETE') { Write-Host 'Skipped'; continue }
     if (-not (Test-Path -LiteralPath $item.Path -PathType Container)) { Write-Host 'Missing; skipped'; continue }
+    Write-Host ("A  {0}  {1:N0} B (snapshot)" -f $item.Path, $item.Bytes)
     Remove-Item -LiteralPath $item.Path -Recurse -Force -ErrorAction Stop
+}
+foreach ($item in $bCandidates) {
+    if (-not (Test-Path -LiteralPath (Join-Path $item.Root 'boot.img') -PathType Leaf)) { Write-Warning "B-prune skipped (boot.img missing): $($item.Root)"; continue }
+    $answer = Read-Host ("Type DELETE to confirm prerequisites and delete exactly: " + $item.Path)
+    if ($answer -cne 'DELETE') { Write-Host 'Skipped'; continue }
+    $current = Get-Item -LiteralPath $item.Path -Force -ErrorAction Stop
+    $parent = $current
+    while ($parent.FullName -ne $item.Root) {
+        if ($parent.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw "Reparse point appeared: $($parent.FullName)" }
+        $parent = $parent.Parent
+    }
+    if ($parent.Attributes -band [IO.FileAttributes]::ReparsePoint -or $current.PSIsContainer) { throw "Unsafe candidate: $($item.Path)" }
+    $stream = [IO.File]::Open($item.Path, 'Open', 'Read', 'Read')
+    try {
+        $header = [byte[]]::new(10)
+        if ($stream.Read($header, 0, 10) -eq 10 -and [Text.Encoding]::ASCII.GetString($header) -ceq '-----BEGIN') { Write-Warning "Protected BEGIN file: $($item.Path)"; continue }
+    } finally { $stream.Dispose() }
+    Write-Host ("B-prune  {0}  {1:N0} B" -f $item.Path, $current.Length)
+    Remove-Item -LiteralPath $item.Path -Force -ErrorAction Stop
 }
