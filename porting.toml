@@ -523,6 +523,7 @@ id = "documentation-inventory"
 status = "planned"
 components = []
 paths = [
+  "docs/pipa-hid-keystore-port-20261124.md",
   "docs/mach-msg2-branch-analysis-20261124.md",
   "docs/bootstrap-mig-ids-20261123.md",
   "docs/smp-readiness-20261123.md",
@@ -658,6 +659,7 @@ completion = ["Documentation files have an owner area and evidence reference."]
 limits = ["Registration does not independently verify document claims."]
 next_action = ["Register future documentation in its relevant owner area."]
 evidence = [
+  { kind = "source", reference = "docs/pipa-hid-keystore-port-20261124.md", result = "Self-checked static pipa HID and AppleKeyStore comparison; component methods exist separately from empty diagnostic callbacks, target runtime unverified." },
   { kind = "source", reference = "docs/mach-msg2-branch-analysis-20261124.md", result = "Offline donor mach_msg2 disassembly; PC and LR do not distinguish RPC reply from event-loop receive, self-checked." },
   { kind = "source", reference = "docs/bootstrap-mig-ids-20261123.md", result = "Static historical launchd MIG comparison; donor message ID mapping and launchd wait cause remain unknown." },
   { kind = "source", reference = "docs/smp-readiness-20261123.md", result = "Static SMP readiness assessment; runtime topology, IPI, exact r54 ADT and secondary reset patch remain unverified." },
