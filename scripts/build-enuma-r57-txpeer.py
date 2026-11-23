@@ -19,6 +19,7 @@ cli = argparse.ArgumentParser(description=__doc__)
 mode = cli.add_mutually_exclusive_group(required=True)
 mode.add_argument('--r57', action='store_true')
 mode.add_argument('--r58', action='store_true')
+mode.add_argument('--r60', action='store_true')
 cli.add_argument('--out', type=Path)
 opts = cli.parse_args()
 device = Path(__file__).resolve().parents[1]
@@ -26,8 +27,9 @@ base = device.parents[1] / 'UniXNU'
 r54 = device / 'out/ufs-sm8250-fbfill3-20261123-r54'
 r56 = device / 'out/ufs-sm8250-thsnap-20261123-r56'
 r57 = device / 'out/ufs-sm8250-txpeer-20261123-r57'
-parent = r57 if opts.r58 else r56
-out = (opts.out or (device / 'out/ufs-sm8250-rxpid-20261123-r58' if opts.r58 else r57)).resolve()
+r58 = device / 'out/ufs-sm8250-rxpid-20261123-r58'
+parent = r58 if opts.r60 else r57 if opts.r58 else r56
+out = (opts.out or (device / 'out/ufs-sm8250-th7-20261123-r60' if opts.r60 else r58 if opts.r58 else r57)).resolve()
 assert out.parent == device / 'out' and not out.exists(), out
 helpers = runpy.run_path(str(device / 'scripts/build-enuma-r23-hid-standin.py'))
 digest, snapshot, read_member, fat_tree = (helpers['R'][k] for k in
@@ -52,11 +54,12 @@ names = ('kernel.macho.adt', 'native.macho', 'prelink.macho', 'payload.img', 'bo
 prior = json_file(parent / 'candidate-manifest.json')
 before = {n: digest(parent / n) for n in names}
 assert before == prior['after']
-assert before['boot.img'] == ('e669e3bdf2f7f5315d9eb28e1231bdd02fe5f6245c2a961b88e0fa1ebf071169'
+assert before['boot.img'] == ('e65ad679a1f13adb22012cb825e85deacb741be7cddd8cdc46737e7d838ea285' if opts.r60 else 'e669e3bdf2f7f5315d9eb28e1231bdd02fe5f6245c2a961b88e0fa1ebf071169'
                               if opts.r58 else
                               'e22e05438d199d1feedcbcccdbf8248bb2402cf107196660c8745eb7cbcc58f8')
 record = json_file(r54 / 'candidate-manifest.json')
-r56_record = json_file(r56 / 'candidate-manifest.json') if opts.r58 else prior
+r56_record = json_file(r56 / 'candidate-manifest.json') if opts.r58 or opts.r60 else prior
+r57_record = json_file(r57 / 'candidate-manifest.json') if opts.r60 else None
 recipe = json_file(parent / 'commands.json')
 paths = [Path(x) for x in (parent / 'link.filelist').read_text().splitlines()]
 arch = sorted({Path(a.rsplit(',', 1)[-1]) for a in recipe['link']['argv'] if a.endswith('.a')})
@@ -66,6 +69,8 @@ inputs = snapshot([*paths, *arch, donor])
 for p in paths:
     if p.parent == parent / 'objects':
         expected = prior['objects'][p.name][1]
+    elif opts.r60 and p.parent == r57 / 'objects':
+        expected = r57_record['objects'][p.name][1]
     elif p.parent == r56 / 'objects':
         expected = r56_record['objects'][p.name][1]
     elif p.parent == r54 / 'objects':
@@ -78,9 +83,9 @@ for p in [*arch, donor]:
 
 ipc_old, = (p for p in paths if p.name == 'ipc_kmsg.o')
 snap_old, = (p for p in paths if p.name == 'EnumaThreadSnapshot56.o')
-snap = recipe['compile-EnumaThreadSnapshot56.o']
+snap = (json_file(r57 / 'commands.json') if opts.r60 else recipe)['compile-EnumaThreadSnapshot56.o']
 assert snap['argv'][3:5] == ['-o', str(snap_old)]
-if opts.r58:
+if opts.r58 or opts.r60:
     ipc = recipe['compile-ipc_kmsg.o']
     assert ipc['argv'][3:5] == ['-o', str(ipc_old)]
     ipc_argv, ipc_cwd = ipc['argv'].copy(), ipc['cwd']
@@ -91,7 +96,7 @@ else:
     ipc_base = ipc_old
 ipc_original = json.loads(ipc_base.with_suffix('.o.json').read_text().strip().removesuffix(','))
 assert ipc_original['arguments'][3:5] == ['-o', ipc_old.name]
-if not opts.r58:
+if not (opts.r58 or opts.r60):
     ipc_argv, ipc_cwd = ipc_original['arguments'].copy(), ipc_original['directory']
 original_ipc = Path(ipc_original['arguments'][2])
 xnu = original_ipc.parents[2]
@@ -129,12 +134,12 @@ def call(tag, argv, cwd=out):
 
 
 ipc_src = out / 'source/ipc_kmsg.c'
-inc = 'EnumaTxPeer58.inc' if opts.r58 else 'EnumaTxPeer57.inc'
+inc = 'EnumaTxPeer58.inc' if opts.r58 or opts.r60 else 'EnumaTxPeer57.inc'
 shutil.copyfile(device / 'package' / inc, ipc_src.with_name(inc))
 anchor = 'static TUNABLE(bool, enforce_strict_reply, "ipc_strict_reply", false);'
 ipc_text = insert(original_ipc.read_text(), anchor, f'{anchor}\n#include "{inc}"')
 anchor = '\tipc_voucher_send_preprocessing(kmsg);\n\n\tport = hdr->msgh_remote_port;\n\tassert(IP_VALID(port));'
-if opts.r58:
+if opts.r58 or opts.r60:
     anchor += '\n\tip_mq_lock(port);'
     ipc_text = insert(ipc_text, anchor, anchor.removesuffix('\n\tip_mq_lock(port);') + '''
 	const int enuma_sender = __improbable(enuma_tx_enabled == 1) ? proc_selfpid() : -1;
@@ -148,9 +153,18 @@ else:
 		enuma_tx_record(hdr, port);
 	}''')
 ipc_src.write_text(ipc_text)
-compile_steps = [(ipc_old, ipc_src, ipc_argv, ipc_cwd)]
+compile_steps = [] if opts.r60 else [(ipc_old, ipc_src, ipc_argv, ipc_cwd)]
 snap_text = Path(snap['argv'][2]).read_text()
-if not opts.r58:
+if opts.r60:
+    snap_src = out / 'source/EnumaThreadSnapshot56.c'
+    package_text = (device / 'package/EnumaThreadSnapshot56.c').read_text()
+    package_text = insert(package_text, 'enum { ENUMA_TH_CAP = 8 };',
+                          'extern void enuma_tx_dump(void);\n\nenum { ENUMA_TH_CAP = 8 };')
+    snap_text = insert(package_text, '\tthread_call_free(self);',
+                       '\tenuma_tx_dump();\n\tthread_call_free(self);')
+    snap_src.write_text(snap_text)
+    compile_steps.append((snap_old, snap_src, snap['argv'].copy(), snap['cwd']))
+elif not opts.r58:
     snap_src = out / 'source/EnumaThreadSnapshot56.c'
     snap_text = insert(snap_text, 'enum { ENUMA_TH_CAP = 8 };',
                         'extern void enuma_tx_dump(void);\n\nenum { ENUMA_TH_CAP = 8 };')
@@ -176,10 +190,13 @@ for tag in ('link', 'prelink'):
 
 formats = ((b'enuma-tx: %d  id=0x%x port=0x%llx rxpid=%d\n\0',
             b'enuma-tx: %d  id=0x%x port=0x%llx rxpid=NA\n\0',
-            b'enuma-tx: %d  id=NA port=NA rxpid=NA\n\0') if opts.r58 else
+             b'enuma-tx: %d  id=NA port=NA rxpid=NA\n\0') if opts.r58 or opts.r60 else
            (b'enuma-tx: %d  id=0x%x port=0x%llx owner=NA\n\0',
             b'enuma-tx: %d  id=NA port=NA owner=NA\n\0'))
 formats += (b'enuma-txpeer\0', b'enuma-th\0')
+if opts.r60:
+    formats += (b'enuma-th: %d/%llu st=NA we=NA wq=NA ct=NA pc=NA lr=NA why=busy\n\0',
+                b'enuma-th: %d/%llu st=0x%x we=0x%llx wq=0x%llx ct=NA pc=%s lr=%s\n\0')
 symbols = ('_ipc_kmsg_send', '_enuma_tx_record', '_enuma_tx_dump', '_enuma_th_worker')
 for name in ('native.macho', 'prelink.macho'):
     p = out / name
@@ -199,7 +216,7 @@ for name in ('native.macho', 'prelink.macho'):
         elif symbol == '_enuma_th_worker':
             assert targets.count('_enuma_tx_dump') == 1
         elif symbol == '_enuma_tx_record':
-            if opts.r58:
+            if opts.r58 or opts.r60:
                 assert targets == ['_ipc_port_get_receiver_task_locked'], targets
             else:
                 assert targets == ['_proc_selfpid']
@@ -209,12 +226,12 @@ shutil.copytree(parent / 'device', out / 'device')
 shutil.copyfile(parent / 'kernel.macho.adt', out / 'kernel.macho.adt')
 assert (out / 'kernel.macho.adt').read_bytes() == (parent / 'kernel.macho.adt').read_bytes()
 shutil.copyfile(parent / 'payload.img', out / 'payload.img')
-arg = '' if opts.r58 else ' enuma-txpeer=1'
+arg = '' if opts.r58 or opts.r60 else ' enuma-txpeer=1'
 needle = b'"\n[[entry]]\nid = "reset"'
 config = out / 'unixnu.toml'
 config.write_bytes(insert(read_member(parent / 'payload.img', 'unixnu.toml'), needle, arg.encode() + needle))
 replace = [(out / 'prelink.macho', 'Payloads/kernel.macho')]
-if not opts.r58:
+if not (opts.r58 or opts.r60):
     replace.append((config, 'unixnu.toml'))
 for src, member in replace:
     os.utime(src, (payload_step.EPOCH, payload_step.EPOCH))
@@ -225,7 +242,7 @@ assert fat_tree(out / 'payload.img') == tree
 members = [p.removeprefix('::/EFI/UniXNU/') for p in tree if not p.endswith('/')]
 new_members = {n: hashlib.sha256(read_member(out / 'payload.img', n)).hexdigest() for n in members}
 changed = sorted(n for n in members if new_members[n] != prior['payload_members_after'][n])
-assert changed == (['Payloads/kernel.macho'] if opts.r58 else ['Payloads/kernel.macho', 'unixnu.toml'])
+assert changed == (['Payloads/kernel.macho'] if opts.r58 or opts.r60 else ['Payloads/kernel.macho', 'unixnu.toml'])
 assert new_members['Payloads/kernel.macho'] == digest(out / 'prelink.macho')
 assert read_member(out / 'payload.img', 'Payloads/kernel.macho.adt') == (parent / 'kernel.macho.adt').read_bytes()
 

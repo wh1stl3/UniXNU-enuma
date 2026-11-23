@@ -500,6 +500,20 @@ next_action = ["Parent integration: deep review of the locked capture and atomic
 evidence = [{ kind = "host", reference = "docs/enuma-r58-rxpid-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r58", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked isolated ipc_kmsg.o rebuild, unchanged remaining link inputs and r57 hashes, embedded arguments, ADT equality, linked formats/callsites and zero undefined including weak. No device runtime result." }]
 
 [[area]]
+id = "r60-seven-thread-snapshot"
+status = "planned"
+components = []
+paths = ["package/EnumaThreadSnapshot56.c", "scripts/build-enuma-r57-txpeer.py", "docs/enuma-r60-th7-host-20261123.md"]
+inputs = ["Frozen r58 artifacts and inherited compile/link provenance."]
+configuration = ["Isolated r60: r58 arguments unchanged; default-off enuma-th worker samples seven PID/comm pairs."]
+procedure = ["Build with /home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r60 under WSL from the device repository."]
+findings = ["Host-only worker expansion includes waitq pointer values under the existing thread lock; no higher-level object identity or runtime result is established."]
+completion = ["Build and inspect binary inputs, linked formats, callsites, ADT and boot argument readback."]
+limits = ["No device result or panic-free guarantee; snapshots are sequential, truncated and potentially stale."]
+next_action = ["Parent integration: deep review concurrent snapshot and increased stack; verifier replay before any device observation."]
+evidence = [{ kind = "host", reference = "docs/enuma-r60-th7-host-20261123.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r57-txpeer.py --r60", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked isolated thread object rebuild, linked images and payload, baseline input hashes, boot arguments, ADT, unique row formats and zero undefined including weak; no runtime result." }]
+
+[[area]]
 id = "documentation-inventory"
 status = "planned"
 components = []

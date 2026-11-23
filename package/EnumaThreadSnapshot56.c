@@ -16,7 +16,7 @@ extern task_t enuma_th_task_ref(int pid, const char *comm, const char **why);
 thread_call_t enuma_th_alloc(unsigned int tick);
 
 struct enuma_th_row {
-	uint64_t tid, we, pc, lr;
+	uint64_t tid, we, wq, pc, lr;
 	unsigned int state;
 	bool busy, saved;
 };
@@ -91,6 +91,7 @@ enuma_th_capture(int pid, const char *comm, struct enuma_th_sample *sample)
 			row->tid = thread->thread_id;
 			row->state = (unsigned int)thread->state;
 			row->we = thread->wait_event;
+			row->wq = (uintptr_t)thread->waitq.wq_q;
 			enuma_th_read_saved(thread, row);
 			thread_unlock(thread);
 			splx(s);
@@ -111,7 +112,7 @@ enuma_th_print(int pid, const struct enuma_th_sample *sample)
 	for (unsigned int i = 0; i < sample->shown; ++i) {
 		const struct enuma_th_row *row = &sample->rows[i];
 		if (row->busy) {
-			printf("enuma-th: %d/%llu st=NA we=NA ct=NA pc=NA lr=NA why=busy\n",
+			printf("enuma-th: %d/%llu st=NA we=NA wq=NA ct=NA pc=NA lr=NA why=busy\n",
 			    pid, (unsigned long long)row->tid);
 			continue;
 		}
@@ -120,9 +121,9 @@ enuma_th_print(int pid, const struct enuma_th_sample *sample)
 			snprintf(pc, sizeof(pc), "0x%llx", (unsigned long long)row->pc);
 			snprintf(lr, sizeof(lr), "0x%llx", (unsigned long long)row->lr);
 		}
-		printf("enuma-th: %d/%llu st=0x%x we=0x%llx ct=NA pc=%s lr=%s\n",
+		printf("enuma-th: %d/%llu st=0x%x we=0x%llx wq=0x%llx ct=NA pc=%s lr=%s\n",
 		    pid, (unsigned long long)row->tid, row->state,
-		    (unsigned long long)row->we, pc, lr);
+		    (unsigned long long)row->we, (unsigned long long)row->wq, pc, lr);
 	}
 }
 
@@ -131,17 +132,24 @@ enuma_th_worker(thread_call_param_t tick, thread_call_param_t self)
 {
 	uint64_t ns;
 	absolutetime_to_nanoseconds(mach_absolute_time(), &ns);
-	struct enuma_th_sample bb = {}, sb = {};
-	enuma_th_capture(34, "backboardd", &bb);
-	enuma_th_capture(5, "SpringBoard", &sb);
+	static const struct { int pid; const char *comm; } targets[] = {
+		{1, "launchd"}, {5, "SpringBoard"}, {34, "backboardd"},
+		{58, "distnoted"}, {60, "notifyd"}, {82, "securityd"},
+		{26, "amfid"},
+	};
+	struct enuma_th_sample samples[7] = {};
+	for (unsigned int i = 0; i < 7; ++i) {
+		enuma_th_capture(targets[i].pid, targets[i].comm, &samples[i]);
+	}
 	char slide[11] = "NA";
-	if (bb.slide != UINT32_MAX) {
-		snprintf(slide, sizeof(slide), "0x%x", bb.slide);
+	if (samples[2].slide != UINT32_MAX) {
+		snprintf(slide, sizeof(slide), "0x%x", samples[2].slide);
 	}
 	printf("enuma-th: tick=%u t=%llu slide=%s saved=possibly-stale/non-atomic\n",
 	    (unsigned int)(uintptr_t)tick, (unsigned long long)(ns / NSEC_PER_SEC), slide);
-	enuma_th_print(34, &bb);
-	enuma_th_print(5, &sb);
+	for (unsigned int i = 0; i < 7; ++i) {
+		enuma_th_print(targets[i].pid, &samples[i]);
+	}
 	thread_call_free(self);
 }
 
