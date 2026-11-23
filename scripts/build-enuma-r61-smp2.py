@@ -15,7 +15,7 @@ from types import SimpleNamespace
 
 
 def rebuild_r62(device, parent, out, helpers):
-    """Replay the pinned r58/r61 link, recompiling the two changed units."""
+    """Replay the pinned r58/r61 link with the original console object."""
     def load(directory, name="candidate-manifest.json"):
         return json.loads((directory / name).read_text())
 
@@ -90,6 +90,10 @@ def rebuild_r62(device, parent, out, helpers):
     shutil.copyfile(device / "package" / inc, dest / inc)
     bp = dest / "EnumaBootProgress2.inc"
     text = bp.read_text()
+    lines = text.splitlines(keepends=True)
+    removed_fill = [line for line in lines if "g_enuma_fbfill_" in line]
+    assert len(removed_fill) == 4
+    text = "".join(line for line in lines if "g_enuma_fbfill_" not in line)
     for anchor, replacement in (
         ('#include "EnumaThreadSnapshot56Bsd.inc"',
          f'#include "EnumaThreadSnapshot56Bsd.inc"\n#include "{inc}"'),
@@ -111,21 +115,9 @@ def rebuild_r62(device, parent, out, helpers):
         argv[argv.index("-MF") + 1] = obj.with_suffix(".d")
     run("compile-kern_exec.o", argv, step["cwd"])
     assert inputs[str(exe)] != digest(obj)
-    video_step = load(r54, "commands.json")["compile-video_console.o"]
-    video_src = Path(video_step["argv"][2]).parent
-    video_dest = out / "source/osfmk/console"
-    shutil.copytree(video_src, video_dest)
-    fill = video_dest / "EnumaFbFill52.inc"
-    fill_before = digest(fill)
-    shutil.copyfile(device / "package/EnumaFbFill54.inc", fill)
-    assert fill_before != digest(fill)
-    video_obj = out / "objects/video_console.o"
-    argv = video_step["argv"].copy()
-    assert argv[3:5] == ["-o", str(video)]
-    argv[2], argv[4] = video_dest / "video_console.c", video_obj
-    if "-MF" in argv:
-        argv[argv.index("-MF") + 1] = video_obj.with_suffix(".d")
-    run("compile-video_console.o", argv, video_step["cwd"])
+    baseline = device / "out/ufs-sm8250-bp2-20261123-r49"
+    baseline_paths = [Path(x) for x in (baseline / "link.filelist").read_text().splitlines()]
+    video_obj, = (p for p in baseline_paths if p.name == "video_console.o")
     assert inputs[str(video)] != digest(video_obj)
     replacements = {exe: obj, video: video_obj}
     (out / "link.filelist").write_text("".join(f"{replacements.get(p, p)}\n" for p in paths))
@@ -155,9 +147,9 @@ def rebuild_r62(device, parent, out, helpers):
     assert (parent / "link.filelist").read_bytes() == frozen
     check_pins()
     changed_sources = {n: [old_sources.get(n), new_sources[n]] for n in (bp.name, inc)}
-    changed_sources["EnumaFbFill52.inc"] = [fill_before, digest(fill)]
     return dict(objects={exe.name: [inputs[str(exe)], digest(obj)],
                          video.name: [inputs[str(video)], digest(video_obj)]},
+                video_baseline=str(video_obj),
                 changed_sources=changed_sources,
                 unchanged_filelist_inputs=len(paths) - 2, unchanged_direct_archives=len(archives),
                 armcpu_archive_sha256=inputs[str(armcpu)], unique_formats=True, callsites=sites)

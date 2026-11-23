@@ -18,20 +18,22 @@ enuma-cpu: online=%u seen1=0x%llx step1=%u fail1=%u
 enuma-cpu: mpidr1=0x%llx
 ```
 
-The inherited report also emits an `enuma-fbfill` line and other inherited diagnostics. Online count 2 supports a second online CPU, not proof of working interprocessor interrupts. No line, freeze or panic does not identify the cause.
+The inherited report emits other diagnostics, but the color-fill report is removed. Online count 2 supports a second online CPU, not proof of working interprocessor interrupts. No line, freeze or panic does not identify the cause.
 
 The two IPI options are removed to avoid the SPI IPI configuration when board interrupt allocation is not established; the intended SGI alternative and delivery are not runtime verified. The unchanged ADT has only the two interrupt-controller properties found by the script; absence of device interrupt properties does not establish physical SPI occupancy or GIC capacity; see `docs/ipi-intid-conflict-20261124.md`.
 
 ## Character path and build evidence
 
-Previously the disabled framebuffer fill parsed its boot argument on each call; now the first disabled parse marks it done and later calls return after the flag check. This is a source-level path comparison, not a measured timing or a claim that the inherited console locking is safe. When enabled, its existing behavior is retained.
+The color-fill hook and its once-only disabled-path modification are withdrawn to restore the original character path; the `EnumaFbFill*.inc` files remain in the repository but are not linked into this candidate. The inherited color-fill statistics report and declarations are also removed because the original console object has no such globals. No timing or locking safety claim is made.
 
-WSL root `/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r61-smp2.py --r62` completed. Output `out/ufs-sm8250-smpobs-20261124-r62/boot.img`: 169951232 bytes, SHA-256 `32a877a8b1bad892c3519fde29eb5c60514561d0a6030deb6b02c751c445925c`.
+WSL root `/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r61-smp2.py --r62` completed. Output `out/ufs-sm8250-smpobs-20261124-r62/boot.img`: 169951232 bytes, SHA-256 `e378b1055e26b7d9b743f1ea7f30d8d26bd3a89e48de54ee23428ae0f9c3d894`. The previous r62 output was moved to `out/_superseded/`. Upstream HEAD at start: `90c0893904859cf4bf8d486a08dc45ceb18bb50d`.
 
 | Rebuilt unit | Input SHA-256 | Output SHA-256 |
 |---|---|---|
-| `video_console.o` | `66b79b41dd044fe3cdbe5fcf510bccc6bbdf8c8b2b5dfcb440df18939510b264` | `77a2bfc4f1f3946d0c009972d591d72186d8c3c5b5459c520818a5c6087baad6` |
-| `kern_exec.o` | `7f7b3104afcf7fd7040ee9107c334f83e3912273079d79f2341a48f1540d8560` | `aa68bf35ebcd7c188c0aad08af9fed576c0a72db47f53c2faf1d64a564cf7a28` |
+| `video_console.o` | `66b79b41dd044fe3cdbe5fcf510bccc6bbdf8c8b2b5dfcb440df18939510b264` | `9394e2950c80eca52f359b41a8b6276e82caf3afbd604aff75e1abd241b6cf02` |
+| `kern_exec.o` | `7f7b3104afcf7fd7040ee9107c334f83e3912273079d79f2341a48f1540d8560` | `2c9ecfb9c487252fbab5d34faa5550df8daffce1e474e1852fd3de1e84774db0` |
+
+The selected `video_console.o` is the identical original object listed in the r49 link filelist, before the r52 fill insertion; it is reused directly rather than recompiled. Its exact path is in the candidate manifest. Thus the comparison is identity with that baseline, not a separately reproduced compile.
 
 The r61 five artifact hashes were checked before and after; its boot SHA-256 remains `6f13c3b5ca3139309019ff966214a1f13acaa819bb8b928a42998452ffde015b`. ADT is byte-identical, SHA-256 `1fb896cf756f7cfbd93ac99ddb9ed6ac062ece28697a487708b6bbe3449a7457`. Both linked Mach-O files have zero undefined symbols including weak according to `llvm-nm` and symbol table checks. The payload changes only kernel and `unixnu.toml`; call sites and report formats were checked. The output manifest records full input/output hashes.
 
