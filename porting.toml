@@ -86,7 +86,7 @@ findings = ["2026-11-22 r17 reuses r15 kern_exec.o to remove the r16 CPU calibra
 completion = ["Every enabled CPU reaches its entry checkpoint and timer/IPI handling works on each enabled CPU."]
 limits = ["Hardware inputs and implementation are pending for enuma."]
 next_action = ["Inventory the required cpu and interrupts inputs before implementation."]
-evidence = []
+evidence = [{ kind = "source", reference = "docs/smp-requirements-20261124.md", result = "Self-checked static r61 multicore requirements survey; PSCI, secondary redistributor, SPI IPI and concurrent runtime remain unverified; no device operation or build." }]
 
 [[area]]
 id = "memory"
