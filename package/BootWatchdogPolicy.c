@@ -17,11 +17,7 @@ static const char policy_head[] =
 static const char policy_watchdogd[] = "<key>com.apple.watchdogd</key><true/>";
 static const char policy_tail[] = "</dict></plist>\n";
 static const char lite_jobs[] =
-    "com.apple.identityservicesd,com.apple.locationd,com.apple.CommCenter,com.apple.bluetoothd,"
-    "com.apple.photoanalysisd,com.apple.mediaanalysisd,com.apple.mediastream.mstreamd,com.apple.icloud.searchpartyd,"
-    "com.apple.findmy.findmybeaconingd,com.apple.familycircled,com.apple.financed,com.apple.softwareupdateservicesd,"
-    "com.apple.ndoagent,com.apple.biomesyncd,com.apple.email.maild,com.apple.amsengagementd,com.apple.adid,com.apple.eyereliefd,"
-    "com.apple.fairplayd.A2,com.apple.passd,com.apple.mobile.obliteration";
+    "com.apple.identityservicesd,com.apple.locationd,com.apple.CommCenter,com.apple.bluetoothd";
 static char policy[2048];
 
 static int
