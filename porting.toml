@@ -553,6 +553,7 @@ id = "documentation-inventory"
 status = "planned"
 components = []
 paths = [
+  "docs/fp-symbols-r65-20261124.md",
   "docs/pipa-hid-keystore-port-20261124.md",
   "docs/ustack-symbols-r64-20261124.md",
   "docs/mach-msg2-branch-analysis-20261124.md",
@@ -690,6 +691,7 @@ completion = ["Documentation files have an owner area and evidence reference."]
 limits = ["Registration does not independently verify document claims."]
 next_action = ["Register future documentation in its relevant owner area."]
 evidence = [
+  { kind = "source", reference = "docs/fp-symbols-r65-20261124.md", result = "Self-checked offline r65 FP-chain symbolization against r56 donor cache; runtime cache UUID and raw capture unverified." },
   { kind = "source", reference = "docs/pipa-hid-keystore-port-20261124.md", result = "Self-checked static pipa HID and AppleKeyStore comparison; component methods exist separately from empty diagnostic callbacks, target runtime unverified." },
   { kind = "source", reference = "docs/ustack-symbols-r64-20261124.md", result = "Self-checked offline r64 candidate stack symbolization against local r56 donor cache; runtime cache UUID and stack unwinding unverified." },
   { kind = "source", reference = "docs/mach-msg2-branch-analysis-20261124.md", result = "Offline donor mach_msg2 disassembly; PC and LR do not distinguish RPC reply from event-loop receive, self-checked." },
