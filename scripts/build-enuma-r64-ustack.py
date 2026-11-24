@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-"""Build the isolated user-stack diagnostic on the frozen r63 candidate."""
+"""Build the isolated r64 user-stack or r65 FP diagnostic."""
 import argparse
 import ast
 import hashlib
@@ -18,10 +18,15 @@ from types import SimpleNamespace
 
 sys.dont_write_bytecode = True
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--r64", action="store_true", required=True)
+rounds = parser.add_mutually_exclusive_group(required=True)
+rounds.add_argument("--r64", action="store_true")
+rounds.add_argument("--r65", action="store_true")
 parser.add_argument("--out", type=Path, help="fresh path under out/ for independent replay")
 opts = parser.parse_args()
 device = Path(__file__).resolve().parents[1]
+if opts.r65:
+    runpy.run_path(str(Path(__file__).with_name("build-enuma-r65-fp.py")))["build"](device, opts.out)
+    sys.exit(0)
 base = device.parents[1] / "UniXNU"
 r57 = device / "out/ufs-sm8250-txpeer-20261123-r57"
 r62 = device / "out/ufs-sm8250-smpobs-20261124-r62"
@@ -332,7 +337,9 @@ archive("libShengHidInputStandin.a", hid_late, hid_bind, hid_pub)
 obj = out / "objects/kern_exec.o"
 compile_unit(recipe["compile-kern_exec.o"], source / "kern_exec.c", obj)
 assert digest(obj) != inputs[str(old_obj)]
-stk_src = device / "package/EnumaUserStack64.c"
+stk_src = stage("EnumaUserStack64.c", subprocess.check_output([
+    "git", "-C", device, "show", "43fadeffd14c1e5a8a4d29406cafa99829f857e4:package/EnumaUserStack64.c",
+], text=True))
 stk_obj = out / "objects/EnumaUserStack64.o"
 private_recipe = json.loads((r57 / "commands.json").read_text())["compile-EnumaThreadSnapshot56.o"]
 compile_unit(private_recipe, stk_src, stk_obj)

@@ -535,6 +535,20 @@ next_action = ["Parent integration: deep review the callout and stack capture; i
 evidence = [{ kind = "host", reference = "docs/enuma-r64-ustack-host-20261124.md", command = "/home/wh1stl3/.local/bin/python3 -B scripts/build-enuma-r64-ustack.py --r64", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked host build: zero missing link inputs; both Mach-O images have zero undefined including weak; unique probe formats and callsites checked. r64 boot image 169951232 bytes, sha256 8a80bfde1891495102bee30326de230735ad1499c6cd1130dd641031ec29b446; ADT and boot args equal r63 readback. No device operation." }]
 
 [[area]]
+id = "r65-user-fp-diagnostic"
+status = "planned"
+components = []
+paths = ["package/EnumaUserStack64.c", "scripts/build-enuma-r64-ustack.py", "scripts/build-enuma-r65-fp.py", "docs/enuma-r65-fp-host-20261124.md"]
+inputs = ["Frozen r64 artifacts and recorded link, prelink and packing inputs."]
+configuration = ["Isolated host candidate; unchanged enuma-bp=1 tick, ADT and boot arguments."]
+procedure = ["Replace only EnumaUserStack64.o; relink, prelink and read boot.img back."]
+findings = ["Up to 16 ARM64 frame records via the referenced task map with no caller-held lock across reads. Print raw saved LRs and stop on the first invalid frame, failed read or changed sample."]
+completion = ["Compare r64 inputs and artifacts, read back ADT and boot args, check both Mach-O images for undefined symbols including weak."]
+limits = ["References do not freeze the stack. Host checks only; no validated runtime unwind, caller or on-device behavior."]
+next_action = ["Parent integration: deep review worker checks and independent build replay before device observation."]
+evidence = [{ kind = "host", reference = "docs/enuma-r65-fp-host-20261124.md", command = "/home/wh1stl3/.local/bin/python3 -B scripts/build-enuma-r64-ustack.py --r65", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked build and 14 synthetic FP cases. Boot image 169951232 bytes, sha256 56267f02fab8c3712faeb77436e9d6eaa1e2bcf45bd2387875282ff6d5e56a34; r64 artifacts unchanged; extracted ADT and args identical; zero undefined including weak. No device operation." }]
+
+[[area]]
 id = "documentation-inventory"
 status = "planned"
 components = []
