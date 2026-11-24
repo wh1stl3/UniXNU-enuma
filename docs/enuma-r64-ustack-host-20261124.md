@@ -2,6 +2,10 @@
 
 `self-checked`; no device access or cleanup/retention scripts.
 
+This was an incremental recovery build, not a clean build of the entire
+kernel. See [the r63 source inventory](reproducible-build-20261124.md) for
+the staged external sources and remaining full-build steps.
+
 ## Source baseline and rebuild decision
 
 Cleanup removed the staged sources and intermediate inputs referenced by the

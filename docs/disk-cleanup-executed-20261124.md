@@ -15,5 +15,5 @@
 - 脚本一之后及脚本二进程结束后，UniXNU `status --porcelain` 与 `/tmp/enuma-cleanup-upstream-baseline-20261124.txt` diff 均为空。
 - `_retained-signing` 6977 文件、`_retained-audit-docs` 80 文件、`_retained-images` 4 文件；r57 备份 SHA-256 `e669e3bdf2f7f5315d9eb28e1231bdd02fe5f6245c2a961b88e0fa1ebf071169`。
 - `out` 顶层目录 196 个；`df -B1 /mnt/d` 可用 380,625,170,432 字节。
-- 运行中的 `du -sb out` 因并发删除报告目录不存在、exit 1，不作为最终结果；清理前两脚本总 df 基线未提供。
+- 运行中的 `du -sb out` 因并发删除报告目录不存在、exit 1，不作为最终结果。脚本二前 `du -sb out` 为 125,072,602,144 字节，结束后为 84,312,745,269 字节，减少 40,759,856,875 字节（37.961 GiB）；这是逻辑大小而非物理释放量。脚本二结束后 df 可用 380,625,317,888 字节；清理前两脚本总 df 基线未提供。
 - 提交前记录检查改用 `/home/wh1stl3/.local/bin/python3`：exit 0，24 structured areas checked；此前系统 Python 因缺少 `tomllib` 失败。

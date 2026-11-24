@@ -1,0 +1,157 @@
+bsd\kern\EnumaAttempt.inc:5:static struct enuma_ctl_entry att_names[6];
+bsd\kern\EnumaAttempt.inc:15:enuma_att_record(unsigned int kind)
+bsd\kern\EnumaAttempt.inc:51:enuma_att_dump(void)
+bsd\kern\EnumaBbScan.inc:7:#include "EnumaProcExecReport.inc"
+bsd\kern\EnumaBbScan.inc:8:#include "EnumaBootProgress2.inc"
+bsd\kern\EnumaBbScan.inc:34:struct enuma_bb_entry {
+bsd\kern\EnumaBbScan.inc:40:static struct enuma_bb_entry enuma_bb_entries[12];
+bsd\kern\EnumaBbScan.inc:41:static _Atomic(unsigned int) enuma_bb_next;
+bsd\kern\EnumaBbScan.inc:42:static _Atomic(uint64_t) enuma_bb_calls, enuma_bb_overflow;
+bsd\kern\EnumaBbScan.inc:46:#include "EnumaIpc.inc"
+bsd\kern\EnumaBbScan.inc:49:enuma_bb_record(const char *name, uint32_t type)
+bsd\kern\EnumaBbScan.inc:51:enuma_ctl_record();
+bsd\kern\EnumaBbScan.inc:55:__c11_atomic_fetch_add(&enuma_bb_calls, 1, __ATOMIC_RELAXED);
+bsd\kern\EnumaBbScan.inc:56:unsigned int slot = __c11_atomic_load(&enuma_bb_next, __ATOMIC_RELAXED);
+bsd\kern\EnumaBbScan.inc:57:while (slot < 12 && !__c11_atomic_compare_exchange_weak(&enuma_bb_next,
+bsd\kern\EnumaBbScan.inc:60:__c11_atomic_fetch_add(&enuma_bb_overflow, 1, __ATOMIC_RELAXED);
+bsd\kern\EnumaBbScan.inc:62:strlcpy(enuma_bb_entries[slot].name, name && name[0] ? name : "-",
+bsd\kern\EnumaBbScan.inc:63:sizeof(enuma_bb_entries[slot].name));
+bsd\kern\EnumaBbScan.inc:64:enuma_bb_entries[slot].type = type;
+bsd\kern\EnumaBbScan.inc:70:enuma_bb_record_done(unsigned int slot, int ret)
+bsd\kern\EnumaBbScan.inc:73:enuma_bb_entries[slot].ret = ret;
+bsd\kern\EnumaBbScan.inc:74:__c11_atomic_store(&enuma_bb_entries[slot].complete, 1, __ATOMIC_RELEASE);
+bsd\kern\EnumaBbScan.inc:136:enuma_matchcnt_dump();
+bsd\kern\EnumaBbScan.inc:165:(unsigned long long)__c11_atomic_load(&enuma_bb_calls, __ATOMIC_RELAXED),
+bsd\kern\EnumaBbScan.inc:166:(unsigned long long)__c11_atomic_load(&enuma_bb_overflow, __ATOMIC_RELAXED));
+bsd\kern\EnumaBbScan.inc:168:struct enuma_bb_entry *entry = &enuma_bb_entries[i];
+bsd\kern\EnumaBbScan.inc:174:enuma_ctl_dump();
+bsd\kern\EnumaBbScan.inc:175:enuma_att_dump();
+bsd\kern\EnumaBootProgress.inc:4:enuma_bp_print(void)
+bsd\kern\EnumaBootProgress.inc:16:enuma_matchcnt_dump();
+bsd\kern\EnumaBootProgress2.inc:7:enuma_bp_print(unsigned int idx)
+bsd\kern\EnumaBootProgress2.inc:26:enuma_matchcnt_dump();
+bsd\kern\EnumaBootProgress2.inc:36:enuma_bp_print(idx);
+bsd\kern\EnumaBootProgress2.inc:53:enuma_bp_print(0);
+bsd\kern\EnumaBootProgress62Cpu.inc:5:/* Existing ArmCpu C-linkage diagnostics; slot 1 is the logical secondary. */
+bsd\kern\EnumaBootProgress62Cpu.inc:6:extern volatile uint32_t armcpu_smp_seen_mpidr[8], armcpu_smp_step[8];
+bsd\kern\EnumaBootProgress62Cpu.inc:7:extern volatile uint32_t armcpu_smp_fail[8], armcpu_smp_mpidr[8];
+bsd\kern\EnumaBootProgress62Cpu.inc:12:unsigned int step = armcpu_smp_step[1];
+bsd\kern\EnumaBootProgress62Cpu.inc:15:online, (unsigned long long)armcpu_smp_seen_mpidr[1], step,
+bsd\kern\EnumaBootProgress62Cpu.inc:16:armcpu_smp_fail[1]);
+bsd\kern\EnumaBootProgress62Cpu.inc:18:(unsigned long long)armcpu_smp_mpidr[1]);
+bsd\kern\EnumaControl.inc:3:struct enuma_ctl_entry {
+bsd\kern\EnumaControl.inc:7:static struct enuma_ctl_entry enuma_ctl_entries[8];
+bsd\kern\EnumaControl.inc:8:static _Atomic(uint64_t) enuma_ctl_all, enuma_ctl_bb, enuma_ctl_overflow;
+bsd\kern\EnumaControl.inc:11:enuma_ctl_record(void)
+bsd\kern\EnumaControl.inc:21:__c11_atomic_fetch_add(&enuma_ctl_all, 1, __ATOMIC_RELAXED);
+bsd\kern\EnumaControl.inc:23:__c11_atomic_fetch_add(&enuma_ctl_bb, 1, __ATOMIC_RELAXED);
+bsd\kern\EnumaControl.inc:25:enuma_fb_comm_t found = __c11_atomic_load(&enuma_ctl_entries[i].name,
+bsd\kern\EnumaControl.inc:29:if (__c11_atomic_compare_exchange_strong(&enuma_ctl_entries[i].name,
+bsd\kern\EnumaControl.inc:36:__c11_atomic_fetch_add(&enuma_ctl_entries[i].count, 1, __ATOMIC_RELAXED);
+bsd\kern\EnumaControl.inc:40:__c11_atomic_fetch_add(&enuma_ctl_overflow, 1, __ATOMIC_RELAXED);
+bsd\kern\EnumaControl.inc:44:enuma_ctl_dump(void)
+bsd\kern\EnumaControl.inc:47:(unsigned long long)__c11_atomic_load(&enuma_ctl_all, __ATOMIC_RELAXED),
+bsd\kern\EnumaControl.inc:48:(unsigned long long)__c11_atomic_load(&enuma_ctl_bb, __ATOMIC_RELAXED),
+bsd\kern\EnumaControl.inc:49:(unsigned long long)__c11_atomic_load(&enuma_ctl_overflow, __ATOMIC_RELAXED));
+bsd\kern\EnumaControl.inc:51:enuma_fb_comm_t name = __c11_atomic_load(&enuma_ctl_entries[i].name,
+bsd\kern\EnumaControl.inc:57:(unsigned long long)__c11_atomic_load(&enuma_ctl_entries[i].count,
+bsd\kern\EnumaFixupDiag.inc:4:int enuma_fxd_enabled;
+bsd\kern\EnumaFixupDiag.inc:5:unsigned int enuma_fxd_sv, enuma_fxd_fx, enuma_fxd_taint, enuma_fxd_novalid;
+bsd\kern\EnumaFixupDiag.inc:6:unsigned int enuma_fxd_nx, enuma_fxd_vnode, enuma_fxd_range, enuma_fxd_bytes;
+bsd\kern\EnumaFixupDiag.inc:7:unsigned int enuma_fxd_page;
+bsd\kern\EnumaFixupDiag.inc:9:#define ENUMA_FXD_INC(counter) do { \
+bsd\kern\EnumaFixupDiag.inc:10:if (enuma_fxd_enabled) { \
+bsd\kern\EnumaFixupDiag.inc:16:enuma_fxd_report(void)
+bsd\kern\EnumaFixupDiag.inc:18:if (enuma_fxd_enabled != 1) {
+bsd\kern\EnumaFixupDiag.inc:22:os_atomic_load(&enuma_fxd_sv, relaxed), os_atomic_load(&enuma_fxd_fx, relaxed),
+bsd\kern\EnumaFixupDiag.inc:23:os_atomic_load(&enuma_fxd_taint, relaxed), os_atomic_load(&enuma_fxd_novalid, relaxed),
+bsd\kern\EnumaFixupDiag.inc:24:os_atomic_load(&enuma_fxd_nx, relaxed));
+bsd\kern\EnumaFixupDiag.inc:26:os_atomic_load(&enuma_fxd_vnode, relaxed), os_atomic_load(&enuma_fxd_range, relaxed),
+bsd\kern\EnumaFixupDiag.inc:27:os_atomic_load(&enuma_fxd_bytes, relaxed), os_atomic_load(&enuma_fxd_page, relaxed));
+bsd\kern\EnumaFixupReport.inc:4:static uint8_t enuma_fx_bits;
+bsd\kern\EnumaFixupReport.inc:5:_Static_assert(__atomic_always_lock_free(sizeof(enuma_fx_bits), 0),
+bsd\kern\EnumaFixupReport.inc:12:unsigned int bits = os_atomic_load(&enuma_fx_bits, acquire);
+bsd\kern\EnumaFixupReport.inc:13:unsigned int applied = os_atomic_load(&cs_text_fixup_applied, relaxed);
+bsd\kern\EnumaFixupReport.inc:15:unsigned int parsed = cs_text_fixup_parsed;
+bsd\kern\EnumaFixupReport.inc:23:enuma_fxd_report();
+bsd\kern\EnumaIpc.inc:7:enuma_ipc_record(unsigned int receive)
+bsd\kern\EnumaMatchCount.inc:19:enuma_matchcnt_record(unsigned int kind, int caller)
+bsd\kern\EnumaMatchCount.inc:68:enuma_matchcnt_dump(void)
+bsd\kern\EnumaMatchCount2.inc:20:enuma_matchcnt_record(unsigned int kind, int caller)
+bsd\kern\EnumaMatchCount2.inc:87:enuma_matchcnt_dump(void)
+bsd\kern\EnumaProcExecReport.inc:99:struct enuma_exec_observation {
+bsd\kern\EnumaProcExecReport.inc:108:enuma_ex_failure(struct enuma_exec_observation *obs, os_reason_t why, int error,
+bsd\kern\EnumaProcExecReport.inc:139:static struct enuma_exec_observation enuma_ex_last[EEX_LAST];
+bsd\kern\EnumaProcExecReport.inc:142:enuma_ex_finish(const struct enuma_exec_observation *obs)
+bsd\kern\EnumaProcExecReport.inc:164:struct enuma_exec_observation last[EEX_LAST];
+bsd\kern\EnumaProcExecReport.inc:189:const struct enuma_exec_observation *r = &last[i];
+bsd\kern\EnumaThreadSnapshot56Bsd.inc:3:extern thread_call_t enuma_th_alloc(unsigned int tick);
+bsd\kern\EnumaThreadSnapshot56Bsd.inc:4:task_t enuma_th_task_ref(int pid, const char *comm, const char **why);
+bsd\kern\EnumaThreadSnapshot56Bsd.inc:7:enuma_th_task_ref(int pid, const char *comm, const char **why)
+bsd\kern\kern_exec.c:388:struct enuma_exec_observation;
+bsd\kern\kern_exec.c:389:static int exec_activate_image(struct image_params *imgp, struct enuma_exec_observation *obs);
+bsd\kern\kern_exec.c:403:static int process_signature(proc_t, struct image_params *, struct enuma_exec_observation *);
+bsd\kern\kern_exec.c:600:exec_shell_imgact(struct image_params *imgp, struct enuma_exec_observation *obs __unused)
+bsd\kern\kern_exec.c:766:exec_fat_imgact(struct image_params *imgp, struct enuma_exec_observation *obs __unused)
+bsd\kern\kern_exec.c:1190:#include "EnumaBbScan.inc"
+bsd\kern\kern_exec.c:1193:exec_mach_imgact(struct image_params *imgp, struct enuma_exec_observation *obs)
+bsd\kern\kern_exec.c:2183:int(*const ex_imgact)(struct image_params *, struct enuma_exec_observation *);
+bsd\kern\kern_exec.c:2222:exec_activate_image(struct image_params *imgp, struct enuma_exec_observation *obs)
+bsd\kern\kern_exec.c:3565:struct enuma_exec_observation obs = {0};
+bsd\kern\kern_exec.c:5191:struct enuma_exec_observation obs = {0};
+bsd\kern\kern_exec.c:8786:process_signature(proc_t p, struct image_params *imgp, struct enuma_exec_observation *obs)
+bsd\kern\ubc_subr.c:6078:#define CS_TEXT_FIXUP_MAX 32
+bsd\kern\ubc_subr.c:6079:#define CS_TEXT_FIXUP_BYTES 16
+bsd\kern\ubc_subr.c:6080:struct cs_text_fixup {
+bsd\kern\ubc_subr.c:6083:uint8_t         original[CS_TEXT_FIXUP_BYTES];
+bsd\kern\ubc_subr.c:6084:uint8_t         replacement[CS_TEXT_FIXUP_BYTES];
+bsd\kern\ubc_subr.c:6087:static TUNABLE_STR(cs_text_fixup_arg0, 160, "text-fixup0", "");
+bsd\kern\ubc_subr.c:6088:static TUNABLE_STR(cs_text_fixup_arg1, 160, "text-fixup1", "");
+bsd\kern\ubc_subr.c:6089:static TUNABLE_STR(cs_text_fixup_arg2, 160, "text-fixup2", "");
+bsd\kern\ubc_subr.c:6090:static TUNABLE_STR(cs_text_fixup_arg3, 160, "text-fixup3", "");
+bsd\kern\ubc_subr.c:6091:static TUNABLE_STR(cs_text_fixup_arg4, 160, "text-fixup4", "");
+bsd\kern\ubc_subr.c:6092:static TUNABLE_STR(cs_text_fixup_arg5, 160, "text-fixup5", "");
+bsd\kern\ubc_subr.c:6093:static TUNABLE_STR(cs_text_fixup_arg6, 160, "text-fixup6", "");
+bsd\kern\ubc_subr.c:6094:static TUNABLE_STR(cs_text_fixup_arg7, 160, "text-fixup7", "");
+bsd\kern\ubc_subr.c:6095:static struct cs_text_fixup cs_text_fixups[CS_TEXT_FIXUP_MAX];
+bsd\kern\ubc_subr.c:6096:static uint32_t cs_text_fixup_count;
+bsd\kern\ubc_subr.c:6097:uint32_t cs_text_fixup_parsed;
+bsd\kern\ubc_subr.c:6098:uint32_t cs_text_fixup_applied;
+bsd\kern\ubc_subr.c:6102:cs_text_fixup_hex(char c)
+bsd\kern\ubc_subr.c:6118:cs_text_fixup_bytes(const char **cursor, uint8_t *out)
+bsd\kern\ubc_subr.c:6123:int hi = cs_text_fixup_hex(s[0]), lo = s[1] ? cs_text_fixup_hex(s[1]) : -1;
+bsd\kern\ubc_subr.c:6124:if (hi < 0 || lo < 0 || n == CS_TEXT_FIXUP_BYTES) {
+bsd\kern\ubc_subr.c:6135:cs_text_fixup_parse(const char *arg, struct cs_text_fixup *f)
+bsd\kern\ubc_subr.c:6145:int v = cs_text_fixup_hex(*s);
+bsd\kern\ubc_subr.c:6154:uint32_t n = cs_text_fixup_bytes(&s, f->original);
+bsd\kern\ubc_subr.c:6155:if (n == 0 || cs_text_fixup_bytes(&s, f->replacement) != n || *s) {
+bsd\kern\ubc_subr.c:6167:cs_text_fixup_init(void)
+bsd\kern\ubc_subr.c:6171:enuma_fxd_enabled = (diag == 1);
+bsd\kern\ubc_subr.c:6181:if (length < sizeof(entry) && cs_text_fixup_count < CS_TEXT_FIXUP_MAX) {
+bsd\kern\ubc_subr.c:6183:if (cs_text_fixup_parse(entry, &cs_text_fixups[cs_text_fixup_count])) {
+bsd\kern\ubc_subr.c:6184:cs_text_fixup_count++;
+bsd\kern\ubc_subr.c:6195:cs_text_fixup_arg0, cs_text_fixup_arg1, cs_text_fixup_arg2, cs_text_fixup_arg3,
+bsd\kern\ubc_subr.c:6196:cs_text_fixup_arg4, cs_text_fixup_arg5, cs_text_fixup_arg6, cs_text_fixup_arg7,
+bsd\kern\ubc_subr.c:6199:if (args[i][0] == '\0' || cs_text_fixup_count == CS_TEXT_FIXUP_MAX) {
+bsd\kern\ubc_subr.c:6202:if (cs_text_fixup_parse(args[i], &cs_text_fixups[cs_text_fixup_count])) {
+bsd\kern\ubc_subr.c:6203:cs_text_fixup_count++;
+bsd\kern\ubc_subr.c:6208:cs_text_fixup_parsed = cs_text_fixup_count;
+bsd\kern\ubc_subr.c:6210:STARTUP(EARLY_BOOT, STARTUP_RANK_MIDDLE, cs_text_fixup_init);
+bsd\kern\ubc_subr.c:6217:cs_text_fixup_page(struct vnode *vp, memory_object_offset_t page_offset, void *kva)
+bsd\kern\ubc_subr.c:6219:ENUMA_FXD_INC(enuma_fxd_fx);
+bsd\kern\ubc_subr.c:6221:for (uint32_t i = 0; i < cs_text_fixup_count; i++) {
+bsd\kern\ubc_subr.c:6222:const struct cs_text_fixup *f = &cs_text_fixups[i];
+bsd\kern\ubc_subr.c:6224:ENUMA_FXD_INC(enuma_fxd_range);
+bsd\kern\ubc_subr.c:6228:ENUMA_FXD_INC(enuma_fxd_vnode);
+bsd\kern\ubc_subr.c:6231:ENUMA_FXD_INC(enuma_fxd_page);
+bsd\kern\ubc_subr.c:6234:ENUMA_FXD_INC(enuma_fxd_bytes);
+bsd\kern\ubc_subr.c:6239:uint32_t applied = os_atomic_inc(&cs_text_fixup_applied, relaxed);
+bsd\kern\ubc_subr.c:6241:os_atomic_or(&enuma_fx_bits, (uint8_t)(1u << i), release);
+osfmk\vm\vm_fault.c:7755:extern int enuma_fxd_enabled;
+osfmk\vm\vm_fault.c:7756:extern unsigned int enuma_fxd_sv, enuma_fxd_taint, enuma_fxd_novalid, enuma_fxd_nx;
+osfmk\vm\vm_fault.c:7757:#define ENUMA_FXD_INC(c) do { if (enuma_fxd_enabled) os_atomic_inc(&(c), relaxed); } while (0)
+osfmk\vm\vm_fault.c:7768:ENUMA_FXD_INC(enuma_fxd_sv);
+osfmk\vm\vm_fault.c:7808:if (tainted != VMP_CS_ALL_FALSE) ENUMA_FXD_INC(enuma_fxd_taint);
+osfmk\vm\vm_fault.c:7809:if (validated != VMP_CS_ALL_TRUE) ENUMA_FXD_INC(enuma_fxd_novalid);
+osfmk\vm\vm_fault.c:7810:if (nx != VMP_CS_ALL_FALSE) ENUMA_FXD_INC(enuma_fxd_nx);
+osfmk\vm\vm_fault.c:7813:cs_text_fixup_page(vnode, mo_offset, (void *)phystokv((pmap_paddr_t)VM_PAGE_GET_PHYS_PAGE(page) << PAGE_SHIFT)) != 0) {
