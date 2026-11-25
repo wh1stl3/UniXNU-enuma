@@ -32,3 +32,11 @@ been finally verified. This replacement requires independent deep review.
   the seed digest is not checked.
 - The replacement recipe is the last UFS archive writer in the recipe list;
   it asserts the copied archive SHA-256 before linking.
+
+## r69c Data branch correction
+
+- r69b encountered panic 22 on device.
+- The typed Data branch was not enabled, so the build took the `/dev/md0` path.
+- r69c sets `XNU_NATIVE_RAM_BLOCK=1` and retains the Data UUID
+  `62F1BC9E-4868-4CFF-BF7E-59AFCD474B4F`. The correction is not yet built
+  or tested on device.
