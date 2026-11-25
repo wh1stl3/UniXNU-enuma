@@ -1,5 +1,7 @@
 # UniXNU-enuma
 
+**r66 + IPC 单次观察（2026-11-25，`self-checked`）**：见 [观察记录](docs/ufs-sm8250-r66-ipc-device-20261125.md)；阶段不提升。
+
 **r69c 首次启动（2026-11-25，`self-checked`）**：见 [观察记录](docs/ufs-sm8250-r69c-device-20261125.md)，阶段不提升；此前刷写见 [记录](docs/ufs-sm8250-r69c-flash-20261125.md)。
 
 **r69b 首次启动（2026-11-25，`self-checked`）**：UFS 就绪，SystemOS、OS、SystemCryptex 挂载；scratch Data panic 22，未到 launchd。见 [观察记录](docs/ufs-sm8250-r69b-device-20261125.md)；阶段不提升。
