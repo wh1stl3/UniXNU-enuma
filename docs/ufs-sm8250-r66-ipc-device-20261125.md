@@ -4,7 +4,8 @@
 
 ## 动作和输入
 
-- 主控报告 enuma 刷写 `boot_b` 后重启；serial 脱敏。未提供命令输出、退出码、设备侧回读或刷写前最终 diff 审查结论。
+- 主控报告 enuma 刷写 `boot_b` 后重启；serial 脱敏。未提供命令输出、退出码或设备侧回读。当轮授权及 claim 已消耗，不得访问、删除或重放；不构成新设备操作授权。
+- 主控提供实际 reviewer `ses_ded25e8a7ffeY6E0nb8OIP9wq4` 有条件接受；未经 deep_reviewer。基线核对范围仅两路径/宏及抽样五件，不是全部输入哈希，详见离线封装记录。
 - 镜像 `out/ufs-sm8250-r66-ipc-20261125/boot.img`：169,951,232 B，SHA-256 `205b4148274714137bcd2e48752b9e8cb310a7b23ffd80bad5fddce9e01a238f`。
 - 内核 SHA-256 `5e46e1a460caa89c17bd64a724c4b0e26c23e2acf4af3eb69069743fcc6d557e`；离线封装见 `docs/enuma-r66-ipc-20261125.md`。
 - vision 判读 `media/r66+ipc.jpg`、`media/r66+ipc2.jpg`；照片不入 Git。
@@ -18,7 +19,9 @@
 
 进程表为 `1:launchd 4:SpringBoard 5:assistantd 34:backboardd`；`sb(5)` 标签错误，实际采样的是 assistantd，SpringBoard 是 pid 4。
 
-按主控提供的 60 秒采样间隔，launchd send +152、recv +28，仍有活动；backboardd 两项均不变。backboardd 计数差为 4；主控结合既有 FP 链判读为四条已发未回消息、卡在 `__xpc_bootstrap_services` 等 `0x320` 回复，launchd 未完成其请求。仅凭两项总计数之差不能独立证明请求与回复的配对或待回复数量，本次照片也未直接证明该调用栈。
+按主控提供的 60 秒采样间隔，launchd send +152、recv +28，仍有活动；backboardd 两项成功计数均不变。send/recv 总数差 4 不是未回复数量，不能配对请求和回复，也不能证明 launchd 收到或未回复 routine 800。历史 FP 链中的 `0x320` 是调用参数，不是已知 Mach `msgh_id`；本次照片也未直接证明该调用栈。
+
+第三帧 `i=3 t=309` 按设计不打印 `enuma-ipc2`（仅 i=1、2 打印），不能把该行缺失解释为异常。AX lookup 的请求者名称被截断，身份未知；注册者调查尚无可确认结果，留待交接。
 
 ## 边界
 

@@ -64,8 +64,8 @@
 | 现象 | 判读 |
 |---|---|
 | `enuma bp r49 i=0` 出现 | backboardd 已 exec 且 framebuffer 匹配成功 |
-| `i=1`/`i=2` 的 `enuma-ipc2` 行 | 看 `l(1)` 的 `r`：增长 → launchd 在收 bb 的 `0x320`；`s` 增、`r` 不动 → 可能积压 |
-| 注意 | send/recv 非配对，不能单独证明积压 |
+| `i=1`/`i=2` 的 `enuma-ipc2` 行 | launchd 的总计数增长只说明对应计数有活动，不识别对端或 routine |
+| 注意 | send/recv 非配对，差值不能证明未回复数量或积压；不能据此证明 launchd 收到或未回复 routine 800 |
 | `enuma-bb:` / `enuma-att:` 行 | 附属诊断（bb 记录 / 分发尝试） |
 
 ## 10. 局限
