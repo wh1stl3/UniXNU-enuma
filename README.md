@@ -1,6 +1,6 @@
 # UniXNU-enuma
 
-**r69b 刷写（2026-11-25，`self-checked`）**：已写 boot_b、仍在 fastboot、未重启；SHA-256 `3c6d0ef8c0d7a9eb6750773e1c37ac5dd5f725f9ea3c8050128f6e5bcfe3132c`。见 [记录](docs/ufs-sm8250-r69b-flash-20261125.md)；未启动验证，阶段不提升。
+**r69b 首次启动（2026-11-25，`self-checked`）**：UFS 就绪，SystemOS、OS、SystemCryptex 挂载；scratch Data panic 22，未到 launchd。见 [观察记录](docs/ufs-sm8250-r69b-device-20261125.md)；阶段不提升。
 
 **r44 单次观察（2026-11-22，`self-checked`）**：受测入口阳性对照成立，两个目标进程五项为零；三条共享缓存 fixup 未命中，详见 [r44 记录](docs/enuma-r44-device-20261123.md)，阶段不提升。
 
