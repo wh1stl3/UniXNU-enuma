@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause-Patent */
 /* Isolated user Mach message trap observations, not a transactional snapshot. */
 static _Atomic(uint64_t) ipc_all[2], ipc_bb[2], ipc_sb[2];
+static volatile uint64_t enuma_ipc_s[3], enuma_ipc_r[3];
 
 void
 enuma_ipc_record(unsigned int receive)
@@ -9,6 +10,15 @@ enuma_ipc_record(unsigned int receive)
 	__c11_atomic_fetch_add(&ipc_all[receive], 1, __ATOMIC_RELAXED);
 	if (p == PROC_NULL)
 		return;
+	if (p->p_pid == 1)
+		__atomic_fetch_add(receive ? &enuma_ipc_r[0] : &enuma_ipc_s[0],
+		    1, __ATOMIC_RELAXED);
+	else if (p->p_pid == 5)
+		__atomic_fetch_add(receive ? &enuma_ipc_r[1] : &enuma_ipc_s[1],
+		    1, __ATOMIC_RELAXED);
+	else if (p->p_pid == 34)
+		__atomic_fetch_add(receive ? &enuma_ipc_r[2] : &enuma_ipc_s[2],
+		    1, __ATOMIC_RELAXED);
 	if (p->p_comm[0] == 'b' && strcmp(p->p_comm, "backboardd") == 0)
 		__c11_atomic_fetch_add(&ipc_bb[receive], 1, __ATOMIC_RELAXED);
 	else if (p->p_comm[0] == 'S' && strcmp(p->p_comm, "SpringBoard") == 0)

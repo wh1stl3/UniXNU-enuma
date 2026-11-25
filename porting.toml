@@ -555,8 +555,13 @@ status = "planned"
 components = []
 paths = [
   "docs/fp-symbols-r65-20261124.md",
+  "docs/seed-vs-donor-var-20261124.md",
+  "docs/launchd-0320-handler-20261124.md",
+  "docs/migration-marker-check-20261124.md",
   "docs/pipa-hid-keystore-port-20261124.md",
   "docs/ustack-symbols-r64-20261124.md",
+  "docs/pipa-hid-flags-20261124.md",
+  "docs/instrumentation-audit-20261124.md",
   "docs/mach-msg2-branch-analysis-20261124.md",
   "docs/bootstrap-mig-ids-20261123.md",
   "docs/smp-readiness-20261123.md",
@@ -693,8 +698,13 @@ limits = ["Registration does not independently verify document claims."]
 next_action = ["Register future documentation in its relevant owner area."]
 evidence = [
   { kind = "source", reference = "docs/fp-symbols-r65-20261124.md", result = "Self-checked offline r65 FP-chain symbolization against r56 donor cache; runtime cache UUID and raw capture unverified." },
+  { kind = "source", reference = "docs/seed-vs-donor-var-20261124.md", result = "Self-checked read-only seed and donor APFS var tree comparison; runtime metadata and launchd 0x320 causality unverified." },
+  { kind = "source", reference = "docs/launchd-0320-handler-20261124.md", result = "Self-checked offline bootstrap protocol comparison; donor request payload and launchd receiver remain unverified." },
+  { kind = "source", reference = "docs/migration-marker-check-20261124.md", result = "Self-checked offline nabu migration-state comparison and seed byte scan; active APFS paths and enuma runtime migration remain unverified." },
   { kind = "source", reference = "docs/pipa-hid-keystore-port-20261124.md", result = "Self-checked static pipa HID and AppleKeyStore comparison; component methods exist separately from empty diagnostic callbacks, target runtime unverified." },
   { kind = "source", reference = "docs/ustack-symbols-r64-20261124.md", result = "Self-checked offline r64 candidate stack symbolization against local r56 donor cache; runtime cache UUID and stack unwinding unverified." },
+  { kind = "source", reference = "docs/pipa-hid-flags-20261124.md", result = "Static pipa HID and keystore flag comparison against enuma r62 prelink and source; self-checked, no build or device." },
+  { kind = "source", reference = "docs/instrumentation-audit-20261124.md", result = "Static r62 instrumentation and disabled-path audit; partial binary coverage, self-checked, no build or device." },
   { kind = "source", reference = "docs/mach-msg2-branch-analysis-20261124.md", result = "Offline donor mach_msg2 disassembly; PC and LR do not distinguish RPC reply from event-loop receive, self-checked." },
   { kind = "source", reference = "docs/bootstrap-mig-ids-20261123.md", result = "Static historical launchd MIG comparison; donor message ID mapping and launchd wait cause remain unknown." },
   { kind = "source", reference = "docs/smp-readiness-20261123.md", result = "Static SMP readiness assessment; runtime topology, IPI, exact r54 ADT and secondary reset patch remain unverified." },
@@ -825,3 +835,18 @@ evidence = [
   { kind = "source", reference = "docs/unit-scale-investigation-20261123.md", result = "Document inventory: offline-legacy-unit-scale 源码调查" },
   { kind = "source", reference = "docs/window-vs-framebuffer-20261122.md", result = "Document inventory: DarwinBoot 窗口与 framebuffer（2026-11-22）" },
 ]
+
+[[area]]
+id = "r69-build-diagnostics"
+status = "planned"
+components = []
+paths = ["docs/build-full-pipeline-20261125-hooks-r64.txt", "docs/build-full-pipeline-20261125.md", "docs/enuma-r69-diagnostics-20261125.md"]
+inputs = ["r64 hook injection and r68 baseline; r69 offline package."]
+configuration = ["Diagnostic hooks and unchanged r68 payload configuration."]
+procedure = ["Record the build pipeline and compare r69 package against r68."]
+findings = ["r69 package and payload kernel hash self-checked; build history is recorded in the referenced documents."]
+completion = ["Independent verification and runtime evaluation remain pending."]
+limits = ["No device operation or runtime validation in this record."]
+next_action = ["Review the diagnostic candidate and independently verify the final build."]
+evidence = [{ kind = "host", reference = "docs/enuma-r69-diagnostics-20261125.md", command = "bash .cache/r69-package.sh", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked offline packaging; no independent verification or device test." },
+ { kind = "device", reference = "docs/ufs-sm8250-r69b-flash-20261125.md", command = "fastboot -s <enuma-serial> flash boot_b out/ufs-sm8250-full-20261125-r69b/boot.img", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Reported exit 0; no reboot, runtime validation or device readback. See observation for missing original review and output details." }]

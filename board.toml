@@ -42,6 +42,7 @@ archives = [
   "build-enuma-ufs-observe.py",
   # Explicit local donor/reference/manifest hashes; absent inputs fail closed.
   "build-enuma-platform-power.py --inputs build/sheng-platform-power/inputs.json",
+  "/mnt/d/Code/PortingiOS/enuma/UniXNU-enuma/scripts/replace-sheng-ufs-r64.sh",
 ]
 
 [device_tree]

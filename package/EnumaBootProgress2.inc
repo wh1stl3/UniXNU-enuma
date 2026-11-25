@@ -13,6 +13,16 @@ enuma_bp_print(unsigned int idx)
 	absolutetime_to_nanoseconds(mach_absolute_time(), &ns);
 	printf("enuma bp r49 i=%u t=%lu\n", idx,
 	    (unsigned long)(ns / NSEC_PER_SEC));
+	if (idx >= 1 && idx <= 2) {
+		printf("enuma-ipc2: t=%lu l(1)=%llu/%llu bb(34)=%llu/%llu sb(5)=%llu/%llu\n",
+		    (unsigned long)(ns / NSEC_PER_SEC),
+		    (unsigned long long)__atomic_load_n(&enuma_ipc_s[0], __ATOMIC_RELAXED),
+		    (unsigned long long)__atomic_load_n(&enuma_ipc_r[0], __ATOMIC_RELAXED),
+		    (unsigned long long)__atomic_load_n(&enuma_ipc_s[2], __ATOMIC_RELAXED),
+		    (unsigned long long)__atomic_load_n(&enuma_ipc_r[2], __ATOMIC_RELAXED),
+		    (unsigned long long)__atomic_load_n(&enuma_ipc_s[1], __ATOMIC_RELAXED),
+		    (unsigned long long)__atomic_load_n(&enuma_ipc_r[1], __ATOMIC_RELAXED));
+	}
 	enuma_matchcnt_dump();
 	enuma_fixup_report();
 	enuma_ps_dump();
