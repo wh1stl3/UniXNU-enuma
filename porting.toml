@@ -378,7 +378,8 @@ findings = ["2026-11-21 archive: retain existing diagnostic sources and supporti
 completion = ["SIM identity, network registration and a data session are observed on the device."]
 limits = ["Planned; outside the first boot milestone."]
 next_action = ["Extract modem firmware and EFS inputs, then record QRTR/QMI channels from the vendor DTS."]
-evidence = [{ kind = "source", reference = "package/EnumaUserStack64.c", result = "Matched by package/** only; this host-built stack diagnostic is not cellular evidence and does not change modem status." },
+evidence = [{ kind = "source", reference = "package/EnumaHidStandin.cpp", result = "HID digitizer publication observation matches package/** only; it is recorded under enuma-bootprogress-hid-event and is not cellular evidence or a modem status change." },
+  { kind = "source", reference = "package/EnumaUserStack64.c", result = "Matched by package/** only; this host-built stack diagnostic is not cellular evidence and does not change modem status." },
   { kind = "source", reference = "package/EnumaMatchCount2.inc", result = "The r43 IOKit counter helper matches package/**; it is not cellular evidence and does not change modem status." },
   { kind = "source", reference = "docs/enuma-r11-keystore-host-20261121.md", result = "EnumaKeyStoreProbe.cpp matches this area's broad package/** path; not a cellular input or a change in modem status." },
   { kind = "source", reference = "docs/enuma-r25-census-host-20261122.md", result = "Census sources also match package/**; they have no cellular or modem behavior." },
