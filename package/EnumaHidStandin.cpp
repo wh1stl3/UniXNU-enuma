@@ -24,6 +24,16 @@ void native_hid_input_observed(unsigned, int) {}
 bool native_hid_input_requested(void) { return false; }
 }
 
+// One independent observation, not a readiness or input-delivery signal.
+static unsigned enuma_hid_digitizer_seen;
+static_assert(sizeof(unsigned) == 4 && alignof(unsigned) == 4 &&
+    __atomic_always_lock_free(sizeof(unsigned), &enuma_hid_digitizer_seen));
+
+extern "C" unsigned enuma_hid_digitizer_sample(void)
+{
+    return __atomic_load_n(&enuma_hid_digitizer_seen, __ATOMIC_RELAXED);
+}
+
 static IORegistryEntry *findEventDriver(IORegistryEntry *parent, unsigned depth)
 {
     if (!depth) return nullptr;
@@ -65,6 +75,8 @@ extern "C" void native_hid_live_checkpoint(IOService *device)
     published = true; // Do not repeatedly notify attached user clients.
     const bool ok = interface && publishDigitizerProperties(interface) &&
                     publishDigitizerProperties(driver);
+    if (ok)
+        __atomic_store_n(&enuma_hid_digitizer_seen, 1, __ATOMIC_RELAXED);
     printf("enuma HID stand-in: digitizer properties=%d\n", ok);
     driver->release();
 }

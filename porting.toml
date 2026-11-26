@@ -926,3 +926,17 @@ completion = ["Source-only provenance self-checked; no new build, device run or 
 limits = ["Local generated and donor inputs are not part of the archive."]
 next_action = ["Use the provenance record before reusing any historical candidate."]
 evidence = [{ kind = "source", reference = "docs/bootprogress-source-provenance-20261126.md", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Self-checked source and generated-material comparison; pinned BSD notices retained." }]
+
+[[area]]
+id = "enuma-bootprogress-hid-event"
+status = "planned"
+components = []
+paths = ["package/EnumaHidStandin.cpp", "candidates/bootprogress-hid-event-20261126/**"]
+inputs = ["Actual r9 boot/link/compile records and the r64 HID archive/compiler record pinned in the recipe."]
+configuration = ["Isolated local candidate; r9 boot args and one-shot process sampling unchanged."]
+procedure = ["Replay the r9 build with the new HID publisher and console sampler, then inspect the kernel extracted from boot.img."]
+findings = ["The existing all-eight-properties success path sets the boot-local observation once. The touch row samples it before a pixel lease, independently of report count and without asserting readiness or touch delivery."]
+completion = ["Host fixtures, cross-build and extracted-kernel edges self-checked; no device or stage acceptance."]
+limits = ["No deployment or independent verifier run."]
+next_action = ["Review the source changes and independently replay the host recipe into a fresh directory."]
+evidence = [{ kind = "host", reference = "candidates/bootprogress-hid-event-20261126/README.md", command = "/home/wh1stl3/.local/bin/python3.11 candidates/bootprogress-hid-event-20261126/build.py out/bootprogress-hid-event-20261126-r2", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Self-checked 10 sanitizer cases, exact archive replay and extracted-kernel read/write and r9 run-state edges; 169951232-byte boot.img SHA-256 e278d568b7c59fb9dafffbfe3617159d6f062421ebbad5e4447703c9732f13eb." }]
