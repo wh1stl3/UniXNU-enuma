@@ -1,4 +1,93 @@
-# enuma BootProgress: Legacy service open
+# enuma BootProgress: Legacy display discovery and open
+
+## Display-chain extension of Legacy open r4
+
+This is a separate local diagnostic based on the r4 bytes pinned below. It
+preserves the r4 open/dispatch capture and GUI STOP. Three more page rows show
+the current attributed BB exec generation and:
+
+1. **DT inline paths:** nonnull or empty server returns for the literal
+   `IODeviceTree:/arm-io` and `IODeviceTree:/arm-io/enuma-gop-display`.
+   The latter is the enuma nub name, set before attaching to `/arm-io` in
+   the frozen display source `package/EnumaLegacyDisplay.cpp:95–105`.
+   Both `is_io_registry_entry_from_path` and the inline branch of
+   `is_io_registry_entry_from_path_ool` are covered. The former can return a
+   compatibility match; the nonnull bit alone does not prove object identity.
+   This is **direct query coverage** only, not DT child-iterator coverage,
+   a `Ref_FB` observation, a private property lookup, or client receipt.
+   Other path spellings, mapped OOL path bytes and generic DT iterator results
+   are explicitly uncovered. On the pinned XNU, `getName(plane)` takes a
+   registry lock and returns a registry-owned name after unlocking, so this
+   candidate does not add name reads to generic iterator returns.
+2. **First-match vs. returned service:** the actual server result from
+   `internal_io_service_add_notification` for the first-match symbol and exact
+   `IOProviderClass=IOMobileFramebuffer` in its already parsed dictionary.
+   This covers the binary inline and mapped wrappers after their original
+   checks/parser; it does not read serialized matching or wake references.
+   Separately, the successful `is_io_iterator_next` out-object is observed
+   only when its exact class is `NativeLegacyDisplay`. Empty and other-object
+   iterator results cannot identify a target registration, and are not counted.
+   There is no safe iterator key in this scope: registration/return pairing
+   and user-space receipt remain unknown.
+3. **Early open vs. sample loss:** only the existing MAC and unsupported
+   properties early returns after a valid service and owning task are covered.
+   Bad service/task inputs are not classified as board-service rejections.
+   The optional `same`/`different` comparison is between the two live
+   objects' registry IDs previously sampled in this BB generation. Zero is
+   unknown. The IDs are not displayed; equality is kernel object identity,
+   not an iterator registration, a userspace request pair or a connection.
+   Lock-loss bits are sticky across the boot, not attributed to BB and
+   never stored as a rejection or stage event. In the recorder, wrong task,
+   unmatched identity, matched exit and saturated generation reject attribution.
+
+Each cell retains first positive evidence where available; before it, it may
+show the first failed/empty observation. Generation is checked under the
+existing trylock at each sample point; the r4 one-shot open may still show a
+separately labeled older generation. The new rows displace only the three
+stage-history rows to a later part of the same page; current stage, original
+display, HID, run-state and log rows remain.
+
+From the active enuma root in WSL, rerun:
+
+```sh
+/home/wh1stl3/.local/bin/python3.11 \
+  out/bootprogress-display-chain-20261126-src/candidates/bootprogress-legacy-open-20261126/build.py \
+  --device . out/bootprogress-display-chain-20261126-verify
+```
+
+The recipe
+asserts that its r4 generator inputs reproduce the pinned r4 IOKit and sample
+sources, then generates the bounded overlay and checks the final extracted
+edges. `source.diff` is for generated units; the code and page include changes
+are in the local commit.
+
+Host result (`self-checked`), `out/bootprogress-display-chain-20261126-r2/`:
+
+- `boot.img`: 169,951,232 B; SHA-256
+  `6533f27e784037cd479d905dff5d732ad01e0398770b90a7ecf59006fe3533af`;
+  `boot_b` budget 201,326,592 B, remaining 31,375,360 B.
+- Extracted `embedded-kernel.macho`: SHA-256
+  `bc6d2d39d5bd119c5cc89623260a8f774c64251d1ab4fdb05daca0f9b5bc9d0f`.
+  Source/commands hashes and package details are available in the output;
+  `source.diff` SHA-256 is
+  `8922a51445b9ed883a56faefd44040260fb98bfe3c4120c21b9ae6ad68873b5a`.
+  `r4-to-chain-generated.diff` isolates the two generated files that differ
+  from r4 (`IOUserClient.cpp` and `sample.inc`); the other eight generated
+  files, embedded config and payload member list matched r4 byte-for-byte.
+- ASan/UBSan host recorder/page fixture: empty and successful DT, failed
+  and successful registration, other identities/IDs, original rejection,
+  unattributed contention, replacement generation, overflow, and inherited
+  r4 one-shot/client/dispatch cases. This exercises the recorder and page,
+  not running IOKit or device scheduling.
+- Extracted-kernel logs cover both DT RPCs (OOL excludes the mapped path),
+  the notifier's success/unsupported branches, the iterator's actual returned
+  object, and both original early-open branches feeding the shared recorder
+  edge. Inherited r4 dispatch/filter, display ABI/GUI STOP, HID/run-state,
+  three-object link map, zero undefined and extracted boot/payload checks passed.
+  Boot config and pinned r4 artifacts plus the ten active untracked inputs
+  were rechecked. No device run or independent verifier.
+
+## Legacy open r4 baseline
 
 Local candidate only, based on HID r2 at `cf29ecd04e9d05cb894a3d4903ec6fc7908e5112`.
 The host recipe reuses the actual r6 compiler record and r2 link/prelink/package

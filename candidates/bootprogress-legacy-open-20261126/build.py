@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-"""Build the isolated enuma Legacy open/dispatch observation from actual HID r2 inputs."""
+"""Extend the pinned enuma Legacy open r4 observation in an isolated host build."""
 import argparse
 import difflib
 import importlib.util
@@ -82,6 +82,52 @@ def iokit(text):
         part = one(part, anchor, anchor.replace("\t\tret", f"\t\tenuma_legacy_method(client, selector, ENUMA_METHOD_{kind});\n\t\tret"))
         text = text[:pos] + part + text[end:]
     return text
+
+
+def chain_iokit(text):
+    text = one(text, '#include "iokit.inc"\n\n', '')
+    text = one(text, "kern_return_t\nis_io_iterator_next(",
+               '#include "iokit.inc"\n\nkern_return_t\nis_io_iterator_next(')
+
+    def routine(start, end, old, new):
+        nonlocal text
+        a = text.index(start)
+        b = text.index(end, a)
+        text = text[:a] + one(text[a:b], old, new) + text[b:]
+
+    routine("is_io_iterator_next(", "/* Routine io_iterator_reset */",
+            "\t\t*object = obj;\n\t\tret = kIOReturnSuccess;",
+            """\
+		*object = obj;
+		ret = kIOReturnSuccess;
+		IOService *returned = OSDynamicCast(IOService, obj);
+		if (enuma_chain_service(returned))
+			enuma_chain_note(ENUMA_ITER_SERVICE, 0, true,
+			    returned->getRegistryEntryID());""")
+    routine("internal_io_service_add_notification(", "/* Routine io_service_add_notification */",
+            "\t} while (false);", "\t\tenuma_chain_first_match(sym, dict, err);\n\t} while (false);")
+    routine("is_io_registry_entry_from_path(", "is_io_registry_entry_from_path_ool(",
+            "\t*registry_entry = entry;",
+            "\t*registry_entry = entry;\n\tenuma_chain_dt(path, entry);")
+    routine("is_io_registry_entry_from_path_ool(", "/* Routine io_registry_entry_in_plane */",
+            "\t*result = res;", "\t*result = res;\n\tif (path[0])\n\t\tenuma_chain_dt(path, entry);")
+    routine("is_io_service_open_extended(", "/* Routine io_service_close */",
+            "\t\treturn kIOReturnNotPermitted;", """\
+		if (enuma_chain_service(service))
+			enuma_chain_note(ENUMA_OPEN_REJECT, ENUMA_REJECT_MAC, false,
+			    service->getRegistryEntryID());
+		return kIOReturnNotPermitted;""")
+    routine("is_io_service_open_extended(", "/* Routine io_service_close */",
+            "\t\t\treturn kIOReturnUnsupported;", """\
+			if (enuma_chain_service(service))
+				enuma_chain_note(ENUMA_OPEN_REJECT, ENUMA_REJECT_PROPERTIES, false,
+				    service->getRegistryEntryID());
+			return kIOReturnUnsupported;""")
+    return one(text,
+               'strcmp(service->getMetaClass()->getClassName(), "NativeLegacyDisplay") == 0 &&\n'
+               '\t\t    enuma_legacy_open_claim(connect_type);',
+               'enuma_chain_service(service) &&\n'
+               '\t\t    enuma_legacy_open_claim(connect_type, service->getRegistryEntryID());')
 
 
 def sample(text):
@@ -183,11 +229,43 @@ def verify(out, call):
         code = dis(symbol)
         need("<_lck_spin_try_lock>" in code and "<_lck_spin_lock>" not in code and
              re.search(r"\b(?:cas|ldxr)\w*\s", code), f"{name}: trylock/CAS drift")
+    need(1 <= open_code.count("<_enuma_chain_note>") <= 2, "missing original open-rejection observations")
+    iterator = dis("_is_io_iterator_next")
+    need(iterator.count("<_enuma_chain_note>") == 1 and "getRegistryEntryID" in iterator,
+         "iterator returned-object edge missing")
+
+    def helper(fragment):
+        matches = [line.split()[-1] for line in names.splitlines()
+                   if line.split() and fragment in line.split()[-1]]
+        need(len(matches) == 1, f"expected one linked helper: {fragment}")
+        return matches[0]
+
+    dt = helper("enuma_chain_dt")
+    for suffix in ("", "_ool"):
+        code = dis("_is_io_registry_entry_from_path" + suffix)
+        need(code.count(f"<{dt}>") == 1 and "fromPath" in code, f"DT inline edge {suffix}")
+    need(1 <= dis(dt).count("<_enuma_chain_note>") <= 2, "DT parent/child outcome edges missing")
+    first_match = helper("enuma_chain_first_match")
+    notify = dis(helper("internal_io_service_add_notificationP"))
+    # Clang duplicates the observer at the two original result blocks.
+    branch = re.search(r"<[^>]*addMatchingNotification[^>]*>\n[^\n]*\bcbz\s+x0, 0x([a-f0-9]+)", notify)
+    need(branch is not None and notify.count(f"<{first_match}>") == 2,
+         "notification registration result split missing")
+    fail_at = notify.index("\n" + branch[1] + ":")
+    success, fail = notify[branch.end():fail_at], notify[fail_at:]
+    need(re.search(r"\bmov\s+w2, #0\n[^\n]*<" + re.escape(first_match) + r">", success) and
+         re.search(r"\bmov\s+w2, #711\n[^\n]*\bmovk\s+w2, #57344, lsl #16\n[^\n]*<" +
+                   re.escape(first_match) + r">", fail),
+         "notification success/unsupported result edges missing")
+    need("<_enuma_chain_note>" in dis(first_match), "notification recorder edge missing")
+    note = dis("_enuma_chain_note")
+    need("<_lck_spin_try_lock>" in note and "<_lck_spin_lock>" not in note, "chain recorder blocks")
 
 
 def build(device, out):
     need(out.parent == device / "out" and not out.exists(), "fresh direct device out required")
     r2 = device / "out/bootprogress-hid-event-20261126-r2"
+    legacy = device / "out/bootprogress-legacy-open-20261126-r4"
     r6out = device / "out/bootprogress-full-link-20261125-r6"
     r9 = device / "out/bootprogress-run-state-20261126-r9"
     r4 = device / "out/bootprogress-display-events-20261126-r4"
@@ -210,6 +288,11 @@ def build(device, out):
         fd=uefi / "Build/enumaPkg/DEBUG_CLANGPDB/FV/SILICIUM_UEFI.fd")
     pins = {
         **run.PINS, **hid.PINS,
+        legacy / "boot.img":"cd76efaa275bd07f834938d79d833e1d3d8e74eb84eaae1361134c6267a3dbf5",
+        legacy / "IOUserClient.cpp":"3fe13a24f8fcf8decb5015148fa111bb718d8ede5f0c21f5bec5e4d03a799c05",
+        legacy / "sample.inc":"55e04af45abc385bbfa4e6f65eb43a607a79e2923795e65b895a89d80cefb340",
+        legacy / "embedded-kernel.macho":"1a24a9da79e4936ceb9ee0c5db03fb0867e22aabc15394223598012581c3179f",
+        legacy / "payload.img":"bac5342b0bfe84d407b1758bf3383d133c82e19bbb2d66a0aa70ce258fa1e8b0",
         **{r2 / f: h for f,h in {
             "boot.img":"e278d568b7c59fb9dafffbfe3617159d6f062421ebbad5e4447703c9732f13eb",
             "commands.json":"3de369068d91287d49610a89c668d07fbd1f6e40fc4d77b3b32dba4c294a8b0c",
@@ -280,10 +363,14 @@ def build(device, out):
     for origin in (r9 / "kern_exec.c", r9 / "EnumaBbScan.inc", r9 / "EnumaBootProgress2.inc",
                    r2 / "video_console.c", r2 / "renderer.inc"):
         shutil.copyfile(origin, out / origin.name)
-    generate(r6out / "IOUserClient.cpp", iokit)
+    need(iokit((r6out / "IOUserClient.cpp").read_text()) == (legacy / "IOUserClient.cpp").read_text(),
+         "r4 IOKit generated source is not reproduced")
+    generate(legacy / "IOUserClient.cpp", chain_iokit)
     generate(r9 / "EnumaProcExecReport.inc",
              lambda s: one(s, '#include "proc-recorder.inc"', '#include "proc-recorder.inc"\n#include "record.inc"'))
-    generate(r2 / "sample.inc", sample)
+    need(sample((r2 / "sample.inc").read_text()) == (legacy / "sample.inc").read_text(),
+         "r4 sample generated source is not reproduced")
+    generate(legacy / "sample.inc", lambda s: one(s, "i = 0, r = 6", "i = 0, r = 18"))
     generate(r4 / "display-page.inc", display_page)
     generate(r4 / "page.h", page_layout)
     (out / "source.diff").write_text("".join(diffs))
@@ -335,15 +422,21 @@ def build(device, out):
         need(a[k] == b[k], f"display ABI drift: {k}")
     r6.pack(opts, out / "prelink.macho", call)
     need((out / "embedded.toml").read_bytes() == (r2 / "embedded.toml").read_bytes(), "r2 boot config drift")
+    need((out / "embedded.toml").read_bytes() == (legacy / "embedded.toml").read_bytes(),
+         "r4 boot config drift")
     run.display.verify_final(out, call)
     run.verify_run_state(out, call)
     hid.verify_hid(out, call)
     verify(out, call)
     validate()
     need(before == protected(), "active untracked inputs changed")
-    (out / "legacy-open-verified.json").write_text(json.dumps({
+    size = (out / "boot.img").stat().st_size
+    need(size == (legacy / "boot.img").stat().st_size and size < 201326592, "boot_b budget drift")
+    (out / "display-chain-verified.json").write_text(json.dumps({
         "status": "self-checked", "sha256": r6.digest(out / "boot.img"), "device_tested": False,
-        "untracked_before_after": before, "bytes": (out / "boot.img").stat().st_size,
+        "untracked_before_after": before, "bytes": size,
+        "boot_b_budget": 201326592, "boot_b_remaining": 201326592 - size,
+        "embedded_kernel_sha256": r6.digest(out / "embedded-kernel.macho"),
     }, indent=2) + "\n")
 
 

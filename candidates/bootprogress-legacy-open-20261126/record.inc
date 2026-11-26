@@ -5,6 +5,15 @@
 static struct enuma_open_snapshot enuma_open_slot;
 static unsigned enuma_open_claimed, enuma_method_claimed;
 static uint64_t enuma_open_registry;
+static struct enuma_chain_snapshot enuma_chain;
+/* A failed trylock cannot establish BB ownership. These are coverage bits only. */
+static unsigned enuma_chain_unsampled;
+
+static void
+enuma_chain_busy(unsigned edge)
+{
+	__atomic_fetch_or(&enuma_chain_unsampled, 1u << edge, __ATOMIC_RELAXED);
+}
 
 static bool
 enuma_open_current(struct enuma_bp_identity *who)
@@ -27,18 +36,52 @@ enuma_open_generation(struct enuma_bp_identity who)
 	    enuma_bp_same_identity(who, exec->latest) ? exec->count : 0;
 }
 
+/* Caller holds the existing proc lock and has checked the BB generation. */
+static void
+enuma_chain_save(uint32_t generation, unsigned edge, uint32_t value, bool positive, uint64_t key)
+{
+	if (generation != enuma_chain.generation) {
+		enuma_chain = (struct enuma_chain_snapshot){0};
+		enuma_chain.generation = generation;
+	}
+	struct enuma_chain_point *p = &enuma_chain.point[edge];
+	if (!p->seen || (!p->positive && positive))
+		*p = (struct enuma_chain_point){true, positive, value, key};
+}
+
+__attribute__((noinline)) void
+enuma_chain_note(unsigned edge, uint32_t value, bool positive, uint64_t key)
+{
+	struct enuma_bp_identity who;
+	if (!enuma_open_current(&who))
+		return;
+	if (!lck_spin_try_lock(&enuma_bp_proc_lock)) {
+		enuma_chain_busy(edge);
+		return;
+	}
+	const uint32_t generation = enuma_open_generation(who);
+	if (generation)
+		enuma_chain_save(generation, edge, value, positive, key);
+	lck_spin_unlock(&enuma_bp_proc_lock);
+}
+
 __attribute__((noinline)) bool
-enuma_legacy_open_claim(uint32_t type)
+enuma_legacy_open_claim(uint32_t type, uint64_t service_key)
 {
 	struct enuma_bp_identity who;
 	if (__atomic_load_n(&enuma_open_claimed, __ATOMIC_RELAXED) ||
-	    !enuma_open_current(&who) || !lck_spin_try_lock(&enuma_bp_proc_lock))
+	    !enuma_open_current(&who))
 		return false;
+	if (!lck_spin_try_lock(&enuma_bp_proc_lock)) {
+		enuma_chain_busy(ENUMA_OPEN_SERVICE);
+		return false;
+	}
 	const uint32_t generation = enuma_open_generation(who);
 	unsigned empty = 0;
 	const bool claimed = generation && __atomic_compare_exchange_n(&enuma_open_claimed,
 	    &empty, 1, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
 	if (claimed) {
+		enuma_chain_save(generation, ENUMA_OPEN_SERVICE, type, true, service_key);
 		enuma_open_slot.attempt.uid = who.uniqueid;
 		enuma_open_slot.attempt.pid = who.pid;
 		enuma_open_slot.attempt.version = who.idversion;
@@ -106,6 +149,15 @@ enuma_legacy_method_note(uint32_t selector, unsigned kind)
 __attribute__((noinline)) void
 enuma_legacy_open_read(struct enuma_open_snapshot *out)
 {
+	if (lck_spin_try_lock(&enuma_bp_proc_lock)) {
+		const unsigned i = ENUMA_BP_BACKBOARDD - 1;
+		const uint32_t generation = enuma_bp_events.slot[i].exec.count;
+		if (generation != UINT32_MAX && generation == enuma_chain.generation)
+			out->chain = enuma_chain;
+		out->chain.available = true;
+		lck_spin_unlock(&enuma_bp_proc_lock);
+	}
+	out->chain.unsampled = __atomic_load_n(&enuma_chain_unsampled, __ATOMIC_RELAXED);
 	out->phase = __atomic_load_n(&enuma_open_slot.phase, __ATOMIC_ACQUIRE);
 	if (out->phase >= ENUMA_OPEN_ATTEMPT)
 		out->attempt = enuma_open_slot.attempt;

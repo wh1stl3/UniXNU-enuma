@@ -30,6 +30,9 @@ static void lck_spin_unlock(pthread_mutex_t *lock) { assert(!pthread_mutex_unloc
 #include "page.inc"
 #include "display-page.inc"
 
+static bool claim_type(uint32_t type) { return enuma_legacy_open_claim(type, 42); }
+#define enuma_legacy_open_claim(type) claim_type(type)
+
 static const struct enuma_bp_identity bb = {UINT64_MAX, INT_MIN, INT_MIN};
 static const struct enuma_bp_identity other = {43, INT_MIN, INT_MIN};
 static void set_current(struct enuma_bp_identity who)
@@ -43,6 +46,8 @@ static void reset(void)
 	memset(&enuma_bp_events, 0, sizeof(enuma_bp_events));
 	memset(enuma_bp_matching_exit, 0, sizeof(enuma_bp_matching_exit));
 	memset(&enuma_open_slot, 0, sizeof(enuma_open_slot));
+	memset(&enuma_chain, 0, sizeof(enuma_chain));
+	enuma_chain_unsampled = 0;
 	enuma_open_claimed = enuma_method_claimed = 0;
 	enuma_open_registry = 0;
 	set_current(bb);
@@ -68,6 +73,8 @@ static void check_page(const struct enuma_open_snapshot *s, const struct enuma_b
 	panel_display_events(&page, &display);
 	assert(strstr(page.main[4].text, open) && strstr(page.main[11].text, final));
 	assert(strstr(page.main[12].text, method));
+	assert(strstr(page.main[6].text, "DT inline") && strstr(page.main[7].text, "pairing unknown") &&
+	    strstr(page.main[8].text, "lock loss (unowned)"));
 	assert(!strcmp(page.main[5].text, "stage sentry") && !strcmp(page.main[13].text, "run-state sentry"));
 	assert(strstr(page.main[9].text, "registered=0") && strstr(page.main[10].text, "VALIDATE") &&
 	    strstr(page.main[15].text, "PREPARE"));
@@ -96,8 +103,58 @@ static void *method(void *arg)
 	return NULL;
 }
 
+static void check_chain(void)
+{
+	reset();
+	enuma_chain_note(ENUMA_DT_PARENT, 0, true, 0);
+	assert(!read_slot().chain.generation);
+	enuma_bp_record_exec(ENUMA_BP_BACKBOARDD, bb, 1);
+	set_current(other);
+	enuma_chain_note(ENUMA_DT_PARENT, 0, true, 0);
+	assert(!read_slot().chain.point[ENUMA_DT_PARENT].seen);
+	set_current(bb);
+	enuma_chain_note(ENUMA_DT_PARENT, 0, false, 0);
+	assert(read_slot().chain.point[ENUMA_DT_PARENT].seen && !read_slot().chain.point[ENUMA_DT_PARENT].positive);
+	enuma_chain_note(ENUMA_DT_PARENT, 0, true, 0);
+	enuma_chain_note(ENUMA_DT_PARENT, 0, false, 0);
+	enuma_chain_note(ENUMA_DT_CHILD, 0, true, 0);
+	enuma_chain_note(ENUMA_FIRST_MATCH, UINT32_MAX, false, 0);
+	assert(read_slot().chain.point[ENUMA_FIRST_MATCH].value == UINT32_MAX);
+	enuma_chain_note(ENUMA_FIRST_MATCH, 0, true, 0);
+	enuma_chain_note(ENUMA_ITER_SERVICE, 0, true, 42);
+	enuma_chain_note(ENUMA_ITER_SERVICE, 0, true, 99);
+	lck_spin_lock(&enuma_bp_proc_lock);
+	enuma_chain_note(ENUMA_OPEN_REJECT, ENUMA_REJECT_MAC, false, 42);
+	assert(!enuma_legacy_open_claim(0));
+	struct enuma_open_snapshot s = read_slot();
+	assert(!s.chain.available && (s.chain.unsampled & (1u << ENUMA_OPEN_SERVICE)));
+	lck_spin_unlock(&enuma_bp_proc_lock);
+	assert(!read_slot().chain.point[ENUMA_OPEN_REJECT].seen);
+	enuma_chain_note(ENUMA_OPEN_REJECT, ENUMA_REJECT_PROPERTIES, false, 43);
+	assert(enuma_legacy_open_claim(0));
+	s = read_slot();
+	const struct enuma_chain_point *p = s.chain.point;
+	assert(s.chain.generation == 1 && p[ENUMA_DT_PARENT].positive && p[ENUMA_DT_CHILD].positive);
+	assert(p[ENUMA_FIRST_MATCH].positive && p[ENUMA_ITER_SERVICE].key == 42);
+	assert(p[ENUMA_OPEN_REJECT].value == ENUMA_REJECT_PROPERTIES && p[ENUMA_OPEN_REJECT].key == 43);
+	struct panel_page page = {0};
+	panel_legacy_chain(&page, &s.chain);
+	assert(strstr(page.main[6].text, "/arm-io=returned enuma-gop-display=returned"));
+	assert(strstr(page.main[7].text, "first-match=registered") && strstr(page.main[7].text, "pairing unknown"));
+	assert(strstr(page.main[8].text, "properties | iter object early/call=different/same") &&
+	    strstr(page.main[8].text, "=seen"));
+	enuma_bp_record_exec(ENUMA_BP_BACKBOARDD, bb, 2);
+	assert(!read_slot().chain.generation && read_slot().attempt.generation == 1);
+	enuma_chain_note(ENUMA_DT_CHILD, 0, false, 0);
+	assert(read_slot().chain.generation == 2 && !read_slot().chain.point[ENUMA_DT_PARENT].seen);
+	enuma_bp_events.slot[ENUMA_BP_BACKBOARDD - 1].exec.count = UINT32_MAX;
+	enuma_chain_note(ENUMA_DT_CHILD, 0, true, 0);
+	assert(!read_slot().chain.generation);
+}
+
 int main(void)
 {
+	check_chain();
 	const unsigned slot = ENUMA_BP_BACKBOARDD - 1;
 	reset();
 	struct enuma_open_snapshot s = read_slot();

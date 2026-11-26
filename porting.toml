@@ -955,3 +955,17 @@ completion = ["Host fixture, link, final ABI and package extraction self-checked
 limits = ["Server result is not reply receipt. Registry object identity is not connection identity or method completion. No post-takeover reader."]
 next_action = ["Review the final generated diff and independently rerun host gates before any separately authorized device work."]
 evidence = [{ kind = "host", reference = "candidates/bootprogress-legacy-open-20261126/README.md", command = "/home/wh1stl3/.local/bin/python3.11 out/bootprogress-legacy-open-20261126-src/candidates/bootprogress-legacy-open-20261126/build.py --device . out/bootprogress-legacy-open-20261126-r4", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Astra deep design PASS WITH CONDITIONS (ses_de808f308ffeXxjMivBd9246Sb); final host build and extracted-kernel gates self-checked. r4 boot.img SHA-256 cd76efaa275bd07f834938d79d833e1d3d8e74eb84eaae1361134c6267a3dbf5." }]
+
+[[area]]
+id = "enuma-bootprogress-display-chain"
+status = "planned"
+components = []
+paths = ["candidates/bootprogress-legacy-open-20261126/**"]
+inputs = ["Pinned Legacy open r4 boot, extracted kernel and generated sources; pinned XNU d8b80295118ef25ac3a784134bcf95cd8e88109f."]
+configuration = ["Isolated host diagnostic overlay; the three existing object replacements and GUI STOP are retained."]
+procedure = ["Use the candidate README and replay the final build into a fresh device out directory."]
+findings = ["For one attributed BB generation, record direct typed inline DT returns, parsed first-match registration, successful exact board-service iteration, and original early open rejection separately. A trylock loss is unattributed coverage only."]
+completion = ["Final extracted-image edge and host recorder/page tests self-checked; no device or stage acceptance."]
+limits = ["Direct literal DT path coverage only, not a Ref_FB or DT child-iterator observation. Registration and iterator pairing, client receipt, user-space request pairing and connection identity are unknown."]
+next_action = ["Astra final review of the generated source diff, extracted kernel and host evidence before any separately authorized device work."]
+evidence = [{ kind = "host", reference = "candidates/bootprogress-legacy-open-20261126/README.md", command = "/home/wh1stl3/.local/bin/python3.11 out/bootprogress-display-chain-20261126-src/candidates/bootprogress-legacy-open-20261126/build.py --device . out/bootprogress-display-chain-20261126-r2", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Host fixture, generated sources, extracted edges, package and previous-input preservation self-checked. boot.img 169951232 B SHA-256 6533f27e784037cd479d905dff5d732ad01e0398770b90a7ecf59006fe3533af. No independent verifier or device run." }]

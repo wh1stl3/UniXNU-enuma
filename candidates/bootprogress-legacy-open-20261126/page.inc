@@ -1,11 +1,52 @@
 /* SPDX-License-Identifier: BSD-2-Clause-Patent */
 #include "open.h"
 
+static const char *
+panel_chain_dt(const struct enuma_chain_point *p)
+{
+	return !p->seen ? "unknown" : p->positive ? "returned" : "empty";
+}
+
+static const char *
+panel_chain_object(const struct enuma_chain_point *iter, const struct enuma_chain_point *open)
+{
+	return !iter->key || !open->key ? "?" : iter->key == open->key ? "same" : "different";
+}
+
+static void
+panel_legacy_chain(struct panel_page *page, const struct enuma_chain_snapshot *s)
+{
+	const struct enuma_chain_point *p = s->point;
+	char text[PANEL_COLS], match[24];
+	snprintf(text, sizeof(text), "DT inline gen=%u: /arm-io=%s enuma-gop-display=%s | %s",
+	    s->generation, panel_chain_dt(&p[ENUMA_DT_PARENT]), panel_chain_dt(&p[ENUMA_DT_CHILD]),
+	    s->available ? "direct path only" : "snapshot busy");
+	panel_line(&page->main[6], text, PANEL_CYAN, 0);
+
+	const struct enuma_chain_point *reg = &p[ENUMA_FIRST_MATCH], *iter = &p[ENUMA_ITER_SERVICE];
+	if (reg->seen && !reg->positive)
+		snprintf(match, sizeof(match), "0x%08x", (unsigned)reg->value);
+	else
+		snprintf(match, sizeof(match), "%s", reg->seen ? "registered" : "unknown");
+	snprintf(text, sizeof(text), "IOMobileFramebuffer first-match=%s | board iterator return=%s | pairing unknown",
+	    match, iter->positive ? "observed" : "unknown");
+	panel_line(&page->main[7], text, PANEL_CYAN, 0);
+
+	const struct enuma_chain_point *reject = &p[ENUMA_OPEN_REJECT];
+	const unsigned open_mask = (1u << ENUMA_OPEN_REJECT) | (1u << ENUMA_OPEN_SERVICE);
+	snprintf(text, sizeof(text), "Open early=%s | iter object early/call=%s/%s | open lock loss (unowned)=%s",
+	    !reject->seen ? "unknown" : reject->value == ENUMA_REJECT_MAC ? "MAC" : "properties",
+	    panel_chain_object(iter, reject), panel_chain_object(iter, &p[ENUMA_OPEN_SERVICE]),
+	    (s->unsampled & open_mask) ? "seen" : "none seen");
+	panel_line(&page->main[8], text, PANEL_CYAN, 0);
+}
+
 static void
 panel_legacy_open(struct panel_page *page, const struct enuma_open_snapshot *v,
     const struct enuma_bp_event *exec)
 {
 	char text[PANEL_COLS];
+	panel_legacy_chain(page, &v->chain);
 	if (v->phase >= ENUMA_OPEN_ATTEMPT)
 		snprintf(text, sizeof(text), "BB exec for open: pid=%d uid=%llu ver=%d gen=%u",
 		    v->attempt.pid, (unsigned long long)v->attempt.uid, v->attempt.version, v->attempt.generation);
