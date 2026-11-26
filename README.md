@@ -1,5 +1,11 @@
 # UniXNU-enuma
 
+**run-state r9 单次刷写、重启及单帧观察（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-run-state-r9-flash-20261126.md)；阶段不提升。
+
+**display events r4 单次刷写、另行授权重启及两帧观察（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-display-events-r4-flash-20261126.md)；阶段不提升。
+
+**proc events r5 单次刷写、重启及两帧观察（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-proc-events-r5-flash-20261126.md)；阶段不提升。
+
 **折行 r3 刷写及后续观察（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-wrap-r3-flash-20261126.md)；阶段不提升。
 
 **r5 boot_b 单次刷写与重启（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-r5-flash-20261126.md)；启动画面未观察，阶段不提升。

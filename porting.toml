@@ -18,7 +18,10 @@ findings = ["2026-11-23 offline cleanup inventory and manual dry-run script; no 
 completion = ["All source pins resolve; every selected component has a record; status shows the intended overrides and patch order."]
 limits = ["Board DTS has no verified memory or peripheral wiring; shared kona resources do not establish enuma reservations or AC power policy."]
 next_action = ["Extract enuma vendor DTS and reconcile board memory and wiring before extending dts/enuma.dts."]
-evidence = [{ kind = "device", reference = "docs/bootprogress-wrap-r3-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked single boot_b flash and subsequent reboot reported by parent; one screen frame recorded; no stage promotion; revision is repository HEAD, not image provenance." },
+evidence = [{ kind = "device", reference = "docs/bootprogress-run-state-r9-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE; fastboot -s SERIAL reboot", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked one authorized boot_b flash and one reboot exit 0; startup and device-side readback not observed; no stage promotion; image SHA-256 0a7df79d01478eb96ccf5932a3e13891deb8ca886e855a000527491bb25994e0; revision is repository HEAD, not image provenance." },
+ { kind = "device", reference = "docs/bootprogress-display-events-r4-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE; fastboot -s SERIAL reboot", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked one authorized boot_b flash exit 0 and separately authorized reboot exit 0; two-frame display and process observation recorded, without continuity or caller attribution; no device-side readback or stage promotion; image SHA-256 5849e9c67ebce4440544cee96d5d54a37b6c0f9c2705a6389a513e0807086183; revision is repository HEAD, not image provenance." },
+ { kind = "device", reference = "docs/bootprogress-proc-events-r5-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE; fastboot -s SERIAL reboot", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked one authorized boot_b flash exit 0 and a separately authorized subsequent reboot command exit 0; two screen frames show the r5 page and exec installed for three comm values, without proving persistence; no device-side readback or stage promotion; image SHA-256 50bb81c21b0b56e08aad6a1f8a99e3f57d04e3eeea40914efc19baf5f5680fa2; revision is repository HEAD, not image provenance." },
+ { kind = "device", reference = "docs/bootprogress-wrap-r3-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked single boot_b flash and subsequent reboot reported by parent; one screen frame recorded; no stage promotion; revision is repository HEAD, not image provenance." },
  { kind = "device", reference = "docs/bootprogress-r5-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE; fastboot -s SERIAL reboot", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked one boot_b flash and one reboot command succeeded; startup screen and device-side readback not observed; no stage promotion; revision identifies device repository HEAD, not image provenance." },
  { kind = "source", reference = "docs/nuwa-identified-difference-20261125.md", result = "Self-checked offline comparison: nuwa seed and service differences are unproven hypotheses, not a verified fix; same enuma cause remains unknown. No build or device operation." },
  { kind = "source", reference = "docs/disk-cleanup-executed-20261124.md", result = "Records the earlier cleanup and entry guards in 77681b5. The r64 rebuild did not run cleanup or retention scripts." },
@@ -206,11 +209,11 @@ evidence = [{ kind = "host", reference = "docs/ufs-gate-a-offline-20261121.md", 
 id = "display"
 status = "planned"
 components = []
-paths = ["package/*Display*", "package/*Framebuffer*", "package/*Backlight*", "package/AppleARMBacklight.cpp", "package/GeniI2c*", "scripts/*display*", "scripts/*gop*", "scripts/*framebuffer*"]
+paths = ["package/*Display*", "package/*Framebuffer*", "package/*Backlight*", "package/AppleARMBacklight.cpp", "package/GeniI2c*", "scripts/*display*", "scripts/*gop*", "scripts/*framebuffer*", "candidates/bootprogress-display-events-20261126/*"]
 inputs = ["Identify the display hardware, resources and existing component interfaces for this board."]
 configuration = ["Record the board.toml fields, DTS properties and defconfig values used for display."]
 procedure = ["Follow the display stage in the porting guide and record the actual commands."]
-findings = ["2026-11-07 source-only: the enuma stock defconfig (MiCode elish-r-oss 52a2f180865f8368828985d6384130acd093fa93, line 463) enables CONFIG_BACKLIGHT_KTZ8866 (drivers/video/backlight/ktz8866.c). The branch has no panel names or timings; the stock UEFI image carries 36 Panel_*.xml resources (stock xbl.img DXE volume, see proprietary-files.txt) but which panel the enuma unit uses is not established.", "2026-11-08 device run: with USE_CUSTOM_DISPLAY_DRIVER = 0 (SimpleFbDxe, reusing the ABL-left display) the frame buffer is visible on-screen through the SEC/DXE logs and the UniXNU menu on the 1600x2560 panel; the vendor DisplayDxe hangs at entry and blanks the screen (reverted to SimpleFb). Framebuffer geometry/colour and backlight control remain unverified beyond the menu text being legible.", "Collect the first display observation, its cause when established, and the resulting implementation decision."]
+findings = ["2026-11-26: host-only Legacy service events in r5 rows 31-34 are independently sampled and lack caller attribution. See docs/bootprogress-display-events-20261126.md.", "2026-11-07 source-only: the enuma stock defconfig (MiCode elish-r-oss 52a2f180865f8368828985d6384130acd093fa93, line 463) enables CONFIG_BACKLIGHT_KTZ8866 (drivers/video/backlight/ktz8866.c). The branch has no panel names or timings; the stock UEFI image carries 36 Panel_*.xml resources (stock xbl.img DXE volume, see proprietary-files.txt) but which panel the enuma unit uses is not established.", "2026-11-08 device run: with USE_CUSTOM_DISPLAY_DRIVER = 0 (SimpleFbDxe, reusing the ABL-left display) the frame buffer is visible on-screen through the SEC/DXE logs and the UniXNU menu on the 1600x2560 panel; the vendor DisplayDxe hangs at entry and blanks the screen (reverted to SimpleFb). Framebuffer geometry/colour and backlight control remain unverified beyond the menu text being legible.", "Collect the first display observation, its cause when established, and the resulting implementation decision."]
 completion = ["A known frame appears with correct geometry and colors, then userland presentation and backlight controls work."]
 limits = ["Hardware inputs and implementation are pending for enuma."]
 next_action = ["Inventory the required display inputs before implementation."]
@@ -583,8 +586,10 @@ paths = [
   "docs/backboardd-springboard-plist-20261122.md",
   "docs/bb-entry-disassembly-20261123.md",
   "docs/bootprogress-candidates-20261123.md",
+  "docs/bootprogress-display-events-20261126.md",
   "docs/bootprogress-integration-design-20261123.md",
   "docs/bootprogress-mechanisms-compared-20261123.md",
+  "docs/bootprogress-proc-events-20261126.md",
   "docs/cs-bypass-audit-20261123.md",
   "docs/data-mount-flags-20261123.md",
   "docs/data-seed-20261119-generation.md",
@@ -729,6 +734,8 @@ evidence = [
   { kind = "source", reference = "docs/bootprogress-candidates-20261123.md", result = "Document inventory: 同 donor boot-progress 候选（2026-11-23）" },
   { kind = "source", reference = "docs/bootprogress-integration-design-20261123.md", result = "Document inventory: enuma 全屏 boot-progress 接入设计（2026-11-23）" },
   { kind = "source", reference = "docs/bootprogress-mechanisms-compared-20261123.md", result = "Document inventory: Boot-progress 机制对照（2026-11-23）" },
+  { kind = "host", reference = "docs/bootprogress-proc-events-20261126.md", command = "/home/wh1stl3/.local/bin/python3.11 out/bootprogress-proc-events-20261126-r5-audit/build-r5.py", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked r5 shows explicit saturation and corrects re-exec identity documentation; final event edges and exec/exit objects unchanged from r4. Boot SHA-256 50bb81c21b0b56e08aad6a1f8a99e3f57d04e3eeea40914efc19baf5f5680fa2. No device or independent verifier." },
+  { kind = "host", reference = "docs/bootprogress-display-events-20261126.md", command = "/home/wh1stl3/.local/bin/python3.11 candidates/bootprogress-display-events-20261126/build.py out/bootprogress-display-events-20261126-r4", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked host package: display event, raster, ABI and embedded image gates passed; r5 exec/exit objects unchanged, caller/BB unknown, no device run or stage promotion." },
   { kind = "source", reference = "docs/cs-bypass-audit-20261123.md", result = "Document inventory: r44/r47 code-sign validation bypass audit" },
   { kind = "source", reference = "docs/data-mount-flags-20261123.md", result = "Document inventory: r39 Data mount, seed vm directory and swap prefix" },
   { kind = "source", reference = "docs/data-seed-20261119-generation.md", result = "Document inventory: Data seed generated on a macOS 15 VM — 2026-11-19 (temporary, not a persistent Data volume)" },
@@ -856,3 +863,31 @@ evidence = [{ kind = "host", reference = "docs/enuma-r69-diagnostics-20261125.md
   { kind = "device", reference = "docs/ufs-sm8250-r69c-flash-20261125.md", command = "fastboot -s <enuma-serial> flash boot_b out/ufs-sm8250-full-20261125-r69c/boot.img", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Reported typed Data fix image written to boot_b, exit 0; no reboot or runtime validation at flash time." },
   { kind = "device", reference = "docs/ufs-sm8250-r69c-device-20261125.md", command = "fastboot -s <enuma-serial> reboot", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Reported reboot exit 0; typed Data branch active but UUID provider/volume lookup failed ENOENT 2 before launchd; root cause unresolved, not repeated." },
   { kind = "device", reference = "docs/ufs-sm8250-r66-ipc-device-20261125.md", command = "Reported boot_b flash and reboot; exact commands unavailable", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Vision transcription shows backboardd counters unchanged 36/32 while launchd counters increase; no panic seen, not repeated." }]
+
+[[area]]
+id = "enuma-bootprogress-proc-events"
+status = "planned"
+components = []
+paths = ["candidates/bootprogress-wrap-20261126/proc-events.h", "candidates/bootprogress-wrap-20261126/proc-page.inc", "candidates/bootprogress-wrap-20261126/proc-recorder.inc", "candidates/bootprogress-wrap-20261126/test-proc.c"]
+inputs = ["Local proc-events r5 candidate and pinned XNU sources described in the evidence."]
+configuration = ["Diagnostic candidate only."]
+procedure = ["Review the host recipe and extracted-kernel checks in the evidence."]
+findings = ["Independent process exec and exit events do not establish liveness or userspace entry."]
+completion = ["Host candidate self-checked; no stage acceptance."]
+limits = ["The local recipe depends on separately retained inputs and has not been independently reproduced."]
+next_action = ["Independently review and reproduce the candidate before further device action."]
+evidence = [{ kind = "host", reference = "docs/bootprogress-proc-events-20261126.md", command = "/home/wh1stl3/.local/bin/python3.11 out/bootprogress-proc-events-20261126-r5-audit/build-r5.py", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Host candidate self-checked; details and earlier replay blocker are recorded in the referenced document." }]
+
+[[area]]
+id = "enuma-bootprogress-run-state"
+status = "planned"
+components = []
+paths = ["candidates/bootprogress-run-state-20261126/**"]
+inputs = ["Pinned proc-events r5, display-events r4 and XNU d8b80295118ef25ac3a784134bcf95cd8e88109f."]
+configuration = ["Local candidate only; r4 boot arguments and display path unchanged."]
+procedure = ["Replay the host recipe, including sanitizer fixtures, link map and disassembly from the extracted boot kernel."]
+findings = ["Only the two successful exec initial thread instances can be sampled once. The stable boot-page rows show pending, run_state or a pre/post/target reason. Both legacy snapshot objects and their submission paths are absent from the candidate."]
+completion = ["Host build and package self-checked; no runtime or stage acceptance."]
+limits = ["Scheduling classification only; no user memory, stack, register, wait-address or IPC payload read by the diagnostic. No device operation."]
+next_action = ["Review the exact generated diff and independently rerun the host recipe before considering any device action."]
+evidence = [{ kind = "host", reference = "candidates/bootprogress-run-state-20261126/README.md", command = "python3.11 candidates/bootprogress-run-state-20261126/build.py out/bootprogress-run-state-20261126-r9", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Self-checked 23 host cases including continued refresh and row boundaries, target build and extracted boot sampling/publication/read edges; independent review and device run not performed." }]
