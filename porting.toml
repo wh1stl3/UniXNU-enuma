@@ -898,11 +898,30 @@ evidence = [{ kind = "host", reference = "candidates/bootprogress-run-state-2026
 id = "enuma-bootprogress-source-archive"
 status = "planned"
 components = []
-paths = ["candidates/bootprogress-20261125/**"]
+paths = [
+  "candidates/bootprogress-20261125/**",
+  "candidates/bootprogress-upstream-20261126/README.md",
+  "candidates/bootprogress-upstream-20261126/build.py",
+  "candidates/bootprogress-upstream-20261126/reference.py",
+  "candidates/bootprogress-upstream-20261126/refresh.inc",
+  "candidates/bootprogress-upstream-20261126/test-page.c",
+  "candidates/bootprogress-upstream-2x-20261126/README.md",
+  "candidates/bootprogress-upstream-2x-20261126/build.py",
+  "candidates/bootprogress-upstream-2x-20261126/reference.py",
+  "candidates/bootprogress-upstream-2x-20261126/refresh.inc",
+  "candidates/bootprogress-upstream-2x-20261126/test-page.c",
+  "candidates/bootprogress-upstream-2x-20261126/test-reference.c",
+  "candidates/bootprogress-wrap-20261126/README.md",
+  "candidates/bootprogress-wrap-20261126/build.py",
+  "candidates/bootprogress-wrap-20261126/reference.py",
+  "candidates/bootprogress-wrap-20261126/refresh.inc",
+  "candidates/bootprogress-wrap-20261126/test-page.c",
+  "candidates/bootprogress-wrap-20261126/test-reference.c",
+]
 inputs = ["Fixed UniXNU and XNU source, enuma history and local generation records identified in the evidence."]
 configuration = ["Host-only historical source archive; no default config or series change."]
 procedure = ["Compare fixed Git blobs, source anchors, historical compiler input records and generated outputs without shipping generated inputs."]
-findings = ["The 2026-11-25 r6 replay is derived from r65, not the blocked r69d writer; XNU bodies and glyph data remain external inputs."]
+findings = ["The 2026-11-25 r6 replay is derived from r65, not the blocked r69d writer; XNU bodies and glyph data remain external inputs.", "The 2026-11-26 independent wrappers and fixtures are archived without any page.h or sample.inc; those six files contain sheng-derived expression whose upstream MIT notice is not available in the pinned material."]
 completion = ["Source-only provenance self-checked; no new build, device run or stage acceptance."]
 limits = ["Local generated and donor inputs are not part of the archive."]
 next_action = ["Use the provenance record before reusing any historical candidate."]
