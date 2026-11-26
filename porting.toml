@@ -10,7 +10,7 @@ summary = "Xiaomi Pad 5 Pro 5G (SM8250-AC) iPadOS 17.7.11 bring-up. Format 2 mig
 id = "configuration"
 status = "planned"
 components = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot", "RamBlock"]
-paths = ["scripts/unlink-then-clean-20261124.sh", "scripts/prepare-cleanup-enuma-out.ps1", "scripts/cleanup-enuma-out.sh", "scripts/retain-cleanup-20261124.py", "board.toml", "feeds.toml", "configs/**", "dts/**", "patches/xnu/series", ".github/**", ".gitignore", "local.toml.example", "scripts/__pycache__/**", "scripts/**/__pycache__/**", "scripts/gen-ram-block-audit.py", "scripts/prepare-ram-block-audit.py", "scripts/data/ram-block-interface-audit.json", "scripts/*.py", "scripts/tests/*.py", "docs/SESSION-HANDOFF-20261114.md", "docs/data-seed-macos-vm-procedure.md", "docs/data-seed-vm-run.sh", "docs/ufs-handoff-design.md", "docs/ufs-hci30-compat.md"]
+paths = ["scripts/build-kernel-local.sh", "scripts/unlink-then-clean-20261124.sh", "scripts/prepare-cleanup-enuma-out.ps1", "scripts/cleanup-enuma-out.sh", "scripts/retain-cleanup-20261124.py", "board.toml", "feeds.toml", "configs/**", "dts/**", "patches/xnu/series", ".github/**", ".gitignore", "local.toml.example", "scripts/__pycache__/**", "scripts/**/__pycache__/**", "scripts/gen-ram-block-audit.py", "scripts/prepare-ram-block-audit.py", "scripts/data/ram-block-interface-audit.json", "scripts/*.py", "scripts/tests/*.py", "docs/SESSION-HANDOFF-20261114.md", "docs/data-seed-macos-vm-procedure.md", "docs/data-seed-vm-run.sh", "docs/ufs-handoff-design.md", "docs/ufs-hci30-compat.md"]
 inputs = ["FFT-infra/UniXNU-sm8250-common at 166235ec2480ff0992627b7aafa15c65ce6b4efa.", "Vendor DTS for SM8250-AC register, interrupt and clock values.", "A device-verified memory map for [payload] dram_size and the board DTS memory nodes."]
 configuration = ["2026-11-23 r34 isolated Mach trap counters self-checked on host only; concurrency review and runtime pending, see docs/enuma-r34-ipc-host-20261123.md.", "Historical handoff, Data seed procedure and runner, UFS design and compatibility notes, and historical diagnostic and build scripts are retained without a new runtime or device validation claim; historical status does not authorize device operations.", "board.toml schema_version = 2 with [board], [components], [kernel], [device_tree], [firmware], [ipsw], [payload], [payload.adt], [package].", "feeds.toml and unixnu.lock pin FFT-infra/UniXNU-sm8250-common at 166235ec2480ff0992627b7aafa15c65ce6b4efa.", "dts/enuma.dts includes soc:dts sm8250.dtsi; no unverified addresses are written."]
 procedure = ["./unixnu defconfig enuma_defconfig -D ../UniXNU-enuma", "./unixnu fetch -D ../UniXNU-enuma", "./unixnu status --json -D ../UniXNU-enuma", "./unixnu tree -D ../UniXNU-enuma"]
@@ -24,7 +24,8 @@ evidence = [{ kind = "device", reference = "docs/bootprogress-run-state-r9-flash
  { kind = "device", reference = "docs/bootprogress-wrap-r3-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked single boot_b flash and subsequent reboot reported by parent; one screen frame recorded; no stage promotion; revision is repository HEAD, not image provenance." },
  { kind = "device", reference = "docs/bootprogress-r5-flash-20261126.md", command = "fastboot -s SERIAL flash boot_b IMAGE; fastboot -s SERIAL reboot", revision = "1e0af4e589bfad6c558830532eec6923d7bfe1d1", result = "Self-checked one boot_b flash and one reboot command succeeded; startup screen and device-side readback not observed; no stage promotion; revision identifies device repository HEAD, not image provenance." },
  { kind = "source", reference = "docs/nuwa-identified-difference-20261125.md", result = "Self-checked offline comparison: nuwa seed and service differences are unproven hypotheses, not a verified fix; same enuma cause remains unknown. No build or device operation." },
- { kind = "source", reference = "docs/disk-cleanup-executed-20261124.md", result = "Records the earlier cleanup and entry guards in 77681b5. The r64 rebuild did not run cleanup or retention scripts." },
+  { kind = "source", reference = "docs/disk-cleanup-executed-20261124.md", result = "Records the earlier cleanup and entry guards in 77681b5. The r64 rebuild did not run cleanup or retention scripts." },
+  { kind = "source", reference = "scripts/build-kernel-local.sh", revision = "b383d8d951191586f46236aad23099f1f535a12f", result = "Historical local enuma unixnu build kernel wrapper; reports elapsed time and the output kernel hash. Source-only archive; not rerun." },
  { kind = "host", reference = "docs/enuma-r62-smpobs-host-20261124.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r61-smp2.py --r62", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked r62 rebuild, original pre-fill console object reused and payload read back; no device operation, SMP and interrupt runtime unverified; independent verification and deep review pending." },
  { kind = "host", reference = "docs/enuma-r61-smp2-host-20261124.md", command = "/home/wh1stl3/.local/bin/python3 scripts/build-enuma-r61-smp2.py --r61", revision = "693f5d9cae8a408dd18b39f3f9fdc4228c934241", result = "Self-checked r58 boot-argument-only dual-core repack; no device operation, secondary and IPI runtime unverified; independent verification and deep review pending." },
  { kind = "source", reference = "docs/nuwa-smp-status-20261123.md", result = "Self-checked nuwa records: r16-r35 single-core evidence; later logo-run online CPU count unproven. No build or device operation." },
@@ -731,6 +732,7 @@ evidence = [
   { kind = "source", reference = "docs/backboardd-offline-20261123.md", result = "Document inventory: backboardd 离线分析（2026-11-23）" },
   { kind = "source", reference = "docs/backboardd-springboard-plist-20261122.md", result = "Document inventory: backboardd / SpringBoard plist 调查（2026-11-22）" },
   { kind = "source", reference = "docs/bb-entry-disassembly-20261123.md", result = "Document inventory: backboardd 入口离线反汇编（self-checked）" },
+  { kind = "host", reference = "candidates/bootprogress-20261125/README.md", command = "sha256sum current kernel; inspect active linkarchives and r64 display source", revision = "c8f92b208068eeaa4cd2b0f592671f04ee70076e", result = "Historical self-checked r69d integration blocker, separate from the later r65-derived r6 recipe: r69d kernel hash matches manifest but active archive list does not establish its GUI writer provenance; r64 display source cannot be mixed. No full-screen handoff, link, package or device action in the r69d investigation." },
   { kind = "source", reference = "docs/bootprogress-candidates-20261123.md", result = "Document inventory: 同 donor boot-progress 候选（2026-11-23）" },
   { kind = "source", reference = "docs/bootprogress-integration-design-20261123.md", result = "Document inventory: enuma 全屏 boot-progress 接入设计（2026-11-23）" },
   { kind = "source", reference = "docs/bootprogress-mechanisms-compared-20261123.md", result = "Document inventory: Boot-progress 机制对照（2026-11-23）" },
@@ -849,11 +851,11 @@ evidence = [
 id = "r69-build-diagnostics"
 status = "planned"
 components = []
-paths = ["docs/build-full-pipeline-20261125-hooks-r64.txt", "docs/build-full-pipeline-20261125.md", "docs/enuma-r69-diagnostics-20261125.md"]
+paths = ["docs/build-full-pipeline-20261125-hooks-r64.txt", "docs/build-full-pipeline-20261125.md", "docs/enuma-r69-diagnostics-20261125.md", "scripts/hook-check-20261125.py"]
 inputs = ["r64 hook injection and r68 baseline; r69 offline package."]
 configuration = ["Diagnostic hooks and unchanged r68 payload configuration."]
 procedure = ["Record the build pipeline and compare r69 package against r68."]
-findings = ["r69 package and payload kernel hash self-checked; build history is recorded in the referenced documents."]
+findings = ["r69 package and payload kernel hash self-checked; build history is recorded in the referenced documents.", "Archived helper hook-check-20261125.py reads the tracked r64 marker list and checks literal presence by source file in the local ownerdata tree; it does not establish the documented containing-function gate and was not rerun."]
 completion = ["Independent verification and runtime evaluation remain pending."]
 limits = ["No device operation or runtime validation in this record."]
 next_action = ["Review the diagnostic candidate and independently verify the final build."]
@@ -891,3 +893,17 @@ completion = ["Host build and package self-checked; no runtime or stage acceptan
 limits = ["Scheduling classification only; no user memory, stack, register, wait-address or IPC payload read by the diagnostic. No device operation."]
 next_action = ["Review the exact generated diff and independently rerun the host recipe before considering any device action."]
 evidence = [{ kind = "host", reference = "candidates/bootprogress-run-state-20261126/README.md", command = "python3.11 candidates/bootprogress-run-state-20261126/build.py out/bootprogress-run-state-20261126-r9", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Self-checked 23 host cases including continued refresh and row boundaries, target build and extracted boot sampling/publication/read edges; independent review and device run not performed." }]
+
+[[area]]
+id = "enuma-bootprogress-source-archive"
+status = "planned"
+components = []
+paths = ["candidates/bootprogress-20261125/**"]
+inputs = ["Fixed UniXNU and XNU source, enuma history and local generation records identified in the evidence."]
+configuration = ["Host-only historical source archive; no default config or series change."]
+procedure = ["Compare fixed Git blobs, source anchors, historical compiler input records and generated outputs without shipping generated inputs."]
+findings = ["The 2026-11-25 r6 replay is derived from r65, not the blocked r69d writer; XNU bodies and glyph data remain external inputs."]
+completion = ["Source-only provenance self-checked; no new build, device run or stage acceptance."]
+limits = ["Local generated and donor inputs are not part of the archive."]
+next_action = ["Use the provenance record before reusing any historical candidate."]
+evidence = [{ kind = "source", reference = "docs/bootprogress-source-provenance-20261126.md", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Self-checked source and generated-material comparison; pinned BSD notices retained." }]
