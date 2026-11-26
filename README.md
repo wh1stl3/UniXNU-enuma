@@ -1,5 +1,11 @@
 # UniXNU-enuma
 
+**折行 r3 刷写及后续观察（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-wrap-r3-flash-20261126.md)；阶段不提升。
+
+**r5 boot_b 单次刷写与重启（2026-11-26，`self-checked`）**：见 [记录](docs/bootprogress-r5-flash-20261126.md)；启动画面未观察，阶段不提升。
+
+**r6 boot_b 单次刷写（2026-11-26，`self-checked`）**：见 [刷写记录](docs/bootprogress-r6-flash-20261125.md)；未验证启动，阶段不提升。
+
 **r66 + IPC 单次观察（2026-11-25，`self-checked`）**：见 [观察记录](docs/ufs-sm8250-r66-ipc-device-20261125.md)；阶段不提升。
 
 **r69c 首次启动（2026-11-25，`self-checked`）**：见 [观察记录](docs/ufs-sm8250-r69c-device-20261125.md)，阶段不提升；此前刷写见 [记录](docs/ufs-sm8250-r69c-flash-20261125.md)。
