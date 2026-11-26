@@ -940,3 +940,17 @@ completion = ["Host fixtures, cross-build and extracted-kernel edges self-checke
 limits = ["No deployment or independent verifier run."]
 next_action = ["Review the source changes and independently replay the host recipe into a fresh directory."]
 evidence = [{ kind = "host", reference = "candidates/bootprogress-hid-event-20261126/README.md", command = "/home/wh1stl3/.local/bin/python3.11 candidates/bootprogress-hid-event-20261126/build.py out/bootprogress-hid-event-20261126-r2", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Self-checked 10 sanitizer cases, exact archive replay and extracted-kernel read/write and r9 run-state edges; 169951232-byte boot.img SHA-256 e278d568b7c59fb9dafffbfe3617159d6f062421ebbad5e4447703c9732f13eb." }]
+
+[[area]]
+id = "enuma-bootprogress-legacy-open"
+status = "planned"
+components = []
+paths = ["candidates/bootprogress-legacy-open-20261126/**"]
+inputs = ["HID r2, actual full-link r6 IOUserClient compiler record, r9 proc recorder, and pinned XNU d8b80295118ef25ac3a784134bcf95cd8e88109f."]
+configuration = ["Local diagnostic candidate; only three objects replaced, boot args and GUI STOP unchanged."]
+procedure = ["Replay the host recipe into a fresh out and compare generated sources, final ABI and embedded kernel edges."]
+findings = ["One attributed backboardd exec generation can publish Legacy open attempt, original and final server results, and first observed post-filter dispatch on the same kernel object when its key is nonzero. Missing attribution is unknown."]
+completion = ["Host fixture, link, final ABI and package extraction self-checked; no device or stage acceptance."]
+limits = ["Server result is not reply receipt. Registry object identity is not connection identity or method completion. No post-takeover reader."]
+next_action = ["Review the final generated diff and independently rerun host gates before any separately authorized device work."]
+evidence = [{ kind = "host", reference = "candidates/bootprogress-legacy-open-20261126/README.md", command = "/home/wh1stl3/.local/bin/python3.11 out/bootprogress-legacy-open-20261126-src/candidates/bootprogress-legacy-open-20261126/build.py --device . out/bootprogress-legacy-open-20261126-r4", revision = "d8b80295118ef25ac3a784134bcf95cd8e88109f", result = "Astra deep design PASS WITH CONDITIONS (ses_de808f308ffeXxjMivBd9246Sb); final host build and extracted-kernel gates self-checked. r4 boot.img SHA-256 cd76efaa275bd07f834938d79d833e1d3d8e74eb84eaae1361134c6267a3dbf5." }]
